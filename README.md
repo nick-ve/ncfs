@@ -1,5 +1,14 @@
 # ncfs
-The NCFSPack framework with its extensions
+The NCFSPack framework with its extensions.
+
+In this repository the software development is performed on the
+"main" branch (called "trunk" in SVN jargon), whereas various specific
+releases (and the initial "import" from the original SVN repository)
+are stored in different named branches, which are protected against
+modifications and/or deletion.
+Note however, that all branches (including "main") always contain a
+fully functional package which is 100% backward compatible with previous
+releases.  
 
 //*CMZ :  1.00/01 04/07/97  16.43.13  by  Nick van Eijndhoven (UU/CERN)
 //*-- Author :    Nick van Eijndhoven (UU/CERN)   04/07/97
