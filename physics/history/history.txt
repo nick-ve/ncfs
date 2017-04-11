@@ -1,0 +1,9 @@
+//////////////////////////////////////////////////////////////////////////
+//                        History of updates                            //
+//////////////////////////////////////////////////////////////////////////
+06-may-2011 NvE Creation of the physics directory in the NCFS repository and the ROOT macro grbmodel.cc added
+                in the directory /macros.
+06-sep-2012 NvE Fix introduced in grbmodel.cc to prevent overfluctuation of the number of GRB muons
+                in case the user has selected the non-fluctuation mode (grbnu<0).
+                Thanks Lionel Brayeur.
+
