@@ -1,0 +1,230 @@
+//////////////////////////////////////////////////////////////////////////////////////
+//                                History of updates                                //
+//////////////////////////////////////////////////////////////////////////////////////
+01-dec-2004 NvE First release of the package as a subdirectory of Ralice.
+18-feb-2005 NvE Copyright format modified in all .cxx source files in line with Ralice
+                such that the text shows up correctly in the auto-generated html docs.
+13-apr-2005 NvE Documentation of IceEvent updated w.r.t. the labeling of MC and Reco tracks.
+21-apr-2005 NvE Directory iceconvert introduced to hold the various readers to
+                convert Amanda/IceCube data into the Ralice/IcePack event structures.
+12-aug-2005 NvE TTask derived class IceXtalk introduced for cross talk correction.
+20-sep-2005 NvE TTask derived class IceCalibrate introduced for (de)calibration of data.
+                Also example macros icextalk.cc and icecalib.cc introduced in the /macros
+                directory to illustrate the usage of these TTask based procedures.
+07-oct-2005 NvE Typo fixed in memberfunction SetCalibFile of IceXtalk and IceCalibrate.
+13-oct-2005 NvE TTask derived class IceCleanHits introduced to perform hit cleaning.
+                Also example macro icecalib.cc in the /macros directory updated to
+                illustrate the use of the hit cleaning processor. 
+20-oct-2005 NvE Trigger time window selection introduced in IceCleanHits based
+                on Dipo's trigger time distributions. For further details see the
+                docs of IceCleanHits.
+31-oct-2005 NvE Slight correction in IceCalibrate.cxx and IceCleanhits.cxx to satisfy
+                the gcc compiler (thanks Dipo).
+                Also first (prototype) version of class IceDwalk introduced to perform
+                direct walk reconstruction. In the /macros directory an example job
+                icedwalk.cc has been introduced.
+03-nov-2005 NvE User selectable trigger time setting introduced in IceCleanhits to allow
+                investigation of various trigger time settings.
+                Protection introduced in IceDwalk for the case that no track candidates
+                are left.
+                Also protection introduced in IceXtalk for the case that no OM database
+                was specified. 
+14-nov-2005 NvE Only devices derived from IceGOM taken into account in IceCalibrate
+                and only devices derived from IceAOM taken into account in IceXtalk 
+                to comply with the presence of the newly introduced Trigger device.
+                IceCleanHits updated to support automatic trigger time setting from
+                the IceEvent trigger information.
+14-nov-2005 NvE Typo corrected in IceCleanHits::SetTnameA.
+17-nov-2005 NvE Prototype version of IceDwalk tuned/improved for multi-track reconstruction. 
+15-feb-2006 NvE Class IcePandel introduced. In the /macros directory an example job
+                icepandel.cc was introduced as well.
+23-feb-2006 NvE All global slotnames and signals copied from OM Dbase info (if present)
+                in IceCalibrate. This will provide all necessary calib. info in case
+                the original F2K file didn't contain these data.
+                Also anaroot.cc example macro introduced in /macros sub-directory.
+                This example macro shows how to analyse the IcePack event structures
+                from a chain of ROOT files using the task processor facilities.
+28-feb-2006 NvE Example macro anaroot.cc in sub-directory /macros updated to use the
+                more convenient new ProcessObject() facility of AliJob.
+                Also unused variables r, rmin and rmax removed in IcePandel.cxx to prevent
+                compiler warnings. 
+07-mar-2006 NvE Facility introduced in IceDwalk and IcePandel to modify the name tag of
+                the produced tracks via the memberfunction SetTrackName().
+                Also specification of maximum number of good fired modules for events to
+                be processed introduced in IceDwalk. 
+10-mar-2006 NvE Xtalk ADC correction value stored as ADC offset in IceXtalk processing.
+                This will allow easy investigation of Xtalk corrected hits and also
+                enable successive Xtalk processing to investigate (systematic) effects
+                of various criteria. See the IceXtalk docs for further details.
+                Also specification of minimum number of good fired modules for events to
+                be processed introduced in IceDwalk. 
+                New class IceLinefit introduced.  
+14-mar-2006 NvE User defined track charge setting introduced in IceDwalk, IceLinefit and IcePandel.
+29-mar-2006 NvE Modified numerical evaluation of pandel value in IcePandel to extend validity
+                range (by George and Dipo).
+                Also new memberfunction SetPenalty() introduced in IcePandel.
+21-apr-2006 NvE TFile.h included in header files of IceCalibrate and IceXtalk to prevent
+                compiler error with new ROOT 5.11 version.
+10-may-2006 NvE Compiler warnings activated for overloaded virtuals in installation
+                script for AMD Athlon in the /scripts sub-directory.
+23-jun-2006 NvE New lightweight AliSignal::AddTrack facility used in IceLinefit and IceDwalk.
+07-jul-2006 NvE Track Id correctly set in IceLinefit.
+28-jul-2006 NvE New class IceChi2 introduced and example macro icechi2.cc added.
+                Also IcePandel updated to use a Convoluted Pandel pdf.
+14-sep-2006 NvE IceCalibrate.cxx updated to correctly process multiple waveforms and hits per OM.
+                Also some calibration constants dropped from OM data words in IceCalibrate,
+                since these values are also stored as parameters in the corresponding
+                (de)calibration functions.                 
+22-sep-2006 NvE IceDwalk extended for specification of maximum number of hits per OM,
+                to allow comparison with Sieglinde (which only uses the first OM hit).
+                Also IceDwalk now introduces a device into the event named "IceDwalk"
+                which contains the values of all the used reconstruction parameters.
+25-oct-2006 NvE Spread of Psi median included in track fit statistics of IceChi2
+                and IcePandel.
+                Processing parameters of IceCalibrate, IceXtalk, IceCleanHits, IceChi2
+                and IcePandel included as the corresponding devices in the event structure. 
+15-nov-2006 NvE Separate treatment of v_phase and v_group introduced in IceDwalk, IceChi2
+                and IcePandel to improve time residuals (thanks to George Japaridze).
+                Also IceLinefit extended for specification of maximum number of hits per OM
+                and automatic introduction of a device into the event named "IceLinefit"
+                which contains the values of all the used reconstruction parameters and
+                the beta value (v/c) of the reconstructed track.
+16-nov-2006 NvE Class IceDwalk renamed to IceDwalkx to provide a Sieglinde-like direct
+                walk-II approach. The remaining class IceDwalk will provide a more
+                sophisticated approach with more physics driven selection criteria.
+23-nov-2006 NvE Improved version of IceDwalk installed. Note that the old algorithm is
+                still available as IceDwalkx.
+22-jan-2007 NvE New class IceMakeHits introduced to perform waveform feature extraction.
+23-jan-2007 NvE Bug fixed by Garmt in IceMakeHits.cxx.
+15-mar-2007 GdV IceMakeHits.cxx cleaned up to remove unnecessary tests which have become
+                obsolete due to bug fix in IceRawTWR.
+28-mar-2007 NvE Explicitly included TMath.h in IceChi2.h and IcePandel.h due to a
+                ROOT restructuring introduced in version 5.15/04.
+01-jun-2007 NvE Memberfunction GetString() introduced in class IceGOM.
+                IceCalibrate.cxx and IceXtalk.cxx updated to support both the old (MuDaq only)
+                and new (MuDaq, TWRDaq, ...) calibration file format.
+                Also isolation cut in IceCleanHits modified to ignore hits from
+                the same OM.
+05-jun-2007 NvE Search for attached dbase performed only once in the Exec() memberfunction
+                of IceCalibrate and IceXtalk to speed up processing.
+06-jun-2007 NvE Explicit tests on null pointers for returned TObjArray* from e.g. GetHits()
+                introduced in the .cxx files of IceCalibrate, IceChi2, IceCleanHits, IceDwalk,
+                IceDwalkx, IceLinefit, IceMakeHits, IcePandel and IceXtalk to prevent
+                problems with empty events.
+07-jun-2007 NvE Contents of OM slot "READOUT" used to determine readout system for Amanda OMs
+                in IceCalibrate.cxx.
+24-jun-2007 NvE Treatment of TWRDaq data introduced in IceCleanHits.
+25-jun-2007 NvE Warning messages suppressed in the IceMakeHits processor to prevent
+                TSpectrum warnings in case of (noisy) waveforms with very many peaks.  
+26-jun-2007 NvE Class IceDwalk made modular such that it can serve as a base class
+                for more sophisticated reconstruction algorithms.
+                Also expression for "ksi" corrected to correctly represent the traveled
+                distance of the cherenkov photon in IcePandel.cxx.
+27-sep-2007 NvE Check for event selection/rejection flag introduced in IceCalibrate.cxx,
+                IceChi2.cxx, IceCleanHits.cxx, IceDwalk.cxx, IceDwalkx.cxx, IceLinefit.cxx,
+                IceMakeHits.cxx, IcePandel.cxx and IceXtalk.cxx.
+04-oct-2007 NvE New memberfunctions GetLevel and GetOMId introduced in class IceGOM
+                to enable retrieval and conversion of various (D)OM numbering schemes.
+12-nov-2007 GdV New version of IceMakeHits and IceCalibrate to handle IceCube DOMs.
+15-nov-2007 NvE Processor IceLinefit updated to treat also InIce DOMs.
+                Note that the generated IceLinefit tracks now automatically get a suffix
+                "A" or "I" in the trackname to indicate Amanda (OM) or InIce (DOM) tracks, resp.
+16-nov-2007 NvE Processor IceDwalk updated to treat also InIce DOMs.
+                Note that the generated IceDwalk tracks now automatically get a suffix
+                "A" or "I" in the trackname to indicate Amanda (OM) or InIce (DOM) tracks, resp.
+                Also the memberfunctions SetMaxModA(), SetMaxModI() etc... of IceLinefit
+                have been integrated in memberfunctions SetMaxMod() etc... 
+21-nov-2007 NvE (De)calibration functions reset to 0 in IceMakeHits to indicate uncalibrated
+                data. This will allow correct re-processing of IceMakeHits on already calibrated
+                signals.
+02-dec-2007 NvE New memberfunctions GetNstrings() introduced in IceEvent.
+04-dec-2007 NvE New quality value based on both associated hits and strings introduced
+                in IceDwalk. The user can select between various modes via the new
+                memberfunction SetAsType().
+27-dec-2007 NvE Installation scripts adapted to the use of the environment variable RALICE
+                instead of ALIROOT.
+28-dec-2007 NvE IcePandel.cxx and IceChi2.cxx modified to treat Amanda (OM), InIce (DOM)
+                or combined tracks separately. The UseHits default has been changed to the
+                new mode=2 facility. See the class docs for details. 
+03-may-2008 NvE Typo in IcePandel.cxx corrected to test on "eta" instead of "tres" for
+                regions 3 and 4 (thanks to David Boersma).
+30-may-2008 NvE Include of "Math/SpecFuncMathMore.h" replaced by generic "Math/SpecFunc.h"
+                in IcePandel.h and IceChi2.h to comply with new ROOT convention.
+29-jul-2008 NvE Typo in the docs of IceMakeHits.cxx corrected (Thanks Garmt).
+11-jun-2009 NvE Package based on the new NCFS-Pack to increase flexibility.
+18-aug-2009 NvE New classes IceICDOM and IceDCDOM introduced to enable separate treatment of
+                the main IceCube In-Ice DOMs and DeepCore DOMs.
+20-oct-2009 NvE Support introduced for InIce waveform selection by name in IceMakeHits.
+06-jan-2010 NvE Extension of params device named slots corrected in IceMakeHits.
+08-feb-2010 NvE New memberfunction GetTriggerTime introduced in IceEvent.
+10-feb-2010 NvE IceCleanHits.h and IceCleanHits.cxx modified to incorporate extensions and optimisations.
+                Also IceMakeHits.h and IceMakeHits.cxx modified to incorporate the tuning for IceCube
+                waveform hit extraction as performed by Dennis Diederix.
+                Also some new example macros (e.g. hit statistics etc.) introduce in the macros directory.
+11-feb-2010 NvE File gcclib.sh in /scripts modified to incorporate use of the NCFS environment variable. 
+18-feb-2010 NvE File hit-stat.cc in /macros updated to provide full sensor ID per hit.
+09-mar-2010 NvE Extended/retuned version of IceDwalk introduced for separate InIce, standard IceCube and DeepCore track reco.
+07-apr-2010 NvE File gcclib.sh in /scripts modified to list the relevant environment variables.
+                Also file track-stat.cc in /macros updated to provide all the various IceDwalk tracks. 
+21-apr-2010 NvE Conditional reconstruction of various detector signals implemented in IceDwalk to enable saving of cpu time.
+28-apr-2010 NvE New memberfunction UseWaveformNameI introduced in IceMakeHits to provide more flexibility
+                and also baseline determination optimised. Also the saturation check is now only performed
+                on the RAW waveforms since the calibrated ones should not contain saturation.
+                This recovers again good hits in the CAL-FADC waveforms, which were lost before.
+08-jul-2010 NvE New file filt-stat.cc introduced in /macros to provide IceCube filter statistics.
+20-jul-2010 NvE IceMakeHits.h and IceMakeHits.cxx modified to incorporate several improvements for IceCube waveform extraction.
+17-jan-2011 NvE File hit-stat.cc updated and file hit-stat.cxx added in /macros to provide IceCube hit data
+                in plain ROOT tree format for an in-depth investigation of hit statistics.  
+25-feb-2011 NvE Functionality of IceLinefit extended to support now also "IC" and "DC" tracks next to "I" and "A".
+                Also the actual linefit reconstruction is now performed by a central module which is invoked
+                by the various detector configurations. 
+21-apr-2011 NvE IceDwalk derived from IceLinefit to allow usage of common memberfunctions and the docs of
+                both classes updated accordingly. 
+20-may-2011 NvE Macros trig-stat.cc and filt-stat.cc updated in /macros to protect against division by 0 in case dt=0.
+                In file filt-stat.cc now always a signal is added (even if it is 0) in order to have all available
+                filters listed, via Data(), in the statistics at the end.  
+22-jun-2011 NvE Library creation scripts for Alpha, AMD, HP and Mac updated in /scripts to use the NCFS environment variable.
+15-jul-2011 NvE Files hit-stat.cc and hit-stat.cxx updated in /macros to enable also analysis of sDST data. 
+21-jul-2011 NvE File hit-stat.cxx updated in /macros in order not to skip entries without hits.
+                In this way the (new) feature of the TTreeViewer entry slider bar can be used to obtain a direct
+                comparison with the actual IcePack input data in an individual event analysis.
+03-jan-2012 NvE Typos corrected in storing device parameter values for IceCleanHits.
+                NcSignal changed into NcDevice to hold the parameter settings for all the tasks, which provides
+                a more consistent use of nomenclature and allows a future restriction to devices of the AddDevice()
+                and GetDevice() memberfunctions of NcEvent.
+                This change has been made in the Exec() memberfunctions of IceCalibrate, IceChi2, IceCleanHits,
+                IceDwalk, IceDwalkx, IceLinefit and IceMakeHits.
+11-jan-2012 NvE Funcionality of IceEvent::GetTriggerTime() extended. 
+02-feb-2012 NvE More correct suppression of (TSpectrum) warning/error messages and re-activation of previous
+                info level in IceMakeHits.
+07-feb-2012 NvE IceCleanHits updated by enabling multiple "trigger times" to allow correct processing of multiple
+                tracks within one single event and time window settings for IceCube updated accordingly.
+                This extension became possible via the new features of IceEvent::GetTriggerTime(). 
+                Also no selection is made anymore on ADC or TOT for IceCube hits in the cleaning.
+02-may-2012 NvE File filt-stat.cc updated in /macros to provide also the various filtered event rates.
+03-may-2012 NvE File filt-stat.cc updated in /macros to extend the functionality with user selective suppression
+                of various filter channels to study possible background reduction for specific analyses.
+04-may-2012 NvE File trig-stat.cc updated in /macros to extend the functionality with user selective suppression
+                of various trigger channels to study possible background reduction for specific analyses.
+12-jul-2012 NvE New memberfunction GetTimeResidual() introduced in class IceGOM.
+13-jul-2012 NvE Class IceDwalk made more modular and functionality extended and fine tuned.
+                The previous version of IceDwalk is still available as IceDwalkx.
+18-jul-2012 NvE Optional flipping of track direction introduced in IceLinefit and IceDwalk to enable further
+                reduction of the background for upgoing tracks due to mis-reconstructed downgoing muons.
+11-nov-2012 NvE Flipping of track direction de-activated by default in IceLinefit and IceDwalk since it was seen
+                that with previous defaults thetatrk=90 and thetahits=100 too many upgoing signal events were lost.
+07-jan-2013 NvE Memberfunctions GetNmodules() introduced in IceEvent and memberfunctions GetNstrings() optimised for speed. 
+19-jan-2013 NvE New reconstruction base class IceRecoBase introduced and ICEHeaders.h and ICELinkDef.h updated accordingly.
+                This new IceRecoBase is now used as a base class for IceLinefit, IceDwalk and IcePandel.
+24-jan-2013 NvE Memberfunction SetSingleHit() moved from IceDwalk to IceRecoBase and also the default settings
+                for single hit switching in the IceDwalk constructor modified.
+27-feb-2013 NvE Backward link to the track introduced for all Pandel track associated hits.  
+15-mar-2013 NvE Memberfunction GetStringMax() introduced in IceEvent.
+                Support for maximum number of (D)OMs on a single string introduced in IceRecoBase::SetSingleHit()
+                and IceDwalk updated to use this new feature.
+17-mar-2013 NvE Values of return arguments in IceEvent::GetStringMax() initialised to 0 so that all returned values
+                will be 0 in case their were no requested (D)OMs firing.
+27-mar-2014 NvE Files filt-stat.cxx and run.cc added to /macros
+15-jul-2016 NvE Memberfunction IceEvent::Reset() introduced.
+
+
