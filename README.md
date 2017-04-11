@@ -1,6 +1,9 @@
 # ncfs
 The NCFSPack framework with its extensions.
 
+Documentation of all the contained software tools is available at
+http://www.iihe.ac.be/ice3/ncfsdoc
+
 In this repository the software development is performed on the
 "main" branch (called "trunk" in SVN jargon), whereas various specific
 releases (and the initial "import" from the original SVN repository)
