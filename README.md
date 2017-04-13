@@ -134,19 +134,31 @@ the generic detector tools.
  
 Installation :
 --------------
-The various shared libraries can be automatically installed using the provided shell
+The various shared libraries may be automatically installed using the provided shell
 scripts in the "scripts" directory of the various packages.
 It is essential that one first installs ROOT (including the TPythia6 package
-in view of the NcCollider physics event generator).
-Once ROOT is installed, the first shared library to be created is "ncfspack",
-after which all the detector specific shared libraries can be created.
+in view of the NcCollider physics event generator) and run the provided installation
+scripts within the proper "NCFS environment".
+The proper "NCFS environment" may be obtained automatically by invoking the following
+scripts which are provided in this "ncfs" top directory :
+
+ncfs.bat : To initialise the proper "NCFS environment" for Windows
+ncfs.sh  : To initialise the proper "NCFS environment" for bash shells
+
+Note that after invokation of one of the above "environment setting scripts", the
+command prompt should be "ncfs>" to indicate that the environment has been set correctly.
+
+Once ROOT is installed and the "NCFS environment" is set correctly, the first shared library
+to be created is "ncfspack", after which all the detector specific shared libraries can be created.
  
 Invoking the various tools :
 ----------------------------
 The functionality of a certain package is obtained by loading the needed shared
 libraries into the ROOT system. In doing so, one should always first load the
 generic "ncfspack" library, followed by the desired detector specific package(s).
+
 Example : To create the IceCube environment one should load the following libraries
+
 Root> gSystem->Load("ncfspack");
 Root> gSystem->Load("icepack");
  
