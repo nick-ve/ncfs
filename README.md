@@ -142,8 +142,8 @@ scripts within the proper "NCFS environment".
 The proper "NCFS environment" may be obtained automatically by invoking the following
 scripts which are provided in this "ncfs" top directory :
 
-ncfs.bat : To initialise the proper "NCFS environment" for Windows
-ncfs.sh  : To initialise the proper "NCFS environment" for bash shells
+ncfs.bat : To initialise the proper "NCFS environment" for Windows.
+ncfs.sh  : To initialise the proper "NCFS environment" for bash shells.
 
 Note that after invokation of one of the above "environment setting scripts", the
 command prompt should be "ncfs>" to indicate that the environment has been set correctly.
