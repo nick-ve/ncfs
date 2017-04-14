@@ -1,37 +1,38 @@
 # ncfs
 The NCFSPack framework with its extensions.
 
-Documentation of all the contained software tools is available at
-http://www.iihe.ac.be/ice3/ncfsdoc
-
 In this repository the software development is performed on the
 "main" branch (called "trunk" in SVN jargon), whereas various specific
 releases (and the initial "import" from the original SVN repository)
 are stored in different named branches, which are protected against
-modifications and/or deletion.
-Note however, that all branches (including "main") always contain a
-fully functional package which is 100% backward compatible with previous
-releases.  
+modifications and/or deletion.   
+Note : All branches (including "main") always contain a fully functional
+       package which is 100% backward compatible with previous releases.
+       
+Documentation of all the contained software tools is available at
+http://www.iihe.ac.be/ice3/ncfsdoc
 
-//*CMZ :  1.00/01 04/07/97  16.43.13  by  Nick van Eijndhoven (UU/CERN)
-//*-- Author :    Nick van Eijndhoven (UU/CERN)   04/07/97
+    //CMZ :  1.00/01 04/07/97  16.43.13  by  Nick van Eijndhoven (UU/CERN)
+    //-- Author :    Nick van Eijndhoven (UU/CERN)   04/07/97
  
-This project was started to provide an Object Oriented framework,
+The project was started to provide an Object Oriented framework,
 consisting of C++ classes, in which event reconstruction of the ALICE
 detector data at the CERN LHC could be performed.
 In switching to Object Oriented programming, I myself have started to
-perform the WA93 and WA98 data analysis within the ROOT [1] framework
-and the corresponding ALICE software package was called RALICE.
-Having seen the great advantages of this system I have started to make my
+perform the WA93 and WA98 data analysis within the ROOT (http://root.cern.ch)
+framework and the corresponding ALICE software package was called RALICE.   
+Having seen the great advantages of this system, I have started to make my
 C++ classes more general in order to use them as an onset for a generic
 reconstruction and (astro)physics analysis toolbox fully integrated within
 the ROOT framework.
+
 The basic generic classes providing various tools for detector signal handling,
 track storage, event building, physics analysis, statistics and even the simulation
 of particle collisions are contained in the "ncfspack" directory.
 In addition to that, various detector specific packages can be added to extend
 the functionality tailored to different experiments, like the "icepack" directory
-for the analysis of IceCube data.  
+for the analysis of IceCube data.
+
 The complete package can be compiled on all platforms which support ROOT,
 using for instance the GNU G++ compiler.
 Being embedded within the ROOT framework provides sophisticated analysis
@@ -47,7 +48,7 @@ is fully compatible with all standard C++ compilers as well as with
 the ROOT/CINT interpreting system.
  
 The comments in the source code are placed in the locations proposed
-in the ROOT manual pages [1] such that the automatic source code
+in the ROOT manual pages such that the automatic source code
 documentation system of ROOT can be used directly from the source code.
 This has turned out to be very convenient (time saving) and guarantees
 always updated documentation compatible with the current source code.
@@ -62,10 +63,11 @@ The rules are the following :
  1) Only ANSI standard C++ is allowed, with an even stricter
     requirement that the code should compile without any warnings
     under the GNU g++, msvc++ and the native C++ compilers of HP,
-    Mac, AMD and DECAlpha machines.
+    Mac, AMD and DECAlpha machines.   
     This will assure the programs to run on all standard research platforms.
  2) The generic "ncfspack"  class names start with "Nc" followed by an
-    uppercase character, like for example : NcEvent.
+    uppercase character.   
+     Example : NcEvent.   
     In this way the "ncfspack" class names will NEVER clash with the ones
     of ROOT whereas the probability of a clash with the class names of
     other group's code (e.g. IceCube) is minimised by using for instance
@@ -73,43 +75,42 @@ The rules are the following :
     To prevent name clashes within the various (future) detector packages,
     please refer to the general note at the end.
  3) Class headers should be under the control of "#ifndef" and the name
-    should consist of "classname_h".
-    Example : #ifndef NcTrack_h
-              #define NcTrack_h
-    In this way also the ifdefs will be unique and prevents the danger
-    of having the name of an ifdef being the same as a Classname.
- 4) The private area in the class header has to be defined as the last item.
+    should consist of "classname_h".   
+    In this way also the "ifdefs" will be unique and it prevents the danger
+    of having the name of an "ifdef" being the same as a Classname.   
+     Example for the header of the NcTrack class :   
+     #ifndef NcTrack_h   
+     #define NcTrack_h 
+ 4) The private area in the class header has to be defined as the last item.   
     Macros, like the ROOT ClassDef() statement (if needed) must be put
     to appear at the right location, i.e. just before the "};" of the
     class definition.
  5) Names of member functions should start with a capital character
-    and should NOT contain underscores (which drop out with HTML).
+    and should NOT contain underscores (which are invisible in HTML).
     From the name it should be clear what the functionality is and
-    capital characters should be used to indicate various "words".
-    Example : NcTrack::Set3Momentum(...)
+    capital characters should be used to indicate various "words".   
+     Example : NcTrack::Set3Momentum(...)
  6) The declaration of variables should adopt the ROOT type definitions
-    like for instance Int_t, Float_t, Double_t etc.
+    like for instance Int_t, Float_t, Double_t etc.   
     This will assure the most compact data format and correct type conversion
     across various platforms.
  7) Names of datamembers of a class should start with a lowercase "f"
-    and the next character has to be uppercase.
-    Example : Float_t fEnergy
-    This will allow directly identification of datamembers in the code.
-    The names of all other local variables may be chosen freely by the
-    author.
-    Note : It is recommended to use only lowercase characters
-           for local variables.
+    and the next character has to be uppercase.   
+     Example : Float_t fEnergy   
+    This will allow easy identification of datamembers in the code.
+    The names of all other local variables may be chosen freely by the author.   
+    Note : It is recommended to use only lowercase characters for local variables.
  8) Names of global variables should start with "g" and the next
     characters have to be the detector specific character string
-    used as the start for the detector specific class names.
-    Example : gIcePandel
-    This will allow directly identification of global variables in the
+    used as the start for the detector specific class names.   
+     Example : gIcePandel   
+    This will allow easy identification of global variables in the
     code and will not clash with the existing ROOT globals like
-    for instance gDirectory etc...
+    for instance gDirectory etc.   
     Note : Usage of global variables should be avoided as much as
            possible. Most of the data transfer should go via the classes
            and their member functions (data hiding).
- 9) Comments should be placed at the positions as outlined in the ROOT docs.
+ 9) Comments should be placed at the positions as outlined in the ROOT docs.   
     This will enable the automatic HTML machinery of ROOT.
 10) Each class should contain a short description of the class functionality,
     including some examples, at the appropriate location for the ROOT
@@ -138,12 +139,12 @@ The various shared libraries may be automatically installed using the provided s
 scripts in the "scripts" directory of the various packages.
 It is essential that one first installs ROOT (including the TPythia6 package
 in view of the NcCollider physics event generator) and run the provided installation
-scripts within the proper "NCFS environment".
+scripts within the proper "NCFS environment".   
 The proper "NCFS environment" may be obtained automatically by invoking the following
 scripts which are provided in this "ncfs" top directory :
 
-ncfs.bat : To initialise the proper "NCFS environment" for Windows.
-ncfs.sh  : To initialise the proper "NCFS environment" for bash shells.
+    ncfs.bat : To initialise the proper "NCFS environment" for Windows.
+    ncfs.sh  : To initialise the proper "NCFS environment" for bash shells.
 
 Note that after invokation of one of the above "environment setting scripts", the
 command prompt should be "ncfs>" to indicate that the environment has been set correctly.
@@ -159,10 +160,8 @@ generic "ncfspack" library, followed by the desired detector specific package(s)
 
 Example : To create the IceCube environment one should load the following libraries
 
-Root> gSystem->Load("ncfspack");
-Root> gSystem->Load("icepack");
- 
-[1] http://root.cern.ch
+    Root> gSystem->Load("ncfspack");
+    Root> gSystem->Load("icepack");
  
  
  
