@@ -6,7 +6,7 @@ In this repository the software development is performed on the
 versions (and the initial "import" from the original SVN repository)
 are stored in different named releases c.q. tags, which are protected against
 modifications and/or deletion.   
-Note : All branches (including "main") always contain a fully functional
+Note : All tags (including the "main" branch) always contain a fully functional
        package which is 100% backward compatible with previous releases.
        
 Documentation of all the contained software tools is available at
