@@ -4,7 +4,7 @@ The NCFSPack framework with its extensions.
 In this repository the software development is performed on the
 "main" branch (called "trunk" in SVN jargon), whereas various specific
 releases (and the initial "import" from the original SVN repository)
-are stored in different named branches, which are protected against
+are stored in different named branches c.q. tags, which are protected against
 modifications and/or deletion.   
 Note : All branches (including "main") always contain a fully functional
        package which is 100% backward compatible with previous releases.
