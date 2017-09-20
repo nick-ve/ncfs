@@ -3,7 +3,7 @@
 // Copyright(c) 1997-2009, NCFS, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcAstrolab.h 139 2016-11-22 15:16:45Z nickve $
+// $Id: NcAstrolab.h 139 2017-09-20 08:30:45Z nickve $
 
 #include <math.h>
 
@@ -25,6 +25,7 @@
 #include "NcTimestamp.h"
 #include "NcPosition.h"
 #include "NcSignal.h"
+#include "NcDevice.h"
 #include "NcRandom.h"
 #include "NcMath.h"
  
@@ -32,15 +33,17 @@ class NcAstrolab : public TTask,public NcTimestamp
 {
  public:
   NcAstrolab(const char* name="NcAstrolab",const char* title="Generic lab"); // Constructor
-  virtual ~NcAstrolab();                                       // Destructor
-  NcAstrolab(const NcAstrolab& t);                             // Copy constructor
-  virtual TObject* Clone(const char* name="") const;           // Make a deep copy and provide its pointer
-  void Data(Int_t mode=1,TString u="deg");                     // Lab info in angular units u
-  void SetLabPosition(Nc3Vector& r);                           // Set lab position in terrestrial frame
-  void SetLabPosition(Double_t l,Double_t b,TString u="deg");  // Set lab terrestrial position
-  void SetExperiment(TString name);                            // Set position and local frame for the specified experiment
-  NcPosition GetLabPosition() const;                           // Provide the lab terrestrial position 
-  void GetLabPosition(Double_t& l,Double_t& b,TString u="deg") const;// Provide the lab terrestrial position
+  virtual ~NcAstrolab();                                              // Destructor
+  NcAstrolab(const NcAstrolab& t);                                    // Copy constructor
+  virtual TObject* Clone(const char* name="") const;                  // Make a deep copy and provide its pointer
+  void Data(Int_t mode=1,TString u="deg");                            // Lab info in angular units u
+  void SetLabPosition(Nc3Vector& r);                                  // Set lab position in terrestrial frame
+  void SetLabPosition(Double_t l,Double_t b,TString u="deg");         // Set lab terrestrial position
+  void SetExperiment(TString name);                                   // Set position and local frame for the specified experiment
+  NcPosition GetLabPosition() const;                                  // Provide the lab terrestrial position 
+  void GetLabPosition(Double_t& l,Double_t& b,TString u="deg") const; // Provide the lab terrestrial position
+  void SetRandomiser(Int_t iseed,NcTimestamp* ts=0,Int_t cnt1=0,Int_t cnt2=0); // (Re)initialise the internal NcRandom randomisation facility 
+  NcRandom* GetRandomiser(Int_t& iseed,Int_t& cnt1,Int_t& cnt2) const;         // Provide the current internal NcRandom randomiser parameters
   using NcTimestamp::GetLT;
   Double_t GetLT();  // Provide Local Time (LT) in fractional hours
   using NcTimestamp::GetLMST;
@@ -56,36 +59,42 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t ConvertAngle(Double_t a,TString in,TString out) const;       // Angular format conversions
   void PrintAngle(Double_t a,TString in,TString out,Int_t ndig=1) const;// Print angle in various formats
   Double_t GetSolidAngle(Double_t thetamin,Double_t thetamax,TString tu,Double_t phimin,Double_t phimax,TString pu) const; // Provide solid angle between the specified boundaries
-  NcSignal* SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode="T",TString name=""); // Store generic signal
-  NcSignal* SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode,TString name="");// Store generic signal
+  NcSignal* SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode="T",TString name="",Int_t type=0); // Store generic signal
+  NcSignal* SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode,TString name="",Int_t type=0);// Store generic signal
   Int_t GetNRefSignals(Int_t mode=0) const; // Provide the number of stored reference signals
-  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode="T");   // Provide signal data
-  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,TString name,TString mode="T"); // Provide signal data
-  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode);  // Provide signal data
-  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,TString name,TString mode);// Provide signal data
-  NcSignal* GetSignal(Int_t jref=0);                 // Provide pointer to a stored signal object
-  NcSignal* GetSignal(TString name);                 // Provide pointer to a stored signal object
-  void RemoveRefSignal(Int_t j,Int_t compress);      // Remove a stored reference signal object
-  void RemoveRefSignal(TString name,Int_t compress); // Remove a stored reference signal object
-  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref=0,TString emode="T"); // Print stored signal data
-  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode="T"); // Print stored signal data
-  void ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode="T",Int_t nmax=-1); // List stored signals
-  Int_t GetSignalIndex(TString name); // Provide storage index of the signal with the specified name
-  Double_t GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref=0);// Provide the Local Hour Angle in degrees
+  Int_t GetNsignals(Int_t type,Int_t mode=0) const; // Provide the number of stored signals of type "type"
+  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode="T",Int_t type=0);   // Provide signal data
+  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,TString name,TString mode="T",Int_t type=0); // Provide signal data
+  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode,Int_t type=0);  // Provide signal data
+  NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,TString name,TString mode,Int_t type=0);// Provide signal data
+  NcSignal* GetSignal(Int_t jref=0,Int_t type=0);                   // Provide pointer to a stored signal object
+  NcSignal* GetSignal(TString name,Int_t type=0,NcTimestamp* ts=0); // Provide pointer to a stored signal object
+  void RemoveRefSignal(Int_t j,Int_t compress);                     // Remove a stored reference signal object
+  void RemoveRefSignal(TString name,Int_t compress);                // Remove a stored reference signal object
+  void RemoveSignal(Int_t j,Int_t type,Int_t compress);             // Remove a stored signal object
+  void RemoveSignal(TString name,Int_t type,Int_t compress);        // Remove a stored signal object
+  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref=0,TString emode="T",Int_t type=0); // Print stored signal data
+  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode="T",Int_t type=0); // Print stored signal data
+  void ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode="T",Int_t nmax=10,Int_t j=-1,Int_t type=-1); // List stored signals
+  Int_t GetSignalIndex(TString name,Int_t type=0); // Provide storage index of the signal with the specified name
+  Double_t GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref=0,Int_t type=0);// Provide the Local Hour Angle in degrees
   void SetLocalFrame(Double_t t1,Double_t p1,Double_t t2,Double_t p2,Double_t t3,Double_t p3); // Define local coordinate frame
   using NcTimestamp::GetDifference;
   Double_t GetDifference(Int_t jref,TString au,Double_t& dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0); // Provide space and time difference
   Double_t GetDifference(TString name,TString au,Double_t& dt,TString tu,Int_t mode=1);// Provide space and time difference
   TArrayI* MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1); // Provide space and time matching reference signals
+  void MatchSignals(NcDevice& matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1); // Provide space and time matching info of signals
+  void MatchSignals(NcDevice& matches,TString name,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1); // Provide space and time matching info of signals
   void SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frndm=0); // Set time scrambling parameters
   Int_t GetTimeScramble(Double_t* tmin=0,Double_t* tmax=0,TF1* frndm=0); // Provide time scrambling parameters
   void SetPositionScramble(Int_t mode,Double_t dmin,Double_t dmax,TF1* df=0,Double_t thmin=0,Double_t thmax=0,TF1* thf=0,Double_t phimin=0,Double_t phimax=0,TF1* phif=0); // Set position scrambling parameters
   Int_t GetPositionScramble(Double_t* dmin=0,Double_t* dmax=0,TF1* df=0,Double_t* thmin=0,Double_t* thmax=0,TF1* thf=0,Double_t* phimin=0,Double_t* phimax=0,TF1* phif=0); // Get position scrambling parameters
   void SetMaxDt(Double_t s); // Set maximum time difference (in sec) for GetSignal 
   Double_t GetMaxDt() const; // Provide maximum time difference (in sec) for GetSignal 
-  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t jref=0,TString proj="ham",Int_t clr=0); // Display stored signal
-  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj="ham",Int_t clr=0); // Display stored signal
-  void DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj="ham",Int_t clr=0);             // Display all stored signals
+  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j=0,TString proj="ham",Int_t clr=0); // Display stored signal
+  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj="ham",Int_t clr=0,Int_t type=0); // Display stored signal
+  void DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj="ham",Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1); // Display all stored signals
+  void SetMarkerSize(Float_t size,Int_t type); // Set size for the marker symbols of the skymaps and related histograms 
   void SetCentralMeridian(Double_t phi,TString u="deg");  // Set central meridian for the sky display
   void SetPhysicalParameter(TString name,Double_t value); // Facility to modify physical parameter values
   Double_t GetPhysicalParameter(TString name) const;      // Provide the (modified) value of a physical parameter
@@ -110,8 +119,8 @@ class NcAstrolab : public TTask,public NcTimestamp
  protected:
   NcPosition fLabPos;    // Position of the lab in the terrestrial longitude-latitude frame
   Double_t fToffset;     // Lab time offset in fractional hours w.r.t. UT
-  NcSignal* fXsig;       // Signal entry for object or event studies
   TObjArray* fRefs;      // Array holding the reference signals
+  TObjArray* fSigs;      // Array holding the measured signals
   TRotMatrix fB;         //! The frame bias matrix for conversion of ICRS to J2000 coordinates
   Int_t fBias;           //! Initialisation flag for fB values (0=uninitialised  1=initialised)
   TRotMatrix fP;         //! Matrix for precession correction  
@@ -138,9 +147,9 @@ class NcAstrolab : public TTask,public NcTimestamp
   TF1* fPhiscfunc;       // Randomisation function for local phi coordinate scrambling
   NcRandom* fRan;        // The randomising facility
   Double_t fMaxDt;       // Maximum time difference (in sec) for GetSignal 
-  NcSignal* SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimestamp* ts,Int_t jref=0,TString name=""); // Generic signal storage
-  NcSignal* GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimestamp* ts,Int_t jref=0); // Provide stored signal data
-  void SetSolarSystem(TString name,NcTimestamp* ts); // Set c.q. update coordinates for solar system objects
+  NcSignal* SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimestamp* ts,Int_t jref=0,TString name="",Int_t type=0); // Generic signal storage
+  NcSignal* GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimestamp* ts,Int_t jref=0,Int_t type=0); // Provide stored signal data
+  void SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0); // Set c.q. update coordinates for solar system objects
   void SetBmatrix();                 // Set the frame bias matrix
   void SetPmatrix(NcTimestamp* ts);  // Set precession matrix for Julian date jd w.r.t. J2000.
   void SetNmatrix(NcTimestamp* ts);  // Set nutation matrix for Julian date jd w.r.t. J2000.
@@ -150,13 +159,20 @@ class NcAstrolab : public TTask,public NcTimestamp
   void Precess(Nc3Vector& r,NcTimestamp* ts1,NcTimestamp* ts2); // Correct RA and decl. for earth's precession
   void Nutate(Nc3Vector& r,NcTimestamp* ts); // Correct RA and decl. for earth's nutation
 
+  // Internal facility for reference signal and/or measurement matching
+  Int_t fSolUpdate; // Flag to update the position of Solar system objects for signal matching  
+  Double_t GetDifference(Int_t i,Int_t j,TString au,Double_t& dt,TString tu,Int_t mode=1); // Provide space and time difference
+
   // The skymap display facilities
-  Int_t fUsMeridian;   // Flag to denote that the user has selected the central meridian (1) or not (0)
-  Double_t fMeridian;  //! Central meridian (in rad) for the sky display
-  TString fProj;       //! Projection which is currently in use
-  TCanvas* fCanvas;    //! The canvas for the skymap
-  TH1* fHist;          //! Temp. histogram for the sky display
-  TObjArray* fMarkers; //! Temp. array to hold the markers for the signal display
+  Int_t fUsMeridian;      // Flag to denote that the user has selected the central meridian (1) or not (0)
+  Double_t fMeridian;     //! Central meridian (in rad) for the sky display
+  TString fProj;          //! Projection which is currently in use
+  TCanvas* fCanvas;       //! The canvas for the skymap
+  TH2* fHist[2];          //! Temp. histograms for the sky display
+  TObjArray* fMarkers;    //! Temp. array to hold the markers for the signal display
+  Float_t fMarkerSize[4]; // Size of the marker symbols for the skymaps and related histograms
+  Int_t fMarkerStyle[4];  // Style of the marker symbols for the skymaps and related histograms
+  Int_t fMarkerColor[4];  // Color of the marker symbols for the skymaps and related histograms
   void Project(Double_t l,Double_t b,TString proj,Double_t& x,Double_t& y);// Projection of (l,b) pair
   void ProjectCylindrical(Double_t l,Double_t b,Double_t& x,Double_t& y);  // Cylindrical projection of (l,b) pair
   void ProjectHammer(Double_t l,Double_t b,Double_t& x,Double_t& y);       // Hammer-Aitoff projection of (l,b) pair
@@ -200,6 +216,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
  
- ClassDef(NcAstrolab,21) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,22) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

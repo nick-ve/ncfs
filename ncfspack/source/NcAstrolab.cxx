@@ -25,7 +25,7 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcAstrolab.cxx 139 2016-11-22 15:16:45Z nickve $
+// $Id: NcAstrolab.cxx 139 2017-09-20 08:30:45Z nickve $
 
 ///////////////////////////////////////////////////////////////////////////
 // Class NcAstrolab
@@ -47,18 +47,18 @@
 // lab reference frame can also be specified. Together with the lab's
 // timestamp this uniquely defines all the coordinate transformations
 // between the various reference frames.
-// These lab characteristics allow a space-time correlation of lab
+// These lab characteristics allow space and time correlations of lab
 // observations with external (astrophysical) phenomena.
 //
 // Observations are entered as generic signals containing a position,
-// reference frame specification and a timestamp.
+// reference frame specification and a timestamp (see SetSignal).
 // These observations can then be analysed in various reference frames
 // via the available GET functions.
 //
 // Various external (astrophysical) phenomena may be entered as
 // so-called reference signals.
-// This class provides facilities (e.g. MatchRefSignal) to check
-// correlations of the stored measurement with these reference signals.
+// This class provides facilities (e.g. MatchSignals) to check
+// correlations of the stored measurements with these reference signals.
 // The memberfunction SetTimeScramble provides a facility to scramble
 // the timestamp of an observation or time differences with reference signals.
 // The memberfunction SetPositionScramble provides a facility to scramble
@@ -85,70 +85,68 @@
 // // Print laboratory parameters
 // lab.Data(1,"dms");
 //
-// // Enter some observed event to be investigated
+// // Enter some measurements (e.g. observed events) to be investigated
 // NcTimestamp ts;
-// ts.SetUT(1989,7,30,8,14,23,738504,0);
-// lab.SetSignal(1,23.8,"deg",208.65,"deg","loc",&ts,0,"M","Event10372");
+// ts.SetUT("30-07-1989","08:14:23.74",0);
+// lab.SetSignal(1,-18.2,"deg",87.53,"deg","loc",&ts,-1,"T","Event9081",1);
+// ts.Add(0,1,87326);
+// lab.SetSignal(1,23.8,"deg",208.65,"deg","loc",&ts,-1,"T","Event10372",1);
 //
 // // Enter some reference signals
 // Float_t alpha=194818.0;
 // Float_t delta=84400.;
-// lab.SetSignal(1,alpha,"hms",delta,"dms","equ","B",1950,-1,"M","Altair");
+// lab.SetSignal(1,alpha,"hms",delta,"dms","equ",0,-1,"B","Altair");
 // alpha=124900.0;
 // delta=272400.;
-// lab.SetSignal(1,alpha,"hms",delta,"dms","equ","B",1950,-1,"M","NGP");
+// lab.SetSignal(1,alpha,"hms",delta,"dms","equ",0,-1,"B","NGP");
 // alpha=64508.917;
 // delta=-164258.02;
-// lab.SetSignal(1,alpha,"hms",delta,"dms","equ","J",2000,-1,"M","Sirius");
+// lab.SetSignal(1,alpha,"hms",delta,"dms","equ",0,-1,"J","Sirius");
 // alpha=23149.08;
 // delta=891550.8;
-// lab.SetSignal(1,alpha,"hms",delta,"dms","equ","J",2000,-1,"M","Polaris");
+// lab.SetSignal(1,alpha,"hms",delta,"dms","equ",0,-1,"J","Polaris");
 // alpha=43600.;
 // delta=163100.;
-// lab.SetSignal(1,alpha,"hms",delta,"dms","equ","J",2000,-1,"M","Aldebaran");
-// lab.SetSignal(1,182948.53,"hms",380228.45,"dms","equ","J",2000,-1,"M","LyrA");
+// lab.SetSignal(1,alpha,"hms",delta,"dms","equ",0,-1,"J","Aldebaran");
+// lab.SetSignal(1,182948.53,"hms",380228.45,"dms","equ",0,-1,"J","LyrA");
 // lab.SetSignal(1,0,"deg",-90,"deg","gal",0,-1,"M","SGP");
 // // Mimic a GRB 5 seconds before the occurrence of Event10372
 // ts.Add(0,-5,0);
-// lab.SetSignal(1,327.531,"deg",-35.8903,"deg","gal",&ts,-1,"M","GRB890730");
+// lab.SetSignal(1,327.531,"deg",-35.8903,"deg","gal",&ts,-1,"T","GRB890730");
 // ts.Add(0,5,0);
 //
 // // List all stored objects
 // cout << endl;
-// lab.ListSignals("equ","M",5);
+// lab.ListSignals("equ","J",5,"M",-1);
 //
-// // Determine minimal space and time differences with reference signals
-// Double_t da,dt;
-// Int_t ia,it;
-// da=lab.GetDifference(0,"deg",dt,"s",1,&ia,&it);
-// cout << endl;
-// lab.ListSignals("loc","M",5);
-// cout << endl;
-// cout << " Minimal differences damin (deg) : " << da << " dtmin (s) : " << dt
-//      << " damin-index : " << ia << " dtmin-index : " << it << endl;
-// cout << " damin for "; lab.PrintSignal("equ","T",&ts,5,ia); cout << endl;
-// cout << " dtmin for "; lab.PrintSignal("equ","T",&ts,5,it); cout << endl;
+// // Search for space and time matches between the measurements and the reference signals
+// // within a cone of 20 degrees and a time window of [-60,60] seconds
+// NcDevice matches;
+// lab.MatchSignals(matches,20,"deg",60,"s");
+// matches.Data();
+// 
+// // Get the minimal encountered angular and time difference
+// // (for a more detailed example please refer to the docs of MatchSignals)
+// Double_t da=0; // Angular difference
+// Double_t dt=0; // Time difference
+// Int_t ia=0;    // "Hit" index of the pair with the minimal angular difference 
+// Int_t it=0;    // "Hit" index of the pair with the minimal time difference 
+// da=matches.GetSignal(1);
+// dt=matches.GetSignal(2);
+// ia=matches.GetSignal(3);
+// it=matches.GetSignal(4);
 //
-// // Search for space and time match with the reference signals
-// da=5;
-// dt=10;
-// TArrayI* arr=lab.MatchRefSignal(da,"deg",dt,"s");
-// Int_t index=0;
-// if (arr)
-// {
-//  for (Int_t i=0; i<arr->GetSize(); i++)
-//  {
-//   index=arr->At(i);
-//   cout << " Match found for index : " << index << endl;
-//   cout << " Corresponding ref. object "; lab.PrintSignal("equ","T",&ts,5,index); cout << endl;
-//  }
-// }
+// cout << " Minimal differences damin (deg) : " << da << " dtmin (s) : " << dt << endl;
+//
+// // The full information for the pair with the minimal time difference
+// NcSignal* sx=matches.GetHit(it);
+// if (sx) sx->Data();
 //
 // // Display all stored objects in a skymap (Hammer projection)
-// lab.DisplaySignals("equ","M",&ts,"ham",1);
+// lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: NvE $Date: 2016-11-22 16:16:45 +0100 (Tue, 22 Nov 2016) $ NCFS
+//- Modified: NvE $Date: 2017-09-20 09:30:45 +0100 (Wed, 20 Sep 2017) $ IIHE-VUB, Brussels
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -161,8 +159,8 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
 // Default constructor
 
  fToffset=0;
- fXsig=0;
  fRefs=0;
+ fSigs=0;
  fBias=0;
  fGal=0;
  fIndices=0;
@@ -170,8 +168,21 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
  fMeridian=-999;
  fProj="none";
  fCanvas=0;
- fHist=0;
+ fHist[0]=0;
+ fHist[1]=0;
  fMarkers=0;
+ fMarkerSize[0]=1; 
+ fMarkerSize[1]=1;
+ fMarkerSize[2]=1.5;
+ fMarkerSize[3]=0.3;
+ fMarkerStyle[0]=23;
+ fMarkerStyle[1]=20;
+ fMarkerStyle[2]=29;
+ fMarkerStyle[3]=8;
+ fMarkerColor[0]=kRed;
+ fMarkerColor[1]=kBlue;
+ fMarkerColor[2]=kRed;
+ fMarkerColor[3]=kBlack;
  fTscmode=0;
  fTscmin=0;
  fTscmax=0;
@@ -188,6 +199,7 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
  fPhiscfunc=0;
  fRan=0;
  fMaxDt=-1;
+ fSolUpdate=0;
 
  // Standard values (Particle Data Group 2014) for some (astro)physical parameters
  fSpeedC=299792458;
@@ -226,25 +238,28 @@ NcAstrolab::~NcAstrolab()
 {
 // Destructor to delete all allocated memory.
 
- if (fXsig)
- {
-  delete fXsig;
-  fXsig=0;
- }
  if (fRefs)
  {
   delete fRefs;
   fRefs=0;
+ }
+ if (fSigs)
+ {
+  delete fSigs;
+  fSigs=0;
  }
  if (fIndices)
  {
   delete fIndices;
   fIndices=0;
  }
- if (fHist)
+ for (Int_t i=0; i<2; i++)
  {
-  delete fHist;
-  fHist=0;
+  if (fHist[i])
+  {
+   delete fHist[i];
+   fHist[i]=0;
+  }
  }
  if (fMarkers)
  {
@@ -290,17 +305,27 @@ NcAstrolab::NcAstrolab(const NcAstrolab& t) : TTask(t),NcTimestamp(t)
  fToffset=t.fToffset;
  fLabPos=t.fLabPos;
  fL=t.fL;
- fXsig=0;
- if (t.fXsig) fXsig=new NcSignal(*(t.fXsig));
+ Int_t size=0;
  fRefs=0;
  if (t.fRefs)
  {
-  Int_t size=t.fRefs->GetSize();
+  size=t.fRefs->GetSize();
   fRefs=new TObjArray(size);
   for (Int_t i=0; i<size; i++)
   {
    NcSignal* sx=(NcSignal*)t.fRefs->At(i);
    if (sx) fRefs->AddAt(sx->Clone(),i);
+  }
+ }
+ fSigs=0;
+ if (t.fSigs)
+ {
+  size=t.fSigs->GetSize();
+  fSigs=new TObjArray(size);
+  for (Int_t i=0; i<size; i++)
+  {
+   NcSignal* sx=(NcSignal*)t.fSigs->At(i);
+   if (sx) fSigs->AddAt(sx->Clone(),i);
   }
  }
  fBias=0;
@@ -309,8 +334,17 @@ NcAstrolab::NcAstrolab(const NcAstrolab& t) : TTask(t),NcTimestamp(t)
  fMeridian=-999;
  fProj="none";
  fCanvas=0;
- fHist=0;
+ for (Int_t ih=0; ih<2; ih++)
+ {
+  fHist[ih]=0;
+ }
  fMarkers=0;
+ for (Int_t i=0; i<4; i++)
+ {
+  fMarkerSize[i]=t.fMarkerSize[i];
+  fMarkerStyle[i]=t.fMarkerStyle[i];
+  fMarkerColor[i]=t.fMarkerColor[i];
+ }
 
  fTscmode=0;
  fTscmin=0;
@@ -364,7 +398,8 @@ void NcAstrolab::Data(Int_t mode,TString u)
  cout << " Lab position longitude : "; PrintAngle(l,"deg",u,2);
  cout << " latitude : "; PrintAngle(b,"deg",u,2);
  cout << endl;
- cout << " Lab time offset w.r.t. UT : "; PrintTime(fToffset,12); cout << endl;
+ cout << " Lab time offset w.r.t. UT : "; PrintTime(fToffset,12);
+ cout << endl;
 
  // UT and Local time info
  Date(mode,fToffset);
@@ -373,7 +408,7 @@ void NcAstrolab::Data(Int_t mode,TString u)
  {
   cout << " ------------------" << endl;
   if (fTscmode==1) cout << " *** The obtained time differences will be scrambled (mode " << fTscmode << ") ***" << endl;
-  if (fTscmode==2) cout << " *** The stored observations are time scrambled (mode " << fTscmode << ") ***" << endl;
+  if (fTscmode==2) cout << " *** The stored measurements are time scrambled (mode " << fTscmode << ") ***" << endl;
   cout << " tmin : " << fTscmin << " tmax : " << fTscmax << " sec.";
   if (fTscfunc)
   {
@@ -389,7 +424,7 @@ void NcAstrolab::Data(Int_t mode,TString u)
  {
   cout << " ------------------" << endl;
   cout << " *** The obtained angular differences will be scrambled (mode " << fRscmode << ") ***" << endl;
-  cout << " dmin : " << fDscmin << " dmax : " << fDscmax << " degrees.";
+  cout << " dangmin : " << fDscmin << " dangmax : " << fDscmax << " degrees.";
   if (fDscfunc)
   {
    cout << " Randomising TF1 function " << fDscfunc->GetName() << " is used." << endl;
@@ -404,7 +439,7 @@ void NcAstrolab::Data(Int_t mode,TString u)
  {
   cout << " ------------------" << endl;
   cout << " *** The stored observations are position scrambled (mode " << fRscmode << ") ***" << endl;
-  cout << " dmin : " << fDscmin << " dmax : " << fDscmax;
+  cout << " drmin : " << fDscmin << " drmax : " << fDscmax;
   if (fDscfunc)
   {
    cout << " Randomising TF1 function " << fDscfunc->GetName() << " is used." << endl;
@@ -432,7 +467,16 @@ void NcAstrolab::Data(Int_t mode,TString u)
    cout << " Uniform phi randomisation is used." << endl;
   }
  }
- if (fTscmode || fRscmode) cout << " ------------------" << endl;
+ 
+ if (fRan)
+ {
+  Int_t iseed,cnt1,cnt2;
+  GetRandomiser(iseed,cnt1,cnt2);
+  cout << " ------------------" << endl;
+  cout << " Current settings of the internal NcRandom randomiser : iseed=" << iseed << " cnt1=" << cnt1 << " cnt2=" << cnt2 << endl;
+ }
+
+ if (fTscmode || fRscmode || fRan) cout << " ------------------" << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::SetLabPosition(Nc3Vector& p)
@@ -576,6 +620,66 @@ void NcAstrolab::GetLabPosition(Double_t& l,Double_t& b,TString u) const
  l=p[2];
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::SetRandomiser(Int_t iseed,NcTimestamp* ts,Int_t cnt1,Int_t cnt2)
+{
+// (Re)initialise the internal NcRandom randomisation facility.
+//
+// Note :
+// ------
+// This member function provides the user a handle to (re)initialise the internal randomisation
+// facility in order to obtain reproducible results or to ensure the use of different
+// random sequences for various NcAstrolab invokations by using e.g. the "date/time driven" initialisation. 
+// However, in case internal randomisations are needed, the randomisation facility
+// is automatically "date/time driven" initialised if it was not initialised by the user before.
+// So, in general there actually is no need for the user to explicitly invoke this member function.
+//
+// Input arguments :
+// -----------------
+// iseed >= 0 --> Use this value as seed for the internal NcRandom object.
+//                For allowed seed values please refer to the docs of NcRandom.
+//       < 0  --> Use the JD+sec of the provided timestamp "ts" as seed for the internal NcRandom object.
+//                In case ts=0 the JD+sec of the current NcAstrolab timestamp will be used.           
+//
+// For detailed information about the NcRandom seed and the optional
+// parameters "cnt1" and "cnt2" please refer to the docs of NcRandom. 
+//
+// The default values are ts=0, cnt1=0 and cnt2=0.
+
+ if (fRan) delete fRan;
+
+ if (iseed<0) // Use the provided timestamp
+ {
+  NcTimestamp* tx=ts;
+  if (!tx) tx=(NcTimestamp*)this;
+  Int_t jd,sec,ns;
+  tx->GetJD(jd,sec,ns);
+  iseed=jd+sec; 
+ }
+ 
+ fRan=new NcRandom(iseed,cnt1,cnt2);
+}
+///////////////////////////////////////////////////////////////////////////
+NcRandom* NcAstrolab::GetRandomiser(Int_t& iseed,Int_t& cnt1,Int_t& cnt2) const
+{
+// Provide the current "iseed", "cnt1" and "cnt2" parameters of the internal NcRandom randomiser.
+// For detailed information about these parameters please refer to the docs of NcRandom. 
+// The return argument is the pointer to the internal NcRandom object.
+// In case no internal randomiser was defined, a pointer value 0 will be returned and
+// the parameters will be set to iseed=-1, cnt1=-1 and cnt2=-1.
+
+ iseed=-1;
+ cnt1=-1;
+ cnt2=-1;
+
+ if (!fRan) return 0;
+
+ iseed=fRan->GetSeed();
+ cnt1=fRan->GetCnt1();
+ cnt2=fRan->GetCnt2();
+
+ return fRan;
+}
+///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::SetMaxDt(Double_t s)
 {
 // Set the maximum time difference (in sec) for returning a timestamp related
@@ -672,8 +776,10 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig) const
  if (out=="deg" || out=="rad")
  {
   cout.setf(ios::fixed,ios::floatfield);
-  cout << setprecision(ndig) << b << " " << out.Data();
-  cout.unsetf(ios::fixed);
+  Int_t nold=cout.precision(ndig);
+  cout << b << " " << out.Data();
+  cout.precision(nold);
+  cout.unsetf(ios::floatfield);
   return; 
  }
 
@@ -755,7 +861,7 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig) const
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimestamp* ts,Int_t jref,TString name)
+NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimestamp* ts,Int_t jref,TString name,Int_t type)
 {
 // Internal memberfunction for generic storage of a signal as specified by the position r and the timestamp ts.
 // The pointer to the stored signal is returned (0 in case of incompatible data).
@@ -801,65 +907,49 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
 //        "B" --> Besselian (B1950) reference epoch coordinates 
 //        "J" --> Julian (J2000) reference epoch coordinates 
 //
-// The input parameter "jref" allows the user to store so-called "reference" signals.
+// The input parameters "jref" and "type" allow the user to store measurements or so-called "reference" signals.
 // These reference signals may be used to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Storage of the measurement
-//        j --> Storage of a reference signal at the j-th position (j=1 is first)
-//      < 0 --> Add a reference signal at the next available position
+// jref = j --> Storage of a signal at the j-th position (j=1 is first)
+//      < 0 --> Add a signal at the next available position
+//
+// type = 0 --> The entered data is a reference signal
+//        1 --> The entered data is a measured signal
+//
+// Note : For backward compatibility jref=0 invokes the storage of a single measurement.
+//        When invoked with jref=0 all other stored measurements will be lost.
+//        However, the stored reference signals are not affected.
+//        The user is advised not to use this obsolete jref=0 facility anymore. 
 //
 // Via the input argument "name" the user can give the stored signal also a name.
 //
-// The default values are jref=0 and name="".
+// The default values are jref=0, name="" and type=0 to obtain backward compatible functionality.
 //
 // Notes :
 // -------
 // 1) In case ts=0 the current timestamp of the lab will be taken.
 // 2) In case scrambling has been activated, the data will be scrambled accordingly.
 
+// Cope with the (obsolete) jref=0 specification
+ if (!jref)
+ {
+  type=1;
+  jref=1;
+  delete fSigs;
+  fSigs=0;
+ }
+ 
+ if (!r) return 0;
+
+ if (!r->HasVector()) return 0;
+
+ if (frame!="equ" && frame!="gal" && frame!="ecl" && frame!="hor" && frame!="icr" && frame!="loc") return 0;
+
+ if (frame=="equ" && mode!="M" && mode!="m" && mode!="T" && mode!="t" && mode!="B" && mode!="b" && mode!="J" && mode!="j") return 0;
+
  NcSignal* sx=0;
-
- if (!r)
- {
-  if (!jref && fXsig)
-  {
-   delete fXsig;
-   fXsig=0;
-  }
-  return 0;
- }
-
- if (!r->HasVector())
- {
-  if (!jref && fXsig)
-  {
-   delete fXsig;
-   fXsig=0;
-  }
-  return 0;
- }
-
- if (frame!="equ" && frame!="gal" && frame!="ecl" && frame!="hor" && frame!="icr" && frame!="loc")
- {
-  if (!jref && fXsig)
-  {
-   delete fXsig;
-   fXsig=0;
-  }
-  return 0;
- }
-
- if (frame=="equ" && mode!="M" && mode!="m" && mode!="T" && mode!="t" && mode!="B" && mode!="b" && mode!="J" && mode!="j")
- {
-  if (!jref && fXsig)
-  {
-   delete fXsig;
-   fXsig=0;
-  }
-  return 0;
- }
-
+ 
  if (!ts) ts=(NcTimestamp*)this;
 
  Double_t vec[3];
@@ -876,30 +966,19 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
   q=q.GetUnprimed(&fL);
 
   // Store the signal
-  sx=SetSignal(&q,"hor",mode,ts,jref,name);
+  sx=SetSignal(&q,"hor",mode,ts,jref,name,type);
   return sx;
  }
 
- // If needed, initialise the randomiser with as seed JD+sec
- // of the timestamp of the first reference signal.
- // If there is no ref. signal, use the event timestamp instead.
- if (!fRan && !jref && (fTscmode==2 || fRscmode==2))
- {
-  NcTimestamp* tran=0;
-  NcSignal* sran=GetSignal(1);
-  if (sran) tran=sran->GetTimestamp();
-  if (!tran) tran=ts;
-  Int_t jd,sec,ns;
-  tran->GetJD(jd,sec,ns);
-  Int_t iseed=jd+sec; 
-  fRan=new NcRandom(iseed);
- }
+ // If needed, initialise the randomiser with a "date/time driven" seed
+ // of the provided timestamp.
+ if (!fRan && type && (fTscmode==2 || fRscmode==2)) SetRandomiser(-1,ts);
 
  // Local timestamp copy to allow time scrambling
  NcTimestamp tx(*ts);
 
  // Perform time scrambling (measurements only) if requested
- if (!jref && fTscmode==2)
+ if (type && fTscmode==2)
  {
   Double_t dt=0;
 
@@ -996,23 +1075,40 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
   if (!fBias) SetBmatrix(); 
   q=q.GetUnprimed(&fB);
  }
-
+ 
  // Store the signal in ICRS coordinates
- if (!jref) // Storage of a measurement
+ if (type) // Storage of a measurement
  {
-  if (!fXsig)
+  NcSignal* sxsig=0;
+  if (!fSigs) 
   {
-   fXsig=new NcSignal();
+   fSigs=new TObjArray();
+   fSigs->SetOwner();
+  }
+  // Expand array size if needed
+  if (jref>0 && jref>=fSigs->GetSize()) fSigs->Expand(jref+1);
+  sxsig=GetSignal(jref,type);
+  if (!sxsig)
+  {
+   sxsig=new NcSignal();
   }
   else
   {
-   fXsig->Reset(1);
+   sxsig->Reset(1);
   }
-  if (name != "") fXsig->SetName(name);
-  fXsig->SetTitle("Event in ICRS coordinates");
-  fXsig->SetTimestamp(tx);
-  fXsig->SetPosition(q);
-  sx=fXsig;
+  if (name != "") sxsig->SetName(name);
+  sxsig->SetTitle("Observed event in ICRS coordinates");
+  sxsig->SetTimestamp(tx);
+  sxsig->SetPosition(q);
+  if (jref<0)
+  {
+   fSigs->Add(sxsig);
+  }
+  else
+  {
+   fSigs->AddAt(sxsig,jref-1);
+  }
+  sx=sxsig;
  }
  else // Storage of a reference signal
  {
@@ -1024,7 +1120,7 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
   }
   // Expand array size if needed
   if (jref>0 && jref>=fRefs->GetSize()) fRefs->Expand(jref+1);
-  sxref=GetSignal(jref);
+  sxref=GetSignal(jref,type);
   if (!sxref)
   {
    sxref=new NcSignal();
@@ -1048,17 +1144,16 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
   sx=sxref;
  }
 
- if (fRscmode !=2 || jref) return sx;
+ if (fRscmode !=2 || !type) return sx;
 
  //////////////////////////////////////////////////////////////////
  // Perform position scrambling (measurements only) if requested //
  //////////////////////////////////////////////////////////////////
 
- // Get the measurement in horizontal coordinates
- GetSignal(q,"hor",mode,&tx,0);
-
- // Convert from horizontal to local-frame coordinates
- q=q.GetPrimed(&fL);
+ // Get the measurement in local coordinates
+ Int_t index=fSigs->IndexOf(sx);
+ index++; // First storage is at index=1 and not index=0
+ GetSignal(q,"loc",mode,&tx,index,type);
 
  q.GetVector(vec,"sph","deg"); 
 
@@ -1122,9 +1217,10 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
  }
 
  vec[0]+=dd;
+ if (vec[0]<=0) vec[0]=1e-20; // Keep a physical situation
  vec[1]+=dtheta;
  vec[2]+=dphi;
- q.SetVector(vec,"sph","deg"); 
+ q.SetVector(vec,"sph","deg");
 
  ///////////////////////////////////////////////////////////////////
  // Construct the corresponding ICRS position vector to be stored //
@@ -1150,13 +1246,12 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
  q=q.GetUnprimed(&fB);
 
  // Store the measurement position
- fXsig->SetPosition(q);
- sx=fXsig;
+ sx->SetPosition(q);
 
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts)
+void NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts,Int_t type)
 {
 // Internal memberfunction to set c.q. update coordinates for solar system objects
 // according to timestamp "ts".
@@ -1167,11 +1262,16 @@ void NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts)
 // which is available on http://aa.usno.navy.mil/publications/docs/Circular_179.pdf.
 //
 // name : Name of the solar system object.
+// ts   : Timestamp used to evaluate the position of the specified object.
+// type : 0 --> The object data will be searched c.q. entered among the reference signals
+//        1 --> The object data will be searched c.q. entered among the measured signals
 //
 // All geocentric name specifications as indicated in the docs of NcTimestamp::Almanac()
 // are supported here.
 //
 // Note : In case ts=0 the current timestamp of this NcAstrolab instance will be taken.
+//
+// The default value is type=0 for backward compatibility.
 
  // Only geocentric positions are allowed
  if (name.Contains("*")) return;
@@ -1187,14 +1287,14 @@ void NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts)
  ts->Almanac(0,0,0,0,name,&lx,&bx,&rx);
  if (rx>0) set=1;
 
- // Store the object as a reference signal.
+ // Replace c.q. store the object data as a reference or measured signal according to "type".
  // In case the object wasn't stored yet, jref=-1 and the object will be 
- // added to the list of stored reference signals.
- Int_t jref=GetSignalIndex(name);
- if (set && jref) SetSignal(rx,lx,"deg",bx,"deg","ecl",ts,jref,"M",name);
+ // added to the list of stored signals of "type".
+ Int_t jref=GetSignalIndex(name,type);
+ if (set && jref) SetSignal(rx,lx,"deg",bx,"deg","ecl",ts,jref,"M",name,type);
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode,TString name)
+NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode,TString name,Int_t type)
 {
 // Store a signal as specified by the distance d, angular position (a,b) and the timestamp ts.
 // The pointer to the stored signal is returned (0 in case of incompatible data).
@@ -1246,17 +1346,24 @@ NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TStr
 //        "B" --> Besselian (B1950) reference epoch coordinates 
 //        "J" --> Julian (J2000) reference epoch coordinates 
 //
-// The input parameter "jref" allows the user to store so-called "reference" signals.
+// The input parameters "jref" and "type" allow the user to store measurements or so-called "reference" signals.
 // These reference signals may be used to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Storage of the measurement
-//        j --> Storage of a reference signal at the j-th position (j=1 is first)
-//      < 0 --> Add a reference signal at the next available position
+// jref = j --> Storage of a signal at the j-th position (j=1 is first)
+//      < 0 --> Add a signal at the next available position
+//
+// type = 0 --> The entered data is a reference signal
+//        1 --> The entered data is a measured signal
+//
+// Note : For backward compatibility jref=0 invokes the storage of a single measurement.
+//        When invoked with jref=0 all other stored measurements will be lost.
+//        However, the stored reference signals are not affected.
+//        The user is advised not to use this obsolete jref=0 facility anymore. 
 //
 // Via the input argument "name" the user can give the stored signal also a name.
 //
-// The default values are mode="T" and name="".
+// The default values are mode="T", name="" and type=0.
 //
 // Notes :
 // -------
@@ -1277,15 +1384,7 @@ NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TStr
  // Equatorial coordinates
  if (frame=="equ")
  {
-  if (mode!="M" && mode!="m" && mode!="T" && mode!="t" && mode!="B" && mode!="b" && mode!="J" && mode!="j")
-  {
-   if (!jref && fXsig)
-   {
-    delete fXsig;
-    fXsig=0;
-   }
-   return 0;
-  }
+  if (mode!="M" && mode!="m" && mode!="T" && mode!="t" && mode!="B" && mode!="b" && mode!="J" && mode!="j") return 0;
   vec[1]=90.-b;
   vec[2]=a;
  }
@@ -1326,11 +1425,11 @@ NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TStr
  }
 
  r.SetVector(vec,"sph","deg");
- NcSignal* sx=SetSignal(&r,frame,mode,ts,jref,name);
+ NcSignal* sx=SetSignal(&r,frame,mode,ts,jref,name,type);
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode,TString name)
+NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode,TString name,Int_t type)
 {
 // Store a signal as specified by the distance d, angular position (a,b) and the specified epoch.
 // The pointer to the stored signal is returned (0 in case of incompatible data).
@@ -1388,29 +1487,41 @@ NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TStr
 //        "B" --> Besselian (B1950) reference epoch coordinates 
 //        "J" --> Julian (J2000) reference epoch coordinates 
 //
-// The input parameter "jref" allows the user to store so-called "reference" signals.
+// The input parameters "jref" and "type" allow the user to store measurements or so-called "reference" signals.
 // These reference signals may be used to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Storage of the measurement
-//        j --> Storage of a reference signal at the j-th position (j=1 is first)
-//      < 0 --> Add a reference signal at the next available position
+// jref = j --> Storage of a signal at the j-th position (j=1 is first)
+//      < 0 --> Add a signal at the next available position
+//
+// type = 0 --> The entered data is a reference signal
+//        1 --> The entered data is a measured signal
+//
+// Note : For backward compatibility jref=0 invokes the storage of a single measurement.
+//        When invoked with jref=0 all other stored measurements will be lost.
+//        However, the stored reference signals are not affected.
+//        The user is advised not to use this obsolete jref=0 facility anymore. 
 //
 // Via the input argument "name" the user can give the stored signal also a name.
 //
-// The default value is name="".
+// The default values are name="" and type=0.
 //
 // Note : In case scrambling has been activated, the data will be scrambled accordingly.
 
  NcTimestamp tx;
  tx.SetEpoch(e,s);
  
- NcSignal* sx=SetSignal(d,a,au,b,bu,frame,&tx,jref,mode,name);
+ NcSignal* sx=SetSignal(d,a,au,b,bu,frame,&tx,jref,mode,name,type);
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAstrolab::GetNRefSignals(Int_t mode) const
 {
+// ************************************************************************************
+// *** This memberfunction is obsolete and is only kept for backward compatibility. ***
+// *** The user is advised to use the memberfunction GetNsignals() instead.         ***
+// ************************************************************************************
+//
 // Provide the (max. index) number of stored reference signals.
 //
 // Note : It might be that a user may have removed a reference signal
@@ -1428,21 +1539,50 @@ Int_t NcAstrolab::GetNRefSignals(Int_t mode) const
 //
 // The default value is mode=0.
 
- if (!fRefs) return 0;
+ Int_t n=GetNsignals(0,mode);
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcAstrolab::GetNsignals(Int_t type,Int_t mode) const
+{
+// Provide the (max. index) number of stored signals of type "type".
+//
+// type = 0 --> The requested number corresponds to the stored reference signals
+//        1 --> The requested number corresponds to the stored  measured signal
+//
+// Note : It might be that a user may have removed a reference signal
+//        from the storage without compressing the storage array
+//        (e.g. for maintaining the original reference signal indices).
+//        In such a case the actual storage array may contain reference
+//        signals at index values which are larger than the number of
+//        actually stored reference signals.
+//        The input argument "mode" may be used to obtain this max. index
+//        value instead of the number actually stored reference signals.
+//
+// mode : 0 --> Return the number of actually stored signals of type "type".
+//        1 --> Return the max. index value for stored signals of type "type"
+//              (which actually is just the size of the storage array). 
+//
+// The default value is mode=0.
+ 
+ TObjArray* arr=fRefs;
+ if (type) arr=fSigs;
+
+ if (!arr) return 0;
 
  Int_t n=0;
  if (!mode)
  {
-  n=fRefs->GetEntries();
+  n=arr->GetEntries();
  }
  else
  {
-  n=fRefs->GetSize();
+  n=arr->GetSize();
  }
  return n;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimestamp* ts,Int_t jref)
+NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimestamp* ts,Int_t jref,Int_t type)
 {
 // Internal memberfunction to provide the frame specific coordinates of a signal at the specified timestamp ts.
 // The coordinates are returned via the vector argument "r".
@@ -1450,14 +1590,9 @@ NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimest
 // In case no stored signal was available or one of the input arguments was
 // invalid, the returned pointer will be 0.
 //
-// Notes :
-// -------
-// 1) In case the name specifies a solar system object supported by SetSolarSystem()
-//    which was not yet stored as a reference signal, the corresponding reference signal
-//    will be created and stored with the specified timestamp.
-// 2) In case the time difference between the stored signal and the specified
-//    timestamp is larger than the maximum allowed (see memberfunction SetMaxDt),
-//    the vector "r" is set to 0 and also the returned pointer will be 0.
+// Note : In case the time difference between the stored signal and the specified
+//        timestamp is larger than the maximum allowed (see memberfunction SetMaxDt),
+//        the vector "r" is set to 0 and also the returned pointer will be 0.
 //
 // The input parameter "frame" specifies the frame to which the components of r refer.
 // The various conventions are :
@@ -1490,14 +1625,19 @@ NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimest
 //        "B" --> Provides Besselian (B1950) reference epoch coordinates 
 //        "J" --> Provides Julian (J2000) reference epoch coordinates 
 //
-// The input parameter "jref" allows to access so-called "reference" signals.
+// The input parameters "jref" and "type" allow to access measurements or so-called "reference" signals.
 // These reference signals may be used to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Access to the measurement
-//        j --> Access to the reference signal at the j-th position (j=1 is first)
+// jref = j --> Access to a signal at the j-th position (j=1 is first)
+//        0 --> Access to the first measurement (only kept for backward compatibility)
 //
-// Default value is jref=0.
+// type = 0 --> The requested data is a reference signal
+//        1 --> The requested data is a measured signal
+//
+// The user is advised not to use the obsolete "jref=0" functionality anymore.
+//
+// Default values are jref=0 and type=0 for backward compatibility.
 //
 // Note : In case ts=0 the current timestamp of the lab will be taken.
 
@@ -1507,7 +1647,7 @@ NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimest
 
  if (frame=="equ" && mode!="M" && mode!="m" && mode!="T" && mode!="t" && mode!="B" && mode!="b" && mode!="J" && mode!="j") return 0;
 
- NcSignal* sx=GetSignal(jref);
+ NcSignal* sx=GetSignal(jref,type);
 
  if (!sx) return 0;
 
@@ -1524,7 +1664,7 @@ NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimest
 
  // Update coordinates for Solar system objects
  TString name=sx->GetName();
- SetSolarSystem(name,ts);
+ SetSolarSystem(name,ts,type);
 
  Double_t vec[3];
  sx->GetPosition(vec,"sph","rad");
@@ -1598,7 +1738,7 @@ NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimest
  if (frame=="loc")
  {
   // Get the signal in horizontal coordinates
-  GetSignal(q,"hor",mode,ts,jref);
+  GetSignal(q,"hor",mode,ts,jref,type);
 
   // Convert from horizontal to local-frame coordinates
   q=q.GetPrimed(&fL);
@@ -1608,9 +1748,9 @@ NcSignal* NcAstrolab::GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimest
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode)
+NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode,Int_t type)
 {
-// Provide celestial position data (d,a,b) of the signal specified by "jref" at the specific timestamp ts.
+// Provide celestial position data (d,a,b) of the signal specified by "jref" and "type" at the specific timestamp ts.
 // For angular celestial positions it is quite common to use unit vectors, i.e. d=1.
 // However, via the coordinate "d" an actual distance, redshift, Lorentz factor or any other
 // positive scalar observable related to the observation may have been specified and retrieved here.
@@ -1622,12 +1762,19 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
 //        timestamp is larger than the maximum allowed (see memberfunction SetMaxDt),
 //        the d, a and b coordinates are set to 0 and also the returned pointer will be 0.
 //
-// The input parameter "jref" allows the user to also access so-called "reference" signals.
+// The input parameters "jref" and "type" allow to access measurements or so-called "reference" signals.
 // These reference signals may be used to check space-time event coincidences with the
-// stored regular signal (e.g. coincidence of the stored signal with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Access to the measurement
-//        j --> Access to the reference signal at the j-th position (j=1 is first)
+// jref = j --> Access to a signal at the j-th position (j=1 is first)
+//        0 --> Access to the first measurement (only kept for backward compatibility)
+//
+// type = 0 --> The requested data is a reference signal
+//        1 --> The requested data is a measured signal
+//
+// The user is advised not to use the obsolete "jref=0" functionality anymore.
+//
+// Default values are jref=0 and type=0.
 //
 // The input parameter "frame" allows the user to specify the frame to which
 // the angular coordinates (a,b) refer. Available options are :
@@ -1675,7 +1822,7 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
  b=0;
 
  Nc3Vector r;
- NcSignal* sx=GetSignal(r,frame,mode,ts,jref);
+ NcSignal* sx=GetSignal(r,frame,mode,ts,jref,type);
 
  if (!sx) return 0;
 
@@ -1730,9 +1877,9 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,TString name,TString mode)
+NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,NcTimestamp* ts,TString name,TString mode,Int_t type)
 {
-// Provide celestial position data (d,a,b) of the signal specified by "name" at the specific timestamp ts.
+// Provide celestial position data (d,a,b) of the signal specified by "name" and "type" at the specific timestamp ts.
 // For angular celestial positions it is quite common to use unit vectors, i.e. d=1.
 // However, via the coordinate "d" an actual distance, redshift, Lorentz factor or any other
 // positive scalar observable related to the observation may have been specified and retrieved here.
@@ -1740,11 +1887,21 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
 // In case no stored signal was available or one of the input arguments was
 // invalid, the returned pointer will be 0.
 //
+// The input parameter "type" allows to access measurements or so-called "reference" signals.
+// These reference signals may be used to check space-time event coincidences with the
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
+//
+// type = 0 --> The requested data is a reference signal
+//        1 --> The requested data is a measured signal
+//
+// Default value is type=0.
+//
 // Notes :
 // -------
-// 1) In case the name specifies a solar system object supported by SetSolarSystem()
-//    which was not yet stored as a reference signal, the corresponding reference signal
-//    will be created and stored with the specified timestamp.
+// 1) In case the name specifies a solar system object which was not yet stored according to "type",
+//    the corresponding signal will be created and stored with the specified timestamp.
+//    All geocentric name specifications for solar system objects as indicated in the
+//    docs of NcTimestamp::Almanac() are supported.
 // 2) In case the time difference between the stored signal and the specified
 //    timestamp is larger than the maximum allowed (see memberfunction SetMaxDt),
 //    the d, a and b coordinates are set to 0 and also the returned pointer will be 0.
@@ -1791,17 +1948,17 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
 // Note : In case ts=0 the current timestamp of the lab will be taken.
 
  // Set c.q. update coordinates for Solar system objects
- SetSolarSystem(name,ts);
+ SetSolarSystem(name,ts,type);
 
  NcSignal* sx=0;
- Int_t j=GetSignalIndex(name);
- if (j>=0) sx=GetSignal(d,a,au,b,bu,frame,ts,j,mode);
+ Int_t j=GetSignalIndex(name,type);
+ if (j>=0) sx=GetSignal(d,a,au,b,bu,frame,ts,j,mode,type);
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode)
+NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode,Int_t type)
 {
-// Provide celestial position data (d,a,b) of the signal specified by "jref" at the specified epoch.
+// Provide celestial position data (d,a,b) of the signal specified by "jref" and "type" at the specified epoch.
 // For angular celestial positions it is quite common to use unit vectors, i.e. d=1.
 // However, via the coordinate "d" an actual distance, redshift, Lorentz factor or any other
 // positive scalar observable related to the observation may have been specified and retrieved here.
@@ -1813,12 +1970,19 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
 //        timestamp is larger than the maximum allowed (see memberfunction SetMaxDt),
 //        the d, a and b coordinates are set to 0 and also the returned pointer will be 0.
 //
-// The input parameter "jref" allows the user to also access so-called "reference" signals.
+// The input parameters "jref" and "type" allow to access measurements or so-called "reference" signals.
 // These reference signals may be used to check space-time event coincidences with the
-// stored regular signal (e.g. coincidence of the stored signal with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Access to the measurement
-//        j --> Access to the reference signal at the j-th position (j=1 is first)
+// jref = j --> Access to a signal at the j-th position (j=1 is first)
+//        0 --> Access to the first measurement (only kept for backward compatibility)
+//
+// type = 0 --> The requested data is a reference signal
+//        1 --> The requested data is a measured signal
+//
+// The user is advised not to use the obsolete "jref=0" functionality anymore.
+//
+// Default values are jref=0 and type=0.
 //
 // The input parameter "frame" allows the user to specify the frame to which
 // the angular coordinates (a,b) refer. Available options are :
@@ -1874,13 +2038,13 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
  NcTimestamp tx;
  tx.SetEpoch(e,s);
 
- NcSignal* sx=GetSignal(d,a,au,b,bu,frame,&tx,jref,mode);
+ NcSignal* sx=GetSignal(d,a,au,b,bu,frame,&tx,jref,mode,type);
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,TString name,TString mode)
+NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,TString name,TString mode,Int_t type)
 {
-// Provide celestial position data (d,a,b) of the signal specified by "name" at the specified epoch.
+// Provide celestial position data (d,a,b) of the signal specified by "name" and "type" at the specified epoch.
 // For angular celestial positions it is quite common to use unit vectors, i.e. d=1.
 // However, via the coordinate "d" an actual distance, redshift, Lorentz factor or any other
 // positive scalar observable related to the observation may have been specified and retrieved here.
@@ -1888,11 +2052,21 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
 // In case no stored signal was available or one of the input arguments was
 // invalid, the returned pointer will be 0.
 //
+// The input parameter "type" allows to access measurements or so-called "reference" signals.
+// These reference signals may be used to check space-time event coincidences with the
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
+//
+// type = 0 --> The requested data is a reference signal
+//        1 --> The requested data is a measured signal
+//
+// Default value is type=0.
+//
 // Notes :
 // -------
-// 1) In case the name specifies a solar system object supported by SetSolarSystem()
-//    which was not yet stored as a reference signal, the corresponding reference signal
-//    will be created and stored with the specified timestamp.
+// 1) In case the name specifies a solar system object which was not yet stored according to "type",
+//    the corresponding signal will be created and stored with the specified epoch as timestamp.
+//    All geocentric name specifications for solar system objects as indicated in the
+//    docs of NcTimestamp::Almanac() are supported.
 // 2) In case the time difference between the stored signal and the specified
 //    timestamp is larger than the maximum allowed (see memberfunction SetMaxDt),
 //    the d, a and b coordinates are set to 0 and also the returned pointer will be 0.
@@ -1945,64 +2119,93 @@ NcSignal* NcAstrolab::GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,T
  // Set c.q. update coordinates for Solar system objects
  NcTimestamp tx;
  tx.SetEpoch(e,s);
- SetSolarSystem(name,&tx);
+ SetSolarSystem(name,&tx,type);
 
  NcSignal* sx=0;
- Int_t j=GetSignalIndex(name);
- if (j>=0) sx=GetSignal(d,a,au,b,bu,frame,s,e,j,mode);
+ Int_t j=GetSignalIndex(name,type);
+ if (j>=0) sx=GetSignal(d,a,au,b,bu,frame,s,e,j,mode,type);
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::GetSignal(Int_t jref)
+NcSignal* NcAstrolab::GetSignal(Int_t jref,Int_t type)
 {
 // Provide the pointer to a stored signal object.
 //
-// The input parameter "jref" allows the user to access so-called "reference" signals.
-// These reference signals may be used to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
+// The input parameters "jref" and "type" allow to access either measured of so-called "reference" signals.
+// The reference signals may be used to check space-time event coincidences with the
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Access to the measurement
-//        j --> Access to the reference signal at the j-th position (j=1 is first)
+// jref = j --> Access to the signal at the j-th position (j=1 is first)
 //
-// Default value is jref=0.
+// type = 0 --> Provide the corresponding reference signal
+//        1 --> Provide the corresponding measurement
+//
+// Note : jref=0 is an obsolete way to access the first measurement.
+//        The user is advised not to use this obsolete "jref=0" method anymore,
+//        but it is still supported for backward compatibility.
+//
+// Default values are jref=0 and type=0 for backward compatibility.
 
- if (jref && !fRefs) return 0;
+ if (jref<0) return 0;
+ 
+ if (!jref) // For backward compatibility
+ {
+  jref=1;
+  type=1;
+ }
+ 
+ if (!type && !fRefs) return 0;
+ if (type && !fSigs) return 0;
 
  NcSignal* sx=0;
- if (!jref)
+ if (type)
  {
-  sx=fXsig;
+  if (jref<=fSigs->GetSize()) sx=(NcSignal*)fSigs->At(jref-1);
  }
  else
  {
-  if (jref>0 && jref<=fRefs->GetSize()) sx=(NcSignal*)fRefs->At(jref-1);
+  if (jref<=fRefs->GetSize()) sx=(NcSignal*)fRefs->At(jref-1);
  }
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcAstrolab::GetSignal(TString name)
+NcSignal* NcAstrolab::GetSignal(TString name,Int_t type,NcTimestamp* ts)
 {
-// Provide the pointer to the stored signal object with the specified name.
+// Provide the pointer to the stored signal object with the specified name and type.
 //
-// Note : In case the name specifies a solar system object supported by SetSolarSystem()
-//        which was not yet stored as a reference signal, the corresponding reference signal
-//        will be created and stored with the current timestamp of this NcAstrolab instance. 
+// type = 0 --> Provide the corresponding reference signal
+//        1 --> Provide the corresponding measurement
+//
+//
+// Note : In case the name specifies a solar system object which was not yet stored,
+//        the corresponding signal will be created according to "type" and the provided
+//        timestamp "ts".
+//        In case ts=0, the current timestamp of this NcAstrolab instance will be used.
+//        All geocentric name specifications for solar system objects as indicated in the
+//        docs of NcTimestamp::Almanac() are supported.
+//
+// The default values are type=0 and ts=0 for backward compatibility.
 
  NcSignal* sx=0;
- Int_t j=GetSignalIndex(name);
+ Int_t j=GetSignalIndex(name,type);
 
- if (j==-1) // Set and store info for the requested Solar system object if not already stored
+ if (!type && j==-1) // Set and store info for the requested Solar system object if not already stored
  {
-  SetSolarSystem(name,0);
-  j=GetSignalIndex(name);
+  SetSolarSystem(name,ts,type);
+  j=GetSignalIndex(name,type);
  }
 
- if (j>=0) sx=GetSignal(j);
+ if (j>=0) sx=GetSignal(j,type);
  return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::RemoveRefSignal(Int_t j,Int_t compress)
 {
+// ***********************************************************************************
+// *** This memberfunction is obsolete and is only kept for backward compatibility ***
+// *** The user is advised to use the memberfunction RemoveSignal() instead        ***
+// ***********************************************************************************
+//
 // Remove the reference signal which was stored at the j-th position (j=1 is first).
 // Note : j=0 means that all stored reference signals will be removed.
 //        j<0 allows array compression (see below) without removing any signals. 
@@ -2038,6 +2241,11 @@ void NcAstrolab::RemoveRefSignal(Int_t j,Int_t compress)
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::RemoveRefSignal(TString name,Int_t compress)
 {
+// ***********************************************************************************
+// *** This memberfunction is obsolete and is only kept for backward compatibility ***
+// *** The user is advised to use the memberfunction RemoveSignal() instead        ***
+// ***********************************************************************************
+//
 // Remove the reference signal with the specified name.
 //
 // The "compress" parameter allows compression of the ref. signal storage array.
@@ -2052,25 +2260,90 @@ void NcAstrolab::RemoveRefSignal(TString name,Int_t compress)
  if (j>0) RemoveRefSignal(j,compress);
 }
 ///////////////////////////////////////////////////////////////////////////
-Int_t NcAstrolab::GetSignalIndex(TString name)
+void NcAstrolab::RemoveSignal(Int_t j,Int_t type,Int_t compress)
+{
+// Remove the signal of type "type" which was stored at the j-th position (j=1 is first).
+// Note : j=0 means that all stored signals of type "type" will be removed.
+//        j<0 allows array compression (see below) without removing any signals. 
+//
+// type = 0 --> Remove a reference signal
+//      = 1 --> Remove a measured signal
+//
+// The "compress" parameter allows compression of the signal storage array of type "type".
+//
+// compress = 1 --> Array will be compressed
+//            0 --> Array will not be compressed
+//
+// Note : Compression of the storage array means that the indices of the
+//        signals in that storage array will change.
+ 
+ TObjArray* arr=fRefs;
+ if (type) arr=fSigs;
+
+ if (!arr) return;
+
+ // Clearing of the complete storage
+ if (!j)
+ {
+  delete arr;
+  arr=0;
+  return;
+ }
+
+ // Removing a specific reference signal
+ if (j>0 && j<=arr->GetSize())
+ {
+  TObject* obj=arr->RemoveAt(j-1);
+  if (obj) delete obj;
+ }
+
+ // Compression of the storage array
+ if (compress) arr->Compress();
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::RemoveSignal(TString name,Int_t type,Int_t compress)
+{
+// Remove the signal with the specified name and type.
+//
+// type = 0 --> Remove a reference signal
+//      = 1 --> Remove a measured signal
+//
+// The "compress" parameter allows compression of the signal storage array of type "type".
+//
+// compress = 1 --> Array will be compressed
+//            0 --> Array will not be compressed
+//
+// Note : Compression of the storage array means that the indices of the
+//        signals in that storage array will change.
+//
+// In case no matching signal with the specified name and type is found,
+// no action will be taken.
+
+ Int_t j=GetSignalIndex(name,type);
+ if (j>0) RemoveSignal(j,type,compress);
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcAstrolab::GetSignalIndex(TString name,Int_t type)
 {
 // Provide storage index of the signal with the specified name.
-// In case the name matches with the stored measurement,
-// the value 0 is returned.
+//
+// type = 0 --> Provide the index of a reference signal
+//      = 1 --> Provide the index of a measured signal
+//
 // In case no signal with the specified name was found, the value -1 is returned.
+//
+// The default value is type=0 for backward compatibility.
 
  Int_t index=-1;
  
- if (fXsig)
- {
-  if (name==fXsig->GetName()) return 0;
- }
+ TObjArray* arr=fRefs;
+ if (type) arr=fSigs;
+ 
+ if (!arr) return -1;
 
- if (!fRefs) return -1;
-
- for (Int_t i=0; i<fRefs->GetSize(); i++)
+ for (Int_t i=0; i<arr->GetSize(); i++)
  {
-  NcSignal* sx=(NcSignal*)fRefs->At(i);
+  NcSignal* sx=(NcSignal*)arr->At(i);
   if (!sx) continue;
 
   if (name==sx->GetName())
@@ -2083,9 +2356,10 @@ Int_t NcAstrolab::GetSignalIndex(TString name)
  return index;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref,TString emode)
+void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref,TString emode,Int_t type)
 {
 // Print data of a stored signal in user specified coordinates at the specific timestamp ts.
+// In case ts=0 the actual timestamp of the stored signal will be taken.
 // In case no stored signal was available or one of the input arguments was
 // invalid, no printout is produced.
 //
@@ -2137,33 +2411,42 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
 //        "B" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //        "J" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //
-// The input parameter "jref" allows printing of a so-called "reference" signal.
+// The input parameters "jref" and "type" allow printing of a measurement or a so-called "reference" signal.
 // These reference signals may serve to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Printing of the measurement
-//        j --> Printing of the j-th reference signal
+// jref = j --> Printing of the j-th stored signal
 //
-// Default values are jref=0 and emode="T".
+// type = 0 --> Print data of a stored reference signal
+//        1 --> Print data of a stored measurement
 //
-// Note : In case ts=0 the current timestamp of the lab will be taken.
+// Note :
+// ------
+// For jref=0 always the first stored measurement will be printed for backward compatibility,
+// but the user is advised not to use this obsolete method anymore.
+//
+// Default values are jref=0, emode="T" and type=0.
 
- Nc3Vector r;
- NcSignal* sx=GetSignal(r,frame,mode,ts,jref);
+ NcSignal* sx=GetSignal(jref,type);
 
  if (!sx) return;
 
+ if (!ts) ts=sx->GetTimestamp();
+
+ Nc3Vector r;
+ GetSignal(r,frame,mode,ts,jref,type);
+
  // Local Hour Angle of the signal
- Double_t lha=GetHourAngle("A",ts,jref);
+ Double_t lha=GetHourAngle("A",ts,jref,type);
  TString slha="LAHA";
  if (mode=="M" || mode=="m")
  {
-  lha=GetHourAngle("M",ts,jref);
+  lha=GetHourAngle("M",ts,jref,type);
   slha="LMHA";
  }
  else if ((mode=="B" || mode=="b" || mode=="J" || mode=="j") && emode=="M")
  {
-  lha=GetHourAngle("M",ts,jref);
+  lha=GetHourAngle("M",ts,jref,type);
   slha="LMHA";
  }
 
@@ -2245,16 +2528,23 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode)
+void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode,Int_t type)
 {
-// Print data of the stored signal with the specified name in user specified coordinates
+// Print data of the stored signal with the specified name and type in user specified coordinates
 // at the specific timestamp ts.
+// In case ts=0 the actual timestamp of the stored signal will be taken.
 // In case no such stored signal was available or one of the input arguments was
 // invalid, no printout is produced.
 //
-// Note : In case the name specifies a solar system object supported by SetSolarSystem()
-//        which was not yet stored as a reference signal, the corresponding reference signal
-//        will be created and stored with the specified timestamp.
+// type = 0 --> Print data of a stored reference signal
+//        1 --> Print data of a stored measurement
+//
+// Note : In case the name specifies a solar system object which was not yet stored according to "type",
+//        the corresponding signal will be created and stored with the specified timestamp.
+//        In case ts=0 the solar system object will be stored with the current timestamp of
+//        this NcAstrolab instance.
+//        All geocentric name specifications for solar system objects as indicated in the
+//        docs of NcTimestamp::Almanac() are supported.
 //
 // The argument "ndig" specifies the number of digits for the fractional
 // part (e.g. ndig=6 for "dms" corresponds to micro-arcsecond precision).
@@ -2304,28 +2594,34 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
 //        "B" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //        "J" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //
-// Note : In case ts=0 the current timestamp of the lab will be taken.
-//
-// The default value is emode="T"
+// The default values are emode="T" and type=0.
 
  // Set c.q. update coordinates for Solar system objects
- SetSolarSystem(name,ts);
+ SetSolarSystem(name,ts,type);
 
- Int_t j=GetSignalIndex(name);
- if (j>=0) PrintSignal(frame,mode,ts,ndig,j,emode);
+ Int_t j=GetSignalIndex(name,type);
+ if (j>=0) PrintSignal(frame,mode,ts,ndig,j,emode,type);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode,Int_t nmax)
+void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode,Int_t nmax,Int_t j,Int_t type)
 {
-// List stored signals in user specified coordinates at the timestamp
-// of the actual recording of the stored measurement under investigation.
-// In case no (timestamp of the) actual measurement is available,
+// List stored measurements and/or reference signals in user specified coordinates
+// at a specific timestamp.
+// Measurements are listed according to the timestamp of their actual stored recording, which may be
+// a scrambled timestamp according to the invokation of the memberfunction SetTimeScramble().
+// For reference signals the actual timestamp of the j-th (j=1 is first) stored measurement is used.
+// In case j=0 or no (timestamp of the) j-th measurement is available,
 // the current timestamp of the lab will be taken.
-// In case no stored signal is available or one of the input arguments is
+// For j<0 the timestamp of the actual recording of the reference signal will be used.
+// In case no corresponding stored signal is available or one of the input arguments is
 // invalid, no printout is produced.
 //
-// The argument "nmax" specifies the maximum number of reference signals
-// that will be listed. When nmax<0 all stored reference signals are listed.
+// type = 0 --> List the data of stored reference signals
+//        1 --> List the data of stored measured signals
+//      < 0 --> List the data of both measured and reference signals  
+//
+// The argument "nmax" specifies the maximum number of measured c.q. reference signals
+// that will be listed. When nmax<0 all stored measured c.q. reference signals are listed.
 //
 // The argument "ndig" specifies the number of digits for the fractional
 // part (e.g. ndig=6 for "dms" corresponds to micro-arcsecond precision).
@@ -2375,63 +2671,163 @@ void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode
 //        "B" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //        "J" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //
-// The default values are ndig=1, emode="T" and nmax=-1.
+// The default values are ndig=1, emode="T", nmax=10, j=-1 and type=-1.
 
  Int_t iprint=0;
 
+ NcSignal* sx=0;
  NcTimestamp* tx=0;
 
  Int_t dform=1;
  if (mode=="T" || mode=="t") dform=-1;
  if ((mode=="B" || mode=="b" || mode=="J" || mode=="j") && emode=="T") dform=-1;
 
- if (fXsig)
+ if (j>0) sx=GetSignal(j,1);
+ if (sx)
  {
-  tx=fXsig->GetTimestamp();
+  tx=sx->GetTimestamp();
   if (!tx) tx=(NcTimestamp*)this;
   cout << " *NcAstrolab::ListSignals* List of stored signals." << endl;
-  cout << " === The measurement under investigation ===" << endl;
-  if (fTscmode==2) cout << " *** The stored measurement is time scrambled ***" << endl;
-  cout << " Timestamp of the observation" << endl;
+  if (fTscmode!=2)
+  {
+   cout << " Timestamp of the measurement stored at index=" << j;
+  }
+  else
+  {
+   cout << " *Scrambled* timestamp of the measurement stored at index=" << j;
+  }
+  cout << " (Lab time offset w.r.t. UT : "; PrintTime(fToffset,12); cout << ")" << endl;
   tx->Date(dform,fToffset);
-  cout << " Location of the observation" << endl;
-  cout << " "; PrintSignal(frame,mode,tx,ndig,0,emode); cout << endl;
+  cout << " Corresponding location of this measurement" << endl;
+  cout << " "; PrintSignal(frame,mode,tx,ndig,j,emode,1); cout << endl;
   iprint=1;
  }
 
- if (!fRefs) return;
-
- Int_t nstored=fRefs->GetEntries();
+ TObjArray* arr=0;
+ Int_t nstored=0;
  Int_t jlist=0;
- for (Int_t i=1; i<=fRefs->GetSize(); i++)
+ Int_t test=type;
+ while (test<2)
  {
-  NcSignal* sx=GetSignal(i);
-  if (!sx) continue;
-
-  jlist++;
-  if (nmax>=0 && jlist>nmax) break;
-
-  if (!iprint)
+  if (test==0)
   {
-   cout << " *NcAstrolab::ListSignals* List of stored signals." << endl;
-   tx=(NcTimestamp*)this;
-   cout << " Current timestamp of the laboratory" << endl;
-   tx->Date(dform,fToffset);
-   iprint=1;
+   type=0;
+   arr=fRefs;
+   test=999;
   }
-  if (iprint==1)
+  if (test==1)
   {
-   if (nmax<0 || nmax>=nstored)
-   {
-    cout << " === All stored reference signals according to the above timestamp ===" << endl;
-   }
-   else
-   {
-    cout << " === The first " << nmax << " stored reference signals according to the above timestamp ===" << endl;
-   }
-   iprint=2;
+   type=1;
+   arr=fSigs;
+   test=999;
   }
-  cout << " Index : " << i << " "; PrintSignal(frame,mode,tx,ndig,i,emode); cout << endl;
+  if (test<0)
+  {
+   type=0;
+   arr=fRefs;
+   test=1;
+  }
+  
+  if (!arr) continue;
+
+  nstored=arr->GetEntries();
+  jlist=0;
+  for (Int_t i=1; i<=arr->GetSize(); i++)
+  {
+   sx=GetSignal(i,type);
+   if (!sx) continue;
+
+   jlist++;
+   if (nmax>=0 && jlist>nmax) break;
+
+   if (!iprint)
+   {
+    cout << " *NcAstrolab::ListSignals* List of stored signals." << endl;
+    tx=(NcTimestamp*)this;
+    cout << " Current timestamp of the laboratory (Lab time offset w.r.t. UT : "; PrintTime(fToffset,12); cout << ")";
+    cout << endl;
+    tx->Date(dform,fToffset);
+    iprint=1;
+   }
+   if (iprint==1)
+   {
+    if (nmax<0 || nmax>=nstored)
+    {
+     if (!type)
+     {
+      if (j>=0)
+      {
+       cout << " === All stored reference signals according to the above timestamp ===" << endl;
+      }
+      else
+      {
+       cout << " === All stored reference signals according to their actual recorded timestamp ===" << endl;
+      }
+     }
+     else
+     {
+      if (fTscmode!=2)
+      {
+       cout << " === All stored measurements according to their actual observation timestamp ===" << endl;
+      }
+      else
+      {
+       cout << " === All stored measurements according to their *scrambled* observation timestamp ===" << endl;
+       cout << " === Time scrambling was performed by adding dt from the interval [dtmin,dtmax] to their actual timestamp" << endl;
+       cout << " === dtmin : " << fTscmin << " dtmax : " << fTscmax << " sec.";
+       if (fTscfunc)
+       {
+        cout << " Randomising TF1 function " << fTscfunc->GetName() << " was used." << endl;
+       }
+       else
+       {
+        cout << " Uniform randomisation was used." << endl;
+       }
+      }
+     } 
+    }
+    else
+    {
+     if (!type)
+     {
+      if (j>=0)
+      {
+       cout << " === The first " << nmax << " stored reference signals according to the above timestamp ===" << endl;
+      }
+      else
+      {
+       cout << " === The first " << nmax << " stored reference signals according to their actual recorded timestamp ===" << endl;
+      }
+     }
+     else
+     {
+      if (fTscmode!=2)
+      {
+       cout << " === The first " << nmax << " stored measurements according to their actual observation timestamp ===" << endl;
+      }
+      else
+      {
+       cout << " === The first " << nmax << " stored measurements according to their *scrambled* observation timestamp ===" << endl;
+       cout << " === Time scrambling was performed by adding dt from the interval [dtmin,dtmax] to their actual timestamp" << endl;
+       cout << " === dtmin : " << fTscmin << " dtmax : " << fTscmax << " sec.";
+       if (fTscfunc)
+       {
+        cout << " Randomising TF1 function " << fTscfunc->GetName() << " was used." << endl;
+       }
+       else
+       {
+        cout << " Uniform randomisation was used." << endl;
+       }
+      }
+     }
+    }
+    iprint=2;
+   }
+   if (type==1 || (!type && j<0)) tx=0;
+   if (!type && !j) tx=(NcTimestamp*)this;
+   cout << " Index : " << i << " "; PrintSignal(frame,mode,tx,ndig,i,emode,type); cout << endl;
+  }
+  iprint=1;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2934,7 +3330,7 @@ Double_t NcAstrolab::GetSolidAngle(Double_t thetamin,Double_t thetamax,TString t
  return omega;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcAstrolab::GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref)
+Double_t NcAstrolab::GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref,Int_t type)
 {
 // Provide the Local Hour Angle (in fractional degrees) of a stored signal
 // object at the specified timestamp.
@@ -2946,14 +3342,21 @@ Double_t NcAstrolab::GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref)
 //        "A" --> Output is the Apparent Hour Angle
 // ts   : Timestamp at which the hour angle is requested.
 //
-// The input parameter "jref" allows the user to specify so-called "reference" signals.
+// The input parameters "jref" and "type" allow to specify measured or so-called "reference" signals.
 // These reference signals may be used to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
 //
-// jref = 0 --> Use the stored measurement
-//        j --> Use the reference signal at the j-th position (j=1 is first)
+// jref = j --> Use the signal at the j-th position (j=1 is first)
 //
-// Default value is jref=0.
+// type = 0 --> Select a stored reference signal
+//        1 --> Select a stored measurement
+//
+// Note :
+// ------
+// For jref=0 always the first stored measurement will be selected for backward compatibility,
+// but the user is advised not to use this obsolete method anymore.
+//
+// Default values are jref=0 and type=0.
 //
 // Note : In case ts=0 the current timestamp of the lab will be taken.
 
@@ -2961,8 +3364,8 @@ Double_t NcAstrolab::GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref)
 
  // Get corrected right ascension and declination for the specified timestamp.
  Double_t d,a,b;
- if (mode=="M" || mode=="m") GetSignal(d,a,"deg",b,"deg","equ",ts,jref,"M");
- if (mode=="A" || mode=="a") GetSignal(d,a,"deg",b,"deg","equ",ts,jref,"T");
+ if (mode=="M" || mode=="m") GetSignal(d,a,"deg",b,"deg","equ",ts,jref,"M",type);
+ if (mode=="A" || mode=="a") GetSignal(d,a,"deg",b,"deg","equ",ts,jref,"T",type);
 
  a/=15.; // Convert a to fractional hours
  Double_t ha=0;
@@ -3089,8 +3492,13 @@ void NcAstrolab::SetLT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcAstrolab::GetDifference(Int_t j,TString au,Double_t& dt,TString tu,Int_t mode,Int_t* ia,Int_t* it)
 {
+// ************************************************************************************
+// *** This memberfunction is obsolete and is only kept for backward compatibility. ***
+// *** The user is advised to use the memberfunction MatchSignals() instead.        ***
+// ************************************************************************************
+//
 // Provide space and time difference between the j-th reference signal
-// (j=1 indicates first) and the stored measurement.
+// (j=1 indicates first) and the single stored measurement at storage index 1.
 // 
 // The return value of this memberfunction provides the positional angular
 // difference, whereas the output argument "dt" provides the time difference.
@@ -3126,21 +3534,131 @@ Double_t NcAstrolab::GetDifference(Int_t j,TString au,Double_t& dt,TString tu,In
 //
 // Note : In case scrambling has been activated, the results will be scrambled accordingly.
 
- Double_t dang=999;
- dt=1.e20;
+ Double_t da=999;
+ dt=1.e30;
+
  if (ia) *ia=0;
  if (it) *it=0;
 
- if (!fRefs) return dang;
+ if (j<0) return da;
 
- Nc3Vector rx; // Position of the measurement
- Nc3Vector r0; // Position of the reference signal
+ NcDevice matches;
+ Int_t nhits=0;
+ NcSignal* sx=0;
+ if (j) // Space and time difference w.r.t. a specific reference signal
+ {
+  MatchSignals(matches,da,au,dt,tu,mode,j,j,0,1,1,1);
+  nhits=matches.GetNhits();
+  if (nhits)
+  {
+   da=matches.GetSignal(1);
+   dt=matches.GetSignal(2);
+   if (ia) *ia=j;
+   if (it) *it=j;
+  }
+ }
+ else // Minimal space and time difference encountered over all reference signals
+ {
+  MatchSignals(matches,da,au,dt,tu,mode,1,0,0,1,1,1);
+  nhits=matches.GetNhits();
+  if (nhits)
+  {
+   da=matches.GetSignal(1);
+   dt=matches.GetSignal(2);
+   if (ia)
+   {
+    Int_t ipsi=matches.GetSignal("ipsi");
+    sx=matches.GetHit(ipsi);
+    if (sx) *ia=sx->GetSignal("index1");
+   }
+   if (it)
+   {
+    Int_t idt=matches.GetSignal("idt");
+    sx=matches.GetHit(idt);
+    if (sx) *it=sx->GetSignal("index1");
+   }
+  }
+ }
+ return da;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetDifference(Int_t i,Int_t j,TString au,Double_t& dt,TString tu,Int_t mode)
+{
+// Internal memberfunction to provide space and time difference between the i-th and j-th stored signal.
+// This memberfunction serves the MatchSignals() facility.
+//
+// i > 0 : Indicates a reference signal stored at index i (i=1 is the first)
+// i < 0 : Indicates a measurement stored at index abs(i) (i=-1 is the first)
+// j > 0 : Indicates a reference signal stored at index j (j=1 is the first)
+// j < 0 : Indicates a measurement stored at index abs(j) (j=-1 is the first)
+// 
+// The return value of this memberfunction provides the positional angular
+// difference, whereas the output argument "dt" provides the time difference.
+//
+// In case of inconsistent input the return value will have the unphysical value of 999.
+//
+// The units of the angular difference can be specified via the the "au"
+// input argument, where
+//
+// au = "rad" --> Angular difference in (fractional) radians
+//      "deg" --> Angular difference in (fractional) degrees
+//
+// The units of the time difference can be specified via the "tu" and "mode"
+// input arguments. For details please refer to NcTimestamp::GetDifference().
+// Also here mode=1 is the default value.
+//
+// For the time difference the signal indicated via "i" is used as the standard.
+// This means that in case of a positive time difference, the j-th stored
+// signal occurred later than i-th one.
+//
+// Note : In case scrambling has been activated, the results will be scrambled accordingly.
 
- NcSignal* sx=GetSignal(rx,"icr","M",0);
- if (!sx) return dang;
+ Double_t dang=999;
+ dt=1.e30;
 
- NcTimestamp* tx=sx->GetTimestamp();
- if (!tx) return dang;
+ if (!i || !j) return dang;
+ if ((i>0 || j>0) && !fRefs) return dang;
+ if ((i<0 || j<0) && !fSigs) return dang;
+
+ Int_t itype=0;
+ if (i<0)
+ {
+  itype=1;
+  i=abs(i);
+ }
+
+ Int_t jtype=0;
+ if (j<0)
+ {
+  jtype=1;
+  j=abs(j);
+ }
+
+ Nc3Vector ri; // Position of the i-th signal
+ Nc3Vector rj; // Position of the j-th signal
+ NcSignal* si=0; // Link to the stored i-th signal
+ NcSignal* sj=0; // Link to the stored j-th signal
+ NcTimestamp* ti=0; // Link to the timestamp of the i-th signal
+ NcTimestamp* tj=0; // Link to the timestamp of the j-th signal
+
+ si=GetSignal(i,itype);
+ sj=GetSignal(j,jtype);
+ if (!si || !sj) return dang;
+
+ ti=si->GetTimestamp();
+ tj=sj->GetTimestamp();
+ if (!ti || !tj) return dang;
+
+ // Update the location of Solar system objects if requested
+ if (fSolUpdate)
+ {
+  ti=tj;
+  TString name=si->GetName();
+  SetSolarSystem(name,ti,itype);
+ }
+
+ GetSignal(ri,"icr","M",ti,i,itype);
+ GetSignal(rj,"icr","M",tj,j,jtype);
 
  // Setting the parameters in the correct units for time difference scrambling
  Double_t tlow=fTscmin;
@@ -3165,155 +3683,69 @@ Double_t NcAstrolab::GetDifference(Int_t j,TString au,Double_t& dt,TString tu,In
  // Setting the parameters for angular difference scrambling
  if (fDscfunc) fDscfunc->SetRange(fDscmin,fDscmax);
 
- // If needed, initialise the randomiser with as seed JD+sec
- // of the timestamp of the selected reference signal.
- // In case j=0 take the first ref. signal.
- // In case no matching ref. signal is present, take the event timestamp instead.
- if (!fRan)
- {
-  Int_t k=j;
-  if (k==0) k=1;
-  NcTimestamp* tran=0;
-  NcSignal* sran=GetSignal(k);
-  if (sran) tran=sran->GetTimestamp();
-  if (!tran) tran=tx;
-  Int_t jd,sec,ns;
-  tran->GetJD(jd,sec,ns);
-  Int_t iseed=jd+sec; 
-  fRan=new NcRandom(iseed);
- }
+ // If needed, initialise the randomiser with a "date/time driven" seed
+ // of the timestamp of the selected i-th signal.
+ if (!fRan && (fRscmode || fTscmode)) SetRandomiser(-1,ti);
 
  Double_t pi=acos(-1.);
 
  //////////////////////////////////////////////////////////////////
- // Space and time difference w.r.t. a specific reference signal //
+ // Space and time difference w.r.t. the specified signals       //
  //////////////////////////////////////////////////////////////////
- if (j>0)
+
+ if (fRscmode != 1)
  {
-  NcSignal* s0=GetSignal(r0,"icr","M",0,j);
-  if (!s0) return dang;
-  NcTimestamp* t0=s0->GetTimestamp();
-
-  if (!t0) return dang;
-
-  if (fRscmode != 1)
-  {
-   dang=r0.GetOpeningAngle(rx,au);
-  }
-  else
-  {
-   if (!fDscfunc)
-   {
-    Float_t cosmin=cos(fDscmin*pi/180.);
-    Float_t cosmax=cos(fDscmax*pi/180.);
-    if (cosmin>cosmax)
-    {
-     Float_t temp=cosmin;
-     cosmin=cosmax;
-     cosmax=temp;
-    }
-    Double_t cosang=fRan->Uniform(cosmin,cosmax);
-    dang=acos(cosang);
-    if (au=="deg") dang*=180./pi;
-   }
-   else
-   {
-    dang=fDscfunc->GetRandom(fDscmin,fDscmax);
-    if (au=="rad") dang*=pi/180.;
-   }
-  }
-
-  if (fTscmode != 1)
-  {
-   dt=t0->GetDifference(tx,tu,mode);
-  }
-  else
-  {
-   if (!fTscfunc)
-   {
-    dt=fRan->Uniform(float(tlow),float(tup));
-   }
-   else
-   {
-    dt=fTscfunc->GetRandom(tlow,tup);
-   }
-  }
-  return dang;
+  dang=ri.GetOpeningAngle(rj,au);
  }
-
- //////////////////////////////////////////////////////////////////////////////
- // Minimal space and time difference encountered over all reference signals //
- //////////////////////////////////////////////////////////////////////////////
- Double_t dangmin=dang;
- Double_t dtmin=dt;
- for (Int_t i=1; i<=fRefs->GetSize(); i++)
+ else
  {
-  NcSignal* s0=GetSignal(r0,"icr","M",0,i);
-  if (!s0) continue;
-  NcTimestamp* t0=s0->GetTimestamp();
-  if (!t0) continue;
-
-  if (fRscmode != 1)
+  if (!fDscfunc)
   {
-   dang=r0.GetOpeningAngle(rx,au);
+   Float_t cosmin=cos(fDscmin*pi/180.);
+   Float_t cosmax=cos(fDscmax*pi/180.);
+   if (cosmin>cosmax)
+   {
+    Float_t temp=cosmin;
+    cosmin=cosmax;
+    cosmax=temp;
+   }
+   Double_t cosang=fRan->Uniform(cosmin,cosmax);
+   dang=acos(cosang);
+   if (au=="deg") dang*=180./pi;
   }
   else
   {
-   if (!fDscfunc)
-   {
-    Float_t cosmin=cos(fDscmin*pi/180.);
-    Float_t cosmax=cos(fDscmax*pi/180.);
-    if (cosmin>cosmax)
-    {
-     Float_t temp=cosmin;
-     cosmin=cosmax;
-     cosmax=temp;
-    }
-    Double_t cosang=fRan->Uniform(cosmin,cosmax);
-    dang=acos(cosang);
-    if (au=="deg") dang*=180./pi;
-   }
-   else
-   {
-    dang=fDscfunc->GetRandom(fDscmin,fDscmax);
-    if (au=="rad") dang*=pi/180.;
-   }
-  }
-
-  if (fTscmode != 1)
-  {
-   dt=t0->GetDifference(tx,tu,mode);
-  }
-  else
-  {
-   if (!fTscfunc)
-   {
-    dt=fRan->Uniform(float(tlow),float(tup));
-   }
-   else
-   {
-    dt=fTscfunc->GetRandom(tlow,tup);
-   }
-  }
-
-  if (fabs(dang)<dangmin)
-  {
-   dangmin=fabs(dang);
-   if (ia) *ia=i;
-  }
-  if (fabs(dt)<dtmin)
-  {
-   dtmin=fabs(dt);
-   if (it) *it=i;
+   dang=fDscfunc->GetRandom(fDscmin,fDscmax);
+   if (au=="rad") dang*=pi/180.;
   }
  }
 
- dt=dtmin;
- return dangmin;
+ if (fTscmode != 1)
+ {
+  dt=ti->GetDifference(tj,tu,mode);
+ }
+ else
+ {
+  if (!fTscfunc)
+  {
+   dt=fRan->Uniform(float(tlow),float(tup));
+  }
+  else
+  {
+   dt=fTscfunc->GetRandom(tlow,tup);
+  }
+ }
+
+ return dang;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcAstrolab::GetDifference(TString name,TString au,Double_t& dt,TString tu,Int_t mode)
 {
+// ************************************************************************************
+// *** This memberfunction is obsolete and is only kept for backward compatibility. ***
+// *** The user is advised to use the memberfunction MatchSignals() instead.        ***
+// ************************************************************************************
+//
 // Provide space and time difference between the stored reference signal
 // with the specified name and the stored measurement.
 //
@@ -3341,7 +3773,7 @@ Double_t NcAstrolab::GetDifference(TString name,TString au,Double_t& dt,TString 
 // Note : In case scrambling has been activated, the results will be scrambled accordingly.
 
  Double_t dang=999;
- dt=1.e20;
+ dt=1.e30;
 
  Int_t j=GetSignalIndex(name);
 
@@ -3357,8 +3789,13 @@ Double_t NcAstrolab::GetDifference(TString name,TString au,Double_t& dt,TString 
 ///////////////////////////////////////////////////////////////////////////
 TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode)
 {
+// ***********************************************************************************
+// *** This memberfunction is obsolete and is only kept for backward compatibility ***
+// *** The user is advised to use the memberfunction MatchSignals() instead        ***
+// ***********************************************************************************
+//
 // Provide the storage indices of the reference signals which match in space
-// and time with the stored measurement.
+// and time with the single stored measurement at storage index 1.
 // The indices are returned via a pointer to a TArrayI object.
 // In case no matches were found, the null pointer is returned.
 // A reference signal is regarded as matching with the stored measurement
@@ -3377,23 +3814,29 @@ TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString t
 //
 // Note : In case scrambling has been activated, the results reflect the scrambled measurement.
 
- if (!fXsig || !fRefs) return 0;
+ if (!fSigs || !fRefs) return 0;
 
- Int_t nrefs=fRefs->GetEntries();
+ NcDevice matches;
+ MatchSignals(matches,da,au,dt,tu,mode,1,0,0,1,1,1); // Perform the obsolete MatchRefSignal() action
+
+ Int_t nhits=matches.GetNhits();
+ if (!nhits) return 0;
 
  if (fIndices) delete fIndices;
- fIndices=new TArrayI(nrefs);
+ fIndices=new TArrayI(nhits);
 
- Double_t dang,dtime;
- Int_t jfill=0; 
- for (Int_t i=1; i<=fRefs->GetSize(); i++)
+ Int_t index=0;
+ NcSignal* sx=0;
+ Int_t jfill=0;
+ for (Int_t i=1; i<=nhits; i++)
  {
-  dang=GetDifference(i,au,dtime,tu,mode);
-  if (fabs(dang)<=da && fabs(dtime)<=dt)
-  {
-   fIndices->AddAt(i,jfill);
-   jfill++;
-  }
+  sx=matches.GetHit(i);
+
+  if(!sx) continue;
+
+  index=sx->GetSignal("index1");
+  fIndices->AddAt(index,jfill);
+  jfill++;
  }
 
  fIndices->Set(jfill);
@@ -3401,6 +3844,356 @@ TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString t
  if (!jfill) return 0; // No match found
 
  return fIndices;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::MatchSignals(NcDevice& matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode,Int_t i1,Int_t i2,Int_t itype,Int_t j1,Int_t j2,Int_t jtype)
+{
+// Provide information about the matching in space and time of the stored
+// reference signal(s) and/or measurement(s).
+// Signals are regarded as matching if the positional angular difference
+// doesn't exceed "da" and the absolute value of the time difference doesn't exceed "dt".
+//
+// Notes :
+// -------
+// In case da<0 the signals will always be regarded as matching w.r.t. the positional angular difference. 
+// In case dt<0 the signals will always be regarded as matching w.r.t. the time difference. 
+//
+// So, specifying da>0 and dt<0 will only check on matching of the locations of the signals, irrespective
+// of the time of the various recordings. This is very convenient in the study of steady sources over
+// extended time periods. 
+//
+// The information (see below) for the observed matches is provided via the NcDevice argument "matches",
+// where each matching pair is recorded as a "hit" with the corresponding NcSignal data.
+// Consequently, the number of matches can be obtained as the number of "hits" in the NcDevice.
+//
+// Note : This memberfunction will completely reset and re-define the NcDevice "matches".
+//
+// The units of the angular difference "da" can be specified via the the "au"
+// input argument, where
+//
+// au = "rad" --> Angular difference in (fractional) radians
+//      "deg" --> Angular difference in (fractional) degrees
+//
+// The units of the time difference "dt" can be specified via the "tu" and "mode"
+// input arguments. For details please refer to NcTimestamp::GetDifference().
+// Also here mode=1 is the default value.
+//
+// It is possible to investigate only a sub-set of the stored reference signals c.q. measurements
+// via the input arguments "i1", "i2", "itype", "j1" and "j2", "jtype" as follows :
+//
+// i1    : Start index of the stored signals to be investigated (1=first stored signal)
+// i2    : End index of the stored signals to be investigated (0=last stored signal)
+// itype : 0 ==> [i1,i2] refer to stored reference signals
+//         1 ==> [i1,i2] refer to stored measurements
+// j1    : Start index of the stored signals to be investigated (1=first stored signal)
+// j2    : End index of the stored signals to be investigated (0=last stored signal)
+// jtype : 0 ==> [j1,j2] refer to stored reference signals
+//         1 ==> [j1,j2] refer to stored measurements
+//
+// Note : Using itype=jtype allows investigation of (self)correlations within a sample. 
+//        In this case the matching of a signal with itself will be skipped.
+//
+// The default values are i1=1, i2=0, itype=0, j1=1, j2=0 and jtype=1.
+//
+// The data for each matching signal pair provided as a "hit" of the NcDevice object is the following :
+// Name   : Indicating the name (if any) of object1
+// Title  : Indicating the name (if any) of object2
+// Slot 1 : "type1"  --> Type of object1 (0=reference signal, 1=measurement) 
+// Slot 2 : "index1" --> Storage index of object1 (see memberfunction GetSignal)
+// Slot 3 : "type2"  --> Type of object2 (0=reference signal, 1=measurement) 
+// Slot 4 : "index2" --> Storage index of object2 (see memberfunction GetSignal)
+// Slot 5 : "psi"    --> Opening angle between object2 and object1 in units as specified via "au"
+// Slot 6 : "t2-t1"  --> Time offset between object2 and object1 in units as specified via "tu" and "mode"
+//
+// The NcDevice object itself provides the data of the best encountered matchings as follows :
+//
+// Slot 1 : "psimin" --> Minimal encountered opening angle in units as specified via "au"
+// Slot 2 : "dtmin"  --> Minimal encountered time offset in units as specified via "tu" and "mode"
+// Slot 3 : "ipsi"   --> Index of the hit that corresponds to the minimal opening angle
+// Slot 4 : "idt"    --> Index of the hit that corresponds to the minimal time offset
+//
+// A full overview of all matchings can be obtained via NcDevice::Data().
+//
+// Note : In case scrambling has been activated, the results reflect the scrambled measurement(s).
+//
+// Usage example :
+// ---------------
+// NcAstrolab lab;
+// // Enter various measurements and reference signals into "lab"
+// lab.SetSignal(...);
+// lab.SetSignal(...);
+// lab.SetSignal(...);
+// ...
+// ...
+// ...
+// // Look for matches between the measurements and reference signals
+// // within 10 degrees opening angle and 600 seconds time offset.
+// NcDevice matches;
+// lab.MatchSignals(matches,10,"deg",600,"s");
+//
+// // List all the encountered matching details
+// matches.Data();
+//
+// // Retrieve the minimal encountered opening angle
+// Float_t angmin=matches.GetSignal(1);
+//
+// // Access the data of the matching pair (i.e. "hit") that yielded the minimal time offset
+// Int_t ih=matches.GetSignal("idt");
+// NcSignal* sx=matches.GetHit(ih);
+// sx->Data();
+//
+// // Access the originally recorded signal of object1 that yielded the minimal opening angle
+// // and retrieve its timestamp and the corresponding MJD. 
+// ih=matches.GetSignal("ipsi");
+// sx=matches.GetHit(ih);
+// Int_t itype=sx->GetSignal("type1");
+// Int_t i=sx->GetSignal("index1");
+// sx=lab.GetSignal(i,itype);
+// NcTimestamp* tx=sx->GetTimestamp();
+// tx->Date();
+// Double_t mjd1=tx->GetMJD();
+
+ matches.Reset(1);
+ matches.SetHitCopy(1);
+
+ TString name="Matches";
+ TString title="Space and time matchings of NcAstrolab stored signals";
+ matches.SetNameTitle(name.Data(),title.Data());
+ TString namedamin="psimin in "; 
+ namedamin+=au;
+ TString namedtmin="dtmin in ";
+ namedtmin+=tu;
+ matches.AddNamedSlot(namedamin);
+ matches.AddNamedSlot(namedtmin);
+ matches.AddNamedSlot("ipsi");
+ matches.AddNamedSlot("idt");
+
+ NcSignal data;
+ TString nameda="psi in "; 
+ nameda+=au;
+ TString namedt="t2-t1 in ";
+ namedt+=tu;
+ data.AddNamedSlot("type1");
+ data.AddNamedSlot("index1");
+ data.AddNamedSlot("type2");
+ data.AddNamedSlot("index2");
+ data.AddNamedSlot(nameda);
+ data.AddNamedSlot(namedt);
+
+ if ((!itype || !jtype) && !fRefs) return;
+ if ((itype || jtype) && !fSigs) return;
+
+ Int_t nrefs=0;
+ if (fRefs) nrefs=fRefs->GetSize();
+ Int_t nsigs=0;
+ if (fSigs) nsigs=fSigs->GetSize();
+
+
+ // Make input data consistent with conventions
+ if (itype) itype=1;
+ if (jtype) jtype=1;
+ if (i1<1) i1=1;
+ if (!itype)
+ {
+  if (i2<1 || i2>nrefs) i2=nrefs;
+ }
+ else
+ {
+  if (i2<1 || i2>nsigs) i2=nsigs;
+ }
+ if (j1<1) j1=1;
+ if (!jtype)
+ {
+  if (j2<1 || j2>nrefs) j2=nrefs;
+ }
+ else
+ {
+  if (j2<1 || j2>nsigs) j2=nsigs;
+ }
+
+ if (i1>i2 || j1>j2) return;
+
+ Double_t dang,dtime;
+ Int_t ix=0;
+ Int_t jx=0;
+ NcSignal* sx=0;
+ Int_t id=0;
+ Double_t dangmin=99999;
+ Double_t dtmin=1e20;
+ Int_t idamin=0;
+ Int_t idtmin=0;
+ for (Int_t i=i1; i<=i2; i++)
+ {
+  ix=i;
+  if (itype) ix=-i;
+
+  for (Int_t j=j1; j<=j2; j++)
+  {
+   // Skip matching a signal with itself
+   if (itype==jtype && i==j) continue;
+
+   jx=j;
+   if (jtype) jx=-j;
+
+   dang=GetDifference(ix,jx,au,dtime,tu,mode);
+
+   if ((fabs(dang)<=da || da<0) && (fabs(dtime)<=dt || dt<0)) 
+   {
+    data.Reset();
+    name="Object1=";
+    sx=GetSignal(i,itype);
+    if (!sx) continue;
+    name+=sx->GetName();
+    title="Object2=";
+    sx=GetSignal(j,jtype);
+    if (!sx) continue;
+    title+=sx->GetName();
+    id++;
+    data.SetNameTitle(name.Data(),title.Data());
+    data.SetUniqueID(id);
+    data.SetSignal(itype,"type1");
+    data.SetSignal(i,"index1");
+    data.SetSignal(jtype,"type2");
+    data.SetSignal(j,"index2");
+    data.SetSignal(dtime,namedt);
+    data.SetSignal(dang,nameda);
+    matches.AddHit(data);
+
+    // Record the data for the minimal encountered opening angle
+    if (fabs(dang)<dangmin)
+    {
+     dangmin=fabs(dang);
+     idamin=id;
+    }
+
+    // Record the data for the minimal encountered time difference
+    if (fabs(dtime)<fabs(dtmin))
+    {
+     dtmin=dtime;
+     idtmin=id;
+    }
+   }
+  }
+ }
+
+ // Store the data for the minimal encountered opening angle and time difference
+ matches.SetSignal(dangmin,namedamin);
+ matches.SetSignal(dtmin,namedtmin);
+ matches.SetSignal(idamin,"ipsi");
+ matches.SetSignal(idtmin,"idt");
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::MatchSignals(NcDevice& matches,TString name,Double_t da,TString au,Double_t dt,TString tu,Int_t mode,Int_t itype,Int_t j1,Int_t j2,Int_t jtype)
+{
+// Provide information about the matching in space and time of the stored
+// reference signal(s) and/or measurement(s).
+//
+// name  : The name of the object to be used for the matching with the stored signals 
+// itype : 0 ==> The object "name" resides among the stored reference signals
+//         1 ==> The object "name" resides among the stored measurements
+// j1    : Start index of the stored signals to be investigated (1=first stored signal)
+// j2    : End index of the stored signals to be investigated (0=last stored signal)
+// jtype : 0 ==> [j1,j2] refer to stored reference signals
+//         1 ==> [j1,j2] refer to stored measurements
+//
+// The default values are itype=0, j1=1, j2=0 and jtype=1.
+//
+// Note : In case the name specifies a solar system object which was not yet stored,
+//        the corresponding signal will be created according to "itype" and initially
+//        stored with the current timestamp of this NcAstrolab instance.
+//        In the matching process the location of the solar system object will be updated
+//        according to the timestamp of the other signal. 
+//        All geocentric name specifications for solar system objects as indicated in the
+//        docs of NcTimestamp::Almanac() are supported.
+//
+// Signals are regarded as matching if the positional angular difference
+// doesn't exceed "da" and the absolute value of the time difference doesn't exceed "dt".
+// The information (see below) for the observed matches is provided via the NcDevice argument "matches",
+// where each matching pair is recorded as a "hit" with the corresponding NcSignal data.
+// Consequently, the number of matches can be obtained as the number of "hits" in the NcDevice.
+//
+// Note : This memberfunction will completely reset and re-define the NcDevice "matches".
+//
+// The units of the angular difference "da" can be specified via the the "au"
+// input argument, where
+//
+// au = "rad" --> Angular difference in (fractional) radians
+//      "deg" --> Angular difference in (fractional) degrees
+//
+// The units of the time difference "dt" can be specified via the "tu" and "mode"
+// input arguments. For details please refer to NcTimestamp::GetDifference().
+// Also here mode=1 is the default value.
+//
+// The data for each matching signal pair provided as a "hit" of the NcDevice object is the following :
+// Name   : Indicating the name (if any) of object1
+// Title  : Indicating the name (if any) of object2
+// Slot 1 : "type1"  --> Type of object1 (0=reference signal, 1=measurement) 
+// Slot 2 : "index1" --> Storage index of object1 (see memberfunction GetSignal)
+// Slot 3 : "type2"  --> Type of object2 (0=reference signal, 1=measurement) 
+// Slot 4 : "index2" --> Storage index of object2 (see memberfunction GetSignal)
+// Slot 5 : "psi"    --> Opening angle between object2 and object1 in units as specified via "au"
+// Slot 6 : "t2-t1"  --> Time offset between object2 and object1 in units as specified via "tu" and "mode"
+//
+// The NcDevice object itself provides the data of the best encountered matchings as follows :
+//
+// Slot 1 : "psimin" --> Minimal encountered opening angle in units as specified via "au"
+// Slot 2 : "dtmin"  --> Minimal encountered time offset in units as specified via "tu" and "mode"
+// Slot 3 : "ipsi"   --> Index of the hit that corresponds to the minimal opening angle
+// Slot 4 : "idt"    --> Index of the hit that corresponds to the minimal time offset
+//
+// A full overview of all matchings can be obtained via NcDevice::Data().
+//
+// Note : In case scrambling has been activated, the results reflect the scrambled measurement(s).
+//
+// Usage example :
+// ---------------
+// NcAstrolab lab;
+// // Enter various measurements and reference signals into "lab"
+// lab.SetSignal(...);
+// lab.SetSignal(...);
+// lab.SetSignal(...);
+// ...
+// ...
+// ...
+// // Look for matches between GRB140611A and the recorded measurements
+// // within 10 degrees opening angle and 600 seconds time offset.
+// NcDevice matches;
+// lab.MatchSignals(matches,10,"deg",600,"s","GRB140611A");
+//
+// // List all the encountered matching details
+// matches.Data();
+//
+// // Retrieve the minimal encountered opening angle
+// Float_t angmin=matches.GetSignal(1);
+//
+// // Access the data of the matching pair (i.e. "hit") that yielded the minimal time offset
+// Int_t ih=matches.GetSignal("idt");
+// NcSignal* sx=matches.GetHit(ih);
+// sx->Data();
+//
+// // Access the originally recorded signal of object2 that yielded the minimal opening angle
+// // w.r.t. GRB140611A and retrieve its timestamp and the corresponding MJD. 
+// ih=matches.GetSignal("ipsi");
+// sx=matches.GetHit(ih);
+// Int_t jtype=sx->GetSignal("type2");
+// Int_t j=sx->GetSignal("index2");
+// sx=lab.GetSignal(j,jtype);
+// NcTimestamp* tx=sx->GetTimestamp();
+// tx->Date();
+// Double_t mjd2=tx->GetMJD();
+
+ Int_t i=GetSignalIndex(name,itype);
+
+ if (i==-1) // Add the info for the requested Solar system object if not already stored
+ {
+  SetSolarSystem(name,0,itype);
+  i=GetSignalIndex(name,itype);
+  if (i>0) fSolUpdate=1;
+ }
+
+ MatchSignals(matches,da,au,dt,tu,mode,i,i,itype,j1,j2,jtype);
+
+ fSolUpdate=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frndm)
@@ -3421,8 +4214,8 @@ void NcAstrolab::SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frn
 //              All time differences are randomly selected from the interval [tmin,tmax].
 //              As such, this scrambling mode is very useful for scrambling entries in
 //              specific time windows (see e.g. NvE, Astroparticle Physics 28 (2008) 540).
-//              This time difference scrambling will only affect the outcome of
-//              NcAstrolab::GetDifference() and NcAstrolab::MatchRefSignal().
+//              This time difference scrambling will only affect the outcome of the memberfunctions
+//              GetDifference(), MatchRefSignal() and MatchSignals() of this class NcAstrolab.
 //              So, the actual (stored) event timestamps and the NcTimestamp::GetDifference()
 //              are not affected by the scrambling.
 //              This implies that setting mode=0 will reproduce again the unscrambled values.
@@ -3513,10 +4306,11 @@ void NcAstrolab::SetPositionScramble(Int_t mode,Double_t dmin,Double_t dmax,TF1*
 // mode : 0 ==> No position scrambling is performed.
 //        1 ==> Scrambling is only performed when obtaining angular differences.
 //              All angular differences are randomly selected from the interval [dmin,dmax].
-//              As such, this scrambling mode is very useful for scrambling entries in
-//              specific angular cones (see e.g. NvE, Astroparticle Physics 28 (2008) 540).
-//              This angular difference scrambling will only affect the outcome of
-//              NcAstrolab::GetDifference() and NcAstrolab::MatchRefSignal().
+//              If for this mode dmin<0 it will be set to 0 and if dmax>180 it will be set to 180.
+//              This scrambling mode is very useful for scrambling entries in specific
+//              angular cones (see e.g. NvE, Astroparticle Physics 28 (2008) 540).
+//              This angular difference scrambling will only affect the outcome of the memberfunctions
+//              GetDifference(), MatchRefSignal() and MatchSignals() of this class NcAstrolab.
 //              So, the actual (stored) event positions are not affected by the scrambling.
 //              This implies that setting mode=0 will reproduce again the unscrambled values.
 //              Note : Every time an angular difference is requested, a new random value is produced.
@@ -3525,18 +4319,34 @@ void NcAstrolab::SetPositionScramble(Int_t mode,Double_t dmin,Double_t dmax,TF1*
 //              A value is randomly selected from the intervals [dmin,dmax], [thmin,thmax] and [phimin,phimax]
 //              and added to the actual local spherical coordinates (r,theta,phi) of the measurement.
 //              As such, this scrambling is irreversible but will always provide reproducible results.
-//              Note : This mode=2 scrambling will also result in a corresponding scrambling of e.g. the right ascension.
+//              Notes :
+//              This mode=2 scrambling will also result in a corresponding scrambling of e.g. the right ascension.
+//              In case the r-coordinate would become zero or negative by the scrambling, it's value will be
+//              set to a small positive value before storage, in order to keep a physical situation. 
 //
 // Notes :
 // -------
 // In case df=0 the corresponding scrambling will be performed via a homogeneous solid angle (mode=1) or uniform (mode=2) distribution.
-// In case dthf=0 the corresponding mode=2 scrambling will be performed via a uniform distribution in cos(theta).
-// In case dphif=0 the corresponding mode=2 scrambling will be performed via a uniform distribution in phi.
+// In case thf=0 the corresponding mode=2 scrambling will be performed via a uniform distribution in cos(theta).
+// In case phif=0 the corresponding mode=2 scrambling will be performed via a uniform distribution in phi.
 //
-// The defaults are df=0, thmin=0, thmax=0, thf=0, phimin=0, phimax=0 and dphi=0.
+// If the provided "max" value is smaller than the provided "min" value, both values are set equal
+// to the "min" value. This is the preferred way to study specific angular c.q. distance offsets without
+// running into computer accuracy problems. 
+//
+// The defaults are df=0, thmin=0, thmax=0, thf=0, phimin=0, phimax=0 and phif=0.
 //
 // In the NcAstrolab constructor the position scrambling is switched off
 // by setting mode=0 explicitly.
+
+ // Keep parameters within physical bounds for angular difference scrambling (mode=1)
+ if (mode==1 && dmin<0) dmin=0;
+ if (mode==1 && dmax>180) dmax=180;
+
+ // Check for specific requested offsets
+ if (dmax<dmin) dmax=dmin;
+ if (thmax<thmin) thmax=thmin;
+ if (phimax<phimin) phimax=phimin;
 
  fRscmode=mode;
  fDscmin=dmin;
@@ -3612,15 +4422,33 @@ Int_t NcAstrolab::GetPositionScramble(Double_t* dmin,Double_t* dmax,TF1* df,Doub
  return fRscmode; 
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t jref,TString proj,Int_t clr)
+void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j,TString proj,Int_t clr)
 {
 // Display a stored signal in a user specified coordinate projection
 // at the specific timestamp ts.
 //
+// The input parameter "j" allows display of measurements or so-called "reference" signals.
+// These reference signals may be used to check space-time event coincidences with 
+// stored measurement(s) (e.g. coincidence of the measurement(s) with transient phenomena).
+//
+// j >0 --> Display of the reference signal at the j-th position (j=1 is first)
+//   <0 --> Display of the measurement at the j-th position
+//   =0 --> Display of the first measurement (only kept for backward compatibility)
+//
+// The user is advised not to use the obsolete "j=0" functionality anymore.
+//
+// Default value is j=0 for backward compatibility.
+//
+// Measurements are indicated as blue dots.
+// Reference signals are indicated as red triangles.
+// The Galactic Center is indicated as a red star.
+// The size of the marker symbols may be tailored via the member function SetMarkerSize().
+//
 // In case no stored signal was available or one of the input arguments was
 // invalid, no display is produced.
 //
-// Note : In case ts=0 the current timestamp of the lab will be taken.
+// Note : In case ts=0 the actual recorded timestamp of the signal will be taken.
+//        If such a recorded timestamp is absent, the current timestamp of the lab is used.
 //
 // The input parameter "frame" allows the user to specify the frame to which
 // the coordinates refer. Available options are :
@@ -3638,26 +4466,19 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
 //          "loc" ==> Local spherical angles theta and phi at the NcAstrolab location.
 //
 // In case the coordinates are the equatorial right ascension and declination (a,d),
-// they can represent so-called "mean" and "true" values.
-// The distinction between these two representations is the following :
+// they can represent so-called "mean", "true" or reference "epoch" values.
+// The distinction between these representations is the following :
 //
-// mean values : (a,d) are only corrected for precession and not for nutation
-// true values : (a,d) are corrected for both precession and nutation
+// mean values  : (a,d) are only corrected for precession and not for nutation
+// true values  : (a,d) are corrected for both precession and nutation
+// epoch values : (a,d) are given w.r.t. specific (e.g. B1950 or J2000) reference equinox locations
 //
-// The input parameter "mode" allows the user to specifiy either "mean" or "true"
-// values for the input in case of equatorial (a,d) coordinates.
+// The input parameter "mode" specifies either "mean", "true" or "epoch" values for the equatorial (a,d) coordinates.
 //
-// mode = "M" --> Input coordinates are the mean values 
-//        "T" --> Input coordinates are the true values 
-//
-// The input parameter "jref" allows display of a so-called "reference" signal.
-// These reference signals may serve to check space-time event coincidences with the
-// stored measurement (e.g. coincidence of the measurement with transient phenomena).
-//
-// jref = 0 --> Display of the measurement
-//        j --> Display of the j-th reference signal
-//
-// Default value is jref=0.
+// mode = "M" --> Provided coordinates are the mean values 
+//        "T" --> Provided coordinates are the true values 
+//        "B" --> Provides Besselian (B1950) reference epoch coordinates 
+//        "J" --> Provides Julian (J2000) reference epoch coordinates 
 //
 // The input parameter "proj" allows the user to specify the desired projection.
 // The available projection modes are :
@@ -3677,12 +4498,27 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
 //
 // The input argument "clr" allows to clear (1) the display before drawing or not (0).
 //
-// The default values are : jref=0, proj="ham" and clr=0.
+// The default values are : j=0, proj="ham" and clr=0.
 //
 // This routine is based on initial work by Garmt de Vries-Uiterweerd.
 
+ // Comply with the new (jref,type) convention for measurements and reference signals.
+ Int_t jref=abs(j);
+ Int_t type=0;
+ if (j<0) type=1;
+ if (!j) jref=1;
+
+ NcSignal* sx=0;
+ 
+ if (!ts)
+ {
+  sx=GetSignal(jref,type);
+  if (!sx) return;
+  ts=sx->GetTimestamp();
+ }
+
  Nc3Vector r;
- NcSignal* sx=GetSignal(r,frame,mode,ts,jref);
+ sx=GetSignal(r,frame,mode,ts,jref,type);
 
  if (!sx) return;
 
@@ -3743,6 +4579,8 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
  {
   titleup="Geocentric Equatorial (";
   titleup+=mode;
+  if (mode=="J") titleup+="2000";
+  if (mode=="B") titleup+="1950";
   titleup+=") ";
  }
  if (frame=="gal") titleup="Heliocentric Galactic";
@@ -3771,6 +4609,7 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
  Int_t ang,h,m,s,d;
  Int_t angmax,hmin,hmax,dmin,dmax;
  TString corr;
+ TString scenter="";
  if (frame=="equ" || frame=="icr")
  {
   ang=int(ConvertAngle(fMeridian,"rad","hms"));
@@ -3803,6 +4642,8 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
   sright+="h";
   sleft+=hmin;
   sleft+="h";
+  scenter+=h;
+  scenter+="h";
  }
  else
  {
@@ -3836,10 +4677,13 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
   sright+="#circ";
   sleft+=dmin;
   sleft+="#circ";
+  scenter+=d;
+  scenter+="#circ";
  }
 
  if (!hist) // 2-D Marker display (i.e. not a histogram) 
  {
+  TMarker* marker=0;
   // Remove existing markers, grid and outline from display if needed
   if (clr==1 || proj!=fProj)
   {
@@ -3867,14 +4711,104 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
    Float_t ymargin=0.3; // Y margin for canvas size
    fCanvas->Range(xlow-xmargin,ylow-ymargin,xup+xmargin,yup+ymargin);
 
-   // The ellipse outline 
+   // The ellipse outline with the skymap c.q. projection grid
    if (proj=="ham" || proj=="ait")
    {
-    // Draw ellips outline with axes
+    // Draw ellips outline
     TEllipse* outline=new TEllipse(0,0,xup,yup);
     fMarkers->Add(outline);
     outline->Draw();
-   }
+   } 
+
+   //////////////////////////////////////////
+   // Draw the skymap c.q. projection grid //
+   //////////////////////////////////////////
+
+   // Drawing of the projected meridians every 30 degrees
+   const Int_t nphi=13;
+   Double_t gphiarr[nphi]={0,30,60,90,120,150,180,210,240,270,300,330,360};
+   Double_t gphi=0;
+   Double_t gtheta=0;
+   Int_t ndots=100;
+   Float_t gstep=180./float(ndots);
+   Double_t xgrid=0;
+   Double_t ygrid=0;
+   for (Int_t iph=0; iph<nphi; iph++)
+   {
+    gphi=gphiarr[iph]*pi/180.;
+    if (frame=="hor") gphi=pi-gphi;
+    gtheta=pi/2.;
+    for (Int_t ith=1; ith<ndots; ith++)
+    {
+     gtheta=gtheta-(gstep*pi/180.);
+     Project(gphi,gtheta,proj,xgrid,ygrid);
+     marker=new TMarker(xgrid,ygrid,fMarkerStyle[3]);
+     marker->SetMarkerSize(fMarkerSize[3]);
+     marker->SetMarkerColor(fMarkerColor[3]);
+     fMarkers->Add(marker);
+     marker->Draw();
+    }
+   } 
+
+   // Drawing of the projected latitude circles every 15 degrees
+   const Int_t nth=10;
+   Double_t gtharr[nth]={15,30,45,60,75,105,120,135,150,165};
+   gphi=0;
+   gtheta=0;
+   gstep=360./float(ndots);
+   TString gs;
+   Int_t igs=0;
+   TLatex* lgs=0;
+   Double_t xtext=0;
+   Double_t ytext=0;
+   for (Int_t ith=0; ith<nth; ith++)
+   {
+    gtheta=pi/2.-(gtharr[ith]*pi/180.);
+    igs=int(90.-gtharr[ith]);
+    gs="";
+    gs+=igs;
+    gs+="#circ";
+    xtext=0;
+    for (Int_t iphi=1; iphi<ndots; iphi++)
+    {
+     gphi=gphi+gstep;
+     Project(gphi,gtheta,proj,xgrid,ygrid);
+     marker=new TMarker(xgrid,ygrid,fMarkerStyle[3]);
+     marker->SetMarkerSize(fMarkerSize[3]);
+     marker->SetMarkerColor(fMarkerColor[3]);
+     if (xgrid<xtext)
+     {
+      xtext=xgrid;
+      ytext=ygrid;
+     }
+     fMarkers->Add(marker);
+     marker->Draw();
+    }
+    lgs=new TLatex;
+    fMarkers->Add(lgs);
+    if (ytext>0)
+    {
+     if (proj=="ham" || proj=="ait")
+     {
+      lgs->DrawLatex(xtext-0.25,ytext,gs.Data());
+     }
+     else
+     {
+      lgs->DrawLatex(xtext-0.4,ytext-0.02,gs.Data());
+     }
+    }
+    else
+    {
+     if (proj=="ham" || proj=="ait")
+     {
+      lgs->DrawLatex(xtext-0.3,ytext-0.1,gs.Data());
+     }
+     else
+     {
+      lgs->DrawLatex(xtext-0.4,ytext-0.02,gs.Data());
+     }
+    }
+   } 
 
    // The horizontal and vertical axes
    TLine* line=new TLine(xlow,0,xup,0);
@@ -3895,34 +4829,96 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
    // The left side angular value indicator
    TLatex* left=new TLatex;
    fMarkers->Add(left);
-   left->DrawLatex(xlow-0.4,0,sleft.Data());
+   if (proj=="ham" || proj=="ait")
+   {
+    left->DrawLatex(xlow-0.4,0,sleft.Data());
+   }
+   else
+   {
+    left->DrawLatex(xlow-0.15,yup+0.05,sleft.Data());
+   }
    // The right side angular value indicator
    TLatex* right=new TLatex;
    fMarkers->Add(right);
-   right->DrawLatex(xup+0.1,0,sright.Data());
+   if (proj=="ham" || proj=="ait")
+   {
+    right->DrawLatex(xup+0.1,0,sright.Data());
+   }
+   else
+   {
+    right->DrawLatex(xup-0.1,yup+0.05,sright.Data());
+   }
    // The upper angular value indicator
    TLatex* up=new TLatex;
    fMarkers->Add(up);
-   up->DrawLatex(-0.1,yup+0.05,sup.Data());
+   if (proj=="ham" || proj=="ait")
+   {
+    up->DrawLatex(-0.1,yup+0.05,sup.Data());
+   }
+   else
+   {
+    up->DrawLatex(-0.1,yup+0.05,scenter.Data());
+    if (proj!="ang")
+    {
+     up=new TLatex;
+     fMarkers->Add(up);
+     up->DrawLatex(xlow-0.4,yup-0.04,sup.Data());
+    }
+   }
    // The lower angular value indicator
    TLatex* low=new TLatex;
    fMarkers->Add(low);
-   low->DrawLatex(-0.15,ylow-0.15,slow.Data());
+   if (proj=="ham" || proj=="ait")
+   {
+    low->DrawLatex(-0.15,ylow-0.15,slow.Data());
+   }
+   else
+   {
+    if (proj!="ang") low->DrawLatex(xlow-0.4,ylow,slow.Data());
+   }
+
+   //////////////////////////////////
+   // Indicate the Galactic Center //
+   //////////////////////////////////
+
+   // Add the Galactic Center temporarily as a reference signal for coordinate retrieval
+   sx=SetSignal(1,0,"deg",0,"deg","gal",0,-1,"J","GC",0);
+   Int_t idx=fRefs->IndexOf(sx);
+   idx++;
+   Nc3Vector rgc;
+   sx=GetSignal(rgc,frame,mode,ts,idx,0);
+   if (sx)
+   {
+    Double_t thetagc=0;
+    Double_t phigc=0;
+    if (frame=="equ" || frame=="gal" || frame=="icr" || frame=="ecl" || frame=="loc")
+    {
+     thetagc=(pi/2.)-rgc.GetX(2,"sph","rad");
+     phigc=rgc.GetX(3,"sph","rad");
+    }
+    if (frame=="hor")
+    {
+     thetagc=(pi/2.)-rgc.GetX(2,"sph","rad");
+     phigc=pi-rgc.GetX(3,"sph","rad");
+    }
+    // Obtain the projected (x,y) position
+    Double_t xgc=0;
+    Double_t ygc=0;
+    Project(phigc,thetagc,proj,xgc,ygc);
+    marker=new TMarker(xgc,ygc,fMarkerStyle[2]);
+    marker->SetMarkerSize(fMarkerSize[2]);
+    marker->SetMarkerColor(fMarkerColor[2]);
+    fMarkers->Add(marker);
+    marker->Draw();
+    // Remove the temporary Galactic Center object again
+    RemoveSignal(idx,0,0);
+   }
   }
 
-  // Indicate the measurement or reference signal(s) on the display
-  TMarker* marker=0;
-  if (!jref) // The measurement
-  {
-   marker=new TMarker(x,y,29);
-   marker->SetMarkerColor(kRed);
-  }
-  else // The reference signal(s)
-  {
-   marker=new TMarker(x,y,20);
-   marker->SetMarkerColor(kBlue);
-  }
-  marker->SetMarkerSize(1);
+  // Indicate the measurement(s) or reference signal(s) on the display
+  marker=new TMarker(x,y,fMarkerStyle[type]);
+  marker->SetMarkerSize(fMarkerSize[type]);
+  marker->SetMarkerColor(fMarkerColor[type]);
   fMarkers->Add(marker);
   marker->Draw();
  }
@@ -3933,78 +4929,116 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
   if (frame=="equ" || frame=="icr") xfac=6;
   if (proj=="angh") yfac=1;
   // Reset the histogram if needed
-  if (clr==1 || proj!=fProj)
+  if (clr==1 || proj!=fProj || !fHist[type])
   {
-   fCanvas->Clear();
-   if (!fHist) fHist=new TH2F();
-   fHist->Reset();
-   fHist->SetMarkerStyle(20);
-   fHist->SetMarkerSize(1);
-   fHist->SetMarkerColor(kBlue);
+   if (clr==1 || proj!=fProj)
+   {
+    fCanvas->Clear();
+    fCanvas->SetGrid();
+    for (Int_t i=0; i<2; i++)
+    {
+     if (fHist[i])
+     {
+      fHist[i]->Delete();
+      fHist[i]=0;
+     }
+    }
+   }
+   if (!fHist[type]) fHist[type]=new TH2F();
+   fHist[type]->Reset();
+   fHist[type]->SetMarkerStyle(fMarkerStyle[type]);
+   fHist[type]->SetMarkerSize(fMarkerSize[type]);
+   fHist[type]->SetMarkerColor(fMarkerColor[type]);
    TString title=titleup;
    title+="   ";
    title+=titlelow;
-   fHist->SetNameTitle("SkyMap",title.Data());
-   fHist->GetXaxis()->SetTitle("Degrees from central Meridian");
+   fHist[type]->SetNameTitle("SkyMap",title.Data());
+   fHist[type]->GetXaxis()->SetTitle("Degrees from central Meridian");
    if (proj=="angh")
    {
-    fHist->SetBins(1000,-181,181,100,-1.1,1.1);
-    fHist->GetYaxis()->SetTitle("sin(b)");
+    fHist[type]->SetBins(1000,-181,181,100,-1.1,1.1);
+    fHist[type]->GetYaxis()->SetTitle("sin(b)");
    }
    else
    {
-    fHist->SetBins(1000,-181,181,500,-91,91);
-    fHist->GetYaxis()->SetTitle("Projected Latitude in degrees");
+    fHist[type]->SetBins(1000,-181,181,500,-91,91);
+    fHist[type]->GetYaxis()->SetTitle("Projected Latitude in degrees");
    }
    if (frame=="equ" || frame=="icr")
    {
-    fHist->GetXaxis()->SetTitle("Hours from central Meridian");
+    fHist[type]->GetXaxis()->SetTitle("Hours from central Meridian");
     if (proj=="angh")
     {
-     fHist->SetBins(200,-12.1,12.1,100,-1.1,1.1);
-     if (frame=="equ") fHist->GetYaxis()->SetTitle("sin(#delta)");
+     fHist[type]->SetBins(200,-12.1,12.1,100,-1.1,1.1);
+     if (frame=="equ") fHist[type]->GetYaxis()->SetTitle("sin(#delta)");
     }
     else
     {
-     fHist->SetBins(200,-12.1,12.1,500,-91,91);
-     if (frame=="equ") fHist->GetYaxis()->SetTitle("Projected Declination in degrees");
+     fHist[type]->SetBins(200,-12.1,12.1,500,-91,91);
+     if (frame=="equ") fHist[type]->GetYaxis()->SetTitle("Projected Declination in degrees");
     }
    }
    if (frame=="hor")
    {
     if (proj=="angh")
     {
-     fHist->GetYaxis()->SetTitle("sin(alt)=cos(zenith)");
+     fHist[type]->GetYaxis()->SetTitle("sin(alt)=cos(zenith)");
     }
     else
     {
-     fHist->GetYaxis()->SetTitle("Projected Altitude in degrees");
+     fHist[type]->GetYaxis()->SetTitle("Projected Altitude in degrees");
     }
    }
    if (frame=="loc")
    {
     if (proj=="angh")
     {
-     fHist->GetYaxis()->SetTitle("cos(#theta)=sin(b)");
+     fHist[type]->GetYaxis()->SetTitle("cos(#theta)=sin(b)");
     }
     else
     {
-     fHist->GetYaxis()->SetTitle("Projected Theta in degrees");
+     fHist[type]->GetYaxis()->SetTitle("Projected Theta in degrees");
     }
    }
    fProj=proj;
   }
-  fHist->Fill(x*xfac,y*yfac);
-  fHist->Draw();
+
+  if (proj=="merh")
+  {
+   fHist[type]->Fill(x*xfac,theta*180./pi);
+  }
+  else
+  {
+   fHist[type]->Fill(x*xfac,y*yfac);
+  }
+  if ((!type && fHist[1]) || (type && fHist[0]))
+  {
+   fHist[type]->Draw("same");
+  }
+  else
+  {
+   fHist[type]->Draw();
+  }
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj,Int_t clr)
+void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj,Int_t clr,Int_t type)
 {
-// Display the stored signal with the specified name in a user specified
+// Display the stored signal according to "type" with the specified name in a user specified
 // coordinate projection at the specific timestamp ts.
 //
-// Note : In case ts=0 the current timestamp of the lab will be taken.
+// The input parameter "type" allows to specify either measurements or reference signals.
+//
+// type = 0 --> Display the corresponding reference signal
+//        1 --> Display the corresponding measurement
+//
+// Measurements are indicated as blue dots.
+// Reference signals are indicated as red triangles.
+// The Galactic Center is indicated as a red star.
+// The size of the marker symbols may be tailored via the member function SetMarkerSize().
+//
+// Note : In case ts=0 the actual recorded timestamp of the signal will be taken.
+//        If such a recorded timestamp is absent, the current timestamp of the lab is used.
 //
 // In case no such stored signal was available or one of the input arguments was
 // invalid, no display is produced.
@@ -4025,17 +5059,19 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TStrin
 //          "loc" ==> Local spherical angles theta and phi at the NcAstrolab location.
 //
 // In case the coordinates are the equatorial right ascension and declination (a,d),
-// they can represent so-called "mean" and "true" values.
-// The distinction between these two representations is the following :
+// they can represent so-called "mean", "true" or reference "epoch" values.
+// The distinction between these representations is the following :
 //
-// mean values : (a,d) are only corrected for precession and not for nutation
-// true values : (a,d) are corrected for both precession and nutation
+// mean values  : (a,d) are only corrected for precession and not for nutation
+// true values  : (a,d) are corrected for both precession and nutation
+// epoch values : (a,d) are given w.r.t. specific (e.g. B1950 or J2000) reference equinox locations
 //
-// The input parameter "mode" allows the user to specifiy either "mean" or "true"
-// values for the input in case of equatorial (a,d) coordinates.
+// The input parameter "mode" specifies either "mean", "true" or "epoch" values for the equatorial (a,d) coordinates.
 //
-// mode = "M" --> Input coordinates are the mean values 
-//        "T" --> Input coordinates are the true values 
+// mode = "M" --> Provided coordinates are the mean values 
+//        "T" --> Provided coordinates are the true values 
+//        "B" --> Provides Besselian (B1950) reference epoch coordinates 
+//        "J" --> Provides Julian (J2000) reference epoch coordinates 
 //
 // The input parameter "proj" allows the user to specify the desired projection.
 // The available projection modes are :
@@ -4055,22 +5091,44 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TStrin
 //
 // The input argument "clr" allows to clear (1) the display before drawing or not (0).
 //
-// The default values are : proj="ham" and clr=0.
+// The default values are : proj="ham", clr=0 and type=0.
 
- Int_t j=GetSignalIndex(name);
- if (j>=0) DisplaySignal(frame,mode,ts,j,proj,clr);
+ Int_t j=GetSignalIndex(name,type);
+ if (j>0)
+ {
+  if (type) j=-j;
+  DisplaySignal(frame,mode,ts,j,proj,clr);
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj,Int_t clr)
+void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj,Int_t clr,Int_t nmax,Int_t j,Int_t type)
 {
-// Display of all stored signals in user specified coordinate projection
-// at the specific timestamp ts.
-// In case ts=0, the timestamp of the actual recording of the stored measurement
-// under investigation will be used.
-// In case no (timestamp of the) actual measurement is available,
-// the current timestamp of the lab will be taken.
-// In case no stored signal is available or one of the input arguments is
+// Display of stored signals in a user specified coordinate projection at the specific timestamp.
+//
+// All measurements are displayed according to the timestamp of their actual stored recording,
+// which may be a scrambled timestamp according to the invokation of the memberfunction SetTimeScramble().
+//
+// For reference signals the actual timestamp of the j-th (j=1 is first) measurement is used.
+// In case j=0 the provided timestamp "ts" is used for all the reference signals.
+// For j<0 the timestamp of the actual recording of each reference signal will be used.
+//
+// In case a timestamp is not present for a certain signal, the provided "ts" is used instead.
+// Note : ts=0 corresponds to the current timestamp of the lab.
+//
+// Measurements are indicated as blue dots.
+// Reference signals are indicated as red triangles.
+// The Galactic Center is indicated as a red star.
+// The size of the marker symbols may be tailored via the member function SetMarkerSize().
+//
+// In case no corresponding stored signal is available or one of the input arguments is
 // invalid, no display is produced.
+//
+// type = 0 --> Display the data of stored reference signals
+//        1 --> Display the data of stored measured signals
+//      < 0 --> Display the data of both measured and reference signals  
+//
+// The argument "nmax" specifies the maximum number of measured c.q. reference signals
+// that will be listed. When nmax<0 all stored measured c.q. reference signals are listed.
 //
 // The input parameter "frame" allows the user to specify the frame to which
 // the coordinates refer. Available options are :
@@ -4088,17 +5146,19 @@ void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TStri
 //          "loc" ==> Local spherical angles theta and phi at the NcAstrolab location.
 //
 // In case the coordinates are the equatorial right ascension and declination (a,d),
-// they can represent so-called "mean" and "true" values.
-// The distinction between these two representations is the following :
+// they can represent so-called "mean", "true" or reference "epoch" values.
+// The distinction between these representations is the following :
 //
-// mean values : (a,d) are only corrected for precession and not for nutation
-// true values : (a,d) are corrected for both precession and nutation
+// mean values  : (a,d) are only corrected for precession and not for nutation
+// true values  : (a,d) are corrected for both precession and nutation
+// epoch values : (a,d) are given w.r.t. specific (e.g. B1950 or J2000) reference equinox locations
 //
-// The input parameter "mode" allows the user to specifiy either "mean" or "true"
-// values for the input in case of equatorial (a,d) coordinates.
+// The input parameter "mode" specifies either "mean", "true" or "epoch" values for the equatorial (a,d) coordinates.
 //
-// mode = "M" --> Input coordinates are the mean values 
-//        "T" --> Input coordinates are the true values 
+// mode = "M" --> Provided coordinates are the mean values 
+//        "T" --> Provided coordinates are the true values 
+//        "B" --> Provides Besselian (B1950) reference epoch coordinates 
+//        "J" --> Provides Julian (J2000) reference epoch coordinates 
 //
 // The input parameter "proj" allows the user to specify the desired projection.
 // The available projection modes are :
@@ -4118,24 +5178,84 @@ void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TStri
 //
 // The input argument "clr" allows to clear (1) the display before drawing or not (0).
 //
-// The default values are : proj="ham" and clr=0.
+// The default values are : proj="ham", clr=0, nmax=-1, j=-1 and type=-1.
 
- NcTimestamp* tx=ts;
- if (fXsig && !tx) tx=fXsig->GetTimestamp();
- if (!tx) tx=(NcTimestamp*)this;
+ NcSignal* sx=0;
+ NcTimestamp* tx=0;
+ Int_t nstored=0;
+ Int_t jdisp=0;
 
- // Display all stored reference signals
- if (fRefs)
+ // Display stored reference signals
+ if (fRefs && type<=0)
  {
+  // Use timestamp of j-th measurement if requested
+  if (j>0) sx=GetSignal(j,1);
+  if (sx) tx=sx->GetTimestamp();
+
+  // Use the provided timestamp
+  tx=ts;
+
+  // Use the current lab timestamp if no timestamp selected
+  if (!tx) tx=(NcTimestamp*)this;
+ 
+  nstored=fRefs->GetEntries();
+  jdisp=0;
   for (Int_t i=1; i<=fRefs->GetSize(); i++)
   {
+   sx=GetSignal(i,0);
+   if (!sx) continue;
+
+   jdisp++;
+   if (nmax>=0 && jdisp>nmax) break;
+
+   // Use the actual timestamp of the reference signal
+   if (j<0)
+   {
+    tx=sx->GetTimestamp();
+    if (!tx) tx=ts;
+    if (!tx) tx=(NcTimestamp*)this;
+   }
+
    DisplaySignal(frame,mode,tx,i,proj,clr);
    clr=0; // No display clear for subsequent signals
   }
  }
 
- // Display the measurement
- DisplaySignal(frame,mode,tx,0,proj,clr);
+ // Display all stored measurements
+ if (fSigs && type)
+ {
+  nstored=fSigs->GetEntries();
+  jdisp=0;
+  for (Int_t j=1; j<=fSigs->GetSize(); j++)
+  {
+   sx=GetSignal(j,1);
+   if (!sx) continue;
+
+   jdisp++;
+   if (nmax>=0 && jdisp>nmax) break;
+
+   tx=sx->GetTimestamp();
+   if (!tx) tx=ts;
+   if (!tx) tx=(NcTimestamp*)this;
+   DisplaySignal(frame,mode,tx,-j,proj,clr);
+   clr=0; // No display clear for subsequent signals
+  }
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)
+{
+// Set the size of the marker symbols for skymaps and related histograms.
+// By default all sizes are set to 1 in the constructor of this NcAstrolab class. 
+//
+// type = 0 --> Set marker size for reference signals
+//        1 --> Set marker size for measurements
+//        2 --> Set marker size for the Galactic Center
+//        3 --> Set marker size for the skymap grid dots
+
+ if (type<0 || type >3) return;
+
+ fMarkerSize[type]=size;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::SetCentralMeridian(Double_t phi,TString u)
@@ -4876,14 +5996,8 @@ void NcAstrolab::RandomPosition(Nc3Vector& v,Double_t thetamin,Double_t thetamax
 // 3) In case angular errors have been specified for the vector "v", the randomised vector
 //    will obtain the same angular errors.
 
- // If needed initialise the randomiser with the current Astrolab timestamp
- if (!fRan)
- {
-  Int_t jd,sec,ns;
-  GetJD(jd,sec,ns);
-  Int_t iseed=jd+sec; 
-  fRan=new NcRandom(iseed);
- }
+ // If needed initialise the randomiser with a "date/time driven" seed from current Astrolab timestamp
+ if (!fRan) SetRandomiser(-1);
 
  // Generate random angles in the specified range
  Double_t pi=acos(-1.);
@@ -4927,14 +6041,8 @@ void NcAstrolab::SmearPosition(Nc3Vector& v,Double_t sigma)
 
  if (!v.HasVector()) return;
 
- // If needed initialise the randomiser with the current Astrolab timestamp
- if (!fRan)
- {
-  Int_t jd,sec,ns;
-  GetJD(jd,sec,ns);
-  Int_t iseed=jd+sec; 
-  fRan=new NcRandom(iseed);
- }
+ // If needed initialise the randomiser with a "date/time driven" seed from the current Astrolab timestamp
+ if (!fRan) SetRandomiser(-1);
 
  Double_t norm=v.GetX(1,"sph","deg");
  Double_t theta=v.GetX(2,"sph","deg");

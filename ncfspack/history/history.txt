@@ -1067,3 +1067,5 @@
                 and the documentation of NcAstrolab::Precess() corrected.
 22-nov-2016 NvE Functionality of NcAstrolab::ListSignals() extended with optional specification of the maximum number
                 of reference signals to be listed.
+20-sep-2017 NvE Functionality of NcAstrolab extended with support for storage of multiple measurements and the
+                graphics of NcAstrolab::DisplaySignal() improved. 
