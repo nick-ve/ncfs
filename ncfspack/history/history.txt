@@ -1069,3 +1069,7 @@
                 of reference signals to be listed.
 20-sep-2017 NvE Functionality of NcAstrolab extended with support for storage of multiple measurements and the
                 graphics of NcAstrolab::DisplaySignal() improved. 
+10-oct-2017 NvE Functionality of NcRandom extended with support for automatic date/time driven random seed generation
+                based on NcTimestamp data. This has also been implemented in NcAstrolab and new member functions
+                SetRandomiser() and GetRandomiser() have been introduced to control c.q. access the internal randomiser
+                of NcAstrolab.

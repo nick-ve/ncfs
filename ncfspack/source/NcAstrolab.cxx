@@ -57,14 +57,20 @@
 //
 // Various external (astrophysical) phenomena may be entered as
 // so-called reference signals.
-// This class provides facilities (e.g. MatchSignals) to check
+// This NcAstrolab class provides facilities (e.g. MatchSignals) to check
 // correlations of the stored measurements with these reference signals.
 // The memberfunction SetTimeScramble provides a facility to scramble
 // the timestamp of an observation or time differences with reference signals.
 // The memberfunction SetPositionScramble provides a facility to scramble
 // the location of an observation or angular differences with reference signals.
 // These facilities will enable a background c.q. blind analysis in studying
-// correlations with external (astrophysical) phenomena. 
+// correlations with external (astrophysical) phenomena.
+//
+// By default different random sequences are ensured for different NcAstrolab instances,
+// even with identical stored measurements and reference signals.  
+// In case the user wants to control the random sequence (e.g. to obtain reproducible results),
+// the randomiser has to be explicitly initialised via the member function SetRandomiser().
+// 
 // Also graphical facilities (e.g. DisplaySignals) are available to
 // provide skymaps in various projections.
 // 
@@ -468,15 +474,21 @@ void NcAstrolab::Data(Int_t mode,TString u)
   }
  }
  
+ cout << " ------------------" << endl;
  if (fRan)
  {
   Int_t iseed,cnt1,cnt2;
   GetRandomiser(iseed,cnt1,cnt2);
-  cout << " ------------------" << endl;
-  cout << " Current settings of the internal NcRandom randomiser : iseed=" << iseed << " cnt1=" << cnt1 << " cnt2=" << cnt2 << endl;
+  cout << " *** Current settings of the internal NcRandom randomiser : iseed=" << iseed << " cnt1=" << cnt1 << " cnt2=" << cnt2 << endl;
  }
-
- if (fTscmode || fRscmode || fRan) cout << " ------------------" << endl;
+ else
+ {
+  cout << " *** The internal NcRandom randomiser is currently not intialised ***" << endl;
+  cout << " Automatic initialisation will be performed with the actual timestamp at the first random number request." << endl;
+  cout << " This will ensure different random sequences for different NcAstrolab instances." << endl;
+  cout << " To obtain reproducible scrambled results, please invoke SetRandomiser() before the first SetSignal() invokation." << endl;
+ }
+ cout << " ------------------" << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::SetLabPosition(Nc3Vector& p)
@@ -620,43 +632,53 @@ void NcAstrolab::GetLabPosition(Double_t& l,Double_t& b,TString u) const
  l=p[2];
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::SetRandomiser(Int_t iseed,NcTimestamp* ts,Int_t cnt1,Int_t cnt2)
+void NcAstrolab::SetRandomiser(Int_t iseed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
 {
 // (Re)initialise the internal NcRandom randomisation facility.
 //
 // Note :
 // ------
 // This member function provides the user a handle to (re)initialise the internal randomisation
-// facility in order to obtain reproducible results or to ensure the use of different
-// random sequences for various NcAstrolab invokations by using e.g. the "date/time driven" initialisation. 
-// However, in case internal randomisations are needed, the randomisation facility
-// is automatically "date/time driven" initialised if it was not initialised by the user before.
-// So, in general there actually is no need for the user to explicitly invoke this member function.
+// facility in order to obtain reproducible scrambled results or to define unique random sequences
+// for various NcAstrolab instances.
+// If not initialised by the user, the randomisation facility is internally automatically "date/time driven"
+// initialised by the actual timestamp of the moment the first need for a randomisation arises.
+// This will ensure different random sequences for different NcAstrolab instances (if created at least 0.01 sec. apart),
+// even in the case of identical stored measurements and reference signals.
+// For details about the atomatically generated seed value please refer to the NcRandom documentation.
+//
+// So, in case there is no need for reproducible scrambled results among NcAstrolab instances that are created
+// at time intervals of more than 0.01 second, the user is advised NOT to invoke this member function.
 //
 // Input arguments :
 // -----------------
-// iseed >= 0 --> Use this value as seed for the internal NcRandom object.
-//                For allowed seed values please refer to the docs of NcRandom.
-//       < 0  --> Use the JD+sec of the provided timestamp "ts" as seed for the internal NcRandom object.
-//                In case ts=0 the JD+sec of the current NcAstrolab timestamp will be used.           
+// iseed >= 0 --> Use this value as seed for the internal NcRandom object and start the
+//                random sequence at the point defined by the counters "cnt1" and "cnt2".
+//                In this case the timestamp "ts" is irrelevant.
+//                For allowed seed values and info on the parameters "cnt1" and "cnt2"
+//                please refer to the docs of NcRandom.
+//       < 0  --> Use the provided NcTimestamp "ts" to generate a seed for the internal NcRandom object.
+//                If ts=0 the current timestamp of this NcAstrolab instance is used.
+//                The values of "cnt1" and "cnt2" are irrelevant, since the random sequence will always
+//                be started from scratch.
 //
-// For detailed information about the NcRandom seed and the optional
-// parameters "cnt1" and "cnt2" please refer to the docs of NcRandom. 
+// Note :
+// ------
+// Reproducible scrambled results among different NcAstrolab instances is only possible if they are
+// all initialised with the same parameters for the internal randomiser.
+// This implies that when initialisation is performed via a timestamp, this timestamp should be the
+// same for all the corresponding NcAstrolab instances. This can be obtained via an explicit SetUT()
+// invokation of the provided timestamp or NcAstrolab instance.
+// By providing a specific iseed>=0 (and optionally "cnt1" and "cnt2") for all NcAstrolab instances,
+// reproducibility is automatically obtained if the stored signals are identical.
 //
-// The default values are ts=0, cnt1=0 and cnt2=0.
+// The default values are cnt1=0, cnt2=0 and ts=0.
+
+ if (!ts) ts=(NcTimestamp*)this;
 
  if (fRan) delete fRan;
-
- if (iseed<0) // Use the provided timestamp
- {
-  NcTimestamp* tx=ts;
-  if (!tx) tx=(NcTimestamp*)this;
-  Int_t jd,sec,ns;
-  tx->GetJD(jd,sec,ns);
-  iseed=jd+sec; 
- }
  
- fRan=new NcRandom(iseed,cnt1,cnt2);
+ fRan=new NcRandom(iseed,cnt1,cnt2,ts);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcRandom* NcAstrolab::GetRandomiser(Int_t& iseed,Int_t& cnt1,Int_t& cnt2) const
@@ -971,8 +993,11 @@ NcSignal* NcAstrolab::SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimest
  }
 
  // If needed, initialise the randomiser with a "date/time driven" seed
- // of the provided timestamp.
- if (!fRan && type && (fTscmode==2 || fRscmode==2)) SetRandomiser(-1,ts);
+ // using the timestamp of the moment of this invokation of the member function.
+ // This will ensure different random sequences if the user repeats analyses
+ // with identical measurements and reference signals without explicit initialisation
+ // of the randomiser by the user at the start of the analysis.
+ if (!fRan && type && (fTscmode==2 || fRscmode==2)) fRan=new NcRandom(-1);
 
  // Local timestamp copy to allow time scrambling
  NcTimestamp tx(*ts);
@@ -3684,8 +3709,11 @@ Double_t NcAstrolab::GetDifference(Int_t i,Int_t j,TString au,Double_t& dt,TStri
  if (fDscfunc) fDscfunc->SetRange(fDscmin,fDscmax);
 
  // If needed, initialise the randomiser with a "date/time driven" seed
- // of the timestamp of the selected i-th signal.
- if (!fRan && (fRscmode || fTscmode)) SetRandomiser(-1,ti);
+ // using the timestamp of the moment of this invokation of the member function.
+ // This will ensure different random sequences if the user repeats analyses
+ // with identical measurements and reference signals without explicit initialisation
+ // of the randomiser by the user at the start of the analysis.
+ if (!fRan && (fRscmode || fTscmode)) fRan=new NcRandom(-1);
 
  Double_t pi=acos(-1.);
 
@@ -5996,8 +6024,12 @@ void NcAstrolab::RandomPosition(Nc3Vector& v,Double_t thetamin,Double_t thetamax
 // 3) In case angular errors have been specified for the vector "v", the randomised vector
 //    will obtain the same angular errors.
 
- // If needed initialise the randomiser with a "date/time driven" seed from current Astrolab timestamp
- if (!fRan) SetRandomiser(-1);
+ // If needed, initialise the randomiser with a "date/time driven" seed
+ // using the timestamp of the moment of this invokation of the member function.
+ // This will ensure different random sequences if the user repeats analyses
+ // with identical measurements and reference signals without explicit initialisation
+ // of the randomiser by the user at the start of the analysis.
+ if (!fRan) fRan=new NcRandom(-1);
 
  // Generate random angles in the specified range
  Double_t pi=acos(-1.);
@@ -6041,8 +6073,12 @@ void NcAstrolab::SmearPosition(Nc3Vector& v,Double_t sigma)
 
  if (!v.HasVector()) return;
 
- // If needed initialise the randomiser with a "date/time driven" seed from the current Astrolab timestamp
- if (!fRan) SetRandomiser(-1);
+ // If needed, initialise the randomiser with a "date/time driven" seed
+ // using the timestamp of the moment of this invokation of the member function.
+ // This will ensure different random sequences if the user repeats analyses
+ // with identical measurements and reference signals without explicit initialisation
+ // of the randomiser by the user at the start of the analysis.
+ if (!fRan) fRan=new NcRandom(-1);
 
  Double_t norm=v.GetX(1,"sph","deg");
  Double_t theta=v.GetX(2,"sph","deg");

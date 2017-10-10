@@ -129,39 +129,81 @@ ClassImp(NcRandom) // Class implementation to enable ROOT I/O
 NcRandom::NcRandom()
 {
 // Creation of an NcRandom object and default initialisation.
+// The random sequence will be started from scratch.
 //
 // A seed is used to create the initial u[97] table.
 // This seed is converted into four startup parameters i j k and l
-// (see member function "unpack").
+// as outlined in the docs of the internal member function Unpack().
 //
 // Suggested test values : i=12 j=34 k=56 l=78 (see article)
-// which corresponds to  : seed = 53310452
+// which corresponds to  : seed=53310452
+//
+// This seed value of 53310452 is used in this default initialisation.
  
  Int_t seed=53310452; // Default seed
- Start(seed,0,0);     // Start the sequence for this seed from scratch
+ Start(seed,0,0,0);   // Start the sequence for this seed from scratch
 }
 ///////////////////////////////////////////////////////////////////////////
-NcRandom::NcRandom(Int_t seed)
+NcRandom::NcRandom(Int_t seed,NcTimestamp* ts)
 {
-// Creation of an NcRandom object and user defined initialisation
- 
- Start(seed,0,0); // Start the sequence for this seed from scratch
-}
-///////////////////////////////////////////////////////////////////////////
-NcRandom::NcRandom(Int_t seed,Int_t cnt1,Int_t cnt2)
-{
-// Creation of an NcRandom object and user defined initialisation
+// Creation of an NcRandom object and user defined initialisation.
+// The random sequence will be started from scratch.
 //
-// seed is the seed to create the initial u[97] table.
 // The range of the seed is : 0 <= seed <= 921350143
+//
+// Note :
+// ------
+// If seed<0 a unique seed value will be automatically generated based on the provided NcTimestamp
+// and the sequence will be started from scratch.
+// If ts=0 the actual timestamp at the moment of invoking this member function will be used.
+// The seed is created as : seed=10000*(sssss.ss)+dd where "sssss.ss" indicates the fractional second count
+// in the Julian day and "dd" are the 2 last digits of the Julian day count.
+// This will ensure different random sequences for different NcRandom instances that are created
+// at least 0.01 seconds apart, with a negligible probability of repetition after 99 days.
+// Different random sequences are essential to prevent repetition in for instance large batch processing
+// of many Monte Carlo samples. 
+//
+// In case the provided seed value exceeds the maximum value of 921350143 the seed will be set
+// to the default value of 53310452.
+//
+// The default value is ts=0.
+ 
+ Start(seed,0,0,ts); // Start the sequence for this seed from scratch
+}
+///////////////////////////////////////////////////////////////////////////
+NcRandom::NcRandom(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
+{
+// Creation of an NcRandom object and user defined initialisation.
+// The random sequence is started from a user defined point specified via "cnt1" and "cnt2"
+// as outlined below.
+//
+// The range of the seed is : 0 <= seed <= 921350143
+//
+// Note :
+// ------
+// If seed<0 a unique seed value will be automatically generated based on the provided NcTimestamp
+// and the sequence will be started from scratch.
+// If ts=0 the actual timestamp at the moment of invoking this member function will be used.
+// This means that in case seed<0 both counters cnt1 and cnt2 will be set to zero.
+// The seed is created as : seed=10000*(sssss.ss)+dd where "sssss.ss" indicates the fractional second count
+// in the Julian day and "dd" are the 2 last digits of the Julian day count.
+// This will ensure different random sequences for different NcRandom instances that are created
+// at least 0.01 seconds apart, with a negligible probability of repetition after 99 days.
+// Different random sequences are essential to prevent repetition in for instance large batch processing
+// of many Monte Carlo samples. 
+//
+// In case the provided seed value exceeds the maximum value of 921350143 the seed will be set
+// to the default value of 53310452.
 //
 // cnt1 and cnt2 are the parameters for the counting system
 // to enable a start of the sequence at a certain point.
 // The current values of seed, cnt1 and cnt2 can be obtained
-// via the member functions "GetSeed", "GetCnt1" and "GetCnt2" resp.
-// To start from scratch one should select : cnt1=0 and cnt2=0
+// via the member functions "GetSeed", "GetCnt1" and "GetCnt2" respectively.
+// To start a sequence from scratch one should select : cnt1=0 and cnt2=0.
+//
+// The default value is ts=0.
  
- Start(seed,cnt1,cnt2); // Start the sequence from a user defined point
+ Start(seed,cnt1,cnt2,ts); // Start the sequence from a user defined point
 }
 ///////////////////////////////////////////////////////////////////////////
 NcRandom::~NcRandom()
@@ -175,9 +217,9 @@ NcRandom::~NcRandom()
  fIbins=0;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcRandom::Start(Int_t seed,Int_t cnt1,Int_t cnt2)
+void NcRandom::Start(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
 {
-// Start a certain sequence from scratch or from a user defined point
+// Internal member function to start a certain sequence from scratch or from a user defined point.
 //
 // The algorithm to start from scratch is based on the routine RSTART
 // as described in the report by G.Marsaglia and A.Zaman
@@ -185,18 +227,57 @@ void NcRandom::Start(Int_t seed,Int_t cnt1,Int_t cnt2)
 //
 // seed is the seed to create the initial u[97] table.
 // This seed is converted into four startup parameters i j k and l
-// (see the member function "unpack").
+// as outlined in the docs of the internal member function Unpack().
 //
 // The range of the seed is : 0 <= seed <= 921350143
 //
+// Note :
+// ------
+// If seed<0 a unique seed value will be automatically generated based on the provided NcTimestamp.
+// and the sequence will be started from scratch.
+// If ts=0 the actual timestamp at the moment of invoking this member function will be used.
+// This means that in case seed<0 both counters cnt1 and cnt2 will be set to zero.
+// The seed is created as : seed=10000*(sssss.ss)+dd where "sssss.ss" indicates the fractional second count
+// in the Julian day and "dd" are the 2 last digits of the Julian day count. In this way the automatically
+// generated seed value will always fall in the allowed range.
+// This will ensure different random sequences for different NcRandom instances that are created
+// at least 0.01 seconds apart, with a negligible probability of repetition after 99 days.
+// Different random sequences are essential to prevent repetition in for instance large batch processing
+// of many Monte Carlo samples. 
+//
 // Suggested test values : i=12 j=34 k=56 l=78 (see article)
-// which corresponds to  : seed = 53310452
+// which corresponds to  : seed=53310452
+//
+// In case the provided seed value exceeds the maximum value of 921350143 the seed will be set
+// to the default value of 53310452.
 //
 // cnt1 and cnt2 are the parameters for the counting system
 // to enable a start of the sequence at a certain point.
 // The current values of seed, cnt1 and cnt2 can be obtained
 // via the member functions "GetSeed", "GetCnt1" and "GetCnt2" resp.
-// To start from scratch one should select : cnt1=0 and cnt2=0
+// To start from scratch one should select : cnt1=0 and cnt2=0.
+
+ if (seed>921350143) seed=53310452;
+
+ // Use the provided c.q. current timestamp to create a seed value and start the sequence from scratch
+ if (seed<0)
+ {
+  cnt1=0;
+  cnt2=0;
+  Int_t jd,sec,ns;
+  if (ts)
+  {
+   ts->GetJD(jd,sec,ns);
+  }
+  else
+  {
+   NcTimestamp tx;
+   tx.GetJD(jd,sec,ns);
+  }
+  Int_t jd100=jd%100;
+  Int_t sec100=ns/10000000;
+  seed=10000*sec+100*sec100+jd100;
+ }
  
 // Reset the area function
  fNa=0;
@@ -261,7 +342,7 @@ void NcRandom::Start(Int_t seed,Int_t cnt1,Int_t cnt2)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l)
 {
-// Unpack the seed into the four startup parameters i,j,k and l
+// Internal member function to unpack the seed into the four startup parameters i,j,k and l.
 //
 // The range of the seed is : 0 <= seed <= 921350143
 //
@@ -310,8 +391,8 @@ void NcRandom::Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l)
        << " seed = " << seed << endl;
   cout << " Seed will be set to default value." << endl;
  
-  seed=53310452;   // Default seed
-  Start(seed,0,0); // Start the sequence for this seed from scratch
+  seed=53310452;     // Default seed
+  Start(seed,0,0,0); // Start the sequence for this seed from scratch
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -336,7 +417,7 @@ Int_t NcRandom::GetCnt2() const
 void NcRandom::Data() const
 {
 // Print the current seed, cnt1 and cnt2 values
- cout << " *Random* seed = " << fSeed
+ cout << " *NcRandom* seed = " << fSeed
       << " cnt1 = " << fCnt1 << " cnt2 = " << fCnt2 << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -477,7 +558,7 @@ void NcRandom::Uniform(Float_t* vec,Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Uniform(Int_t n)
 {
-// Generate n uniform random numbers in in one go.
+// Internal member function to generate n uniform random numbers in one go.
 // This saves lots of (member)function calls in case one needs to skip
 // to a certain point in a sequence.
 //

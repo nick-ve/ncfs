@@ -42,7 +42,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   void SetExperiment(TString name);                                   // Set position and local frame for the specified experiment
   NcPosition GetLabPosition() const;                                  // Provide the lab terrestrial position 
   void GetLabPosition(Double_t& l,Double_t& b,TString u="deg") const; // Provide the lab terrestrial position
-  void SetRandomiser(Int_t iseed,NcTimestamp* ts=0,Int_t cnt1=0,Int_t cnt2=0); // (Re)initialise the internal NcRandom randomisation facility 
+  void SetRandomiser(Int_t iseed,Int_t cnt1=0,Int_t cnt2=0,NcTimestamp* ts=0); // (Re)initialise the internal NcRandom randomisation facility 
   NcRandom* GetRandomiser(Int_t& iseed,Int_t& cnt1,Int_t& cnt2) const;         // Provide the current internal NcRandom randomiser parameters
   using NcTimestamp::GetLT;
   Double_t GetLT();  // Provide Local Time (LT) in fractional hours
@@ -216,6 +216,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
  
- ClassDef(NcAstrolab,22) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,23) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

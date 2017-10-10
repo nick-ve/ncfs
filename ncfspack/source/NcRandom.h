@@ -10,13 +10,14 @@
 #include "TObject.h"
 
 #include "NcMath.h"
+#include "NcTimestamp.h"
  
 class NcRandom : public TObject
 {
  public:
   NcRandom();                                                      // Constructor with default sequence
-  NcRandom(Int_t seed);                                            // Constructor with user defined seed
-  NcRandom(Int_t seed,Int_t cnt1,Int_t cnt2);                      // User defined starting point
+  NcRandom(Int_t seed,NcTimestamp* ts=0);                          // Constructor with user defined seed
+  NcRandom(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts=0);    // User defined starting point
   virtual ~NcRandom();                                             // Destructor
   Int_t GetSeed() const;                                           // Provide current seed value
   Int_t GetCnt1() const;                                           // Provide current counter value cnt1
@@ -39,10 +40,10 @@ class NcRandom : public TObject
   Double_t RanBm(Double_t nr,Double_t n,Int_t m,Double_t* p=0,Double_t* na=0,Double_t* psia=0,Double_t psi0=-1,Int_t f=0,TH1* psih=0,Int_t ncut=0,Double_t* nrx=0);// Random B_m
  
  private:
-  Int_t   fI,fJ,fSeed,fCnt1,fCnt2,fClip;                       // Indices, seed and counters
-  Float_t fU[97],fC,fCd,fCm;                                   // The Fibonacci parameters
-  void Start(Int_t seed,Int_t cnt1,Int_t cnt2);                // Start at certain point
-  void Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l); // Unpack the seed
+  Int_t   fI,fJ,fSeed,fCnt1,fCnt2,fClip;                        // Indices, seed and counters
+  Float_t fU[97],fC,fCd,fCm;                                    // The Fibonacci parameters
+  void Start(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts); // Start at certain point
+  void Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l);  // Unpack the seed
   void Uniform(Int_t n); // n uniform randoms for quick skipping
   Int_t fNa;             //! The number of bins of the area function
   Float_t* fXa;          //! The binned x values of the area function
@@ -50,6 +51,6 @@ class NcRandom : public TObject
   Float_t fYamin,fYamax; //! The min. and max. y values of the area function
   Int_t* fIbins;         //! The bin numbers of the random x candidates
  
- ClassDef(NcRandom,2) // Generate universal random numbers and sequences on all common machines.
+ ClassDef(NcRandom,3) // Generate universal random numbers and sequences on all common machines.
 };
 #endif
