@@ -1073,3 +1073,5 @@
                 based on NcTimestamp data. This has also been implemented in NcAstrolab and new member functions
                 SetRandomiser() and GetRandomiser() have been introduced to control c.q. access the internal randomiser
                 of NcAstrolab.
+26-nov-2017 NvE Destructor in NcCollider.cxx modified to synchronise the deletion of the output tree with the closing
+                of the output file. 

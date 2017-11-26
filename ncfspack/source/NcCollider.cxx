@@ -187,25 +187,25 @@ NcCollider::NcCollider() : TPythia6()
 NcCollider::~NcCollider()
 {
 // Default destructor
+
  if (fEvent)
  {
   delete fEvent;
   fEvent=0;
  }
- if (fOutTree)
- {
-  delete fOutTree;
-  fOutTree=0;
- }
+
  if (fSelections)
  {
   delete fSelections;
   fSelections=0;
  }
- if (fOutFile)
+
+ // In case of output to an output file the Tree is deleted
+ // at the closing of the output file.
+ if (fOutTree && !fOutFile)
  {
-  delete fOutFile;
-  fOutFile=0;
+  delete fOutTree;
+  fOutTree=0;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -213,34 +213,40 @@ void NcCollider::SetOutputFile(TString s)
 {
 // Create the output file containing all the data in ROOT output format.
 
+ // Flush and close the current existing output file (if any)
+ // This will also delete the existing output tree connected to this file
+ if (fOutFile)
+ {
+  if (fOutFile->IsOpen())
+  {
+   fOutFile->Write();
+   fOutFile->Close();
+  }
+ }
+
+ // Create a new output file
+ fOutFile=new TFile(s.Data(),"RECREATE","NcCollider data");
+
+ // Create a new NcEvent structure 
  if (fEvent)
  {
   delete fEvent;
   fEvent=0;
  }
-
  fEvent=new NcEvent();
  fEvent->SetOwner();
  fEvent->SetName(GetName());
  fEvent->SetTitle(GetTitle());
 
- if (fOutFile)
- {
-  delete fOutFile;
-  fOutFile=0;
- }
- fOutFile=new TFile(s.Data(),"RECREATE","NcCollider data");
-
- if (fOutTree)
- {
-  delete fOutTree;
-  fOutTree=0;
- }
+ // Create a new output Tree
  fOutTree=new TTree("T","NcCollider event data");
-
  Int_t bsize=32000;
  Int_t split=0;
  fOutTree->Branch("Events","NcEvent",&fEvent,bsize,split);
+
+ cout << " *NcCollider::SetOutputFile* Event data will be written to output file: " << fOutFile->GetName() << endl;
+ cout << endl;
+ cout << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetVertexMode(Int_t mode)
@@ -765,6 +771,7 @@ Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3
  cout << " *** Target particle 3-momentum (GeV/c): px=" << fTarget.GetX(1,"car") << " py=" << fTarget.GetX(2,"car") << " pz=" << fTarget.GetX(3,"car") << endl; 
  if (fFrame!="cms") cout << " *** Total CMS energy: " << ecms << " GeV" << endl;
  if (fFrame=="free" && fWin>0) cout << " *** Forced CMS processing. Cross sections initialised for a CMS energy of " << fWin << " GeV" << endl;
+ if (fOutFile) cout << " *** Event data will be written to output file: " << fOutFile->GetName() << endl;
  cout << endl;
  cout << endl;
 
@@ -971,6 +978,7 @@ Int_t NcCollider::Init(TString frame,Int_t zp,Int_t ap,Int_t zt,Int_t at,Float_t
  cout << " *** Target 3-momentum in GeV/c per nucleon: px=" << fTarget.GetX(1,"car") << " py=" << fTarget.GetX(2,"car") << " pz=" << fTarget.GetX(3,"car") << endl; 
  if (fFrame!="cms") cout << " *** Total CMS energy per nucleon-nucleon collision: " << ecms << " GeV" << endl;
  if (fFrame=="free" && fWin>0) cout << " *** Forced CMS processing. Cross sections initialised for a nucleon-nucleon CMS energy of " << fWin << " GeV" << endl;
+ if (fOutFile) cout << " *** Event data will be written to output file: " << fOutFile->GetName() << endl;
  cout << endl;
  cout << endl;
 
@@ -1678,11 +1686,17 @@ NcEvent* NcCollider::GetEvent(Int_t select) const
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::EndRun()
 {
-// Properly flush last data to the output file (if needed).
+// Properly flush last data to the output file and close it (if needed).
+ // This will also delete the existing output tree connected to this file
  if (fOutFile)
  {
-  fOutFile->Write();
-  cout << " *NcCollider::EndRun* Output file correctly written." << endl;
+  if (fOutFile->IsOpen())
+  {
+   fOutFile->Write();
+   fOutFile->Close();
+  }
+  TString name=fOutFile->GetName();
+  cout << " *NcCollider::EndRun* Output file " << name << " correctly written and closed." << endl;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
