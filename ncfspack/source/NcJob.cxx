@@ -179,6 +179,9 @@ NcJob::~NcJob()
   delete fSelect;
   fSelect=0;
  }
+
+ // Remove the subtasks from the internal TTask list without deleting them
+ if (fTasks) fTasks->Clear();
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::ListEnvironment()

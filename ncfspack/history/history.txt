@@ -1075,3 +1075,8 @@
                 of NcAstrolab.
 26-nov-2017 NvE Destructor in NcCollider.cxx modified to synchronise the deletion of the output tree with the closing
                 of the output file. 
+01-dec-2017 NvE Destructor in NcJob.cxx modified to explicitly clear the task list without deleting the contained
+                objects. This assures that the user can delete the various created tasks without problems, since in the
+                TTask standard destructor the fTasks array is deleted by deleting also all contained objects.
+                Depending on the order of the various deletions, the latter may provide a problem when the user (or ROOT)
+                at the end of the processing deletes all the created objects. 
