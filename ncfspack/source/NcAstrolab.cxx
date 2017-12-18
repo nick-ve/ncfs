@@ -302,6 +302,9 @@ NcAstrolab::~NcAstrolab()
   delete fRan;
   fRan=0;
  }
+
+ // Remove the subtasks from the internal TTask list without deleting them
+ if (fTasks) fTasks->Clear();
 }
 ///////////////////////////////////////////////////////////////////////////
 NcAstrolab::NcAstrolab(const NcAstrolab& t) : TTask(t),NcTimestamp(t)
