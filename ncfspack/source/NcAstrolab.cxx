@@ -5621,10 +5621,24 @@ Double_t NcAstrolab::GetPhysicalParameter(TString name) const
  return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcAstrolab::GetPhysicalDistance(Double_t z) const
+Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u) const
 {
-// Provide the physical distance (in Mpc) of an object with redshift z
+// Provide the physical distance of an object with redshift z
 // for a flat Friedmann-Lemaitre universe.
+//
+// The input argument "u" allows specification of the required distance units,
+// with the following options:
+//
+// u = "Gpc" (distance in Giga parsec)
+//     "Mpc" (distance in Mega parsec)
+//     "pc"  (distance in parsec)
+//     "ly"  (distance in light years)
+//     "km"  (distance in kilometers)
+//     "m"   (distance in meters)
+//     "cm"  (distance in centimeters)
+//
+// The default is u="Mpc" for backward compatibility
+// In case "u" is incorrectly specified, the value 0 will be returned.
 
  if (z<=0 || fHubble<=0) return 0;
 
@@ -5637,9 +5651,21 @@ Double_t NcAstrolab::GetPhysicalDistance(Double_t z) const
  f.SetRange(0,z);
 
  Double_t dist=f.Integral(0,z);
- dist*=c/fHubble;
+ dist*=c/fHubble; // The distance in Mpc
 
- return dist;
+ Double_t distm=dist*1e6*fPc; // corresponding distance in meter
+
+ Double_t val=0;
+
+ if (u=="Gpc") val=dist*1e-3;
+ if (u=="Mpc") val=dist;
+ if (u=="pc") val=dist*1e6;
+ if (u=="ly") val=dist*3.26156e6;
+ if (u=="m") val=distm;
+ if (u=="km") val=distm*1e-3;
+ if (u=="cm") val=distm*1e2;
+
+ return val;
 
 }
 ///////////////////////////////////////////////////////////////////////////

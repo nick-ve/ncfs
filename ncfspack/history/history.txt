@@ -1085,3 +1085,4 @@
                 TTask standard destructor the fTasks array is deleted by deleting also all contained objects.
                 Depending on the order of the various deletions, the latter may provide a problem when the user (or ROOT)
                 at the end of the processing deletes all the created objects. 
+09-feb-2018 NvE Functionality of NcAstrolab::GetPhysicalDistance() extended to support various distance units.
