@@ -3219,7 +3219,7 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
 // In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
 // background distribution is assumed.
 //
-// Default values are : hyp=0, pdf=0 f=0, psih=0, ncut=0, nrx=0 and mark=1.
+// Default values are : hyp=0, pdf=0 f=0, na=0, psih=0, ncut=0, nrx=0 and mark=1.
 //
 // In the case of inconsistent input, a P-value of -1 is returned.
 //
