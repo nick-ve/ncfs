@@ -1087,3 +1087,5 @@
                 at the end of the processing deletes all the created objects. 
 09-feb-2018 NvE Functionality of NcAstrolab::GetPhysicalDistance() extended to support various distance units.
 08-mar-2018 NvE Docs of NcMath::PsiPvalue() updated to correctly indicate the default value na=0.
+14-mar-2018 NvE Memberfunction NcMath::LiMaSignificance() introduced and functionality of NcAstrolab::GetSignalRatePDF()
+                extended to support unequal areas and detection efficiencies for the "on source" and "off source" data.

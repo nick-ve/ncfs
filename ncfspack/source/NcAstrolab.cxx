@@ -6709,6 +6709,10 @@ Double_t NcAstrolab::GetSignalRateProb(Double_t* vars,Double_t* pars)
 // Details of the method can be found in the publication Astrop. Phys. 50-52 (2013) 57.
 // This implementation is based on the original code of Lionel Brayeur and Krijn de Vries.
 //
+// Note : It is essential that the provided Non and Noff data correspond to equal areas and
+//        detection efficiencies.
+//        See the memberfunction GetSignalRatePDF() as an example how to handle this.
+//
 // The input arguments :
 // ---------------------
 // vars[0] (s)    : The signal rate (in Hz) for which the posterior probability will be evaluated.
@@ -6850,7 +6854,7 @@ TF1 NcAstrolab::GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax,Doub
  return pdf;
 }
 ///////////////////////////////////////////////////////////////////////////
-TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t smax,Double_t bmax,Double_t prec)
+TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra,Double_t Re,Double_t smax,Double_t bmax,Double_t prec)
 {
 // Provide the posterior Bayesian PDF for a source signal rate "s"
 // given the specified "on source" and "off source" observations.
@@ -6864,16 +6868,18 @@ TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff
 // Ton  : The "on source" exposure time in seconds.
 // Noff : The number of observed "off source" (background) events.
 // Toff : The "off source" exposure time in seconds.
+// Ra   : The ratio (on source area)/(off source area)
+// Re   : The ratio (on source detection efficiency)/(off source detection efficiency)
 // smax : The maximimal signal event rate in Hz.
 //        If smax<0 this parameter is automatically set to 100*Non/Ton
-//        obtain good prior coverage as indicated below.
+//        to obtain good prior coverage as indicated below.
 // bmax : The maximimal background event rate in Hz.
 //        If bmax<0 this parameter is automatically set to 1000*Noff/Toff
 //        to obtain good prior coverage as indicated below.
 // prec : Cut off value to limit exponential expressions to exp(|prec|) or exp(-|prec|)
 //        to prevent overflow or underflow.
 //
-// Default values : smax=-1, bmax=-1 and prec=709.
+// Default values : Ra=1, Re=1, smax=-1, bmax=-1 and prec=709.
 //
 // The returned PDF is p(s|Non,Ton,Noff,Toff,I), where "I" indicates the prior information.
 //
@@ -6888,6 +6894,13 @@ TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff
  if (smax<0) smax=100.*rNon/Ton;
  
  Double_t rNoff=Noff;
+ // Correct the off source observation for different coverage and detection efficiency
+ // with respect to the actual on source measurement
+ rNoff=rNoff*Ra*Re;
+ Noff=rNoff;
+ if ((rNoff-double(Noff))>0.5) Noff+=1;
+ rNoff=Noff;
+
  if (bmax<0) bmax=100.*rNoff/Toff;
 
  Int_t npar=7;

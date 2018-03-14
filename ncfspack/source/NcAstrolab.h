@@ -108,7 +108,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1F GetCountsHistogram(TF1& spec,Int_t nbins,Double_t xmin, Double_t xmax,Int_t mode,TString s="") const;  // Construct the counts (N) vs. x histogram from a 1D differential spectrum dN/dx
   TH1F GetLogHistogram(TH1* hin,Int_t mode,TString s="") const; // Construct the Log10(y) or Ln(y) vs. x histogram from a 1D y vs. x histogram
   TF1 GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a background rate
-  TF1 GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a source signal rate
+  TF1 GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a source signal rate
   Double_t GetUpperLimit(TF1 pdf,Double_t p);  // Provide the "p%" upper limit for the specified PDF
   Double_t GetUpperLimit(TH1* pdf,Double_t p); // Provide the "p%" upper limit for the specified histogram
   Double_t GetCredibleInterval(TF1 pdf,Double_t p,Double_t& xlow,Double_t& xup,Int_t n=1000); // Provide the "p%" credible interval for the specified PDF
@@ -216,6 +216,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
  
- ClassDef(NcAstrolab,24) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,25) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

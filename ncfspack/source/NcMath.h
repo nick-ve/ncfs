@@ -86,6 +86,7 @@ class NcMath : public TObject
   Double_t Chi2Value(Int_t m,Double_t* n,Double_t* p=0,Int_t* ndf=0) const; // Frequentist Chi2 value of a counting exp. w.r.t. hypothesis
   Double_t Chi2Value(TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t* ndf=0) const;    // Frequentist Chi2 value of a counting exp. w.r.t. hypothesis
   Double_t MeanMu(Double_t cl,Double_t nbkg,Int_t mode,TF1* w=0,TFeldmanCousins* f=0,Int_t nmax=0) const; // Average Feldman-Cousins upper/lower limit 
+  Double_t LiMaSignificance(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1) const; // Li and Ma significance
 
  protected:
   Double_t GamSer(Double_t a,Double_t x) const; // Compute P(a,x) via serial representation
@@ -95,7 +96,7 @@ class NcMath : public TObject
   Double_t BesselI1(Double_t x) const;          // Compute modified Bessel function I_1(x)
   Double_t BesselK1(Double_t x) const;          // Compute modified Bessel function K_1(x)
  
- ClassDef(NcMath,9) // Various mathematical tools for scientific analysis.
+ ClassDef(NcMath,10) // Various mathematical tools for scientific analysis.
  
 };
 #endif

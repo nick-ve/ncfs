@@ -3610,3 +3610,43 @@ Double_t NcMath::MeanMu(Double_t cl,Double_t nbkg,Int_t mode,TF1* fw,TFeldmanCou
  return muav;
 }
 ///////////////////////////////////////////////////////////////////////////
+Double_t NcMath::LiMaSignificance(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra,Double_t Re) const
+{
+// Provide the significance in terms of the amount of standard deviations 
+// of a certain "on source" and "off source" observation according to the
+// procedure outlined by T.Li and Y.Ma in Astrophysical Journal 271 (1983) 317.
+//
+// In case of non-physical situations the value -1 is returned.
+//
+// Input arguments :
+// -----------------
+// Non  : The number of observed "on source" events
+// Ton  : The "on source" exposure time
+// Noff : The number of observed "off source" events 
+// Toff : The "off source" exposure time
+// Ra   : The ratio (on source area)/(off source area)
+// Re   : The ratio (on source detection efficiency)/(off source detection efficiency)
+//
+// Notes :
+// -------
+// 1) The exposure times Ton and Toff may be given in any units (sec, min, hours, ...)
+//    provided that for both the same units are used.
+// 2) The resulting significance is most reliable for Non>10 and Noff>10.
+//
+// The default values are Ra=1 and Re=1.
+
+ Double_t s=-1;
+
+ if (!Non || !Noff || Ton<=0 || Toff<=0 || Ra<=0 || Re<=0) return -1;
+
+ Double_t Ron=Non;
+ Double_t Roff=Noff;
+ Double_t sum=Non+Noff;
+
+ Double_t a=Ra*Re*Ton/Toff;
+
+ s=2.*(Ron*log((1.+a)*Ron/(a*sum))+Roff*log((1.+a)*Roff/sum));
+ s=sqrt(s);
+ return s;
+}
+///////////////////////////////////////////////////////////////////////////
