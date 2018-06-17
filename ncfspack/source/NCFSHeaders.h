@@ -42,3 +42,4 @@
 #include "NcPsiDistrib.h"
 #include "NcVersion.h"
 #include "NcVeto.h"
+#include "NcDataStreamStats.h"
