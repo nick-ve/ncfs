@@ -27,7 +27,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 // Class NcDataStreamStats
-// TTask derived class to perform statistics of event selection tags.
+// TTask derived class to perform statistics of event classification tags.
 //
 // During data taking or online/offline processing one usually records
 // various tags for each event to indicate which trigger or filter criteria

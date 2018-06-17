@@ -44,6 +44,6 @@ class NcDataStreamStats : public TTask
   TString fWritename;  // Name of the tag writing flag
   TObjArray* fDeact;   // Array with de-activated filters
  
- ClassDef(NcDataStreamStats,1) // Provide event filter statistics.
+ ClassDef(NcDataStreamStats,1) // Provide event classification tag statistics.
 };
 #endif
