@@ -48,9 +48,15 @@
 //
 // This class provides a processor to analyse data samples and provide an overview
 // of the various event tags that were encountered and the corresponding event rates.
-// Via the memberfunction DeactivateTag() the user can de-activate certain tags in 
-// order to investigate the effect in view of background reduction.
+// Via the memberfunctions ActivateTag() and DeactivateTag() the user can (de)activate
+// certain tags in order to investigate the effect in view of defining event samples
+// or background reduction.
+// In case none of these memberfunctions ActivateTag() or DeactivateTag() are invoked,
+// all tags are regarded to be active. 
 // The user selected re-tagging results are provided in addition to the regular tag statistics.
+// It should be noted that tags that are explicitly de-activated via DeactivateTag()
+// can not be activated anymore via invokation of ActivateTag().
+// Please refer to the docs of these memberfunctions for further details.
 //
 // The input data is specified via the memberfunction AddInputFile().
 // All data files that contain NcEvent (or derived) data structures are allowed.
@@ -89,18 +95,14 @@
 //
 // fstat.ListInputFiles();
 //
+// // Activate some tags to investigate a certan event sample
+// fstat.ActivateTag("GFU");
+// fstat.ActivateTag("HESE");
+// fstat.ActivateTag("EstresAlert");
+// fstat.ActivateTag("EHEAlert");
+//
 // // De-activate some tags to investigate background reduction
-// fstat.DeactivateTag("IceTop");
-// fstat.DeactivateTag("GC");
-// fstat.DeactivateTag("Moon");
-// fstat.DeactivateTag("Sun");
-// fstat.DeactivateTag("Slop");
-// fstat.DeactivateTag("MinBias");
-// fstat.DeactivateTag("FSSFilter");
-// fstat.DeactivateTag("FixedRate");
-// fstat.DeactivateTag("VEF");
-// fstat.DeactivateTag("DeepCoreFilter_TwoLayer");
-// fstat.DeactivateTag("SDST_NChannel");
+// fstat.DeactivateTag("EHEAlertFilterHB");
 //
 // // Provide a progress output line every 1000 events 
 // fstat.SetPrintFrequency(1000);
@@ -139,6 +141,7 @@ NcDataStreamStats::NcDataStreamStats(const char* name,const char* title) : TTask
  fDevname="none";
  fPassname="*";
  fWritename="*";
+ fAct=0;
  fDeact=0;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -150,6 +153,11 @@ NcDataStreamStats::~NcDataStreamStats()
  {
   delete fData;
   fData=0;
+ }
+ if (fAct)
+ {
+  delete fAct;
+  fAct=0;
  }
  if (fDeact)
  {
@@ -175,6 +183,8 @@ NcDataStreamStats::NcDataStreamStats(const NcDataStreamStats& q) : TTask(q)
  fDevname=q.fDevname;
  fPassname=q.fPassname;
  fWritename=q.fWritename;
+ fAct=0;
+ if (q.fAct) fAct=(TObjArray*)(q.fAct->Clone());
  fDeact=0;
  if (q.fDeact) fDeact=(TObjArray*)(q.fDeact->Clone());
 }
@@ -218,8 +228,25 @@ void NcDataStreamStats::Exec(Option_t* opt)
  if (fMaxevt && fMaxevt<nen) nen=fMaxevt;
  cout << " *** Number of entries to be processed : " << nen << endl;
 
+ Int_t nact=0;
  Int_t ndeact=0;
+ if (fAct) nact=fAct->GetEntries();
  if (fDeact) ndeact=fDeact->GetEntries();
+ for (Int_t i=0; i<nact; i++)
+ {
+  if (!i)
+  {
+   cout << endl;
+   cout << " === Tag names (*=wildcard) that are activated by the user for event sample studies ===" << endl;
+   cout << " The non-activated tags are flagged as \"dead\" in the combined \"Passing*Writing\" listing." << endl;
+   cout << " However, they are still shown in the corresponding tag matrix to identify the missed tags." << endl; 
+   cout << endl;
+  }
+  TObjString* tagx=(TObjString*)fAct->At(i);
+  if (!tagx) continue;
+
+  cout << " ... *" << tagx->GetString() << "*" << endl;
+ }
  for (Int_t i=0; i<ndeact; i++)
  {
   if (!i)
@@ -257,7 +284,7 @@ void NcDataStreamStats::Exec(Option_t* opt)
  TMatrixF* mwrites=new TMatrixF(fMaxtag,fMaxtag);
  NcSignal combis;
  title="Combined ";
- if (ndeact) title="User reduced combined ";
+ if (nact || ndeact) title="User reduced combined ";
  if (fPassname!="*" && fWritename!="*")
  {
   title+=fPassname;
@@ -364,13 +391,29 @@ void NcDataStreamStats::Exec(Option_t* opt)
    idx=combis.GetSlotIndex(name);
    if (idx && idx<=fMaxtag) acombis->AddAt(ipass*iwrite,idx-1);
 
-   ///////////////////////////////////////////////////////////////////////
-   // De-activate some tags for the combined pass*write statistics      //
-   // which will enable to study background reduction for some analyses //
-   ///////////////////////////////////////////////////////////////////////
+   ////////////////////////////////////////////////////////////////////////
+   // (De)activate some tags for the combined pass*write statistics      //
+   // which will enable to study event samples or background reduction   //
+   ////////////////////////////////////////////////////////////////////////
 
    namex="";
    jdeact=0;
+   if (fAct) jdeact=1; // The user has specified the tags to be activated
+
+   // Look for a user selection of activated tags
+   for (Int_t i=0; i<nact; i++)
+   {
+    TObjString* sox=(TObjString*)fAct->At(i);
+    if (!sox) continue;
+    namex=sox->GetString();
+    if (name.Contains(namex.Data()))
+    {
+     jdeact=0;
+     break;
+    }
+   }
+   // Look for a user selection of de-activated tags
+   // This may de-activate a previously activated tag
    for (Int_t i=0; i<ndeact; i++)
    {
     TObjString* sox=(TObjString*)fDeact->At(i);
@@ -391,7 +434,7 @@ void NcDataStreamStats::Exec(Option_t* opt)
    {
     if (ipass*iwrite) combflag=1;
    }
-  } // End of filter loop
+  } // End of tag loop
 
   if (combflag) nevtcomb++;
 
@@ -600,7 +643,7 @@ void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)
  TChain input(tree.Data());
  input.Add(file.Data());
 
- // Add the file to the master data chain
+ // Add the file(s) to the master data chain
  fData->Add(&input);
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -666,6 +709,41 @@ void NcDataStreamStats::ListInputFiles(Option_t* opt) const
  }
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcDataStreamStats::ActivateTag(TString name)
+{
+// Activate a certain tag for the combined pass*write statistics
+// which will enable to study user selected event samples.
+// It should be noted that this doesn't affect the results for the
+// regular individual "pass" and "write" statistics.
+//
+// In case the specified "name" matches (part of) a certain tag name, that
+// specific tag will be activated.
+// All characters in "name" are taken literally, so wildcards are not allowed.   
+// 
+// Example :
+// ---------
+// If name="LowPt" it would activate both tags "LowPtMuon" and "LowPtPion".
+//
+// Notes :
+// -------
+// 1) If this memberfunction is not invoked, all tags are regarded as active.
+// 2) If this memberfunction is invoked, all tags that are not explicitly activated
+//    by the user will be considered de-activated.
+// 3) This memberfunction may be invoked several times to activate
+//    various tags before executing the task.
+// 4) Tags that are explicitly de-activated by the user via invokation of DeactivateTag()
+//    can not be activated anymore.
+
+ if (!fAct)
+ {
+  fAct=new TObjArray();
+  fAct->SetOwner();
+ }
+ TObjString* s=new TObjString();
+ s->SetString(name.Data());
+ fAct->Add(s);
+}
+///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::DeactivateTag(TString name)
 {
 // De-activate a certain tag for the combined pass*write statistics
@@ -681,8 +759,12 @@ void NcDataStreamStats::DeactivateTag(TString name)
 // ---------
 // If name="LowPt" it would de-activate both tags "LowPtMuon" and "LowPtPion".
 //
-// Note : This memberfunction may be invoked several times to de-activate
-//        various tags before executing the task.
+// Notes :
+// -------
+// 1) This memberfunction may be invoked several times to de-activate
+//    various tags before executing the task.
+// 3) Tags that are explicitly de-activated via this memberfunction
+//    can not be activated anymore via invokation of ActivateTag().
 
  if (!fDeact)
  {

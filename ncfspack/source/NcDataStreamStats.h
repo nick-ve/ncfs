@@ -28,6 +28,7 @@ class NcDataStreamStats : public TTask
   void SetMaxTag(Int_t n);                                      // Set the maximum number of tags to be processed
   void SetPrintFrequency(Int_t m);                              // Set print frequency to provide a progress output line every "m" events
   void SetDeviceNames(TString dev,TString pass,TString write);  // Set the name of the NcDevice and the names of the tag passing criteria
+  void ActivateTag(TString name);                               // Activate a certain tag for user selected event sample studies
   void DeactivateTag(TString name);                             // Deactivate a certain tag for background reduction studies
   void ListInputFiles(Option_t* opt="") const;                  // Provide an overview of the various input files
   virtual void Exec(Option_t* opt);                             // Perform the analysis
@@ -42,8 +43,9 @@ class NcDataStreamStats : public TTask
   TString fDevname;    // The name of the NcDevice that contains the various event tags
   TString fPassname;   // Name of the tag passing flag
   TString fWritename;  // Name of the tag writing flag
-  TObjArray* fDeact;   // Array with de-activated filters
+  TObjArray* fAct;     // Array with activated tags
+  TObjArray* fDeact;   // Array with de-activated tags
  
- ClassDef(NcDataStreamStats,1) // Provide event classification tag statistics.
+ ClassDef(NcDataStreamStats,2) // Provide event classification tag statistics.
 };
 #endif
