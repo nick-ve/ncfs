@@ -1091,3 +1091,5 @@
                 extended to support unequal areas and detection efficiencies for the "on source" and "off source" data.
 17-jun-2018 NvE New class NcDataStreamStats introduced.
 29-jun-2018 NvE New memberfunction ActivateTag() introduced in class NcDataStreamStats.
+19-sep-2018 NvE Functionality of NcAstrolab::GetDxHistogram() extended with an additional bin size
+                option and the documentation updated accordingly.

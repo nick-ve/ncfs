@@ -6162,7 +6162,7 @@ void NcAstrolab::SmearPosition(Nc3Vector& v,Double_t sigma)
 TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,Double_t dxmax) const
 {
 // Provide interval size (dx) distribution of X-axis intervals containing
-// exactly "nc" consecutive histogram entries.
+// exactly "nc" consecutive histogram entries of the specified input histogram.
 // This facility can for instance be used to investigate the distribution
 // of time intervals between observed events.
 //
@@ -6170,10 +6170,11 @@ TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,D
 // -----------------
 // hx    : The input histogram
 // nc    : The required number of consecutive entries within the interval dx
-// dxbin : The bin size of the X-axis for the dx distribution
-//         dxbin=0 ==> Bin size taken the same as the input histogram hx
-//         dxbin<0 ==> Bin size taken to be the minimal encountered dx interval
+// dxbin : The bin size of the X-axis for the dx distribution (see also the note below)
+//         dxbin=0  ==> Bin size taken the same as the input histogram hx
+//         dxbin=-1 ==> Bin size taken to be the minimal encountered dx interval
 //                     (or hx bin size in case the minimal encountered dx was 0) 
+//         dxbin=-2 ==> Bin size taken to be nc times the bin size of the input histogram hx
 // dxmin : The lower bound of the produced histogram
 //         dxmin<0 ==> Lower bound taken to be the minimal encountered dx interval           
 // dxmax : The upper bound of the produced histogram
@@ -6184,6 +6185,18 @@ TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,D
 // Returned object : The 1-D histogram (TH1F) containing the dx distribution.
 //
 // Default values : dxbin=-1, dxmin=-1 and dxmax=-1. 
+//
+// Note : A too coarse bin size "dxbin" may lead to binning effects which may affect
+//        a statistical interpretation of the resulting histogram, for instance in the
+//        light of a comparison with known background distributions.
+//        In case the input histogram "hx" reflects an unbinned situation, i.e. not more
+//        than one single entry per bin, then "dxbin=0" assures that also the produced
+//        "dx histogram" will be free of binning effects.
+//        For sparsely populated histograms, the same may hold for "dxbin=-2", which has
+//        the advantage of having fewer bins which may reduce computing time when
+//        performing statistical analyses (e.g. randomised combinatorics) on it.
+//        It is advised to always first inspect the produced "dx histogram" before
+//        performing a statistics analysis on it.
 //
 // Example :
 // ---------
@@ -6296,10 +6309,15 @@ TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,D
  {
   // Set the bin size (if needed) for the output histogram
   if (!dxbin) dxbin=hx->GetBinWidth(1);
-  if (dxbin<0)
+  if (dxbin==-1)
   {
    dxbin=hx->GetBinWidth(1);
    if (deltaxmin>0) dxbin=deltaxmin;
+  }
+  if (dxbin==-2)
+  {
+   dxbin=hx->GetBinWidth(1);
+   dxbin=dxbin*float(nc);
   }
 
   // Set the auto-determined range of the output histogram
