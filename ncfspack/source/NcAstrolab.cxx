@@ -5789,8 +5789,6 @@ Double_t NcAstrolab::GetHubbleParameter(Double_t z,TString u) const
 
  if (z<0 || fHubble<=0) return 0;
 
- Double_t c=fSpeedC/1000.; // Lightspeed in km/s
-
  TF1 f("f","sqrt([0]*pow((1.+x),4)+[1]*pow((1.+x),3)+[2])");
 
  f.SetParameter(0,fOmegaR);
