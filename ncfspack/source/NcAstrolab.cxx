@@ -207,7 +207,7 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
  fMaxDt=-1;
  fSolUpdate=0;
 
- // Standard values (Particle Data Group 2014) for some (astro)physical parameters
+ // Standard values (Particle Data Group 2018) for some (astro)physical parameters
  fSpeedC=299792458;
  fQe=1.602176565e-19;
  fMe=0.510998928;
@@ -227,12 +227,12 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
  fNewton=6.67384e-11;
  fAu=1.49597870700e11;
  fPc=3.08567758149e16;
- fHubble=67.3;
- fOmegaM=0.315;
- fOmegaR=5.46e-5;
- fOmegaL=0.685;
- fOmegaB=0.0499;
- fOmegaC=0.265;
+ fHubble=67.8;
+ fOmegaM=0.308;
+ fOmegaR=5.38e-5;
+ fOmegaL=0.692;
+ fOmegaB=0.0484;
+ fOmegaC=0.258;
 
  // Some derived (astro)physical parameters c.q. conversion constants
  fHbar=6.58211928e-22;
@@ -5626,6 +5626,11 @@ Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u) const
 // Provide the physical distance of an object with redshift z
 // for a flat Friedmann-Lemaitre universe.
 //
+// The physical distance reflects the distance that one would measure
+// with a ruler at one specific time.
+//
+// Note that the physical distance is also called "comoving distance".
+//
 // The input argument "u" allows specification of the required distance units,
 // with the following options:
 //
@@ -5644,10 +5649,11 @@ Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u) const
 
  Double_t c=fSpeedC/1000.; // Lightspeed in km/s
 
- TF1 f("f","1./sqrt([0]*pow((1.+x),3)+[1])");
+ TF1 f("f","1./sqrt([0]*pow((1.+x),4)+[1]*pow((1.+x),3)+[2])");
 
- f.SetParameter(0,fOmegaM);
- f.SetParameter(1,fOmegaL);
+ f.SetParameter(0,fOmegaR);
+ f.SetParameter(1,fOmegaM);
+ f.SetParameter(2,fOmegaL);
  f.SetRange(0,z);
 
  Double_t dist=f.Integral(0,z);
@@ -5666,7 +5672,148 @@ Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u) const
  if (u=="cm") val=distm*1e2;
 
  return val;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetLuminosityDistance(Double_t z,TString u) const
+{
+// Provide the luminosity distance of an object with redshift z
+// for a flat Friedmann-Lemaitre universe.
+//
+// Consider an object with known intrinsic luminosity L (erg/s) of which
+// a flux F (erg/(s*cm^2) is observed.
+// The luminosity distance d is defined such that F=L/(4*pi*d^2), which can
+// be alternatively written as d=sqrt(L/(4*pi*F)).
+//
+// The luminosity distance d can be related to the physical distance D by
+// realizing that the observed energy is reduced by a factor (z+1) and that 
+// the observed time intervals are stretched by a factor (z+1).
+// This results in F=L/[(z+1)*(z+1)*4*pi*D^2] or in other words : d=(z+1)*D.
+//
+// The input argument "u" allows specification of the required distance units,
+// with the following options:
+//
+// u = "Gpc" (distance in Giga parsec)
+//     "Mpc" (distance in Mega parsec)
+//     "pc"  (distance in parsec)
+//     "ly"  (distance in light years)
+//     "km"  (distance in kilometers)
+//     "m"   (distance in meters)
+//     "cm"  (distance in centimeters)
+//
+// The default is u="Mpc" for backward compatibility
+// In case "u" is incorrectly specified, the value 0 will be returned.
 
+ Double_t val=GetPhysicalDistance(z,u);
+ val=val*(z+1.);
+
+ return val;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetLightTravelDistance(Double_t z,TString u) const
+{
+// Provide the light-travel distance of an object with redshift z
+// for a flat Friedmann-Lemaitre universe.
+//
+// The light-travel distance reflects the distance (c*dt) that light has traveled
+// to reach us from an object located at a redshift z.
+//
+// The light-travel distance is determined via a similar integral as the physical distance,
+// but taking into account that for each redshift value z a cosmological time dilation
+// factor (1+z) applies. This results in an extra term 1/(1+z) in the integrand.
+//
+// The light-travel time may be obtained by dividing the light-travel distance by
+// the lightspeed. Alternatively, expressing the light-travel distance in units
+// of light years (ly) reflects directly the light-travel time.
+//
+// The input argument "u" allows specification of the required distance units,
+// with the following options:
+//
+// u = "Gpc" (distance in Giga parsec)
+//     "Mpc" (distance in Mega parsec)
+//     "pc"  (distance in parsec)
+//     "ly"  (distance in light years)
+//     "km"  (distance in kilometers)
+//     "m"   (distance in meters)
+//     "cm"  (distance in centimeters)
+//
+// The default is u="Mpc" for backward compatibility
+// In case "u" is incorrectly specified, the value 0 will be returned.
+
+ if (z<=0 || fHubble<=0) return 0;
+
+ Double_t c=fSpeedC/1000.; // Lightspeed in km/s
+
+ TF1 f("f","1./((1.+x)*sqrt([0]*pow((1.+x),4)+[1]*pow((1.+x),3)+[2]))");
+
+ f.SetParameter(0,fOmegaR);
+ f.SetParameter(1,fOmegaM);
+ f.SetParameter(2,fOmegaL);
+ f.SetRange(0,z);
+
+ Double_t dist=f.Integral(0,z);
+ dist*=c/fHubble; // The distance in Mpc
+
+ Double_t distm=dist*1e6*fPc; // corresponding distance in meter
+
+ Double_t val=0;
+
+ if (u=="Gpc") val=dist*1e-3;
+ if (u=="Mpc") val=dist;
+ if (u=="pc") val=dist*1e6;
+ if (u=="ly") val=dist*3.26156e6;
+ if (u=="m") val=distm;
+ if (u=="km") val=distm*1e-3;
+ if (u=="cm") val=distm*1e2;
+
+ return val;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetHubbleParameter(Double_t z,TString u) const
+{
+// Provide the Hubble parameter H(z) at a certain redshift z
+// for a flat Friedmann-Lemaitre universe.
+//
+// The input argument "u" allows specification of the required units,
+// with the following options:
+//
+// u = "Gpc" (H(z) in km/s per Giga parsec)
+//     "Mpc" (H(z) in km/s per Mega parsec)
+//     "pc"  (H(z) in km/s per parsec)
+//     "ly"  (H(z) in km/s per light year)
+//     "km"  (H(z) in km/s per kilometers)
+//     "m"   (H(z) in km/s per meters)
+//     "cm"  (H(z) in km/s per centimeters)
+//
+// The default is u="Mpc" for backward compatibility
+// In case "u" is incorrectly specified, the value 0 will be returned.
+
+ if (z<0 || fHubble<=0) return 0;
+
+ Double_t c=fSpeedC/1000.; // Lightspeed in km/s
+
+ TF1 f("f","sqrt([0]*pow((1.+x),4)+[1]*pow((1.+x),3)+[2])");
+
+ f.SetParameter(0,fOmegaR);
+ f.SetParameter(1,fOmegaM);
+ f.SetParameter(2,fOmegaL);
+ f.SetRange(0,z);
+
+ Double_t H=f.Eval(z);
+ H*=fHubble; // The current Hubble parameter (H0) in km/s per Mpc
+
+ Double_t Hm=H/(1e6*fPc); // corresponding H in km/s per meter
+
+ Double_t val=0;
+
+ if (u=="Gpc") val=H/1e-3;
+ if (u=="Mpc") val=H;
+ if (u=="pc") val=H/1e6;
+ if (u=="ly") val=H/3.26156e6;
+ if (u=="m") val=Hm;
+ if (u=="km") val=Hm/1e-3;
+ if (u=="cm") val=Hm/1e2;
+
+ return val;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcAstrolab::GetNuclearMass(Int_t z,Int_t n,Int_t mode) const

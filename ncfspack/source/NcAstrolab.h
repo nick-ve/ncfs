@@ -99,6 +99,9 @@ class NcAstrolab : public TTask,public NcTimestamp
   void SetPhysicalParameter(TString name,Double_t value); // Facility to modify physical parameter values
   Double_t GetPhysicalParameter(TString name) const;      // Provide the (modified) value of a physical parameter
   Double_t GetPhysicalDistance(Double_t z,TString u="Mpc") const; // Provide physical distance of an object with redshift z in a flat universe
+  Double_t GetLuminosityDistance(Double_t z,TString u="Mpc") const; // Provide luminosity distance of an object with redshift z in a flat universe
+  Double_t GetLightTravelDistance(Double_t z,TString u="Mpc") const; // Provide light-travel distance of an object with redshift z in a flat universe
+  Double_t GetHubbleParameter(Double_t z,TString u="Mpc") const; // Provide the Hubble parameter for a certain redshift z in a flat universe
   Double_t GetNuclearMass(Int_t z,Int_t n,Int_t mode=1) const; // Provide the nuclear mass or binding energy for a nucleus (Z,N)
   Double_t GetNeutrinoXsection(Int_t mode,Int_t type,Double_t egev,Double_t xscale=1,Double_t* eprimgev=0,Double_t* alpha=0) const; // Provide neutrino cross section
   void RandomPosition(Nc3Vector& v,Double_t thetamin,Double_t thetamax,Double_t phimin,Double_t phimax); // Random angular position according to an isotropic solid angle distribution
@@ -216,6 +219,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
  
- ClassDef(NcAstrolab,25) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,26) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

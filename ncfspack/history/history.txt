@@ -1093,3 +1093,6 @@
 29-jun-2018 NvE New memberfunction ActivateTag() introduced in class NcDataStreamStats.
 19-sep-2018 NvE Functionality of NcAstrolab::GetDxHistogram() extended with an additional bin size
                 option and the documentation updated accordingly.
+20-sep-2018 NvE Memberfunctions GetLuminosityDistance(), GetLightTravelDistance() and GetHubbleParameter()
+                introduced to class NcAstrolab and also the values of the corresponding astrophysical parameters updated
+                to the PDG 2018 values.
