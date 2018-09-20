@@ -5780,9 +5780,9 @@ Double_t NcAstrolab::GetHubbleParameter(Double_t z,TString u) const
 //     "Mpc" (H(z) in km/s per Mega parsec)
 //     "pc"  (H(z) in km/s per parsec)
 //     "ly"  (H(z) in km/s per light year)
-//     "km"  (H(z) in km/s per kilometers)
-//     "m"   (H(z) in km/s per meters)
-//     "cm"  (H(z) in km/s per centimeters)
+//     "km"  (H(z) in km/s per kilometer)
+//     "m"   (H(z) in km/s per meter)
+//     "cm"  (H(z) in km/s per centimeter)
 //
 // The default is u="Mpc" for backward compatibility
 // In case "u" is incorrectly specified, the value 0 will be returned.
