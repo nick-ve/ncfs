@@ -118,6 +118,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetCredibleInterval(TF1 pdf,Double_t p,Float_t& xlow,Float_t& xup,Int_t n=1000);   // Provide the "p%" credible interval for the specified PDF
   Double_t GetCredibleInterval(TH1* his,Double_t p,Double_t& xlow,Double_t& xup); // Provide the "p%" credible interval for the specified histogram
   Double_t GetCredibleInterval(TH1* his,Double_t p,Float_t& xlow,Float_t& xup);   // Provide the "p%" credible interval for the specified histogram
+  Double_t KolmogorovTest(TString mode,TH1* h1,TH1* h2=0,TF1* pdf=0,Double_t nr=1000,TH1F* ksh=0,Int_t ncut=0,Double_t* nrx=0,Int_t mark=1); // Perform a K-S test
  
  protected:
   NcPosition fLabPos;    // Position of the lab in the terrestrial longitude-latitude frame
@@ -219,6 +220,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
  
- ClassDef(NcAstrolab,26) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,27) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

@@ -7467,6 +7467,287 @@ Double_t NcAstrolab::GetCredibleInterval(TH1* his,Double_t p,Float_t& xlow,Float
  return val;
 }
 ///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double_t nr,TH1F* ksh,Int_t ncut,Double_t* nrx,Int_t mark)
+{
+// Perform the Kolmogorov-Smirnov (KS) test on a 1-dimensional histogram "h1",
+// e.g. an observed distribution which may contain a signal, and a reference
+// distribution ("h2" or "pdf"), for instance a background (hypothesis).
+// The specification of the reference distribution can be provided either in
+// histogram format "h2" or via a probability distribution function "pdf" (but not both),
+// as outlined below.
+// In case the reference distribution is specified via a histogram "h2", this histogram
+// must have the same range and binning as the histogram "h1".
+// In case the reference distribution is specified via the function "pdf",
+// the range etc. will be automatically selected to match the input histogram "h1" in
+// order to perform the KS test.
+// Note : The function "pdf" does not need to be normalised.
+//
+// This facility is an extension of the memberfunction KolmogorovTest of the ROOT class TH1.
+// Note that in the ROOT facility the role of "h1" and "h2" is inverted.
+//
+// The meaning of the returned value depends on the selected testing performance,
+// as specified via the input parameter "mode" (see below).
+//
+// In case the P-value is requested, the return value amounts to the fraction of recorded
+// maximum KS distance values with dmax>=d0, based on "nr" repetitions of a KS test for which
+// at each repetition "n" random entries have been drawn from the reference distribution (hypothesis).
+// Each repetition is called a pseudo experiment.
+// The number of random entries "n" of each pseudo experiment is the same as the number of entries of
+// the input histogram "h1".
+// The value d0 represents the maximum KS distance between "h1" and the reference distribution.
+//
+// The arguments of this memberfunction :
+// --------------------------------------
+// mode : A string of characters to specify the required functionality of the KS test (see below)
+// nr   : The number of repetitions (see note 2) of the KS test with n random background entries.
+// h1   : The observed experimental distribution in histogram format.
+// h2   : Reference distribution in histogram format.
+// pdf  : Function describing some (hypothetical) reference distribution.
+// ksh  : Histogram with the KS dmax values obtained from the pseudo experiments (see notes 2 and 3).
+// ncut : Number of dmax>=d0 values to be obtained to trigger an early stop of the pseudo experiments.
+//        In case ncut=0 all the specified "nr" pseudo experiments will be performed. 
+// nrx  : Returned number of actually performed pseudo experiments (see note 1).
+//        (only if a non-zero "nrx" value was also provided on input)
+// mark : Flag to activate (mark=1) the marking of the threshold dmax value (d0) by a vertical line in the "ksh" histogram.
+//        Also the corresponding P-value will be mentioned in the legend.
+//
+// Via the character string "mode" the performance of the KS test is specified as follows :
+//
+// "U" : Include Underflows in the KS test
+// "O" : Include Overflows in the KS test
+// "N" : Include comparison of histogram Normalizations in addition to the shapes for the KS test probability
+// "M" : Return the Maximum KS distance
+// "K" : Return the standard KS test Probability
+// "P" : Return the P-value of the maximum KS distance based on a number of pseudo experiments
+// "I" : Provide output with Information of the KS test result
+//
+// Examples :
+// ----------
+// mode="UONK" returns the standard KS Probability including Underflows, Overflows and Normalizations
+// mode="PI" returns the P-value of the maximum KS distance and provides relevant KS test information
+// mode="MPI" returns -1 (conflicting input) 
+//
+// Notes :
+// -------
+// 1) The number of repetitions "nr" and "nrx" are of type "double" to allow for large numbers.
+//    Obviously these variables are meant to represent only integer counts.
+//
+// 2) In case a non-zero input argument "ncut" is provided, the number of pseudo experiments will be stopped
+//    as soon as "ncut" values of dmax>=d0 are obtained.
+//    When a large number of repetitions "nr" was specified, this allows an "early stop" and as such
+//    a significant reduction of the CPU time. In case the number "ncut" was not reached, the performance
+//    of pseudo experiments will stop as soon as "nr" repetitions have been performed.
+//    However, when nr=0 was specified the pseudo experiments will be repeated until the number "ncut"
+//    is reached or when the number of repetitions has reached the maximum allowed value of 1e19.
+//    In case a non-zero input argument "nrx" is provided the number of actually performed pseudo experiments
+//    will be returned via this same argument "nrx".
+//
+// 3) In case a histogram "ksh" is provided, this function recreates the histogram (and a legend if "mark" is activated).
+//
+// For practical reasons the maximum value of "nr" has been limited to 1e19, which is about
+// the corresponding maximum value of an unsigned 64-bit integer.
+//
+// Default values are : h2=0, pdf=0, nr=1000, ksh=0, ncut=0, nrx=0 and mark=1.
+//
+// In the case of inconsistent input, a value of -1 is returned.
+//
+//--- Nick van Eijndhoven 19-nov-2018 IIHE-VUB Brussel
+
+ Double_t value=-1;
+
+ if (!mode.Contains("M") && !mode.Contains("K") && !mode.Contains("P")) return -1;
+ if (mode.Contains("M") && (mode.Contains("K") || mode.Contains("P"))) return -1;
+ if (mode.Contains("K") && (mode.Contains("M") || mode.Contains("P"))) return -1;
+ if (mode.Contains("P") && (mode.Contains("M") || mode.Contains("K"))) return -1;
+
+ if (!h1) return -1;
+ if (!h2 && !pdf) return -1;
+ if (h2 && pdf) return -1;
+
+ ULong64_t nrep=ULong64_t(nr);
+ ULong64_t jrep;
+ if (!nrep)
+ {
+  if (ncut)
+  {
+   nrep=ULong64_t(1.e19);
+  }
+  else
+  {
+   return -1;
+  }
+ }
+
+ TAxis* xaxis=h1->GetXaxis();
+ Double_t xmin1=xaxis->GetXmin();
+ Double_t xmax1=xaxis->GetXmax();
+ Double_t range1=xmax1-xmin1;
+ Int_t nbins1=h1->GetNbinsX();
+ Double_t nen1=h1->GetSumOfWeights();
+ Double_t underflow1=h1->GetBinContent(0);
+ Double_t overflow1=h1->GetBinContent(nbins1+1);
+ if (!mode.Contains("U")) nen1=nen1-underflow1;
+ if (!mode.Contains("O")) nen1=nen1-overflow1;
+
+ if (nbins1<=0 || nen1<=0 || range1<=0)
+ {
+  cout << " *NcAstrolab::KolmogorovTest* Histogram h1 is empty or has inconsistent data." << endl;
+  cout << " h1 : nentries=" << nen1 << " nbins=" << nbins1 << " xmin=" << xmin1 << " xmax=" << xmax1 << endl;
+  return -1;
+ }
+
+ if (h2)
+ {
+  xaxis=h2->GetXaxis();
+  Double_t xmin2=xaxis->GetXmin();
+  Double_t xmax2=xaxis->GetXmax();
+  Double_t range2=xmax2-xmin2;
+  Int_t nbins2=h2->GetNbinsX();
+  Double_t nen2=h2->GetSumOfWeights();
+
+  if (nen2<=0 || range2<=0)
+  {
+   cout << " *NcAstrolab::KolmogorovTest* Histogram h2 is empty or has inconsistent data." << endl;
+   cout << " h2 : nentries=" << nen2 << " nbins=" << nbins2 << " xmin=" << xmin2 << " xmax=" << xmax2 << endl;
+   return -1;
+  }
+ 
+  Double_t prec=1e-6;
+  if (nbins2!=nbins1 || fabs(xmin2-xmin1)>prec || fabs(xmax2-xmax1)>prec)
+  {
+   cout << " *NcAstrolab::KolmogorovTest* Histograms h1 and h2 do not have the same binning." << endl;
+   cout << " h1 : nbins=" << nbins1 << " xmin=" << xmin1 << " xmax=" << xmax1 << endl;
+   cout << " h2 : nbins=" << nbins2 << " xmin=" << xmin2 << " xmax=" << xmax2 << endl;
+   return -1;
+  }
+ }
+
+ // Create the "h2" histogram from the "pdf" function to perform the KS test
+ if (pdf)
+ {
+  pdf->SetRange(xmin1,xmax1);
+  pdf->SetNpx(nbins1);
+  h2=(TH1*)pdf->GetHistogram()->Clone();
+  h2->SetName("hpdf");
+ }
+
+ // Convert "mode" into the corresponding character string for TH1::KolmogorovTest
+ TString s="";
+ if (mode.Contains("U")) s+="U";
+ if (mode.Contains("O")) s+="O";
+ if (mode.Contains("N")) s+="N";
+
+ // Obtain the maximum KS distance (d0) for the input histogram "h1"
+ TString s2=s;
+ s2+="M";
+ Double_t d0=h2->KolmogorovTest(h1,s2.Data());
+
+ // Complete "mode" conversion
+ if (mode.Contains("M")) s+="M";
+ if (mode.Contains("I")) s+="D";
+
+ // Perform the requested KS test
+ if (mode.Contains("I"))
+ {
+  if (pdf)
+  {
+   cout << " *NcAstrolab::KolmogorovTest* Single sample KS-test results for execution mode "<< mode.Data() << endl;
+  }
+  else
+  {
+   cout << " *NcAstrolab::KolmogorovTest* Two sample KS-test results for execution mode "<< mode.Data() << endl;
+  }
+ }
+ value=h1->KolmogorovTest(h2,s.Data());
+
+ // Perform the pseudo experiments, if requested
+ if (ksh) ksh->SetBins(101,0,1.01);
+ Double_t xval=0;
+ Double_t dist=0;
+ Double_t sumrep=0;
+ Int_t sumd=0;
+ TH1* htemp=0;
+ if (mode.Contains("P"))
+ {
+  htemp=(TH1*)h1->Clone();
+  for (jrep=0; jrep<nrep; jrep++) // Loop of pseudo experiments
+  {
+   htemp->Reset();
+   for (Int_t ien=0; ien<nen1; ien++) // Take the random entries from the reference distribution
+   {
+    xval=h2->GetRandom();
+    htemp->Fill(xval);
+   }
+   dist=htemp->KolmogorovTest(h2,s2.Data());
+   if (ksh) ksh->Fill(dist);
+   sumrep+=1;
+   if (dist>=d0) sumd++;
+
+   // Stop the pseudo experiments if the required precision is reached
+   if (ncut && sumd>=ncut) break;
+
+  } // end loop over pseudo experiments
+  value=double(sumd)/sumrep;
+  if (nrx) *nrx=sumrep;
+  if (mode.Contains("I"))
+  {
+   cout << " P-value        = " << value << " after " << sumrep << " pseudo experiments." << endl;
+  }
+ }
+
+ if (mode.Contains("I")) cout << " Returned value = " << value << endl;
+ 
+ // Complete the attributes for the "ksh" histogram
+ if (ksh)
+ {
+  TString xlabel="Dmax";
+  TString ylabel="Counts after ";
+  ylabel+=sumrep;
+  ylabel+=" pseudo experiments";
+
+  ksh->SetTitle("KS-test Dmax distribution from pseudo experiments");
+  ksh->SetXTitle(xlabel.Data());
+  ksh->SetYTitle(ylabel.Data());
+
+  // Mark the actually observed D0 value by a vertical line in the "ksh" histogram
+  // Also the corresponding P-value is mentioned in the legend
+  if (mark)
+  {
+   Float_t x=d0;
+   Float_t ymin=0;
+   Float_t ymax=ksh->GetMaximum();
+
+   TLine* vline=new TLine(x,ymin,x,ymax);
+   vline->SetLineStyle(2); // Dashed line
+   vline->SetLineWidth(2);
+   vline->SetLineColor(4); // Blue color
+
+   TString title="P-value : %-10.3g";
+   TString sh=title.Format(title.Data(),value);
+
+   TLegend* leg=new TLegend(0.6,0.8,0.8,0.9);
+   leg->SetFillColor(0);
+   leg->SetHeader(sh.Data());
+   leg->AddEntry(vline,"Observed Dmax","L");
+
+   TList* hlist=ksh->GetListOfFunctions();
+   hlist->Add(vline);
+   hlist->Add(leg);
+  }
+ }
+
+ // Delete temporary histograms, if any
+ if (pdf && h2)
+ {
+  delete h2;
+  h2=0;
+ }
+
+ if (htemp) delete htemp;
+
+ return value;
+}
+///////////////////////////////////////////////////////////////////////////
 TObject* NcAstrolab::Clone(const char* name) const
 {
 // Make a deep copy of the current object and provide the pointer to the copy.
