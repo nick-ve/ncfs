@@ -7502,7 +7502,7 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
 // nr   : The number of repetitions (see note 2) of the KS test with n random background entries.
 // h1   : The observed experimental distribution in histogram format.
 // h2   : Reference distribution in histogram format.
-// pdf  : Function describing some (hypothetical) reference distribution.
+// pdf  : Function describing some (hypothetical) reference distribution (see note 4).
 // ksh  : Histogram with the KS dmax values obtained from the pseudo experiments (see notes 2 and 3).
 // ncut : Number of dmax>=d0 values to be obtained to trigger an early stop of the pseudo experiments.
 //        In case ncut=0 all the specified "nr" pseudo experiments will be performed. 
@@ -7515,7 +7515,7 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
 //
 // "U" : Include Underflows in the KS test
 // "O" : Include Overflows in the KS test
-// "N" : Include comparison of histogram Normalizations in addition to the shapes for the KS test probability
+// "N" : Include comparison of histogram Normalizations in addition to the shapes for the KS test probability (see note 4)
 // "M" : Return the Maximum KS distance
 // "K" : Return the standard KS test Probability
 // "P" : Return the P-value of the maximum KS distance based on a number of pseudo experiments
@@ -7543,6 +7543,11 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
 //    will be returned via this same argument "nrx".
 //
 // 3) In case a histogram "ksh" is provided, this function recreates the histogram (and a legend if "mark" is activated).
+//
+// 4) In case the (hypothetical) reference distribution is specified via the function "pdf", the errors
+//    of the reference distribution are set to zero. This is a so called "Single sample test".
+//    Consequently, it doesn't make sense to include the normalization (mode="N") in the KS-test, so in
+//    these cases the mode="N" will be ignored. 
 //
 // For practical reasons the maximum value of "nr" has been limited to 1e19, which is about
 // the corresponding maximum value of an unsigned 64-bit integer.
@@ -7629,13 +7634,18 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
   pdf->SetNpx(nbins1);
   h2=(TH1*)pdf->GetHistogram()->Clone();
   h2->SetName("hpdf");
+  // Set all bin errors (incl. underflow and overflow bins) to zero
+  for (Int_t i=0; i<=nbins1+1; i++)
+  {
+   h2->SetBinError(i,0);
+  }
  }
 
  // Convert "mode" into the corresponding character string for TH1::KolmogorovTest
  TString s="";
  if (mode.Contains("U")) s+="U";
  if (mode.Contains("O")) s+="O";
- if (mode.Contains("N")) s+="N";
+ if (mode.Contains("N") && !pdf) s+="N";
 
  // Obtain the maximum KS distance (d0) for the input histogram "h1"
  TString s2=s;
@@ -7652,6 +7662,7 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
   if (pdf)
   {
    cout << " *NcAstrolab::KolmogorovTest* Single sample KS-test results for execution mode "<< mode.Data() << endl;
+   if (mode.Contains("N")) cout << " === For a single sample KS-test the mode=N is suppressed ===" << endl;
   }
   else
   {
