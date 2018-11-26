@@ -7496,8 +7496,8 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
 // the input histogram "h1".
 // The value d0 represents the maximum KS distance between "h1" and the reference distribution.
 //
-// The arguments of this memberfunction :
-// --------------------------------------
+// Input arguments :
+// -----------------
 // mode : A string of characters to specify the required functionality of the KS test (see below)
 // nr   : The number of repetitions (see note 2) of the KS test with n random background entries.
 // h1   : The observed experimental distribution in histogram format.
@@ -7586,8 +7586,8 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
  Double_t nen1=h1->GetSumOfWeights();
  Double_t underflow1=h1->GetBinContent(0);
  Double_t overflow1=h1->GetBinContent(nbins1+1);
- if (!mode.Contains("U")) nen1=nen1-underflow1;
- if (!mode.Contains("O")) nen1=nen1-overflow1;
+ if (mode.Contains("U")) nen1=nen1+underflow1;
+ if (mode.Contains("O")) nen1=nen1+overflow1;
 
  if (nbins1<=0 || nen1<=0 || range1<=0)
  {
@@ -7746,6 +7746,155 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
  if (htemp) delete htemp;
 
  return value;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1F NcAstrolab::GetCumulHistogram(TH1* h,TString name,TString mode) const
+{
+// Provide the Cumulative Distribution Hstogram from the input 1-D histogram "h".
+//
+// Input arguments :
+// -----------------
+// h    : Input 1-D histogram from which the cumulative distribution will be determined
+// name : Name for the newly created histogram which contains the cumulative distribution
+// mode : "F" --> Determine the cumulative distribution in the forward sense  
+//        "B" --> Determine the cumulative distribution in the backward sense  
+//        "N" --> Determine the cumulative distribution normalized to 1
+//
+// Examples :
+// ----------
+// mode="BN" will provide the backward cumulative distribution, normalized to 1.
+// mode="BFN" will provide an empty cumulative distribution (conflicting input).
+//
+// The default is mode="F".
+//
+// Note : Underflow and Overflow entries are not taken into account.
+//
+// In case of inconsistent input, an empty cumulative distribution histogram will be returned.
+//
+//--- Nick van Eijndhoven 26-nov-2018 IIHE-VUB Brussel
+
+ TH1F hcd;
+ TString title="Cumulative Distribution of histogram ";
+ hcd.SetNameTitle(name.Data(),title.Data());
+
+ if (!h) return hcd;
+
+ TAxis* xaxis=h->GetXaxis();
+ TAxis* yaxis=h->GetYaxis();
+ Double_t xmin=xaxis->GetXmin();
+ Double_t xmax=xaxis->GetXmax();
+ Double_t range=xmax-xmin;
+ Int_t nbins=h->GetNbinsX();
+ Double_t nen=h->GetSumOfWeights();
+ TString nameh=h->GetName();
+ TString xtitle=xaxis->GetTitle();
+ TString ytitle=yaxis->GetTitle();
+ title+=nameh;
+ hcd.SetNameTitle(name.Data(),title.Data());
+ hcd.SetXTitle(xtitle.Data());
+ hcd.SetYTitle(ytitle.Data());
+
+ if (nbins<=0 || nen<=0 || range<=0) return hcd;
+
+ if(!(mode.Contains("F") || mode.Contains("B")) || (mode.Contains("F") && mode.Contains("B"))) return hcd;
+
+ hcd.SetBins(nbins,xmin,xmax);
+ title="";
+ if (mode.Contains("N")) title="Normalized ";
+ if (mode.Contains("F")) title+="Forward ";
+ if (mode.Contains("B")) title+="Backward ";
+ title+="Cumulative Distribution of histogram ";
+ title+=nameh;
+ hcd.SetNameTitle(name.Data(),title.Data());
+ hcd.SetXTitle(xtitle.Data());
+ hcd.SetYTitle(ytitle.Data());
+
+ Double_t norm=1;
+ if (mode.Contains("N")) norm=nen;
+ Double_t y=0;
+ Double_t sum=0;
+
+ if (mode.Contains("F")) // Forward cumulation
+ {
+  for (Int_t ibin=1; ibin<=nbins; ibin++)
+  {
+   y=h->GetBinContent(ibin);
+   sum+=y/norm;
+   hcd.SetBinContent(ibin,sum);
+  }
+ }
+ else // Backward cumulation
+ {
+  for (Int_t ibin=nbins; ibin>=1; ibin--)
+  {
+   y=h->GetBinContent(ibin);
+   sum+=y/norm;
+   hcd.SetBinContent(ibin,sum);
+  }
+ }
+ return hcd;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1F NcAstrolab::GetCumulHistogram(TF1* f,TString name,Int_t nbins,Double_t xmin,Double_t xmax,TString mode) const
+{
+// Provide the Cumulative Distribution Histogram from the input 1-D function "f".
+//
+// Input arguments :
+// -----------------
+// f     : Input 1-D function from which the cumulative distribution will be determined
+// name  : Name for the newly created histogram which contains the cumulative distribution
+// nbins : The number of bins for the output histogram
+// xmin  : Minimum x value for the output histogram
+// xmax  : Maximum x value for the output histogram
+// mode  : "F" --> Determine the cumulative distribution in the forward sense  
+//         "B" --> Determine the cumulative distribution in the backward sense  
+//         "N" --> Determine the cumulative distribution normalized to 1
+//
+// Examples :
+// ----------
+// mode="BN" will provide the backward cumulative distribution, normalized to 1.
+// mode="BFN" will provide an empty cumulative distribution (conflicting input).
+//
+// The default is mode="F".
+//
+// In case of inconsistent input, an empty cumulative distribution histogram will be returned.
+//
+//--- Nick van Eijndhoven 26-nov-2018 IIHE-VUB Brussel
+
+ TH1F hcd;
+ TString title="Cumulative Distribution Histogram of function ";
+ hcd.SetNameTitle(name.Data(),title.Data());
+
+ if (!f) return hcd;
+
+ // The original range of the function "f"
+ Double_t xminold=f->GetXmin();
+ Double_t xmaxold=f->GetXmax();
+
+ f->SetRange(xmin,xmax);
+ f->SetNpx(nbins);
+ TH1* hf=(TH1*)f->GetHistogram();
+
+ hcd=GetCumulHistogram(hf,name,mode);
+
+ if (hcd.GetEntries()>0) // Histogram has been filled
+ {
+  title="";
+  if (mode.Contains("N")) title="Normalized ";
+  if (mode.Contains("F")) title+="Forward ";
+  if (mode.Contains("B")) title+="Backward ";
+  title+="Cumulative Distribution Histogram of function ";
+ }
+
+ TString namef=f->GetName();
+ title+=namef;
+
+ hcd.SetTitle(title.Data());
+
+ // Restore the original range for the function "f"
+ f->SetRange(xminold,xmaxold);
+
+ return hcd;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcAstrolab::Clone(const char* name) const

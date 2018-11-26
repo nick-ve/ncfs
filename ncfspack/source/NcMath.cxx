@@ -2501,6 +2501,7 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
 // Further mathematical details can be found in astro-ph/0702029.
 //
 // his : The experimental observations in histogram format
+//       Note that Underflow and/or Overflow entries are not taken into account
 // hyp : Hypothetical observations according to some hypothesis
 // pdf : Probability distribution function for the hypothesis
 // f   : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
@@ -2525,9 +2526,6 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
  Double_t range=xmax-xmin;
  Int_t nbins=his->GetNbinsX();
  Double_t nensig=his->GetSumOfWeights();
- Double_t underflow=his->GetBinContent(0);
- Double_t overflow=his->GetBinContent(nbins+1);
- nensig=nensig-(underflow+overflow);
 
  if (nbins<=0 || nensig<=0 || range<=0) return psi;
 
@@ -2889,6 +2887,7 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
 // Further mathematical details can be found in astro-ph/0702029.
 //
 // his : The experimental observations in histogram format
+//       Note that Underflow and/or Overflow entries are not taken into account
 // hyp : Hypothetical observations in histogram format according to some hypothesis
 // pdf : Probability distribution function for the hypothesis
 // k   : The specified (k=1,2,..,m) fixed outcome (bin) which is obtained at every trial.
@@ -2916,9 +2915,6 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
  Double_t range=xmax-xmin;
  Int_t nbins=his->GetNbinsX();
  Double_t nensig=his->GetSumOfWeights();
- Double_t underflow=his->GetBinContent(0);
- Double_t overflow=his->GetBinContent(nbins+1);
- nensig=nensig-(underflow+overflow);
 
  if (nbins<=0 || nensig<=0 || range<=0) return psi;
 
@@ -3166,6 +3162,7 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
 //        If psi0<0 the corresponding psi value of the input histogram "his" will be taken as psi0.
 // nr   : The number of repetitions (see note 4) of the counting experiment with n independent random trials.
 // his  : The experimental observations of the different B_m outcomes in histogram format.
+//        Note that Underflow and/or Overflow entries are not taken into account.
 // hyp  : Hypothetical observations (in histogram format) according to some B_m hypothesis.
 // pdf  : Probability distribution function for some B_m hypothesis.
 // f    : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
@@ -3235,9 +3232,6 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
  Double_t range=xmax-xmin;
  Int_t nbins=his->GetNbinsX();
  Double_t nensig=his->GetSumOfWeights();
- Double_t underflow=his->GetBinContent(0);
- Double_t overflow=his->GetBinContent(nbins+1);
- nensig=nensig-(underflow+overflow);
 
  if (nbins<=0 || nensig<=0 || range<=0) return pval;
 
@@ -3446,6 +3440,7 @@ Double_t NcMath::Chi2Value(TH1* his,TH1* hyp,TF1* pdf,Int_t* ndf) const
 // Further mathematical details can be found in astro-ph/0702029.
 //
 // his : The experimental observations in histogram format
+//       Note that Underflow and/or Overflow entries are not taken into account
 // hyp : Hypothetical observations according to some hypothesis
 // pdf : Probability distribution function for the hypothesis
 // ndf : The returned number of degrees of freedom
@@ -3469,9 +3464,6 @@ Double_t NcMath::Chi2Value(TH1* his,TH1* hyp,TF1* pdf,Int_t* ndf) const
  Double_t range=xmax-xmin;
  Int_t nbins=his->GetNbinsX();
  Double_t nensig=his->GetSumOfWeights();
- Double_t underflow=his->GetBinContent(0);
- Double_t overflow=his->GetBinContent(nbins+1);
- nensig=nensig-(underflow+overflow);
 
  if (nbins<=0 || nensig<=0 || range<=0) return chi;
 

@@ -1097,3 +1097,6 @@
                 introduced to class NcAstrolab and also the values of the corresponding astrophysical parameters updated
                 to the PDG 2018 values.
 21-nov-2018 NvE Memberfunction KolmogorovTest() introduced to class NcAstrolab.
+26-nov-2018 NvE Memberfunction GetCumulHistogram() introduced to class NcAstrolab.
+                Also for histogram statistics in class NcMath it is explicitly stated that Underflow
+                and/or Overflow entries are not taken into account.  
