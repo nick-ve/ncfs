@@ -1100,3 +1100,4 @@
 26-nov-2018 NvE Memberfunction GetCumulHistogram() introduced to class NcAstrolab.
                 Also for histogram statistics in class NcMath it is explicitly stated that Underflow
                 and/or Overflow entries are not taken into account.  
+29-nov-2018 NvE Support for International Atomic Time (TAI) introduced in class NcTimestamp.

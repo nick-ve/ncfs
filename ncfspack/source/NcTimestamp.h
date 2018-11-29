@@ -33,8 +33,10 @@ class NcTimestamp : public TTimeStamp
   void PrintTime(Double_t h,Int_t ndig=1) const;// Print time in hh:mm:ss.sss format
   void GetMJD(Int_t& mjd,Int_t& sec,Int_t& ns); // Provide corresponding Modified Julian Date and time
   Double_t GetMJD();                            // Provide corresponding Modified Julian Date in fractional days
-  void GetTJD(Int_t& mjd,Int_t& sec,Int_t& ns); // Provide corresponding Truncated Julian Date and time
+  void GetTJD(Int_t& tjd,Int_t& sec,Int_t& ns); // Provide corresponding Truncated Julian Date and time
   Double_t GetTJD();                            // Provide corresponding Truncated Julian Date in fractional days
+  void GetTAI(Int_t& d,Int_t& sec,Int_t& ns);   // Provide corresponding TAI Date and time
+  Double_t GetTAI();                            // Provide corresponding TAI Date in fractional days
   void GetJD(Int_t& jd,Int_t& sec,Int_t& ns);   // Provide corresponding Julian Date and time
   Double_t GetJD();                             // Provide corresponding Julian Date in fractional days
   Double_t GetJE();                             // Provide corresponding Julian Epoch
@@ -42,12 +44,15 @@ class NcTimestamp : public TTimeStamp
   Double_t GetJD(Double_t e,TString mode="J") const;  // Provide fractional Julian Date from Epoch
   Double_t GetMJD(Double_t e,TString mode="J") const; // Provide fractional Modified Julian Date from Epoch
   Double_t GetTJD(Double_t e,TString mode="J") const; // Provide fractional Truncated Julian Date from Epoch
+  Double_t GetTAI(Double_t e,TString mode="J") const; // Provide fractional TAI day count from Epoch
   void SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0); // Set Modified Julian Date and time
   void SetMJD(Double_t mjd);                            // Set Modified Julian Date and time
   void SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps=0);   // Set Julian Date and time
   void SetJD(Double_t jd);                              // Set Julian Date and time
   void SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps=0); // Set Truncated Julian Date and time
   void SetTJD(Double_t tjd);                            // Set Truncated Julian Date and time
+  void SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps=0);   // Set International Atomic Time (TAI) date and time
+  void SetTAI(Double_t tai);                            // Set International Atomic Time (TAI) date and time
   void SetNs(Int_t ns);                                 // Set the remaining fractional number of sec in nanoseconds
   Int_t GetNs() const;                                  // Provide remaining fractional number of sec in nanoseconds
   void SetPs(Int_t ps);                                 // Set the remaining fractional number of ns in picoseconds
@@ -92,6 +97,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,5) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,6) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

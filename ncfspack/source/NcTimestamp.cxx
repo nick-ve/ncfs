@@ -35,6 +35,16 @@
 // facilities (e.g. Julian date) which are commonly used in the
 // field of (astro)particle physics.
 //
+// The basis of the used timing is the (SI) second, derived from Cs atomic clocks
+// that provide the International Atomic Time (TAI) recording.
+//
+// 1 day is defined as 86400 seconds.
+// 1 day=24 hours  1 hour=60 minutes  1 minute=60 seconds.
+//
+// All Gregorian dates/times (e.g. 12-aug-1982 13:20:12) are treated as
+// Universal Time (UT), so there is no need for leap second treatment
+// like this is the case for Coordinated Universal Time (UTC).  
+//
 // The Julian Date (JD) indicates the number of days since noon (UT) on
 // 01 jan -4712 (i.e. noon 01 jan 4713 BC), being day 0 of the Julian calendar.
 //
@@ -66,11 +76,17 @@
 // they provide an absolute timescale irrespective of timezone or daylight
 // saving time (DST).
 //
+// In addition to the Julian date indicators there are also several other absolute
+// timescales, which are all based on continuous "ticks" of a (SI) second.
+//
+// TAI  : A clock with origin at MJD=43144 which corresponds to 01-jan-1977 00:00:00 UT.
+// GPST : Global Positioning System (GPS) Time, with origin at 06-jan-1980 00:00:19 TAI, so GPST=TAI-19 sec.
+//
 // In view of astronomical observations and positioning it is convenient
 // to have also a UT equivalent related to stellar meridian transitions.
 // This is achieved by the Greenwich Sidereal Time (GST).
 // The GST is defined as the right ascension of the objects passing
-// the Greenwich meridian at 00:00:00 UT.
+// the Greenwich meridian.
 // Due to the rotation of the Earth around the Sun, a sidereal day
 // lasts 86164.09 seconds (23h 56m 04.09s) compared to the mean solar
 // day of 86400 seconds (24h).
@@ -89,18 +105,19 @@
 // of time of flight analyses for particle physics experiments.
 // For normal date/time indication the standard nanosecond precision
 // will in general be sufficient.
+// Picosecond precision can be obtained by invokation of GetPs() or GetDifference().
 // Note that when the fractional JD, MJD and TJD counts are used instead
 // of the integer (days,sec,ns) specification, the nanosecond precision
 // may be lost due to computer accuracy w.r.t. floating point operations.
 //
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UTC
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
 // which corresponds to JD=2440587.5 or the start of MJD=40587 or TJD=587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input (M/T)JD and time.
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than JD=2440587.5 or MJD=40587 or TJD=587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UTC.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M/T)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -119,10 +136,15 @@
 // NcTimestamp t;
 //
 // t.Date();
+//
+// Set a specific Date/Time in Universal Time (UT)
+// t.SetUT("22-08-2016","14:03:29.7358",0);
 // 
-// // Retrieve Julian Date
+// // Retrieve Julian Date to ns precision
 // Int_t jd,jsec,jns;
 // t.GetJD(jd,jsec,jns);
+// // Get the remaining ps precision
+// Int_t ps=GetPs();
 //
 // // Retrieve fractional Truncated Julian Date
 // Double_t tjd=t.GetTJD();
@@ -134,7 +156,8 @@
 // Int_t mjd=50537;
 // Int_t mjsec=1528;
 // Int_t mjns=185643;
-// t.SetMJD(mjd,mjsec,mjns);
+// Int_t mjps=35;
+// t.SetMJD(mjd,mjsec,mjns,mjps);
 //
 // t.Date();
 //
@@ -228,6 +251,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 // mode = 1 ==> Only the UT yy-mm-dd hh:mm:ss.sss and GMST info is printed
 //        2 ==> Only the Julian parameter info is printed
 //        3 ==> Both the UT, GMST and Julian parameter info is printed
+//        4 ==> Only the TAI info is printed
 //       -1 ==> Only the UT yy-mm-dd hh:mm:ss.sss and GAST info is printed
 //       -3 ==> Both the UT, GAST and Julian parameter info is printed
 //
@@ -344,6 +368,13 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
        << " Fractional : " << setprecision(25) << GetMJD() << endl;
   cout << " TJD : " << tjd << "  sec : " << tjsec << " ns : " << tjns << " ps : " << fJps
        << " Fractional : " << setprecision(25) << GetTJD() << endl;
+ }
+ if (mode==4)
+ {
+  Int_t d,sec,ns;
+  GetTAI(d,sec,ns);
+  cout << " TAI : " << d << "  sec : " << sec << " ns : " << ns << " ps : " << fJps
+       << " Fractional : " << setprecision(25) << GetTAI() << endl;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -820,15 +851,15 @@ Double_t NcTimestamp::GetMJD()
  return date;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::GetTJD(Int_t& tjd,Int_t& sec, Int_t& ns)
+void NcTimestamp::GetTJD(Int_t& tjd,Int_t& sec,Int_t& ns)
 {
 // Provide the Truncated Julian Date (TJD) and time corresponding to the
 // currently stored NcTimestamp date/time parameters.
 //
 // The returned arguments represent the following :
-// tjd : The modified Julian date.
-// sec : The number of seconds elapsed within the MJD.
-// ns  : The remaining fractional number of seconds (in ns) elapsed within the MJD.
+// tjd : The truncated Julian date.
+// sec : The number of seconds elapsed within the TJD.
+// ns  : The remaining fractional number of seconds (in ns) elapsed within the TJD.
 
  Int_t mjd=0;
  GetMJD(mjd,sec,ns);
@@ -842,7 +873,7 @@ Double_t NcTimestamp::GetTJD()
 // currently stored NcTimestamp date/time parameters.
 //
 // Due to computer accuracy the ns precision may be lost.
-// It is advised to use the (mjd,sec,ns) getter instead.
+// It is advised to use the (tjd,sec,ns) getter instead.
 
  Int_t tjd=0;
  Int_t sec=0;
@@ -854,7 +885,41 @@ Double_t NcTimestamp::GetTJD()
  return date;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::GetJD(Int_t& jd,Int_t& sec, Int_t& ns)
+void NcTimestamp::GetTAI(Int_t& d,Int_t& sec,Int_t& ns)
+{
+// Provide the TAI date and time corresponding to the
+// currently stored NcTimestamp date/time parameters.
+//
+// The returned arguments represent the following :
+// d   : The number of TAI days elapsed
+// sec : The number of seconds elapsed within the TAI day.
+// ns  : The remaining fractional number of seconds (in ns) elapsed within the TAI day.
+
+ Int_t mjd=0;
+ GetMJD(mjd,sec,ns);
+
+ d=mjd-43144;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcTimestamp::GetTAI()
+{
+// Provide the (fractional) number of elapsed TAI days corresponding to the
+// currently stored NcTimestamp date/time parameters.
+//
+// Due to computer accuracy the ns precision may be lost.
+// It is advised to use the (d,sec,ns) getter instead.
+
+ Int_t d=0;
+ Int_t sec=0;
+ Int_t ns=0;
+ GetTAI(d,sec,ns);
+
+ Double_t date=Convert(d,sec,ns);
+
+ return date;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcTimestamp::GetJD(Int_t& jd,Int_t& sec,Int_t& ns)
 {
 // Provide the Julian Date (JD) and time corresponding to the currently
 // stored NcTimestamp date/time parameters.
@@ -921,14 +986,14 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps)
 //
 // Note :
 // ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UTC
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
 // which corresponds to the start of MJD=40587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input MJD and time.
 // Obviously this TTimeStamp implementation would prevent usage of MJD values
 // smaller than 40587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UTC.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -995,14 +1060,14 @@ void NcTimestamp::SetMJD(Double_t mjd)
 //
 // Note :
 // ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UTC
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
 // which corresponds to the start of MJD=40587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input MJD and time.
 // Obviously this TTimeStamp implementation would prevent usage of MJD values
 // smaller than 40587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UTC.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1031,14 +1096,14 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps)
 //
 // Note :
 // ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UTC
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
 // which corresponds to JD=2440587.5 or the start of MJD=40587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input MJD and time.
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than JD=2440587.5.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UTC.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1073,14 +1138,14 @@ void NcTimestamp::SetJD(Double_t jd)
 //
 // Note :
 // ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UTC
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
 // which corresponds to JD=2440587.5 or the start of MJD=40587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input MJD and time.
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than JD=2440587.5.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UTC.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1110,14 +1175,14 @@ void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps)
 //
 // Note :
 // ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UTC
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
 // which corresponds to JD=2440587.5 or the start of TJD=587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input MJD and time.
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than TJD=587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UTC.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (T)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1146,14 +1211,14 @@ void NcTimestamp::SetTJD(Double_t tjd)
 //
 // Note :
 // ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UTC
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
 // which corresponds to JD=2440587.5 or the start of TJD=587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input MJD and time.
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than TJD=587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UTC.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (T)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1174,6 +1239,79 @@ void NcTimestamp::SetTJD(Double_t tjd)
  Convert(tjd,days,secs,ns);
 
  SetTJD(days,secs,ns);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps)
+{
+// Set the International Atomic Time (TAI) date and time and update the TTimeStamp
+// parameters accordingly (if possible).
+//
+// Note :
+// ------
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
+// which corresponds to JD=2440587.5 or the start of TAI=-2557.
+// Using the corresponding TAI of this EPOCH allows construction of
+// the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input TAI day and time.
+// Obviously this TTimeStamp implementation would prevent usage of values
+// smaller than TAI=-2557.
+// Furthermore, due to a limitation on the "seconds since the EPOCH start" count
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// However, this NcTimestamp facility provides support for the full range
+// of TAI values, but the setting of the corresponding TTimeStamp parameters
+// is restricted to the values allowed by the TTimeStamp implementation.
+// For these earlier/later TAI values, the standard TTimeStamp parameters will
+// be set corresponding to the start of the TTimeStamp EPOCH.  
+// This implies that for these earlier/later TAI values the TTimeStamp parameters
+// do not match the TAI c.q. Julian parameters of NcTimestamp.  
+//
+// The input arguments represent the following :
+// d   : The TAI day count.
+// sec : The number of seconds elapsed within the TAI day.
+// ns  : The remaining fractional number of seconds (in ns) elapsed within the TAI day.
+// ps  : The remaining fractional number of nanoseconds (in ps) elapsed within the TAI day.
+//
+// Note : ps=0 is the default value.
+
+ Int_t mjd=d+43144;
+
+ SetMJD(mjd,sec,ns,ps);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcTimestamp::SetTAI(Double_t tai)
+{
+// Set the International Atomic Time (TAI) date and time and update the TTimeStamp
+// parameters accordingly (if possible).
+//
+// Note :
+// ------
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
+// which corresponds to JD=2440587.5 or the start of TAI=-2557.
+// Using the corresponding TAI of this EPOCH allows construction of
+// the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input TAI day and time.
+// Obviously this TTimeStamp implementation would prevent usage of values
+// smaller than TAI=-2557.
+// Furthermore, due to a limitation on the "seconds since the EPOCH start" count
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// However, this NcTimestamp facility provides support for the full range
+// of TAI values, but the setting of the corresponding TTimeStamp parameters
+// is restricted to the values allowed by the TTimeStamp implementation.
+// For these earlier/later TAI values, the standard TTimeStamp parameters will
+// be set corresponding to the start of the TTimeStamp EPOCH.  
+// This implies that for these earlier/later TAI values the TTimeStamp parameters
+// do not match the TAI c.q. Julian parameters of NcTimestamp.  
+//
+// Due to computer accuracy the ns precision may be lost.
+// It is advised to use the (d,sec,ns) setting instead.
+//
+// The input argument represents the following :
+// tai : The TAI fractional day count.
+
+ Int_t days=0;
+ Int_t secs=0;
+ Int_t ns=0;
+ Convert(tai,days,secs,ns);
+
+ SetTAI(days,secs,ns);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetNs(Int_t ns)
@@ -2172,6 +2310,21 @@ Double_t NcTimestamp::GetTJD(Double_t e,TString mode) const
  Double_t tjd=GetJD(e,mode)-2440000.5;
 
  return tjd;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcTimestamp::GetTAI(Double_t e,TString mode) const
+{
+// Provide the fractional TAI day count from epoch e.
+// The sort of epoch may be specified via the "mode" parameter.
+//
+// mode = "J" ==> Julian epoch
+//        "B" ==> Besselian epoch
+//
+// The default value is mode="J".
+
+ Double_t tai=GetJD(e,mode)-2443144.5;
+
+ return tai;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double_t* dl,TString name,Double_t* el,Double_t* eb,Double_t* dr,Double_t* value,Int_t j)
