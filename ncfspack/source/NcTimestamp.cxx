@@ -30,38 +30,127 @@
 ///////////////////////////////////////////////////////////////////////////
 // Class NcTimestamp
 // Handling of timestamps for (astro)particle physics reserach.
+// This facility supports picosecond timing precision.
 //
 // This class is derived from TTimeStamp and provides additional
 // facilities (e.g. Julian date) which are commonly used in the
 // field of (astro)particle physics.
 //
-// The basis of the used timing is the (SI) second, derived from Cs atomic clocks
-// that provide the International Atomic Time (TAI) recording.
+// The basis of the used timing is the "day".
 //
-// 1 day is defined as 86400 seconds.
 // 1 day=24 hours  1 hour=60 minutes  1 minute=60 seconds.
 //
-// All Gregorian dates/times (e.g. 12-aug-1982 13:20:12) are treated as
-// Universal Time (UT), so there is no need for leap second treatment
+// So, 1 day consists of 86400 seconds.
+//
+// The absolute duration of a day is defined by the time scale that is used.
+// The two main time scales for time recording are Universal Time (UT)
+// and International Atomic Time (TAI), as outlined below.
+// The UT time scale is always provided and the TAI (and its derived) time scale(s)
+// may be activated by the various Set() functions, as outlined in the corresponding docs.
+// For precise time keeping it is important to work within 1 single time scale and indicate
+// which time scale is being used.
+// Time information for the various time scales may be obtained via the Date() and the
+// various Get() memberfunctions.
+//
+// Notes :
+// -------
+// 1) Both the UT and TAI based time scales provide picosecond precision, so from that
+//    respect there is no preference for one or the other.
+//    However, when timing is received from an external clock (e.g. GPS), it might be
+//    convenient to choose a specific time scale when setting dates and times depending
+//    on the format in which the clock information is broadcast.
+// 2) As explained below, the UT and TAI clocks do not "tick" at the same pace.
+//    This implies that when two timestamps are compared (e.g. via the GetDifference()
+//    member function) both timestamps should be using the same time scale.
+// 3) For most of the time broadcasting the Coordinated Universal Time (UTC) is used.
+//    This UTC time runs at the pace of TAI, but is kept close (within 0.9 sec) to UT
+//    by the introduction of Leap Seconds when abs(UT-UTC) exceeds 0.9 sec.
+//    This time synchronisation is coordinated by the International Earth Rotation and
+//    Reference Systems Service (IERS) via a daily monitoring of the Earth Orientation
+//    Parameters (EOP). 
+//    Depending on dUT=UT-UTC, these Leap Seconds can be positive or negative.
+//    The introduction of Leap Seconds into UTC started at 01-jan-1972 00:00:00 UT.
+//
+//    An overview of the history of introduced Leap seconds (TAI-UTC) is online available at :
+//                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+//
+//    The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+//    The accuracy of dUT=UT-UTC is about 10 microseconds, so in case of accurate astronomical
+//    timing the user is advised to specify dUT in the various Set() facilities or use SetUT().
+//    An automatic setting of dUT is provided based on the IERS data files. 
+//    Please refer to the member function LoadUTCparameterFiles() for further details.
+// 
+// Supported time scales :
+// ----------------------
+// UT  : Universal Time.
+//       1 day is the time span between two successive solar meridian transitions.
+//       This implies that UT is based on the actual rotation of the Earth and as such suited
+//       for (synchronization of) astronomical observations at various locations on Earth.
+//       The reference time is defined by transitions over the meridian at Greenwich.
+// ST  : Siderial Time (see also the details below).
+//       1 day is the time span between two successive stellar meridian transitions.
+//       This implies that ST is based on the actual rotation of the Earth and its rotation
+//       around the Sun. Siderial Time is very well suited for astronomical observations.
+//       The reference time is defined by transitions over the meridian at Greenwich.
+//       Because of the stability of the rotation of the Earth around the Sun, the Siderial Time
+//       is derived from the Universal Time and as such not treated as a separate time scale.
+// TAI : International Atomic Time (Temps Atomique International).
+//       1 day is the time span of 86400 standard atomic (SI) seconds at average sea level.
+//       The standard atomic (SI) second is derived from a set of Cs atomic clocks.
+//       This implies that TAI is not related to the actual rotation of the Earth and as such
+//       will not run at the same pace as UT.
+//       The start epoch of TAI is 01-jan-1958 00:00:00 UT, at which time UT-UTC was about 0.
+// GPS : Global Positioning System time.
+//       This satellite based timing system is based on TAI and broadcast via a satellite network.
+//       The start epoch of GPS is 06-jan-1980 00:00:00 UTC, at which the number of Leap Seconds was 19.
+//       This implies that at that time TAI=UTC+19 sec. and consequently we always have TAI=GPS+19 sec.
+//       GPS is broadcast in two formats : (w,sow) and (w,dow,sod) with
+//       w   = week number after the start epoch.   1 week=7 days or 1 week=604800 seconds.
+//       sow = (fractional) second count in the current week
+//       dow = day number in the current week (sunday=0, monday=1 etc.)
+//       sod = (fractional) second count in the current day
+//       Early implementations used to reset the week count after a cycle of 1024 weeks and
+//       provided the corresponding cycle count. Please refer to the SetGPS() memberfunctions
+//       for further details.
+// TT  : Terrestrial Time.
+//       This timing system is based on TAI and provides the date/time at average sea level.
+//       It has been introduced for observations from the surface of the Earth, to be consistent
+//       with General Relativity. Since planetary orbits are very stable in time and not related
+//       to the rotation of the Earth, TT is mainly used for observations of the Solar system.
+//       TT was synchronized with TAI at 01-jan-1977 00:00:00 TAI, to indicate 00:00:32.184 in
+//       order to provide a continuation of its (now obsolete) predecessor Ephemeris Time (ET).
+//       This implies that always TT=TAI+32.184 sec.
+//
+// All Gregorian dates/times (e.g. 12-aug-1982 13:20:12) are treated on basis of
+// the time scales mentioned above. So, there is no need for leap second treatment
 // like this is the case for Coordinated Universal Time (UTC).  
 //
-// The Julian Date (JD) indicates the number of days since noon (UT) on
+// In order to enable a precise measurement of elapsed time over (very) long periods,
+// a continuous day counting system has been introduced, called the Julian Date.
+// The Julian Date (JD) indicates the number of days since noon (12:00:00) on
 // 01 jan -4712 (i.e. noon 01 jan 4713 BC), being day 0 of the Julian calendar.
+// It is custom to couple the Julian Date to UT so that it serves astronomical observations.
+// However, this NcTimestamp facility allows to use a continuous day counting system
+// with all the supported time scales mentioned above.
 //
-// The Modified Julian Date (MJD) indicates the number of days since midnight
-// (UT) on 17-nov-1858, which corresponds to 2400000.5 days after day 0 of the
+// The Modified Julian Date (MJD) indicates the number of days since midnight (00:00:00)
+// on 17-nov-1858, which corresponds to 2400000.5 days after day 0 of the
 // Julian calendar.
 //
 // The Truncated Julian Date (TJD) corresponds to 2440000.5 days after day 0
 // of the Julian calendar and consequently TJD=MJD-40000.
-// This TJD date indication was used by the Vela and Batse missions in
+// This TJD date indication was used by the Vela and CGRO satellite missions in
 // view of Gamma Ray Burst investigations.
 //
 // The Julian Epoch (JE) indicates the fractional elapsed Julian year count
 // since the start of the Gregorian year count.
-// A Julian year is defined to be 365.25 days and starts at 01-jan 12:00:00 UT.
+// A Julian year is defined to be 365.25 days and starts at 01-jan 12:00:00.
 // As such, the integer part of JE corresponds to the usual Gregorian year count,
-// apart from 01-jan before 12:00:00 UT.
+// apart from 01-jan before 12:00:00.
 // So, 01-jan-1965 12:00:00 UT corresponds to JE=1965.0
 //
 // The Besselian Epoch (BE) indicates the fractional elapsed Besselian year count
@@ -72,21 +161,15 @@
 // The Besselian and Julian epochs are used in astronomical catalogs
 // to denote values of time varying observables like e.g. right ascension.
 //
-// Because of the fact that the Julian date indicators are all w.r.t. UT
-// they provide an absolute timescale irrespective of timezone or daylight
+// Because of the fact that the Julian date indicators are all w.r.t. UT or TAI derived
+// time scales, they provide an absolute time scale irrespective of timezone or daylight
 // saving time (DST).
-//
-// In addition to the Julian date indicators there are also several other absolute
-// timescales, which are all based on continuous "ticks" of a (SI) second.
-//
-// TAI  : A clock with origin at MJD=43144 which corresponds to 01-jan-1977 00:00:00 UT.
-// GPST : Global Positioning System (GPS) Time, with origin at 06-jan-1980 00:00:19 TAI, so GPST=TAI-19 sec.
 //
 // In view of astronomical observations and positioning it is convenient
 // to have also a UT equivalent related to stellar meridian transitions.
 // This is achieved by the Greenwich Sidereal Time (GST).
 // The GST is defined as the right ascension of the objects passing
-// the Greenwich meridian.
+// the meridian over Greenwich.
 // Due to the rotation of the Earth around the Sun, a sidereal day
 // lasts 86164.09 seconds (23h 56m 04.09s) compared to the mean solar
 // day of 86400 seconds (24h).
@@ -110,14 +193,14 @@
 // of the integer (days,sec,ns) specification, the nanosecond precision
 // may be lost due to computer accuracy w.r.t. floating point operations.
 //
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
+// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00
 // which corresponds to JD=2440587.5 or the start of MJD=40587 or TJD=587.
 // Using the corresponding MJD of this EPOCH allows construction of
 // the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input (M/T)JD and time.
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than JD=2440587.5 or MJD=40587 or TJD=587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08.
 // However, this NcTimestamp facility provides support for the full range
 // of (M/T)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -137,8 +220,28 @@
 //
 // t.Date();
 //
-// Set a specific Date/Time in Universal Time (UT)
+// // Set a specific Date/Time in Universal Time (UT)
+// // without recording the corresponding International Atomic Time (TAI)
 // t.SetUT("22-08-2016","14:03:29.7358",0);
+//
+// // Set a specific Date/Time in Universal Time (UT)
+// // and also record the corresponding International Atomic Time (TAI)
+// // using manual "leap" and "dut" settings
+// Int_t leap=34;
+// Double_t dut=-0.14;
+// t.SetUT("17-05-2011","05:43:18.31468",0,"M",leap,dut);
+//
+// // Set a specific Date/Time in Universal Time (UT)
+// // and also record the corresponding International Atomic Time (TAI)
+// // using automatic "leap" and "dut" settings from the IERS data files
+// t.LoadUTCparameterFiles("leap.txt","dut.txt");
+// t.SetUT("17-05-2011","05:43:18.31468",0,"A");
+//
+// // Set a specific Date/Time in Global Positioning System time (GPS)
+// // and also record the corresponding Universal Time (UT)
+// // using automatic "leap" and "dut" settings from the IERS data files
+// t.LoadUTCparameterFiles("leap.txt","dut.txt");
+// t.SetTAI("GPS","17-05-2011","05:43:18.31468",0,"A",0,0);
 // 
 // // Retrieve Julian Date to ns precision
 // Int_t jd,jsec,jns;
@@ -153,15 +256,26 @@
 // Double_t je=t.GetJE();
 //
 // // Set to a specific Modified Julian Date
+// // without recording the corresponding International Atomic Time (TAI)
 // Int_t mjd=50537;
 // Int_t mjsec=1528;
 // Int_t mjns=185643;
 // Int_t mjps=35;
-// t.SetMJD(mjd,mjsec,mjns,mjps);
+// t.SetMJD(mjd,mjsec,mjns,mjps,"N");
+//
+// // Set to a specific Modified Julian Date
+// // and also record the corresponding International Atomic Time (TAI)
+// // using automatic "leap" and "dut" settings from the IERS data files
+// Int_t mjd=58457;
+// Int_t mjsec=1528;
+// Int_t mjns=185643;
+// Int_t mjps=35;
+// t.LoadUTCparameterFiles("leap.txt","dut.txt");
+// t.SetMJD(mjd,mjsec,mjns,mjps,"A");
 //
 // t.Date();
 //
-// // Time intervals for e.g. trigger or TOF analysis
+// // Time intervals for e.g. Trigger or Time Of Flight analysis
 // NcEvent evt;
 // NcTrack* tx=evt.GetTrack(5);
 // NcTimestamp* timex=tx->GetTimestamp();
@@ -199,7 +313,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: NvE $Date: 2015-01-04 21:26:28 +0100 (Sun, 04 Jan 2015) $ NCFS
+//- Modified: Nick van Eijndhoven 23-jan-2019 IIHE-VUB, Brussel
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -216,6 +330,14 @@ NcTimestamp::NcTimestamp() : TTimeStamp()
 
  FillJulian();
  fJps=0;
+ fUtc=0;
+ fLeap=0;
+ fDut=0;
+ fTmjd=0;
+ fTsec=0;
+ fTns=0;
+ fTps=0;
+ fUTCdata=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp::NcTimestamp(TTimeStamp& t) : TTimeStamp(t)
@@ -225,11 +347,24 @@ NcTimestamp::NcTimestamp(TTimeStamp& t) : TTimeStamp(t)
 
  FillJulian();
  fJps=0;
+ fUtc=0;
+ fLeap=0;
+ fDut=0;
+ fTmjd=0;
+ fTsec=0;
+ fTns=0;
+ fTps=0;
+ fUTCdata=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp::~NcTimestamp()
 {
 // Destructor to delete dynamically allocated memory.
+ if (fUTCdata)
+ {
+  delete fUTCdata;
+  fUTCdata=0;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp::NcTimestamp(const NcTimestamp& t) : TTimeStamp(t)
@@ -242,6 +377,16 @@ NcTimestamp::NcTimestamp(const NcTimestamp& t) : TTimeStamp(t)
  fJps=t.fJps;
  fCalcs=t.fCalcs;
  fCalcns=t.fCalcns;
+ fUtc=t.fUtc;
+ fLeap=t.fLeap;
+ fDut=t.fDut;
+ fTmjd=t.fTmjd;
+ fTsec=t.fTsec;
+ fTns=t.fTns;
+ fTps=t.fTps;
+ fUTCdata=0;
+ TTree* tx=t.fUTCdata;
+ if (tx) fUTCdata=(TTree*)tx->Clone();
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Date(Int_t mode,Double_t offset)
@@ -249,11 +394,11 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 // Print date/time info.
 //
 // mode = 1 ==> Only the UT yy-mm-dd hh:mm:ss.sss and GMST info is printed
-//        2 ==> Only the Julian parameter info is printed
-//        3 ==> Both the UT, GMST and Julian parameter info is printed
-//        4 ==> Only the TAI info is printed
+//        2 ==> Only the Julian parameter info (incl. TAI MJD, if available) is printed
+//        3 ==> Both the UT, GMST and Julian parameter info (incl. TAI MJD, if available) is printed
+//        4 ==> Only the UTC and TAI related date/time is printed
 //       -1 ==> Only the UT yy-mm-dd hh:mm:ss.sss and GAST info is printed
-//       -3 ==> Both the UT, GAST and Julian parameter info is printed
+//       -3 ==> Both the UT, GAST and Julian parameter info (incl. TAI MJD, if available) is printed
 //
 // offset : Local time offset from UT (and also GMST) in fractional hours.
 //
@@ -275,6 +420,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
  Int_t hh,mm,ss,ns,ps;
  Double_t gast;
  
+ // The UT date and time
  if (abs(mode)==1 || abs(mode)==3)
  {
   if (mjd>=40587 && (mjd<65442 || (mjd==65442 && mjsec<8047)))
@@ -292,6 +438,8 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
   cout << setfill('0') << setw(2) << hh << ":"
        << setw(2) << mm << ":" << setw(2) << ss << "."
        << setw(9) << ns << setw(3) << ps << " (UT)  ";
+
+  // The Siderial time information
   if (mode>0)
   {
    GetGMST(hh,mm,ss,ns,ps);
@@ -354,6 +502,8 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
    }
   }
  }
+
+ // Julian parameter information
  if (abs(mode)==2 || abs(mode)==3)
  {
   Int_t jd,jsec,jns;
@@ -368,13 +518,66 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
        << " Fractional : " << setprecision(25) << GetMJD() << endl;
   cout << " TJD : " << tjd << "  sec : " << tjsec << " ns : " << tjns << " ps : " << fJps
        << " Fractional : " << setprecision(25) << GetTJD() << endl;
+  if (fUtc)
+  {
+   cout << " TAI : " << fTmjd << "  sec : " << fTsec << " ns : " << fTns << " ps : " << fTps
+        << " Fractional : " << setprecision(25) << GetTAI() << endl;
+  }
  }
- if (mode==4)
+
+ // TAI related information
+ if (mode==4 && fUtc)
  {
-  Int_t d,sec,ns;
-  GetTAI(d,sec,ns);
-  cout << " TAI : " << d << "  sec : " << sec << " ns : " << ns << " ps : " << fJps
-       << " Fractional : " << setprecision(25) << GetTAI() << endl;
+  cout << " Cumulated (TAI-UTC) leap seconds: " << setfill(' ') << setw(3) << fLeap 
+       << " UT-UTC : " << setprecision(6) << fDut << " sec.";
+  if (fUtc<0) cout << " (IERS database)" << endl;
+  if (fUtc>0) cout << " (Manual setting)" << endl;
+ 
+  // A dummy timestamp is used to obtain the TAI corresponding date indicator
+  NcTimestamp tx;
+  tx.SetMJD(fTmjd,fTsec,fTns,fTps);
+  Int_t timeonly=0;
+  if (fTmjd>=40587 && (fTmjd<65442 || (fTmjd==65442 && fTsec<8047)))
+  {
+   tx.GetDate(kTRUE,0,&y,&m,&d);
+   wd=tx.GetDayOfWeek(kTRUE,0);
+   cout << " " << day[wd-1].Data() << ", " << setfill('0') << setw(2) << d << " "
+        << setfill(' ') << month[m-1].Data() << " " << y << " ";
+  }
+  else
+  {
+    timeonly=1;
+    cout << " Time ";
+  }
+
+  // Determine the TAI derived times
+  GetTAI(hh,mm,ss,ns,ps,"TAI");
+  cout << setfill('0') << setw(2) << hh << ":"
+       << setw(2) << mm << ":" << setw(2) << ss << "."
+       << setw(9) << ns << setw(3) << ps << " (TAI) ";
+
+  GetTAI(hh,mm,ss,ns,ps,"UTC");
+  cout << setfill('0') << setw(2) << hh << ":"
+       << setw(2) << mm << ":" << setw(2) << ss << "."
+       << setw(9) << ns << setw(3) << ps << " (UTC)" << endl;
+
+  GetTAI(hh,mm,ss,ns,ps,"GPS");
+  if (timeonly)
+  {
+    cout << " Time ";
+  }
+  else
+  {
+   cout << "                  ";
+  }
+  cout << setfill('0') << setw(2) << hh << ":"
+       << setw(2) << mm << ":" << setw(2) << ss << "."
+       << setw(9) << ns << setw(3) << ps << " (GPS) ";
+
+  GetTAI(hh,mm,ss,ns,ps,"TT");
+  cout << setfill('0') << setw(2) << hh << ":"
+       << setw(2) << mm << ":" << setw(2) << ss << "."
+       << setw(9) << ns << setw(3) << ps << " (TT)" << endl;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -885,38 +1088,132 @@ Double_t NcTimestamp::GetTJD()
  return date;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::GetTAI(Int_t& d,Int_t& sec,Int_t& ns)
+Int_t NcTimestamp::GetTAI(Int_t& d,Int_t& sec,Int_t& ns,Int_t& ps,Bool_t tmjd)
 {
-// Provide the TAI date and time corresponding to the
-// currently stored NcTimestamp date/time parameters.
+// Provide the TAI day count and time corresponding to the currently stored
+// NcTimestamp date/time parameters.
+// The return value indicates whether the TAI and UTC parameters were actually
+// set manually (1), automatically (-1) or not (0).
+// In the latter case only UT time recording is available.
 //
-// The returned arguments represent the following :
-// d   : The number of TAI days elapsed
-// sec : The number of seconds elapsed within the TAI day.
-// ns  : The remaining fractional number of seconds (in ns) elapsed within the TAI day.
+// The (returned) arguments represent the following :
+// d    : The number of TAI days elapsed.
+// sec  : The number of seconds elapsed within the TAI day.
+// ns   : The remaining fractional number of seconds (in ns) elapsed within the TAI day.
+// ps   : The remaining fractional number of nanoseconds (in picoseconds) elapsed within the TAI day.
+// tmjd : kTRUE  ==> Provide the MJD equivalent TAI day count.
+//        kFALSE ==> Count the elapsed days since the TAI start epoch 01-jan-1958 00:00:00 UT (MJD=36204).
+//
+// The default value is mjd=kTRUE.
+//
+// Notes :
+// -------
+// 1) In case TAI recording was not activated, all returned values will be zero.
+// 2) In case tmjd=kFALSE and the current timestamp lies before the TAI start epoch,
+//    a negative day count is returned.
 
- Int_t mjd=0;
- GetMJD(mjd,sec,ns);
+ // Make sure to have the updated parameters
+ GetMJD(d,sec,ns);
+ FillTAI();
 
- d=mjd-43144;
+ d=0;
+ sec=0;
+ ns=0;
+ ps=0;
+
+ if (!fUtc) return 0;
+
+ d=fTmjd;
+ sec=fTsec;
+ ns=fTns;
+ ps=fTps;
+
+ if (!tmjd) d-=36204;
+
+ return fUtc;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcTimestamp::GetTAI()
+Double_t NcTimestamp::GetTAI(Bool_t tmjd)
 {
 // Provide the (fractional) number of elapsed TAI days corresponding to the
 // currently stored NcTimestamp date/time parameters.
 //
 // Due to computer accuracy the ns precision may be lost.
-// It is advised to use the (d,sec,ns) getter instead.
+// It is advised to use the (d,sec,ns,ps) getter instead.
+//
+// The input argument :
+// tmjd : kTRUE  ==> Provide the MJD equivalent TAI day count.
+//        kFALSE ==> Count the elapsed days since the TAI start epoch 01-jan-1958 00:00:00 UT (MJD=36204).
+//
+// The default value is tmjd=kTRUE.
+//
+// Notes :
+// -------
+// 1) In case TAI recording was not activated, the value 0 will be returned.
+// 2) In case tmjd=kFALSE and the current timestamp lies before the TAI start epoch,
+//    a negative value is returned.
+
+ if (!fUtc) return 0;
 
  Int_t d=0;
- Int_t sec=0;
+ Int_t s=0;
  Int_t ns=0;
- GetTAI(d,sec,ns);
+ Int_t ps=0;
+ GetTAI(d,s,ns,ps,tmjd);
 
- Double_t date=Convert(d,sec,ns);
+ Double_t days=Convert(d,s,ns);
 
- return date;
+ return days;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TString type)
+{
+// Provide the corrresponding TAI time as hh:mm:ss:ns:ps.
+// The return value indicates whether the TAI and UTC parameters were actually
+// set manually (1), automatically (-1) or not (0).
+// In the latter case only UT time recording is available.
+//
+// The "type" input argument represents the following :
+// type : TAI ==> Time provided is the International Atomic Time
+//        UTC ==> Time provided is the Coordinated Universal Time
+//        GPS ==> Time provided is the Global Positioning System time
+//        TT  ==> Time provided is the Terrestrial Time
+//
+// The default value is type="TAI".
+//
+// Notes :
+// -------
+// 1) In case TAI recording was not activated or the specified "type" is unknown,
+//    all returned values will be zero.
+// 3) This facility is based on the TAI day count, so the TTimeStamp limitations
+//    do not apply here.
+
+ hh=0;
+ mm=0;
+ ss=0;
+ ns=0;
+ ps=0;
+
+ if (type!="TAI" && type!="UTC" && type!="GPS" && type!="TT") return 0;
+
+ Int_t d,sec,nsec,psec;
+
+ // Use a dummy timestamp to easily correct for the various offsets
+ NcTimestamp tx=(*this);
+ if (type=="UTC") tx.Add(0,-fLeap,0,0);
+ if (type=="GPS") tx.Add(0,-19,0,0);
+ if (type=="TT") tx.Add(0,32,184000000,0);
+
+ tx.GetTAI(d,sec,nsec,psec);
+
+ hh=sec/3600;
+ sec=sec%3600;
+ mm=sec/60;
+ ss=sec%60;
+ ns=nsec;
+ ps=psec;
+
+ return fUtc;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::GetJD(Int_t& jd,Int_t& sec,Int_t& ns)
@@ -979,10 +1276,14 @@ Double_t NcTimestamp::GetBE()
  return be;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps)
+void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
 // Set the Modified Julian Date (MJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the MJD setting.
 //
 // Note :
 // ------
@@ -1003,17 +1304,46 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps)
 // do not match the Julian parameters of NcTimestamp.  
 //
 // The input arguments represent the following :
-// mjd : The modified Julian date.
-// sec : The number of seconds elapsed within the MJD.
-// ns  : The remaining fractional number of seconds (in ns) elapsed within the MJD.
-// ps  : The remaining fractional number of nanoseconds (in ps) elapsed within the MJD.
+// mjd  : The modified Julian date.
+// sec  : The number of seconds elapsed within the MJD.
+// ns   : The remaining fractional number of seconds (in ns) elapsed within the MJD.
+// ps   : The remaining fractional number of nanoseconds (in ps) elapsed within the MJD.
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
 //
-// Note : ps=0 is the default value.
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The defaults are ps=0, utc="A", leap=0 and dut=0.
 
  if (sec<0 || sec>=24*3600 || ns<0 || ns>=1e9 || ps<0 || ps>=1000)
  {
   cout << " *NcTimestamp::SetMJD* Invalid input."
-       << " sec : " << sec << " ns : " << ns << endl; 
+       << " sec : " << sec << " ns : " << ns << " ps : " << ps << endl; 
   return;
  }
 
@@ -1051,12 +1381,19 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps)
  // earlier times.
  fCalcs=GetSec();
  fCalcns=GetNanoSec();
+
+ // Update the UTC parameters and corresonding TAI time recording
+ SetUTCparameters(utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetMJD(Double_t mjd)
+void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 {
 // Set the Modified Julian Date (MJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the MJD setting.
 //
 // Note :
 // ------
@@ -1079,20 +1416,55 @@ void NcTimestamp::SetMJD(Double_t mjd)
 // Due to computer accuracy the ns precision may be lost.
 // It is advised to use the (mjd,sec,ns) setting instead.
 //
-// The input argument represents the following :
-// mjd : The modified Julian date as fractional day count.
+// The input arguments represent the following :
+// mjd  : The modified Julian date as fractional day count.
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 
  Int_t days=0;
  Int_t secs=0;
  Int_t ns=0;
  Convert(mjd,days,secs,ns);
- SetMJD(days,secs,ns);
+ SetMJD(days,secs,ns,0,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps)
+void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
 // Set the Julian Date (JD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the JD setting.
 //
 // Note :
 // ------
@@ -1113,12 +1485,41 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps)
 // do not match the Julian parameters of NcTimestamp.  
 //
 // The input arguments represent the following :
-// jd  : The Julian date.
-// sec : The number of seconds elapsed within the JD.
-// ns  : The remaining fractional number of seconds (in ns) elapsed within the JD.
-// ps  : The remaining fractional number of nanoseconds (in ps) elapsed within the JD.
+// jd   : The Julian date.
+// sec  : The number of seconds elapsed within the JD.
+// ns   : The remaining fractional number of seconds (in ns) elapsed within the JD.
+// ps   : The remaining fractional number of nanoseconds (in ps) elapsed within the JD.
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
 //
-// Note : ps=0 is the default value.
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are ps=0, utc="A", leap=0 and dut=0.
 
  Int_t mjd=jd-2400000;
  sec-=12*3600;
@@ -1128,13 +1529,17 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps)
   mjd-=1;
  }
 
- SetMJD(mjd,sec,ns,ps);
+ SetMJD(mjd,sec,ns,ps,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetJD(Double_t jd)
+void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 {
 // Set the Julian Date (JD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the JD setting.
 //
 // Note :
 // ------
@@ -1157,21 +1562,56 @@ void NcTimestamp::SetJD(Double_t jd)
 // Due to computer accuracy the ns precision may be lost.
 // It is advised to use the (jd,sec,ns) setting instead.
 //
-// The input argument represents the following :
-// jd : The Julian date as fractional day count.
+// The input arguments represent the following :
+// jd   : The Julian date as fractional day count.
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 
  Int_t days=0;
  Int_t secs=0;
  Int_t ns=0;
  Convert(jd,days,secs,ns);
 
- SetJD(days,secs,ns);
+ SetJD(days,secs,ns,0,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps)
+void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
 // Set the Truncated Julian Date (TJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the TJD setting.
 //
 // Note :
 // ------
@@ -1192,22 +1632,55 @@ void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps)
 // do not match the Julian parameters of NcTimestamp.  
 //
 // The input arguments represent the following :
-// tjd : The Truncated Julian date.
-// sec : The number of seconds elapsed within the JD.
-// ns  : The remaining fractional number of seconds (in ns) elapsed within the JD.
-// ps  : The remaining fractional number of nanoseconds (in ps) elapsed within the JD.
+// tjd  : The Truncated Julian date.
+// sec  : The number of seconds elapsed within the JD.
+// ns   : The remaining fractional number of seconds (in ns) elapsed within the JD.
+// ps   : The remaining fractional number of nanoseconds (in ps) elapsed within the JD.
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
 //
-// Note : ps=0 is the default value.
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are ps=0, utc="A", leap=0 and dut=0.
 
  Int_t mjd=tjd+40000;
 
- SetMJD(mjd,sec,ns,ps);
+ SetMJD(mjd,sec,ns,ps,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetTJD(Double_t tjd)
+void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 {
 // Set the Truncated Julian Date (TJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the TJD setting.
 //
 // Note :
 // ------
@@ -1230,88 +1703,482 @@ void NcTimestamp::SetTJD(Double_t tjd)
 // Due to computer accuracy the ns precision may be lost.
 // It is advised to use the (jd,sec,ns) setting instead.
 //
-// The input argument represents the following :
-// tjd : The Truncated Julian date as fractional day count.
+// The input arguments represent the following :
+// tjd  : The Truncated Julian date as fractional day count.
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0, dut=0.
 
  Int_t days=0;
  Int_t secs=0;
  Int_t ns=0;
  Convert(tjd,days,secs,ns);
 
- SetTJD(days,secs,ns);
+ SetTJD(days,secs,ns,0,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps)
+void NcTimestamp::FillTAI()
 {
-// Set the International Atomic Time (TAI) date and time and update the TTimeStamp
-// parameters accordingly (if possible).
-//
-// Note :
-// ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
-// which corresponds to JD=2440587.5 or the start of TAI=-2557.
-// Using the corresponding TAI of this EPOCH allows construction of
-// the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input TAI day and time.
-// Obviously this TTimeStamp implementation would prevent usage of values
-// smaller than TAI=-2557.
-// Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
-// However, this NcTimestamp facility provides support for the full range
-// of TAI values, but the setting of the corresponding TTimeStamp parameters
-// is restricted to the values allowed by the TTimeStamp implementation.
-// For these earlier/later TAI values, the standard TTimeStamp parameters will
-// be set corresponding to the start of the TTimeStamp EPOCH.  
-// This implies that for these earlier/later TAI values the TTimeStamp parameters
-// do not match the TAI c.q. Julian parameters of NcTimestamp.  
+// Internal memberfunction to calculate and set the TAI day count parameters
+// corresponding to the current NcTimestamp parameters.
+// A separate MJD counting system is recorded for the TAI timing system. 
+
+ if (!fUtc)
+ {
+  fTmjd=0;
+  fTsec=0;
+  fTns=0;
+  fTps=0;
+  return;
+ }
+
+ // Use memberfunction to ensure most recent values 
+ GetMJD(fTmjd,fTsec,fTns);
+ fTps=GetPs();
+
+ // Dummy timestamp to easily obtain TAI based day etc. counts
+ // It is essential not to use UTC parameters here in order to prevent an infinite loop
+ NcTimestamp tx;
+ tx.SetMJD(fTmjd,fTsec,fTns,fTps,"N");
+
+ tx.Add(0,fLeap,0,0); // Account for the leap seconds
+ tx.AddSec(-fDut);    // Account for dUT=UT-UTC
+
+ // Retrieve the corresponding TAI day etc. count
+ tx.GetMJD(fTmjd,fTsec,fTns);
+ fTps=tx.GetPs();
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::SetTAI(TString type,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut)
+{
+// Set the NcTimestamp parameters corresponding to the specified TAI based date and time
+// in the Gregorian calendar as specified by the input arguments.
+// Based on the specified accumulated number of Leap Seconds ("leap") and the UT-UTC value ("dut")
+// also the UT will be set.
+// The return value indicates whether the date/time and UTC parameters are actually
+// set Manually (1), Automatically (-1) or Failed (0).
+// Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
+// For a guaranteed picosecond precision please refer to the other SetTAI() or SetUT() memberfunctions.
 //
 // The input arguments represent the following :
-// d   : The TAI day count.
-// sec : The number of seconds elapsed within the TAI day.
-// ns  : The remaining fractional number of seconds (in ns) elapsed within the TAI day.
-// ps  : The remaining fractional number of nanoseconds (in ps) elapsed within the TAI day.
+// type : UTC ==> Date/time provided by the Coordinated Universal Time broadcast
+//        GPS ==> Date/time provided by the Global Positioning System broadcast
+//        TAI ==> Date/time provided by the International Atomic Time recording
+//        TT  ==> Date/time provided by the Terrestrial Time recording
+// date : The date in the format dd-mm-yyyy or dd/mm/yyyy or ddmmyyyy (mode=0)
+// date : The date in the format yyyy-mm-dd or yyyy/mm/dd or yyyymmdd (mode=1)
+// date : The date in the format mm-dd-yyyy or mm/dd/yyyy or mmddyyyy (mode=2)
+// date : The date in the format yyyy-dd-mm or yyyy/dd/mm or yyyyddmm (mode=3)
+// time : The time in the format hh:mm:ss.sss
+// mode : Date format specifier (see above)
+// utc  : Flag to denote which UTC parameter values "leap" and "dut" (see below) should be used.
+//        "M" ==> Manually provided UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatically provided UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
 //
-// Note : ps=0 is the default value.
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// The default value is dut=0, but if <1 sec precision is required, the actual dut value should be provided.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+//    Also JD=0 will be set to indicate that something went wrong.
+//    The same holds in case utc="A" and no data files have been loaded, or no
+//    IERS information for the provided date/time is available.
+// 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
+// 3) In case a date/time setting outside the range of the IERS information is required,
+//    the manual setting of "leap" and "dut" has to be invoked.  
 
- Int_t mjd=d+43144;
+ Int_t ibad=0;
 
- SetMJD(mjd,sec,ns,ps);
+ if (type!="UTC" && type!="GPS" && type!="TAI" && type!="TT") ibad=1;
+
+ if (utc!="M" && utc!="A") ibad=1;
+
+ if (utc=="M" && fabs(dut)>0.9) ibad=1;
+
+ if (utc=="A" && !fUTCdata) ibad=1;
+
+ // In case utc="A" check whether the corresponding IERS database info is available
+ if (utc=="A")
+ {
+  NcTimestamp tx; // Dummy timestamp for easy MJD retrieval
+  tx.SetUT(date,time,mode);
+  Int_t ien=GetUTCparameters(tx.fMJD,leap,dut);
+  if (ien<0) ibad=1;
+ }
+
+ if (ibad)
+ {
+  SetJD(0,"N");
+  return fUtc;
+ }
+
+ SetUT(date,time,mode,utc,leap,dut);
+ if (type != "UTC") Add(0,-fLeap,0,0);      // Account for the leap seconds
+ if (type == "GPS") Add(0,19,0,0);          // Account for TAI-GPS=19 sec.
+ if (type == "TT") Add(0,-32,-184000000,0); // Account for TAI-TT=-32.184 sec.
+ AddSec(fDut); // Account for dUT=UT-UTC
+
+ return fUtc;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetTAI(Double_t tai)
+Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Bool_t tmjd)
 {
 // Set the International Atomic Time (TAI) date and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// The return value indicates whether the date/time and UTC parameters are actually
+// set Manually (1), Automatically (-1) or Failed (0).
 //
-// Note :
-// ------
-// The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
-// which corresponds to JD=2440587.5 or the start of TAI=-2557.
-// Using the corresponding TAI of this EPOCH allows construction of
-// the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input TAI day and time.
-// Obviously this TTimeStamp implementation would prevent usage of values
-// smaller than TAI=-2557.
-// Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
-// However, this NcTimestamp facility provides support for the full range
-// of TAI values, but the setting of the corresponding TTimeStamp parameters
-// is restricted to the values allowed by the TTimeStamp implementation.
-// For these earlier/later TAI values, the standard TTimeStamp parameters will
-// be set corresponding to the start of the TTimeStamp EPOCH.  
-// This implies that for these earlier/later TAI values the TTimeStamp parameters
-// do not match the TAI c.q. Julian parameters of NcTimestamp.  
+// The input arguments represent the following :
+// d    : The TAI day count according to the specified "tmjd" parameter (see below).
+// sec  : The number of seconds elapsed within the TAI day.
+// ns   : The remaining fractional number of seconds (in ns) elapsed within the TAI day.
+// ps   : The remaining fractional number of nanoseconds (in ps) elapsed within the TAI day.
+// utc  : Flag to denote which UTC parameter values "leap" and "dut" (see below) should be used.
+//        "M" ==> Manually provided UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatically provided UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+// tmjd : kTRUE  ==> The MJD equivalent TAI day count.
+//        kFALSE ==> The TAI day count since the TAI start epoch 01-jan-1958 00:00:00 UT (MJD=36204).
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// The default values are dut=0 and tmjd=kFALSE.
+// However, if <1 sec precision is required, the actual dut value should be provided.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+//    Also JD=0 will be set to indicate that something went wrong.
+//    The same holds in case utc="A" and no data files have been loaded, or no
+//    IERS information for the provided date/time is available.
+// 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
+// 3) In case a date/time setting outside the range of the IERS information is required,
+//    the manual setting of "leap" and "dut" has to be invoked.  
+// 4) The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
+//    which corresponds to JD=2440587.5 (i.e. the start of MJD=40587) or the
+//    start of TAI=4383 w.r.t. the TAI start epoch 01-jan-1958 00:00:00 UT.
+//    Using the corresponding TAI of this EPOCH allows construction of
+//    the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input TAI day and time.
+//    Obviously this TTimeStamp implementation would prevent usage of values
+//    smaller than TAI=4383 for tmjd=kFALSE or TAI=40587 for tmjd=kTRUE.
+//    Furthermore, due to a limitation on the "seconds since the EPOCH start" count
+//    in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+//    However, this NcTimestamp facility provides support for the full range
+//    of TAI values, but the setting of the corresponding TTimeStamp parameters
+//    is restricted to the values allowed by the TTimeStamp implementation.
+//    For these earlier/later TAI values, the standard TTimeStamp parameters will
+//    be set corresponding to the start of the TTimeStamp EPOCH.  
+//    This implies that for these earlier/later TAI values the TTimeStamp parameters
+//    do not match the TAI c.q. Julian parameters of NcTimestamp.  
+
+ Int_t ibad=0;
+
+ if (sec<0 || sec>86400 || ns<0 || ns>999999999 || ps<0 || ps>999) ibad=1;
+
+ if (utc!="M" && utc!="A") ibad=1;
+
+ if (utc=="M" && fabs(dut)>0.9) ibad=1;
+
+ if (utc=="A" && !fUTCdata) ibad=1;
+
+ // Set the corresponding MJD
+ Int_t mjd=d;
+ if (!tmjd) mjd+=36204;
+
+ // In case utc="A" check whether the corresponding IERS database info is available
+ if (utc=="A")
+ {
+  Int_t ien=GetUTCparameters(mjd,leap,dut);
+  if (ien<0) ibad=1;
+ }
+
+ if (ibad)
+ {
+  SetJD(0,"N");
+  return fUtc;
+ }
+
+ SetMJD(mjd,sec,ns,ps,utc,leap,dut);
+ Add(0,-fLeap,0,0); // Account for the leap seconds
+ AddSec(fDut);      // Account for dUT=UT-UTC
+
+ // Set the corresponding TAI day count etc.
+ FillTAI();
+
+ return fUtc;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_t tmjd)
+{
+// Set the International Atomic Time (TAI) date and time and update the TTimeStamp
+// parameters accordingly (if possible).
+// The return value indicates whether the date/time and UTC parameters are actually
+// set Manually (1), Automatically (-1) or Failed (0).
 //
 // Due to computer accuracy the ns precision may be lost.
-// It is advised to use the (d,sec,ns) setting instead.
+// It is advised to use the (d,sec,ns,ps) setting instead.
 //
-// The input argument represents the following :
-// tai : The TAI fractional day count.
+// The input arguments represent the following :
+// tai  : The TAI fractional day count according to the specified "tmjd" parameter (see below).
+// utc  : Flag to denote which UTC parameter values "leap" and "dut" (see below) should be used.
+//        "M" ==> Manually provided UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatically provided UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+// tmjd : kTRUE  ==> The MJD equivalent TAI day count.
+//        kFALSE ==> The TAI day count since the TAI start epoch 01-jan-1958 00:00:00 UT (MJD=36204).
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// The default values are dut=0 and tmjd=kFALSE.
+// However, if <1 sec precision is required, the actual dut value should be provided.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+//    Also JD=0 will be set to indicate that something went wrong.
+//    The same holds in case utc="A" and no data files have been loaded, or no
+//    IERS information for the provided date/time is available.
+// 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
+// 3) In case a date/time setting outside the range of the IERS information is required,
+//    the manual setting of "leap" and "dut" has to be invoked.  
+// 4) The TTimeStamp EPOCH starts at 01-jan-1970 00:00:00 UT
+//    which corresponds to JD=2440587.5 (i.e. the start of MJD=40587) or the
+//    start of TAI=4383 w.r.t. the TAI start epoch 01-jan-1958 00:00:00 UT.
+//    Using the corresponding TAI of this EPOCH allows construction of
+//    the yy-mm-dd hh:mm:ss:ns TTimeStamp from a given input TAI day and time.
+//    Obviously this TTimeStamp implementation would prevent usage of values
+//    smaller than TAI=4383 for tmjd=kFALSE or TAI=40587 for tmjd=kTRUE.
+//    Furthermore, due to a limitation on the "seconds since the EPOCH start" count
+//    in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+//    However, this NcTimestamp facility provides support for the full range
+//    of TAI values, but the setting of the corresponding TTimeStamp parameters
+//    is restricted to the values allowed by the TTimeStamp implementation.
+//    For these earlier/later TAI values, the standard TTimeStamp parameters will
+//    be set corresponding to the start of the TTimeStamp EPOCH.  
+//    This implies that for these earlier/later TAI values the TTimeStamp parameters
+//    do not match the TAI c.q. Julian parameters of NcTimestamp.  
 
  Int_t days=0;
  Int_t secs=0;
  Int_t ns=0;
  Convert(tai,days,secs,ns);
 
- SetTAI(days,secs,ns);
+ SetTAI(days,secs,ns,0,utc,leap,dut,tmjd);
+
+ return fUtc;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::SetGPS(Int_t w,Int_t sow,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Int_t icycle)
+{
+// Set the date and time from Global Positioning System (GPS) broadcast data.
+// The return value indicates whether the date/time and UTC parameters are actually
+// set Manually (1), Automatically (-1) or Failed (0).
+//
+// The input arguments represent the following :
+// ---------------------------------------------
+// w      : The GPS week count since the GPS epoch start at 06-jan-1980 00:00:00 UTC which
+//          corresponds to 06-jan-1980 00:00:19 TAI representing a TAI day count of 8040.
+//          1 week corresponds to 7 days.
+// sow    : The number of seconds elapsed within the GPS week (Seconds Of Week).
+// ns     : The remaining fractional number of seconds (in ns) elapsed within the GPS week.
+// ps     : The remaining fractional number of nanoseconds (in ps) elapsed within the GPS week.
+// utc    : Flag to denote which UTC parameter values "leap" and "dut" (see below) should be used.
+//          "M" ==> Manually provided UTC parameters as specified by "leap" and "dut".
+//          "A" ==> Automatically provided UTC parameters from the loaded IERS data files.
+//                  In this case the specified values of "leap" and "dut" are irrelevant.
+//                  For further details see the memberfunction SetUTCparameters().
+// leap   : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut    : The monitored time difference UT-UTC in seconds.
+// icycle : The GPS cycle count (to support previous GPS broadcasts).
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// In older GPS clock implementations the week count was reset after 1024 weeks,
+// which was called a "cycle", and the cycle count was increased by 1.
+// So, week=2030 and icycle=0 is equivalent with week=1006 and icycle=1. 
+//
+// The default values are dut=0 and icycle=0.
+// However, if <1 sec precision is required, the actual dut value should be provided.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the GPS (i.e. TAI) related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+//    Also JD=0 will be set to indicate that something went wrong.
+//    The same holds in case utc="A" and no data files have been loaded, or no
+//    IERS information for the provided date/time is available.
+// 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
+// 3) In case a date/time setting outside the range of the IERS information is required,
+//    the manual setting of "leap" and "dut" has to be invoked.  
+
+ if (w<0 || sow<0 || sow>604800 || ns<0 || ns>999999999 || ps<0 || ps>999 || icycle<0)
+ {
+  SetJD(0,"N");
+  return fUtc;
+ }
+
+ // Correct the week count for the cycle number if needed
+ if (icycle) w+=icycle*1024;
+
+ Int_t days=8040+w*7;
+ sow+=19;
+ Int_t daysecs=24*3600;
+ Int_t days2=sow/daysecs;
+ days+=days2;
+ Int_t secs=sow%daysecs;
+
+ SetTAI(days,secs,ns,ps,utc,leap,dut);
+
+ return fUtc;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Int_t icycle)
+{
+// Set the date and time from Global Positioning System (GPS) broadcast data.
+// The return value indicates whether the date/time and UTC parameters are actually
+// set Manually (1), Automatically (-1) or Failed (0).
+//
+// The input arguments represent the following :
+// ---------------------------------------------
+// w      : The GPS week count since the GPS epoch start at 06-jan-1980 00:00:00 UTC which
+//          corresponds to 06-jan-1980 00:00:19 TAI representing a TAI day count of 8040.
+//          1 week corresponds to 7 days.
+// dow    : The day count within the GPS week (Day Of Week).
+// sod    : The number of seconds elapsed within the GPS day (Seconds Of Day).
+// ns     : The remaining fractional number of seconds (in ns) elapsed within the GPS day.
+// ps     : The remaining fractional number of nanoseconds (in ps) elapsed within the GPS day.
+// utc    : Flag to denote which UTC parameter values "leap" and "dut" (see below) should be used.
+//          "M" ==> Manually provided UTC parameters as specified by "leap" and "dut".
+//          "A" ==> Automatically provided UTC parameters from the loaded IERS data files.
+//                  In this case the specified values of "leap" and "dut" are irrelevant.
+//                  For further details see the memberfunction SetUTCparameters().
+// leap   : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut    : The monitored time difference UT-UTC in seconds.
+// icycle : The GPS cycle count (to support previous GPS broadcasts).
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// In older GPS clock implementations the week count was reset after 1024 weeks,
+// which was called a "cycle", and the cycle count was increased by 1.
+// So, week=2030 and icycle=0 is equivalent with week=1006 and icycle=1. 
+//
+// The default values are dut=0 and icycle=0.
+// However, if <1 sec precision is required, the actual dut value should be provided.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the GPS (i.e. TAI) related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+//    Also JD=0 will be set to indicate that something went wrong.
+//    The same holds in case utc="A" and no data files have been loaded, or no
+//    IERS information for the provided date/time is available.
+// 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
+// 3) In case a date/time setting outside the range of the IERS information is required,
+//    the manual setting of "leap" and "dut" has to be invoked.  
+
+ if (w<0 || dow<0 || dow>7 || sod<0 || sod>86400 || ns<0 || ns>999999999 || ps<0 || ps>999 || icycle<0)
+ {
+  SetJD(0,"N");
+  return fUtc;
+ }
+
+ // Correct the week count for the cycle number if needed
+ if (icycle) w+=icycle*1024;
+
+ Int_t days=8040+w*7+dow;
+ sod+=19;
+
+ SetTAI(days,sod,ns,ps,utc,leap,dut);
+
+ return fUtc;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetNs(Int_t ns)
@@ -1319,12 +2186,12 @@ void NcTimestamp::SetNs(Int_t ns)
 // Set the remaining fractional number of seconds in nanosecond precision.
 // Notes :
 // -------
-// 1) The allowed range for the argument "ns" is [0,99999999].
+// 1) The allowed range for the argument "ns" is [0,999999999].
 //    Outside that range no action is performed.
 // 2) The ns fraction can also be entered directly via SetMJD() etc...
 // 3) For additional accuracy see SetPs().
 
- if (ns>=0 && ns<=99999999) fJns=ns; 
+ if (ns>=0 && ns<=999999999) fJns=ns; 
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetNs() const
@@ -1358,10 +2225,350 @@ Int_t NcTimestamp::GetPs() const
  return fJps; 
 }
 ///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::GetUTCparameters(Int_t& leap,Double_t& dut) const
+{
+// Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC).
+// The return value indicates whether the UTC parameters were actually
+// set manually (1), automatically (-1) or not (0).
+// In the latter case only UT time recording is available.
+
+ leap=fLeap;
+ dut=fDut;
+
+ return fUtc; 
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::GetUTCparameters(Int_t mjd,Int_t& leap,Double_t& dut) const
+{
+// Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
+// from the daily IERS data for the specified MJD.
+// The return value indicates the entry (0=first) in the IERS data TTree at which
+// the corresponding data was stored.
+// In case the corresponding data could not be found, the return value is -1
+// and "leap" and "dut" are set to 0.
+
+ leap=0;
+ dut=0;
+
+ if (!fUTCdata) return -1;
+
+ Int_t nen=fUTCdata->GetEntries();
+
+ if (!nen) return -1;
+
+ Int_t dbmjd=0;
+ Int_t dbleap=0;
+ Double_t dbdut=0;
+
+ fUTCdata->SetBranchAddress("mjd",&dbmjd);
+ fUTCdata->SetBranchAddress("lsec",&dbleap);
+ fUTCdata->SetBranchAddress("dut",&dbdut);
+
+ // Data of the first entry
+ fUTCdata->GetEntry(0);
+ Int_t ien=mjd-dbmjd;
+
+ if (ien<0 || ien>=nen) return -1; // Specified mjd not in range of database
+
+ fUTCdata->GetEntry(ien);
+ if (dbmjd==mjd) // Specified mjd is found in database
+ {
+  leap=dbleap;
+  dut=dbdut;
+ }
+ else
+ {
+  ien=-1;
+  leap=0;
+  dut=0;
+ }
+
+ return ien;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)
+{
+// Setting of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC).
+// The TAI time recording will also be updated accordingly, but the UT
+// time recording will remain unaffected.
+// The return value indicates whether the UTC parameters are actually
+// set Manually (1), Automatically (-1) or Not (0).
+// In the latter case only UT time recording is available.
+//
+// The input arguments represent the following :
+// ---------------------------------------------
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction LoadUTCparameterFiles().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) Most of the date/time setting memberfunctions support direct setting
+//    of the UTC parameters already.
+// 2) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 3) The case utc="A" with no loaded data files, or no available data for the current MJD,
+//    will be treated as utc="N".
+
+ fUtc=0;
+ fLeap=0;
+ fDut=0;
+
+ Int_t ibad=0;
+
+ if (utc!="N" && utc!="M" && utc!="A") ibad=1;
+
+ if (utc=="N" || (utc=="A" && !fUTCdata)) ibad=1;
+
+ if (utc=="M" && fabs(dut)>0.9) ibad=1;
+
+ if (ibad)
+ {
+  FillTAI();
+  return fUtc;
+ }
+
+ // From here only utc="M" or utc="A"
+
+ if (utc=="M")
+ {
+  fUtc=1;
+  fLeap=leap;
+  fDut=dut;
+
+  FillTAI();
+  return fUtc;
+ }
+
+ // Automatic setting of the UTC parameters from the loaded data files
+ Int_t nen=fUTCdata->GetEntries();
+
+ if (nen<=0) return fUtc; // No entries in the IERS data TTree
+
+ Int_t mjd=0;
+
+ fUTCdata->SetBranchAddress("mjd",&mjd);
+ fUTCdata->SetBranchAddress("lsec",&leap);
+ fUTCdata->SetBranchAddress("dut",&dut);
+
+ // Get the starting mjd of the IERS daily data
+ // and determine the entry for the current MJD info
+ fUTCdata->GetEntry(0);
+ Int_t ien=fMJD-mjd;
+ if (ien>=0 && ien<nen)
+ {
+  fUTCdata->GetEntry(ien);
+  if (mjd==fMJD)
+  {
+   fUtc=-1;
+   fLeap=leap;
+   fDut=dut;
+  }
+ }
+ 
+ FillTAI();
+
+ return fUtc;
+}
+///////////////////////////////////////////////////////////////////////////
+TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
+{
+// Load the IERS data for automatic setting of Leap Seconds and dUT=UT-UTC.
+//
+// Input arguments :
+// -----------------
+// leapfile : The name of a copy of the (most recent) IERS ascii file
+//            https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//            This file contains the archival list of accumulated Leap Seconds.
+// dutfile  : The name of a copy of the (most recent) IERS the ascii file
+//            ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//            This file contains the archival list of the daily dUT=UT-UTC monitoring.
+//
+// The corresponding daily values of the accumulated Leap Seconds and dUT=UT-UTC
+// are stored in an internal ROOT TTree.
+// The return argument provides a pointer to the corresponding TTree to enable
+// the user to investigate or store the corresponding data.
+//
+// The data stored in each TTree entry are the following :
+// Int_t mjd    : The corresponding MJD of the entry.
+// Int_t lsec   : The accumulated leap seconds of the corresponding mjd.
+// Double_t dut : The dUT=UT-UTC value (in seconds) of the corresponding mjd.
+//
+// Accurate daily monitoring dUT=UT-UTC data, with about 10 microsecond precision,
+// is available since MJD=37665 (01-jan-1962 00:00:00).
+// Leap Seconds were introduced into UTC on MJD=41317 (01-jan-1972 00:00:00).
+// For the period MJD=37665 until MJD=41317 the accumulated Leap Second count is set to 0. 
+//
+// Note : In case of an error or inconsistency, no ROOT TTree will be created
+//        and the returned pointer will be zero.
+
+ if (fUTCdata)
+ {
+  delete fUTCdata;
+  fUTCdata=0;
+ }
+
+ // The Leap Second input data file 
+ ifstream fleap;
+ fleap.clear();
+ fleap.open(leapfile.Data());
+ if (!fleap.good())
+ {
+  cout << " *NcTimestamp::LoadUTCparameterFiles* Data file for Leap Seconds not found ***" << endl;
+  cout << " File name provided was : " << leapfile.Data() << endl;
+  return 0;
+ }
+
+ // The dUT=UT-UTC input data file 
+ ifstream fdut;
+ fdut.clear();
+ fdut.open(dutfile.Data());
+ if (!fdut.good())
+ {
+  cout << " *NcTimestamp::LoadUTCparameterFiles* Data file for dUT=UT-UTC not found ***" << endl;
+  cout << " File name provided was : " << dutfile.Data() << endl;
+  return 0;
+ }
+
+ // Determine the number of characters in the Leap Second input file
+ // to reserve sufficient array storage of all Leap Second entries
+ fleap.seekg(0,fleap.end); // Position at end of file
+ Int_t ndim=fleap.tellg();
+
+ // The storage arrays for the Leap second data
+ Int_t* lmjd=new Int_t[ndim];
+ Int_t* leap=new Int_t[ndim];
+
+ ///////////////////////////////
+ // Read the Leap Second data //
+ ///////////////////////////////
+
+ fleap.seekg(0); // Position at begin of file
+
+ // Read title lines until the first data line is found
+ string line;
+ Int_t i=0;
+ while (getline(fleap,line))
+ {
+  if (line.find("1972")!=line.npos) break;
+  i++;
+ }
+
+ // Go to the beginning of the file and skip the title lines preceding the data lines
+ fleap.seekg(0);
+ for (Int_t j=0; j<i; j++)
+ {
+  getline(fleap,line);
+ }
+ 
+ // Read the data
+ Float_t rmjd=0;
+ Int_t lsec=0;
+ Float_t x; // Dummy variable for skipping non-requested data columns
+ i=0;
+ while (fleap >> rmjd >> x >> x >> x >> lsec)
+ {
+  lmjd[i]=int(rmjd);
+  leap[i]=lsec;
+  i++;
+ }
+
+ // The number of actual Leap Second entries
+ Int_t nleap=i;
+
+ /////////////////////////
+ // Read the dUT=UT-UTC //
+ /////////////////////////
+
+ fdut.seekg(0); // Position at begin of file
+
+ // Read title lines until the first data line is found
+ i=0;
+ while (getline(fdut,line))
+ {
+  if (line.find("1962")!=line.npos) break;
+  i++;
+ }
+
+ // Go to the beginning of the file and skip the title lines preceding the data lines
+ fdut.seekg(0);
+ for (Int_t j=0; j<i; j++)
+ {
+  getline(fdut,line);
+ }
+ 
+ // Read the dUT daily data and fill the TTree structure
+ Int_t mjd=0;
+ Double_t dut=0;
+
+ // The produced output structure
+ fUTCdata=new TTree("T","Daily UTC leap second and dUT=UT-UTC parameter data");
+
+ // The output variables for the Tree
+ fUTCdata->Branch("mjd",&mjd,"mjd/I");
+ fUTCdata->Branch("lsec",&lsec,"lsec/I");
+ fUTCdata->Branch("dut",&dut,"dut/D");
+
+ while (fdut >> x >> x >> x >> mjd >> x >> x >> dut >> x >> x >> x >> x >> x >> x >> x >> x >> x)
+ {
+  lsec=0;
+  // Retrieve the corresponding Leap Second info
+  for (Int_t j=nleap-1; j>=0; j--)
+  {
+   if (mjd>=lmjd[j])
+   {
+    lsec=leap[j];
+    break;
+   }
+  }
+  fUTCdata->Fill();
+ }
+
+ delete[] lmjd;
+ delete[] leap; 
+
+ return fUTCdata;
+}
+///////////////////////////////////////////////////////////////////////////
+TTree* NcTimestamp::GetIERSdatabase() const
+{
+// Provide the pointer to the internal IERS database TTree.
+// In case no database TTree exists the pointer value 0 will be returned.
+// For details please refer to the member function LoadUTCparameterFiles().
+
+ return fUTCdata;
+}
+///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps)
 {
 // Add (or subtract) a certain time difference to the current timestamp.
 // Subtraction can be achieved by entering negative values as input arguments.
+//
+// The current settings of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
+// are maintained after the addition (or subtraction) of the time difference.
+// In case the new date/time is so far from the original timestamp that the
+// UTC parameters (if they were set) have to be updated, the user should invoke
+// the memberfunction SetUTCparameters() directly after the invokation of this
+// Add() memberfunction.
 //
 // The time difference is entered via the following input arguments :
 //
@@ -1428,7 +2635,10 @@ void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps)
 
  days+=d;
 
- SetMJD(days,secs,nsec,psec);
+ TString utc="N";
+ if (fUtc==1) utc="M";
+ if (fUtc==-1) utc="A";
+ SetMJD(days,secs,nsec,psec,utc,fLeap,fDut);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Add(Double_t hours)
@@ -1436,6 +2646,16 @@ void NcTimestamp::Add(Double_t hours)
 // Add (or subtract) a certain time difference to the current timestamp.
 // The time difference is specified as a (fractional) number of hours.
 // Subtraction can be achieved by entering a negative value as input argument.
+//
+// Note : For small time differences a better accuracy may be obtained by using
+//        the memberfunction AddSec() or Add(d,s,ns,ps).
+//
+// The current settings of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
+// are maintained after the addition (or subtraction) of the time difference.
+// In case the new date/time is so far from the original timestamp that the
+// UTC parameters (if they were set) have to be updated, the user should invoke
+// the memberfunction SetUTCparameters() directly after the invokation of this
+// Add() memberfunction.
 
  Int_t d,s,ns,ps;
  Double_t h=fabs(hours);
@@ -1452,12 +2672,59 @@ void NcTimestamp::Add(Double_t hours)
  if (hours<0) Add(-d,-s,-ns,-ps);
 }
 ///////////////////////////////////////////////////////////////////////////
-Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t& d,Int_t& s,Int_t& ns,Int_t& ps)
+void NcTimestamp::AddSec(Double_t seconds)
+{
+// Add (or subtract) a certain time difference to the current timestamp.
+// The time difference is specified as a (fractional) number of seconds.
+// Subtraction can be achieved by entering a negative value as input argument.
+//
+// Note : For very small time differences a better accuracy may be obtained by
+//        using the memberfunction Add(d,s,ns,ps).
+//
+// The current settings of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
+// are maintained after the addition (or subtraction) of the time difference.
+// In case the new date/time is so far from the original timestamp that the
+// UTC parameters (if they were set) have to be updated, the user should invoke
+// the memberfunction SetUTCparameters() directly after the invokation of this
+// Add() memberfunction.
+
+ Int_t s,ns,ps;
+ Double_t a=fabs(seconds);
+ s=int(a);
+ a-=double(s);
+ a*=1.e9;
+ ns=int(a);
+ a-=double(ns);
+ ps=int(a*1000.);
+ if (seconds>0) Add(0,s,ns,ps);
+ if (seconds<0) Add(0,-s,-ns,-ps);
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t& d,Int_t& s,Int_t& ns,Int_t& ps,TString type)
 {
 // Provide the time difference w.r.t the NcTimestamp specified on the input.
 // This memberfunction supports both very small (i.e. time of flight analysis
 // for particle physics experiments) and very long (i.e. investigation of
-// astrophysical phenomena) timescales.
+// astrophysical phenomena) time intervals.
+//
+// The input argument "type" allows to specify the time recording system
+// type : "UT"  ==> Time difference is provided according to the UT day counting
+//        "TAI" ==> Time difference is provided according to the TAI day counting
+//
+// Note :
+// ------
+// In case type="TAI" and the TAI recording was not activated for one (or both) of the timestamps,
+// the time difference will be set to 0.
+// The UT recording is always available.
+//
+// The default value is type="UT", which is to be used for accurate astrophysical observations.
+//
+// Full picosecond accuracy is automatically obtained by using the same "type" as with which
+// both the timestamps have been set (i.e. SetTAI() or SetGPS() and using type="TAI" 
+// or via the SetUT() related facilities and using type="UT").
+// Otherwise, the time difference accuracy amounts to the one of dUT=UT-UTC.
+// For timestamps that have the same UTC parameters (i.e. Leap Seconds and dUT=UT-UTC),
+// both the "UT" and "TAI" systems provide the same time difference (within the dUT accuracy).
 //
 // The time difference is returned via the following output arguments :
 // d  : elapsed number of days
@@ -1472,20 +2739,46 @@ Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t& d,Int_t& s,Int_t& ns,Int_
 //
 // The integer return argument indicates whether the NcTimestamp specified
 // on the input argument occurred earlier (-1), simultaneously (0) or later (1).
+//
+// In case of inconsistent input the time difference and the return argument will be set to 0.
 
- if (!t) return 0;
+ d=0;
+ s=0;
+ ns=0;
+ ps=0;
 
- // Ensure updated Julian parameters for this NcTimestamp instance 
- if (fCalcs != GetSec() || fCalcns != GetNanoSec()) FillJulian();
+ if (!t || (type!="UT" && type!="TAI")) return 0;
 
- // Use Get functions to ensure updated Julian parameters. 
- t->GetMJD(d,s,ns);
- ps=t->GetPs();
+ if (type=="TAI" && (!fUtc || !t->fUtc)) return 0;
 
- d-=fMJD;
- s-=fJsec;
- ns-=fJns;
- ps-=fJps;
+ Int_t d1=0;
+ Int_t s1=0;
+ Int_t ns1=0;
+ Int_t ps1=0;
+
+ Int_t d2=0;
+ Int_t s2=0;
+ Int_t ns2=0;
+ Int_t ps2=0;
+
+ // Use Get functions to ensure updated Julian and TAI parameters. 
+ if (type=="UT")
+ {
+  t->GetMJD(d1,s1,ns1);
+  ps1=t->GetPs();
+  GetMJD(d2,s2,ns2);
+  ps2=GetPs();
+ }
+ if (type=="TAI")
+ {
+  t->GetTAI(d1,s1,ns1,ps1);
+  GetTAI(d2,s2,ns2,ps2);
+ }
+
+ d=d1-d2;
+ s=s1-s2;
+ ns=ns1-ns2;
+ ps=ps1-ps2;
 
  if (!d && !s && !ns && !ps) return 0;
 
@@ -1536,12 +2829,31 @@ Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t& d,Int_t& s,Int_t& ns,Int_
  return sign;
 }
 ///////////////////////////////////////////////////////////////////////////
-Int_t NcTimestamp::GetDifference(NcTimestamp& t,Int_t& d,Int_t& s,Int_t& ns,Int_t& ps)
+Int_t NcTimestamp::GetDifference(NcTimestamp& t,Int_t& d,Int_t& s,Int_t& ns,Int_t& ps,TString type)
 {
 // Provide the time difference w.r.t the NcTimestamp specified on the input.
 // This memberfunction supports both very small (i.e. time of flight analysis
 // for particle physics experiments) and very long (i.e. investigation of
-// astrophysical phenomena) timescales.
+// astrophysical phenomena) time intervals.
+//
+// The input argument "type" allows to specify the time recording system
+// type : "UT"  ==> Time difference is provided according to the UT day counting
+//        "TAI" ==> Time difference is provided according to the TAI day counting
+//
+// Note :
+// ------
+// In case type="TAI" and the TAI recording was not activated for one (or both) of the timestamps,
+// the time difference will be set to 0.
+// The UT recording is always available.
+//
+// The default value is type="UT", which is to be used for accurate astrophysical observations.
+//
+// Full picosecond accuracy is automatically obtained by using the same "type" as with which
+// both the timestamps have been set (i.e. SetTAI() or SetGPS() and using type="TAI" 
+// or via the SetUT() related facilities and using type="UT").
+// Otherwise, the time difference accuracy amounts to the one of dUT=UT-UTC.
+// For timestamps that have the same UTC parameters (i.e. Leap Seconds and dUT=UT-UTC),
+// both the "UT" and "TAI" systems provide the same time difference (within the dUT accuracy).
 //
 // The time difference is returned via the following output arguments :
 // d  : elapsed number of days
@@ -1556,18 +2868,39 @@ Int_t NcTimestamp::GetDifference(NcTimestamp& t,Int_t& d,Int_t& s,Int_t& ns,Int_
 //
 // The integer return argument indicates whether the NcTimestamp specified
 // on the input argument occurred earlier (-1), simultaneously (0) or later (1).
+//
+// In case of inconsistent input the time difference and the return argument will be set to 0.
 
- return GetDifference(&t,d,s,ns,ps);
+ return GetDifference(&t,d,s,ns,ps,type);
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode)
+Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode,TString type)
 {
 // Provide the time difference w.r.t the NcTimestamp specified on the input
-// argument in the units as specified by the TString argument.
+// in the units as specified by the TString "u" argument.
 // A positive return value means that the NcTimestamp specified on the input
 // argument occurred later, whereas a negative return value indicates an
 // earlier occurence. 
-//  
+//
+// The input argument "type" allows to specify the time recording system
+// type : "UT"  ==> Time difference is provided according to the UT day counting
+//        "TAI" ==> Time difference is provided according to the TAI day counting
+//
+// Note :
+// ------
+// In case type="TAI" and the TAI recording was not activated for one (or both) of the timestamps,
+// the time difference will be set to 0.
+// The UT recording is always available.
+//
+// The default value is type="UT", which is to be used for accurate astrophysical observations.
+//
+// Full picosecond accuracy is automatically obtained by using the same "type" as with which
+// both the timestamps have been set (i.e. SetTAI() or SetGPS() and using type="TAI" 
+// or via the SetUT() related facilities and using type="UT").
+// Otherwise, the time difference accuracy amounts to the one of dUT=UT-UTC.
+// For timestamps that have the same UTC parameters (i.e. Leap Seconds and dUT=UT-UTC),
+// both the "UT" and "TAI" systems provide the same time difference (within the dUT accuracy).
+//
 // The units may be specified as :
 // u = "d"  ==> Time difference returned as (fractional) day count
 //     "s"  ==> Time difference returned as (fractional) second count
@@ -1600,27 +2933,45 @@ Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode)
 // val=-19                                for u="ns" and mode=3
 //
 // The default is mode=1.
+//
+// In case of inconsistent input the time difference will be set to 0.
 
- if (!t || mode<1 || mode>3) return 0;
+ if (!t || mode<1 || mode>3 || (type!="UT" && type!="TAI")) return 0;
+
+ if (u!="d" && u!="s" && u!="ns" && u!="ps") return 0;
+
+ if (type=="TAI" && (!fUtc || !t->fUtc)) return 0;
 
  Double_t dt=0;
 
- // Ensure updated Julian parameters for this NcTimestamp instance 
- if (fCalcs != GetSec() || fCalcns != GetNanoSec()) FillJulian();
+ Int_t d1=0;
+ Int_t s1=0;
+ Int_t ns1=0;
+ Int_t ps1=0;
 
- Int_t dd=0;
- Int_t ds=0;
- Int_t dns=0;
- Int_t dps=0;
+ Int_t d2=0;
+ Int_t s2=0;
+ Int_t ns2=0;
+ Int_t ps2=0;
 
- // Use Get functions to ensure updated Julian parameters. 
- t->GetMJD(dd,ds,dns);
- dps=t->GetPs();
+ // Use Get functions to ensure updated Julian and TAI parameters. 
+ if (type=="UT")
+ {
+  t->GetMJD(d1,s1,ns1);
+  ps1=t->GetPs();
+  GetMJD(d2,s2,ns2);
+  ps2=GetPs();
+ }
+ if (type=="TAI")
+ {
+  t->GetTAI(d1,s1,ns1,ps1);
+  GetTAI(d2,s2,ns2,ps2);
+ }
 
- dd-=fMJD;
- ds-=fJsec;
- dns-=fJns;
- dps-=fJps;
+ Int_t dd=d1-d2;
+ Int_t ds=s1-s2;
+ Int_t dns=ns1-ns2;
+ Int_t dps=ps1-ps2;
 
  // Time difference for the specified units only
  if (mode==3)
@@ -1662,13 +3013,32 @@ Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode)
  return dt;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcTimestamp::GetDifference(NcTimestamp& t,TString u,Int_t mode)
+Double_t NcTimestamp::GetDifference(NcTimestamp& t,TString u,Int_t mode,TString type)
 {
 // Provide the time difference w.r.t the NcTimestamp specified on the input
-// argument in the units as specified by the TString argument.
+// in the units as specified by the TString "u" argument.
 // A positive return value means that the NcTimestamp specified on the input
 // argument occurred later, whereas a negative return value indicates an
 // earlier occurence. 
+//
+// The input argument "type" allows to specify the time recording system
+// type : "UT"  ==> Time difference is provided according to the UT day counting
+//        "TAI" ==> Time difference is provided according to the TAI day counting
+//
+// Note :
+// ------
+// In case type="TAI" and the TAI recording was not activated for one (or both) of the timestamps,
+// the time difference will be set to 0.
+// The UT recording is always available.
+//
+// The default value is type="UT", which is to be used for accurate astrophysical observations.
+//
+// Full picosecond accuracy is automatically obtained by using the same "type" as with which
+// both the timestamps have been set (i.e. SetTAI() or SetGPS() and using type="TAI" 
+// or via the SetUT() related facilities and using type="UT").
+// Otherwise, the time difference accuracy amounts to the one of dUT=UT-UTC.
+// For timestamps that have the same UTC parameters (i.e. Leap Seconds and dUT=UT-UTC),
+// both the "UT" and "TAI" systems provide the same time difference (within the dUT accuracy).
 //  
 // The units may be specified as :
 // u = "d"  ==> Time difference returned as (fractional) day count
@@ -1702,11 +3072,13 @@ Double_t NcTimestamp::GetDifference(NcTimestamp& t,TString u,Int_t mode)
 // val=-19                                for u="ns" and mode=3
 //
 // The default is mode=1.
+//
+// In case of inconsistent input the time difference will be set to 0.
 
- return GetDifference(&t,u,mode);
+ return GetDifference(&t,u,mode,type);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps)
+void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
@@ -1716,18 +3088,51 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t
 // The latter has a random spread in the sub-second part, which
 // might be of use in generating distinguishable timestamps while
 // still keeping second precision.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the UT setting.
 //
 // The input arguments represent the following :
-// y  : year in UT (e.g. 1952, 2003 etc...)
-// m  : month in UT (1=jan  2=feb etc...)
-// d  : day in UT (1-31)
-// hh : elapsed hours in UT (0-23) 
-// mm : elapsed minutes in UT (0-59)
-// ss : elapsed seconds in UT (0-59)
-// ns : remaining fractional elapsed second of UT in nanosecond
-// ps : remaining fractional elapsed nanosecond of UT in picosecond
+// y    : year in UT (e.g. 1952, 2003 etc...)
+// m    : month in UT (1=jan  2=feb etc...)
+// d    : day in UT (1-31)
+// hh   : elapsed hours in UT (0-23) 
+// mm   : elapsed minutes in UT (0-59)
+// ss   : elapsed seconds in UT (0-59)
+// ns   : remaining fractional elapsed second of UT in nanosecond
+// ps   : remaining fractional elapsed nanosecond of UT in picosecond
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
 //
-// Note : ns=0 and ps=0 are the default values.
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are ns=0, ps=0, utc="A", leap=0 and dut=0.
 //
 // This facility first determines the elapsed days, seconds etc...
 // since the beginning of the specified UT year on basis of the
@@ -1738,44 +3143,114 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t
 
  Int_t day=GetDayOfYear(d,m,y);
  Int_t secs=hh*3600+mm*60+ss;
- SetUT(y,day-1,secs,ns,ps);
+ SetUT(y,day-1,secs,ns,ps,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s)
+void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
 // For a guaranteed picosecond precision please refer to the other SetUT() memberfunctions.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the UT setting.
 //
 // The input arguments represent the following :
-// y  : year in UT (e.g. 1952, 2003 etc...)
-// m  : month in UT (1=jan  2=feb etc...)
-// d  : day in UT (1-31)
-// hh : elapsed hours in UT (0-23) 
-// mm : elapsed minutes in UT (0-59)
-// s  : elapsed (fractional) seconds in UT (0-59.999...)
+// y    : year in UT (e.g. 1952, 2003 etc...)
+// m    : month in UT (1=jan  2=feb etc...)
+// d    : day in UT (1-31)
+// hh   : elapsed hours in UT (0-23) 
+// mm   : elapsed minutes in UT (0-59)
+// s    : elapsed (fractional) seconds in UT (0-59.999...)
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 
  Int_t ss=int(s);
  s-=double(ss);
  Int_t ns=s*1.e9;
  s-=double(ns)*1.e-9;
  Int_t ps=s*1.e12;
- SetUT(y,m,d,hh,mm,ss,ns,ps);
+ SetUT(y,m,d,hh,mm,ss,ns,ps,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time)
+void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
 // For a guaranteed picosecond precision please refer to the other SetUT() memberfunctions.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the UT setting.
 //
 // The input arguments represent the following :
 // y    : year in UT (e.g. 1952, 2003 etc...)
 // m    : month in UT (1=jan  2=feb etc...)
 // d    : day in UT (1-31)
 // time : The UT time in the format hh:mm:ss.sss
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 
  Int_t iword;
  Double_t uttime;
@@ -1789,15 +3264,19 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time)
  iword=iword%10000;
  mm=iword/100;
  s=uttime-double(hh*10000+mm*100);
- SetUT(y,m,d,hh,mm,s);
+ SetUT(y,m,d,hh,mm,s,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetUT(TString date,TString time,Int_t mode)
+void NcTimestamp::SetUT(TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
 // For a guaranteed picosecond precision please refer to the other SetUT() memberfunctions.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the UT setting.
 //
 // The input arguments represent the following :
 // date : The UT date in the format dd-mm-yyyy or dd/mm/yyyy or ddmmyyyy (mode=0)
@@ -1806,6 +3285,37 @@ void NcTimestamp::SetUT(TString date,TString time,Int_t mode)
 // date : The UT date in the format yyyy-dd-mm or yyyy/dd/mm or yyyyddmm (mode=3)
 // time : The UT time in the format hh:mm:ss.sss
 // mode : Date format specifier (see above)
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 //
 // Note : In case of incompatible argument(s) the current UT date/time will not be modified.
 
@@ -1857,11 +3367,11 @@ void NcTimestamp::SetUT(TString date,TString time,Int_t mode)
  }
  else
  {
-  SetUT(year,month,day,time);
+  SetUT(year,month,day,time,utc,leap,dut);
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
+void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the specified elapsed
 // timespan since the beginning of the new UT year.
@@ -1871,14 +3381,47 @@ void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
 // The latter has a random spread in the sub-second part, which
 // might be of use in generating distinguishable timestamps while
 // still keeping second precision.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the UT setting.
 //
 // The UT year and elapsed time span is entered via the following input arguments :
 //
-// y  : year in UT (e.g. 1952, 2003 etc...)
-// d  : elapsed number of days 
-// s  : (remaining) elapsed number of seconds
-// ns : (remaining) elapsed number of nanoseconds
-// ps : (remaining) elapsed number of picoseconds
+// y    : year in UT (e.g. 1952, 2003 etc...)
+// d    : elapsed number of days 
+// s    : (remaining) elapsed number of seconds
+// ns   : (remaining) elapsed number of nanoseconds
+// ps   : (remaining) elapsed number of picoseconds
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
 //
 // The specified d, s, ns and ps values will be used in an additive
 // way to determine the elapsed timespan.
@@ -1888,7 +3431,7 @@ void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
 // of possible integer overflow problems in the input arguments,
 // which obviously will provide incorrect results. 
 //
-// Note : ns=0 and ps=0 are the default values.
+// Note : ns=0, ps=0, utc="A", leap=0 and dut=0  are the default values.
 //
 // This facility first sets the (M)JD corresponding to the start (01-jan 00:00:00)
 // of the specified UT year following the recipe of R.W. Sinnott
@@ -1901,7 +3444,7 @@ void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
 
  Int_t mjd,sec,nsec;
  GetMJD(mjd,sec,nsec);
- SetMJD(mjd,0,0,0);
+ SetMJD(mjd,0,0,0,utc,leap,dut);
  Add(d,s,ns,ps);
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2121,7 +3664,7 @@ Double_t NcTimestamp::GetLAST(Double_t offset)
  return h;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps)
+void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
@@ -2131,60 +3674,132 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,In
 // The latter has a random spread in the sub-second part, which
 // might be of use in generating distinguishable timestamps while
 // still keeping second precision.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the LT setting.
 //
 // The input arguments represent the following :
 //
-// dt : the local time offset in fractional hours w.r.t. UT.
-// y  : year in LT (e.g. 1952, 2003 etc...)
-// m  : month in LT (1=jan  2=feb etc...)
-// d  : day in LT (1-31)
-// hh : elapsed hours in LT (0-23) 
-// mm : elapsed minutes in LT (0-59)
-// ss : elapsed seconds in LT (0-59)
-// ns : remaining fractional elapsed second of LT in nanosecond
-// ps : remaining fractional elapsed nanosecond of LT in picosecond
+// dt   : the local time offset in fractional hours w.r.t. UT.
+// y    : year in LT (e.g. 1952, 2003 etc...)
+// m    : month in LT (1=jan  2=feb etc...)
+// d    : day in LT (1-31)
+// hh   : elapsed hours in LT (0-23) 
+// mm   : elapsed minutes in LT (0-59)
+// ss   : elapsed seconds in LT (0-59)
+// ns   : remaining fractional elapsed second of LT in nanosecond
+// ps   : remaining fractional elapsed nanosecond of LT in picosecond
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
 //
-// Note : ns=0 and ps=0 are the default values.
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are ns=0, ps=0, utc="A", leap=0 and dut=0.
 //
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian
 // calendar with picosecond precision.
 
- SetUT(y,m,d,hh,mm,ss,ns,ps);
+ SetUT(y,m,d,hh,mm,ss,ns,ps,utc,leap,dut);
  Add(-dt);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s)
+void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
 // For a guaranteed picosecond precision please refer to the other SetLT() memberfunctions.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the LT setting.
 //
 // The input arguments represent the following :
-// dt : the local time offset in fractional hours w.r.t. UT
-// y  : year in LT (e.g. 1952, 2003 etc...)
-// m  : month in LT (1=jan  2=feb etc...)
-// d  : day in LT (1-31)
-// hh : elapsed hours in LT (0-23) 
-// mm : elapsed minutes in LT (0-59)
-// s  : elapsed (fractional) seconds in LT (0-59.999...)
+// dt   : the local time offset in fractional hours w.r.t. UT
+// y    : year in LT (e.g. 1952, 2003 etc...)
+// m    : month in LT (1=jan  2=feb etc...)
+// d    : day in LT (1-31)
+// hh   : elapsed hours in LT (0-23) 
+// mm   : elapsed minutes in LT (0-59)
+// s    : elapsed (fractional) seconds in LT (0-59.999...)
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 //
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
 
- SetUT(y,m,d,hh,mm,s);
+ SetUT(y,m,d,hh,mm,s,utc,leap,dut);
  Add(-dt);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time)
+void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
 // For a guaranteed picosecond precision please refer to the other SetLT() memberfunctions.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the LT setting.
 //
 // The input arguments represent the following :
 // dt   : the local time offset in fractional hours w.r.t. UT
@@ -2192,21 +3807,56 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time)
 // m    : month in LT (1=jan  2=feb etc...)
 // d    : day in LT (1-31)
 // time : The LT time in the format hh:mm:ss.sss
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 //
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
 
- SetUT(y,m,d,time);
+ SetUT(y,m,d,time,utc,leap,dut);
  Add(-dt);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetLT(Double_t dt,TString date,TString time,Int_t mode)
+void NcTimestamp::SetLT(Double_t dt,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
 // For a guaranteed picosecond precision please refer to the other SetLT() memberfunctions.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the LT setting.
 //
 // The input arguments represent the following :
 // dt   : the local time offset in fractional hours w.r.t. UT
@@ -2216,16 +3866,47 @@ void NcTimestamp::SetLT(Double_t dt,TString date,TString time,Int_t mode)
 // date : The LT date in the format yyyy-dd-mm or yyyy/dd/mm or yyyyddmm (mode=3)
 // time : The LT time in the format hh:mm:ss.sss
 // mode : Date format specifier (see above)
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 //
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
 
- SetUT(date,time,mode);
+ SetUT(date,time,mode,utc,leap,dut);
  Add(-dt);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
+void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
 // Set the NcTimestamp parameters corresponding to the specified elapsed
 // timespan since the beginning of the new LT year.
@@ -2235,15 +3916,48 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
 // The latter has a random spread in the sub-second part, which
 // might be of use in generating distinguishable timestamps while
 // still keeping second precision.
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the LT setting.
 //
 // The LT year and elapsed time span is entered via the following input arguments :
 //
-// dt : the local time offset in fractional hours w.r.t. UT.
-// y  : year in LT (e.g. 1952, 2003 etc...)
-// d  : elapsed number of days 
-// s  : (remaining) elapsed number of seconds
-// ns : (remaining) elapsed number of nanoseconds
-// ps : (remaining) elapsed number of picoseconds
+// dt   : the local time offset in fractional hours w.r.t. UT.
+// y    : year in LT (e.g. 1952, 2003 etc...)
+// d    : elapsed number of days 
+// s    : (remaining) elapsed number of seconds
+// ns   : (remaining) elapsed number of nanoseconds
+// ps   : (remaining) elapsed number of picoseconds
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
 //
 // The specified d, s, ns and ps values will be used in an additive
 // way to determine the elapsed timespan.
@@ -2253,13 +3967,13 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps)
 // of possible integer overflow problems in the input arguments,
 // which obviously will provide incorrect results. 
 //
-// Note : ns=0 and ps=0 are the default values.
+// Note : ns=0, ps=0, utc="A", leap=0 and dut=0 are the default values.
 //
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
 
- SetUT(y,d,s,ns,ps);
+ SetUT(y,d,s,ns,ps,utc,leap,dut);
  Add(-dt);
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2310,21 +4024,6 @@ Double_t NcTimestamp::GetTJD(Double_t e,TString mode) const
  Double_t tjd=GetJD(e,mode)-2440000.5;
 
  return tjd;
-}
-///////////////////////////////////////////////////////////////////////////
-Double_t NcTimestamp::GetTAI(Double_t e,TString mode) const
-{
-// Provide the fractional TAI day count from epoch e.
-// The sort of epoch may be specified via the "mode" parameter.
-//
-// mode = "J" ==> Julian epoch
-//        "B" ==> Besselian epoch
-//
-// The default value is mode="J".
-
- Double_t tai=GetJD(e,mode)-2443144.5;
-
- return tai;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double_t* dl,TString name,Double_t* el,Double_t* eb,Double_t* dr,Double_t* value,Int_t j)
@@ -2802,17 +4501,53 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
  return da;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTimestamp::SetEpoch(Double_t e,TString mode)
+void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc,Int_t leap,Double_t dut)
 {
-// Set the timestamp parameters according to the epoch as specified by
-// the input argument "e".
-// Via the input argument "mode" the user can specify the type of epoch
+// Set the timestamp parameters according to the specified epoch.
 //
-// mode = "B" ==> Besselian epoch
+// Optionally the user can also provide the corresponding UTC parameters 
+// (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next 
+// to UT also UTC and TAI derived time information.
+// These UTC parameters will not affect the epoch setting.
+//
+// The input arguments represent the following :
+// e    : The epoch specification
+// mode : "B" ==> Besselian epoch
 //        "J" ==> Julian epoch
+// utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+//
+// The default values are utc="A", leap=0 and dut=0.
 
  Double_t jd=GetJD(e,mode);
- SetJD(jd);
+ SetJD(jd,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetEpoch(TString mode)

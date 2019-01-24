@@ -5,11 +5,15 @@
 
 // $Id: NcTimestamp.h 101 2015-01-04 20:26:28Z nickve $
 
+#include <iostream>
+#include <fstream>
+
 #include <cstdlib>
 #include <math.h>
 
 #include "TTimeStamp.h"
 #include "TString.h"
+#include "TTree.h"
 
 class NcTimestamp : public TTimeStamp
 {
@@ -35,8 +39,6 @@ class NcTimestamp : public TTimeStamp
   Double_t GetMJD();                            // Provide corresponding Modified Julian Date in fractional days
   void GetTJD(Int_t& tjd,Int_t& sec,Int_t& ns); // Provide corresponding Truncated Julian Date and time
   Double_t GetTJD();                            // Provide corresponding Truncated Julian Date in fractional days
-  void GetTAI(Int_t& d,Int_t& sec,Int_t& ns);   // Provide corresponding TAI Date and time
-  Double_t GetTAI();                            // Provide corresponding TAI Date in fractional days
   void GetJD(Int_t& jd,Int_t& sec,Int_t& ns);   // Provide corresponding Julian Date and time
   Double_t GetJD();                             // Provide corresponding Julian Date in fractional days
   Double_t GetJE();                             // Provide corresponding Julian Epoch
@@ -44,15 +46,25 @@ class NcTimestamp : public TTimeStamp
   Double_t GetJD(Double_t e,TString mode="J") const;  // Provide fractional Julian Date from Epoch
   Double_t GetMJD(Double_t e,TString mode="J") const; // Provide fractional Modified Julian Date from Epoch
   Double_t GetTJD(Double_t e,TString mode="J") const; // Provide fractional Truncated Julian Date from Epoch
-  Double_t GetTAI(Double_t e,TString mode="J") const; // Provide fractional TAI day count from Epoch
-  void SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0); // Set Modified Julian Date and time
-  void SetMJD(Double_t mjd);                            // Set Modified Julian Date and time
-  void SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps=0);   // Set Julian Date and time
-  void SetJD(Double_t jd);                              // Set Julian Date and time
-  void SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps=0); // Set Truncated Julian Date and time
-  void SetTJD(Double_t tjd);                            // Set Truncated Julian Date and time
-  void SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps=0);   // Set International Atomic Time (TAI) date and time
-  void SetTAI(Double_t tai);                            // Set International Atomic Time (TAI) date and time
+  void SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set Modified Julian Date and time
+  void SetMJD(Double_t mjd,TString utc="A",Int_t leap=0,Double_t dut=0);                            // Set Modified Julian Date and time
+  void SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0);   // Set Julian Date and time
+  void SetJD(Double_t jd,TString utc="A",Int_t leap=0,Double_t dut=0);                              // Set Julian Date and time
+  void SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set Truncated Julian Date and time
+  void SetTJD(Double_t tjd,TString utc="A",Int_t leap=0,Double_t dut=0);                            // Set Truncated Julian Date and time
+  Int_t SetTAI(TString type,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut=0); // Set specified TAI based date and time
+  Int_t SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut=0,Bool_t tmjd=kFALSE);  // Set International Atomic Time (TAI) date and time
+  Int_t SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut=0,Bool_t tmjd=kFALSE); // Set International Atomic Time (TAI) date and time
+  Int_t SetGPS(Int_t w,Int_t sow,Int_t ns, Int_t ps,TString utc,Int_t leap,Double_t dut=0,Int_t icycle=0);           // Set the GPS date/time
+  Int_t SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut=0,Int_t icycle=0); // Set the GPS date/time
+  Int_t GetTAI(Int_t& d,Int_t& sec,Int_t& ns,Int_t& ps,Bool_t tmjd=kTRUE); // Provide corresponding TAI day count and time
+  Double_t GetTAI(Bool_t tmjd=kTRUE);                                      // Provide the corresponding TAI day count in fractional days
+  Int_t GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TString type="TAI"); // Provide corresponding TAI time
+  Int_t GetUTCparameters(Int_t& leap,Double_t& dut) const;           // Provide the UTC parameters
+  Int_t GetUTCparameters(Int_t mjd,Int_t& leap,Double_t& dut) const; // Provide the UTC parameters for MJD from the IERS data
+  Int_t SetUTCparameters(TString utc,Int_t leap,Double_t dut);       // Setting of the UTC parameters
+  TTree* LoadUTCparameterFiles(TString leapfile,TString dutfile); // Load IERS data for automatic setting of Leap Seconds and dUT=UT-UTC
+  TTree* GetIERSdatabase() const; // Provide the pointer to the internal IERS database TTree
   void SetNs(Int_t ns);                                 // Set the remaining fractional number of sec in nanoseconds
   Int_t GetNs() const;                                  // Provide remaining fractional number of sec in nanoseconds
   void SetPs(Int_t ps);                                 // Set the remaining fractional number of ns in picoseconds
@@ -60,15 +72,16 @@ class NcTimestamp : public TTimeStamp
   using TTimeStamp::Add;
   void Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0);        // Add (or subtract) a certain time difference
   void Add(Double_t hours);                             // Add (or subtract) a certain time difference
-  Int_t GetDifference(NcTimestamp* t,Int_t& days,Int_t& sec,Int_t& ns,Int_t& ps); // Provide time difference
-  Int_t GetDifference(NcTimestamp& t,Int_t& days,Int_t& sec,Int_t& ns,Int_t& ps); // Provide time difference
-  Double_t GetDifference(NcTimestamp* t,TString u,Int_t mode=1); // Provide time diff. in specified units
-  Double_t GetDifference(NcTimestamp& t,TString u,Int_t mode=1); // Provide time diff. in specified units
-  void SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0); // Set specified UT
-  void SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s); // Set specified UT
-  void SetUT(Int_t y,Int_t m,Int_t d,TString time);                 // Set specified UT
-  void SetUT(TString date,TString time,Int_t mode);                 // Set specified UT
-  void SetUT(Int_t y,Int_t d,Int_t s,Int_t ns=0,Int_t ps=0); // Set UT based on elapsed days, secs etc...
+  void AddSec(Double_t seconds);                        // Add (or subtract) a certain time difference
+  Int_t GetDifference(NcTimestamp* t,Int_t& days,Int_t& sec,Int_t& ns,Int_t& ps,TString type="UT"); // Provide time difference
+  Int_t GetDifference(NcTimestamp& t,Int_t& days,Int_t& sec,Int_t& ns,Int_t& ps,TString type="UT"); // Provide time difference
+  Double_t GetDifference(NcTimestamp* t,TString u,Int_t mode=1,TString type="UT"); // Provide time diff. in specified units
+  Double_t GetDifference(NcTimestamp& t,TString u,Int_t mode=1,TString type="UT"); // Provide time diff. in specified units
+  void SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set specified UT
+  void SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TString utc="A",Int_t leap=0,Double_t dut=0); // Set specified UT
+  void SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc="A",Int_t leap=0,Double_t dut=0);                 // Set specified UT
+  void SetUT(TString date,TString time,Int_t mode,TString utc="A",Int_t leap=0,Double_t dut=0);                 // Set specified UT
+  void SetUT(Int_t y,Int_t d,Int_t s,Int_t ns=0,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0);        // Set UT based on elapsed days, secs etc...
   void GetUT(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps); // Provide corresponding UT
   Double_t GetUT(); // Provide corresponding UT in fractional hours
   void GetGMST(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps); // Corresponding Greenwich Mean Sidereal Time (GMST)
@@ -77,26 +90,35 @@ class NcTimestamp : public TTimeStamp
   Double_t GetLT(Double_t offset);  // Provide corresponding Local Time (LT) in fractional hours
   Double_t GetLMST(Double_t offset); // Provide corresponding Local Mean Sidereal Time (LMST) in fractional hours
   Double_t GetLAST(Double_t offset); // Provide corresponding Local Apparent Sidereal Time (LAST) in fractional hours
-  void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0); // Set data according to LT
-  void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s); // Set data according to LT
-  void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time);                 // Set data according to LT
-  void SetLT(Double_t dt,TString date,TString time,Int_t mode);                 // Set data according to LT
-  void SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns=0,Int_t ps=0); // Set data according to LT based on elapsed days, secs etc...
+  void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set data according to LT
+  void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TString utc="A",Int_t leap=0,Double_t dut=0); // Set data according to LT
+  void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time,TString utc="A",Int_t leap=0,Double_t dut=0);                 // Set data according to LT
+  void SetLT(Double_t dt,TString date,TString time,Int_t mode,TString utc="A",Int_t leap=0,Double_t dut=0);                 // Set data according to LT
+  void SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns=0,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set data according to LT based on elapsed days, secs etc...
   Double_t Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name="",Double_t* el=0,Double_t* eb=0,Double_t* er=0,Double_t* value=0,Int_t j=0); // Provide astronomical observables
-  void SetEpoch(Double_t e,TString mode); // Set time parameters according to the specified epoch
-  Double_t GetEpoch(TString mode);        // Provide the requested epoch
+  void SetEpoch(Double_t e,TString mode,TString utc="A",Int_t leap=0,Double_t dut=0); // Set time parameters according to the specified epoch
+  Double_t GetEpoch(TString mode); // Provide the requested epoch
 
  protected:
-  Int_t fMJD;  // Modified Julian Date
-  Int_t fJsec; // Number of seconds elapsed within the MJD
-  Int_t fJns;  // Remaining fractional number of seconds (in nanoseconds) elapsed within the MJD
-  Int_t fJps;  // Remaining fractional number of nanoseconds (in picoseconds) elapsed within the MJD
+  Int_t fMJD;      // Modified Julian Date
+  Int_t fJsec;     // Number of seconds elapsed within the MJD
+  Int_t fJns;      // Remaining fractional number of seconds (in nanoseconds) elapsed within the MJD
+  Int_t fJps;      // Remaining fractional number of nanoseconds (in picoseconds) elapsed within the MJD
+  Int_t fUtc;      // Flag to denote that the UTC related info below has been provided (-1=auto 0=no 1=yes)
+  Int_t fLeap;     // The cumulated number of leap seconds at the moment of the timestamp
+  Double_t fDut;   // The value of UT-UTC in seconds at the moment of the timestamp
+  Int_t fTmjd;     // Number of elapsed TAI days equivalent to MJD counting
+  Int_t fTsec;     // Number of seconds elapsed within the TAI day
+  Int_t fTns;      // Remaining fractional number of seconds (in nanoseconds) elapsed within the TAI day
+  Int_t fTps;      // Remaining fractional number of nanoseconds (in picoseconds) elapsed within the TAI day
+  TTree* fUTCdata; // Internal tree to contain the daily leap second and UT-UTC values
 
  private:
   void FillJulian(); // Calculation and setting of the corresponding Julian parameters  
+  void FillTAI();    // Calculation and setting of the corresponding TAI day etc. count
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,6) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,7) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

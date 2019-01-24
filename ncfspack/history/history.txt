@@ -1101,3 +1101,6 @@
                 Also for histogram statistics in class NcMath it is explicitly stated that Underflow
                 and/or Overflow entries are not taken into account.  
 29-nov-2018 NvE Support for International Atomic Time (TAI) introduced in class NcTimestamp.
+24-jan-2019 NvE Support for TAI largely extended in class NcTimestamp and also the memberfunction
+                LoadUTCparameterFiles() was introduced to enable automatic loading of the corresponding
+                accumulated number of Leap Seconds and dUT=UT-UTC from the IERS monitoring data files.
