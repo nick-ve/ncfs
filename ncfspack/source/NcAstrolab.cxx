@@ -152,7 +152,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: NvE $Date: 2017-09-20 09:30:45 +0100 (Wed, 20 Sep 2017) $ IIHE-VUB, Brussels
+//- Modified: Nick van Eijndhoven February 11, 2019  01:47 IIHE-VUB, Brussels
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -227,12 +227,13 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
  fNewton=6.67384e-11;
  fAu=1.49597870700e11;
  fPc=3.08567758149e16;
- fHubble=67.8;
- fOmegaM=0.308;
+ // Cosmological parameters from the final Planck 2018 results (arXiv:1807.06209)
+ fHubble=67.4;
+ fOmegaM=0.315;
  fOmegaR=5.38e-5;
- fOmegaL=0.692;
- fOmegaB=0.0484;
- fOmegaC=0.258;
+ fOmegaL=0.685;
+ fOmegaB=0.0492;
+ fOmegaC=0.264;
 
  // Some derived (astro)physical parameters c.q. conversion constants
  fHbar=6.58211928e-22;
@@ -380,7 +381,7 @@ NcAstrolab::NcAstrolab(const NcAstrolab& t) : TTask(t),NcTimestamp(t)
  fMaxDt=t.fMaxDt;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::Data(Int_t mode,TString u)
+void NcAstrolab::Data(Int_t mode,TString u,Bool_t utc)
 {
 // Provide lab information.
 //
@@ -393,7 +394,12 @@ void NcAstrolab::Data(Int_t mode,TString u)
 //     "dms" : angles provided in ddd:mm:ss.sss
 //     "hms" : angles provided in hh:mm:ss.sss
 //
-// The defaults are mode=1 and u="deg".
+// The boolean argument "utc" allows to add UTC and TAI related date/time
+// information in case this is available.
+// utc = kTRUE  --> Add the UTC and TAI related information
+//       kFALSE --> Do not add the UTC and TAI related information
+//
+// The defaults are mode=1, u="deg" and utc=kTRUE.
  
  const char* name=GetName();
  const char* title=GetTitle();
@@ -412,6 +418,9 @@ void NcAstrolab::Data(Int_t mode,TString u)
 
  // UT and Local time info
  Date(mode,fToffset);
+
+ // Add the UTC and TAI related date/time information if requested
+ if (utc && mode!=4) Date(4);
 
  if (fTscmode)
  {
@@ -5621,15 +5630,18 @@ Double_t NcAstrolab::GetPhysicalParameter(TString name) const
  return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u) const
+Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u,Int_t t) const
 {
-// Provide the physical distance of an object with redshift z
+// Provide the physical distance of an object observed with redshift z
 // for a flat Friedmann-Lemaitre universe.
 //
 // The physical distance reflects the distance that one would measure
-// with a ruler at one specific time.
+// with a ruler at a specific time (see below).
 //
-// Note that the physical distance is also called "comoving distance".
+// Note that the physical distance is also called "proper distance".
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/Home/lectures/thelargescaleuniverse
 //
 // The input argument "u" allows specification of the required distance units,
 // with the following options:
@@ -5642,7 +5654,12 @@ Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u) const
 //     "m"   (distance in meters)
 //     "cm"  (distance in centimeters)
 //
-// The default is u="Mpc" for backward compatibility
+// The argument "t" allows to specify the time of the distance determination.
+//
+// t = 0 --> The distance is determined at the time of emission of the signal
+//     1 --> The distance is determined at the time of observation of the signal
+//
+// The default values are u="Mpc" and t=1 for backward compatibility.
 // In case "u" is incorrectly specified, the value 0 will be returned.
 
  if (z<=0 || fHubble<=0) return 0;
@@ -5671,12 +5688,85 @@ Double_t NcAstrolab::GetPhysicalDistance(Double_t z,TString u) const
  if (u=="km") val=distm*1e-3;
  if (u=="cm") val=distm*1e2;
 
+ if (!t) val=val/(z+1.);
+
+ return val;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetProperDistance(Double_t z,TString u,Int_t t) const
+{
+// Provide the proper distance of an object observed with redshift z
+// for a flat Friedmann-Lemaitre universe.
+//
+// The proper distance reflects the distance that one would measure
+// with a ruler at a specific time (see below).
+//
+// Note that the proper distance is also called "physical distance".
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/Home/lectures/thelargescaleuniverse
+//
+// The input argument "u" allows specification of the required distance units,
+// with the following options:
+//
+// u = "Gpc" (distance in Giga parsec)
+//     "Mpc" (distance in Mega parsec)
+//     "pc"  (distance in parsec)
+//     "ly"  (distance in light years)
+//     "km"  (distance in kilometers)
+//     "m"   (distance in meters)
+//     "cm"  (distance in centimeters)
+//
+// The argument "t" allows to specify the time of the distance determination.
+//
+// t = 0 --> The distance is determined at the time of emission of the signal
+//     1 --> The distance is determined at the time of observation of the signal
+//
+// The default values are u="Mpc" and t=1 for backward compatibility.
+// In case "u" is incorrectly specified, the value 0 will be returned.
+
+ Double_t val=GetPhysicalDistance(z,u,t);
+
+ return val;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetComovingDistance(Double_t z,TString u) const
+{
+// Provide the comoving coordinate distance of an object observed with redshift z
+// for a flat Friedmann-Lemaitre universe.
+//
+// The comoving coordinate distance is constant in time and has in principle
+// an arbitrary normalization.
+// We adopt here the commonly used normalization that the cosmic expansion factor a(t)
+// equals 1 at the current time.
+// This implies that the comoving coordinate distance is equal to the physical (or proper)
+// distance at the time of the observation of a signal from an object with redshift z.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/Home/lectures/thelargescaleuniverse
+//
+// The input argument "u" allows specification of the required distance units,
+// with the following options:
+//
+// u = "Gpc" (distance in Giga parsec)
+//     "Mpc" (distance in Mega parsec)
+//     "pc"  (distance in parsec)
+//     "ly"  (distance in light years)
+//     "km"  (distance in kilometers)
+//     "m"   (distance in meters)
+//     "cm"  (distance in centimeters)
+//
+// The default value is u="Mpc" for backward compatibility.
+// In case "u" is incorrectly specified, the value 0 will be returned.
+
+ Double_t val=GetPhysicalDistance(z,u,1);
+
  return val;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcAstrolab::GetLuminosityDistance(Double_t z,TString u) const
 {
-// Provide the luminosity distance of an object with redshift z
+// Provide the luminosity distance of an object observed with redshift z
 // for a flat Friedmann-Lemaitre universe.
 //
 // Consider an object with known intrinsic luminosity L (erg/s) of which
@@ -5688,6 +5778,9 @@ Double_t NcAstrolab::GetLuminosityDistance(Double_t z,TString u) const
 // realizing that the observed energy is reduced by a factor (z+1) and that 
 // the observed time intervals are stretched by a factor (z+1).
 // This results in F=L/[(z+1)*(z+1)*4*pi*D^2] or in other words : d=(z+1)*D.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/Home/lectures/thelargescaleuniverse
 //
 // The input argument "u" allows specification of the required distance units,
 // with the following options:
@@ -5703,7 +5796,7 @@ Double_t NcAstrolab::GetLuminosityDistance(Double_t z,TString u) const
 // The default is u="Mpc" for backward compatibility
 // In case "u" is incorrectly specified, the value 0 will be returned.
 
- Double_t val=GetPhysicalDistance(z,u);
+ Double_t val=GetPhysicalDistance(z,u,1);
  val=val*(z+1.);
 
  return val;
@@ -5711,19 +5804,21 @@ Double_t NcAstrolab::GetLuminosityDistance(Double_t z,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcAstrolab::GetLightTravelDistance(Double_t z,TString u) const
 {
-// Provide the light-travel distance of an object with redshift z
+// Provide the light-travel distance of an object observed with redshift z
 // for a flat Friedmann-Lemaitre universe.
 //
 // The light-travel distance reflects the distance (c*dt) that light has traveled
-// to reach us from an object located at a redshift z.
+// to reach us from an object observed with a redshift z.
 //
 // The light-travel distance is determined via a similar integral as the physical distance,
-// but taking into account that for each redshift value z a cosmological time dilation
-// factor (1+z) applies. This results in an extra term 1/(1+z) in the integrand.
+// but taking into account an extra term 1/(1+z) in the integrand.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/Home/lectures/thelargescaleuniverse
 //
 // The light-travel time may be obtained by dividing the light-travel distance by
 // the lightspeed. Alternatively, expressing the light-travel distance in units
-// of light years (ly) reflects directly the light-travel time.
+// of light years (ly) reflects directly the light-travel time in years.
 //
 // The input argument "u" allows specification of the required distance units,
 // with the following options:
@@ -5764,6 +5859,27 @@ Double_t NcAstrolab::GetLightTravelDistance(Double_t z,TString u) const
  if (u=="m") val=distm;
  if (u=="km") val=distm*1e-3;
  if (u=="cm") val=distm*1e2;
+
+ return val;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetLightTravelTime(Double_t z) const
+{
+// Provide the light-travel time (in years) of an object observed with redshift z
+// for a flat Friedmann-Lemaitre universe.
+//
+// The light-travel time reflects the time that light has traveled
+// to reach us from an object observed with a redshift z.
+//
+// The light-travel time is also called the look back time.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/Home/lectures/thelargescaleuniverse
+//
+// The light-travel time is obtained by dividing the light-travel distance by
+// the lightspeed.
+
+ Double_t val=GetLightTravelDistance(z,"ly");
 
  return val;
 }

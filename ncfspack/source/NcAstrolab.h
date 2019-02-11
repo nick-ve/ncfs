@@ -36,7 +36,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   virtual ~NcAstrolab();                                              // Destructor
   NcAstrolab(const NcAstrolab& t);                                    // Copy constructor
   virtual TObject* Clone(const char* name="") const;                  // Make a deep copy and provide its pointer
-  void Data(Int_t mode=1,TString u="deg");                            // Lab info in angular units u
+  void Data(Int_t mode=1,TString u="deg",Bool_t utc=kTRUE);           // Lab info in angular units u
   void SetLabPosition(Nc3Vector& r);                                  // Set lab position in terrestrial frame
   void SetLabPosition(Double_t l,Double_t b,TString u="deg");         // Set lab terrestrial position
   void SetExperiment(TString name);                                   // Set position and local frame for the specified experiment
@@ -98,9 +98,12 @@ class NcAstrolab : public TTask,public NcTimestamp
   void SetCentralMeridian(Double_t phi,TString u="deg");  // Set central meridian for the sky display
   void SetPhysicalParameter(TString name,Double_t value); // Facility to modify physical parameter values
   Double_t GetPhysicalParameter(TString name) const;      // Provide the (modified) value of a physical parameter
-  Double_t GetPhysicalDistance(Double_t z,TString u="Mpc") const; // Provide physical distance of an object with redshift z in a flat universe
-  Double_t GetLuminosityDistance(Double_t z,TString u="Mpc") const; // Provide luminosity distance of an object with redshift z in a flat universe
-  Double_t GetLightTravelDistance(Double_t z,TString u="Mpc") const; // Provide light-travel distance of an object with redshift z in a flat universe
+  Double_t GetPhysicalDistance(Double_t z,TString u="Mpc",Int_t t=1) const; // Provide physical distance of an object with redshift z in a flat universe
+  Double_t GetProperDistance(Double_t z,TString u="Mpc",Int_t t=1) const;   // Provide proper distance of an object with redshift z in a flat universe
+  Double_t GetComovingDistance(Double_t z,TString u="Mpc") const;           // Provide comoving coordinate distance of an object with redshift z in a flat universe
+  Double_t GetLuminosityDistance(Double_t z,TString u="Mpc") const;         // Provide luminosity distance of an object with redshift z in a flat universe
+  Double_t GetLightTravelDistance(Double_t z,TString u="Mpc") const;        // Provide light-travel distance of an object with redshift z in a flat universe
+  Double_t GetLightTravelTime(Double_t z) const;                            // Provide light-travel time of an object with redshift z in a flat universe
   Double_t GetHubbleParameter(Double_t z,TString u="Mpc") const; // Provide the Hubble parameter for a certain redshift z in a flat universe
   Double_t GetNuclearMass(Int_t z,Int_t n,Int_t mode=1) const; // Provide the nuclear mass or binding energy for a nucleus (Z,N)
   Double_t GetNeutrinoXsection(Int_t mode,Int_t type,Double_t egev,Double_t xscale=1,Double_t* eprimgev=0,Double_t* alpha=0) const; // Provide neutrino cross section
@@ -222,6 +225,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
  
- ClassDef(NcAstrolab,28) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,29) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

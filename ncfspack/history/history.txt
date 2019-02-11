@@ -1104,3 +1104,5 @@
 24-jan-2019 NvE Support for TAI largely extended in class NcTimestamp and also the memberfunction
                 LoadUTCparameterFiles() was introduced to enable automatic loading of the corresponding
                 accumulated number of Leap Seconds and dUT=UT-UTC from the IERS monitoring data files.
+11-feb-2019 NvE Cosmological parameters updated according to final Planck 2018 results and also the
+                functionality of the cosmological distance facilities extended.
