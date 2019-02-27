@@ -1106,3 +1106,6 @@
                 accumulated number of Leap Seconds and dUT=UT-UTC from the IERS monitoring data files.
 11-feb-2019 NvE Cosmological parameters updated according to final Planck 2018 results and also the
                 functionality of the cosmological distance facilities extended.
+27-feb-2019 NvE In class NcAstrolab the string "*NcAstrolab::..." in all printouts replaced by ClassName()
+                so that the correct classname is indicated for derived classes.
+                Also support for Unix time introduced in class NcTimestamp.

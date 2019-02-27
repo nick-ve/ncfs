@@ -3,8 +3,6 @@
 // Copyright(c) 1997-2009, NCFS, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcTimestamp.h 101 2015-01-04 20:26:28Z nickve $
-
 #include <iostream>
 #include <fstream>
 
@@ -57,9 +55,11 @@ class NcTimestamp : public TTimeStamp
   Int_t SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut=0,Bool_t tmjd=kFALSE); // Set International Atomic Time (TAI) date and time
   Int_t SetGPS(Int_t w,Int_t sow,Int_t ns, Int_t ps,TString utc,Int_t leap,Double_t dut=0,Int_t icycle=0);           // Set the GPS date/time
   Int_t SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut=0,Int_t icycle=0); // Set the GPS date/time
+  Int_t SetUnixTime(Double_t sec,TString utc="A",Int_t leap=0,Double_t dut=0); // Set Unix date and time
   Int_t GetTAI(Int_t& d,Int_t& sec,Int_t& ns,Int_t& ps,Bool_t tmjd=kTRUE); // Provide corresponding TAI day count and time
   Double_t GetTAI(Bool_t tmjd=kTRUE);                                      // Provide the corresponding TAI day count in fractional days
   Int_t GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TString type="TAI"); // Provide corresponding TAI time
+  Double_t GetUnixTime(); // Provide the corresponding Unix time (fractional) second count
   Int_t GetUTCparameters(Int_t& leap,Double_t& dut) const;           // Provide the UTC parameters
   Int_t GetUTCparameters(Int_t mjd,Int_t& leap,Double_t& dut) const; // Provide the UTC parameters for MJD from the IERS data
   Int_t SetUTCparameters(TString utc,Int_t leap,Double_t dut);       // Setting of the UTC parameters
@@ -119,6 +119,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,7) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,8) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

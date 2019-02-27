@@ -25,8 +25,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcTimestamp.cxx 101 2015-01-04 20:26:28Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcTimestamp
 // Handling of timestamps for (astro)particle physics reserach.
@@ -76,13 +74,33 @@
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 //
 //    The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 //    The accuracy of dUT=UT-UTC is about 10 microseconds, so in case of accurate astronomical
 //    timing the user is advised to specify dUT in the various Set() facilities or use SetUT().
 //    An automatic setting of dUT is provided based on the IERS data files. 
 //    Please refer to the member function LoadUTCparameterFiles() for further details.
+//
+// 4) In some cases Unix Time (also called POSIX Time or UNIX Epoch Time) is used.
+//    Unix Time is closely releated to UTC and represents the (fractional) elapsed second count
+//    since the start of the Unix Epoch, in which every Unix Time day contains exactly 86400 seconds.
+//    This implies that for Unix Time the UTC leap seconds should be ignored, as explained below.
+//    The UNIX Time EPOCH starts at 01-jan-1970 00:00:00 UTC which corresponds to JD=2440587.5
+//    (i.e. the start of MJD=40587, as explained in the discussion on Julian Date below).
+//    Synchronization with UTC is obtained by continuing the second count when a UTC leap second
+//    occurs and then the Unix Time count jumps up or down 1 second at the beginning of the new
+//    day after the UTC leap second has expired.
+//    In case of a negative UTC leap second (which has not occurred so far) this would result
+//    in a jump forward of 1 second in Unix Time, introducing a "gap" of 1 second in the timing
+//    at the start of the new day.
+//    In case of a positive UTC leap second this results in a jump back of 1 second in Unix Time
+//    at the start of a new day.
+//    In this case there exist 2 ambiguous Unix Times over a 1 second time interval,
+//    namely at the beginning of the introduction of the UTC leap second and at the moment that
+//    the UTC leap second expires, i.e. the start of the new day.
+//    This NcTimestamp facility provides setting and retrieval of Unix Time, but for accurate
+//    timing the user is advised to use one of the time scales mentioned below. 
 // 
 // Supported time scales :
 // ----------------------
@@ -313,7 +331,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven 23-jan-2019 IIHE-VUB, Brussel
+//- Modified: Nick van Eijndhoven February 27, 2019 18:19 IIHE-VUB, Brussel
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -1216,6 +1234,62 @@ Int_t NcTimestamp::GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TStr
  return fUtc;
 }
 ///////////////////////////////////////////////////////////////////////////
+Double_t NcTimestamp::GetUnixTime()
+{
+// Provide the Unix time.
+// Unix Time is also called POSIX Time or UNIX Epoch Time and represents
+// the (fractional) elapsed second count since the start of the Unix Epoch. 
+//
+// Unix Time is closely releated to UTC and represents the (fractional) elapsed second count
+// since the start of the Unix Epoch, in which every Unix Time day contains exactly 86400 seconds.
+// This implies that for Unix Time the UTC leap seconds should be ignored as explained below.
+// The UNIX Time EPOCH starts at 01-jan-1970 00:00:00 UTC which corresponds to JD=2440587.5
+// (i.e. the start of MJD=40587).
+// Synchronization with UTC is obtained by continuing the second count when a UTC leap second
+// occurs and then the Unix Time count jumps up or down 1 second at the beginning of the new
+// day after the UTC leap second has expired.
+// In case of a negative UTC leap second (which has not occurred so far) this would result
+// in a jump forward of 1 second in Unix Time, introducing a "gap" of 1 second in the timing
+// at the start of the new day.
+// In case of a positive UTC leap second this results in a jump back of 1 second in Unix Time
+// at the start of a new day.
+// In this case there exist 2 ambiguous Unix Times over a 1 second time interval,
+// namely at the beginning of the introduction of the UTC leap second and at the moment that
+// the UTC leap second expires, i.e. the start of the new day.
+//
+// Due to a limitation on the "seconds since the EPOCH start" count,
+// the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+//
+// Due to computer accuracy the ns precision may be lost.
+// For better precision it is advised to use the other date/time Get() facilities instead.
+
+ Double_t t=0;
+
+ Int_t days=0;
+ Int_t secs=0;
+ Int_t ns=0;
+ Int_t mjd=0;
+ GetMJD(mjd,secs,ns);
+ Int_t ps=GetPs();
+
+ // Get accurate UTC from UT via UTC=UT1-dUT
+ if (fUtc)
+ {
+  NcTimestamp tx;
+  tx.SetMJD(mjd,secs,ns,ps);
+  tx.AddSec(-fDut);
+  tx.GetMJD(mjd,secs,ns);
+  ps=tx.GetPs();
+ }
+
+ days=mjd-40587;
+
+ t=(days*86400)+secs;
+ t+=double(ns)*1.e-9+double(ps)*1.e-12;
+
+ return t;
+}
+///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::GetJD(Int_t& jd,Int_t& sec,Int_t& ns)
 {
 // Provide the Julian Date (JD) and time corresponding to the currently
@@ -1326,7 +1400,7 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1436,7 +1510,7 @@ void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1507,7 +1581,7 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t l
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1582,7 +1656,7 @@ void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1654,7 +1728,7 @@ void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1723,7 +1797,7 @@ void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1813,7 +1887,7 @@ Int_t NcTimestamp::SetTAI(TString type,TString date,TString time,Int_t mode,TStr
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1893,7 +1967,7 @@ Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t 
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -1993,7 +2067,7 @@ Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -2067,7 +2141,7 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t sow,Int_t ns,Int_t ps,TString utc,Int_t 
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -2141,7 +2215,7 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString 
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -2177,6 +2251,98 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString 
  sod+=19;
 
  SetTAI(days,sod,ns,ps,utc,leap,dut);
+
+ return fUtc;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
+{
+// Set the Unix date and time and update the TTimeStamp parameters accordingly (if possible).
+// Unix Time is also called POSIX Time or UNIX Epoch Time.
+//
+// Unix Time is closely releated to UTC and represents the (fractional) elapsed second count
+// since the start of the Unix Epoch, in which every Unix Time day contains exactly 86400 seconds.
+// This implies that for Unix Time the UTC leap seconds should be ignored as explained below.
+// The UNIX Time EPOCH starts at 01-jan-1970 00:00:00 UTC which corresponds to JD=2440587.5
+// (i.e. the start of MJD=40587).
+// Synchronization with UTC is obtained by continuing the second count when a UTC leap second
+// occurs and then the Unix Time count jumps up or down 1 second at the beginning of the new
+// day after the UTC leap second has expired.
+// In case of a negative UTC leap second (which has not occurred so far) this would result
+// in a jump forward of 1 second in Unix Time, introducing a "gap" of 1 second in the timing
+// at the start of the new day.
+// In case of a positive UTC leap second this results in a jump back of 1 second in Unix Time
+// at the start of a new day.
+// In this case there exist 2 ambiguous Unix Times over a 1 second time interval,
+// namely at the beginning of the introduction of the UTC leap second and at the moment that
+// the UTC leap second expires, i.e. the start of the new day.
+//
+// For accurate timing the user is advised to use one of the other supported time scales. 
+//
+// Due to a limitation on the "seconds since the EPOCH start" count,
+// the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+//
+// The return value indicates whether the date/time and UTC parameters are actually
+// set Manually (1), Automatically (-1) or Failed (0).
+//
+// Due to computer accuracy the ns precision may be lost.
+// For better precision it is advised to use the other date/time Set() facilities instead.
+//
+// The input arguments represent the following :
+// ---------------------------------------------
+// sec  : The (fractional) second count elapsed since the start of the Unix Epoch.
+// utc  : Flag to denote which UTC parameter values "leap" and "dut" (see below) should be used.
+//        "N" ==> No UTC parameters will be stored.
+//                The TAI related time recording is disabled and the values of
+//                the Leap Seconds and dut=UT-UTC will be set to zero.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//        "M" ==> Manually provided UTC parameters as specified by "leap" and "dut".
+//        "A" ==> Automatically provided UTC parameters from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
+//                For further details see the memberfunction SetUTCparameters().
+// leap : The accumulated number of Leap Seconds corresponding to this date/time.
+// dut  : The monitored time difference UT-UTC in seconds.
+//
+// The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+// An overview of the accumulated leap seconds is available at :
+//                https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+//                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
+// 
+// The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
+//                     or  http://maia.usno.navy.mil/ser7/ser7.dat
+//
+// The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+//
+// The default values are dt=0, utc="A", leap=0, dut=0.
+// However, if <1 sec precision is required, the actual dut value should be provided.
+//
+// Notes :
+// -------
+// 1) In case of invalid input arguments the TAI related time recording is disabled
+//    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
+// 2) In case utc="A" and no data files have been loaded, or no information is available,
+//    the utc="N" mode will be invoked.
+
+ // Determine the fractional day count since the start of the Unix Epoch
+ Double_t tday=sec/86400.;
+
+ Int_t days=0;
+ Int_t s=0;
+ Int_t ns=0;
+ Convert(tday,days,s,ns);
+
+ // Determine the remaining elapsed picoseconds
+ Int_t iword=int(sec);
+ sec=sec-double(iword);
+ sec*=1e9;
+ iword=int(sec);
+ sec=sec-double(iword);
+ Int_t ps=int(sec*1000.);
+ 
+ SetMJD(40587,0,0,0,utc,leap,dut); // Start of the Unix Epoch
+ Add(days,s,ns,ps);      // Add the elapsed time
+ if (fUtc) AddSec(fDut); // Correct for dUT=UT1-UTC
 
  return fUtc;
 }
@@ -2315,7 +2481,7 @@ Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -2400,7 +2566,7 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 //            https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
 //            This file contains the archival list of accumulated Leap Seconds.
 // dutfile  : The name of a copy of the (most recent) IERS the ascii file
-//            ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//            https://hpiers.obspm.fr/iers/series/opa/eopc04
 //            This file contains the archival list of the daily dUT=UT-UTC monitoring.
 //
 // The corresponding daily values of the accumulated Leap Seconds and dUT=UT-UTC
@@ -3120,7 +3286,7 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3182,7 +3348,7 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TSt
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3238,7 +3404,7 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t l
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3303,7 +3469,7 @@ void NcTimestamp::SetUT(TString date,TString time,Int_t mode,TString utc,Int_t l
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3411,7 +3577,7 @@ void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,In
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3708,7 +3874,7 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,In
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3768,7 +3934,7 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Do
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3825,7 +3991,7 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time,TString
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3884,7 +4050,7 @@ void NcTimestamp::SetLT(Double_t dt,TString date,TString time,Int_t mode,TString
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -3947,7 +4113,7 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TS
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
@@ -4532,7 +4698,7 @@ void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc,Int_t leap,Double
 //                     or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 // 
 // The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
-//                 ftp://hpiers.obspm.fr/iers/series/opa/eopc04_IAU2000
+//                 https://hpiers.obspm.fr/iers/series/opa/eopc04
 //                     or  http://maia.usno.navy.mil/ser7/ser7.dat
 //
 // The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.

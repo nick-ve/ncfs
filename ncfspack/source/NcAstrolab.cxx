@@ -25,8 +25,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcAstrolab.cxx 139 2017-09-20 08:30:45Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcAstrolab
 // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
@@ -152,7 +150,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven February 11, 2019  01:47 IIHE-VUB, Brussels
+//- Modified: Nick van Eijndhoven February 27, 2019 12:09 IIHE-VUB, Brussel
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -606,7 +604,7 @@ void NcAstrolab::SetExperiment(TString name)
   return;
  }
 
- cout << " *NcAstrolab::SetExperiment* Unsupported experiment name : " << name.Data() << endl;
+ cout << " *" << ClassName() << "::SetExperiment* Unsupported experiment name : " << name.Data() << endl;
  }
 ///////////////////////////////////////////////////////////////////////////
 NcPosition NcAstrolab::GetLabPosition() const
@@ -2724,7 +2722,7 @@ void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode
  {
   tx=sx->GetTimestamp();
   if (!tx) tx=(NcTimestamp*)this;
-  cout << " *NcAstrolab::ListSignals* List of stored signals." << endl;
+  cout << " *" << ClassName() << "::ListSignals* List of stored signals." << endl;
   if (fTscmode!=2)
   {
    cout << " Timestamp of the measurement stored at index=" << j;
@@ -2779,7 +2777,7 @@ void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode
 
    if (!iprint)
    {
-    cout << " *NcAstrolab::ListSignals* List of stored signals." << endl;
+    cout << " *" << ClassName() << "::ListSignals* List of stored signals." << endl;
     tx=(NcTimestamp*)this;
     cout << " Current timestamp of the laboratory (Lab time offset w.r.t. UT : "; PrintTime(fToffset,12); cout << ")";
     cout << endl;
@@ -7712,7 +7710,7 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
 
  if (nbins1<=0 || nen1<=0 || range1<=0)
  {
-  cout << " *NcAstrolab::KolmogorovTest* Histogram h1 is empty or has inconsistent data." << endl;
+  cout << " *" << ClassName() << "::KolmogorovTest* Histogram h1 is empty or has inconsistent data." << endl;
   cout << " h1 : nentries=" << nen1 << " nbins=" << nbins1 << " xmin=" << xmin1 << " xmax=" << xmax1 << endl;
   return -1;
  }
@@ -7728,7 +7726,7 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
 
   if (nen2<=0 || range2<=0)
   {
-   cout << " *NcAstrolab::KolmogorovTest* Histogram h2 is empty or has inconsistent data." << endl;
+   cout << " *" << ClassName() << "::KolmogorovTest* Histogram h2 is empty or has inconsistent data." << endl;
    cout << " h2 : nentries=" << nen2 << " nbins=" << nbins2 << " xmin=" << xmin2 << " xmax=" << xmax2 << endl;
    return -1;
   }
@@ -7736,7 +7734,7 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
   Double_t prec=1e-6;
   if (nbins2!=nbins1 || fabs(xmin2-xmin1)>prec || fabs(xmax2-xmax1)>prec)
   {
-   cout << " *NcAstrolab::KolmogorovTest* Histograms h1 and h2 do not have the same binning." << endl;
+   cout << " *" << ClassName() << "::KolmogorovTest* Histograms h1 and h2 do not have the same binning." << endl;
    cout << " h1 : nbins=" << nbins1 << " xmin=" << xmin1 << " xmax=" << xmax1 << endl;
    cout << " h2 : nbins=" << nbins2 << " xmin=" << xmin2 << " xmax=" << xmax2 << endl;
    return -1;
@@ -7777,12 +7775,12 @@ Double_t NcAstrolab::KolmogorovTest(TString mode,TH1* h1,TH1* h2,TF1* pdf,Double
  {
   if (pdf)
   {
-   cout << " *NcAstrolab::KolmogorovTest* Single sample KS-test results for execution mode "<< mode.Data() << endl;
+   cout << " *" << ClassName() << "::KolmogorovTest* Single sample KS-test results for execution mode "<< mode.Data() << endl;
    if (mode.Contains("N")) cout << " === For a single sample KS-test the mode=N is suppressed ===" << endl;
   }
   else
   {
-   cout << " *NcAstrolab::KolmogorovTest* Two sample KS-test results for execution mode "<< mode.Data() << endl;
+   cout << " *" << ClassName() << "::KolmogorovTest* Two sample KS-test results for execution mode "<< mode.Data() << endl;
   }
  }
  value=h1->KolmogorovTest(h2,s.Data());
