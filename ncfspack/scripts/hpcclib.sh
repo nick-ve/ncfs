@@ -1,8 +1,8 @@
 #!/bin/sh
 ### Shell script to create a ROOT loadable HP-CC shared lib out of .cxx source code
 ###
-### Note : An environment variable NCFS has to be set, pointing to the
-###        location where the topdirectory of the NCFS software is residing.  
+### Note : Make sure that the environment variables ROOTSYS, NCFS and CFITSIO are correctly set.
+###        See the file ncfs.sh in the top directory for examples.
 ###
 ### NvE 28-jun-1999 UU-SAP Utrecht
 #
@@ -12,8 +12,8 @@ lib=ncfspack.sl
 ### The option strings for HP-CC shared lib compilation and linking ***
 ### For the HP-CC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-hpcomp="-c -s -z +z +a1 +w +DAportable -I$ROOTSYS/include"
-hproot="-c -s -z +z +a1 +DAportable -I$ROOTSYS/include"
+hpcomp="-c -s -z +z +a1 +w +DAportable -I$ROOTSYS/include -I$CFITSIO"
+hproot="-c -s -z +z +a1 +DAportable -I$ROOTSYS/include -I$CFITSIO"
 hplink="-L$ROOTSYS/lib/ -l*.sl -lm"
 #
 echo "lib = " $lib
@@ -25,7 +25,7 @@ echo "hproot = " $hproot
 cd $NCFS/ncfspack/source
 #
 ### Create the dictionary files
-rootcint -f zzzncfspackdict.cxx -c NCFSHeaders.h NCFSLinkDef.h
+rootcint -f zzzncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 CC $hproot *.cxx   

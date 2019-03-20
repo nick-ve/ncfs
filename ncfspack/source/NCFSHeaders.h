@@ -43,3 +43,4 @@
 #include "NcVersion.h"
 #include "NcVeto.h"
 #include "NcDataStreamStats.h"
+#include "NcFITSIO.h"

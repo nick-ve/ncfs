@@ -1109,3 +1109,6 @@
 27-feb-2019 NvE In class NcAstrolab the string "*NcAstrolab::..." in all printouts replaced by ClassName()
                 so that the correct classname is indicated for derived classes.
                 Also support for Unix time introduced in class NcTimestamp.
+20-mar-2019 NvE New class NcFITSIO introduced to provide an I/O interface for FITS files.
+                Directory ncfspack/scripts (and ncfs.sh example script in the top directory) updated
+                to provide access to the CFITSIO header file "fitsio.h" on various systems.

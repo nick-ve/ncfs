@@ -23,8 +23,9 @@ rem * TEMP will be set to D:\temp
 rem * TMPDIR will be set to D:\temp
 rem * ROOTSYS will be set to D:\root
 rem * NCFS will be set to HOME\cxx\source\ncfs
+rem * CFITSIO will be set to standard (to indicate standard system include path) 
 rem * MSVCDIR will be set to D:\msvc
-rem * INCLUDE will get addition of MSVCDIR\include
+rem * INCLUDE will get addition of MSVCDIR\include and CFITSIO
 rem * LIB will get addition of MSVCDIR\lib
 rem * PATH will get addition of ROOTSYS\bin, MSVCDIR\bin and MSVCDIR\dll
 rem *
@@ -42,8 +43,9 @@ set TEMP=%1:\temp
 set TMPDIR=%1:\temp
 set ROOTSYS=%1:\root
 set NCFS=%HOME%\cxx\source\ncfs
+set CFITSIO=standard
 set MSVCDIR=%1:\msvc
-set INCLUDE=%MSVCDIR%\include;%INCLUDE%
+set INCLUDE=%MSVCDIR%\include;%INCLUDE%;%CFITSIO%
 set LIB=%MSVCDIR%\lib;%LIB%
 set PATH=%PATH%;%ROOTSYS%\bin;%MSVCDIR%\bin;%MSVCDIR%\dll
 

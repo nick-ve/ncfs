@@ -35,9 +35,13 @@ cd ..\source
 rem --- Prevent linking of the standard ROOT library libNew.lib
 if exist %ROOTSYS%\lib\libNew.lib rename %ROOTSYS%\lib\libNew.lib libNew.lix
 
+rem --- Directory where the CFITSIO header files reside
+rem --- Set it to standard if the files are in the standard system include path
+set CFITSIO=standard
+
 rem --- The option strings for MSVC++ DLL compilation and linking ---
-set mscomp=/nologo /c /Ze /TP /MD /GR /GX /I%ROOTSYS%\include
-set msdll=/nologo /Ze /TP /MD /LD /GD /GR /GX /I%ROOTSYS%\include
+set mscomp=/nologo /c /Ze /TP /MD /GR /GX /I%ROOTSYS%\include /I%CFITSIO%
+set msdll=/nologo /Ze /TP /MD /LD /GD /GR /GX /I%ROOTSYS%\include /I%CFITSIO%
 set mslink=/ENTRY:_DllMainCRTStartup@12 %ROOTSYS%\lib\*.lib
 
 if "%1" == "" goto export
@@ -74,7 +78,7 @@ goto end
 echo *** Creation of ROOT loadable export libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint zzzncfspackdict.cxx -c NCFSHeaders.h NCFSLinkDef.h
+rootcint zzzncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
 rem --- Compilation step ---
 cl %mscomp% *.cxx
 rem --- Creation of the export LIB ---
@@ -100,7 +104,7 @@ goto end
 echo *** Creation of ROOT loadable full version libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint zzzncfspackdict.cxx -c NCFSHeaders.h NCFSLinkDef.h
+rootcint zzzncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
 rem --- Creation of the DLL ---
 cl %msdll% *.cxx /link %mslink% /OUT:ncfspack.dll
 rem --- Creation of the full version LIB ---

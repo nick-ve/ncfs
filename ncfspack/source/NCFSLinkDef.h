@@ -48,5 +48,6 @@
  #pragma link C++ class NcVersion+;
  #pragma link C++ class NcVeto+;
  #pragma link C++ class NcDataStreamStats+;
+ #pragma link C++ class NcFITSIO+;
 #endif
  

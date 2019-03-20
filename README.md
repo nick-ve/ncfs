@@ -137,9 +137,9 @@ Installation :
 --------------
 The various shared libraries may be automatically installed using the provided shell
 scripts in the "scripts" directory of the various packages.
-It is essential that one first installs ROOT (including the TPythia6 package
-in view of the NcCollider physics event generator) and run the provided installation
-scripts within the proper "NCFS environment".   
+It is essential that one first installs ROOT (with the pythia6 and cfitsio packages
+in view of the NcCollider physics event generator and the NcFITSIO facility) and run
+the provided installation scripts within the proper "NCFS environment".   
 The proper "NCFS environment" may be obtained automatically by invoking the following
 scripts which are provided in this "ncfs" top directory :
 

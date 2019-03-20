@@ -5,12 +5,15 @@
 ### Nick van Eijndhoven, IIHE-VUB, Brussel, Belgium
 #
 ### Set environment variables to run the ROOT package ###
-export ROOTSYS=/ice3/software/root_v5.34.23
+export ROOTSYS=/ice3/software/root_v5.34.38
 export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
 #
 ### Additional libraries like for instance Pythia
-export MYLIBS=/ice3/software/pythia6
+export MYLIBS=/ice3/software/pythia-6.4.28
 #
+### Directory where the CFITSIO header files reside
+# export CFITSIO=standard ### Use this when the header files are in the standard system include path
+export CFITSIO=/usr/include/cfitsio
 #
 ### Pointer to the NCFS top directory
 export NCFS=/ice3/software/ncfs
@@ -19,6 +22,9 @@ export NCFS=/ice3/software/ncfs
 export PS1="ncfs>"
 #
 export PATH=$ROOTSYS/bin:/ice3/software/firefox:$PATH
+#
+echo " NCFS environment set: ROOTSYS="${ROOTSYS} " NCFS="${NCFS} " CFITSIO="${CFITSIO}
+#
 #
 ### Define the "extractx" facility to "unzip" various file types
 extractx () {

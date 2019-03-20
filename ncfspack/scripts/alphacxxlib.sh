@@ -1,8 +1,8 @@
 #!/bin/sh
 ### Shell script to create a ROOT loadable ALPHA-CXX shared lib out of .cxx source code
 ###
-### Note : An environment variable NCFS has to be set, pointing to the
-###        location where the topdirectory of the NCFS software is residing.  
+### Note : Make sure that the environment variables ROOTSYS, NCFS and CFITSIO are correctly set.
+###        See the file ncfs.sh in the top directory for examples.
 ###
 ### NvE 05-jul-2000 UU-SAP Utrecht
 #
@@ -12,7 +12,7 @@ lib=ncfspack.so
 ### The option string for ALPHA-CXX shared lib compilation and linking ***
 ### For the ALPHA-CXX ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-alpharoot="-x cxx -g0 -shared -w1 -I$ROOTSYS/include -o $lib"
+alpharoot="-x cxx -g0 -shared -w1 -I$ROOTSYS/include -I$CFITSIO -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
@@ -23,7 +23,7 @@ echo "alpharoot = " $alpharoot
 cd $NCFS/ncfspack/source
 #
 ### Create the dictionary files
-rootcint -f zzzncfspackdict.cxx -c NCFSHeaders.h NCFSLinkDef.h
+rootcint -f zzzncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 cxx $alpharoot *.cxx   
