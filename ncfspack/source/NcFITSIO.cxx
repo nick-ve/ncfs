@@ -1603,7 +1603,6 @@ Int_t NcFITSIO::GetImageLayer(TASImage &im,Int_t layer,Double_t* thres,Double_t 
  if (!LoadLayer(arr,layer)) return 0;
 
  Int_t ndim1=fSizes->At(0);
- Int_t ndim2=fSizes->At(1);
  Int_t npix=arr.GetSize();
 
  if (npix)
