@@ -1,15 +1,17 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS, All Rights Reserved.                          *
+ * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
  *                                                                             *
- * Author: The Netherlands Center for Fundamental Studies (NCFS).              *
- *         http://sites.google.com/site/ncfsweb ncfs.nl@gmail.com              *
+ * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
+ *          The Inter-university Institute for High Energies (IIHE).           *                 
+ *                    Website : http://www.iihe.ac.be                          *
+ *            Contact : Nick van Eijndhoven (nickve.nl@gmail.com)              *
  *                                                                             *
  * Contributors are mentioned in the code where appropriate.                   *
  *                                                                             * 
  * No part of this software may be used, copied, modified or distributed       *
- * by any means nor transmitted or translated into machine language without    *
- * written permission by the NCFS.                                             *
- * Permission to use the documentation strictly for non-commercial purposes    *
+ * by any means nor transmitted or translated into machine language for        *
+ * commercial purposes without written permission by the IIHE representative.  *
+ * Permission to use the software strictly for non-commercial purposes         *
  * is hereby granted without fee, provided that the above copyright notice     *
  * appears in all copies and that both the copyright notice and this           *
  * permission notice appear in the supporting documentation.                   *
@@ -43,40 +45,40 @@
 //
 // Note : 
 // ------
-// The current implementation of this NcFITSIO facility is a "quick and dirty"
-// patchwork in order to provide a test bench for further developments.
-// This class is currently being completely re-designed, so no backward compatibility
-// may be expected for future releases.
-// Once a first release is made, then of course backward compatibility will be
-// guaranteed as usual for later releases.
-// The current implementation has been developed from the code of the original TFITSHDU
-// facility as released on 19-jul-2010 by the main author Claudi Martinez via the files
-// TFITS.h and TFITS.cxx which can be found in ROOT v5.34.38.
+// This class has been inspired by the code released on 19-jul-2010
+// by Claudi Martinez via the files TFITS.h and TFITS.cxx.
 //
 // NcFITSIO is an interface for the treatment of Flexible Image Transport System
-// (FITS) files, which are generally used in astronomy. This file format
-// was standardized 1981 and today it is still widely used among astronomers.
+// (FITS) files, which were initially used in astronomy. This file format
+// was introduced in the late 70's and today it is widely used among scientists.
 // FITS files can contain a large variety of (multi-dimensional) data like
 // for instance spectra, data tables, histograms and multi-layered images.
 // Furthermore, FITS data files are self explanatory since they contain
-// human-readable information to serve interpretation of the data within
+// human-readable information to allow the interpretation of the data within
 // the FITS file. For example, a FITS file could contain a 3D data cube, 
-// but an additional description would tell us that we must read it, for 
-// example, as a 3-layer image.
+// but an additional description could indicate that it represents, for 
+// example, a 3-layer image.
 // As such, it is very well suited to make experimental data available
 // to the general community. 
 //
 // The basic data entity is a so called Header-Data Unit (HDU) and the
 // NcFITSIO facility provides several methods to access the data of
 // the various HDUs that may be present in a FITS file.
-// An HDU is a chunk of data with a header containing several tokens as
+// An HDU is a set of data with a header containing several tokens as
 // "keyword = value". The header describes the data structure within
 // the HDU. An HDU can be of two types: an "Image HDU" or a "Table HDU".
-// The former can be any kind of multidimensional array of real numbers,
-// by which the name "Image" may be confusing. One can store an image, but
-// one can also store a N-dimensional data cube. On the other hand, Table
-// HDUs are sets of several rows and columns (a.k.a fields) which contain
-// generic data, such as strings, real or complex numbers and even arrays.
+// The former can be any kind of multidimensional set of numerical values.
+// So, an "Image" should be regarded as an N-dimensional data object,
+// which may indeed contain a (multi-layered) image, but also the data
+// of a matrix, a 1D, 2D or 3D histogram or even space-time detector signals.
+// On the other hand, a Table is a set of several rows and columns
+// (columns are also called fields) which contain generic data, such as strings,
+// integer, real or even complex numbers.
+// In a Table, a (row,column) element may also contain an array of data,
+// which may even have a variable number of array elements for different rows.
+// In this NCFITSIO2 facility, a Table is regarded as a 3D data cube, where
+// a specific single data item is addressed as (row,column,layer).
+// The convention is that all row, column and layer numbering starts at 1.
 //
 // Current limitations :
 // - No support yet for complex values within data tables
@@ -90,8 +92,9 @@
 // -----------
 // The file contains only the primary HDU which consists of
 // an image of NGC7662.
-// We retrieve the first plane of the image array as a TASImage object
-// and as a histogram and display both on a canvas.
+// We retrieve the first layer of the image array as a TASImage object
+// and as a 2-dimensional histogram and display both on a canvas.
+// For illustrative purposes we also retrieve the data as a matrix.
 //
 // gSystem->Load("ncfspack");
 //
@@ -101,24 +104,25 @@
 //
 // if (!q.OpenInputFile(filename)) return;
 //
-// q.ListFileHeader(0);
 // q.ListFileHeader();
-// q.ListHDUHeader();
 //  
-// TMatrixD* mat=q.ReadAsMatrix(0); // Just to illustrate this functionality
-// // mat->Print(); // This produces a lot of printout
-//   
-// TASImage* im=q.ReadAsImage(0);
+// Double_t thres=1000; // Threshold for pixel value
+// Double_t max=1;      // Rescale pixel values to [0,max]
 //
-// TH1* hist=q.ReadAsHistogram();
+// TASImage im;
+// q.GetImageLayer(im,1,&thres,max); // Image with threshold and rescaling
 //
-// // Show the graphics
-// TCanvas* c=new TCanvas("c1", "NcFITSIO Example 1");
-// c->Divide(2,1);
-// c->cd(1);
-// im->Draw();
-// c->cd(2);
-// hist->Draw("COL");
+// TH2D hist;
+// q.GetImageLayer(hist,1,0,max); // Histogram with only rescaling 
+//
+// TMatrixD m;
+// q.GetImageLayer(m,1); // Matrix without threshold and rescaling
+//
+// TCanvas* c1=new TCanvas("c1","NcFITSIO Example 1: Image from layer");
+// im.Draw();
+//
+// TCanvas* c2=new TCanvas("c2","NcFITSIO Example 1: Histogram from layer");
+// hist.Draw("COLZ");
 //
 // Example 2 :
 // -----------
@@ -138,14 +142,26 @@
 //
 // q.ListFileHeader(0);
 // q.ListHDUHeader();
-//   
-// TVectorD* Y=q.GetArrayRow(0);
-// TVectorD* X=q.GetArrayRow(1);
-// TGraph* gr=new TGraph(*X,*Y);
-//      
-// // Show the graphics
-// TCanvas* c=new TCanvas("c1", "NcFITSIO Example 2");
-// gr->Draw("BA");
+//
+// Int_t dim=q.GetImageDimension();    // The dimension "N" of the N-dimensional data object
+//
+// Int_t nmeas=q.GetImageDimension(1); // The number of measurements (i.e. columns)
+//
+// TArrayI ifirst(dim); // Array to indicate the starting point for reading in each dimension
+//
+// TArrayD a1;        // Array to hold the data of row 1
+// ifirst.SetAt(1,0); // Start index 1 of dimension 1 (i.e. columnn 1)
+// ifirst.SetAt(1,1); // Start at index 1 of dimension 2 (i.e. row 1)
+// q.GetImageArray(a1,ifirst,nmeas);
+//
+// TArrayD a2;        // Array to hold the data of row 2
+// ifirst.SetAt(1,0); // Start at index 1 of dimension 1 (i.e. column 1)
+// ifirst.SetAt(2,1); // Start at index 2 of dimension 2 (i.e. row 2)
+// q.GetImageArray(a2,ifirst,nmeas);
+//
+// TGraph* gr=new TGraph(nmeas,a2.GetArray(),a1.GetArray());
+// TCanvas* c1=new TCanvas("c1","NcFITSIO Example 2: Spectrum from Image data");
+// gr->Draw("AP");
 //
 // Example 3 :
 // -----------
@@ -165,21 +181,23 @@
 // q.ListFileHeader(0);
 //  
 // // Open the extension #1 which contains the data table
-// Int_t ext=1;
-// 
-// if (!q.SelectHDU(ext)) return;
+// if (!q.SelectHDU(1)) return;
 //
-// q.ListHDUHeader();
+// q.ListTable();   // List the table column description
+// q.ListTable(10); // List the table contents
 //
-// q.ListTable();
-// q.ListTable(10);
+// // Retrieve the actual values of the column named DATAMAX.
+// TString colname="DATAMAX";
+// TArrayD darr; // Array to hold the actual data
+// q.GetTableColumn(darr,colname);
 //
-// // Retrieve the actual DATAMAX values.
-// TVectorD* v=q.GetTabRealVectorColumn("DATAMAX");
-//
+// // List the contents of the retrieved data array
 // cout << endl;
-// cout << " *** Dump of vector contents for the DATAMAX column" << endl;
-// if (v) v->Print();
+// cout << " Data contents of the column " << colname << endl;
+// for (Int_t i=1; i<=darr.GetSize(); i++)
+// {
+//  cout << " Row:" << i << " value:" << darr.At(i-1) << endl;
+// }
 //
 // Example 4 :
 // -----------
@@ -202,28 +220,31 @@
 // // Open the extension #1 which contains the data table with a selection filter
 // if (!q.SelectHDU("[1][DATAMAX>2e-15]")) return;
 //
-// q.ListHDUHeader();
+// q.ListTable();   // List the table column description
+// q.ListTable(10); // List the table contents
 //
-// q.ListTable();
-// q.ListTable(10);
+// // Retrieve the actual values of the column named DATAMAX.
+// TString colname="DATAMAX";
+// TArrayD darr; // Array to hold the actual data
+// q.GetTableColumn(darr,colname);
 //
-// // Retrieve the actual DATAMAX value(s) of the matching row(s)
-// TVectorD* v=q.GetTabRealVectorColumn("DATAMAX");
-//
+// // List the contents of the retrieved data array
 // cout << endl;
-// cout << " *** Dump of vector contents for the filtered DATAMAX column" << endl;
-// if (v) v->Print();
+// cout << " Data contents of the column " << colname << endl;
+// for (Int_t i=1; i<=darr.GetSize(); i++)
+// {
+//  cout << " Row:" << i << " value:" << darr.At(i-1) << endl;
+// }
 //
 // Example 5 :
 // -----------
 // The primary HDU contains an array representing a flux vs. wavelength spectrum.
 // The extension #1 contains a data table with 9 rows and 8 columns.
 // Column 4 has the name "mag" and contains a vector of 6 numeric components.
+// We will read the "mag" values of the first 5 rows.
 // The "mag" values of rows 1 and 2 are :
 // Row1: (99.0, 24.768, 23.215, 21.68, 21.076, 20.857)
 // Row2: (99.0, 21.689, 20.206, 18.86, 18.32 , 18.128)
-//
-// Note that row and column indices start at 0.
 //
 // gSystem->Load("ncfspack");
 //
@@ -236,98 +257,29 @@
 // q.ListFileHeader();
 //  
 // // Open the extension #1 which contains the data table
-// Int_t ext=1;
+// if(!q.SelectHDU(1)) return;
 //
-// if(!q.SelectHDU(ext)) return;
+// q.ListTable();   // List the table column description
+// q.ListTable(10); // List the table contents
 //
-// q.ListHDUHeader();
+// // Read the "mag" values of rows 1 to 5 (incl.)
+// TArrayD arr;
+// for (Int_t jrow=1; jrow<=5; jrow++)
+// { 
+//  q.GetTableCell(arr,jrow,"mag");
 //
-// q.ListTable();
-// q.ListTable(10);
-//
-// // Read the vectors at rows 1 and 2
-// TVectorD* vecs[2];
-// vecs[0]=q.GetTabRealVectorCell(0, "mag");
-// vecs[1]=q.GetTabRealVectorCell(1, "mag");
-//
-// cout << endl;
-// cout << " *** Standard print of vector 1 for mag" << endl;
-// if (vecs[0]) vecs[0]->Print();
-//
-// cout << endl;
-// cout << " *** Standard print of vector 2 mag" << endl;
-// if (vecs[1]) vecs[1]->Print();
-//
-// cout << endl;
-// cout << " *** Accessing every component of vector 1" << endl;
-// TVectorD* v=vecs[0];
-// Int_t n=0;
-// if (v) n=v->GetNoElements();
-// Double_t val=0;
-// for (Int_t i=0; i<n; i++)
-// {
-//  val=(*v)[i];
-//  cout << " " << val;
-// }
-// cout << endl;
-//
-// cout << endl;
-// cout << " *** Accessing every component of vector 2" << endl;
-// TVectorD* v=vecs[1];
-// Int_t nv=0;
-// if (v) n=v->GetNoElements();
-// Double_t val=0;
-// for (Int_t i=0; i<n; i++)
-// {
-//  val=(*v)[i];
-//  cout << " " << val;
-// }
-// cout << endl;
-//
-// cout << endl;
-// cout << " *** Dump of all row values of \"mag\" via the GetTabRealVectorCells" << endl;
-// TObjArray* arr=q.GetTabRealVectorCells("mag");
-// Int_t na=0;
-// if (arr) na=arr->GetEntriesFast();
-// for (Int_t i=0; i<na; i++)
-// {
-//  v=(TVectorD*)arr->At(i);
-//  nv=v->GetNoElements();
-//  for (Int_t j=0; j<nv; j++)
+//  // List the contents of the data array
+//  cout << endl;
+//  cout << " \"mag\" data contents of Row:" << jrow << endl;
+//  for (Int_t i=1; i<=arr.GetSize(); i++)
 //  {
-//   val=(*v)[j];
-//   cout << " " << val;
+//   cout <<  " " << arr.At(i-1);
 //  }
 //  cout << endl;
 // }
-//
-// cout << endl;
-// cout << " *** Dump of all row values of \"reddening\" via the GetTabRealVectorCells" << endl;
-// TObjArray* arr=q.GetTabRealVectorCells("reddening");
-// na=0;
-// if (arr) na=arr->GetEntriesFast();
-// for (Int_t i=0; i<na; i++)
-// {
-//  v=(TVectorD*)arr->At(i);
-//  nv=v->GetNoElements();
-//  for (Int_t j=0; j<nv; j++)
-//  {
-//   val=(*v)[j];
-//   cout << " " << val;
-//  }
-//  cout << endl;
-// }
-//
-// val=q.GetTabRealValueCell(0,"mag");
-// 
-// cout << endl;
-// cout << " Value via GetTabRealValueCell(0,mag) = " << val << endl; 
-//
-// q.SelectHDU();
-// q.ListHDUHeader();
-//
 //
 //--- Author: Nick van Eijndhoven March 13, 2019 03:40 IIHE-VUB, Brussel
+//- Modified: Nick van Eijndhoven April 12, 2019 10:25 IIHE-VUB, Brussel
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -352,65 +304,83 @@ NcFITSIO::~NcFITSIO()
 NcFITSIO::NcFITSIO(const NcFITSIO& q) : TNamed(q)
 {
 // Copy constructor
+
+ Initialize();
+ fFilename=q.fFilename;
+ fFilenameFilter=q.fFilenameFilter;
+
+ if (!LoadHeaderInfo())
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::NcFITSIO* Failure in copy constructor." << endl;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::Initialize()
 {
 // Initialization of all parameters 
 
- fFilename="none";       // The (full path) name of the FITS file on the computer system
- fFilenameFilter="none"; // The FITS filename with the HDU selection filter
+ fFilename="";           // The (full path) name of the FITS file on the computer system
+ fFilenameFilter="";     // The FITS filename with the HDU selection filter
  fInput=0;               // Pointer to the FITS input file
  fOutput=0;              // Pointer to the FITS output file
- fRecords=0;             // HDU metadata records
- fNRecords=0;            // Number of records
- fType=kImageHDU;        // HDU type
- fExtensionName="none";  // Extension Name
- fNumber=0;              // HDU number (1=PRIMARY)
+ fType=kImageHDU;        // The HDU type
+ fExtensionName="";      // Extension name of the HDU
+ fExtensionNumber=0;     // Extension number of the HDU (0=PRIMARY)
+ fNkeys=0;               // The number of HDU keywords
+ fKeyNames=0;            // The HDU key names
+ fKeyValues=0;           // The HDU key values
+ fComments=0;            // The HDU (key) comments
+ fNrows=0;               // The number of table rows
+ fNcolumns=0;            // The number of table columns
+ fColumnNames=0;         // The names of the table columns
+ fColumnTypes=0;         // The types of the table columns
+ fColumnLayers=0;        // The number of layers of the table column
  fSizes=0;               // Image sizes in each dimension (when fType == kImageHDU)
- fPixels=0;              // Image pixels (when fType == kImageHDU)
- fColumnsInfo=0;         // Information about columns (when fType == kTableHDU)
- fNColumns=0;            // Number of columns (when fType == kTableHDU)
- fNRows=0;               // Number of rows (when fType == kTableHDU)
- fCells=0;               // Table cells (when fType == kTableHDU)
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::Reset()
 {
-// Reset all allocated memory.
+// Reset all allocated memory and parameters
 
-   if (fRecords) delete [] fRecords;
+ if (fKeyNames)
+ {
+  delete[] fKeyNames;
+  fKeyNames=0;
+ }
+ if (fKeyValues)
+ {
+  delete[] fKeyValues;
+  fKeyValues=0;
+ }
+ if (fComments)
+ {
+  delete[] fComments;
+  fComments=0;
+ }
+ if (fColumnNames)
+ {
+  delete[] fColumnNames;
+  fColumnNames=0;
+ }
+ if (fColumnTypes)
+ {
+  delete[] fColumnTypes;
+  fColumnTypes=0;
+ }
+ if (fColumnLayers)
+ {
+  delete[] fColumnLayers;
+  fColumnLayers=0;
+ }
+ if (fSizes)
+ {
+  delete fSizes;
+  fSizes=0;
+ }
 
-   if (fType == kImageHDU) {
-      if (fSizes)  delete fSizes;
-      if (fPixels) delete fPixels;
-   } else {
-      if (fColumnsInfo) {
-         if (fCells) {
-            for (Int_t i = 0; i < fNColumns; i++) {               
-               if (fColumnsInfo[i].fType == kString) {
-                  //Deallocate character arrays allocated for kString columns
-                  Int_t offset = i * fNRows;
-                  for (Int_t row = 0; row < fNRows; row++) {
-                     delete [] fCells[offset+row].fString;
-                  }
-               } else if (fColumnsInfo[i].fType == kRealVector) {
-                  //Deallocate character arrays allocated for kString columns
-                  Int_t offset = i * fNRows;
-                  for (Int_t row = 0; row < fNRows; row++) {
-                     delete [] fCells[offset+row].fRealVector;
-                  }
-               }
-            }
-            
-            delete [] fCells;
-         }
-      
-         delete [] fColumnsInfo;
-      }
-      
-      
-   }
+ // Reset all parameters
+ Initialize();
 }
 /////////////////////////////////////////////////////////////////////////// 
 Bool_t NcFITSIO::OpenInputFile(TString specs)
@@ -449,7 +419,7 @@ Bool_t NcFITSIO::OpenInputFile(TString specs)
  fFilenameFilter=file;
  fFilename=StripFilter(fFilenameFilter);
 
- Bool_t good=LoadHDU(fFilenameFilter);
+ Bool_t good=LoadHeaderInfo();
 
  if (good)
  {
@@ -460,7 +430,6 @@ Bool_t NcFITSIO::OpenInputFile(TString specs)
  {
   cout << endl;
   cout << " *" << ClassName() << "::OpenInputFile* Could not open " << fFilenameFilter << endl;
-
   Reset();
  }
 
@@ -476,6 +445,263 @@ TString NcFITSIO::StripFilter(TString filename) const
  if (idx>=0) s.Resize(idx);
 
  return s;
+}
+///////////////////////////////////////////////////////////////////////////
+Bool_t NcFITSIO::LoadHeaderInfo()
+{
+// Load the header records of the current HDU and indicate success (kRUE) or failure (kFALSE)
+// via the boolean return value.
+
+ Bool_t good=kTRUE;
+ fInput=0;
+ int status=0;
+
+ if (fKeyNames) delete[] fKeyNames;
+ if (fKeyValues) delete[] fKeyValues;
+ if (fComments) delete[] fComments;
+
+ // Open the FITS file as specified via OpenInputFile() or SelectHDU()
+ fits_open_file(&fInput,fFilenameFilter.Data(),READONLY,&status);
+ 
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::LoadHeaderInfo* Could not open " << fFilenameFilter << endl;
+  Reset();
+  good=kFALSE;
+  return good;
+ }
+
+ // Read the number of this HDU
+ int hdunum;
+ fits_get_hdu_num(fInput,&hdunum);
+ fExtensionNumber=Int_t(hdunum)-1;
+
+ // Read the type of this HDU
+ int hdutype;
+ fits_get_hdu_type(fInput,&hdutype,&status);
+ 
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve the HDU type." << endl;
+  fits_close_file(fInput,&status);
+  Reset();
+  good=kFALSE;
+  return good;
+ }
+
+ fType=kTableHDU;
+ if (hdutype==IMAGE_HDU) fType=kImageHDU;
+
+ // Read the HDU header records
+ int nkeys,morekeys;
+ fits_get_hdrspace(fInput,&nkeys,&morekeys,&status);
+ 
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve the HDU header space." << endl;
+  fits_close_file(fInput,&status);
+  Reset();
+  good=kFALSE;
+  return good;
+ }
+
+ // Store the HDU header information
+ fKeyNames=new TString[nkeys];
+ fKeyValues=new TString[nkeys];
+ fComments=new TString[nkeys];
+
+ char keyname[FLEN_KEYWORD+1];
+ char keyvalue[FLEN_VALUE+1];
+ char comment[FLEN_COMMENT+1];
+ fNkeys=0;
+ for (Int_t i=1; i<=nkeys; i++)
+ {
+  fits_read_keyn(fInput,i,keyname,keyvalue,comment,&status);
+
+  if (status)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve info of HDU key record "<< i << endl;
+   fits_close_file(fInput,&status);
+   Reset(); 
+   good=kFALSE;
+   return good;
+  }
+
+  fKeyNames[i-1]=keyname;
+  fKeyValues[i-1]=keyvalue;
+  fComments[i-1]=comment;
+
+  fNkeys++;
+
+  // Obtain the extension name
+  fExtensionName="[";
+   if (fKeyNames[i-1]=="EXTNAME")
+  {
+   fExtensionName+=fKeyValues[i-1];
+   fExtensionName.ReplaceAll("'",""); // Remove the single quotes
+  }
+  else
+  {
+   fExtensionName+=fExtensionNumber;
+  }
+  fExtensionName+="]";
+ }
+
+ // Obtain row and column information in case of Table data
+ if (fType==kTableHDU)
+ {
+  long nrows;
+  fits_get_num_rows(fInput,&nrows,&status);
+
+  if (status)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve number of table rows." << endl;
+   fits_close_file(fInput,&status);
+   Reset(); 
+   good=kFALSE;
+   return good;
+  }
+      
+  fNrows=Int_t(nrows);
+      
+  int ncols;
+  fits_get_num_cols(fInput,&ncols,&status);
+
+  if (status)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve number of table columns." << endl;
+   fits_close_file(fInput,&status);
+   Reset(); 
+   good=kFALSE;
+   return good;
+  }
+
+  // Store the Table column information
+  fNcolumns=Int_t(ncols);
+  fColumnNames=new TString[ncols];
+  fColumnTypes=new eColumnTypes[ncols];
+  fColumnLayers=new Int_t[ncols];
+            
+  // Read the column names
+  char colname[80];     
+  int jcol;
+  fits_get_colname(fInput,CASEINSEN,(char*)"*",colname,&jcol,&status);
+  while (status==COL_NOT_UNIQUE)
+  {
+   fColumnNames[jcol-1]=colname;
+   fits_get_colname(fInput,CASEINSEN,(char*)"*",colname,&jcol,&status);
+  }
+  if (status!=COL_NOT_FOUND)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve name of table column " << jcol << endl;
+   fits_close_file(fInput,&status);
+   Reset(); 
+   good=kFALSE;
+   return good;
+  }
+
+  // Read the column data types
+  status=0;
+  int typecode;
+  long repeat,width;
+  Int_t dim=1; // Dimension of the stored column elements
+  for (jcol=1; jcol<=fNcolumns; jcol++)
+  {
+   fits_get_coltype(fInput,jcol,&typecode,&repeat,&width,&status);
+
+   if (status)
+   {
+    cout << endl;
+    cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve data type of table column " << jcol << endl;
+    fits_close_file(fInput,&status);
+    Reset(); 
+    good=kFALSE;
+    return good;
+   }
+
+   // Determine the dimension of the stored column elements
+   dim=Int_t(repeat);
+   if (typecode==TSTRING) dim=Int_t(repeat/width);
+   if (dim<=0) dim=1;
+
+   fColumnLayers[jcol-1]=dim;
+
+   if (typecode==TSTRING)
+   {
+    fColumnTypes[jcol-1]=kString;
+    if (dim>1) fColumnTypes[jcol-1]=kStringArray;
+   }
+   else if (typecode==TCOMPLEX || typecode==TDBLCOMPLEX)
+   {
+    fColumnTypes[jcol-1]=kComplexNumber;
+    if (dim>1) fColumnTypes[jcol-1]=kComplexArray;
+   }
+   else
+   {
+    fColumnTypes[jcol-1]=kRealNumber;
+    if (dim>1) fColumnTypes[jcol-1]=kRealArray;
+   }
+  }
+ } // End of Table info
+
+ // Obtain dimension and size information in case of Image data
+ if (fType==kImageHDU)
+ {
+  // The number of dimensions of the N-dimensional data 
+  status=0;
+  int ndims=0;
+  fits_get_img_dim(fInput,&ndims,&status);
+
+  if (status)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve the number of dimensions of the Image." << endl;
+   fits_close_file(fInput,&status);
+   Reset(); 
+   good=kFALSE;
+   return good;
+  }
+
+  // Empty Image
+  if (ndims<=0)
+  {
+   fSizes=new TArrayI();
+   return good;
+  }
+
+  // The size of each dimension
+  long* dimsizes=new long[ndims];
+  fits_get_img_size(fInput,ndims,dimsizes,&status);
+
+  if (status)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve the sizes of the dimensions of the Image." << endl;
+   fits_close_file(fInput,&status);
+   Reset(); 
+   good=kFALSE;
+   delete[] dimsizes;
+   return good;
+  }
+
+  // Store the size of each dimension
+  fSizes=new TArrayI(ndims);
+  for (Int_t i= 0; i<ndims; i++)
+  {
+   fSizes->SetAt(dimsizes[i],i);
+  }
+
+  delete [] dimsizes;
+ } // End of Image info
+
+ return good;
 }
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcFITSIO::SelectHDU(TString extname)
@@ -499,7 +725,7 @@ Bool_t NcFITSIO::SelectHDU(TString extname)
  fFilenameFilter=fFilename;
  fFilenameFilter+=extname;
 
- Bool_t good=LoadHDU(fFilenameFilter);
+ Bool_t good=LoadHeaderInfo();
 
  if (good)
  {
@@ -510,7 +736,6 @@ Bool_t NcFITSIO::SelectHDU(TString extname)
  {
   cout << endl;
   cout << " *" << ClassName() << "::SelectHDU* Could not select " << fFilenameFilter << endl;
-
   Reset();
  }
  
@@ -538,71 +763,1195 @@ Bool_t NcFITSIO::SelectHDU(Int_t extnumber)
  return good;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcFITSIO::GetTabRealValueCell(Int_t row,Int_t col)
+TString NcFITSIO::GetKeywordValue(TString keyname,Int_t mode)
 {
-// Provide the real number value of the cell (row,col) in a table.
-// Note that the row and column counting starts at 0.
-// If the cell contains a vector of data, the value of the first element is returned.
-// In case of inconsistent data the value 0 is returned.
+// Provide a TString with the value of the HDU keyword with the specified name.
+// 
+// If no match is found, an empty string is returned.
+//
+// mode = 0 --> The HDU keyword name should match exactly the provided "keyname"
+//        1 --> The HDU keyword name only has to contain the provided "keyname" pattern.
+//
+// The default value is mode=0.
+//
+// Notes :
+// -------
+// 1) Leading and trailing blanks and single quotes will be removed from the value string.
+//    For example, the HDU keyword value 'Zenith  ' will be provided as TString="Zenith".
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
 
- if (row<0 || row>=fNRows || col<0 || col>=fNColumns) return 0;
 
- if (fType!=kTableHDU || fColumnsInfo[col].fType==kString) return 0;
+ TString value="";
 
- Double_t val=0;
-
- Int_t dim=fColumnsInfo[col].fDim;
-
- if (fColumnsInfo[col].fType==kRealNumber && dim==1)
+ for (Int_t i=0; i<fNkeys; i++)
  {
-  val=fCells[col*fNRows+row].fRealNumber;
-  return val;
+  if (fKeyNames[i]==keyname || (mode && fKeyNames[i].Contains(keyname.Data())))
+  {
+   value=fKeyValues[i];
+   break;
+  } 
  }
 
- if (fColumnsInfo[col].fType==kRealVector || (fColumnsInfo[col].fType==kRealNumber && dim>1))
- {
-  TVectorD* v=GetTabRealVectorCell(row,col);
+ value=value.Strip(value.kBoth,' '); // Remove leading and trailing blanks
+ value.ReplaceAll("'","");          // Remove the single quotes
 
-  if (!v) return 0;
-
-  val=(*v)[0];
-  delete v;
- }
-
- return val;
+ return value;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcFITSIO::GetTabRealValueCell(Int_t row,TString colname)
+Int_t NcFITSIO::GetTableNrows() const
 {
-// Provide the real number value of the cell matching the row number "row"
-// and column name "colname" in a table.
-// Note that the row and column counting starts at 0.
-// If the cell contains a vector of data, the value of the first element is returned.
+// Provide the number of rows in the table
+
+ return fNrows;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableNcolumns() const
+{
+// Provide the number of columns in the table
+
+ return fNcolumns;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetColumnNumber(TString colname,Int_t mode) const
+{
+// Provide the number of the first table column that matches the provided name pattern.
+// Column numbers start at 1.
+// 
+// If no match is found, the value 0 is returned.
+//
+// mode = 0 --> The column name should match exactly the provided "colname"
+//        1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The default value is mode=0.
+   
+ Int_t colnum=0;
+ Int_t match=0;
+ for (Int_t i=1; i<=fNcolumns; i++)
+ {
+  if (!mode && fColumnNames[i-1]==colname) match=1;
+  if (mode && fColumnNames[i-1].Contains(colname)) match=1;
+  if (match)
+  {
+   colnum=i;
+   break;
+  }
+ }
+ return colnum;
+}
+///////////////////////////////////////////////////////////////////////////
+TString NcFITSIO::GetColumnName(Int_t colnum) const
+{
+// Provide the name of the table column with number "colnum".
+// Column numbers start at 1.
+//
+// In case of inconsistent data an empty string is returned.
+
+ TString name="";
+
+ if (fType!=kTableHDU || colnum<1 || colnum>fNcolumns) return name;
+
+ name=fColumnNames[colnum-1];
+ return name;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,Int_t col,Int_t layer)
+{
+// Provide the real number value of the cell (row,col,layer) in a table.
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+// The dimension of the full array is reflected by the return argument,
+// which in case of a single data element is 1.
+//
+// The row, column and layer counting starts at 1.
+//
+// The default value is layer=1.
+//
+// In case of inconsistent data the value 0 is provided with 0 as return argument.
+
+ TArrayD arr;
+ Int_t ndim=GetTableCell(arr,row,col);
+
+ if (!ndim || layer<1 || layer>ndim)
+ {
+  val=0;
+  return 0;
+ }
+
+ val=arr[layer-1];
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,TString colname,Int_t layer,Int_t mode)
+{
+// Provide the real number value of the cell matching the row number "row",
+// column name (pattern) "colname" and layer number "layer" in a table.
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+// The dimension of the full array is reflected by the return argument,
+// which in case of a single data element is 1.
+//
+// mode = 0 --> The column name should match exactly the provided "colname"
+//        1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The row, column and layer counting starts at 1.
+//
+// The default values are layer=1 and mode=0.
+//
+// In case of inconsistent data the value 0 is provided with 0 as return argument.
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t ndim=GetTableCell(val,row,col);
+
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,Int_t col)
+{
+// Provide via array "arr" the real number value(s) of the cell (row,col) in a table.
+// The row and column counting starts at 1.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+
+ arr.Set(0);
+
+ if (row<=0 || row>fNrows || col<=0 || col>fNcolumns) return 0;
+
+ if (fType!=kTableHDU || fColumnTypes[col-1]==kString || fColumnTypes[col-1]==kStringArray) return 0;
+
+ // Obtain the number of (array) elements stored in this (row,col) cell.
+ Int_t dim=0;
+ int colnum=col;
+ long long rownum=row;
+ long repeat=0;
+ long offset=0;
+ int status=0;
+ fits_read_descript(fInput,colnum,rownum,&repeat,&offset,&status);
+
+ if (!status) // The column was created to hold a variable number of elements
+ {
+  dim=repeat;
+ }
+ else // The column was created to hold a fixed number of elements
+ {
+  dim=fColumnLayers[col-1];
+ }
+ 
+ if (dim<=0) return 0;
+
+ // Read the cell contents into an array
+ double nulval=0;
+ int anynul=0;
+ double* array=new double[dim];
+ status=0;
+ fits_read_col(fInput,TDOUBLE,col,row,1,dim,&nulval,array,&anynul,&status);
+
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::GetTableCell* Could not retrieve data type of table cell [" 
+               << row << "," << col << "]." << endl;
+  fits_close_file(fInput,&status);
+  Reset();
+  delete [] array; 
+  return 0;
+ }
+
+ // Copy the cell values into the output array
+ arr.Set(dim);
+ for (Int_t i=0; i<dim; i++)
+ {
+  arr.SetAt(array[i],i);
+ }
+
+ delete [] array;
+ return dim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,TString colname,Int_t mode)
+{
+// Provide via array "arr" the real number value(s) of the cell matching the row number "row"
+// and column name (pattern) "colname" in a table.
+// The row and column counting starts at 1.
+//
+// mode = 0 --> The column name should match exactly the provided "colname"
+//        1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The default value is mode=0.
+//
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t ndim=GetTableCell(arr,row,col);
+
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,Int_t col,Int_t layer)
+{
+// Provide the data item from the cell (row,col,layer) in a table as a TString.
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+// The dimension of the full array is reflected by the return argument,
+// which in case of a single data element is 1.
+//
+// The row, column and layer counting starts at 1.
+//
+// The default value is layer=1.
+//
+// In case of inconsistent data an empty string is provided with 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+
+ TString* arr=0;
+ Int_t ndim=GetTableCell(arr,row,col);
+ if (!ndim || layer<1 || layer>ndim)
+ {
+  str="";
+  ndim=0;
+ }
+ else
+ {
+  str=arr[layer-1];
+ }
+ 
+ delete[] arr;
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,TString colname,Int_t layer,Int_t mode)
+{
+// Provide the data item of the cell matching the row number "row",
+// column name (pattern) "colname" and layer number "layer" in a table as a TString.
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+// The dimension of the full array is reflected by the return argument,
+// which in case of a single data element is 1.
+//
+// mode = 0 --> The column name should match exactly the provided "colname"
+//        1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The row, column and layer counting starts at 1.
+//
+// The default values are layer=1 and mode=0.
+//
+// In case of inconsistent data an empty string is provided with 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t ndim=GetTableCell(str,row,col,layer);
+
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,Int_t col)
+{
+// Provide via the TString array "arr" the content(s) of the cell (row,col) in a table.
+// The row and column counting starts at 1.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+// 3) This memberfunction produces a newly created TString array, so to prevent a memory leak,
+//    the user should invoke the "delete[]" operator when the array is not needed anymore.
+// 4) To obtain an array with automatic memory management and size indication, the user is
+//    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+
+ if (!arr) arr=new TString[1];
+ arr[0]="";
+
+ if (row<=0 || row>fNrows || col<=0 || col>fNcolumns) return 0;
+
+ if (fType!=kTableHDU) return 0;
+
+ // Obtain the number of (array) elements stored in this (row,col) cell.
+ Int_t dim=0;
+ int colnum=col;
+ long long rownum=row;
+ long repeat=0;
+ long offset=0;
+ int status=0;
+ fits_read_descript(fInput,colnum,rownum,&repeat,&offset,&status);
+
+ if (!status) // The column was created to hold a variable number of elements
+ {
+  dim=repeat;
+ }
+ else // The column was created to hold a fixed number of elements
+ {
+  dim=fColumnLayers[col-1];
+ }
+ 
+ if (dim<=0) return 0;
+
+ // Retrieve the character width for this column
+ int dispwidth=0;
+ status=0;
+ fits_get_col_display_width(fInput,col,&dispwidth,&status);
+
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::GetTableCell* Could not retrieve string width of table cell [" 
+               << row << "," << col << "]." << endl;
+  fits_close_file(fInput,&status);
+  Reset();
+  return 0;
+ }
+
+ if (dispwidth<=0) dispwidth=1;
+
+ // Read the cell contents into an array
+ char* nulval=(char*)"";
+ int anynul=0;
+ char** array=new char*[dim];
+ for (Int_t i=0; i<dim; i++)
+ {
+  array[i]=new char[dispwidth+1];
+ }
+ fits_read_col(fInput,TSTRING,col,row,1,dim,nulval,array,&anynul,&status);
+
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::GetTableCell* Could not retrieve string of table cell [" 
+               << row << "," << col << "]." << endl;
+  fits_close_file(fInput,&status);
+  Reset();
+  delete [] array; 
+  return 0;
+ }
+
+ // Copy the data into the output array
+ delete[] arr;
+ arr=new TString[dim];
+ for (Int_t j=0; j<dim; j++)
+ {
+  arr[j]=array[j];
+ }
+
+ delete[] array;
+ return dim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,TString colname,Int_t mode)
+{
+// Provide via the TString array "arr" the content(s) of the cell matching the row number "row"
+// and column name (pattern) "colname" in a table.
+// The row and column counting starts at 1.
+//
+// mode = 0 --> The column name should match exactly the provided "colname"
+//        1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The default value is mode=0.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+// 3) This memberfunction produces a newly created TString array, so to prevent a memory leak,
+//    the user should invoke the "delete[]" operator when the array is not needed anymore.
+// 4) To obtain an array with automatic memory management and size indication, the user is
+//    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t ndim=GetTableCell(arr,row,col);
+
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,Int_t col)
+{
+// Provide via an array of TObjString objects the content(s) of the cell (row,col) in a table.
+// The row and column counting starts at 1.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array is provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+
+ TString* temp=0;
+ Int_t ndim=GetTableCell(temp,row,col);
+
+ arr.Clear();
+ arr.SetOwner();
+
+ TObjString* sobj;
+ for (Int_t i=0; i<ndim; i++)
+ {
+  sobj=new TObjString();
+  sobj->SetString(temp[i]);
+  arr.Add(sobj);
+ }
+
+ delete[] temp;
+
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,TString colname,Int_t mode)
+{
+// Provide via an array of TObjString objects the content(s) of the cell matching the row number "row"
+// and column name (pattern) "colname" in a table.
+// The row and column counting starts at 1.
+//
+// mode = 0 --> The column name should match exactly the provided "colname"
+//        1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The default value is mode=0.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t ndim=GetTableCell(arr,row,col);
+
+ return ndim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableColumn(TArrayD &arr,Int_t col,Int_t rstart,Int_t rend,Int_t layer)
+{
+// Provide via array "arr" the real number values for row=[rstart,rend], column=col
+// and layer number "layer".
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+//
+// Input arguments :
+// -----------------
+// arr    : The array to contain the retrieved real numbers
+// col    : The requested column number (first column is col=1)
+// rstart : Row number to start with (first row is rstart=1)
+// rend   : Row number to end with (rend=0 will process until the last row)
+// layer  : The layer number
+//
+// The default values are rstart=1, rend=0 and layer=1.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+
+ if (!rend) rend=fNrows;
+
+ arr.Set(0);
+
+ if (rstart<=0 || rstart>fNrows || rend<=0 || rend>fNrows || col<=0 || col>fNcolumns || layer<1) return 0;
+
+ if (fType!=kTableHDU || fColumnTypes[col-1]==kString || fColumnTypes[col-1]==kStringArray) return 0;
+
+ Int_t ndim=(rend-rstart)+1;
+ arr.Set(ndim);
+
+ Double_t val=0;
+ Int_t dim=0;
+ Int_t n=0;
+ for (Int_t irow=rstart; irow<=rend; irow++)
+ {
+  dim=GetTableCell(val,irow,col);
+
+  if (!dim || layer>dim)
+  {
+   arr.Set(0);
+   return 0;
+  }
+
+  arr.AddAt(val,n);
+  n++;
+ }
+
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableColumn(TArrayD &arr,TString colname,Int_t rstart,Int_t rend,Int_t layer,Int_t mode)
+{
+// Provide via array "arr" the real number values for row=[rstart,rend], the column
+// for which the name matches the name (pattern) "colname" and the layer number "layer".
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+//
+// Input arguments :
+// -----------------
+// arr     : The array to contain the retrieved real numbers
+// colname : The requested column name (pattern)
+// rstart  : Row number to start with (first row is rstart=1)
+// rend    : Row number to end with (rend=0 will process until the last row)
+// layer   : The layer number
+// mode    : 0 --> The column name should match exactly the provided "colname"
+//           1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The default values are rstart=1, rend=0, layer=1 and mode=0.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t n=GetTableColumn(arr,col,rstart,rend,layer);
+
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableColumn(TString* &arr,Int_t col,Int_t rstart,Int_t rend,Int_t layer)
+{
+// Provide via the TString array "arr" the contents for row=[rstart,rend], column=col
+// and layer number "layer".
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+//
+// Input arguments :
+// -----------------
+// arr    : The array to contain the retrieved strings
+// col    : The requested column number (first column is col=1)
+// rstart : Row number to start with (first row is rstart=1)
+// rend   : Row number to end with (rend=0 will process until the last row)
+// layer  : The layer number
+//
+// The default values are rstart=1, rend=0 and layer=1.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+// 3) This memberfunction produces a newly created TString array, so to prevent a memory leak,
+//    the user should invoke the "delete[]" operator when the array is not needed anymore.
+// 4) To obtain an array with automatic memory management and size indication, the user is
+//    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+
+ if (!rend) rend=fNrows;
+
+ if (!arr) arr=new TString[1];
+ arr[0]="";
+
+ if (rstart<=0 || rstart>fNrows || rend<=0 || rend>fNrows || col<=0 || col>fNcolumns || layer<1) return 0;
+
+ if (fType!=kTableHDU) return 0;
+
+ Int_t ndim=(rend-rstart)+1;
+
+ delete[] arr;
+ arr=new TString[ndim];
+
+ TString str;
+ Int_t dim=0;
+ Int_t n=0;
+ for (Int_t irow=rstart; irow<=rend; irow++)
+ {
+  dim=GetTableCell(str,irow,col,layer);
+
+  if (!dim || layer>dim)
+  {
+   delete[] arr;
+   arr=new TString[1];
+   arr[0]="";
+   return 0;
+  }
+
+  arr[n]=str;
+  n++;
+ }
+
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableColumn(TString* &arr,TString colname,Int_t rstart,Int_t rend,Int_t layer,Int_t mode)
+{
+// Provide via the TString array "arr" the contents for row=[rstart,rend], the column
+// for which the name matches the name (pattern) "colname" and layer number "layer".
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+//
+// Input arguments :
+// -----------------
+// arr     : The array to contain the retrieved strings
+// colname : The requested column name (pattern)
+// rstart  : Row number to start with (first row is rstart=1)
+// rend    : Row number to end with (rend=0 will process until the last row)
+// layer   : The layer number
+// mode    : 0 --> The column name should match exactly the provided "colname"
+//           1 --> The column name only has to contain the provided "colname" pattern.
+//
+// The default values are rstart=1, rend=0, layer=1 and mode=0.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+// 3) This memberfunction produces a newly created TString array, so to prevent a memory leak,
+//    the user should invoke the "delete[]" operator when the array is not needed anymore.
+// 4) To obtain an array with automatic memory management and size indication, the user is
+//    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t n=GetTableColumn(arr,col,rstart,rend,layer);
+
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableColumn(TObjArray &arr,Int_t col,Int_t rstart,Int_t rend,Int_t layer)
+{
+// Provide via an array of TObjString objects the contents for row=[rstart,rend], column=col
+// and layer number "layer".
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+//
+// Input arguments :
+// -----------------
+// arr    : The array to contain the retrieved TObjString objects
+// col    : The requested column number (first column is col=1)
+// rstart : Row number to start with (first row is rstart=1)
+// rend   : Row number to end with (rend=0 will process until the last row)
+// layer  : The layer number (first layer is layer=1)
+//
+// The default values are rstart=1, rend=0 and layer=1.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array is provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+
+ if (!rend) rend=fNrows;
+
+ arr.Clear();
+ arr.SetOwner();
+
+ if (rstart<=0 || rstart>fNrows || rend<=0 || rend>fNrows || col<=0 || col>fNcolumns || layer<1) return 0;
+
+ if (fType!=kTableHDU) return 0;
+
+ TString str;
+ Int_t dim=0;
+ TObjString* sx;
+ Int_t n=0;
+ for (Int_t irow=rstart; irow<=rend; irow++)
+ {
+  dim=GetTableCell(str,irow,col,layer);
+
+  if (!dim || layer>dim)
+  {
+   arr.Clear();
+   return 0;
+  }
+
+  sx=new TObjString();
+  sx->SetString(str.Data());
+  arr.Add(sx);
+  n++;
+ }
+
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetTableColumn(TObjArray &arr,TString colname,Int_t rstart,Int_t rend,Int_t layer,Int_t mode)
+{
+// Provide via an array of TObjString objects the contents for row=[rstart,rend], the column
+// for which the name matches the name (pattern) "colname" and layer number "layer".
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+//
+// Input arguments :
+// -----------------
+// arr     : The array to contain the retrieved TObjString objects
+// colname : The requested column name (pattern)
+// rstart  : Row number to start with (first row is rstart=1)
+// rend    : Row number to end with (rend=0 will process until the last row)
+// layer   : The layer number (first layer is layer=1)
+// mode    : 0 --> The column name should match exactly the provided "colname"
+//           1 --> The column name only has to contain the provided "colname" pattern
+//
+// The default values are rstart=1, rend=0, layer=1 and mode=0.
+//
+// The integer return argument represents the number of array elements.
+//
+// In case of inconsistent data an empty array is provided and 0 as return argument.
+//
+// Notes :
+// -------
+// 1) Any table data item can be obtained as a TString.
+// 2) Conversion from a TString to a numerical value can easily be obtained
+//    via the TString memberfunctions Atof(), Atoi() and Atoll().
+
+ Int_t col=GetColumnNumber(colname,mode);
+
+ Int_t n=GetTableColumn(arr,col,rstart,rend,layer);
+
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetImageDimension(Int_t i) const
+{
+// Provide the dimension of an N-dimensional Image data unit.
+//
+// Input argument :
+// ----------------
+// i : The axis (1,...N) for which the dimension is provided.
+//   : 0 --> Provide the total Image dimension "N".
+//
 // In case of inconsistent data the value 0 is returned.
+//
+// The default value is i=0.
 
- Int_t col=GetColumnNumber(colname.Data());
+ if (!fSizes) return 0;
 
- Double_t val=GetTabRealValueCell(row,col);
+ Int_t dim=fSizes->GetSize();
 
- return val;
+ if (!i) return dim;
+
+ if (i<1 || i>dim) return 0;
+
+ dim=fSizes->At(i-1);
+
+ return dim;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetImageLayer(TASImage &im,Int_t layer,Double_t* thres,Double_t max)
+{
+// Provide the specified layer as a displayable image.
+// The return value indicates the number of pixels in the image.
+// 
+// Input arguments :
+// -----------------
+// im    : The TASImage object to contain the image.
+// layer : The layer number (1=first layer) of the data cube.
+// thres : (Pointer to) Threshold for pixel value. Pixel values below the threshold will be set to 0.
+//         No threshold will be applied when thres=0.
+// max   : Rescale pixel values to [0,max], which may be used to match a specific colour or grey scale scheme.
+//         For instance max=255 would match a 256 colour scheme.
+//         No rescaling will be performed when max<=0.
+//
+// Notes :
+// -------
+// 1) The (optional) rescaling is performed after the threshold correction.
+// 2) By default a standard colour palette is used, but by setting a specific colour palette
+//    (e.g. via the canvas Palette Editor) one may tailor the color scheme.
+//
+// In case of inconsistent data, an empty image and a return value 0 is provided.
+//
+// The default values are layer=1, thres=0 and max=-1.
+
+ // Set the image empty
+ im.SetImage(0,0);
+
+ TArrayD arr;
+ if (!LoadLayer(arr,layer)) return 0;
+
+ Int_t ndim1=fSizes->At(0);
+ Int_t ndim2=fSizes->At(1);
+ Int_t npix=arr.GetSize();
+
+ if (npix)
+ {
+  if (thres) ApplyPixelThreshold(arr,*thres);
+  if (max>0) RescalePixels(arr,max);
+  im.SetImage(arr,ndim1);
+ }
+
+ return npix;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetImageLayer(TMatrixD &m,Int_t layer,Double_t* thres,Double_t max)
+{
+// Provide the specified layer as a 2-dimensional matrix.
+// The return value indicates the number of matrix elements.
+// 
+// Input arguments :
+// -----------------
+// m     : The TMatrixD object to contain the layer data.
+// layer : The layer number (1=first layer) of the data cube.
+// thres : (Pointer to) Threshold for pixel value. Pixel values below the threshold will be set to 0.
+//         No threshold will be applied when thres=0.
+// max   : Rescale values of the matrix elements to [0,max].
+//         No rescaling will be performed when max<=0.
+//
+// Notes :
+// -------
+// 1) The size (nrow,ncol) of the matrix is automatically set according to the layer dimensions.
+//    The correspondence with the FITS parameters is ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height).
+// 2) The FITS image data start at the lower left corner and end at the right upper corner.
+//    This convention is maintained for the produced matrix to provide a consistent "view" of the
+//    contents of a matrix, image and 2D histogram.
+//    Note that the TMatrixD row and column numbering start at 0.
+//    This implies that for the matrix contents the row numbering should be interpreted as inverted,
+//    such that (row,col)=(0,0) indicates the lower left corner instead of the (usual) upper left corner.
+//    With this convention, the upper left corner is (nrow-1,0), the lower left corner is (0,ncol-1)
+//    and the upper right corner is (nrow-1,ncol-1).     
+// 3) The (optional) rescaling is performed after the threshold correction.
+//
+// In case of inconsistent data, an empty matrix and a return value 0 is provided.
+//
+// The default values are layer=1, thres=0 and max=-1.
+
+ // Clear the matrix elements
+ m.Clear();
+
+ TArrayD arr;
+ if (!LoadLayer(arr,layer)) return 0;
+
+ Int_t ndim1=fSizes->At(0);
+ Int_t ndim2=fSizes->At(1);
+ Int_t npix=arr.GetSize();
+
+ if (npix)
+ {
+  if (thres) ApplyPixelThreshold(arr,*thres);
+  if (max>0) RescalePixels(arr,max);
+  m.ResizeTo(ndim2,ndim1);
+  Int_t i=0;
+  for (Int_t jrow=0; jrow<ndim2; jrow++)
+  {
+   for (Int_t jcol=0; jcol<ndim1; jcol++)
+   {
+    m(jrow,jcol)=arr.At(i);
+    i++;
+   }
+  }
+ }
+
+ return npix;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetImageLayer(TH2D &his,Int_t layer,Double_t* thres,Double_t max)
+{
+// Provide the specified layer as a 2-dimensional histogram.
+// The return value indicates the number of histogram entries.
+// 
+// Input arguments :
+// -----------------
+// his   : The 2-D histogram to contain the layer data.
+// layer : The layer number (1=first layer) of the data cube.
+// thres : (Pointer to) Threshold for pixel value. Pixel values below the threshold will be set to 0.
+//         No threshold will be applied when thres=0.
+// max   : Rescale values of the matrix elements to [0,max].
+//         No rescaling will be performed when max<=0.
+//
+// Note :
+// ------
+// The binning and range of the histogram axes is automatically set according to the layer dimensions.
+// The correspondence with the FITS parameters is nbinsx=NAXIS1 (=width) and nbinsy=NAXIS2 (=height). 
+//
+// In case of inconsistent data, an empty histogram and a return value 0 is provided.
+//
+// The default values are layer=1, thres=0 and max=-1.
+
+ // Clear the histogram
+ his.Reset();
+ TString title="Histogram of layer ";
+ title+=layer;
+ his.SetTitle(title.Data());
+
+ TMatrixD m;
+ Int_t npix=GetImageLayer(m,layer,thres,max);
+
+ if (!npix) return 0;
+
+ Int_t nrows=m.GetNrows();
+ Int_t ncols=m.GetNcols();
+
+ // Set the binning and range of the histogram axes
+ his.SetBins(ncols+1,0,ncols,nrows+1,0,nrows);
+
+ // Fill the histogram cells with the corresponding matrix contents
+ Double_t val=0;
+ for (Int_t icol=0; icol<ncols; icol++)
+ {
+  for (Int_t irow=0; irow<nrows; irow++)
+  {
+   val=m(irow,icol);
+   his.SetBinContent(icol+1,irow+1,val);
+  }
+ }
+
+ return npix;
+}
+///////////////////////////////////////////////////////////////////////////
+UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,TArrayI ilast,TArrayI incr)
+{
+// Copy (a subset of) the pixel contents of an N-dimensional Image data unit into a linear data array.
+// The return argument is the number of stored pixels.
+//
+// Input arguments :
+// -----------------
+// arr    : The array to hold the pixel values
+// ifirst : Array with the starting pixel numbers (1=first) for each dimension
+// ilast  : Array with the (inclusive) ending pixel numbers for each dimension
+// incr   : Array with the pixel sampling increment for each dimension
+//
+// For a (nrow,ncol) matrix, the FITS parameters correspond to ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height). 
+// The FITS image data start at the lower left corner and end at the right upper corner and follow a
+// pixel array storage with the following sequence convention for pixel coordinates (ix,iy) :
+// (1,1),(2,1),(3,1),...(NAXIS1,1),(1,2),(2,2),(3,2),...(NAXIS1,2),...(1,NAXIS2),(2,NAXIS2),...(NAXIS1,NAXIS2).
+// This implies that for a matrix interpretation the row numbering should be considered as inverted,
+// such that (row,col)=(1,1) indicates the lower left corner instead of the (usual) upper left corner.
+// With this convention, the upper left corner is (nrow,1), the lower left corner is (1,ncol)
+// and the upper right corner is (nrow,ncol).     
+//
+// Example : The full 2nd row of the 3rd layer of a 3-dimensional data cube is obtained via :
+//           ifirst[0]=1, ilast[0]=NAXIS1, ifirst[1]=2, ilast[1]=2, ifirst[2]=3, ilast[2]=3
+//           and all incr[i] values set to 1.
+//
+// Note : The incr[i] values must always be larger than 0.
+//
+// In case of inconsistent data, an empty array and a return value 0 is provided.
+
+ arr.Set(0);
+
+ if (fType!=kImageHDU || !fSizes) return 0;
+
+ Int_t ndims=fSizes->GetSize();
+
+ if (ndims<1 || ifirst.GetSize()<ndims || ilast.GetSize()<ndims || incr.GetSize()<ndims) return 0;
+
+ // Read the pixels of the specified (sub)set
+ long* fpixel=new long[ndims];
+ long* lpixel=new long[ndims];
+ long* inc=new long[ndims];
+ long long npixels=1;
+ int status=0;
+
+ Int_t istart=0;
+ Int_t iend=0;
+ Int_t istep=0;
+ for (Int_t i=0; i<ndims; i++)
+ {
+  istart=ifirst.At(i);
+  iend=ilast.At(i);
+  istep=incr.At(i);
+
+  if (istart<1 || iend<1 || istep<1 || iend<istart)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetImageArray* Inconsistent ifirst, ilast or incr input array(s)." << endl;
+   fits_close_file(fInput,&status);
+   Reset();
+   delete[] fpixel;
+   delete[] lpixel;
+   delete[] inc;
+   return 0;
+  }
+
+  fpixel[i]=istart;
+  lpixel[i]=iend;
+  inc[i]=istep;
+  if (iend>istart) npixels*=1+(iend-istart)/istep;
+ }
+
+ if (!npixels) npixels=1;
+ double* pixels=new double[npixels];
+
+ double nulval=0;
+ int anynul;
+ status=0;
+ fits_read_subset(fInput,TDOUBLE,fpixel,lpixel,inc,(void*)&nulval,(void*)pixels,&anynul,&status);
+
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::GetImageArray* Could not read pixel data." << endl;
+  fits_close_file(fInput,&status);
+  Reset();
+  delete[] fpixel;
+  delete[] lpixel;
+  delete[] inc;
+  delete[] pixels;
+  return 0;
+ }
+
+ // Store the pixel data in the output array
+ arr.Set(npixels);
+ Double_t val=0;
+ for (long long i=0; i<npixels; i++)
+ {
+  val=pixels[i];
+  arr.SetAt(val,i);
+ }
+
+ UInt_t npix=npixels;
+ return npix;
+}
+///////////////////////////////////////////////////////////////////////////
+UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,UInt_t npix)
+{
+// Copy (a subset of) the pixel contents of an N-dimensional Image data unit into a linear data array.
+// The return argument is the number of stored pixels.
+//
+// Input arguments :
+// -----------------
+// arr    : The array to hold the pixel values
+// ifirst : Array with the starting pixel numbers (1=first) for each dimension
+// npix   : The number of pixels to be read
+//
+// For a (nrow,ncol) matrix, the FITS parameters correspond to ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height). 
+// The FITS image data start at the lower left corner and end at the right upper corner and follow a
+// pixel array storage with the following sequence convention for pixel coordinates (ix,iy) :
+// (1,1),(2,1),(3,1),...(NAXIS1,1),(1,2),(2,2),(3,2),...(NAXIS1,2),...(1,NAXIS2),(2,NAXIS2),...(NAXIS1,NAXIS2).
+// This implies that for a matrix interpretation the row numbering should be considered as inverted,
+// such that (row,col)=(1,1) indicates the lower left corner instead of the (usual) upper left corner.
+// With this convention, the upper left corner is (nrow,1), the lower left corner is (1,ncol)
+// and the upper right corner is (nrow,ncol).     
+//
+// Example : The full 2nd row of the 3rd layer of a 3-dimensional data cube is obtained via :
+//           ifirst[0]=1, ifirst[1]=2, ifirst[2]=3 and npix=NAXIS1.
+//
+// In case of inconsistent data, an empty array and a return value 0 is provided.
+
+ arr.Set(0);
+
+ if (fType!=kImageHDU || !fSizes || npix<1) return 0;
+
+ Int_t ndims=GetImageDimension();
+
+ if (ndims<1 || ifirst.GetSize()<ndims) return 0;
+
+ ULong_t nmax=1;
+ for (Int_t i=1; i<=ndims; i++)
+ {
+  nmax*=GetImageDimension(i);
+ } 
+
+ if (npix>nmax) return 0;
+
+ // Read the pixels of the specified (sub)set
+ long* fpixel=new long[ndims];
+ int status=0;
+
+ Int_t istart=0;
+ for (Int_t i=0; i<ndims; i++)
+ {
+  istart=ifirst.At(i);
+
+  if (istart<1)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetImageArray* Inconsistent ifirst input array." << endl;
+   fits_close_file(fInput,&status);
+   Reset();
+   delete[] fpixel;
+   return 0;
+  }
+
+  fpixel[i]=istart;
+ }
+
+ long long npixels=npix;
+ double* pixels=new double[npixels];
+ double nulval=0;
+ int anynul;
+ status=0;
+ fits_read_pix(fInput,TDOUBLE,fpixel,npixels,(void*)&nulval,(void*)pixels,&anynul,&status);
+
+ if (status)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::GetImageArray* Could not read pixel data." << endl;
+  fits_close_file(fInput,&status);
+  Reset();
+  delete[] fpixel;
+  delete[] pixels;
+  return 0;
+ }
+
+ // Store the pixel data in the output array
+ arr.Set(npixels);
+ Double_t val=0;
+ for (long long i=0; i<npixels; i++)
+ {
+  val=pixels[i];
+  arr.SetAt(val,i);
+ }
+
+ UInt_t nread=npixels;
+ return nread;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t cend)
 {
-// List table information.
+// List table information for row=[rstart,rend], column=[cstart,cend] and layer=1.
+//
+// A table element is identified via the usual (row,column) indication.
+// If the table element contains an array of data, the array components are
+// considered as layers, where layer=n represents the n-th component of the array.
+// Since this listing may involve various columns with a different number of layers,
+// only the data of the first layer (which is always present) can be displayed.
 //
 // Input arguments :
 // -----------------
 // width  : column width (in character count) for the listing output
-//          <0 --> List only the description (width=|width|) of all the table columns
-// rstart : Row number to start with (first row is rstart=0, rstart<0 lists all rows)
-// rend   : Row number to end with
-// cstart : Column number to start with (first column is cstart=0, cstart<0 lists all columns)
-// cend   : Column number to end with
+//          <0 --> List only the description (width=|width|) of the table columns [cstart,cend]
+// rstart  : Row number to start with (first row is rstart=1)
+// rend    : Row number to end with (rend=0 will list until the last row)
+// cstart  : Column number to start with (first column is cstart=1)
+// cend    : Column number to end with (rend=0 will list until the last row)
 //
 // Note : In general a column width of 10 is sufficient.
 //
-// The default values are width=-10, rstart=-1, rend=-1, cstart=-1 and cend=-1.
+// The default values are width=-10, rstart=1, rend=0, cstart=1 and cend=0.
    
  if (fType != kTableHDU)
  {
@@ -616,23 +1965,45 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
   return;
  }
 
+ if (!rend) rend=fNrows;
+
+ if (!cend) cend=fNcolumns;
+
+ if (rstart<=0 || rstart>fNrows || rend<=0 || rend>fNrows ||
+     cstart<=0 || cstart>fNcolumns || cend<=0 || cend>fNcolumns)
+ {
+  cout << " *" << ClassName() <<"::ListTable* Invalid input rstart=" << rstart << " rend=" << rend
+       << " cstart=" << cstart << " cend=" << cend << endl;
+  return;
+ }
+
  TString type;
+ TString name;
  if (width<0) // List description of all table columns
  {  
-  cout << endl;
-  cout << " *" << ClassName() << "::ListTable* Table column description" << endl;
-  cout << endl;
-
   width=-width;
-  cout.setf(ios::left);
-  for (Int_t i=0; i<fNColumns; i++)
-  {
-   if (fColumnsInfo[i].fType==kRealNumber) type="REAL NUMBER";
-   if (fColumnsInfo[i].fType==kString) type="STRING";
-   if (fColumnsInfo[i].fType==kRealVector) type="REAL VECTOR";
 
-   cout << " " << setw(width) << fColumnsInfo[i].fName << " : " << type;
-   if (type.Contains("VECTOR")) cout << "[" << fColumnsInfo[i].fDim << "]";
+  cout << endl;
+  cout << " *" << ClassName() << "::ListTable* Table column description for col=["
+       << cstart << "," << cend << "] (name width is " << width << " characters)."<< endl;
+  cout << endl;
+
+  cout.setf(ios::left); // Left adjusted printout
+  for (Int_t i=cstart; i<=cend; i++)
+  {
+   if (fColumnTypes[i-1]==kString) type="STRING";
+   if (fColumnTypes[i-1]==kStringArray) type="STRING ARRAY";
+   if (fColumnTypes[i-1]==kRealNumber) type="REAL NUMBER";
+   if (fColumnTypes[i-1]==kRealArray) type="REAL ARRAY";
+   if (fColumnTypes[i-1]==kComplexNumber) type="COMPLEX NUMBER";
+   if (fColumnTypes[i-1]==kComplexArray) type="COMPLEX ARRAY";
+
+   name=fColumnNames[i-1];
+   name=name.Strip(name.kBoth,' ');
+   name.Resize(width);
+
+   cout << " " << name << " : " << type;
+   if (type.Contains("ARRAY")) cout << "[" << fColumnLayers[i-1] << "]";
    cout << endl;
   }
   return;
@@ -640,23 +2011,6 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
 
  if (width>0) // List the (selected) table contents
  {
-  if (rstart<0)
-  {
-   rstart=0;
-   rend=fNRows-1;
-  }
-
-  if (cstart<0)
-  {
-   cstart=0;
-   cend=fNColumns-1;
-  }
-
-  if (rstart>=fNRows) rstart=fNRows-1;
-  if (rend>=fNRows) rend=fNRows-1;
-
-  if (cstart>=fNColumns) cstart=fNColumns-1;
-  if (cend>=fNColumns) rend=fNColumns-1;
 
   cout << endl;
   cout << " *" << ClassName() << "::ListTable* Table contents for row=[" << rstart << "," << rend << "] and"
@@ -667,11 +2021,15 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
   if (width<7) width=7;               // Minimal width needed for scientific notation
   Int_t nold=cout.precision(width-7); // Adjust precision and save the original value
   cout.setf(ios::left);               // Print values left adjusted
+  TString str;
   Int_t nchars=0;
   for (Int_t col=cstart; col<=cend; col++)
   {
+   str=fColumnNames[col-1];
+   str=str.Strip(str.kBoth,' ');
+   str.Resize(width);
    if (col==cstart) cout << " ";
-   cout << setw(width) << fColumnsInfo[col].fName << setw(2) << "| ";
+   cout << str << "| ";
    nchars+=(width+2);
   }
   cout << endl;
@@ -684,19 +2042,33 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
    
   // List the (selected) row content
   Double_t val=0;
+  Int_t ndim=0;
   for (Int_t row=rstart; row<=rend; row++)
   {
    for (Int_t col=cstart; col<=cend; col++)
    {
-   if (col==cstart) cout << " ";
-    if (fColumnsInfo[col].fType==kString)
+    if (col==cstart) cout << " ";
+    if (fColumnTypes[col-1]==kString || fColumnTypes[col-1]==kStringArray)
     {
-     cout << setw(width) << fCells[col*fNRows+row].fString;
+     ndim=GetTableCell(str,row,col);
+     if (!ndim) str="---";
+     str=str.Strip(str.kBoth,' ');
+     str.Resize(width);
+     cout << str;
     }
-    else
+    else // Numerical value
     {
-     val=GetTabRealValueCell(row,col);
-     cout << setw(width) << val;
+     str="---";
+     str.Resize(width);
+     ndim=GetTableCell(val,row,col);
+     if (ndim)
+     {
+      cout << setw(width) << val;
+     }
+     else
+     {
+      cout << str;
+     }
     }
     cout << "| ";
    } // end of column loop
@@ -713,15 +2085,14 @@ void NcFITSIO::ListHDUHeader() const
 // List the header information (also called Metadata) of the current HDU record.
 
  cout << endl;
- cout << " *" << ClassName() << "::ListHDUHeader* The current HDU header record" << endl;
+ cout << " *" << ClassName() << "::ListHDUHeader* The current HDU header record " << fExtensionName  << endl;
  cout << endl;
 
- Int_t width=8; // FITS keywords have a maximum of 8 characters
  cout.setf(ios::left);
- for (Int_t i=0; i<fNRecords; i++)
+ for (Int_t i=0; i<fNkeys; i++)
  {
-  cout << " " << setw(width) << fRecords[i].fKeyword << " = " << fRecords[i].fValue;
-  if (fRecords[i].fComment.Length() > 0) cout << " / " << fRecords[i].fComment;
+  cout << " " << setw(8) << fKeyNames[i] << " = " << fKeyValues[i];
+  if (fComments[i].Length()>0) cout << " / " << fComments[i];
   cout << endl;
  }
 }
@@ -782,6 +2153,9 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
  char comment[FLEN_COMMENT+1];
  TString exttype;
  TString extname;
+ TString* keynames=0;
+ TString* keyvalues=0;
+ TString* comments=0;
  for (Int_t jhdu=1; jhdu<=nhdus; jhdu++)
  {
   // Read the HDU type
@@ -809,7 +2183,9 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
    return;
   }
 
-  struct HDURecord* records=new struct HDURecord[nkeys];
+  keynames=new TString[nkeys];
+  keyvalues=new TString[nkeys];
+  comments=new TString[nkeys];
 
   // Read the description of the HDU keys
   extname="";
@@ -821,19 +2197,21 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
    {
     cout << " *" << ClassName() << "::ListFileHeader* Could not read key number " << i << " of HDU ["<< (jhdu-1) << "]" << endl;
     fits_close_file(fp,&status);
-    delete [] records;
+    if (keynames) delete[] keynames;
+    if (keyvalues) delete[] keyvalues;
+    if (comments) delete[] comments;
     return;
    }
 
-   records[i-1].fKeyword=keyname;
-   records[i-1].fValue=keyvalue;
-   records[i-1].fComment=comment;
+   keynames[i-1]=keyname;
+   keyvalues[i-1]=keyvalue;
+   comments[i-1]=comment;
 
    // Obtain the extension name if specified in the HDU
-   if (records[i-1].fKeyword=="EXTNAME")
+   if (keynames[i-1]=="EXTNAME")
    {
     extname="[";
-    extname+=records[i-1].fValue;
+    extname+=keyvalues[i-1];
     extname+="]";
     extname.ReplaceAll("'",""); // Remove the single quotes
    }
@@ -848,14 +2226,16 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
    cout.setf(ios::left);
    for (Int_t i=0; i<nkeys; i++)
    {
-    cout << " " << setw(8) << records[i].fKeyword << " = " << records[i].fValue;
-    if (comment[0]) cout << " / " << records[i].fComment;
+    cout << " " << setw(8) << keynames[i] << " = " << keyvalues[i];
+    if (comments[i].Length()>0) cout << " / " << comments[i];
     cout << endl;
    }
    cout << endl;
   }
 
-  delete [] records;
+  if (keynames) delete[] keynames;
+  if (keyvalues) delete[] keyvalues;
+  if (comments) delete[] comments;
 
   // Move to the next HDU
   if (jhdu<nhdus)
@@ -876,6 +2256,123 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
  return;
 }
 ///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::LoadLayer(TArrayD &arr,Int_t layer)
+{
+// Internal memberfunction to load the pixels of an image layer.
+// The layer counting starts at 1.
+// The return argument is the number of stored pixels.
+
+ arr.Set(0);
+
+ if (fType!=kImageHDU || !fSizes || layer<1) return 0;
+
+ Int_t ndims=GetImageDimension();
+
+ // Check whether the data dimensions are consistent with a (layered) image. 
+ if (ndims<2) return 0;
+
+ Int_t ndim1=GetImageDimension(1);
+ Int_t ndim2=GetImageDimension(2);
+ Int_t ndim3=GetImageDimension(3);
+
+ // Check whether the layer number is within bounds
+ if ((ndims==2 && layer>1) || (ndims>2 && layer>ndim3)) return 0;
+
+ // Read the pixels of the specified layer
+ TArrayI ifirst(ndims);
+ TArrayI ilast(ndims);
+ TArrayI incr(ndims);
+ for (Int_t i=0; i<ndims; i++)
+ {
+  ifirst.SetAt(1,i);
+  ilast.SetAt(1,i);
+  incr.SetAt(1,i);
+ }
+
+ // Read a full layer content
+ ilast.SetAt(ndim1,0);
+ ilast.SetAt(ndim2,1);
+
+ // The selected layer
+ if (ndim3)
+ {
+  ifirst.SetAt(layer,2);
+  ilast.SetAt(layer,2);
+ }
+
+ // Read the layer into the data storage
+ // For a (nrow,ncol) matrix, the FITS parameters correspond to ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height). 
+ // The FITS image data start at the lower left corner and end at the right upper corner and follow a
+ // pixel array storage with the following sequence convention for pixel coordinates (ix,iy) :
+ // (1,1),(2,1),(3,1),...(NAXIS1,1),(1,2),(2,2),(3,2),...(NAXIS1,2),...(1,NAXIS2),(2,NAXIS2),...(NAXIS1,NAXIS2).
+ // This implies that for a matrix interpretation the row numbering should be considered as inverted,
+ // such that (row,col)=(1,1) indicates the lower left corner instead of the (usual) upper left corner.
+ // With this convention, the upper left corner is (nrow,1), the lower left corner is (1,ncol)
+ // and the upper right corner is (nrow,ncol).     
+ GetImageArray(arr,ifirst,ilast,incr);
+
+ Int_t npix=arr.GetSize();
+ return npix;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcFITSIO::ApplyPixelThreshold(TArrayD &arr,Double_t thres)
+{
+// Internal memberfunction to apply a threshold to the Image pixel values.
+// All pixels with a value below "thres" will get the value 0.
+
+ UInt_t npix=arr.GetSize();
+
+ for (UInt_t i=0; i<npix; i++)
+ {
+  if (arr.At(i) < thres) arr.SetAt(0,i); 
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcFITSIO::RescalePixels(TArrayD &arr,Double_t max)
+{
+// Internal memberfunction to rescale the Image pixel values to [0,max].
+
+ UInt_t npix=arr.GetSize();
+
+ if (!npix) return;
+
+ Double_t minval=0;
+ Double_t maxval=0;
+ Double_t val=0;
+ for (UInt_t i=0; i<npix; i++)
+ {
+  val=arr.At(i);
+
+  if (!i)
+  {
+   minval=val;
+   maxval=val;
+   continue;
+  }
+
+  if (val<minval) minval=val; 
+  if (val>maxval) maxval=val; 
+ }
+
+ Double_t range=maxval-minval;
+ Double_t fact=-1;
+ if (range>0) fact=max/range;
+
+ for (UInt_t i=0; i<npix; i++)
+ {
+  if (fact<0)
+  {
+   arr.SetAt(max,i);
+  }
+  else
+  {
+   val=arr.At(i);
+   val=fact*(val-minval);
+   arr.SetAt(val,i);
+  }
+ }
+}
+///////////////////////////////////////////////////////////////////////////
 TObject* NcFITSIO::Clone(const char* name) const
 {
 // Make a deep copy of the current object and provide the pointer to the copy.
@@ -891,967 +2388,3 @@ TObject* NcFITSIO::Clone(const char* name) const
  return q;
 }
 ///////////////////////////////////////////////////////////////////////////
-//______________________________________________________________________________
-Bool_t NcFITSIO::LoadHDU(TString& filepath_filter)
-{
-   // Load HDU from fits file satisfying the specified filter.
-   // Returns kTRUE if success. Otherwise kFALSE.
-   // If filter == "" then the primary array is selected
-
-   fitsfile *fp=0;
-   int status = 0;
-   char errdescr[FLEN_STATUS+1];
-
-   // Open file with filter
-   fits_open_file(&fp, filepath_filter.Data(), READONLY, &status);
-   if (status) goto ERR;
-
-   // Read HDU number
-   int hdunum;
-   fits_get_hdu_num(fp, &hdunum);
-   fNumber = Int_t(hdunum);
-
-   // Read HDU type
-   int hdutype;
-   fits_get_hdu_type(fp, &hdutype, &status);
-   if (status) goto ERR;
-   fType = (hdutype == IMAGE_HDU) ? kImageHDU : kTableHDU;
-
-   //Read HDU header records
-   int nkeys, morekeys;
-   char keyname[FLEN_KEYWORD+1];
-   char keyvalue[FLEN_VALUE+1];
-   char comment[FLEN_COMMENT+1];
-
-   fits_get_hdrspace(fp, &nkeys, &morekeys, &status);
-   if (status) goto ERR;
-
-   fRecords = new struct HDURecord[nkeys];
-
-   for (int i = 1; i <= nkeys; i++) {
-      fits_read_keyn(fp, i, keyname, keyvalue, comment, &status);
-      if (status) goto ERR;
-      fRecords[i-1].fKeyword = keyname;
-      fRecords[i-1].fValue = keyvalue;
-      fRecords[i-1].fComment = comment;
-   }
-
-   fNRecords = Int_t(nkeys);
-
-   //Set extension name
-   fExtensionName = "PRIMARY"; //Default
-   for (int i = 0; i < nkeys; i++) {
-      if (fRecords[i].fKeyword == "EXTNAME") {
-         fExtensionName = fRecords[i].fValue;
-         break;
-      }
-   }
-
-   //Read HDU's data
-   if (fType == kImageHDU) {
-      //Image
-      int param_ndims=0;
-      long *param_dimsizes;
-
-      //Read image number of dimensions
-      fits_get_img_dim(fp, &param_ndims, &status);
-      if (status) goto ERR;
-      if (param_ndims > 0) {
-         //Read image sizes in each dimension
-         param_dimsizes = new long[param_ndims];
-         fits_get_img_size(fp, param_ndims, param_dimsizes, &status);
-         if (status) {
-            delete [] param_dimsizes;
-            goto ERR;
-         }
-
-         fSizes = new TArrayI(param_ndims);
-         fSizes = new TArrayI(param_ndims);
-         for (int i = 0; i < param_ndims; i++) { //Use for loop to copy values instead of passing array to constructor, since 'Int_t' size may differ from 'long' size
-            fSizes->SetAt(param_dimsizes[i], i);
-         }
-
-         delete [] param_dimsizes;
-
-         //Read pixels
-         int anynul;
-         long *firstpixel = new long[param_ndims];
-         double nulval = 0;
-         long npixels = 1;
-
-         for (int i = 0; i < param_ndims; i++) {
-            npixels *= (long) fSizes->GetAt(i); //Compute total number of pixels
-            firstpixel[i] = 1; //Set first pixel to read from.
-         }
-
-         double *pixels = new double[npixels];
-
-         fits_read_pix(fp, TDOUBLE, firstpixel, npixels,
-                     (void *) &nulval, (void *) pixels, &anynul, &status);
-
-         if (status) {
-            delete [] firstpixel;
-            delete [] pixels;
-            goto ERR;
-         }
-
-         fPixels = new TArrayD(npixels, pixels);
-
-         delete [] firstpixel;
-         delete [] pixels;
-
-      } else {
-         //Null array
-         fSizes = new TArrayI();
-         fPixels = new TArrayD();
-      }
-   } else {
-      // Table
-      
-      // Get table's number of rows and columns
-      long table_rows;
-      int  table_cols;
-      
-      fits_get_num_rows(fp, &table_rows, &status);
-      if (status) goto ERR;
-      
-      fNRows = Int_t(table_rows);
-      
-      fits_get_num_cols(fp, &table_cols, &status);
-      if (status) goto ERR;
-           
-      fNColumns = Int_t(table_cols);
-      
-      // Allocate column info array     
-      fColumnsInfo = new struct Column[table_cols];
-            
-      // Read column names
-      char colname[80];     
-      int colnum;
-      
-      fits_get_colname(fp, CASEINSEN, (char*) "*", colname, &colnum, &status);
-      while (status == COL_NOT_UNIQUE)
-      {
-         fColumnsInfo[colnum-1].fName = colname;
-         fits_get_colname(fp, CASEINSEN, (char*) "*", colname, &colnum, &status);
-      }
-      if (status != COL_NOT_FOUND) goto ERR;
-      status = 0;  
-      
-      //Allocate cells
-      fCells = new union Cell [table_rows * table_cols];
-      
-      // Read columns
-      int typecode;
-      long repeat, width;
-      Int_t cellindex;
-      
-      
-      for (colnum = 0, cellindex = 0; colnum < fNColumns; colnum++) {
-         fits_get_coltype(fp, colnum+1, &typecode, &repeat, &width, &status);
-         if (status) goto ERR;
-         
-         if ((typecode == TDOUBLE) || (typecode == TSHORT) || (typecode == TLONG) 
-                                   || (typecode == TFLOAT) || (typecode == TLOGICAL) || (typecode == TBIT)
-                                   || (typecode == TBYTE)  || (typecode == TSTRING)) {
-             
-            fColumnsInfo[colnum].fType = (typecode == TSTRING) ? kString : kRealNumber;
-            
-            if (typecode == TSTRING) {
-               // String column
-               int dispwidth=0;
-               fits_get_col_display_width(fp, colnum+1, &dispwidth, &status);
-               if (status) goto ERR;
-               
-               
-               char *nulval = (char*) "";
-               int anynul=0;
-               char **array;
-               
-               if (dispwidth <= 0) {               
-                  dispwidth = 1;
-               }
-               
-               array = new char* [table_rows];
-               for (long row = 0; row < table_rows; row++) {
-                  array[row] = new char[dispwidth+1]; //also room for end null!
-               }
-               
-               if (repeat > 0) {
-                  fits_read_col(fp, TSTRING, colnum+1, 1, 1, table_rows, nulval, array, &anynul, &status);
-                  if (status) {
-                     for (long row = 0; row < table_rows; row++) {
-                        delete [] array[row]; 
-                     }
-                     delete [] array;
-                     goto ERR;
-                  }
-                  
-               } else {
-                  //No elements: set dummy
-                  for (long row = 0; row < table_rows; row++) {
-                     strlcpy(array[row], "-",dispwidth+1); 
-                  }
-               }
-               
-               
-               //Save values
-               for (long row = 0; row < table_rows; row++) {
-                  fCells[cellindex++].fString = array[row];
-               }
-               
-               delete [] array; //Delete temporal array holding pointer to strings, but not delete strings themselves!
-               
-               
-            } else {
-               //Numeric or vector column
-               double nulval = 0;
-               int anynul=0;
-               
-               fColumnsInfo[colnum].fDim = (Int_t) repeat;
-               
-               double *array;
-               
-               if (repeat > 0) {
-                  array = new double [table_rows * repeat]; //Hope you got a big machine! Ask China otherwise :-)
-                  fits_read_col(fp, TDOUBLE, colnum+1, 1, 1, table_rows * repeat, &nulval, array, &anynul, &status);
-                  
-                  if (status) {
-                     delete [] array;
-                     goto ERR;
-                  }
-               } else {
-                  //No elements: set dummy
-                  array = new double [table_rows];
-                  for (long row = 0; row < table_rows; row++) {
-                     array[row] = 0.0;
-                  }
-               }
-               
-               //Save values
-               if (repeat == 1) {
-                  //Scalar
-                  for (long row = 0; row < table_rows; row++) {
-                     fCells[cellindex++].fRealNumber = array[row];
-                  }
-               } else if (repeat > 1) {
-                  //Vector
-                  fColumnsInfo[colnum].fType=kRealVector; // Mark as Real Vector (NvE 14-mar-2019 16:40)
-                  for (long row = 0; row < table_rows; row++) {
-                     double *vec = new double [repeat];
-                     long offset = row * repeat;
-                     for (long component = 0; component < repeat; component++) {
-                        vec[component] = array[offset++];
-                     }
-                     fCells[cellindex++].fRealVector = vec;
-                  }
-               }
-               
-               delete [] array;
-               
-            }
-            
-         } else {
-            Warning("LoadHDU", "error opening FITS file. Column type %d is currently not supported", typecode);
-         }
-      }
-      
-      
-      
-      if (hdutype == ASCII_TBL) {
-         //ASCII table
-         
-      } else {
-         //Binary table
-      }
-
-   }
-
-   // Close file
-   fits_close_file(fp, &status);
-   return kTRUE;
-
-ERR:
-   fits_get_errstatus(status, errdescr);
-   Warning("LoadHDU", "error opening FITS file. Details: %s", errdescr);
-   status = 0;
-   if (fp) fits_close_file(fp, &status);
-   return kFALSE;
-}
-
-//______________________________________________________________________________
-struct NcFITSIO::HDURecord* NcFITSIO::GetRecord(const char *keyword)
-{
-   // Get record by keyword.
-
-   for (int i = 0; i < fNRecords; i++) {
-      if (fRecords[i].fKeyword == keyword) {
-         return &fRecords[i];
-      }
-   }
-   return 0;
-}
-
-//______________________________________________________________________________
-TString& NcFITSIO::GetKeywordValue(const char *keyword)
-{
-   // Get the value of a given keyword. Return "" if not found.
-
-   HDURecord *rec = GetRecord(keyword);
-   if (rec) {
-      return rec->fValue;
-   } else {
-      return *(new TString(""));
-   }
-}
-//______________________________________________________________________________
-TImage *NcFITSIO::ReadAsImage(Int_t layer, TImagePalette *pal)
-{
-   // Read image HDU as a displayable image. Return 0 if conversion cannot be done.
-   // If the HDU seems to be a multilayer image, 'layer' parameter can be used
-   // to retrieve the specified layer (starting from 0)
-
-   if (fType != kImageHDU) {
-      Warning("ReadAsImage", "this is not an image HDU.");
-      return 0;
-   }
-   
-
-   if (((fSizes->GetSize() != 2) && (fSizes->GetSize() != 3) && (fSizes->GetSize() != 4)) || ((fSizes->GetSize() == 4) && (fSizes->GetAt(3) > 1))) {
-      Warning("ReadAsImage", "could not convert image HDU to image because it has %d dimensions.", fSizes->GetSize());
-      return 0;
-   }
-
-   Int_t width, height;
-   UInt_t pixels_per_layer;
-
-   width  = Int_t(fSizes->GetAt(0));
-   height = Int_t(fSizes->GetAt(1));
-
-   pixels_per_layer = UInt_t(width) * UInt_t(height);
-
-   if (  ((fSizes->GetSize() == 2) && (layer > 0)) 
-      || (((fSizes->GetSize() == 3) || (fSizes->GetSize() == 4)) && (layer >= fSizes->GetAt(2)))) {
-      
-      Warning("ReadAsImage", "layer out of bounds.");
-      return 0;
-   }
-
-   // Get the maximum and minimum pixel values in the layer to auto-stretch pixels
-   Double_t maxval = 0, minval = 0;
-   UInt_t i;
-   Double_t pixvalue;
-   Int_t offset = layer * pixels_per_layer;
-
-   for (i = 0; i < pixels_per_layer; i++) {
-      pixvalue = fPixels->GetAt(offset + i);
-
-      if (pixvalue > maxval) {
-         maxval = pixvalue;
-      }
-
-      if ((i == 0) || (pixvalue < minval)) {
-         minval = pixvalue;
-      }
-   }
-
-   //Build the image stretching pixels into a range from 0.0 to 255.0
-   //TImage *im = new TImage(width, height);
-   TImage *im = TImage::Create();
-   if (!im) return 0;
-   TArrayD *layer_pixels = new TArrayD(pixels_per_layer);
-
-
-   if (maxval == minval) {
-      //plain image
-      for (i = 0; i < pixels_per_layer; i++) {
-         layer_pixels->SetAt(255.0, i);
-      }   
-   } else {   
-      Double_t factor = 255.0 / (maxval-minval);
-      for (i = 0; i < pixels_per_layer; i++) {
-         pixvalue = fPixels->GetAt(offset + i);
-         layer_pixels->SetAt(factor * (pixvalue-minval), i) ;
-      }
-   }
-
-   if (pal == 0) {
-      // Default palette: grayscale palette
-      pal = new TImagePalette(256);
-      for (i = 0; i < 256; i++) {
-         pal->fPoints[i] = ((Double_t)i)/255.0;
-         pal->fColorAlpha[i] = 0xffff;
-         pal->fColorBlue[i] = pal->fColorGreen[i] = pal->fColorRed[i] = i << 8;
-      }
-      pal->fPoints[0] = 0;
-      pal->fPoints[255] = 1.0;
-
-      im->SetImage(*layer_pixels, UInt_t(width), pal);
-
-      delete pal;
-
-   } else {
-      im->SetImage(*layer_pixels, UInt_t(width), pal);
-   }
-
-   delete layer_pixels;
-
-   return im;
-}
-
-//______________________________________________________________________________
-void NcFITSIO::Draw(Option_t *)
-{
-   // If the HDU is an image, draw the first layer of the primary array
-   // To set a title to the canvas, pass it in "opt"
-   
-   if (fType != kImageHDU) {
-      Warning("Draw", "cannot draw. This is not an image HDU.");
-      return;
-   }
-   
-   TImage *im = ReadAsImage(0, 0);
-   if (im) {
-      Int_t width = Int_t(fSizes->GetAt(0));
-      Int_t height = Int_t(fSizes->GetAt(1));
-      TString cname, ctitle;
-      cname.Form("%sHDU", this->GetName());
-      ctitle.Form("%d x %d", width, height);
-      new TCanvas(cname, ctitle, width, height);
-      im->Draw();
-   }
-}
-
-
-//______________________________________________________________________________
-TMatrixD* NcFITSIO::ReadAsMatrix(Int_t layer, Option_t *opt)
-{
-   // Read image HDU as a matrix. Return 0 if conversion cannot be done
-   // If the HDU seems to be a multilayer image, 'layer' parameter can be used
-   // to retrieve the specified layer (starting from 0) in matrix form.
-   // Options (value of 'opt'):
-   // "S": stretch pixel values to a range from 0.0 to 1.0
-
-   if (fType != kImageHDU) {
-      Warning("ReadAsMatrix", "this is not an image HDU.");
-      return 0;
-   }
-
-   if (((fSizes->GetSize() != 2) && (fSizes->GetSize() != 3) && (fSizes->GetSize() != 4)) || ((fSizes->GetSize() == 4) && (fSizes->GetAt(3) > 1))) {
-      Warning("ReadAsMatrix", "could not convert image HDU to image because it has %d dimensions.", fSizes->GetSize());
-      return 0;
-   }
- 
-
-   if (   ((fSizes->GetSize() == 2) && (layer > 0)) 
-       || (((fSizes->GetSize() == 3) || (fSizes->GetSize() == 4)) && (layer >= fSizes->GetAt(2)))) {
-      Warning("ReadAsMatrix", "layer out of bounds.");
-      return 0;
-   }
-
-   Int_t width, height;
-   UInt_t pixels_per_layer;
-   Int_t offset;
-   UInt_t i;
-   TMatrixD *mat=0;
-   
-   width  = Int_t(fSizes->GetAt(0));
-   height = Int_t(fSizes->GetAt(1));
-   
-   pixels_per_layer = UInt_t(width) * UInt_t(height);
-   offset = layer * pixels_per_layer;
-   
-   double *layer_pixels = new double[pixels_per_layer];
-
-   if ((opt[0] == 'S') || (opt[0] == 's')) {
-      //Stretch
-      // Get the maximum and minimum pixel values in the layer to auto-stretch pixels
-      Double_t factor, maxval=0, minval=0;   
-      Double_t pixvalue;
-      for (i = 0; i < pixels_per_layer; i++) {
-         pixvalue = fPixels->GetAt(offset + i);
-   
-         if (pixvalue > maxval) {
-            maxval = pixvalue;
-         }
-   
-         if ((i == 0) || (pixvalue < minval)) {
-            minval = pixvalue;
-         }
-      }
-      
-      if (maxval == minval) {
-         //plain image
-         for (i = 0; i < pixels_per_layer; i++) {
-            layer_pixels[i] = 1.0;
-         }   
-      } else {
-         factor = 1.0 / (maxval-minval);
-         mat = new TMatrixD(height, width);
-      
-         for (i = 0; i < pixels_per_layer; i++) {
-            layer_pixels[i] = factor * (fPixels->GetAt(offset + i) - minval);
-         }
-      }
-      
-   } else {
-      //No stretching
-      mat = new TMatrixD(height, width);
-      
-      for (i = 0; i < pixels_per_layer; i++) {
-         layer_pixels[i] = fPixels->GetAt(offset + i);
-      }
-   }
-
-   if (mat) {
-      // mat->Use(height, width, layer_pixels);
-      memcpy(mat->GetMatrixArray(), layer_pixels, pixels_per_layer*sizeof(double));
-   }
-
-   delete [] layer_pixels;
-   return mat;
-}
-
-
-//______________________________________________________________________________
-TH1 *NcFITSIO::ReadAsHistogram()
-{
-   // Read image HDU as a histogram. Return 0 if conversion cannot be done.
-   // The returned object can be TH1D, TH2D or TH3D depending on data dimensionality.
-   // Please, check condition (returnedValue->IsA() == TH*D::Class()) to
-   // determine the object class.
-   // NOTE: do not confuse with image histogram! This function interprets
-   // the array as a histogram. It does not compute the histogram of pixel
-   // values of an image! Here "pixels" are interpreted as number of entries.
-
-   if (fType != kImageHDU) {
-      Warning("ReadAsHistogram", "this is not an image HDU.");
-      return 0;
-   }
-
-   TH1 *result=0;
-
-   if ((fSizes->GetSize() != 1) && (fSizes->GetSize() != 2) && (fSizes->GetSize() != 3)) {
-      Warning("ReadAsHistogram", "could not convert image HDU to histogram because it has %d dimensions.", fSizes->GetSize());
-      return 0;
-   }
-
-   if (fSizes->GetSize() == 1) {
-      //1D
-      UInt_t Nx = UInt_t(fSizes->GetAt(0));
-      UInt_t x;
-
-      TH1D *h = new TH1D("", "", Int_t(Nx), 0, Nx-1);
-
-      for (x = 0; x < Nx; x++) {
-         Int_t nentries = Int_t(fPixels->GetAt(x));
-         if (nentries < 0) nentries = 0; //Crop negative values
-         h->Fill(x, nentries);
-      }
-
-      result = h;
-
-   } else if (fSizes->GetSize() == 2) {
-      //2D
-      UInt_t Nx = UInt_t(fSizes->GetAt(0));
-      UInt_t Ny = UInt_t(fSizes->GetAt(1));
-      UInt_t x,y;
-
-      TH2D *h = new TH2D("", "", Int_t(Nx), 0, Nx-1, Int_t(Ny), 0, Ny-1);
-
-      for (y = 0; y < Ny; y++) {
-         UInt_t offset = y * Nx;
-         for (x = 0; x < Nx; x++) {
-            Int_t nentries = Int_t(fPixels->GetAt(offset + x));
-            if (nentries < 0) nentries = 0; //Crop negative values
-            h->Fill(x,y, nentries);
-         }
-      }
-
-      result = h;
-
-   } else if (fSizes->GetSize() == 3) {
-      //3D
-      UInt_t Nx = UInt_t(fSizes->GetAt(0));
-      UInt_t Ny = UInt_t(fSizes->GetAt(1));
-      UInt_t Nz = UInt_t(fSizes->GetAt(2));
-      UInt_t x,y,z;
-
-      TH3D *h = new TH3D("", "", Int_t(Nx), 0, Nx-1, Int_t(Ny), 0, Ny-1, Int_t(Nz), 0, Nz-1);
-
-
-      for (z = 0; z < Nz; z++) {
-         UInt_t offset1 = z * Nx * Ny;
-         for (y = 0; y < Ny; y++) {
-            UInt_t offset2 = y * Nx;
-            for (x = 0; x < Nx; x++) {
-               Int_t nentries = Int_t(fPixels->GetAt(offset1 + offset2 + x));
-               if (nentries < 0) nentries = 0; //Crop negative values
-               h->Fill(x, y, z, nentries);
-            }
-         }
-      }
-
-      result = h;
-   }
-
-   return result;
-}
-
-//______________________________________________________________________________
-TVectorD* NcFITSIO::GetArrayRow(UInt_t row)
-{
-   // Get a row from the image HDU when it's a 2D array.
-
-   if (fType != kImageHDU) {
-      Warning("GetArrayRow", "this is not an image HDU.");
-      return 0;
-   }
-
-   if (fSizes->GetSize() != 2) {
-      Warning("GetArrayRow", "could not get row from HDU because it has %d dimensions.", fSizes->GetSize());
-      return 0;
-   }
-
-   UInt_t i, offset, W,H;
-
-   W =  UInt_t(fSizes->GetAt(0));
-   H =  UInt_t(fSizes->GetAt(1));
-
-
-   if (row >= H) {
-      Warning("GetArrayRow", "index out of bounds.");
-      return 0;
-   }
-
-   offset = W * row;
-   double *v = new double[W];
-
-   for (i = 0; i < W; i++) {
-      v[i] = fPixels->GetAt(offset+i);
-   }
-
-   TVectorD *vec = new TVectorD(W, v);
-
-   delete [] v;
-
-   return vec;
-}
-
-//______________________________________________________________________________
-TVectorD* NcFITSIO::GetArrayColumn(UInt_t col)
-{
-   // Get a column from the image HDU when it's a 2D array.
-
-   if (fType != kImageHDU) {
-      Warning("GetArrayColumn", "this is not an image HDU.");
-      return 0;
-   }
-
-   if (fSizes->GetSize() != 2) {
-      Warning("GetArrayColumn", "could not get row from HDU because it has %d dimensions.", fSizes->GetSize());
-      return 0;
-   }
-
-   UInt_t i, W,H;
-
-   W =  UInt_t(fSizes->GetAt(0));
-   H =  UInt_t(fSizes->GetAt(1));
-
-
-   if (col >= W) {
-      Warning("GetArrayColumn", "index out of bounds.");
-      return 0;
-   }
-
-   double *v = new double[H];
-
-   for (i = 0; i < H; i++) {
-      v[i] = fPixels->GetAt(W*i+col);
-   }
-
-   TVectorD *vec = new TVectorD(H, v);
-
-   delete [] v;
-
-   return vec;
-}
-
-
-//______________________________________________________________________________
-Int_t NcFITSIO::GetColumnNumber(const char *colname)
-{
-   //Get column number given its name
-   
-   Int_t colnum;
-   for (colnum = 0; colnum < fNColumns; colnum++) {
-      if (fColumnsInfo[colnum].fName == colname) {
-         return colnum;
-      }
-   }
-   return -1;
-}
-
-//______________________________________________________________________________
-TObjArray* NcFITSIO::GetTabStringColumn(Int_t colnum)
-{
-   // Get a string-typed column from a table HDU given its column index (>=0).
-   
-   if (fType != kTableHDU) {
-      Warning("GetTabStringColumn", "this is not a table HDU.");
-      return 0;
-   }
-   
-   if ((colnum < 0) || (colnum >= fNColumns)) {
-      Warning("GetTabStringColumn", "column index out of bounds.");
-      return 0;
-   }
-   
-   if (fColumnsInfo[colnum].fType != kString) {
-      Warning("GetTabStringColumn", "attempting to read a column that is not of type 'kString'.");
-      return 0;
-   }
-   
-   Int_t offset = colnum * fNRows;
-   
-   TObjArray *res = new TObjArray();
-   for (Int_t row = 0; row < fNRows; row++) {
-      res->Add(new TObjString(fCells[offset + row].fString));
-   }
-   
-   return res;
-}
-   
-//______________________________________________________________________________
-TObjArray* NcFITSIO::GetTabStringColumn(const char *colname)
-{
-   // Get a string-typed column from a table HDU given its name
-   
-   if (fType != kTableHDU) {
-      Warning("GetTabStringColumn", "this is not a table HDU.");
-      return 0;
-   }
-   
-   
-   Int_t colnum = GetColumnNumber(colname);
-   
-   if (colnum == -1) {
-      Warning("GetTabStringColumn", "column not found.");
-      return 0;
-   }
-      
-   if (fColumnsInfo[colnum].fType != kString) {
-      Warning("GetTabStringColumn", "attempting to read a column that is not of type 'kString'.");
-      return 0;
-   }
-   
-   Int_t offset = colnum * fNRows;
-   
-   TObjArray *res = new TObjArray();
-   for (Int_t row = 0; row < fNRows; row++) {
-      res->Add(new TObjString(fCells[offset + row].fString));
-   }
-   
-   return res;
-}   
-
-//______________________________________________________________________________
-TVectorD* NcFITSIO::GetTabRealVectorColumn(Int_t colnum)
-{
-   // Get a real number-typed column from a table HDU given its column index (>=0).
-   
-   if (fType != kTableHDU) {
-      Warning("GetTabRealVectorColumn", "this is not a table HDU.");
-      return 0;
-   }
-   
-   if ((colnum < 0) || (colnum >= fNColumns)) {
-      Warning("GetTabRealVectorColumn", "column index out of bounds.");
-      return 0;
-   }
-   
-   if (fColumnsInfo[colnum].fType != kRealNumber) {
-      Warning("GetTabRealVectorColumn", "attempting to read a column that is not of type 'kRealNumber'.");
-      return 0;
-   } else if (fColumnsInfo[colnum].fDim > 1) {
-      Warning("GetTabRealVectorColumn", "attempting to read a column whose cells have embedded vectors, not real scalars. Use GetTabRealVectorCells() instead.");
-      return 0;
-   }
-   
-   Int_t offset = colnum * fNRows;
-   
-   Double_t *arr = new Double_t[fNRows];
-     
-   for (Int_t row = 0; row < fNRows; row++) {
-      arr[row] = fCells[offset + row].fRealNumber;
-   }
-   
-   TVectorD *res = new TVectorD();
-   res->Use(fNRows, arr);
-   
-   return res;
-}
-
-//______________________________________________________________________________
-TVectorD* NcFITSIO::GetTabRealVectorColumn(const char *colname)
-{
-   // Get a real number-typed column from a table HDU given its name
-   
-   if (fType != kTableHDU) {
-      Warning("GetTabRealVectorColumn", "this is not a table HDU.");
-      return 0;
-   }
-   
-   Int_t colnum = GetColumnNumber(colname);
-   
-   if (colnum == -1) {
-      Warning("GetTabRealVectorColumn", "column not found.");
-      return 0;
-   }
-   
-   if (fColumnsInfo[colnum].fType != kRealNumber) {
-      Warning("GetTabRealVectorColumn", "attempting to read a column that is not of type 'kRealNumber'.");
-      return 0;
-   } else if (fColumnsInfo[colnum].fDim > 1) {
-      Warning("GetTabRealVectorColumn", "attempting to read a column whose cells have embedded vectors, not real scalars. Use GetTabRealVectorCells() instead.");
-      return 0;
-   }
-   
-   Int_t offset = colnum * fNRows;
-   
-   Double_t *arr = new Double_t[fNRows];
-     
-   for (Int_t row = 0; row < fNRows; row++) {
-      arr[row] = fCells[offset + row].fRealNumber;
-   }
-   
-   TVectorD *res = new TVectorD();
-   res->Use(fNRows, arr);
-   
-   return res;
-}
-//______________________________________________________________________________
-TObjArray *NcFITSIO::GetTabRealVectorCells(Int_t colnum)
-{
-   // Get a collection of real vectors embedded in cells along a given column from a table HDU. colnum >= 0. 
-   if (fType != kTableHDU) {
-      Warning("GetTabRealVectorCells", "this is not a table HDU.");
-      return 0;
-   }
-   
-   if ((colnum < 0) || (colnum >= fNColumns)) {
-      Warning("GetTabRealVectorCells", "column index out of bounds.");
-      return 0;
-   }
-   
-   if (fColumnsInfo[colnum].fType != kRealVector) {
-      Warning("GetTabRealVectorCells", "attempting to read a column that is not of type 'kRealVector'.");
-      return 0;
-   }
-   
-   Int_t offset = colnum * fNRows;
-   
-   TObjArray *res = new TObjArray();
-   Int_t dim = fColumnsInfo[colnum].fDim;
-     
-   for (Int_t row = 0; row < fNRows; row++) {
-      TVectorD *v = new TVectorD();
-      v->Use(dim, fCells[offset + row].fRealVector);
-      res->Add(v);
-   }
-   
-   //Make the collection to own the allocated TVectorD objects, so when
-   //destroying the collection, the vectors will be destroyed too. 
-   res->SetOwner(kTRUE);
-   
-   return res;
-}
-
-//______________________________________________________________________________
-TObjArray *NcFITSIO::GetTabRealVectorCells(const char *colname)
-{
-   // Get a collection of real vectors embedded in cells along a given column from a table HDU by name 
-   if (fType != kTableHDU) {
-      Warning("GetTabRealVectorCells", "this is not a table HDU.");
-      return 0;
-   }
-   
-   Int_t colnum = GetColumnNumber(colname);
-   
-   if (colnum == -1) {
-      Warning("GetTabRealVectorCells", "column not found.");
-      return 0;
-   }
-   
-   return GetTabRealVectorCells(colnum);
-}
-
-//______________________________________________________________________________
-TVectorD *NcFITSIO::GetTabRealVectorCell(Int_t rownum, Int_t colnum)
-{
-   // Get a real vector embedded in a cell given by (row>=0, column>=0) 
-   if (fType != kTableHDU) {
-      Warning("GetTabRealVectorCell", "this is not a table HDU.");
-      return 0;
-   }
-   
-   if ((colnum < 0) || (colnum >= fNColumns)) {
-      Warning("GetTabRealVectorCell", "column index out of bounds.");
-      return 0;
-   }
-   
-   if ((rownum < 0) || (rownum >= fNRows)) {
-      Warning("GetTabRealVectorCell", "row index out of bounds.");
-      return 0;
-   }
-
-   if (fColumnsInfo[colnum].fType != kRealVector) {
-      Warning("GetTabRealVectorCell", "attempting to read a column that is not of type 'kRealVector'.");
-      return 0;
-   }
-   
-   TVectorD *v = new TVectorD();
-   v->Use(fColumnsInfo[colnum].fDim, fCells[(colnum * fNRows) + rownum].fRealVector);
-   
-   return v;
-}
-
-//______________________________________________________________________________
-TVectorD *NcFITSIO::GetTabRealVectorCell(Int_t rownum, const char *colname)
-{
-   // Get a real vector embedded in a cell given by (row>=0, column name)  
-   if (fType != kTableHDU) {
-      Warning("GetTabRealVectorCell", "this is not a table HDU.");
-      return 0;
-   }
-   
-   Int_t colnum = GetColumnNumber(colname);
-   
-   if (colnum == -1) {
-      Warning("GetTabRealVectorCell", "column not found.");
-      return 0;
-   }
-   
-   return GetTabRealVectorCell(rownum, colnum);
-}
-
-
-//______________________________________________________________________________
-const TString& NcFITSIO::GetColumnName(Int_t colnum)
-{
-   // Get the name of a column given its index (column>=0).
-   // In case of error the column name is "".
-
-   static TString noName;
-   if (fType != kTableHDU) {
-      Error("GetColumnName", "this is not a table HDU.");
-      return noName;
-   }
-   
-   if ((colnum < 0) || (colnum >= fNColumns)) {
-      Error("GetColumnName", "column index out of bounds.");
-      return noName;
-   }
-   return fColumnsInfo[colnum].fName;
-}
-//______________________________________________________________________________

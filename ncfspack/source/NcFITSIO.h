@@ -1,6 +1,6 @@
 #ifndef NcFITSIO_h
 #define NcFITSIO_h
-// Copyright(c) 1997-2019, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <stdlib.h>
@@ -9,125 +9,98 @@
 
 #include "TSystem.h"
 #include "TNamed.h"
-#include "TImage.h"
 #include "TArrayI.h"
 #include "TArrayD.h"
 #include "TH1D.h"
 #include "TH2D.h"
 #include "TH3D.h"
-#include "TImage.h"
+#include "TASImage.h"
 #include "TVectorD.h"
 #include "TMatrixD.h"
 #include "TObjArray.h"
+#include "TString.h"
 #include "TObjString.h"
-#include "TCanvas.h"
-
-class TImagePalette;
 
 class NcFITSIO : public TNamed
 {
  public:
   // Markers of the various HDU types
-  enum EHDUTypes{kImageHDU,kTableHDU};
+  enum eHDUTypes{kImageHDU,kTableHDU};
    
   // Markers of the various column data types
-  enum EColumnTypes{kRealNumber,kString,kRealVector};
-   
-  // The FITS HDU record
-  struct HDURecord
-  {
-   TString fKeyword;
-   TString fValue;
-   TString fComment;
-  };
-   
-  // Information of a table column
-  struct Column
-  {
-   TString            fName; // The column name
-   enum EColumnTypes  fType; // The column data type
-   Int_t              fDim;  // Vector dimension (1=scalar) in case a cell contains a vector of real numbers
-  };
-   
-  // Contents of a table cell
-  union Cell
-  {
-   Char_t*   fString;
-   Double_t  fRealNumber;
-   Double_t* fRealVector;
-  };
+  enum eColumnTypes{kString,kStringArray,kRealNumber,kRealArray,kComplexNumber,kComplexArray};
 
-  NcFITSIO(const char* name="NcFITSIO",const char* title="FITS I/O interface"); // Default constructor
-  virtual ~NcFITSIO();                                     // Default destructor
-  NcFITSIO(const NcFITSIO& q);                             // Copy constructor
-  Bool_t OpenInputFile(TString specs);                     // Open a FITS input file with the provided specs
-  Bool_t SelectHDU(TString extname="[0]");                 // Select a certain HDU name
-  Bool_t SelectHDU(Int_t extnumber);                       // Select a certain HDU number
-  Double_t GetTabRealValueCell(Int_t row,Int_t col);       // Retrieve the value of a table cell
-  Double_t GetTabRealValueCell(Int_t row,TString colname); // Retrieve the value of a table cell
-  void ListTable(Int_t width=-10,Int_t rstart=-1,Int_t rend=-1,Int_t cstart=-1,Int_t cend=-1); // List table information
-  void ListHDUHeader() const;                              // List the header info from the current HDU record
-  void ListFileHeader(Int_t mode=1) const;                 // List the header info of the FITS file
-  virtual TObject* Clone(const char* name="") const;       // Make a deep copy and provide its pointer
+  NcFITSIO(const char* name="NcFITSIO",const char* title="FITS data I/O interface"); // Default constructor
+  virtual ~NcFITSIO();                                       // Default destructor
+  NcFITSIO(const NcFITSIO &q);                               // Copy constructor
+  virtual TObject* Clone(const char* name="") const;         // Make a deep copy and provide its pointer
 
-   //Metadata access methods
-   Int_t              GetRecordNumber() const { return fNRecords; }
-   struct HDURecord*  GetRecord(const char *keyword);
-   TString&           GetKeywordValue(const char *keyword);
+  // Input file handling
+  Bool_t OpenInputFile(TString specs);
+  Bool_t SelectHDU(TString extname="[0]");
+  Bool_t SelectHDU(Int_t extnumber);
+  void ListHDUHeader() const;
+  void ListFileHeader(Int_t mode=1) const;
+  TString GetKeywordValue(TString keyname,Int_t mode=0);
 
-   //Image readers
-   TH1*               ReadAsHistogram();
-   TImage*            ReadAsImage(Int_t layer=0,TImagePalette* pal=0);
-   TMatrixD*          ReadAsMatrix(Int_t layer=0,Option_t* opt="");
-   TVectorD*          GetArrayRow(UInt_t row);
-   TVectorD*          GetArrayColumn(UInt_t col);
-   
-   //Table readers
-   Int_t              GetTabNColumns() const { return fNColumns; }
-   Int_t              GetTabNRows()    const { return fNRows; }
-   Int_t              GetColumnNumber(const char* colname);
-   const TString&     GetColumnName(Int_t colnum);
-   TObjArray*         GetTabStringColumn(Int_t colnum);
-   TObjArray*         GetTabStringColumn(const char* colname);
-   TVectorD*          GetTabRealVectorColumn(Int_t colnum);
-   TVectorD*          GetTabRealVectorColumn(const char* colname);
-   TVectorD*          GetTabRealVectorCell(Int_t rownum,Int_t colnum);
-   TVectorD*          GetTabRealVectorCell(Int_t rownum, const char* colname);
-   TObjArray*         GetTabRealVectorCells(Int_t colnum);
-   TObjArray*         GetTabRealVectorCells(const char* colname);
-   
-   //Misc
-   void               Draw(Option_t* opt="");
+  // Table access methods
+  Int_t GetTableNrows() const;
+  Int_t GetTableNcolumns() const;
+  Int_t GetColumnNumber(TString colname,Int_t mode=0) const;
+  TString GetColumnName(Int_t colnum) const;
+  Int_t GetTableCell(Double_t &val,Int_t row,Int_t col,Int_t layer=1);
+  Int_t GetTableCell(Double_t &val,Int_t row,TString colname,Int_t layer=1,Int_t mode=0);
+  Int_t GetTableCell(TArrayD &arr,Int_t row,Int_t col);
+  Int_t GetTableCell(TArrayD &arr,Int_t row,TString colname,Int_t mode=0);
+  Int_t GetTableCell(TString &str,Int_t row,Int_t col,Int_t layer=1);
+  Int_t GetTableCell(TString &str,Int_t row,TString colname,Int_t layer=1,Int_t mode=0);
+  Int_t GetTableCell(TString* &arr,Int_t row,Int_t col);
+  Int_t GetTableCell(TString* &arr,Int_t row,TString colname,Int_t mode=0);
+  Int_t GetTableCell(TObjArray &arr,Int_t row,Int_t col);
+  Int_t GetTableCell(TObjArray &arr,Int_t row,TString colname,Int_t mode=0);
+  Int_t GetTableColumn(TArrayD &arr,Int_t col,Int_t rstart=1,Int_t rend=0,Int_t layer=1);
+  Int_t GetTableColumn(TArrayD &arr,TString colname,Int_t rstart=1,Int_t rend=0,Int_t layer=1,Int_t mode=0);
+  Int_t GetTableColumn(TString* &arr,Int_t col,Int_t rstart=1,Int_t rend=0,Int_t layer=1);
+  Int_t GetTableColumn(TString* &arr,TString colname,Int_t rstart=1,Int_t rend=0,Int_t layer=1,Int_t mode=0);
+  Int_t GetTableColumn(TObjArray &arr,Int_t col,Int_t rstart=1,Int_t rend=0,Int_t layer=1);
+  Int_t GetTableColumn(TObjArray &arr,TString colname,Int_t rstart=1,Int_t rend=0,Int_t layer=1,Int_t mode=0);
+  void ListTable(Int_t width=-10,Int_t rstart=1,Int_t rend=0,Int_t cstart=1,Int_t cend=0);
+
+  // Image access methods
+  Int_t GetImageDimension(Int_t i=0) const;
+  Int_t GetImageLayer(TASImage &im,Int_t layer=1,Double_t* thres=0,Double_t max=-1);
+  Int_t GetImageLayer(TMatrixD &m,Int_t layer=1,Double_t* thres=0,Double_t max=-1);
+  Int_t GetImageLayer(TH2D &his,Int_t layer=1,Double_t* thres=0,Double_t max=-1);
+  UInt_t GetImageArray(TArrayD &arr,TArrayI ifirst,TArrayI ilast,TArrayI incr);
+  UInt_t GetImageArray(TArrayD &arr,TArrayI ifirst,UInt_t npix);
  
  protected:
   TString             fFilename;         // The (full path) name of the FITS file on the computer system
   TString             fFilenameFilter;   // The FITS filename with the HDU selection filter
   fitsfile*           fInput;            // Pointer to the FITS input file
   fitsfile*           fOutput;           // Pointer to the FITS output file
-  struct HDURecord*   fRecords;          // HDU metadata records
-  Int_t               fNRecords;         // Number of records
-  enum EHDUTypes      fType;             // HDU type
-  TString             fExtensionName;    // Extension Name
-  Int_t               fNumber;           // HDU number (1=PRIMARY)
-  TArrayI*            fSizes;            // Image sizes in each dimension (when fType == kImageHDU)
-  TArrayD*            fPixels;           // Image pixels (when fType == kImageHDU)
-  struct Column*      fColumnsInfo;      // Information about columns (when fType == kTableHDU)
-  Int_t               fNColumns;         // Number of columns (when fType == kTableHDU)
-  Int_t               fNRows;            // Number of rows (when fType == kTableHDU)
-  union Cell*         fCells;            // Table cells (when fType == kTableHDU). Cells are ordered in the following way:
-                                         // fCells[0..fNRows-1] -> cells of column 0
-                                         // fCells[fNRows..2*fNRows-1] -> cells of column 1
-                                         // fCells[2*fNRows..3*fNRows-1] -> cells of column 2
-                                         // fCells[(fNColumns-1)*fNRows..fNColumns*fNRows-1] -> cells of column fNColumns-1
-   
-   
- TString StripFilter(TString filename) const;
- Bool_t  LoadHDU(TString& filepath_filter);
+  eHDUTypes           fType;             // The HDU type
+  TString             fExtensionName;    // The HDU extension Name
+  Int_t               fExtensionNumber;  // The HDU extension number (0=PRIMARY)
+  Int_t               fNkeys;            // The number of HDU keywords
+  TString*            fKeyNames;         // The HDU key names
+  TString*            fKeyValues;        // The HDU key values
+  TString*            fComments;         // The HDU (key) comments
+  Int_t               fNrows;            // The number of table rows
+  Int_t               fNcolumns;         // The number of table columns
+  TString*            fColumnNames;      // The names of the table columns
+  eColumnTypes*       fColumnTypes;      // The types of the table columns
+  Int_t*              fColumnLayers;     // The number of layers of the table column
+  TArrayI*            fSizes;            // Image sizes in each dimension
 
- private:
   void Initialize();
   void Reset();
- 
+  TString StripFilter(TString filename) const;
+  Bool_t LoadHeaderInfo();
+  Int_t LoadLayer(TArrayD &arr,Int_t layer);
+  void ApplyPixelThreshold(TArrayD &arr,Double_t thres);
+  void RescalePixels(TArrayD &arr,Double_t max);
+
  ClassDef(NcFITSIO,0) // I/O interface for FITS files
 };
 #endif
