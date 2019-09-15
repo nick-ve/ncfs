@@ -1,6 +1,6 @@
 #ifndef NcEvent_h
 #define NcEvent_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcEvent.h 132 2016-09-01 16:50:25Z nickve $

@@ -1,7 +1,6 @@
 #ifndef NcVeto_h
 #define NcVeto_h
-
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcVeto.h 130 2016-08-24 11:11:33Z nickve $

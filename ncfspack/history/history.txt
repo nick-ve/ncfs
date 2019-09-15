@@ -1113,3 +1113,4 @@
                 Directory ncfspack/scripts (and ncfs.sh example script in the top directory) updated
                 to provide access to the CFITSIO header file "fitsio.h" on various systems.
 14-apr-2019 NvE Class NcFITSIO re-designed to provide new, backward compatible, access methods.
+15-sep-2019 NvE Text of all copyright notices updated.

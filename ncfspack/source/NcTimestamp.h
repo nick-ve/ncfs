@@ -1,6 +1,6 @@
 #ifndef NcTimestamp_h
 #define NcTimestamp_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <iostream>

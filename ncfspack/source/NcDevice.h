@@ -1,6 +1,6 @@
 #ifndef NcDevice_h
 #define NcDevice_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcDevice.h 135 2016-09-13 14:27:42Z nickve $

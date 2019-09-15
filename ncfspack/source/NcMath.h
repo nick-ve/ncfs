@@ -1,6 +1,6 @@
 #ifndef NcMath_h
 #define NcMath_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcMath.h 107 2016-02-07 18:20:26Z nickve $

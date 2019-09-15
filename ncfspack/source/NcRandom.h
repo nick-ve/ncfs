@@ -1,6 +1,6 @@
 #ifndef NcRandom_h
 #define NcRandom_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcRandom.h 98 2014-10-27 10:13:13Z nickve $

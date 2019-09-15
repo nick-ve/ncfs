@@ -1,6 +1,6 @@
 #ifndef NcDataStreamStats_h
 #define NcDataStreamStats_h
-// Copyright(c) 1997-2018, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <iostream>

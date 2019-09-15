@@ -1,15 +1,17 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2009, NCFS, All Rights Reserved.                          *
+ * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
  *                                                                             *
- * Author: The Netherlands Center for Fundamental Studies (NCFS).              *
- *         http://sites.google.com/site/ncfsweb ncfs.nl@gmail.com              *
+ * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
+ *          The Inter-university Institute for High Energies (IIHE).           *                 
+ *                    Website : http://www.iihe.ac.be                          *
+ *            Contact : Nick van Eijndhoven (nickve.nl@gmail.com)              *
  *                                                                             *
  * Contributors are mentioned in the code where appropriate.                   *
  *                                                                             * 
  * No part of this software may be used, copied, modified or distributed       *
- * by any means nor transmitted or translated into machine language without    *
- * written permission by the NCFS.                                             *
- * Permission to use the documentation strictly for non-commercial purposes    *
+ * by any means nor transmitted or translated into machine language for        *
+ * commercial purposes without written permission by the IIHE representative.  *
+ * Permission to use the software strictly for non-commercial purposes         *
  * is hereby granted without fee, provided that the above copyright notice     *
  * appears in all copies and that both the copyright notice and this           *
  * permission notice appear in the supporting documentation.                   *

@@ -1,6 +1,6 @@
 #ifndef Nc3VectorObj_h
 #define Nc3VectorObj_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: Nc3VectorObj.h 5 2010-03-19 10:10:02Z nickve $

@@ -1,6 +1,6 @@
 #ifndef NcVertex_h
 #define NcVertex_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcVertex.h 88 2013-08-18 18:14:09Z nickve $

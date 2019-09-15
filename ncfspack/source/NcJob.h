@@ -1,6 +1,6 @@
 #ifndef NcJob_h
 #define NcJob_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcJob.h 74 2013-01-21 14:02:42Z nickve $

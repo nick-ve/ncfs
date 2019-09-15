@@ -1,6 +1,6 @@
 #ifndef NcAstrolab_h
 #define NcAstrolab_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcAstrolab.h 139 2017-09-20 08:30:45Z nickve $

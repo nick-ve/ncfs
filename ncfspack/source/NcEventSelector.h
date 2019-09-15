@@ -1,6 +1,6 @@
 #ifndef NcEventSelector_h
 #define NcEventSelector_h
-// Copyright(c) 1997-2009, NCFS, All Rights Reserved.
+// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 // $Id: NcEventSelector.h 128 2016-06-13 10:52:31Z nickve $
