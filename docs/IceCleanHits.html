@@ -1,0 +1,576 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Thu Mar 21 09:34:41 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>IceCleanHits</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class IceCleanHits','','IceCleanHits.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/IceCleanHits.h.html">header file</a>
+<a class="descrheadentry" href="src/IceCleanHits.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#IceCleanHits:description">class description</a> 
+<a class="descrheadentry" href="#IceCleanHits:Function_Members">function members</a>
+<a class="descrheadentry" href="#IceCleanHits:Data_Members">data members</a>
+<a class="descrheadentry" href="#IceCleanHits:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">IceCleanHits</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="IceCleanHits:description"></a>class IceCleanHits: public TTask</h1>
+<div class="classdescr">
+<pre>
+ <a href="./IceCleanHits.html#IceCleanHits:Class" title="TClass* IceCleanHits::Class()">Class</a> <a href="./IceCleanHits.html">IceCleanHits</a>
+ <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> derived class to perform hit cleaning.
+
+ In case an event has been rejected by an <a href="./NcEventSelector.html">NcEventSelector</a> (based) processor,
+ this task (and its sub-tasks) is not executed.
+
+ Criteria applied for <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> data :
+
+ 1) ADC within [min,max]  Default : [0.3,999999] PE
+ 2) TOT within [min,max]  Default : electrical [125,2000] optical [20,2000] ns
+ 3) abs(LE-Ttrig)&lt;=win    Default : win=2250 TDC counts
+    where : LE=uncalibrated hit LE (i.e. TDC counts)   Ttrig=selected trigger time in TDC counts
+ 4) At least one hit in another OM within radius R and time difference dt
+    to remove isolated hits. Defaults : R=70 m  dt=500 ns
+
+ Criteria applied for <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> data :
+
+ 1) ADC within [min,max]  Default : [0.3,999999] PE
+ 2) TOT within [min,max]  Default : electrical [125,2000] optical [20,2000] ns
+ 3) abs(LE-Ttrig)&lt;=win    Default : win=3000 ns
+    where : LE=uncalibrated hit LE    Ttrig=selected trigger time
+ 4) At least one hit in another OM within radius R and time difference dt
+    to remove isolated hits. Defaults : R=70 m  dt=500 ns
+
+ Criteria applied for standard IceCube InIce DOM data :
+
+ 1) ADC within [min,max]  Default : [0,999999] PE
+ 2) TOT within [min,max]  Default : [0,999999] ns
+ 3) abs(LE-Ttrig)&lt;=win    Default : win=3000 ns
+    where : LE=hit LE     Ttrig=selected trigger time(s)
+ 4) At least one hit in another DOM within radius R and time difference dt
+    to remove isolated hits. Defaults : R=150 m  dt=1000 ns
+
+ Criteria applied for DeepCore DOM data :
+
+ 1) ADC within [min,max]  Default : [0,999999] PE
+ 2) TOT within [min,max]  Default : [0,999999] ns
+ 3) abs(LE-Ttrig)&lt;=win    Default : win=1000 ns
+    where : LE=hit LE     Ttrig=selected trigger time(s)
+ 4) At least one hit in another DOM within radius R and time difference dt
+    to remove isolated hits. Defaults : R=75 m  dt=500 ns
+
+ Criteria applied for <a href="./IceCleanHits.html#IceCleanHits:IceTop" title="void IceCleanHits::IceTop()">IceTop</a> DOM data :
+
+ 1) ADC within [min,max]  Default : [0,999999] PE
+ 2) TOT within [min,max]  Default : [0,999999] ns
+ 3) abs(LE-Ttrig)&lt;=win    Default : win=999999 ns
+    where : LE=hit LE     Ttrig=selected trigger time(s)
+ 4) At least one hit in another DOM within radius R and time difference dt
+    to remove isolated hits. Defaults : R=150 m  dt=1000 ns
+
+ For AMANDA data the actual DAQ system is obtained automatically from the <a href="./IceEvent.html">IceEvent</a> structure
+ via the device called <span class="string">"Daq"</span>.
+
+ The defaults of the various parameters can be changed by the corresponding
+ Set memberfunctions.
+
+ Information about the actual parameter settings can be found in the event
+ structure itself via the device named <span class="string">"IceCleanHits"</span>.
+
+ Concerning the trigger time :
+
+ The user can impose a specific trigger name or time to be used
+ by invokation of the memberfunctions <a href="./IceCleanHits.html#IceCleanHits:SetTname" title="void IceCleanHits::SetTname(TString name,TString s)">SetTname</a> or <a href="./IceCleanHits.html#IceCleanHits:SetTtime" title="void IceCleanHits::SetTtime(Float_t t,TString s,Int_t slc=0,Int_t mult=0)">SetTtime</a>, respectively.
+ The (uncalibrated) LE of a specified (by name) trigger pulse is used
+ as obtained from the <a href="./IceEvent.html">IceEvent</a> structure (via the GetTriggerTime facility).
+ Specification of a negative trigger time will result in the automatic
+ trigger time setting corresponding to the median of recorded hit times
+ or determination of multiple trigger times based on a spectral analysis
+ of the observed hit times.
+ In case of automatic trigger time selection, only non-isolated HLC hits
+ will be used to determine the trigger time(s).
+ For further details please refer to the docs of the memberfunctions
+ <a href="./IceCleanHits.html#IceCleanHits:SetTname" title="void IceCleanHits::SetTname(TString name,TString s)">SetTname</a> and <a href="./IceCleanHits.html#IceCleanHits:SetTtime" title="void IceCleanHits::SetTtime(Float_t t,TString s,Int_t slc=0,Int_t mult=0)">SetTtime</a>.
+
+ The hits which do not fullfill the criteria are flagged <span class="string">"dead"</span> for the
+ corresponding signal slot. This means they are still present in the
+ <a href="./IceEvent.html">IceEvent</a> structure and are as such still accessible.
+ It is left to the user to decide (based on the various <span class="string">"dead"</span> flag settings)
+ whether or not to use these hits in his/her reconstruction or analysis.
+
+ Note : This processor only works properly on Time and ADC calibrated data.
+
+--- Author: Nick van Eijndhoven 13-oct-2005 Utrecht University
+- Modified: NvE $Date: 2012-02-07 11:05:54 +0100 (Tue, 07 Feb 2012) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="IceCleanHits:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceCleanHits:IceCleanHits@1">IceCleanHits</a>(<span class="keyword">const</span> <a href="./IceCleanHits.html">IceCleanHits</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceCleanHits:IceCleanHits">IceCleanHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceCleanHits"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Hit cleaning"</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#IceCleanHits:_IceCleanHits">~IceCleanHits</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Add"><span class="baseclass">TTask::</span>Add</a>(<a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>* task)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Browse"><span class="baseclass">TTask::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#IceCleanHits:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:CleanTasks"><span class="baseclass">TTask::</span>CleanTasks</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Clear"><span class="baseclass">TTask::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TNamed:Clone"><span class="baseclass">TNamed::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Continue"><span class="baseclass">TTask::</span>Continue</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTask"><span class="baseclass">TTask::</span>ExecuteTask</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"0"</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTasks"><span class="baseclass">TTask::</span>ExecuteTasks</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakin"><span class="baseclass">TTask::</span>GetBreakin</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakout"><span class="baseclass">TTask::</span>GetBreakout</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TList*</td><td class="funcname"><a class="funcname" href="#TTask:GetListOfTasks"><span class="baseclass">TTask::</span>GetListOfTasks</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#IceCleanHits:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsActive"><span class="baseclass">TTask::</span>IsActive</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsFolder"><span class="baseclass">TTask::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./IceCleanHits.html">IceCleanHits</a>&amp;</td><td class="funcname"><a class="funcname" href="#IceCleanHits:operator_">operator=</a>(<span class="keyword">const</span> <a href="./IceCleanHits.html">IceCleanHits</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetActive"><span class="baseclass">TTask::</span>SetActive</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> active = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:SetAdcRange">SetAdcRange</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> min, <a href="./ListOfTypes.html#Float_t">Float_t</a> max, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakin"><span class="baseclass">TTask::</span>SetBreakin</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakin = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakout"><span class="baseclass">TTask::</span>SetBreakout</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakout = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:SetIsolation">SetIsolation</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> rmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> dtmax, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:SetTname">SetTname</a>(TString name, TString s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:SetTotRange">SetTotRange</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> min, <a href="./ListOfTypes.html#Float_t">Float_t</a> max, TString s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:SetTtime">SetTtime</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> t, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> slc = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mult = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:SetTwindow">SetTwindow</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> dtmax, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:Amanda">Amanda</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:Amplitude">Amplitude</a>(TObjArray&amp; hits, <a href="./ListOfTypes.html#Float_t">Float_t</a> adcmin, <a href="./ListOfTypes.html#Float_t">Float_t</a> adcmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> totmin, <a href="./ListOfTypes.html#Float_t">Float_t</a> totmax) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:DCdoms">DCdoms</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:ICdoms">ICdoms</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:IceTop">IceTop</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:Isolation">Isolation</a>(TObjArray&amp; hits, <a href="./ListOfTypes.html#Float_t">Float_t</a> dtmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> rmax) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:MuDaq">MuDaq</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:TimeWindow">TimeWindow</a>(TObjArray&amp; hits, <a href="./ListOfTypes.html#Float_t">Float_t</a> ttrig, <a href="./ListOfTypes.html#Float_t">Float_t</a> twin, TArrayF* peaks = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceCleanHits:TWRDaq">TWRDaq</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="IceCleanHits:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fActive"><span class="baseclass">TTask::</span>fActive</a></td><td class="datadesc">true if task is active</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcmaxAM"></a>fAdcmaxAM</td><td class="datadesc">Maximum Amanda MuDaq ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcmaxAT"></a>fAdcmaxAT</td><td class="datadesc">Maximum Amanda TWRDaq ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcmaxDC"></a>fAdcmaxDC</td><td class="datadesc">Maximum DeepCore ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcmaxIC"></a>fAdcmaxIC</td><td class="datadesc">Maximum standard IceCube InIce ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcmaxT"></a>fAdcmaxT</td><td class="datadesc">Maximum IceTop ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcminAM"></a>fAdcminAM</td><td class="datadesc">Minimum Amanda MuDaq ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcminAT"></a>fAdcminAT</td><td class="datadesc">Minimum Amanda TWRDaq ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcminDC"></a>fAdcminDC</td><td class="datadesc">Minimum DeepCore ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcminIC"></a>fAdcminIC</td><td class="datadesc">Minimum standard IceCube InIce ADC value in PE</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fAdcminT"></a>fAdcminT</td><td class="datadesc">Minimum IceTop ADC value in PE</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fDtmaxA"></a>fDtmaxA</td><td class="datadesc">Maximum Amanda hit isolation dt in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fDtmaxDC"></a>fDtmaxDC</td><td class="datadesc">Maximum DeepCore hit isolation dt in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fDtmaxIC"></a>fDtmaxIC</td><td class="datadesc">Maximum standard IceCube InIce hit isolation dt in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fDtmaxT"></a>fDtmaxT</td><td class="datadesc">Maximum IceTop hit isolation dt in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./IceEvent.html">IceEvent</a>*</td><td class="dataname"><a name="IceCleanHits:fEvt"></a>fEvt</td><td class="datadesc">Pointer to the current event structure</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceCleanHits:fMultDC"></a>fMultDC</td><td class="datadesc">Flag to allow multiple trigger times from DeepCore hits </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceCleanHits:fMultIC"></a>fMultIC</td><td class="datadesc">Flag to allow multiple trigger times from standard InIce hits </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceCleanHits:fMultT"></a>fMultT</td><td class="datadesc">Flag to allow multiple trigger times from IceTop hits </td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fRmaxA"></a>fRmaxA</td><td class="datadesc">Maximum Amanda hit isolation radius in m</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fRmaxDC"></a>fRmaxDC</td><td class="datadesc">Maximum DeepCore hit isolation radius in m</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fRmaxIC"></a>fRmaxIC</td><td class="datadesc">Maximum standard IceCube InIce hit isolation radius in m</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fRmaxT"></a>fRmaxT</td><td class="datadesc">Maximum IceTop hit isolation radius in m</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceCleanHits:fSlcDC"></a>fSlcDC</td><td class="datadesc">Usage flag for SLC hits of DeepCore DOMs to determine the trigger time</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceCleanHits:fSlcIC"></a>fSlcIC</td><td class="datadesc">Usage flag for SLC hits of standard InIce DOMs to determine the trigger time</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceCleanHits:fSlcT"></a>fSlcT</td><td class="datadesc">Usage flag for SLC hits of IceTop DOMs to determine the trigger time</td></tr>
+<tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceCleanHits:fTnamAM"></a>fTnamAM</td><td class="datadesc">The Amanda MuDaq trigger name</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceCleanHits:fTnamAT"></a>fTnamAT</td><td class="datadesc">The Amanda TWRDaq trigger name</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceCleanHits:fTnamDC"></a>fTnamDC</td><td class="datadesc">The IceCube trigger name for DeepCore DOM cleaning</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceCleanHits:fTnamIC"></a>fTnamIC</td><td class="datadesc">The IceCube trigger name for standard InIce DOM cleaning</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceCleanHits:fTnamT"></a>fTnamT</td><td class="datadesc">The IceCube trigger name for IceTop cleaning</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotmaxAEM"></a>fTotmaxAEM</td><td class="datadesc">Maximum Amanda MuDaq electrical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotmaxAET"></a>fTotmaxAET</td><td class="datadesc">Maximum Amanda TWRDaq electrical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotmaxAOM"></a>fTotmaxAOM</td><td class="datadesc">Maximum Amanda MuDaq optical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotmaxAOT"></a>fTotmaxAOT</td><td class="datadesc">Maximum Amanda TWRDaq optical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotmaxDC"></a>fTotmaxDC</td><td class="datadesc">Maximum DeepCore TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotmaxIC"></a>fTotmaxIC</td><td class="datadesc">Maximum standard IceCube InIce TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotmaxT"></a>fTotmaxT</td><td class="datadesc">Maximum IceTop TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotminAEM"></a>fTotminAEM</td><td class="datadesc">Minimum Amanda MuDaq electrical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotminAET"></a>fTotminAET</td><td class="datadesc">Minimum Amanda TWRDaq electrical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotminAOM"></a>fTotminAOM</td><td class="datadesc">Minimum Amanda MuDaq optical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotminAOT"></a>fTotminAOT</td><td class="datadesc">Minimum Amanda TWRDaq optical TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotminDC"></a>fTotminDC</td><td class="datadesc">Minimum DeepCore TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotminIC"></a>fTotminIC</td><td class="datadesc">Minimum standard IceCube InIce TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTotminT"></a>fTotminT</td><td class="datadesc">Minimum IceTop TOT value in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTtimAM"></a>fTtimAM</td><td class="datadesc">The Amanda MuDaq trigger time in TDC counts</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTtimAT"></a>fTtimAT</td><td class="datadesc">The Amanda TWRDaq trigger time in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTtimDC"></a>fTtimDC</td><td class="datadesc">The (median) trigger time in ns for DeepCore DOM hits</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTtimIC"></a>fTtimIC</td><td class="datadesc">The (median) trigger time in ns for standard InIce DOM hits</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTtimT"></a>fTtimT</td><td class="datadesc">The (median) trigger time in ns for IceTop DOM hits</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTwinAM"></a>fTwinAM</td><td class="datadesc">Maximum Amanda MuDaq hit time difference from the trigger time in TDC counts</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTwinAT"></a>fTwinAT</td><td class="datadesc">Maximum Amanda TWRDaq hit time difference from the trigger time in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTwinDC"></a>fTwinDC</td><td class="datadesc">Maximum DeepCore hit time difference from the trigger time in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTwinIC"></a>fTwinIC</td><td class="datadesc">Maximum standard InIce hit time difference from the trigger time in ns</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceCleanHits:fTwinT"></a>fTwinT</td><td class="datadesc">Maximum IceTop hit time difference from the trigger time in ns</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBeginTask"><span class="baseclass">TTask::</span>fgBeginTask</a></td><td class="datadesc">pointer to task initiator</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBreakPoint"><span class="baseclass">TTask::</span>fgBreakPoint</a></td><td class="datadesc">pointer to current break point</td></tr>
+
+</table></div>
+</div>
+<h2><a id="IceCleanHits:Class_Charts"></a>Class Charts</h2>
+<map name="MapIceCleanHits_Lib" id="MapIceCleanHits_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgIceCleanHits_Inh" class="tabsel" href="inh/IceCleanHits_Inh.png" onclick="javascript:return SetImg('Charts','inh/IceCleanHits_Inh.png');">Inheritance</a>
+<a id="imgIceCleanHits_InhMem" class="tab" href="inhmem/IceCleanHits_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/IceCleanHits_InhMem.png');">Inherited Members</a>
+<a id="imgIceCleanHits_Incl" class="tab" href="incl/IceCleanHits_Incl.png" onclick="javascript:return SetImg('Charts','incl/IceCleanHits_Incl.png');">Includes</a>
+<a id="imgIceCleanHits_Lib" class="tab" href="lib/IceCleanHits_Lib.png" onclick="javascript:return SetImg('Charts','lib/IceCleanHits_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapIceCleanHits_Inh" src="inh/IceCleanHits_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCleanHits:IceCleanHits" href="src/IceCleanHits.cxx.html#pvvERE">IceCleanHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceCleanHits"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Hit cleaning"</span>)</span><br />
+<div class="funccomm"><pre> Default constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCleanHits:_IceCleanHits" href="src/IceCleanHits.cxx.html#A3USDB">~IceCleanHits</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:SetAdcRange" href="src/IceCleanHits.cxx.html#LWOtNE">SetAdcRange</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> min, <a href="./ListOfTypes.html#Float_t">Float_t</a> max, TString s)</span><br />
+<div class="funccomm"><pre> Set ADC range in PE.
+
+ The argument <span class="string">"s"</span> specifies the sensor system as follows :
+
+ s = <span class="string">"MuDaq"</span>  ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> system
+     <span class="string">"TWRDaq"</span> ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> system
+     <span class="string">"TDOM"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:IceTop" title="void IceCleanHits::IceTop()">IceTop</a> DOMs
+     <span class="string">"ICDOM"</span>  ==&gt; Standard IceCube InIce DOMs
+     <span class="string">"DCDOM"</span>  ==&gt; DeepCore DOMs
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:SetTotRange" href="src/IceCleanHits.cxx.html#nTcIOE">SetTotRange</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> min, <a href="./ListOfTypes.html#Float_t">Float_t</a> max, TString s)</span><br />
+<div class="funccomm"><pre> Set TOT range in ns.
+
+ The argument <span class="string">"s"</span> specifies the sensor system as follows :
+
+ s = <span class="string">"AEM"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules with electrical readout under the <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> system
+     <span class="string">"AOM"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules with optical fibre readout under the <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> system
+     <span class="string">"AET"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules with electrical readout under the <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> system
+     <span class="string">"AOT"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules with optical fibre readout under the <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> system
+     <span class="string">"TDOM    ==&gt; IceTop DOMs</span>
+     <span class="string">"ICDOM"</span>  ==&gt; Standard IceCube InIce DOMs
+     <span class="string">"DCDOM"</span>  ==&gt; DeepCore DOMs
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:SetIsolation" href="src/IceCleanHits.cxx.html#hWTpQD">SetIsolation</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> rmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> dtmax, TString s)</span><br />
+<div class="funccomm"><pre> Set maximum hit isolation radius (in m) and time difference (in ns).
+
+ The argument <span class="string">"s"</span> specifies the sensor system as follows :
+
+ s = <span class="string">"AOM"</span>    ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules
+     <span class="string">"TDOM    ==&gt; IceTop DOMs</span>
+     <span class="string">"ICDOM"</span>  ==&gt; Standard IceCube InIce DOMs
+     <span class="string">"DCDOM"</span>  ==&gt; DeepCore DOMs
+
+ Note : In case one of the arguments <span class="string">"rmax"</span> or <span class="string">"dtmax"</span> is negative,
+        the corresponding value will not be modified.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:SetTwindow" href="src/IceCleanHits.cxx.html#H.9WaB">SetTwindow</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> dtmax, TString s)</span><br />
+<div class="funccomm"><pre> Set the maximal time window around the trigger time.
+ Only hits which occur in [T-dtmax,T+dtmax] will be kept,
+ where T indicates the trigger time.
+ For the <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> hardware, the times are all in TDC counts,
+ where 1 TDC corresponds to about 1.04 ns.
+ For all other systems the times are all in nanoseconds.
+
+ The argument <span class="string">"s"</span> specifies the sensor system as follows :
+
+ s = <span class="string">"MuDaq"</span>  ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> system
+     <span class="string">"TWRDaq"</span> ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> system
+     <span class="string">"TDOM"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:IceTop" title="void IceCleanHits::IceTop()">IceTop</a> DOMs
+     <span class="string">"ICDOM"</span>  ==&gt; Standard IceCube InIce DOMs
+     <span class="string">"DCDOM"</span>  ==&gt; DeepCore DOMs
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:SetTname" href="src/IceCleanHits.cxx.html#DTkM_">SetTname</a>(TString name, TString s)</span><br />
+<div class="funccomm"><pre> Specify the trigger name to be used to derive the trigger time for the
+ time cleaning of a certain class of sensors.
+
+ Note : Specification of name=<span class="string">"Average"</span> will result in a trigger time
+        being the <span class="string">"median"</span> of all encountered non-zero trigger times.
+
+ The argument <span class="string">"s"</span> specifies the sensor system as follows :
+
+ s = <span class="string">"MuDaq"</span>  ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> system
+     <span class="string">"TWRDaq"</span> ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> system
+     <span class="string">"TDOM"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:IceTop" title="void IceCleanHits::IceTop()">IceTop</a> DOMs
+     <span class="string">"ICDOM"</span>  ==&gt; Standard IceCube InIce DOMs
+     <span class="string">"DCDOM"</span>  ==&gt; DeepCore DOMs
+
+ Specification of a non-existing trigger name will result in a trigger time
+ value of 0.
+
+ The used trigger time value will be stored in the corresponding slot of the
+ <span class="string">"IceCleanHits"</span> device in the event structure.
+
+ Note : The user can also impose a certain trigger time without using any
+        trigger information.
+        This is achieved by invoking the memberfunction <a href="./IceCleanHits.html#IceCleanHits:SetTtime" title="void IceCleanHits::SetTtime(Float_t t,TString s,Int_t slc=0,Int_t mult=0)">SetTtime</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:SetTtime" href="src/IceCleanHits.cxx.html#p8u.gB">SetTtime</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> t, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> slc = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mult = 0)</span><br />
+<div class="funccomm"><pre> Set the trigger time(s) for a certain class of sensors.
+ For the <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> hardware, the times are all in TDC counts,
+ where 1 TDC corresponds to about 1.04 ns.
+ For the other systems the times are all in nanoseconds.
+
+ The argument <span class="string">"s"</span> specifies the sensor system as follows :
+
+ s = <span class="string">"MuDaq"</span>  ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> system
+     <span class="string">"TWRDaq"</span> ==&gt; <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules under the <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> system
+     <span class="string">"TDOM"</span>   ==&gt; <a href="./IceCleanHits.html#IceCleanHits:IceTop" title="void IceCleanHits::IceTop()">IceTop</a> DOMs
+     <span class="string">"ICDOM"</span>  ==&gt; Standard IceCube InIce DOMs
+     <span class="string">"DCDOM"</span>  ==&gt; DeepCore DOMs
+
+ A negative value will induce automatic trigger time(s) setting.
+
+ In case of automatic trigger time determination, the <span class="string">"median"</span> of the hit times
+ of the specified class of sensors, as recorded in the <a href="./IceEvent.html">IceEvent</a> structure,
+ is calculated.
+ Via the argument <span class="string">"slc"</span> the user can select to use (1) or not use (0) SLC hits
+ in the automatic trigger time determination for the specified class of sensors.
+ This <span class="string">"median"</span> value will then be stored (as a negative value) in the
+ corresponding slot of the <span class="string">"IceCleanHits"</span> device in the event structure.
+
+ The argument <span class="string">"mult"</span> allows to select (1) or not select (0) a spectral analysis
+ of the hit time distributions of the corresponding class of sensors.
+ In this analysis various peaks in the hit time distribution will be identified
+ with different trigger times. Each identified peak will be treated as an individual
+ trigger time with the corresponding time window around it.
+ This will allow to cope with coincident tracks in the detector.
+ In case no peaks are found, the <span class="string">"median"</span> trigger time as mentioned above will be used.
+
+ For a user selected trigger time, this trigger time will be stored in the
+ corresponding slot of the <span class="string">"IceCleanHits"</span> device in the event structure.
+
+ The default values are : slc=0 and mult=1.
+
+ Notes :
+
+ 1) The arguments <span class="string">"slc"</span> and <span class="string">"mult"</span> are only used for IceCube hits, not for <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a>.
+ 2) In the constructor of this class the defaults have been set to always perform
+    automatic trigger time determination with slc=0 and mult=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:Exec" href="src/IceCleanHits.cxx.html#GIpNp">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funccomm"><pre> Implementation of the hit cleaning procedures.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:Amanda" href="src/IceCleanHits.cxx.html#AROfPE">Amanda</a>()</span><br />
+<div class="funccomm"><pre> Hit cleaning for <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> modules.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:MuDaq" href="src/IceCleanHits.cxx.html#qtV7ZC">MuDaq</a>()</span><br />
+<div class="funccomm"><pre> Hit cleaning for <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> <a href="./IceCleanHits.html#IceCleanHits:MuDaq" title="void IceCleanHits::MuDaq()">MuDaq</a> data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:TWRDaq" href="src/IceCleanHits.cxx.html#gQH3VC">TWRDaq</a>()</span><br />
+<div class="funccomm"><pre> Hit cleaning for <a href="./IceCleanHits.html#IceCleanHits:Amanda" title="void IceCleanHits::Amanda()">Amanda</a> <a href="./IceCleanHits.html#IceCleanHits:TWRDaq" title="void IceCleanHits::TWRDaq()">TWRDaq</a> data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:IceTop" href="src/IceCleanHits.cxx.html#x9cGnD">IceTop</a>()</span><br />
+<div class="funccomm"><pre> Hit cleaning for <a href="./IceCleanHits.html#IceCleanHits:IceTop" title="void IceCleanHits::IceTop()">IceTop</a> DOMs.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:ICdoms" href="src/IceCleanHits.cxx.html#Jvf92E">ICdoms</a>()</span><br />
+<div class="funccomm"><pre> Hit cleaning for the standard IceCube InIce DOMs.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:DCdoms" href="src/IceCleanHits.cxx.html#Vvf92E">DCdoms</a>()</span><br />
+<div class="funccomm"><pre> Hit cleaning for the DeepCore DOMs.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:Amplitude" href="src/IceCleanHits.cxx.html#f8efXB">Amplitude</a>(TObjArray&amp; hits, <a href="./ListOfTypes.html#Float_t">Float_t</a> adcmin, <a href="./ListOfTypes.html#Float_t">Float_t</a> adcmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> totmin, <a href="./ListOfTypes.html#Float_t">Float_t</a> totmax) const</span><br />
+<div class="funccomm"><pre> Perform hit cleaning based on amplitude (ADC) and duration (TOT).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:Isolation" href="src/IceCleanHits.cxx.html#lnCwpC">Isolation</a>(TObjArray&amp; hits, <a href="./ListOfTypes.html#Float_t">Float_t</a> dtmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> rmax) const</span><br />
+<div class="funccomm"><pre> Perform hit cleaning based on isolation criteria.
+ Only retain hits that have at least one hit of another OM within a certain
+ radius and within a certain time window
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCleanHits:TimeWindow" href="src/IceCleanHits.cxx.html#ghgny">TimeWindow</a>(TObjArray&amp; hits, <a href="./ListOfTypes.html#Float_t">Float_t</a> ttrig, <a href="./ListOfTypes.html#Float_t">Float_t</a> twin, TArrayF* peaks = 0) const</span><br />
+<div class="funccomm"><pre> Perform hit cleaning based on a time window around a trigger time.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCleanHits:IceCleanHits" href="src/IceCleanHits.h.html#sbHZa">IceCleanHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceCleanHits"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Hit cleaning"</span>)</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Thu Mar 21 09:34:44 2019 </em><em>&raquo; Last generated: 2019-03-21 09:34</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

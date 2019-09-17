@@ -1,0 +1,1884 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:21 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcMath</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcMath','','NcMath.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcMath.h.html">header file</a>
+<a class="descrheadentry" href="src/NcMath.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcMath:description">class description</a> 
+<a class="descrheadentry" href="#NcMath:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcMath:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcMath:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcMath</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcMath:description"></a>class NcMath: public TObject</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcMath.html#NcMath:Class" title="TClass* NcMath::Class()">Class</a> <a href="./NcMath.html">NcMath</a>
+ Various mathematical tools which may be very convenient while
+ performing scientific analysis.
+
+ Example : Probability of a Chi-squared value
+
+
+ <a href="./NcMath.html">NcMath</a> M;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> chi2=20;            // The chi-squared value
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf=12;               // The number of degrees of freedom
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> p=M.<a href="./NcMath.html#NcMath:Prob" title="Double_t NcMath::Prob(Double_t chi2,Int_t ndf,Int_t mode=1)">Prob</a>(chi2,ndf); // The probability that at least a Chi-squared
+                             // value of chi2 will be observed, even for a
+                             // correct model
+
+--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
+- Modified: NvE $Date: 2016-02-07 19:20:26 +0100 (Sun, 07 Feb 2016) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcMath:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcMath:NcMath">NcMath</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcMath:NcMath@1">NcMath</a>(<span class="keyword">const</span> <a href="./NcMath.html">NcMath</a>&amp; m)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcMath:_NcMath">~NcMath</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:BesselI">BesselI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:BesselK">BesselK</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:BinomialCDF">BinomialCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:BinomialDist">BinomialDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:BinomialPvalue">BinomialPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:Chi2CDF">Chi2CDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:Chi2Dist">Chi2Dist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Chi2Pvalue">Chi2Pvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> chi2, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Chi2Value">Chi2Value</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ndf = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Chi2Value@1">Chi2Value</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ndf = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Chi2Value@2">Chi2Value</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ndf = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcMath:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Clear"><span class="baseclass">TObject::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:Clone"><span class="baseclass">TObject::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Compare"><span class="baseclass">TObject::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Copy"><span class="baseclass">TObject::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; object) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Erf">Erf</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Erfc">Erfc</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:FratioCDF">FratioCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf2) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:FratioDist">FratioDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf2) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:FratioPvalue">FratioPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf2, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Gamma">Gamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Gamma@1">Gamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:GammaDtDist">GammaDtDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> z) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:GaussCDF">GaussCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:GaussDist">GaussDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GaussProb">GaussProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> q, <a href="./ListOfTypes.html#Double_t">Double_t</a> mean = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> isig = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GaussPvalue">GaussPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> q, <a href="./ListOfTypes.html#Double_t">Double_t</a> mean = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> isig = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetName"><span class="baseclass">TObject::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetTitle"><span class="baseclass">TObject::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Hash"><span class="baseclass">TObject::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcMath:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsSortable"><span class="baseclass">TObject::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LiMaSignificance">LiMaSignificance</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Non, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ton, <a href="./ListOfTypes.html#Int_t">Int_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ra = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Re = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LnGamma">LnGamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LnGamma@1">LnGamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LnNfac">LnNfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LnRfac">LnRfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LogNfac">LogNfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LogRfac">LogRfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ls"><span class="baseclass">TObject::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:MeanMu">MeanMu</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> cl, <a href="./ListOfTypes.html#Double_t">Double_t</a> nbkg, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TF1* w = 0, TFeldmanCousins* f = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:NegBinomialnCDF">NegBinomialnCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:NegBinomialnDist">NegBinomialnDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:NegBinomialnPvalue">NegBinomialnPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:NegBinomialxCDF">NegBinomialxCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:NegBinomialxDist">NegBinomialxDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:NegBinomialxPvalue">NegBinomialxPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Nfac">Nfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcMath.html">NcMath</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcMath:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcMath.html">NcMath</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:PoissonCDF">PoissonCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:PoissonCDF@1">PoissonCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:PoissonDist">PoissonDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:PoissonDist@1">PoissonDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:PoissonDtCDF">PoissonDtCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Int_t">Int_t</a> n) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:PoissonDtDist">PoissonDtDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Int_t">Int_t</a> n) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PoissonDtPvalue">PoissonDtPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PoissonPvalue">PoissonPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> mu, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PoissonPvalue@1">PoissonPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Print"><span class="baseclass">TObject::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Prob">Prob</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> chi2, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiExtreme">PsiExtreme</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiExtreme@1">PsiExtreme</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiPvalue">PsiPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> psi0, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr, <a href="./ListOfTypes.html#Double_t">Double_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* na = 0, TH1F* psih = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* nrx = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mark = 1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiPvalue@1">PsiPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> psi0, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr, TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* na = 0, TH1F* psih = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* nrx = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mark = 1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue@1">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue@2">PsiValue</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Rfac">Rfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcMath:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcMath:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcMath:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:StudentCDF">StudentCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ndf) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:StudentDist">StudentDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ndf) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:StudentPvalue">StudentPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> t, <a href="./ListOfTypes.html#Double_t">Double_t</a> ndf, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Zeta">Zeta</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> nterms = 100000) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:BesselI0">BesselI0</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:BesselI1">BesselI1</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:BesselK0">BesselK0</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:BesselK1">BesselK1</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GamCf">GamCf</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GamSer">GamSer</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcMath:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcMath:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcMath_Lib" id="MapNcMath_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcMath_Inh" class="tabsel" href="inh/NcMath_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcMath_Inh.png');">Inheritance</a>
+<a id="imgNcMath_InhMem" class="tab" href="inhmem/NcMath_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcMath_InhMem.png');">Inherited Members</a>
+<a id="imgNcMath_Incl" class="tab" href="incl/NcMath_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcMath_Incl.png');">Includes</a>
+<a id="imgNcMath_Lib" class="tab" href="lib/NcMath_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcMath_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcMath_Inh" src="inh/NcMath_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcMath:NcMath" href="src/NcMath.cxx.html#KRBWPC">NcMath</a>()</span><br />
+<div class="funccomm"><pre> Default constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcMath:_NcMath" href="src/NcMath.cxx.html#CsEhID">~NcMath</a>()</span><br />
+<div class="funccomm"><pre> Destructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcMath:NcMath@1" href="src/NcMath.cxx.html#dFIG0E">NcMath</a>(<span class="keyword">const</span> <a href="./NcMath.html">NcMath</a>&amp; m)</span><br />
+<div class="funccomm"><pre> <a href="./#TObject:Copy" title="void TObject::Copy(TObject&amp; object)">Copy</a> constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Zeta" href="src/NcMath.cxx.html#K4R7G">Zeta</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> nterms = 100000) const</span><br />
+<div class="funccomm"><pre> Computation of the Riemann <a href="./NcMath.html#NcMath:Zeta" title="Double_t NcMath::Zeta(Double_t x,Int_t nterms=100000)">Zeta</a> function <a href="./NcMath.html#NcMath:Zeta" title="Double_t NcMath::Zeta(Double_t x,Int_t nterms=100000)">Zeta</a>(x) for all x&gt;1.
+
+ The input argument <span class="string">"nterms"</span> determines the number of terms that will be
+ evaluated in the summation series.
+ Default value : nterms=100000 which provides an accuracy of about 10^-5.
+
+ In case of invalid input, the value 0 is returned.
+
+--- Nick van Eijndhoven 14-may-2012, IIHE, Brussels.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Gamma" href="src/NcMath.cxx.html#fDrJgB">Gamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z) const</span><br />
+<div class="funccomm"><pre> Computation of <a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a>(z) for all z&gt;0.
+
+ The algorithm is based on the article by C.Lanczos [1] as denoted in
+ Numerical Recipes 2nd ed. on p. 207 (W.H.Press et al.).
+
+ [1] C.Lanczos, SIAM Journal of Numerical Analysis B1 (1964), 86.
+
+--- Nve 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Gamma@1" href="src/NcMath.cxx.html#wQI3WC">Gamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the incomplete gamma function P(a,x) or gamma(a,x).
+
+ where : P(a,x)=gamma(a,x)/<a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a>(a)
+
+ mode = 0 : Value of P(a,x) is returned
+        1 : Value of gamma(a,x) is returned
+
+ By default mode=0.
+
+ The algorithm is based on the formulas and code as denoted in
+ Numerical Recipes 2nd ed. on p. 210-212 (W.H.Press et al.).
+
+--- Nve 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:LnGamma" href="src/NcMath.cxx.html#wtSyRC">LnGamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z) const</span><br />
+<div class="funccomm"><pre> Computation of ln[<a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a>(z)] for all z&gt;0.
+
+ The algorithm is based on the article by C.Lanczos [1] as denoted in
+ Numerical Recipes 2nd ed. on p. 207 (W.H.Press et al.).
+
+ [1] C.Lanczos, SIAM Journal of Numerical Analysis B1 (1964), 86.
+
+ The accuracy of the result is better than 2e-10.
+
+--- Nve 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:LnGamma@1" href="src/NcMath.cxx.html#lVcFv">LnGamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the ln of the incomplete gamma function P(a,x) or gamma(a,x).
+
+ where : P(a,x)=gamma(a,x)/<a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a>(a)
+
+ mode = 0 : Value of ln[P(a,x)] is returned
+        1 : Value of ln[gamma(a,x)] is returned
+
+ By default mode=0.
+
+--- Nick van Eijndhoven 07-feb-2016, IIHE-VUB, Brussel
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GamSer" href="src/NcMath.cxx.html#IPsW8D">GamSer</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the incomplete gamma function P(a,x)
+ via its series representation.
+
+ The algorithm is based on the formulas and code as denoted in
+ Numerical Recipes 2nd ed. on p. 210-212 (W.H.Press et al.).
+
+--- Nve 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GamCf" href="src/NcMath.cxx.html#nep5Q">GamCf</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the incomplete gamma function P(a,x)
+ via its continued fraction representation.
+
+ The algorithm is based on the formulas and code as denoted in
+ Numerical Recipes 2nd ed. on p. 210-212 (W.H.Press et al.).
+
+--- Nve 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Erf" href="src/NcMath.cxx.html#QoGyWC">Erf</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the error function erf(x).
+
+--- NvE 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Erfc" href="src/NcMath.cxx.html#HYllVC">Erfc</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the complementary error function erfc(x).
+
+ The algorithm is based on a Chebyshev fit as denoted in
+ Numerical Recipes 2nd ed. on p. 214 (W.H.Press et al.).
+
+ The fractional error is always less than 1.2e-7.
+
+--- Nve 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Prob" href="src/NcMath.cxx.html#pYSVJC">Prob</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> chi2, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
+<div class="funccomm"><pre> Computation of the probability for a certain Chi-squared (chi2)
+ and number of degrees of freedom (ndf).
+
+ A more clear and flexible facility is offered by <a href="./NcMath.html#NcMath:Chi2Pvalue" title="Double_t NcMath::Chi2Pvalue(Double_t chi2,Int_t ndf,Int_t sides=0,Int_t sigma=0,Int_t mode=1)">Chi2Pvalue</a>.
+
+ According to the value of the parameter <span class="string">"mode"</span> various algorithms
+ can be selected.
+
+ mode = 0 : Calculations are based on the incomplete gamma function P(a,x),
+            where a=ndf/2 and x=chi2/2.
+
+        1 : Same as for mode=0. However, in case ndf=1 an exact expression
+            based on the error function <a href="./NcMath.html#NcMath:Erf" title="Double_t NcMath::Erf(Double_t x)">Erf</a>() is used.
+
+        2 : Same as for mode=0. However, in case ndf&gt;30 a Gaussian approximation
+            is used instead of the gamma function.
+
+ When invoked as <a href="./NcMath.html#NcMath:Prob" title="Double_t NcMath::Prob(Double_t chi2,Int_t ndf,Int_t mode=1)">Prob</a>(chi2,ndf) the default mode=1 is used.
+
+ P(a,x) represents the probability that the observed Chi-squared
+ for a correct model is at most the value chi2.
+
+ The returned probability corresponds to 1-P(a,x),
+ which denotes the probability that an observed Chi-squared is at least
+ the value chi2 by chance, even for a correct model.
+
+--- NvE 14-nov-1998 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:BesselI0" href="src/NcMath.cxx.html#zYsckB">BesselI0</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the modified Bessel function I_0(x) for any real x.
+
+ The algorithm is based on the article by Abramowitz and Stegun [1]
+ as denoted in Numerical Recipes 2nd ed. on p. 230 (W.H.Press et al.).
+
+ [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
+     Applied Mathematics Series vol. 55 (1964), Washington.
+
+--- NvE 12-mar-2000 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:BesselK0" href="src/NcMath.cxx.html#nndbkB">BesselK0</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the modified Bessel function K_0(x) for positive real x.
+
+ The algorithm is based on the article by Abramowitz and Stegun [1]
+ as denoted in Numerical Recipes 2nd ed. on p. 230 (W.H.Press et al.).
+
+ [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
+     Applied Mathematics Series vol. 55 (1964), Washington.
+
+--- NvE 12-mar-2000 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:BesselI1" href="src/NcMath.cxx.html#DUxXkB">BesselI1</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the modified Bessel function I_1(x) for any real x.
+
+ The algorithm is based on the article by Abramowitz and Stegun [1]
+ as denoted in Numerical Recipes 2nd ed. on p. 230 (W.H.Press et al.).
+
+ [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
+     Applied Mathematics Series vol. 55 (1964), Washington.
+
+--- NvE 12-mar-2000 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:BesselK1" href="src/NcMath.cxx.html#riiWkB">BesselK1</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the modified Bessel function K_1(x) for positive real x.
+
+ The algorithm is based on the article by Abramowitz and Stegun [1]
+ as denoted in Numerical Recipes 2nd ed. on p. 230 (W.H.Press et al.).
+
+ [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
+     Applied Mathematics Series vol. 55 (1964), Washington.
+
+--- NvE 12-mar-2000 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:BesselK" href="src/NcMath.cxx.html#rKkhgC">BesselK</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the Integer Order Modified Bessel function K_n(x)
+ for n=0,1,2,... and positive real x.
+
+ The algorithm uses the recurrence relation
+
+               K_n+1(x) = (2n/x)*K_n(x) + K_n-1(x)
+
+ as denoted in Numerical Recipes 2nd ed. on p. 232 (W.H.Press et al.).
+
+--- NvE 12-mar-2000 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:BesselI" href="src/NcMath.cxx.html#H33N0C">BesselI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Computation of the Integer Order Modified Bessel function I_n(x)
+ for n=0,1,2,... and any real x.
+
+ The algorithm uses the recurrence relation
+
+               I_n+1(x) = (-2n/x)*I_n(x) + I_n-1(x)
+
+ as denoted in Numerical Recipes 2nd ed. on p. 232 (W.H.Press et al.).
+
+--- NvE 12-mar-2000 UU-SAP Utrecht
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:Chi2Dist" href="src/NcMath.cxx.html#K4hsxC">Chi2Dist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf) const</span><br />
+<div class="funccomm"><pre> Provide the Chi-squared PDF corresponding to the specified ndf degrees of freedom.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;chi2&gt;=ndf  Var(chi2)=2*ndf
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:Chi2CDF" href="src/NcMath.cxx.html#uViKAC">Chi2CDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf) const</span><br />
+<div class="funccomm"><pre> Provide the Chi-squared cumulative distribution function corresponding to the
+ specified ndf degrees of freedom.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;chi2&gt;=ndf  Var(chi2)=2*ndf
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:StudentDist" href="src/NcMath.cxx.html#TW7yB">StudentDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ndf) const</span><br />
+<div class="funccomm"><pre> Provide the Student's T PDF corresponding to the specified ndf degrees of freedom.
+
+ In a frequentist approach, the Student's T distribution is particularly
+ useful in making inferences about the mean of an underlying population
+ based on the data from a random sample.
+
+ In a Bayesian context it is used to characterise the posterior PDF
+ for a particular state of information.
+
+ Note : ndf is not restricted to integer values
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;T&gt;=0  Var(T)=ndf/(ndf-2)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:StudentCDF" href="src/NcMath.cxx.html#ZgqQeB">StudentCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ndf) const</span><br />
+<div class="funccomm"><pre> Provide the Student's T cumulative distribution function corresponding to the
+ specified ndf degrees of freedom.
+
+ In a frequentist approach, the Student's T distribution is particularly
+ useful in making inferences about the mean of an underlying population
+ based on the data from a random sample.
+
+ In a Bayesian context it is used to characterise the posterior PDF
+ for a particular state of information.
+
+ Note : ndf is not restricted to integer values
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;T&gt;=0  Var(T)=ndf/(ndf-2)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:FratioDist" href="src/NcMath.cxx.html#T6_lr">FratioDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf2) const</span><br />
+<div class="funccomm"><pre> Provide the F (ratio) PDF corresponding to the specified ndf1 and ndf2
+ degrees of freedom of the two samples.
+
+ In a frequentist approach, the F (ratio) distribution is particularly useful
+ in making inferences about the ratio of the variances of two underlying
+ populations based on a measurement of the variance of a random sample taken
+ from each one of the two populations.
+ So the F test provides a means to investigate the degree of equality of
+ two populations.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;F&gt;=ndf2/(ndf2-2)  Var(F)=2*ndf2*ndf2*(ndf2+ndf1-2)/(ndf1*(ndf2-1)*(ndf2-1)*(ndf2-4))
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:FratioCDF" href="src/NcMath.cxx.html#mWGnr">FratioCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf2) const</span><br />
+<div class="funccomm"><pre> Provide the F (ratio) cumulative distribution function corresponding to the
+ specified ndf1 and ndf2 degrees of freedom of the two samples.
+
+ In a frequentist approach, the F (ratio) distribution is particularly useful
+ in making inferences about the ratio of the variances of two underlying
+ populations based on a measurement of the variance of a random sample taken
+ from each one of the two populations.
+ So the F test provides a means to investigate the degree of equality of
+ two populations.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;F&gt;=ndf2/(ndf2-2)  Var(F)=2*ndf2*ndf2*(ndf2+ndf1-2)/(ndf1*(ndf2-1)*(ndf2-1)*(ndf2-4))
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:BinomialDist" href="src/NcMath.cxx.html#r_QaV">BinomialDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
+<div class="funccomm"><pre> Provide the Binomial PDF corresponding to the specified number of trials n
+ and probability p of success.
+
+ p(k|n,p) = probability to obtain exactly k successes in n trials
+            given the probability p of success.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;k&gt;=n*p  Var(k)=n*p*(1-p)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:BinomialCDF" href="src/NcMath.cxx.html#Cx54.C">BinomialCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
+<div class="funccomm"><pre> Provide the Binomial cumulative distribution function corresponding to the
+ specified number of trials n and probability p of success.
+
+ p(k|n,p) = probability to obtain exactly k successes in n trials
+            given the probability p of success.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;k&gt;=n*p  Var(k)=n*p*(1-p)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:NegBinomialnDist" href="src/NcMath.cxx.html#J9pULC">NegBinomialnDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
+<div class="funccomm"><pre> Provide the Negative Binomial PDF corresponding to the specified number of
+ successes k and probability p of success.
+
+ p(n|k,p) = probability for the number of needed trials n to reach k successes
+            given the probability p of success.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;n&gt;=k/p  Var(n)=k*(1-p)/(p*p)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:NegBinomialnCDF" href="src/NcMath.cxx.html#mWpy1E">NegBinomialnCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
+<div class="funccomm"><pre> Provide the Negative Binomial cumulative distribution function corresponding to the
+ specified number of successes k and probability p of success.
+
+ p(n|k,p) = probability for the number of needed trials n to reach k successes
+            given the probability p of success.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;n&gt;=k/p  Var(n)=k*(1-p)/(p*p)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:NegBinomialxDist" href="src/NcMath.cxx.html#X9pULC">NegBinomialxDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
+<div class="funccomm"><pre> Provide the Negative Binomial PDF corresponding to the specified number of
+ successes k and probability p of success.
+
+ p(x|k,p) = probability for the number of failures x before k successes are reached
+            given the probability p of success.
+
+ Note : In case k=1 the function p(x|1,p) is known as the Geometric PDF.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;x&gt;=k*(1-p)/p  Var(x)=k*(1-p)/(p*p)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:NegBinomialxCDF" href="src/NcMath.cxx.html#QWpy1E">NegBinomialxCDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
+<div class="funccomm"><pre> Provide the Negative Binomial cumulative distribution function corresponding to the
+ specified number of successes k and probability p of success.
+
+ p(x|k,p) = probability for the number of failures x before k successes are reached
+            given the probability p of success.
+
+ Note : In case k=1 the function p(x|1,p) is known as the Geometric PDF.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;x&gt;=k*(1-p)/p  Var(x)=k*(1-p)/(p*p)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonDist" href="src/NcMath.cxx.html#uDnbyB">PoissonDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu) const</span><br />
+<div class="funccomm"><pre> Provide the Poisson PDF p(n|mu).
+
+ p(n|mu) = pdf for observing n events given an average number mu
+           of occurrences in time or space.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;n&gt;=mu  Var(n)=mu
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonCDF" href="src/NcMath.cxx.html#KWPffE">PoissonCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu) const</span><br />
+<div class="funccomm"><pre> Provide the Poisson cumulative distribution function for p(n|mu).
+
+ p(n|mu) = pdf for observing n events given an average number mu
+           of occurrences in time or space.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;n&gt;=mu  Var(n)=mu
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonDist@1" href="src/NcMath.cxx.html#fJu0.B">PoissonDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt) const</span><br />
+<div class="funccomm"><pre> Provide the Poisson PDF p(n|r,dt).
+
+ p(n|r,dt) = pdf for observing n events in a certain time or space interval dt
+             given a constant rate r of occurrences.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;n&gt;=rdt  Var(n)=rdt
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonCDF@1" href="src/NcMath.cxx.html#rUzajB">PoissonCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt) const</span><br />
+<div class="funccomm"><pre> Provide the Poisson cumulative distribution function for p(n|r,dt).
+
+ p(n|r,dt) = pdf for observing n events in a certain time or space interval dt
+             given a constant rate r of occurrences.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;n&gt;=rdt  Var(n)=rdt
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonDtDist" href="src/NcMath.cxx.html#BOPE4B">PoissonDtDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Int_t">Int_t</a> n) const</span><br />
+<div class="funccomm"><pre> Provide the Poisson related PDF p(dt|r,n).
+
+ p(dt|r,n) = pdf for a time or space interval dt in which exactly
+             n events are observed given a constant rate r of occurrences.
+
+ This function is also called the Erlang distribution.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;dt&gt;=n/r  Var(dt)=n/(r*r)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonDtCDF" href="src/NcMath.cxx.html#ILe0QD">PoissonDtCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Int_t">Int_t</a> n) const</span><br />
+<div class="funccomm"><pre> Provide the cumulative distribution for the Poisson related pdf p(dt|r,n).
+
+ p(dt|r,n) = pdf for a time or space interval dt in which exactly
+             n events are observed given a constant rate r of occurrences.
+
+ The function p(dt|r,n) is also called the Erlang distribution.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;dt&gt;=n/r  Var(dt)=n/(r*r)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:GammaDtDist" href="src/NcMath.cxx.html#eDtx0D">GammaDtDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> z) const</span><br />
+<div class="funccomm"><pre> Provide the <a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a> function related PDF p(dt|r,z).
+
+ p(dt|r,z) = pdf for a time or space interval dt in which exactly
+             z occurrences are observed given a constant rate r.
+
+ Note : In case z is a positive integer the user is referred to the member function
+        <a href="./NcMath.html#NcMath:PoissonDtDist" title="TF1 NcMath::PoissonDtDist(Double_t r,Int_t n)">PoissonDtDist</a>(), aka the Erlang distribution.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;dt&gt;=z/r  Var(dt)=z/(r*r)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:GaussDist" href="src/NcMath.cxx.html#dhl51">GaussDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) const</span><br />
+<div class="funccomm"><pre> Provide the Gaussian PDF p(x|mu,sigma).
+
+ p(x|mu,sigma) = pdf for obtaining a value x given a mean value mu
+                 and a standard deviation sigma.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;x&gt;=mu  Var(x)=sigma*sigma
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:GaussCDF" href="src/NcMath.cxx.html#w11T0B">GaussCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) const</span><br />
+<div class="funccomm"><pre> Provide the cumulative distribution function for the Gaussian p(x|mu,sigma).
+
+ p(x|mu,sigma) = pdf for obtaining a value x given a mean value mu
+                 and a standard deviation sigma.
+
+ Details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;x&gt;=mu  Var(x)=sigma*sigma
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GaussProb" href="src/NcMath.cxx.html#SIQ_lD">GaussProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> q, <a href="./ListOfTypes.html#Double_t">Double_t</a> mean = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> isig = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the integrated probability P(|x-mean|&lt;=dist) for a
+ normalised Gaussian pdf, characterised by the <span class="string">"mean"</span> and <span class="string">"sigma"</span>.
+
+ The argument <span class="string">"isig"</span> allows for different specifications of <span class="string">"dist"</span>.
+
+ isig = 0 : dist=|q-mean|.
+        1 : dist=|q*sigma|.
+
+ The default values are : mean=0, sigma=1 and isig=0.
+
+ In case of inconsistent input, a value of -1 is returned.
+
+--- NvE 27-nov-2008 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GaussPvalue" href="src/NcMath.cxx.html#h8ERTE">GaussPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> q, <a href="./ListOfTypes.html#Double_t">Double_t</a> mean = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> isig = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value of <span class="string">"q"</span> w.r.t. a normalised Gaussian pdf,
+ characterised by the <span class="string">"mean"</span> and <span class="string">"sigma"</span>.
+
+ The P-value for a certain value <span class="string">"q"</span> corresponds to the integrated probability
+ to obtain a value x which lies at least as far from the mean as <span class="string">"q"</span>.
+
+ In view of the symmetry of the Gaussian, one distinguishes between a so called
+ <span class="string">"double-sided"</span> and <span class="string">"single-sided"</span> P-value.
+
+ Double-sided : P-value=P(|x-mean|&gt;=|q-mean|)
+ Single-sided : if x&gt;=mean ==&gt; P-value=P(x-mean&gt;=|q-mean|)
+                if x&lt;=mean ==&gt; P-value=P(mean-x&gt;=|q-mean|)
+
+ With the <span class="string">"sides"</span> parameter a single-sided or <a href="./ListOfTypes.html#double">double</a>-sided P-value can be selected.
+
+ sides = 1 : Single-sided P-value.
+         2 : Double-sided P-value.
+
+ The argument <span class="string">"isig"</span> allows for the specification of <span class="string">"q"</span> in units of sigma
+ or for the return value to represent (q-mean) expressed as a (fractional) number of sigma.
+
+ isig = 0 : <span class="string">"q"</span> represents a regular real number; the P-value will be returned.
+        1 : <span class="string">"q"</span> represents a certain (fractional) amount of sigma; the P-value will be returned.
+       -1 : <span class="string">"q"</span> represents a regular number; the (q-mean) will be returned in units of sigma.
+            Note : In this case the returned value may be negative.
+
+ The default values are mean=0, sigma=1, sides=2 and isig=0.
+
+ In case of inconsistent input, a value of -1 is returned.
+
+--- NvE 21-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Chi2Pvalue" href="src/NcMath.cxx.html#WKtc2C">Chi2Pvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> chi2, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified Chi-squared (chi2) value
+ for a Chi-squared distribution with ndf degrees of freedom.
+
+ The P-value for a certain Chi-squared value chi2 corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield a Chi-squared value at least (at most) the value chi2 for an
+ upper (lower) tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;Chi2&gt;=ndf  Var(Chi2)=2*ndf
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input chi2 value w.r.t. &lt;Chi2&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference chi2-&lt;Chi2&gt; expressed in units of sigma
+             Note : This difference may be negative.
+
+ According to the value of the parameter <span class="string">"mode"</span> various algorithms
+ can be selected.
+
+ mode = 0 : Calculations are based on the incomplete gamma function.
+
+        1 : Same as for mode=0. However, in case ndf=1 an exact expression
+            based on the error function <a href="./NcMath.html#NcMath:Erf" title="Double_t NcMath::Erf(Double_t x)">Erf</a>() is used.
+
+        2 : Same as for mode=0. However, in case ndf&gt;30 a Gaussian approximation
+            is used instead of the gamma function.
+
+ The default values are sides=0, sigma=0 and mode=1.
+
+--- NvE 21-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:StudentPvalue" href="src/NcMath.cxx.html#GvnomB">StudentPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> t, <a href="./ListOfTypes.html#Double_t">Double_t</a> ndf, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified Student's t value
+ for a Student's T distribution with ndf degrees of freedom.
+
+ In a frequentist approach, the Student's T distribution is particularly
+ useful in making inferences about the mean of an underlying population
+ based on the data from a random sample.
+
+ The P-value for a certain t value corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield a T value at least (at most) the value t for an upper (lower)
+ tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;T&gt;=0  Var(T)=ndf/(ndf-2)
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input t value w.r.t. &lt;T&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference t-&lt;T&gt; expressed in units of sigma
+             Note : This difference may be negative and sigma
+                    is only defined for ndf&gt;2.
+
+ The default values are sides=0 and sigma=0.
+
+--- NvE 21-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:FratioPvalue" href="src/NcMath.cxx.html#o4wUQD">FratioPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf2, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified F ratio f value
+ for an F (ratio) distribution with ndf1 and ndf2 degrees of freedom
+ for the two samples X,Y respectively to be compared in the ratio X/Y.
+
+ In a frequentist approach, the F (ratio) distribution is particularly useful
+ in making inferences about the ratio of the variances of two underlying
+ populations based on a measurement of the variance of a random sample taken
+ from each one of the two populations.
+ So the F test provides a means to investigate the degree of equality of
+ two populations.
+
+ The P-value for a certain f value corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield an F value at least (at most) the value f for an upper (lower)
+ tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;F&gt;=ndf2/(ndf2-2)  Var(F)=2*ndf2*ndf2*(ndf2+ndf1-2)/(ndf1*(ndf2-1)*(ndf2-1)*(ndf2-4))
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input f value w.r.t. &lt;F&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference f-&lt;F&gt; expressed in units of sigma
+             Note : This difference may be negative and sigma
+                    is only defined for ndf2&gt;4.
+
+ The default values are sides=0 and sigma=0.
+
+--- NvE 21-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:BinomialPvalue" href="src/NcMath.cxx.html#qH5tCB">BinomialPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified number of successes k
+ for a Binomial distribution with n trials and success probability p.
+
+ The P-value for a certain number of successes k corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield a number of successes at least (at most) the value k for an
+ upper (lower) tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;K&gt;=n*p  Var(K)=n*p*(1-p)
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input k value w.r.t. &lt;K&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference k-&lt;K&gt; expressed in units of sigma
+             Note : This difference may be negative.
+
+ mode = 0 : Incomplete Beta function will be used to calculate the tail content.
+        1 : Straightforward summation of the Binomial terms is used.
+
+ The Incomplete Beta function in general provides the most accurate values.
+
+ The default values are sides=0, sigma=0 and mode=0.
+
+--- NvE 24-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PoissonPvalue" href="src/NcMath.cxx.html#SA4zqE">PoissonPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> mu, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified number of occurrences k
+ for a Poisson distribution with a given average number (in time or space)
+ of mu occurrences.
+
+ The P-value for a certain number of occurrences k corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield a number of occurrences at least (at most) the value k for an
+ upper (lower) tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;K&gt;=mu  Var(K)=mu
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input k value w.r.t. &lt;K&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference k-&lt;K&gt; expressed in units of sigma
+             Note : This difference may be negative.
+
+ The default values are sides=0 and sigma=0.
+
+ Note : The tail contents are given by the incomplete <a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a> function P(a,x).
+        Lower tail contents = 1-P(k,mu)
+        Upper tail contents = P(k,mu)
+
+--- NvE 24-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PoissonPvalue@1" href="src/NcMath.cxx.html#oorbp">PoissonPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified number of occurrences k
+ for a Poisson distribution with a given average rate r (in time or space)
+ of occurrences and a (time or space) interval dt.
+
+ The P-value for a certain number of occurrences k corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield a number of occurrences at least (at most) the value k for an
+ upper (lower) tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;K&gt;=rdt  Var(K)=rdt
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input k value w.r.t. &lt;K&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference k-&lt;K&gt; expressed in units of sigma
+             Note : This difference may be negative.
+
+ The default values are sides=0 and sigma=0.
+
+ Note : The tail contents are given by the incomplete <a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a> function P(a,x).
+        Lower tail contents = 1-P(k,mu)
+        Upper tail contents = P(k,mu)
+
+--- NvE 14-oct-2014 IIHE-VUB, Brussel
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PoissonDtPvalue" href="src/NcMath.cxx.html#iiGPbB">PoissonDtPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified time (or space) interval dt
+ for a Poisson related distribution with a given average rate r (in time or space)
+ of occurrences and an observed number n of events.
+
+ The P-value for a certain time (or space) interval dt corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield an interval at least (at most) the value dt for an upper (lower) tail test
+ in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ Note : &lt;dt&gt;=n/r  Var(K)=n/(r*r)
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input dt value w.r.t. &lt;dt&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference dt-&lt;dt&gt; expressed in units of sigma
+             Note : This difference may be negative.
+
+ The default values are sides=0 and sigma=0.
+
+ Note : The tail contents are given by the incomplete <a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a> function P(a,x).
+        Lower tail content = P(n,r*dt)
+        Upper tail content = 1-P(n,r*dt)
+
+ In case of inconsistent input the value -1 is returned.
+
+--- NvE 15-oct-2014 IIHE-VUB, Brussel
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:NegBinomialnPvalue" href="src/NcMath.cxx.html#UX.URD">NegBinomialnPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified number of trials n
+ for a Negative Binomial distribution where exactly k successes are to
+ be reached which have each a probability p.
+
+ p(N|k,p) = probability for the number of needed trials N to reach k successes
+            given the probability p of success.
+
+ Note : &lt;N&gt;=k/p  Var(N)=k*(1-p)/(p*p)
+
+ The P-value for a certain number of trials n corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield a number of trials at least (at most) the value n for an
+ upper (lower) tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input n value w.r.t. &lt;N&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference n-&lt;N&gt; expressed in units of sigma
+             Note : This difference may be negative.
+
+ mode = 0 : Incomplete Beta function will be used to calculate the tail content.
+        1 : Straightforward summation of the Negative Binomial terms is used.
+
+ The Incomplete Beta function in general provides the most accurate values.
+
+ The default values are sides=0, sigma=0 and mode=0.
+
+--- NvE 24-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:NegBinomialxPvalue" href="src/NcMath.cxx.html#UX.URB">NegBinomialxPvalue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> sigma = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Computation of the P-value for a certain specified number of failures x
+ for a Negative Binomial distribution where exactly k successes are to
+ be reached which have each a probability p.
+
+ p(X|k,p) = probability for the number of failures X before k successes are reached
+            given the probability p of success.
+
+ In case k=1 the function p(X|1,p) is known as the Geometric PDF.
+
+ Note : &lt;X&gt;=k*(1-p)/p  Var(X)=k*(1-p)/(p*p)
+
+ The P-value for a certain number of failures x corresponds to the fraction of
+ repeatedly drawn equivalent samples from a certain population, which is expected
+ to yield a number of failures at least (at most) the value x for an
+ upper (lower) tail test in case a certain hypothesis is <a href="./ListOfTypes.html#bool">true</a>.
+
+ Further details can be found in the excellent textbook of Phil Gregory
+ <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+
+ With the <span class="string">"sides"</span> parameter a one-sided or two-sided test can be selected
+ using either the upper or lower tail contents.
+ In case of automatic upper/lower selection the decision is made on basis
+ of the location of the input x value w.r.t. &lt;X&gt; of the distribution.
+
+ sides =  1 : One-sided test using the upper tail contents
+          2 : Two-sided test using the upper tail contents
+         -1 : One-sided test using the lower tail contents
+         -2 : Two-sided test using the lower tail contents
+          0 : One-sided test using the auto-selected upper or lower tail contents
+          3 : Two-sided test using the auto-selected upper or lower tail contents
+
+ The argument <span class="string">"sigma"</span> allows for the following return values :
+
+ sigma = 0 : P-value is returned as the above specified fraction
+         1 : The difference x-&lt;X&gt; expressed in units of sigma
+             Note : This difference may be negative.
+
+ mode = 0 : Incomplete Beta function will be used to calculate the tail content.
+        1 : Straightforward summation of the Negative Binomial terms is used.
+
+ The Incomplete Beta function in general provides the most accurate values.
+
+ The default values are sides=0, sigma=0 and mode=0.
+
+--- NvE 24-may-2005 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Nfac" href="src/NcMath.cxx.html#PQ0vCC">Nfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Compute n!.
+ The algorithm can be selected by the <span class="string">"mode"</span> input argument.
+
+ mode : 0 ==&gt; Calculation by means of straightforward multiplication
+      : 1 ==&gt; Calculation by means of Stirling's approximation
+      : 2 ==&gt; Calculation by means of n!=<a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a>(n+1)
+
+ For large n the calculation modes 1 and 2 will in general be faster.
+ By default mode=0 is used.
+ For n&lt;0 the value 0 will be returned.
+
+ Note : Because of <a href="./ListOfTypes.html#Double_t">Double_t</a> value overflow the maximum value is n=170.
+
+--- NvE 20-jan-2007 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:LnNfac" href="src/NcMath.cxx.html#vxzydE">LnNfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2) const</span><br />
+<div class="funccomm"><pre> Compute ln(n!).
+ The algorithm can be selected by the <span class="string">"mode"</span> input argument.
+
+ mode : 0 ==&gt;  Calculation via evaluation of n! followed by taking ln(n!)
+      : 1 ==&gt;  Calculation via Stirling's approximation ln(n!)=0.5*ln(2*pi)+(n+0.5)*ln(n)-n+1/(12*n)
+      : 2 ==&gt;  Calculation by means of ln(n!)=<a href="./NcMath.html#NcMath:LnGamma" title="Double_t NcMath::LnGamma(Double_t z) or overloads">LnGamma</a>(n+1)
+
+ Note : Because of <a href="./ListOfTypes.html#Double_t">Double_t</a> value overflow the maximum value is n=170 for mode=0.
+
+ For mode=2 rather accurate results are obtained for both small and large n.
+ By default mode=2 is used.
+ For n&lt;1 the value 0 will be returned.
+
+--- NvE 20-jan-2007 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:LogNfac" href="src/NcMath.cxx.html#Yd58UE">LogNfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2) const</span><br />
+<div class="funccomm"><pre> Compute log_10(n!).
+ First ln(n!) is evaluated via invokation of <a href="./NcMath.html#NcMath:LnNfac" title="Double_t NcMath::LnNfac(Int_t n,Int_t mode=2)">LnNfac</a>(n,mode).
+ Then the algorithm log_10(z)=ln(z)*log_10(e) is used.
+
+ For n&lt;1 the value 0 will be returned.
+
+--- NvE 20-jan-2007 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Rfac" href="src/NcMath.cxx.html#BYtjVC">Rfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) const</span><br />
+<div class="funccomm"><pre> Compute r! for a fractional value r.
+ The algorithm used is : r!=<a href="./NcMath.html#NcMath:Gamma" title="Double_t NcMath::Gamma(Double_t z) or overloads">Gamma</a>(r+1).
+
+ For r&lt;0 the value 0 will be returned.
+
+ Note : Because of <a href="./ListOfTypes.html#Double_t">Double_t</a> value overflow the maximum value is about r=170.
+
+--- NvE 17-jul-2008 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:LnRfac" href="src/NcMath.cxx.html#NyuJr">LnRfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) const</span><br />
+<div class="funccomm"><pre> Compute ln(r!) for a fractional value r.
+ The algorithm used is : ln(r!)=<a href="./NcMath.html#NcMath:LnGamma" title="Double_t NcMath::LnGamma(Double_t z) or overloads">LnGamma</a>(r+1).
+
+ For r&lt;0 the value 0 will be returned.
+
+--- NvE 17-jul-2008 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:LogRfac" href="src/NcMath.cxx.html#iovfFB">LogRfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) const</span><br />
+<div class="funccomm"><pre> Compute log_10(r!) for a fractional value r.
+ First ln(r!) is evaluated via invokation of <a href="./NcMath.html#NcMath:LnRfac" title="Double_t NcMath::LnRfac(Double_t r)">LnRfac</a>(r).
+ Then the algorithm log_10(z)=ln(z)*log_10(e) is used.
+
+ For r&lt;0 the value 0 will be returned.
+
+--- NvE 17-jul-2008 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PsiValue" href="src/NcMath.cxx.html#cCixqE">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) const</span><br />
+<div class="funccomm"><pre> Provide the Bayesian Psi value of observations of a counting experiment
+ w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ The Psi value provides (in dB scale) the amount of support that the
+ data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ Further mathematical details can be found in astro-ph/0702029.
+
+ m : The number of different possible outcomes of the counting experiment
+ n : The observed numbers of occurrences of the different outcomes
+ p : The probabilities of the different outcomes according to the hypothesis
+ f : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
+     or the exact Bayesian expression (f=0).
+
+ Note : Both the arrays <span class="string">"n"</span> and (when provided) <span class="string">"p"</span> should be of dimension <span class="string">"m"</span>.
+
+ In case no probabilities are given (i.e. p=0), a uniform distribution
+ is assumed.
+
+ The default values are p=0 and f=0.
+
+ In the case of inconsistent input, a Psi value of -1 is returned.
+
+--- NvE 03-oct-2007 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PsiValue@1" href="src/NcMath.cxx.html#Ex0hxB">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) const</span><br />
+<div class="funccomm"><pre> Provide the Bayesian Psi value of observations of a counting experiment
+ w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ Note : The observed numbers of occurrences of the different outcomes
+        may be fractional numbers for this memberfunction.
+        This mainly serves to investigate predicted background matches
+        via histogram input.
+
+ The Psi value provides (in dB scale) the amount of support that the
+ data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ Further mathematical details can be found in astro-ph/0702029.
+
+ m : The number of different possible outcomes of the counting experiment
+ n : The observed numbers of occurrences of the different outcomes
+ p : The probabilities of the different outcomes according to the hypothesis
+ f : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
+     or the exact Bayesian expression (f=0).
+
+ Note : Both the arrays <span class="string">"n"</span> and (when provided) <span class="string">"p"</span> should be of dimension <span class="string">"m"</span>.
+
+ In case no probabilities are given (i.e. p=0), a uniform distribution
+ is assumed.
+
+ The default values are p=0 and f=0.
+
+ In the case of inconsistent input, a Psi value of -1 is returned.
+
+--- NvE 25-jul-2008 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PsiValue@2" href="src/NcMath.cxx.html#LK0KPE">PsiValue</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) const</span><br />
+<div class="funccomm"><pre> Provide the Bayesian Psi value of observations of a counting experiment
+ (in histogram format) w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ The specification of a hypothesis B_m can be provided either in
+ histogram format (hyp) or via a probability distribution function (pdf),
+ as outlined below.
+ Note : The histogram <span class="string">"hyp"</span> or the function <span class="string">"pdf"</span> do not need to be normalised.
+
+ The Psi value provides (in dB scale) the amount of support that the
+ data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ Further mathematical details can be found in astro-ph/0702029.
+
+ his : The experimental observations in histogram format
+       Note that Underflow and/or Overflow entries are not taken into account
+ hyp : Hypothetical observations according to some hypothesis
+ pdf : Probability distribution function for the hypothesis
+ f   : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
+       or the exact Bayesian expression (f=0).
+
+ In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
+ background distribution is assumed.
+
+ Default values are : hyp=0, pdf=0 and f=0.
+
+ In the case of inconsistent input, a Psi value of -1 is returned.
+
+--- NvE 03-oct-2007 Utrecht University
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PsiExtreme" href="src/NcMath.cxx.html#tYlobC">PsiExtreme</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0) const</span><br />
+<div class="funccomm"><pre> Provide extreme Bayesian Psi values for a certain number of trials
+ w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ The Psi value provides (in dB scale) the amount of support that the
+ data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ However, due to the finite amount of trials a perfect match is never obtained.
+ This gives rise to extreme Psi values given a certain amount of trials.
+ The extreme Psi values which may be retrieved by this memberfunction reflect
+ either the situation where all trials yield the same outcome k (i.e. nk=n)
+ or the case that the observed numbers of occurrences of the different outcomes
+ match the predictions (i.e. nk=n*pk).
+ In the latter case fractional values of nk are allowed (e.g. for weighted event samples),
+ unless the user explicitly requested a discrete situation (via k=-2) where all the nk
+ will be integer values.
+ A discrete situation gives a more accurate description in the case of a low statistics
+ counting experiment where the various outcomes are obtained only a few times (if at all).
+ In such a case the fractional nk values (which may be &lt;1) don't reflect realistic outcomes.
+
+ Further mathematical details can be found in astro-ph/0702029.
+
+ n : The total number of trials
+ m : The number of different possible outcomes of the counting experiment
+ p : The probabilities of the different outcomes according to the hypothesis
+ k : The specified (k=1,2,..,m) fixed outcome which is obtained at every trial.
+     Note : k= 0 implies the best match of the outcomes with the predictions (i.e. nk=n*pk).
+            k=-1 implies the worst match of the outcomes with the predictions,
+                 where all trials yield the outcome with the lowest probability.
+            k=-2 implies the best match of the outcomes with integer nk values.
+
+ In case no probabilities are given (i.e. p=0), a uniform distribution
+ is assumed.
+
+ The default values are p=0 and k=0.
+
+ In the case of inconsistent input, a Psi value of -1 is returned.
+
+--- Nick van Eijndhoven 17-jul-2008 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PsiExtreme@1" href="src/NcMath.cxx.html#FzD70D">PsiExtreme</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0) const</span><br />
+<div class="funccomm"><pre> Provide extreme Bayesian Psi values based on observations in histogram
+ format w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ The specification of a hypothesis B_m can be provided either in
+ histogram format (hyp) or via a probability distribution function (pdf),
+ as outlined below.
+ Note : The pdf does not need to be normalised.
+
+ The Psi value provides (in dB scale) the amount of support that the
+ data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ However, due to the finite amount of trials a perfect match is never obtained.
+ This gives rise to extreme Psi values given a certain amount of trials.
+ The extreme Psi values which may be retrieved by this memberfunction reflect
+ either the situation where all trials yield the same outcome k (i.e. nk=n)
+ or the case that the observed numbers of occurrences of the different outcomes
+ match the predictions (i.e. nk=n*pk).
+ In the latter case fractional values of nk are allowed (e.g. for weighted event samples),
+ unless the user explicitly requested a discrete situation (via k=-2) where all the nk
+ will be integer values.
+ A discrete situation gives a more accurate description in the case of a low statistics
+ counting experiment where the various outcomes are obtained only a few times (if at all).
+ In such a case the fractional nk values (which may be &lt;1) don't reflect realistic outcomes.
+
+ Further mathematical details can be found in astro-ph/0702029.
+
+ his : The experimental observations in histogram format
+       Note that Underflow and/or Overflow entries are not taken into account
+ hyp : Hypothetical observations in histogram format according to some hypothesis
+ pdf : Probability distribution function for the hypothesis
+ k   : The specified (k=1,2,..,m) fixed outcome (bin) which is obtained at every trial.
+       Note : k= 0 implies the best match of the outcomes with the predictions (i.e. nk=n*pk).
+              k=-1 implies the worst match of the outcomes with the predictions,
+                   where all trials yield the outcome with the lowest probability
+              k=-2 implies the best match of the outcomes with integer nk values.
+
+ In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
+ background distribution is assumed.
+
+ Default values are : hyp=0, pdf=0 and k=0.
+
+ In the case of inconsistent input, a Psi value of -1 is returned.
+
+--- Nick van Eijndhoven 18-jul-2008 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PsiPvalue" href="src/NcMath.cxx.html#lS8QQB">PsiPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> psi0, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr, <a href="./ListOfTypes.html#Double_t">Double_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* na = 0, TH1F* psih = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* nrx = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mark = 1)</span><br />
+<div class="funccomm"><pre> Provide the statistical P-value (i.e. the fraction of recorded psi values
+ with psi&gt;=psi0) for the specified psi0 based on <span class="string">"nr"</span> repetitions of a
+ counting experiment corresponding to a Bernoulli class hypothesis B_m
+ with <span class="string">"n"</span> independent random trials.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ The Psi value of n trials of B_m provides (in dB scale) the amount of support
+ that the data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ Further mathematical details can be found in the publication
+ N. van Eijndhoven, Astropart. Phys. 28 (2008) 540 (astro-ph/0702029).
+
+ The arguments of this memberfunction :
+
+ psi0 : A user specified threshold psi value to provide the corresponding P-value
+ nr   : The number of repetitions (see note 4) of the counting experiment with n independent random trials
+ n    : The number of independent random trials of each counting experiment
+ m    : The number of different possible outcomes of the counting experiment
+ p    : The probabilities of the different outcomes according to the hypothesis
+ f    : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
+        or the exact Bayesian expression (f=0).
+ na   : Array with the signal c.q. (cumulative) observed numbers of occurrences of the different outcomes
+ psih : Histogram with observed psi values (see notes 2, 4 and 5).
+ ncut : Number of psi&gt;=psi0 values to be obtained to trigger an early stop of the number of repetitions.
+        In case ncut=0 all the specified <span class="string">"nr"</span> repetitions will be performed.
+ nrx  : Returned number of actually performed repetitions (only if a non-zero <span class="string">"nrx"</span> value was also provided on input).
+ mark : Flag to activate (mark=1) the marking of the threshold psi value (psi0) by a vertical line in the <span class="string">"psih"</span> histogram.
+        Also the corresponding P-value will be mentioned in the legend.
+
+ Notes :
+
+ 1) When provided, the array <span class="string">"na"</span> may be used to specify a specific configuration
+    representing a signal on invokation of this memberfunction.
+    This will allow the investigation of P-values for possible additional signals after
+    one or more signal configurations have already been established.
+    A provided signal configuration will be stored internally and after taking the <span class="string">"n"</span>
+    independent random (background) trials, the signal configuration will be superimposed
+    <span class="string">"as is"</span> on the resulting outcome of each B_m repetition. So, the signal configuration
+    itself will not be randomised.
+    After the randomisation procedure, the array <span class="string">"na"</span> will contain the (cumulative) statistics
+    of the observations of the signal configuration and the randomised background.
+    Obviously, in the case of a specified signal configuration all returned statistics will
+    be determined for the total number of <span class="string">"n+nsig"</span> trials.
+
+ 2) When provided, the arrays <span class="string">"p"</span> and <span class="string">"na"</span> should be of dimension <span class="string">"m"</span>.
+    A way of retrieving the observed psi values is via the user defined histogram <span class="string">"psih"</span>,
+
+ 3) The number of repetitions <span class="string">"nr"</span>, random trials <span class="string">"n"</span> and the signal configuration
+    c.q. observed numbers of occurrences of the different outcomes <span class="string">"na"</span> are of
+    type <span class="string">"double"</span> to allow for large numbers.
+    Obviously all these variables are meant to represent only integer counts.
+
+ 4) In case a non-zero input argument <span class="string">"ncut"</span> is provided, the number of repetitions will be stopped
+    as soon as <span class="string">"ncut"</span> values of psi&gt;=psi0 are obtained.
+    When a large number of repetitions <span class="string">"nr"</span> was specified, this allows an <span class="string">"early stop"</span> and as such
+    a significant reduction of the CPU time. In case the number <span class="string">"ncut"</span> was not reached, the repetition
+    of the counting experiment wil stop as soon as <span class="string">"nr"</span> repetitions have been performed.
+    However, when nr=0 was specified the counting experiment will be repeated until the number <span class="string">"ncut"</span>
+    is reached or when the number of repetitions has reached the maximum allowed value of 1e19.
+    In case a non-zero input argument <span class="string">"nrx"</span> is provided the number of actually performed repetitions
+    will be returned via this same argument <span class="string">"nrx"</span>.
+
+ 5) In case a histogram <span class="string">"psih"</span> is provided, this function will set the axes titles (and a legend if <span class="string">"mark"</span> is activated).
+
+ For practical reasons the maximum values of <span class="string">"nr"</span> and <span class="string">"n"</span> have been limited
+ to 1e19, which is about the corresponding maximum value of an <a href="./ListOfTypes.html#unsigned">unsigned</a> 64-bit integer.
+
+ In case no probabilities are given (i.e. p=0), a uniform distribution is assumed.
+
+ The default values are p=0, f=0, na=0, psih=0, ncut=0, nrx=0 and mark=1.
+
+ In the case of inconsistent input, a value of -1 is returned.
+
+--- NvE 17-nov-2008 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:PsiPvalue@1" href="src/NcMath.cxx.html#OQcJ3E">PsiPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> psi0, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr, TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* na = 0, TH1F* psih = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* nrx = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mark = 1)</span><br />
+<div class="funccomm"><pre> Provide the statistical P-value (i.e. the fraction of recorded psi values
+ with psi&gt;=psi0) for the specified psi0 based on <span class="string">"nr"</span> repetitions of a
+ counting experiment (specified by the observed histogram <span class="string">"his"</span>) corresponding
+ to a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+ The number of independent random trials <span class="string">"n"</span> of each counting experiment
+ is determined from the number of entries of the input histogram <span class="string">"his"</span>.
+
+ The specification of a hypothesis B_m can be provided either in
+ histogram format (hyp) or via a probability distribution function (pdf),
+ as outlined below.
+ Note : The histogram <span class="string">"hyp"</span> or the function <span class="string">"pdf"</span> do not need to be normalised.
+
+ The Psi value provides (in dB scale) the amount of support that the
+ data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ Further mathematical details can be found in the publication
+ N. van Eijndhoven, Astropart. Phys. 28 (2008) 540 (astro-ph/0702029).
+
+
+ The arguments of this memberfunction :
+
+ psi0 : A user specified threshold psi value to provide the corresponding P-value.
+        If psi0&lt;0 the corresponding psi value of the input histogram <span class="string">"his"</span> will be taken as psi0.
+ nr   : The number of repetitions (see note 4) of the counting experiment with n independent random trials.
+ his  : The experimental observations of the different B_m outcomes in histogram format.
+        Note that Underflow and/or Overflow entries are not taken into account.
+ hyp  : Hypothetical observations (in histogram format) according to some B_m hypothesis.
+ pdf  : Probability distribution function for some B_m hypothesis.
+ f    : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
+        or the exact Bayesian expression (f=0).
+ na   : Array with the signal c.q. (cumulative) observed numbers of occurrences of the different outcomes.
+ psih : Histogram with observed psi values (see notes 2, 4 and 5).
+ ncut : Number of psi&gt;=psi0 values to be obtained to trigger an early stop of the number of repetitions.
+        In case ncut=0 all the specified <span class="string">"nr"</span> repetitions will be performed.
+ nrx  : Returned number of actually performed repetitions (only if a non-zero <span class="string">"nrx"</span> value was also provided on input).
+ mark : Flag to activate (mark=1) the marking of the threshold psi value (psi0) by a vertical line in the <span class="string">"psih"</span> histogram.
+        Also the corresponding P-value will be mentioned in the legend.
+
+ Notes :
+
+ 1) When provided, the array <span class="string">"na"</span> may be used to specify a specific configuration
+    representing a signal on invokation of this memberfunction.
+    This will allow the investigation of P-values for possible additional signals after
+    one or more signal configurations have already been established.
+    A provided signal configuration will be stored internally and after taking the <span class="string">"n"</span>
+    independent random (background) trials, the signal configuration will be superimposed
+    <span class="string">"as is"</span> on the resulting outcome of each B_m repetition. So, the signal configuration
+    itself will not be randomised.
+    After the randomisation procedure, the array <span class="string">"na"</span> will contain the (cumulative) statistics
+    of the observations of the signal configuration and the randomised background.
+    Obviously, in the case of a specified signal configuration all returned statistics will
+    be determined for the total number of <span class="string">"n+nsig"</span> trials.
+
+ 2) When provided, the array <span class="string">"na"</span> should be of dimension <span class="string">"m"</span>, being the number of bins
+    of the input histogram <span class="string">"his"</span>.
+    A way of retrieving the observed psi values is via the user defined histogram <span class="string">"psih"</span>,
+
+ 3) The number of repetitions <span class="string">"nr"</span> and the signal configuration c.q. observed numbers of
+    occurrences of the different outcomes <span class="string">"na"</span> are of type <span class="string">"double"</span> to allow for large numbers.
+    Obviously all these variables are meant to represent only integer counts.
+
+ 4) In case a non-zero input argument <span class="string">"ncut"</span> is provided, the number of repetitions will be stopped
+    as soon as <span class="string">"ncut"</span> values of psi&gt;=psi0 are obtained.
+    When a large number of repetitions <span class="string">"nr"</span> was specified, this allows an <span class="string">"early stop"</span> and as such
+    a significant reduction of the CPU time. In case the number <span class="string">"ncut"</span> was not reached, the repetition
+    of the counting experiment wil stop as soon as <span class="string">"nr"</span> repetitions have been performed.
+    However, when nr=0 was specified the counting experiment will be repeated until the number <span class="string">"ncut"</span>
+    is reached or when the number of repetitions has reached the maximum allowed value of 1e19.
+    In case a non-zero input argument <span class="string">"nrx"</span> is provided the number of actually performed repetitions
+    will be returned via this same argument <span class="string">"nrx"</span>.
+
+ 5) In case a histogram <span class="string">"psih"</span> is provided, this function will set the axes titles (and a legend if <span class="string">"mark"</span> is activated).
+
+ For practical reasons the maximum value of <span class="string">"nr"</span> has been limited to 1e19, which is about
+ the corresponding maximum value of an <a href="./ListOfTypes.html#unsigned">unsigned</a> 64-bit integer.
+
+ In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
+ background distribution is assumed.
+
+ Default values are : hyp=0, pdf=0 f=0, na=0, psih=0, ncut=0, nrx=0 and mark=1.
+
+ In the case of inconsistent input, a P-value of -1 is returned.
+
+--- Nick van Eijndhoven 05-may-2011 IIHE Brussel
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Chi2Value" href="src/NcMath.cxx.html#gZNJnC">Chi2Value</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ndf = 0) const</span><br />
+<div class="funccomm"><pre> Provide the frequentist chi-squared value of observations of a counting
+ experiment w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ Further mathematical details can be found in astro-ph/0702029.
+
+ m   : The number of different possible outcomes of the counting experiment
+ n   : The observed number of different outcomes
+ p   : The probabilities of the different outcomes according to the hypothesis
+ ndf : The returned number of degrees of freedom
+
+ Note : Both the arrays <span class="string">"n"</span> and (when provided) <span class="string">"p"</span> should be of dimension <span class="string">"m"</span>.
+
+ In case no probabilities are given (i.e. pk=0), a uniform distribution
+ is assumed.
+
+ The default values are pk=0 and ndf=0.
+
+ In the case of inconsistent input, a chi-squared and ndf value of -1 is returned.
+
+--- Nick van Eijndhoven 03-oct-2007 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Chi2Value@1" href="src/NcMath.cxx.html#uEGH5E">Chi2Value</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ndf = 0) const</span><br />
+<div class="funccomm"><pre> Provide the frequentist chi-squared value of observations of a counting
+ experiment w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ Note : The observed numbers of occurrences of the different outcomes
+        may be fractional numbers for this memberfunction.
+        This mainly serves to investigate predicted background matches
+        via histogram input.
+
+ Further mathematical details can be found in astro-ph/0702029.
+
+ m   : The number of different possible outcomes of the counting experiment
+ n   : The observed number of different outcomes
+ p   : The probabilities of the different outcomes according to the hypothesis
+ ndf : The returned number of degrees of freedom
+
+ Note : Both the arrays <span class="string">"n"</span> and (when provided) <span class="string">"p"</span> should be of dimension <span class="string">"m"</span>.
+
+ In case no probabilities are given (i.e. pk=0), a uniform distribution
+ is assumed.
+
+ The default values are pk=0 and ndf=0.
+
+ In the case of inconsistent input, a chi-squared and ndf value of -1 is returned.
+
+--- Nick van Eijndhoven 25-jul-2008 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Chi2Value@2" href="src/NcMath.cxx.html#vc79oC">Chi2Value</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ndf = 0) const</span><br />
+<div class="funccomm"><pre> Provide the frequentist chi-squared value of observations of a counting
+ experiment (in histogram format) w.r.t. a Bernoulli class hypothesis B_m.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+ The specification of a hypothesis B_m can be provided either in
+ histogram format (hyp) or via a probability distribution function (pdf),
+ as outlined below.
+ Note : The pdf does not need to be normalised.
+
+ Further mathematical details can be found in astro-ph/0702029.
+
+ his : The experimental observations in histogram format
+       Note that Underflow and/or Overflow entries are not taken into account
+ hyp : Hypothetical observations according to some hypothesis
+ pdf : Probability distribution function for the hypothesis
+ ndf : The returned number of degrees of freedom
+
+ In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
+ background distribution is assumed.
+
+ Default values are : hyp=0, pdf=0 and ndf=0.
+
+ In the case of inconsistent input, a chi-squared and ndf value of -1 is returned.
+
+--- Nick van Eijndhoven 03-oct-2007 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:MeanMu" href="src/NcMath.cxx.html#gRntUD">MeanMu</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> cl, <a href="./ListOfTypes.html#Double_t">Double_t</a> nbkg, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TF1* w = 0, TFeldmanCousins* f = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0) const</span><br />
+<div class="funccomm"><pre> Provide the Feldman-Cousins average upper/lower limit corresponding to
+ the confidence level <span class="string">"cl"</span>, some background expectation and weight function.
+
+ Input arguments :
+
+ cl   : The required confidence level (e.g. 0.95).
+ nbkg : The expected number of background events.
+ mode : Flag to request the average lowerlimit (1) or upperlimit (2).
+ fw   : Weight function, evaluated for each <span class="string">"nobs"</span> value in the cumulative summation.
+ fc   : Specific Feldman-Cousins function to be used (optional).
+ nmax : The maximum <span class="string">"nobs"</span> value until which the cumulative summation is performed.
+
+ Notes :
+
+ 1) If w=0 a Poisson pdf will be used as weight function.
+ 2) In case f=0 the standard TFeldmanCousins settings are used
+    (apart from the specified <span class="string">"cl"</span> value, which is always taken).
+ 3) In case nmax=0, the cumulative summation will run until nobs=nbkg+10*sqrt(nbkg),
+    which corresponds to 10 sigma above the expectation value for a Poisson pdf.
+
+ Default values are w=0, f=0 an nmax=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:LiMaSignificance" href="src/NcMath.cxx.html#Nee5r">LiMaSignificance</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Non, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ton, <a href="./ListOfTypes.html#Int_t">Int_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ra = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Re = 1) const</span><br />
+<div class="funccomm"><pre> Provide the significance in terms of the amount of standard deviations
+ of a certain <span class="string">"on source"</span> and <span class="string">"off source"</span> observation according to the
+ procedure outlined by T.Li and Y.Ma in Astrophysical Journal 271 (1983) 317.
+
+ In case of non-physical situations the value -1 is returned.
+
+ Input arguments :
+
+ Non  : The number of observed <span class="string">"on source"</span> events
+ Ton  : The <span class="string">"on source"</span> exposure time
+ Noff : The number of observed <span class="string">"off source"</span> events
+ Toff : The <span class="string">"off source"</span> exposure time
+ Ra   : The ratio (on source area)/(off source area)
+ Re   : The ratio (on source detection efficiency)/(off source detection efficiency)
+
+ Notes :
+
+ 1) The exposure times Ton and Toff may be given in any units (sec, min, hours, ...)
+    provided that for both the same units are used.
+ 2) The resulting significance is most reliable for Non&gt;10 and Noff&gt;10.
+
+ The default values are Ra=1 and Re=1.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:22 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

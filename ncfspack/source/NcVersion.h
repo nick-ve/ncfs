@@ -19,9 +19,9 @@ class NcVersion : public TObject
 
  protected:
   TString fVersion; // The actual version number of this release
-  TString fRev;     // SVN Revision of this version
+  TString fRev;     // Revision identifier of this version
   TString fDate;    // Creation date of this version
 
- ClassDef(NcVersion,1) // Facility to provide version information
+ ClassDef(NcVersion,2) // Facility to provide version information
 };
 #endif

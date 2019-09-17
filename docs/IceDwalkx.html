@@ -1,0 +1,954 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Thu Mar 21 09:34:54 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>IceDwalkx</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class IceDwalkx','','IceDwalkx.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/IceDwalkx.h.html">header file</a>
+<a class="descrheadentry" href="src/IceDwalkx.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#IceDwalkx:description">class description</a> 
+<a class="descrheadentry" href="#IceDwalkx:Function_Members">function members</a>
+<a class="descrheadentry" href="#IceDwalkx:Data_Members">data members</a>
+<a class="descrheadentry" href="#IceDwalkx:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">IceDwalkx</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="IceDwalkx:description"></a>class IceDwalkx: public <a href="./IceLinefit.html">IceLinefit</a></h1>
+<div class="classdescr">
+<pre>
+ <a href="./IceDwalkx.html#IceDwalkx:Class" title="TClass* IceDwalkx::Class()">Class</a> <a href="./IceDwalkx.html">IceDwalkx</a>
+ <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> derived class to perform direct walk track reconstruction.
+
+ In case an event has been rejected by an <a href="./NcEventSelector.html">NcEventSelector</a> (based) processor,
+ this task (and its sub-tasks) is not executed.
+
+ Note : <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs, standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> (IC), <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> (DC) and <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> (I) DOMs are treated
+        seperately, which means that for events with various OMs and/or DOMs firing,
+        several direct walk tracks may be produced. The various direct walk tracks can be
+        distinguished on basis of their name as explained below.
+
+ The procedure is based on the method described in the <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> publication
+ in Nuclear Instruments and Methods A524 (2004) 179-180.
+ However, the <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> method has been extended with the intention to
+ take also multiple (muon) tracks within 1 event into account.
+ This will not only provide a means to reconstruct muon bundles and
+ multiple track events in <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a>, but will also allow to reduce the
+ background of faked upgoing muons as a result of multiple downgoing
+ muons hitting the top and bottom parts of the detector.
+
+ A further extension of the original <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> method is the separate treatment
+ of the phase and group velocities as introduced in collaboration with
+ George Japaridze (Clark Atlanta University, USA) which will provide more
+ accurate time residuals due to the different velocities of the Cerenkov
+ wave front (v_phase) and the actually detected photons (v_group).
+ This distinction between v_phase and v_group can be (de)activated via the
+ memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetVgroupUsage" title="void IceDwalkx::SetVgroupUsage(Int_t flag,TString s)">SetVgroupUsage</a>(). By default the distinction between v_phase
+ and v_group is activated in the constructor of this class.
+
+ To prevent waisting CPU time in trying to reconstruct (high-energy) cascade
+ events, or to select specifically reconstruction of low multiplicity events,
+ the user may invoke the memberfunctions <a href="./IceRecoBase.html#IceRecoBase:SetMaxMod" title="void IceRecoBase::SetMaxMod(Int_t nmax,TString s)">SetMaxMod</a>() and <a href="./IceRecoBase.html#IceRecoBase:SetMinMod" title="void IceRecoBase::SetMinMod(Int_t nmin,TString s)">SetMinMod</a>().
+ This allows selection of events for processing with a certain maximum and/or
+ minimum number of good (D)OMs firing.
+ By default the minimum and maximum are set to 0 and 999999, respectively,
+ in the constructor, which implies no multiplicity selection.
+ The maximum number of good hits per (D)OM to be used for the reconstruction
+ can be specified via the memberfunction <a href="./IceRecoBase.html#IceRecoBase:SetMaxHits" title="void IceRecoBase::SetMaxHits(Int_t nmax,TString s)">SetMaxHits</a>().
+ By default only the first good hit of each (D)OM is used but the user may want
+ to extend this number to the first n hits of each (D)OM to account for possible
+ noise and/or afterpulse signals that are not recognised by the hit cleaning procedure.
+ Note that when all the good hits of a (D)OM are used, this may lead to large
+ processing time in case many noise and/or afterpulse signals are not
+ recognised by the hit cleaning procedure.
+
+ The <a href="./IceRecoBase.html#IceRecoBase:SetMaxHits" title="void IceRecoBase::SetMaxHits(Int_t nmax,TString s)">SetMaxHits</a>() facility may also be used to select a specific detector
+ configuration (e.g. <span class="string">"IC"</span> and <span class="string">"DC"</span> without <span class="string">"I"</span>) to be used for the reconstruction.
+ This can be achieved by suppressing processing of e.g. the <span class="string">"I"</span> configuration
+ by setting the corresponding maximum number of hits to -1.
+
+ Another facility to (automatically) select reconstruction of specific detector
+ configurations and/or save CPU time is the so-called conditional processing mode.
+ For further details please refer to the docs of the memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetConditionalReco" title="void IceDwalkx::SetConditionalReco(Int_t flag)">SetConditionalReco</a>().
+
+ All reconstructed tracks will be stored in the <a href="./IceEvent.html">IceEvent</a> structure with as
+ default the Classname of the producing processor as the name of the track.
+ A suffix <span class="string">"A"</span> for an <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> (OM) track, <span class="string">"IC"</span> for a standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> (DOM) track,
+ <span class="string">"I"</span> for a hybrid <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> (DOM) track or <span class="string">"DC"</span> for a <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> (DOM) track will be
+ added to the name automatically.
+ This track name identifier can be modified by the user via the
+ <a href="./IceRecoBase.html#IceRecoBase:SetTrackName" title="void IceRecoBase::SetTrackName(TString s)">SetTrackName</a>() memberfunction. This will allow unique identification
+ of tracks which are produced when re-processing existing data with
+ different criteria.
+ Note that a suffix <span class="string">"A"</span>, <span class="string">"IC"</span>, <span class="string">"I"</span> or <span class="string">"DC"</span> will always be generated automatically.
+
+ The track 3-momentum is set to the reconstructed direction, normalised to 1 GeV.
+ The mass and charge of the track are left 0, since no distinction can
+ be made between positive or negative tracks and also no mass can be determined.
+ However, the user can define the track charge by invokation of the
+ memberfunction <a href="./IceRecoBase.html#IceRecoBase:SetCharge" title="void IceRecoBase::SetCharge(Float_t charge)">SetCharge</a>().
+ This facility may be used to distinguish tracks produced by the
+ various reconstruction algorithms in a (3D) colour display
+ (see the class <a href="./NcHelix.html">NcHelix</a> for further details).
+ The r0 and t0 can be obtained from the reference point of the track,
+ whereas the t0 ia also available from the track timestamp .
+
+ Information about the actual parameter settings can be found in the event
+ structure itself via the device named <span class="string">"IceDwalkx"</span>.
+
+ The various reconstruction steps are summarised as follows :
+
+ 1) Construction of track elements (TE's).
+    A track element is a straight line connecting two hits that
+    appeared at some minimum distance d and within some maximum
+    time difference dt, according to eq. (20) of the NIM article.
+    The default value for d is 75 (A), 120 (IC), 60 (I) and 50 (DC) meter,
+    but this can be modified via the memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetDmin" title="void IceDwalkx::SetDmin(Float_t d,TString s)">SetDmin</a>().
+    By default dt=(hit distance)/c but an additional time margin
+    (set to 0 by default) may be specified via the memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetDtmarg" title="void IceDwalkx::SetDtmarg(Int_t dt,TString s)">SetDtmarg</a>().
+    The reference point r0 of the TE is taken as the center between
+    the two hit positions and the TE timestamp t0 at the position r0
+    is taken as the <a href="./IceEvent.html">IceEvent</a> timestamp increased by the average of the
+    two hit times. So, all timestamps contain the overall <a href="./IceEvent.html">IceEvent</a>
+    timestamp as a basis. This means that time differences can be
+    obtained via the <a href="./NcTimestamp.html">NcTimestamp</a> facilities (supporting upto picosecond
+    precision when available).
+    The TE direction is given by the relative position of the two hits.
+
+ 2) Each TE will obtain so called associated hits.
+    A hit is associated to a TE when it fulfills both the conditions
+
+      -30 &lt; tres &lt; 300 ns
+      dhit/lambda &lt; F
+
+    tres   : time residual
+             Difference between the observed hit time and the time expected
+             for a direct photon hit.
+    dhit   : Distance traveled by the cherenkov photon from the track to the hit position
+    lambda : Photon scattering length in ice
+
+    The default values of the scattering length are 33.3 (A), 30 (IC), 33 (I) and 35 (DC) meter,
+    but this can be modified via the memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetScatteringLength" title="void IceDwalkx::SetScatteringLength(Float_t lambda,TString s)">SetScatteringLength</a>().
+    By default F is set to 3.07126 (A) and 3 (IC, I, DC), but this can be modified via
+    the memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetMaxDhit" title="void IceDwalkx::SetMaxDhit(Float_t d,TString s)">SetMaxDhit</a>().
+
+ 3) Construction of track candidates (TC's).
+    These are TE's that fulfill both the conditions
+
+     nax &gt;= 1
+     qtc &gt;= 0.8*qtcmax
+
+    where we have defined :
+
+    nax    : Associated hits and/or strings value for the specific TE.
+    qtc    : The track quality number (see hereafter).
+    qtcmax : Maximum quality number encountered for the TE's.
+
+    Note : The selection to use the number of associated hits and/or strings
+           for the track quality number can be performed via the
+           memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetAsType" title="void IceDwalkx::SetAsType(Int_t flag,TString s)">SetAsType</a>().
+
+    The track quality number qtc is defined as follows :
+
+     qtc=nax*(term1+term2)-term3-term4-term5
+
+    here we have defined :
+
+    term1=2*spread/span
+    term2=2*spreadL/spanL
+    term3=|spread-expspread|/spread
+    term4=|spreadL-expspreadL|/spreadL
+    term5=|medianT|/spreadT
+
+    The central observables here are the projected positions X on the track
+    of the various associated hits w.r.t. the track reference point r0.
+    Note that X can be negative as well as positive.
+    Therefore we also introduce XL=|X|.
+
+    span       : max(X)-min(X)
+    spanL      : max(XL)-min(XL)
+    Xmedian    : median of X
+    XmedianL   : median of XL
+    spread     : &lt; |X-Xmedian| &gt;
+    spreadL    : &lt; |XL-XmedianL| &gt;
+    expspread  : expected spread in X for a flat distribution of nah hits over span
+    expspreadL : expected spread in XL for a flat distribution of nah hits over spanL
+    medianT    : median of tres
+    spreadT    : &lt; |tres-medianT| &gt;
+
+    However, if |Xmedian| &gt; span/2 we set qtc=0 in order to always require
+    projected hits to appear on both sides of r0 on the track.
+
+    Note : The qtc quality number is used to define the norm of the momentum
+           of the track candidate. As such it serves as a weight for the jet
+           momentum (direction) after clustering of the TC's and lateron
+           merging of the jets (see hereafter).
+
+ 4) The remaining track candidates are clustered into jets when their directions
+    are within a certain maximum opening angle.
+    In addition a track candidate must within a certain maximum distance
+    of the jet starting TC in order to get clustered.
+    The latter criterion prevents clustering of (nearly) parallel track candidates
+    crossing the detector a very different locations (e.g. muon bundles).
+    The default maximum track opening angle is 15 degrees, but can be modified
+    via the <a href="./IceDwalkx.html#IceDwalkx:SetTangmax" title="void IceDwalkx::SetTangmax(Float_t ang,TString s)">SetTangmax</a> memberfunction.
+    The default maximum track distance is 20 meters, but can be modified
+    via the <a href="./IceDwalkx.html#IceDwalkx:SetTdistmax" title="void IceDwalkx::SetTdistmax(Float_t d,TString s,Int_t invol=1)">SetTdistmax</a> memberfunction. This memberfunction also allows to
+    specify whether the distance is determined within the detector volume or not.
+
+    The average of all the r0 and t0 values of the constituent TC's
+    of the jet will provide the r0 and t0 (i.e. reference point) of the jet.
+
+    The jet total momentum consists of the vector sum of the momenta of the
+    constituent TC's. This implies that the qtc quality numbers of the various
+    TC's define a weight for each track in the construction of the jet direction.
+    In addition it means that the total jet momentum represents the sum of the
+    qtc quality numbers of the constituent TC's weighted by the opening angles
+    between the various TC's.
+    As such each jet is given an absolute quality number defined as :
+
+      qtcjet=|jet momentum|/ntracks
+
+    This jet quality number is refined on basis of the number of hits
+    associated to the jet as :
+
+      qtcjet=qtcjet+0.2*(nax-naxmax)
+
+    where we have defined :
+
+    nax    : Associated hits and/or strings value for the specific jet.
+    naxmax : Maximum number of associated hits (or strings) encountered for the jets.
+
+    This qtcjet value is then used to order the various jets w.r.t.
+    decreasing qtcjet quality number.
+
+    Note : The qtcjet value is stored as <span class="string">"energy"</span> of the jet, such that
+           it is always available for each jet and can also be used for
+           ordering the jets according to this value using the generic
+           <a href="./NcEvent.html">NcEvent</a>::<a href="./NcVertex.html#NcVertex:SortJets" title="TObjArray* NcVertex::SortJets(Int_t mode=-1,TObjArray* jets=0,TObjArray* ordered=0)">SortJets</a>() facility.
+
+ 5) The jets (after having been ordered w.r.t. decreasing qtcjet value)
+    are merged when their directions are within a certain maximum opening angle.
+    In addition a jet must within a certain maximum distance of the starting jet
+    in order to get merged.
+    The latter criterion prevents merging of (nearly) parallel tracks/jets
+    crossing the detector a very different locations (e.g. muon bundles).
+    The jet ordering before the merging process is essential, since the starting jet
+    will <span class="string">"eat up"</span> the jets that will be merged into it.
+    The jet ordering ensures that the jet with the highest quality number will
+    always initiate the merging process.
+    The default maximum opening angle is half the TC maximum opening angle,
+    but can be modified via the <a href="./IceDwalkx.html#IceDwalkx:SetJangmax" title="void IceDwalkx::SetJangmax(Float_t ang,TString s,Int_t iter=1)">SetJangmax</a> memberfunction. This memberfunction
+    also allows to specify whether jet merging will be performed iteratively or not.
+    In case iteration has been activated, the jet ordering is performed after each
+    iteration step. This has to be done because since the quality numbers of the
+    resulting merged jets have been automatically updated in the merging process.
+
+    The default maximum jet distance is 30 meters, but can be modified
+    via the <a href="./IceDwalkx.html#IceDwalkx:SetJdistmax" title="void IceDwalkx::SetJdistmax(Float_t d,TString s,Int_t invol=1)">SetJdistmax</a> memberfunction. This memberfunction also allows to
+    specify whether the distance is determined within the detector volume or not.
+
+    Note : Setting the maximum jet opening angle to &lt;=0 will prevent
+           the merging of jets.
+
+    The average of all the r0 and t0 values of the merged jets will provide
+    the r0 and t0 (i.e. reference point) of the final jet.
+
+ 6) The remaining (merged) jets are ordered w.r.t. decreasing jet quality number.
+    As such the jet with the highest quality number will be the first one
+    in the list, which will result in the fact that the final tracks are also
+    ordered w.r.t. decreasing quality number, as outlined hereafter.
+    Each remaining jet will provide the parameters (e.g. direction)
+    for a reconstructed track.
+    The track 3-momentum is set to the total jet 3-momentum, normalised
+    to 1 GeV. The mass and charge of the track are left 0.
+    The reference point data of the jet will provide the r0 and t0
+    (i.e. reference point) of the track.
+
+    All these reconstructed tracks will be stored in the <a href="./IceEvent.html">IceEvent</a> structure
+    using the naming conventions outlined above.
+
+    Note : In case the maximum jet opening angle was specified &lt;0,
+           only the jet with the highest quality number will appear
+           as a reconstructed track in the <a href="./IceEvent.html">IceEvent</a> structure.
+           This will allow comparison with the old <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> (Sieglinde)
+           single track direct walk reconstruction results.
+
+ For further details the user is referred to NIM A524 (2004) 169.
+
+ Note : This algorithm works best on data which has been calibrated,
+        cross talk corrected (<a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a>) and cleaned from noise hits etc. (<a href="./IceCleanHits.html">IceCleanHits</a>).
+
+--- Author: Nick van Eijndhoven 07-oct-2005 Utrecht University
+- Modified: NvE $Date: 2012-07-13 16:17:43 +0200 (Fri, 13 Jul 2012) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="IceDwalkx:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceDwalkx:IceDwalkx@1">IceDwalkx</a>(<span class="keyword">const</span> <a href="./IceDwalkx.html">IceDwalkx</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceDwalkx:IceDwalkx">IceDwalkx</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceDwalkx"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Direct walk reconstruction"</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#IceDwalkx:_IceDwalkx">~IceDwalkx</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Add"><span class="baseclass">TTask::</span>Add</a>(<a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>* task)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Browse"><span class="baseclass">TTask::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#IceDwalkx:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:CleanTasks"><span class="baseclass">TTask::</span>CleanTasks</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Clear"><span class="baseclass">TTask::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TNamed:Clone"><span class="baseclass">TNamed::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Continue"><span class="baseclass">TTask::</span>Continue</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTask"><span class="baseclass">TTask::</span>ExecuteTask</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"0"</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTasks"><span class="baseclass">TTask::</span>ExecuteTasks</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakin"><span class="baseclass">TTask::</span>GetBreakin</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakout"><span class="baseclass">TTask::</span>GetBreakout</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TList*</td><td class="funcname"><a class="funcname" href="#TTask:GetListOfTasks"><span class="baseclass">TTask::</span>GetListOfTasks</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#IceDwalkx:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsActive"><span class="baseclass">TTask::</span>IsActive</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsFolder"><span class="baseclass">TTask::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./IceDwalkx.html">IceDwalkx</a>&amp;</td><td class="funcname"><a class="funcname" href="#IceDwalkx:operator_">operator=</a>(<span class="keyword">const</span> <a href="./IceDwalkx.html">IceDwalkx</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetAbsorptionLength"><span class="baseclass">IceRecoBase::</span>SetAbsorptionLength</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> lambda, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetActive"><span class="baseclass">TTask::</span>SetActive</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> active = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetAsType">SetAsType</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakin"><span class="baseclass">TTask::</span>SetBreakin</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakin = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakout"><span class="baseclass">TTask::</span>SetBreakout</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakout = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetCharge"><span class="baseclass">IceRecoBase::</span>SetCharge</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> charge)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetCleaned"><span class="baseclass">IceRecoBase::</span>SetCleaned</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag, TString s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetConditionalReco">SetConditionalReco</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetDmin">SetDmin</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetDtmarg">SetDtmarg</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> dt, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetFlipAngles"><span class="baseclass">IceRecoBase::</span>SetFlipAngles</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> thetatrk, <a href="./ListOfTypes.html#Float_t">Float_t</a> thetahits)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetJangmax">SetJangmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> ang, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> iter = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetJdistmax">SetJdistmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> invol = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetMaxDhit">SetMaxDhit</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetMaxHits"><span class="baseclass">IceRecoBase::</span>SetMaxHits</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nmax, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetMaxMod"><span class="baseclass">IceRecoBase::</span>SetMaxMod</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nmax, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetMinAhits"><span class="baseclass">IceRecoBase::</span>SetMinAhits</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nmin, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetMinAmods"><span class="baseclass">IceRecoBase::</span>SetMinAmods</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nmin, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetMinMod"><span class="baseclass">IceRecoBase::</span>SetMinMod</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nmin, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetScatteringLength">SetScatteringLength</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> lambda, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetSingleHit"><span class="baseclass">IceRecoBase::</span>SetSingleHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndoms, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndoms1 = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetSLChitUsage"><span class="baseclass">IceRecoBase::</span>SetSLChitUsage</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag, TString s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetTangmax">SetTangmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> ang, TString s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetTdistmax">SetTdistmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> invol = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetTimeJitter"><span class="baseclass">IceRecoBase::</span>SetTimeJitter</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> sigma, TString s)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:SetTrackName"><span class="baseclass">IceRecoBase::</span>SetTrackName</a>(TString s)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SetVgroupUsage">SetVgroupUsage</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag, TString s)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:UseTracks"><span class="baseclass">IceRecoBase::</span>UseTracks</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:Amanda">Amanda</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:AssociateHits">AssociateHits</a>(TObjArray&amp; tes, TObjArray&amp; hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> vgroup, <a href="./ListOfTypes.html#Float_t">Float_t</a> maxdhit, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; qmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> lambda)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:ClusterTracks">ClusterTracks</a>(TObjArray&amp; tes, TObjArray&amp; jets, <a href="./ListOfTypes.html#Float_t">Float_t</a> tangmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> tinvol, <a href="./ListOfTypes.html#Float_t">Float_t</a> tdistmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype, <a href="./ListOfTypes.html#Float_t">Float_t</a> qmax)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceDwalkx:DeepCore">DeepCore</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./IceRecoBase.html#IceRecoBase:FlipTrack"><span class="baseclass">IceRecoBase::</span>FlipTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceDwalkx:IceCube">IceCube</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceDwalkx:InIce">InIce</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:MergeJets">MergeJets</a>(TObjArray&amp; jets, <a href="./ListOfTypes.html#Float_t">Float_t</a> jangmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> jdistmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> jinvol, <a href="./ListOfTypes.html#Int_t">Int_t</a> jiterate, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcTrack.html">NcTrack</a>*</td><td class="funcname"><a class="funcname" href="./IceLinefit.html#IceLinefit:Reconstruct"><span class="baseclass">IceLinefit::</span>Reconstruct</a>(TObjArray* doms, <a href="./ListOfTypes.html#Int_t">Int_t</a> cln, <a href="./ListOfTypes.html#Int_t">Int_t</a> minmod, <a href="./ListOfTypes.html#Int_t">Int_t</a> maxmod, <a href="./ListOfTypes.html#Int_t">Int_t</a> maxhits, <a href="./ListOfTypes.html#Int_t">Int_t</a> minahits, <a href="./ListOfTypes.html#Int_t">Int_t</a> minamods, <a href="./ListOfTypes.html#Int_t">Int_t</a> slc)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:SelectQvalue">SelectQvalue</a>(TObjArray&amp; tes, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype, <a href="./ListOfTypes.html#Float_t">Float_t</a> qmax)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDwalkx:StoreTracks">StoreTracks</a>(TObjArray&amp; jets, <a href="./ListOfTypes.html#Float_t">Float_t</a> jangmax, TString name, TString title)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./IceLinefit.html#IceLinefit:Tracks"><span class="baseclass">IceLinefit::</span>Tracks</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="IceDwalkx:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fActive"><span class="baseclass">TTask::</span>fActive</a></td><td class="datadesc">true if task is active</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fAsTypeA"></a>fAsTypeA</td><td class="datadesc">Amanda flag to indicate usage of # assoc. hits or strings for quality</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fAsTypeDC"></a>fAsTypeDC</td><td class="datadesc">DeepCore flag to indicate usage of # assoc. hits or strings for quality</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fAsTypeI"></a>fAsTypeI</td><td class="datadesc">InIce flag to indicate usage of # assoc. hits or strings for quality</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fAsTypeIC"></a>fAsTypeIC</td><td class="datadesc">Standard IceCube InIce flag to indicate usage of # assoc. hits or strings for quality</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fCharge"><span class="baseclass">IceRecoBase::</span>fCharge</a></td><td class="datadesc">User defined charge of the produced first guess tracks</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fCleanA"><span class="baseclass">IceRecoBase::</span>fCleanA</a></td><td class="datadesc">Amanda flag to indicate usage of only cleaned hits</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fCleanDC"><span class="baseclass">IceRecoBase::</span>fCleanDC</a></td><td class="datadesc">DeepCore flag to indicate usage of only cleaned hits</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fCleanI"><span class="baseclass">IceRecoBase::</span>fCleanI</a></td><td class="datadesc">InIce flag to indicate usage of only cleaned hits</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fCleanIC"><span class="baseclass">IceRecoBase::</span>fCleanIC</a></td><td class="datadesc">Standard IceCube InIce flag to indicate usage of only cleaned hits</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fConditional"></a>fConditional</td><td class="datadesc">Flag to indicate conditional reconstruction of the various detector combinations</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fDminA"></a>fDminA</td><td class="datadesc">Minimum Amanda OM hit distance (in m) to form a track element </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fDminDC"></a>fDminDC</td><td class="datadesc">Minimum DeepCore DOM hit distance (in m) to form a track element </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fDminI"></a>fDminI</td><td class="datadesc">Minimum InIce DOM hit distance (in m) to form a track element </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fDminIC"></a>fDminIC</td><td class="datadesc">Minimum standard IceCube InIce DOM hit distance (in m) to form a track element </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fDtmargA"></a>fDtmargA</td><td class="datadesc">Maximum Amanda OM hit time difference margin (in ns) for track elements</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fDtmargDC"></a>fDtmargDC</td><td class="datadesc">Maximum DeepCore DOM hit time difference margin (in ns) for track elements</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fDtmargI"></a>fDtmargI</td><td class="datadesc">Maximum InIce DOM hit time difference margin (in ns) for track elements</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fDtmargIC"></a>fDtmargIC</td><td class="datadesc">Maximum standard IceCube InIce DOM hit time difference margin (in ns) for track elements</td></tr>
+<tr class="data"><td class="datatype"><a href="./IceEvent.html">IceEvent</a>*</td><td class="dataname"><a name="IceDwalkx:fEvt"></a>fEvt</td><td class="datadesc">Pointer to the event structure</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./IceEvent.html">IceEvent</a>*</td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fEvt"><span class="baseclass">IceRecoBase::</span>fEvt</a></td><td class="datadesc">Pointer to the current event</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fFirst"><span class="baseclass">IceRecoBase::</span>fFirst</a></td><td class="datadesc">Flag to denote first invokation of the processor</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJangmaxA"></a>fJangmaxA</td><td class="datadesc">Amanda angular separation (in deg) within which jets are merged into 1 single track</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJangmaxDC"></a>fJangmaxDC</td><td class="datadesc">DeepCore angular separation (in deg) within which jets are merged into 1 single track</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJangmaxI"></a>fJangmaxI</td><td class="datadesc">InIce angular separation (in deg) within which jets are merged into 1 single track</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJangmaxIC"></a>fJangmaxIC</td><td class="datadesc">Standard IceCube InIce angular separation (in deg) within which jets are merged into 1 single track</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJdistmaxA"></a>fJdistmaxA</td><td class="datadesc">Amanda maximum jet distance (in m) for jet merging</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJdistmaxDC"></a>fJdistmaxDC</td><td class="datadesc">DeepCore maximum jet distance (in m) for jet merging</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJdistmaxI"></a>fJdistmaxI</td><td class="datadesc">InIce maximum jet distance (in m) for jet merging</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fJdistmaxIC"></a>fJdistmaxIC</td><td class="datadesc">Standard IceCube InIce maximum jet distance (in m) for jet merging</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJinvolA"></a>fJinvolA</td><td class="datadesc">Amanda flag to denote maximum jet distance testing inside/outside detector volume</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJinvolDC"></a>fJinvolDC</td><td class="datadesc">DeepCore flag to denote maximum jet distance testing inside/outside detector volume</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJinvolI"></a>fJinvolI</td><td class="datadesc">InIce flag to denote maximum jet distance testing inside/outside detector volume</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJinvolIC"></a>fJinvolIC</td><td class="datadesc">Standard IceCube InIce flag to denote maximum jet distance testing inside/outside detector volume</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJiterateA"></a>fJiterateA</td><td class="datadesc">Amanda flag to indicate iteration in the jet merging process</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJiterateDC"></a>fJiterateDC</td><td class="datadesc">DeepCore flag to indicate iteration in the jet merging process</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJiterateI"></a>fJiterateI</td><td class="datadesc">InIce flag to indicate iteration in the jet merging process</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fJiterateIC"></a>fJiterateIC</td><td class="datadesc">Standard IceCube InIce flag to indicate iteration in the jet merging process</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLabsA"><span class="baseclass">IceRecoBase::</span>fLabsA</a></td><td class="datadesc">Average photon absorption length (in meter) for Amanda OMs</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLabsDL"><span class="baseclass">IceRecoBase::</span>fLabsDL</a></td><td class="datadesc">Average photon absorption length (in meter) for InIce DOMs in the Dust Layer</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLabsLD"><span class="baseclass">IceRecoBase::</span>fLabsLD</a></td><td class="datadesc">Average photon absorption length (in meter) for InIce DOMs in the Lower Detector below the dust layer</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLabsUD"><span class="baseclass">IceRecoBase::</span>fLabsUD</a></td><td class="datadesc">Average photon absorption length (in meter) for InIce DOMs in the Upper Detector above the dust layer</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fLambdaA"></a>fLambdaA</td><td class="datadesc">Average photon scattering length (in meter) for Amanda OMs</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLambdaA"><span class="baseclass">IceRecoBase::</span>fLambdaA</a></td><td class="datadesc">Average photon scattering length (in meter) for Amanda OMs</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fLambdaDC"></a>fLambdaDC</td><td class="datadesc">Average photon scattering length (in meter) for DeepCore DOMs</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLambdaDL"><span class="baseclass">IceRecoBase::</span>fLambdaDL</a></td><td class="datadesc">Average photon scattering length (in meter) for InIce DOMs in the Dust Layer</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fLambdaI"></a>fLambdaI</td><td class="datadesc">Average photon scattering length (in meter) for InIce DOMs</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fLambdaIC"></a>fLambdaIC</td><td class="datadesc">Average photon scattering length (in meter) for standard IceCube InIce DOMs</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLambdaLD"><span class="baseclass">IceRecoBase::</span>fLambdaLD</a></td><td class="datadesc">Average photon scattering length (in meter) for InIce DOMs in the Lower Detector below the dust layer</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fLambdaUD"><span class="baseclass">IceRecoBase::</span>fLambdaUD</a></td><td class="datadesc">Average photon scattering length (in meter) for InIce DOMs in the Upper Detector above the dust layer</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fMaxdhitA"></a>fMaxdhitA</td><td class="datadesc">Maximum Amanda OM hit distance (in scat. length) for hit association</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fMaxdhitDC"></a>fMaxdhitDC</td><td class="datadesc">Maximum DeepCore DOM hit distance (in scat. length) for hit association</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fMaxdhitI"></a>fMaxdhitI</td><td class="datadesc">Maximum InIce DOM hit distance (in scat. length) for hit association</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fMaxdhitIC"></a>fMaxdhitIC</td><td class="datadesc">Maximum standard IceCube InIce DOM hit distance (in scat. length) for hit association</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxhitsA"><span class="baseclass">IceRecoBase::</span>fMaxhitsA</a></td><td class="datadesc">The maximum number of good hits per Amanda OM to be processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxhitsDC"><span class="baseclass">IceRecoBase::</span>fMaxhitsDC</a></td><td class="datadesc">The maximum number of good hits per DeepCore DOM to be processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxhitsI"><span class="baseclass">IceRecoBase::</span>fMaxhitsI</a></td><td class="datadesc">The maximum number of good hits per InIce DOM to be processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxhitsIC"><span class="baseclass">IceRecoBase::</span>fMaxhitsIC</a></td><td class="datadesc">The maximum number of good hits per standard IceCube InIce DOM to be processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxmodA"><span class="baseclass">IceRecoBase::</span>fMaxmodA</a></td><td class="datadesc">The max. number of good fired Amanda OMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxmodDC"><span class="baseclass">IceRecoBase::</span>fMaxmodDC</a></td><td class="datadesc">The max. number of good fired DeepCore DOMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxmodI"><span class="baseclass">IceRecoBase::</span>fMaxmodI</a></td><td class="datadesc">The max. number of good fired InIce DOMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMaxmodIC"><span class="baseclass">IceRecoBase::</span>fMaxmodIC</a></td><td class="datadesc">The max. number of good fired standard IceCube InIce DOMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinahitsA"><span class="baseclass">IceRecoBase::</span>fMinahitsA</a></td><td class="datadesc">The minimum number of associated hits to produce an Amanda reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinahitsDC"><span class="baseclass">IceRecoBase::</span>fMinahitsDC</a></td><td class="datadesc">The minimum number of associated hits to produce a DeepCore (DC) reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinahitsI"><span class="baseclass">IceRecoBase::</span>fMinahitsI</a></td><td class="datadesc">The minimum number of associated hits to produce a hybrid InIce (I) reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinahitsIC"><span class="baseclass">IceRecoBase::</span>fMinahitsIC</a></td><td class="datadesc">The minimum number of associated hits to produce a standard IceCube (IC) reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinamodsA"><span class="baseclass">IceRecoBase::</span>fMinamodsA</a></td><td class="datadesc">The minimum number of associated OMs to produce an Amanda reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinamodsDC"><span class="baseclass">IceRecoBase::</span>fMinamodsDC</a></td><td class="datadesc">The minimum number of associated DOMs to produce a DeepCore (DC) reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinamodsI"><span class="baseclass">IceRecoBase::</span>fMinamodsI</a></td><td class="datadesc">The minimum number of associated DOMs to produce a hybrid InIce (I) reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinamodsIC"><span class="baseclass">IceRecoBase::</span>fMinamodsIC</a></td><td class="datadesc">The minimum number of associated DOMs to produce a standard IceCube (IC) reconstructed track</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinmodA"><span class="baseclass">IceRecoBase::</span>fMinmodA</a></td><td class="datadesc">The min. number of good fired Amanda OMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinmodDC"><span class="baseclass">IceRecoBase::</span>fMinmodDC</a></td><td class="datadesc">The min. number of good fired DeepCore DOMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinmodI"><span class="baseclass">IceRecoBase::</span>fMinmodI</a></td><td class="datadesc">The min. number of good fired InIce DOMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fMinmodIC"><span class="baseclass">IceRecoBase::</span>fMinmodIC</a></td><td class="datadesc">The min. number of good fired standard IceCube InIce DOMs for events to get processed</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcDevice.html">NcDevice</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fParams"><span class="baseclass">IceRecoBase::</span>fParams</a></td><td class="datadesc">Device to store the parameters for this processor</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingle1A"><span class="baseclass">IceRecoBase::</span>fSingle1A</a></td><td class="datadesc">Minimum number of good firing Amanda OMs on a single string at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingle1DC"><span class="baseclass">IceRecoBase::</span>fSingle1DC</a></td><td class="datadesc">Minimum number of good firing DeepCore DOMs on a single string at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingle1I"><span class="baseclass">IceRecoBase::</span>fSingle1I</a></td><td class="datadesc">Minimum number of good firing InIce DOMs on a single string at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingle1IC"><span class="baseclass">IceRecoBase::</span>fSingle1IC</a></td><td class="datadesc">Minimum number of good firing standard IceCube InIce DOMs on a single string at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingleA"><span class="baseclass">IceRecoBase::</span>fSingleA</a></td><td class="datadesc">Minimum number of good firing Amanda OMs at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingleDC"><span class="baseclass">IceRecoBase::</span>fSingleDC</a></td><td class="datadesc">Minimum number of good firing DeepCore DOMs at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingleI"><span class="baseclass">IceRecoBase::</span>fSingleI</a></td><td class="datadesc">Minimum number of good firing InIce DOMs at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSingleIC"><span class="baseclass">IceRecoBase::</span>fSingleIC</a></td><td class="datadesc">Minimum number of good firing standard IceCube InIce DOMs at which only first hits will be used</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSlcDC"><span class="baseclass">IceRecoBase::</span>fSlcDC</a></td><td class="datadesc">DeepCore flag to indicate usage of SLC hits</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSlcI"><span class="baseclass">IceRecoBase::</span>fSlcI</a></td><td class="datadesc">InIce flag to indicate usage of SLC hits</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fSlcIC"><span class="baseclass">IceRecoBase::</span>fSlcIC</a></td><td class="datadesc">Standard IceCube InIce flag to indicate usage of SLC hits</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTangmaxA"></a>fTangmaxA</td><td class="datadesc">Amanda angular separation (in deg) within which track candidates are clustered in a jet</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTangmaxDC"></a>fTangmaxDC</td><td class="datadesc">DeepCore angular separation (in deg) within which track candidates are clustered in a jet</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTangmaxI"></a>fTangmaxI</td><td class="datadesc">InIce angular separation (in deg) within which track candidates are clustered in a jet</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTangmaxIC"></a>fTangmaxIC</td><td class="datadesc">Standard IceCube InIce angular separation (in deg) within which track candidates are clustered in a jet</td></tr>
+<tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTdistmaxA"></a>fTdistmaxA</td><td class="datadesc">Maximum Amanda track distance (in m) for track candidate clustering</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTdistmaxDC"></a>fTdistmaxDC</td><td class="datadesc">Maximum DeepCore track distance (in m) for track candidate clustering</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTdistmaxI"></a>fTdistmaxI</td><td class="datadesc">Maximum InIce track distance (in m) for track candidate clustering</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceDwalkx:fTdistmaxIC"></a>fTdistmaxIC</td><td class="datadesc">Maximum standard IceCube InIce track distance (in m) for track candidate clustering</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fThetahits"><span class="baseclass">IceRecoBase::</span>fThetahits</a></td><td class="datadesc">Hit path polar angle threshold (in degrees) for track direction flipping</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fThetatrk"><span class="baseclass">IceRecoBase::</span>fThetatrk</a></td><td class="datadesc">Track polar angle threshold (in degrees) for track direction flipping</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fTinvolA"></a>fTinvolA</td><td class="datadesc">Amanda flag to denote maximum track distance testing inside/outside detector volume</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fTinvolDC"></a>fTinvolDC</td><td class="datadesc">DeepCore flag to denote maximum track distance testing inside/outside detector volume</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fTinvolI"></a>fTinvolI</td><td class="datadesc">InIce flag to denote maximum track distance testing inside/outside detector volume</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fTinvolIC"></a>fTinvolIC</td><td class="datadesc">Standard IceCube InIce flag to denote maximum track distance testing inside/outside detector volume</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fTrackname"><span class="baseclass">IceRecoBase::</span>fTrackname</a></td><td class="datadesc">The name identifier for the produced first guess tracks</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fTsigmaA"><span class="baseclass">IceRecoBase::</span>fTsigmaA</a></td><td class="datadesc">PMT jitter (in ns) for Amanda OMs</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fTsigmaDC"><span class="baseclass">IceRecoBase::</span>fTsigmaDC</a></td><td class="datadesc">PMT jitter (in ns) for DeepCore DOMs</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fTsigmaIC"><span class="baseclass">IceRecoBase::</span>fTsigmaIC</a></td><td class="datadesc">PMT jitter (in ns) for standard IceCube DOMs</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fUseNames"><span class="baseclass">IceRecoBase::</span>fUseNames</a></td><td class="datadesc">The first guess classnames to be used </td></tr>
+<tr class="datainh"><td class="datatype">TArrayI*</td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fUseNtk"><span class="baseclass">IceRecoBase::</span>fUseNtk</a></td><td class="datadesc">The max. numbers of the various first guess tracks to be used</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fVgroupA"></a>fVgroupA</td><td class="datadesc">Amanda flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fVgroupA"><span class="baseclass">IceRecoBase::</span>fVgroupA</a></td><td class="datadesc">Amanda flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fVgroupDC"></a>fVgroupDC</td><td class="datadesc">DeepCore flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fVgroupDC"><span class="baseclass">IceRecoBase::</span>fVgroupDC</a></td><td class="datadesc">DeepCore flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fVgroupI"></a>fVgroupI</td><td class="datadesc">InIce flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fVgroupI"><span class="baseclass">IceRecoBase::</span>fVgroupI</a></td><td class="datadesc">InIce flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceDwalkx:fVgroupIC"></a>fVgroupIC</td><td class="datadesc">Standard IceCube InIce flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./IceRecoBase.html#IceRecoBase:fVgroupIC"><span class="baseclass">IceRecoBase::</span>fVgroupIC</a></td><td class="datadesc">Standard IceCube InIce flag to indicate usage of distinct phase and group velocities</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBeginTask"><span class="baseclass">TTask::</span>fgBeginTask</a></td><td class="datadesc">pointer to task initiator</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBreakPoint"><span class="baseclass">TTask::</span>fgBreakPoint</a></td><td class="datadesc">pointer to current break point</td></tr>
+
+</table></div>
+</div>
+<h2><a id="IceDwalkx:Class_Charts"></a>Class Charts</h2>
+<map name="MapIceDwalkx_Inh" id="MapIceDwalkx_Inh">
+<area shape="rect" id="node3" href="./IceLinefit.html" title="IceLinefit" alt="" coords="542,5,632,23"/>
+<area shape="rect" id="node4" href="./IceRecoBase.html" title="IceRecoBase" alt="" coords="407,5,497,23"/>
+</map>
+<map name="MapIceDwalkx_InhMem" id="MapIceDwalkx_InhMem">
+<area shape="rect" id="graph12" href="./IceLinefit.html" alt="" coords="1328,63,1581,99"/>
+<area shape="rect" id="graph13" href="./IceLinefit.html" alt="" coords="1493,109,1581,217"/>
+<area shape="rect" id="graph14" href="./IceLinefit.html" alt="" coords="1395,109,1483,247"/>
+<area shape="rect" id="graph15" href="./IceLinefit.html" alt="" coords="1296,109,1384,247"/>
+<area shape="rect" id="graph11" href="./IceLinefit.html" title="IceLinefit" alt="" coords="1285,16,1592,257"/>
+<area shape="rect" id="graph18" href="./IceRecoBase.html" alt="" coords="1176,63,1264,377"/>
+<area shape="rect" id="graph19" href="./IceRecoBase.html" alt="" coords="1077,63,1165,377"/>
+<area shape="rect" id="graph20" href="./IceRecoBase.html" alt="" coords="979,63,1067,377"/>
+<area shape="rect" id="graph21" href="./IceRecoBase.html" alt="" coords="1208,388,1232,409"/>
+<area shape="rect" id="graph22" href="./IceRecoBase.html" alt="" coords="1176,420,1264,601"/>
+<area shape="rect" id="graph23" href="./IceRecoBase.html" alt="" coords="1077,420,1165,601"/>
+<area shape="rect" id="graph24" href="./IceRecoBase.html" alt="" coords="979,420,1067,601"/>
+<area shape="rect" id="graph17" href="./IceRecoBase.html" title="IceRecoBase" alt="" coords="968,16,1275,612"/>
+</map>
+<map name="MapIceDwalkx_Lib" id="MapIceDwalkx_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgIceDwalkx_Inh" class="tabsel" href="inh/IceDwalkx_Inh.png" onclick="javascript:return SetImg('Charts','inh/IceDwalkx_Inh.png');">Inheritance</a>
+<a id="imgIceDwalkx_InhMem" class="tab" href="inhmem/IceDwalkx_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/IceDwalkx_InhMem.png');">Inherited Members</a>
+<a id="imgIceDwalkx_Incl" class="tab" href="incl/IceDwalkx_Incl.png" onclick="javascript:return SetImg('Charts','incl/IceDwalkx_Incl.png');">Includes</a>
+<a id="imgIceDwalkx_Lib" class="tab" href="lib/IceDwalkx_Lib.png" onclick="javascript:return SetImg('Charts','lib/IceDwalkx_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapIceDwalkx_Inh" src="inh/IceDwalkx_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceDwalkx:IceDwalkx" href="src/IceDwalkx.cxx.html#pZZMoB">IceDwalkx</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceDwalkx"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Direct walk reconstruction"</span>)</span><br />
+<div class="funccomm"><pre> Default constructor.
+ The various reconstruction parameters are initialised to the values
+ as mentioned in the general documentation of this class.
+ The angular separation parameter for jet merging is initialised as half
+ the value of the angular separation parameter for track candidate clustering.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceDwalkx:_IceDwalkx" href="src/IceDwalkx.cxx.html#J1u0FD">~IceDwalkx</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetDmin" href="src/IceDwalkx.cxx.html#VrW8u">SetDmin</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s)</span><br />
+<div class="funccomm"><pre> Set minimum hit distance (in m) to form a track element.
+ For default values please refer to the general documentation of this class.
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetDtmarg" href="src/IceDwalkx.cxx.html#kdvH5D">SetDtmarg</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> dt, TString s)</span><br />
+<div class="funccomm"><pre> Set maximum hit time difference margin (in ns) for track elements.
+ For default values please refer to the general documentation of this class.
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetMaxDhit" href="src/IceDwalkx.cxx.html#yt6psE">SetMaxDhit</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s)</span><br />
+<div class="funccomm"><pre> Set maximum distance (in scattering length) for a hit to get associated.
+ For default values please refer to the general documentation of this class.
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetTangmax" href="src/IceDwalkx.cxx.html#lZQbz">SetTangmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> ang, TString s)</span><br />
+<div class="funccomm"><pre> Set maximum angular separation (in deg) for track candidate clustering
+ into jets.
+ In the constructor the default has been set to 15 deg, in accordance
+ to NIM A524 (2004) 180.
+
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+
+ Note : This function also sets automatically the value of the maximum
+        angular separation for jet merging into 1 single track to ang/2.
+        In order to specify a different max. jet merging separation angle,
+        one has to invoke the memberfunction <a href="./IceDwalkx.html#IceDwalkx:SetJangmax" title="void IceDwalkx::SetJangmax(Float_t ang,TString s,Int_t iter=1)">SetJangmax</a> afterwards.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetTdistmax" href="src/IceDwalkx.cxx.html#guJGDC">SetTdistmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> invol = 1)</span><br />
+<div class="funccomm"><pre> Set maximum distance (in m) of the two track candidates in the track
+ clustering process.
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+
+ The distance between the two tracks can be determined restricted to the
+ detector volume (invol=1) or in the overall space (invol=0).
+ The former will prevent clustering of (nearly) parallel tracks which cross
+ the detector volume at very different locations, whereas the latter will
+ enable clustering of tracks with a common location of origin (e.g. muon
+ bundles from an air shower) even if they cross the detector volume at
+ very different locations.
+ At invokation of this memberfunction the default is invol=1.
+ In the constructor the default has been set to 20 meter with invol=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetJangmax" href="src/IceDwalkx.cxx.html#bJGr4C">SetJangmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> ang, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> iter = 1)</span><br />
+<div class="funccomm"><pre> Set angular separation (in deg) within which jets are merged into 1
+ single track.
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+
+ The merging process is a dynamic procedure and can be carried out by
+ iteration (iter=1) until no further merging of the various jets occurs anymore.
+ However, by specification of iter=0 the user can also select to go only
+ once through all the jet combinations to check for mergers.
+ For large events the latter will in general result in more track candidates.
+ At invokation of this memberfunction the default is iter=1.
+ In the constructor the default angle has been set 7.5 deg, being half
+ of the value of the default track candidate clustering separation angle.
+ The iteration flag was set to 1 in the constructor.
+
+ Notes :
+
+ 1)  Setting ang=0 will prevent jet merging.
+     Consequently, every jet will appear as a separate track in the
+     reconstruction result.
+ 2)  Setting ang&lt;0 will prevent jet merging.
+     In addition, only the jet with the maximum number of tracks will
+     appear as a track in the reconstruction result.
+     This situation resembles the standard Sieglinde direct walk processing
+     and as such can be used to perform comparison studies.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetJdistmax" href="src/IceDwalkx.cxx.html#sfAGDC">SetJdistmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> d, TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> invol = 1)</span><br />
+<div class="funccomm"><pre> Set maximum distance (in m) of the two jets in the jet merging process.
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+
+ The distance between the two jets can be determined restricted to the
+ detector volume (invol=1) or in the overall space (invol=0).
+ The former will prevent clustering of (nearly) parallel tracks which cross
+ the detector volume at very different locations, whereas the latter will
+ enable clustering of tracks with a common location of origin (e.g. muon
+ bundles from an air shower) even if they cross the detector volume at
+ very different locations.
+ At invokation of this memberfunction the default is invol=1.
+ In the constructor the default has been set to 30 meter with invol=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetVgroupUsage" href="src/IceDwalkx.cxx.html#AdheUD">SetVgroupUsage</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag, TString s)</span><br />
+<div class="funccomm"><pre> (De)activate the distinction between v_phase and v_group of the Cherenkov light.
+
+ flag = 0 : No distinction between v_phase and v_group
+      = 1 : Separate treatment of v_phase and v_group
+
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+
+ By default the distinction between v_phase and v_group is activated
+ in the constructor of this class.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetAsType" href="src/IceDwalkx.cxx.html#NPr1mC">SetAsType</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag, TString s)</span><br />
+<div class="funccomm"><pre> Select number of associated hits and/or strings as quality indicator.
+
+ flag = 1 : Number of associated hits (nah) is used as quality indicator
+      = 2 : Number of associated strings (nas) is used as quality indicator
+      = 3 : nah*nas is used as quality indicator
+
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+
+ By default the flag value is set to 3 in the constructor of this class.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetScatteringLength" href="src/IceDwalkx.cxx.html#cVXsND">SetScatteringLength</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> lambda, TString s)</span><br />
+<div class="funccomm"><pre> Set average photon scattering length in meter.
+ For default values please refer to the general documentation of this class.
+
+ The input argument <span class="string">"s"</span> allows for detector specification.
+
+ s = <span class="string">"A"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OMs
+     <span class="string">"I"</span>  --&gt; <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"IC"</span> --&gt; Standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOMs
+     <span class="string">"DC"</span> --&gt; <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOMs
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SetConditionalReco" href="src/IceDwalkx.cxx.html#XFKnYE">SetConditionalReco</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
+<div class="funccomm"><pre> Set flag for conditional reconstruction of the various detector combinations.
+ This will allow to save considerably on cpu time, especially on large events.
+
+ flag : 0 ==&gt; Always invoke all the various reconstructions
+        1 ==&gt; No <span class="string">"I"</span> reconstruction in case <span class="string">"IC"</span> track was found
+        2 ==&gt; Same as flag=1 but also no <span class="string">"DC"</span> reconstruction in case <span class="string">"IC"</span> or <span class="string">"I"</span> track was found
+
+ By default flag=1 is set in the constructor.
+
+ Notes :
+
+ 1) Reconstruction in a specific detector can always be de-activated by
+    invokation of the <a href="./IceRecoBase.html#IceRecoBase:SetMaxHits" title="void IceRecoBase::SetMaxHits(Int_t nmax,TString s)">SetMaxHits</a> memberfunction.
+ 2) In case of inconsistent input the current setting will not be modified.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:Exec" href="src/IceDwalkx.cxx.html#AsRMLC">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funccomm"><pre> Implementation of the direct walk track reconstruction.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:Amanda" href="src/IceDwalkx.cxx.html#RHuC4D">Amanda</a>()</span><br />
+<div class="funccomm"><pre> The direct walk track reconstruction for <a href="./IceDwalkx.html#IceDwalkx:Amanda" title="void IceDwalkx::Amanda()">Amanda</a> OM signals.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceDwalkx:InIce" href="src/IceDwalkx.cxx.html#cZ9GDE">InIce</a>()</span><br />
+<div class="funccomm"><pre> The direct walk track reconstruction for all <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOM signals.
+ The procedure here is optimised to provide at least one direct walk track
+ in most of the events (i.e. opt for somewhat lower energy threshold) at the
+ expense of having a pointing accuracy slightly worse than average.
+
+ The return argument indicates whether or not a track has been found
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceDwalkx:IceCube" href="src/IceDwalkx.cxx.html#uHNZkE">IceCube</a>()</span><br />
+<div class="funccomm"><pre> The direct walk track reconstruction for the standard <a href="./IceDwalkx.html#IceDwalkx:IceCube" title="Int_t IceDwalkx::IceCube()">IceCube</a> <a href="./IceDwalkx.html#IceDwalkx:InIce" title="Int_t IceDwalkx::InIce()">InIce</a> DOM signals.
+ The procedure here is optimised to provide a direct walk track with better than average
+ pointing accuracy (i.e. slightly higher energy threshold) on the expense of sometimes
+ not making a reco track at all.
+
+ The return argument indicates whether or not a track has been found
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceDwalkx:DeepCore" href="src/IceDwalkx.cxx.html#As0GZ">DeepCore</a>()</span><br />
+<div class="funccomm"><pre> The direct walk track reconstruction for the <a href="./IceDwalkx.html#IceDwalkx:DeepCore" title="Int_t IceDwalkx::DeepCore()">DeepCore</a> DOM signals.
+ The procedure here is optimised to provide a direct walk track with the
+ lowest possible energy threshold at the expense of having a worse than average
+ pointing accuracy at these low energies.
+
+ The return argument indicates whether or not a track has been found
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:AssociateHits" href="src/IceDwalkx.cxx.html#wEyiCC">AssociateHits</a>(TObjArray&amp; tes, TObjArray&amp; hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> vgroup, <a href="./ListOfTypes.html#Float_t">Float_t</a> maxdhit, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; qmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> lambda)</span><br />
+<div class="funccomm"><pre> Association of hits to the various track elements.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:SelectQvalue" href="src/IceDwalkx.cxx.html#dhphpE">SelectQvalue</a>(TObjArray&amp; tes, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype, <a href="./ListOfTypes.html#Float_t">Float_t</a> qmax)</span><br />
+<div class="funccomm"><pre> Perform selection on Q value in case of multiple track candidates
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:ClusterTracks" href="src/IceDwalkx.cxx.html#OrPiPD">ClusterTracks</a>(TObjArray&amp; tes, TObjArray&amp; jets, <a href="./ListOfTypes.html#Float_t">Float_t</a> tangmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> tinvol, <a href="./ListOfTypes.html#Float_t">Float_t</a> tdistmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype, <a href="./ListOfTypes.html#Float_t">Float_t</a> qmax)</span><br />
+<div class="funccomm"><pre> Cluster track candidates within a certain opening angle into jets.
+ Also the track should be within a certain maximum distance of the
+ starting track in order to get clustered.
+ The latter prevents clustering of (nearly) parallel track candidates
+ crossing the detector a very different locations (e.g. muon bundles).
+ The average r0 and t0 of the constituent tracks will be taken as the
+ jet reference point.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:MergeJets" href="src/IceDwalkx.cxx.html#rXQleC">MergeJets</a>(TObjArray&amp; jets, <a href="./ListOfTypes.html#Float_t">Float_t</a> jangmax, <a href="./ListOfTypes.html#Float_t">Float_t</a> jdistmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> jinvol, <a href="./ListOfTypes.html#Int_t">Int_t</a> jiterate, <a href="./ListOfTypes.html#Int_t">Int_t</a> astype)</span><br />
+<div class="funccomm"><pre> Merge jets within a certain opening to provide the final track(s).
+ Also the jet should be within a certain maximum distance of the
+ starting jet in order to get merged.
+ The latter prevents merging of (nearly) parallel jets/tracks
+ crossing the detector a very different locations (e.g. muon bundles).
+ The average r0 and t0 of the constituent jets will be taken as the
+ final reference point.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDwalkx:StoreTracks" href="src/IceDwalkx.cxx.html#VyKe0B">StoreTracks</a>(TObjArray&amp; jets, <a href="./ListOfTypes.html#Float_t">Float_t</a> jangmax, TString name, TString title)</span><br />
+<div class="funccomm"><pre> Store every jet as a reconstructed track in the event structure.
+ The jet 3-momentum (normalised to 1) and reference point
+ (i.e.the average r0 and t0 of the constituent tracks) will make up
+ the final track parameters.
+ All the associated hits of all the constituent tracks of the jet
+ will be associated to the final track.
+ In case the jet angular separation was set &lt;0, only the jet with
+ the maximum number of tracks (i.e. the first one in the array)
+ will be used to form a track. This will allow comparison with
+ the standard Sieglinde processing.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceDwalkx:IceDwalkx" href="src/IceDwalkx.h.html#i_FGTD">IceDwalkx</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceDwalkx"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Direct walk reconstruction"</span>)</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Thu Mar 21 09:34:57 2019 </em><em>&raquo; Last generated: 2019-03-21 09:34</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

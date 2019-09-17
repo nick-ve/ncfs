@@ -1,0 +1,659 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:20 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcHelix</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcHelix','','NcHelix.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcHelix.h.html">header file</a>
+<a class="descrheadentry" href="src/NcHelix.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcHelix:description">class description</a> 
+<a class="descrheadentry" href="#NcHelix:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcHelix:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcHelix:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcHelix</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcHelix:description"></a>class NcHelix: public THelix</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcHelix.html#NcHelix:Class" title="TClass* NcHelix::Class()">Class</a> <a href="./NcHelix.html">NcHelix</a>
+ Representation and extrapolation of NcTracks in a magnetic field.
+
+ This class is meant to provide a means to display and extrapolate
+ <a href="./NcTrack.html">NcTrack</a> objects in the presence of a constant homogeneous magnetic field.
+
+ For track/event displays the line width, colour etc... can be set using the
+ standard facilities (see <a href="./#TAttLine:TAttLine" title="TAttLine TAttLine::TAttLine() or overloads">TAttLine</a>).
+ By default the linewith is set to 2 and the colour set to -1 in the constructor.
+ The latter results in an automatic colour coding according to the track charge
+ with the convention positive=red neutral=green negative=blue.
+
+ To indicate the track starting point, the memberfunction <a href="./NcHelix.html#NcHelix:SetMarker" title="void NcHelix::SetMarker(Int_t marker=8,Float_t size=0.2,Int_t color=-1)">SetMarker</a>()
+ may be used.
+ By default no marker will be displayed.
+
+ Examples :
+
+
+ <a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> and extrapolation of individual tracks
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> vec[3];
+ <a href="./NcPosition.html">NcPosition</a> r1;
+ <a href="./Nc3Vector.html">Nc3Vector</a> p;
+ <a href="./NcTrack.html">NcTrack</a> t;
+
+ vec[0]=0;
+ vec[1]=0;
+ vec[2]=0;
+ r1.SetVector(vec,<span class="string">"car"</span>);
+
+ vec[0]=1;
+ vec[1]=0;
+ vec[2]=0.3;
+ p.SetVector(vec,<span class="string">"car"</span>);
+
+ t.Set3Momentum(p);
+ t.SetBeginPoint(r1);
+ t.SetCharge(-1);
+ t.SetMass(0.139);
+
+ // The magnetic field vector in Tesla
+ <a href="./Nc3Vector.html">Nc3Vector</a> b;
+ vec[0]=0;
+ vec[1]=0;
+ vec[2]=1;
+ b.SetVector(vec,<span class="string">"car"</span>);
+
+ <a href="./NcHelix.html">NcHelix</a>* helix=new <a href="./NcHelix.html">NcHelix</a>();
+ helix-&gt;<a href="./NcHelix.html#NcHelix:SetB" title="void NcHelix::SetB(Nc3Vector&amp; b)">SetB</a>(b);
+ helix-&gt;<a href="./NcHelix.html#NcHelix:SetTofmax" title="void NcHelix::SetTofmax(Float_t tof)">SetTofmax</a>(1e-7);
+
+ TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
+ TView* view=new TView(1);
+ view-&gt;<a href="./#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);
+ view-&gt;ShowAxis();
+
+ // Track displays
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> range[2]={0,600};
+ helix-&gt;<a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(&amp;t,range,3);
+ t.SetCharge(-t.GetCharge());
+ helix-&gt;<a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(&amp;t);
+
+ // Track extrapolation
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> pars[3]={550,0.001,3};
+ <a href="./NcPosition.html">NcPosition</a>* rext=helix-&gt;<a href="./NcHelix.html#NcHelix:Extrapolate" title="NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars=0,Double_t scale=-1)">Extrapolate</a>(&amp;t,pars);
+ if (rext) rext-&gt;Data();
+
+
+ Online display of events generated via <a href="./NcCollider.html">NcCollider</a>
+
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> nevents=5;   // Number of events to be generated
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> jrun=1;      // The run number of this batch of generated events
+
+ <a href="./ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
+ <a href="./ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *** NcCollider run for "</span> &lt;&lt; nevents &lt;&lt; <span class="string">" events."</span> &lt;&lt; endl;
+ <a href="./ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
+
+ <a href="./NcCollider.html">NcCollider</a>* gen=new <a href="./NcCollider.html">NcCollider</a>();
+
+ gen-&gt;OpenFortranFile(6,<span class="string">"dump.log"</span>);
+
+ gen-&gt;SetVertexMode(2);
+ gen-&gt;SetResolution(1e-4);
+
+ gen-&gt;SetRunNumber(jrun);
+ gen-&gt;SetPrintFreq(1);
+
+ gen-&gt;SetSpectatorPmin(0.01);
+
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> zp=1;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> ap=1;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> zt=2;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> at=4;
+
+ gen-&gt;Init(<span class="string">"fixt"</span>,zp,ap,zt,at,158);
+
+ <a href="./NcHelix.html">NcHelix</a>* helix=new <a href="./NcHelix.html">NcHelix</a>();
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> vec[3]={0,2,0};
+ <a href="./Nc3Vector.html">Nc3Vector</a> b;
+ b.SetVector(vec,<span class="string">"car"</span>);
+ helix-&gt;<a href="./NcHelix.html#NcHelix:SetB" title="void NcHelix::SetB(Nc3Vector&amp; b)">SetB</a>(b);
+
+ helix-&gt;<a href="./NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>(-1); // <a href="./NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a> display after each event
+
+ TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
+ TView* view=new TView(1);
+ view-&gt;<a href="./#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-200,-200,-200,200,200,200);
+ view-&gt;ShowAxis();
+
+ // Prepare random number sequence for this run
+ // to obtain the number of participants for each event
+ <a href="./NcRandom.html">NcRandom</a> rndm(abs(jrun));
+ <a href="./ListOfTypes.html#Float_t">Float_t</a>* rans=new <a href="./ListOfTypes.html#Float_t">Float_t</a>[nevents];
+ rndm.Uniform(rans,nevents,2,ap+at);
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> npart=0;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> ntk=0;
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;nevents; i++)
+ {
+  npart=rans[i];
+  gen-&gt;MakeEvent(npart);
+  <a href="./NcEvent.html">NcEvent</a>* evt=gen-&gt;GetEvent();
+  if (evt)
+  {
+   helix-&gt;<a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(evt);
+   c1-&gt;Update();
+   gSystem-&gt;Sleep(5000); // Some delay to keep the display on screen
+  }
+ }
+
+
+--- Author: Nick van Eijndhoven 17-jun-2004 Utrecht University
+- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcHelix:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcHelix:NcHelix">NcHelix</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcHelix:NcHelix@1">NcHelix</a>(<span class="keyword">const</span> <a href="./NcHelix.html">NcHelix</a>&amp; h)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcHelix:_NcHelix">~NcHelix</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcHelix:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Clear"><span class="baseclass">TObject::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:Clone"><span class="baseclass">TObject::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Compare"><span class="baseclass">TObject::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:Copy"><span class="baseclass">THelix::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; helix) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:Display">Display</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:Display@1">Display</a>(<a href="./NcEvent.html">NcEvent</a>* e, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:Display@2">Display</a>(TObjArray* a, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TAttLine:DistancetoLine"><span class="baseclass">TAttLine::</span>DistancetoLine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py, <a href="./ListOfTypes.html#Double_t">Double_t</a> xp1, <a href="./ListOfTypes.html#Double_t">Double_t</a> yp1, <a href="./ListOfTypes.html#Double_t">Double_t</a> xp2, <a href="./ListOfTypes.html#Double_t">Double_t</a> yp2)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:DistancetoPrimitive"><span class="baseclass">TPolyLine3D::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:Draw"><span class="baseclass">THelix::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:DrawOutlineCube"><span class="baseclass">TPolyLine3D::</span>DrawOutlineCube</a>(TList* outline, <a href="./ListOfTypes.html#Double_t">Double_t</a>* rmin, <a href="./ListOfTypes.html#Double_t">Double_t</a>* rmax)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:DrawPolyLine"><span class="baseclass">TPolyLine3D::</span>DrawPolyLine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a>* p, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:ExecuteEvent"><span class="baseclass">TPolyLine3D::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcPosition.html">NcPosition</a>*</td><td class="funcname"><a class="funcname" href="#NcHelix:Extrapolate">Extrapolate</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Double_t">Double_t</a>* pars = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcHelix:GetB">GetB</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:GetLastPoint"><span class="baseclass">TPolyLine3D::</span>GetLastPoint</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Color_t">Color_t</a></td><td class="funcname"><a class="funcname" href="#TAttLine:GetLineColor"><span class="baseclass">TAttLine::</span>GetLineColor</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Style_t">Style_t</a></td><td class="funcname"><a class="funcname" href="#TAttLine:GetLineStyle"><span class="baseclass">TAttLine::</span>GetLineStyle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Width_t">Width_t</a></td><td class="funcname"><a class="funcname" href="#TAttLine:GetLineWidth"><span class="baseclass">TAttLine::</span>GetLineWidth</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:GetN"><span class="baseclass">TPolyLine3D::</span>GetN</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetName"><span class="baseclass">TObject::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#THelix:GetOption"><span class="baseclass">THelix::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="funcname"><a class="funcname" href="#TPolyLine3D:GetP"><span class="baseclass">TPolyLine3D::</span>GetP</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetTitle"><span class="baseclass">TObject::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcHelix:GetTofmax">GetTofmax</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Hash"><span class="baseclass">TObject::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcHelix:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsSortable"><span class="baseclass">TObject::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:ls"><span class="baseclass">TPolyLine3D::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:MakeCurve">MakeCurve</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:Merge"><span class="baseclass">TPolyLine3D::</span>Merge</a>(TCollection* list)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:Modify"><span class="baseclass">TAttLine::</span>Modify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:Paint"><span class="baseclass">TPolyLine3D::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:Print"><span class="baseclass">THelix::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:Refresh">Refresh</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:ResetAttLine"><span class="baseclass">TAttLine::</span>ResetAttLine</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:SaveLineAttributes"><span class="baseclass">TAttLine::</span>SaveLineAttributes</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <span class="keyword">const</span> <span class="keyword">char</span>* name, <a href="./ListOfTypes.html#Int_t">Int_t</a> coldef = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> stydef = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> widdef = 1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SavePrimitive"><span class="baseclass">THelix::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SetAxis"><span class="baseclass">THelix::</span>SetAxis</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* axis)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SetAxis@1"><span class="baseclass">THelix::</span>SetAxis</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:SetB">SetB</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; b)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SetHelix"><span class="baseclass">THelix::</span>SetHelix</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* xyz, <a href="./ListOfTypes.html#Double_t">Double_t</a>* v, <a href="./ListOfTypes.html#Double_t">Double_t</a> w, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, EHelixRangeType type = kUnchanged, <a href="./ListOfTypes.html#Double_t">Double_t</a>* axis = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:SetLineAttributes"><span class="baseclass">TAttLine::</span>SetLineAttributes</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:SetLineColor"><span class="baseclass">TAttLine::</span>SetLineColor</a>(<a href="./ListOfTypes.html#Color_t">Color_t</a> lcolor)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:SetLineColorAlpha"><span class="baseclass">TAttLine::</span>SetLineColorAlpha</a>(<a href="./ListOfTypes.html#Color_t">Color_t</a> lcolor, <a href="./ListOfTypes.html#Float_t">Float_t</a> lalpha)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:SetLineStyle"><span class="baseclass">TAttLine::</span>SetLineStyle</a>(<a href="./ListOfTypes.html#Style_t">Style_t</a> lstyle)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAttLine:SetLineWidth"><span class="baseclass">TAttLine::</span>SetLineWidth</a>(<a href="./ListOfTypes.html#Width_t">Width_t</a> lwidth)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:SetMarker">SetMarker</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> marker = 8, <a href="./ListOfTypes.html#Float_t">Float_t</a> size = 0.2, <a href="./ListOfTypes.html#Int_t">Int_t</a> color = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:SetNextPoint"><span class="baseclass">TPolyLine3D::</span>SetNextPoint</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SetOption"><span class="baseclass">THelix::</span>SetOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:SetPoint"><span class="baseclass">TPolyLine3D::</span>SetPoint</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> point, <a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:SetPolyLine"><span class="baseclass">TPolyLine3D::</span>SetPolyLine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:SetPolyLine@1"><span class="baseclass">TPolyLine3D::</span>SetPolyLine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a>* p, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:SetPolyLine@2"><span class="baseclass">TPolyLine3D::</span>SetPolyLine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SetRange"><span class="baseclass">THelix::</span>SetRange</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* range, EHelixRangeType rtype = kHelixZ)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SetRange@1"><span class="baseclass">THelix::</span>SetRange</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r1, <a href="./ListOfTypes.html#Double_t">Double_t</a> r2, EHelixRangeType rtype = kHelixZ)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:SetTofmax">SetTofmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> tof)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPolyLine3D:Size"><span class="baseclass">TPolyLine3D::</span>Size</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TAtt3D:Sizeof3D"><span class="baseclass">TAtt3D::</span>Sizeof3D</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcHelix:UseEndPoint">UseEndPoint</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#THelix:FindClosestPhase"><span class="baseclass">THelix::</span>FindClosestPhase</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> phi0, <a href="./ListOfTypes.html#Double_t">Double_t</a> cosine)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./#THelix:THelix" title="THelix THelix::THelix() or overloads">THelix</a>&amp;</td><td class="funcname"><a class="funcname" href="#THelix:operator_"><span class="baseclass">THelix::</span>operator=</a>(<span class="keyword">const</span> <a href="./#THelix:THelix" title="THelix THelix::THelix() or overloads">THelix</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#THelix:SetRotMatrix"><span class="baseclass">THelix::</span>SetRotMatrix</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcHelix:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fAxis"><span class="baseclass">THelix::</span>fAxis[3]</a></td><td class="datadesc">Direction unit vector of the helix axis</td></tr>
+<tr class="data"><td class="datatype"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="dataname"><a name="NcHelix:fB"></a>fB</td><td class="datadesc">The magnetic field vector in Tesla</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcHelix:fCurves"></a>fCurves</td><td class="datadesc">! Temp. storage for the curves on the drawing</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcHelix:fEnduse"></a>fEnduse</td><td class="datadesc">Flag to denote tracks endpoint usage</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcPosition.html">NcPosition</a>*</td><td class="dataname"><a name="NcHelix:fExt"></a>fExt</td><td class="datadesc">! The extrapolation result</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TPolyLine3D:fLastPoint"><span class="baseclass">TPolyLine3D::</span>fLastPoint</a></td><td class="datadesc">The index of the last filled point</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Color_t">Color_t</a></td><td class="dataname"><a href="#TAttLine:fLineColor"><span class="baseclass">TAttLine::</span>fLineColor</a></td><td class="datadesc">line color</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Style_t">Style_t</a></td><td class="dataname"><a href="#TAttLine:fLineStyle"><span class="baseclass">TAttLine::</span>fLineStyle</a></td><td class="datadesc">line style</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Width_t">Width_t</a></td><td class="dataname"><a href="#TAttLine:fLineWidth"><span class="baseclass">TAttLine::</span>fLineWidth</a></td><td class="datadesc">line width</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcHelix:fMcol"></a>fMcol</td><td class="datadesc">The colour of the marker</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcHelix:fMsize"></a>fMsize</td><td class="datadesc">The size of the marker</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcHelix:fMstyle"></a>fMstyle</td><td class="datadesc">The marker style to indicate the track starting point</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TPolyLine3D:fN"><span class="baseclass">TPolyLine3D::</span>fN</a></td><td class="datadesc">Number of points</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TPolyLine3D:fOption"><span class="baseclass">TPolyLine3D::</span>fOption</a></td><td class="datadesc">options</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a href="#TPolyLine3D:fP"><span class="baseclass">TPolyLine3D::</span>fP</a></td><td class="datadesc">[3*fN] Array of 3-D coordinates  (x,y,z)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fPhi0"><span class="baseclass">THelix::</span>fPhi0</a></td><td class="datadesc">Initial phase, so vx0 = fVt*cos(fPhi0)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fRange"><span class="baseclass">THelix::</span>fRange[2]</a></td><td class="datadesc">Range of helix parameter t</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcHelix:fRefresh"></a>fRefresh</td><td class="datadesc">Auto-refresh flag for drawings</td></tr>
+<tr class="datainh"><td class="datatype">TRotMatrix*</td><td class="dataname"><a href="#THelix:fRotMat"><span class="baseclass">THelix::</span>fRotMat</a></td><td class="datadesc">Rotation matrix: axis // z  --&gt;  axis // fAxis</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcHelix:fTofmax"></a>fTofmax</td><td class="datadesc">The maximum time of flight</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fVt"><span class="baseclass">THelix::</span>fVt</a></td><td class="datadesc">Transverse velocity (constant of motion)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fVz"><span class="baseclass">THelix::</span>fVz</a></td><td class="datadesc">Z velocity (constant of motion)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fW"><span class="baseclass">THelix::</span>fW</a></td><td class="datadesc">Angular frequency</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fX0"><span class="baseclass">THelix::</span>fX0</a></td><td class="datadesc">Pivot's x position (see parametrization in class doc)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fY0"><span class="baseclass">THelix::</span>fY0</a></td><td class="datadesc">Pivot's y position (see parametrization in class doc)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="#THelix:fZ0"><span class="baseclass">THelix::</span>fZ0</a></td><td class="datadesc">Pivot's z position (see parametrization in class doc)</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#THelix:fgMinNSeg"><span class="baseclass">THelix::</span>fgMinNSeg</a></td><td class="datadesc">minimal number of segments in polyline</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcHelix:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcHelix_Lib" id="MapNcHelix_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcHelix_Inh" class="tabsel" href="inh/NcHelix_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcHelix_Inh.png');">Inheritance</a>
+<a id="imgNcHelix_InhMem" class="tab" href="inhmem/NcHelix_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcHelix_InhMem.png');">Inherited Members</a>
+<a id="imgNcHelix_Incl" class="tab" href="incl/NcHelix_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcHelix_Incl.png');">Includes</a>
+<a id="imgNcHelix_Lib" class="tab" href="lib/NcHelix_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcHelix_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcHelix_Inh" src="inh/NcHelix_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcHelix:NcHelix" href="src/NcHelix.cxx.html#P7gtUD">NcHelix</a>()</span><br />
+<div class="funccomm"><pre> Default constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcHelix:_NcHelix" href="src/NcHelix.cxx.html#fxz_9">~NcHelix</a>()</span><br />
+<div class="funccomm"><pre> Destructor to delete dynamically allocated memory.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcHelix:NcHelix@1" href="src/NcHelix.cxx.html#HocgFB">NcHelix</a>(<span class="keyword">const</span> <a href="./NcHelix.html">NcHelix</a>&amp; h)</span><br />
+<div class="funccomm"><pre> <a href="./#THelix:Copy" title="void THelix::Copy(TObject&amp; helix)">Copy</a> constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:SetB" href="src/NcHelix.cxx.html#h22hVB">SetB</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; b)</span><br />
+<div class="funccomm"><pre> Set the magnetic field vector in Tesla.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a>&amp; <a class="funcname" name="NcHelix:GetB" href="src/NcHelix.cxx.html#grY0IB">GetB</a>()</span><br />
+<div class="funccomm"><pre> Provide the magnetic field vector in Tesla.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:SetTofmax" href="src/NcHelix.cxx.html#f_UwjE">SetTofmax</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> tof)</span><br />
+<div class="funccomm"><pre> Set the maximum time of flight for straight tracks in seconds.
+ This maximum tof will be used for drawing etc... in case no begin
+ and endpoints can be determined from the track info.
+ Notes :
+
+ 1) In case the user specifies an explicit range, it will override
+    the maximum tof limit.
+ 2) By default the tofmax is set to 10 ns in the <a href="./NcHelix.html">NcHelix</a> constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcHelix:GetTofmax" href="src/NcHelix.cxx.html#TiwSH">GetTofmax</a>() const</span><br />
+<div class="funccomm"><pre> Provide the maximum time of flight for straight tracks in seconds.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:SetMarker" href="src/NcHelix.cxx.html#DTvLiD">SetMarker</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> marker = 8, <a href="./ListOfTypes.html#Float_t">Float_t</a> size = 0.2, <a href="./ListOfTypes.html#Int_t">Int_t</a> color = -1)</span><br />
+<div class="funccomm"><pre> Specify the marker (style, size and colour) to indicate the starting point
+ of a track in a display.
+ In case col&lt;0 the marker will have the same color as the track itself.
+
+ Defaults are style=8, size=0.2 and col=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:UseEndPoint" href="src/NcHelix.cxx.html#s85w1D">UseEndPoint</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
+<div class="funccomm"><pre> Select usage of track endpoint in drawing and extrapolation.
+ This allows correct event displays even for very <a href="./ListOfTypes.html#long">long</a> tracks.
+
+ mode = 0 : Do not use the track endpoint
+        1 : Use the track endpoint
+
+ The default value is mode=1 (which is also set in the constructor).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:MakeCurve" href="src/NcHelix.cxx.html#uXkTh">MakeCurve</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Make the helix curve for the specified <a href="./NcTrack.html">NcTrack</a>.
+ Detailed information of all the helix points can be obtained via the
+ <a href="./#TPolyLine3D:GetN" title="Int_t TPolyLine3D::GetN()">GetN</a>() and <a href="./#TPolyLine3D:GetP" title="Float_t* TPolyLine3D::GetP()">GetP</a>() memberfunctions of <a href="./#TPolyLine3D:TPolyLine3D" title="TPolyLine3D TPolyLine3D::TPolyLine3D() or overloads">TPolyLine3D</a>.
+ In case one wants to display or extrapolate an <a href="./NcTrack.html">NcTrack</a> it is preferable
+ to use the <a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>() or <a href="./NcHelix.html#NcHelix:Extrapolate" title="NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars=0,Double_t scale=-1)">Extrapolate</a>() memberfunctions.
+ It is assumed that the track charge is stored in elementary units
+ (i.e. charge=1 for a proton).
+ The input argument <span class="string">"scale"</span> specifies the unit scale for the various
+ locations where scale=0.01 indicates unit scales in cm etc...
+ In case scale&lt;=0, the unit scale for locations is determined from the
+ begin, reference or endpoint of the track. If neither of these
+ positions is present, all locations are assumed to be given in meter.
+ The lower and upper bounds for the range are specified by range[0] and
+ range[1] and the argument <span class="string">"iaxis"</span> indicates along which axis this range
+ is specified.
+ The range can be specified either in the LAB frame or in the Helix frame.
+ The latter is the frame in which the Z axis points in the B direction.
+
+ The conventions for the <span class="string">"iaxis"</span> argument are the following :
+ iaxis = 1 ==&gt; X axis in the LAB frame
+         2 ==&gt; Y axis in the LAB frame
+         3 ==&gt; Z axis in the LAB frame
+        -1 ==&gt; X axis in the Helix frame
+        -2 ==&gt; Y axis in the Helix frame
+        -3 ==&gt; Z axis in the Helix frame
+
+ In case range=0 the begin/end/reference points of the <a href="./NcTrack.html">NcTrack</a> and the
+ maximum time of flight (see the <a href="./NcHelix.html#NcHelix:SetTofmax" title="void NcHelix::SetTofmax(Float_t tof)">SetTofmax</a>() memberfunction) will be used
+ and an appropriate choice for the iaxis parameter will be made automatically
+ based on the track kinematics.
+ In case the reference point is not present, the begin or endpoint will be used
+ as reference point for the 3-momentum specification. If neither of these positions
+ is present, (0,0,0) will be taken as the reference point.
+
+ The default values are range=0, iaxis=3 and scale=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:Display" href="src/NcHelix.cxx.html#MdgBzB">Display</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> <a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> the helix curve of an <a href="./NcTrack.html">NcTrack</a>.
+ Various curves can be displayed together or individually; please refer to
+ the memberfunction <a href="./NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>() for further details.
+ It is assumed that the track charge is stored in elementary units
+ (i.e. charge=1 for a proton).
+ The input argument <span class="string">"scale"</span> specifies the unit scale for the various
+ locations where scale=0.01 indicates unit scales in cm etc...
+ In case scale&lt;=0, the unit scale for locations is determined from the
+ begin, reference or endpoint of the track. If neither of these
+ positions is present, all locations are assumed to be given in meter.
+ The lower and upper bounds for the range are specified by range[0] and
+ range[1] and the argument <span class="string">"iaxis"</span> indicates along which axis this range
+ is specified.
+ The range can be specified either in the LAB frame or in the Helix frame.
+ The latter is the frame in which the Z axis points in the B direction.
+
+ The conventions for the <span class="string">"iaxis"</span> argument are the following :
+ iaxis = 1 ==&gt; X axis in the LAB frame
+         2 ==&gt; Y axis in the LAB frame
+         3 ==&gt; Z axis in the LAB frame
+        -1 ==&gt; X axis in the Helix frame
+        -2 ==&gt; Y axis in the Helix frame
+        -3 ==&gt; Z axis in the Helix frame
+
+ In case range=0 the begin/end/reference points of the <a href="./NcTrack.html">NcTrack</a> and the
+ maximum time of flight (see the <a href="./NcHelix.html#NcHelix:SetTofmax" title="void NcHelix::SetTofmax(Float_t tof)">SetTofmax</a>() memberfunction) will be used
+ and an appropriate choice for the iaxis parameter will be made automatically
+ based on the track kinematics.
+ In case the reference point is not present, the begin or endpoint will be used
+ as reference point for the 3-momentum specification. If neither of these positions
+ is present, (0,0,0) will be taken as the reference point.
+
+ The default values are range=0, iaxis=3 and scale=-1.
+
+ Note :
+
+ Before any display activity, a TCanvas and a TView have to be initiated
+ first by the user like for instance
+
+ TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
+ TView* view=new TView(1);
+ view-&gt;<a href="./#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);
+ view-&gt;ShowAxis();
+
+ The user can also use the 3D viewing facilities from the TCanvas menu
+ to open an appropriate view.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:Refresh" href="src/NcHelix.cxx.html#kuHy_D">Refresh</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a> the display screen before showing the next curve.
+
+ mode = 0 : refreshing fully under user control.
+        1 : the display screen will be refreshed automatically
+            at each individual track display.
+       -1 : the display screen will be refreshed automatically
+            at each event display.
+
+ The default is mode=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:Display@1" href="src/NcHelix.cxx.html#nA8BmE">Display</a>(<a href="./NcEvent.html">NcEvent</a>* e, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> <a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> the helix curves of all tracks of the specified event.
+ Various events can be displayed together or individually; please refer to
+ the memberfunction <a href="./NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>() for further details.
+ Please refer to the track display memberfunction for further details
+ on the input arguments.
+
+ The default values are range=0, iaxis=3 and scale=-1.
+
+ Note :
+
+ Before any display activity, a TCanvas and a TView have to be initiated
+ first by the user like for instance
+
+ TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
+ TView* view=new TView(1);
+ view-&gt;<a href="./#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);
+ view-&gt;ShowAxis();
+
+ The user can also use the 3D viewing facilities from the TCanvas menu
+ to open an appropriate view.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcHelix:Display@2" href="src/NcHelix.cxx.html#yGosH">Display</a>(TObjArray* a, <a href="./ListOfTypes.html#Double_t">Double_t</a>* range = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iaxis = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> <a href="./NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> the helix curves of all tracks in the specified array.
+ A convenient way to obtain an array with selected tracks from e.g. an <a href="./NcEvent.html">NcEvent</a>
+ is to make use of its GetTracks() selection facility.
+ Various arrays can be displayed together or individually; please refer to
+ the memberfunction <a href="./NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>() for further details.
+ Please refer to the track display memberfunction for further details
+ on the input arguments.
+
+ The default values are range=0, iaxis=3 and scale=-1.
+
+ Note :
+
+ Before any display activity, a TCanvas and a TView have to be initiated
+ first by the user like for instance
+
+ TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
+ TView* view=new TView(1);
+ view-&gt;<a href="./#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);
+ view-&gt;ShowAxis();
+
+ The user can also use the 3D viewing facilities from the TCanvas menu
+ to open an appropriate view.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcPosition.html">NcPosition</a>* <a class="funcname" name="NcHelix:Extrapolate" href="src/NcHelix.cxx.html#u0ZgvE">Extrapolate</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Double_t">Double_t</a>* pars = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> <a href="./NcHelix.html#NcHelix:Extrapolate" title="NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars=0,Double_t scale=-1)">Extrapolate</a> an <a href="./NcTrack.html">NcTrack</a> according to the corresponding helix curve
+ and provide a pointer to the impact position w.r.t. a specified plane.
+ In case the track can never reach the specified plane, the returned
+ position pointer is zero.
+ Detailed information of all the helix points used in the extrapolation
+ can be obtained via the <a href="./#TPolyLine3D:GetN" title="Int_t TPolyLine3D::GetN()">GetN</a>() and <a href="./#TPolyLine3D:GetP" title="Float_t* TPolyLine3D::GetP()">GetP</a>() memberfunctions of <a href="./#TPolyLine3D:TPolyLine3D" title="TPolyLine3D TPolyLine3D::TPolyLine3D() or overloads">TPolyLine3D</a>.
+ It is assumed that the track charge is stored in elementary units
+ (i.e. charge=1 for a proton).
+ The input argument <span class="string">"scale"</span> specifies the unit scale for the various
+ locations where scale=0.01 indicates unit scales in cm etc...
+ In case scale&lt;=0, the unit scale for locations is determined from the
+ begin, reference or endpoint of the track. If neither of these
+ positions is present, all locations are assumed to be given in meter.
+ The extrapolation parameters for the impact plane and required accuracy
+ are specified by pars[0], pars[1] and pars[2], respectively.
+ pars[0] = coordinate value of the plane for the impact point
+ pars[1] = required accuracy on the specified impact plane coordinate
+ pars[2] = the axis along which the value of par[0] is specified
+
+ The parameters can be specified either w.r.t. the LAB frame or the Helix frame.
+ The latter is the frame in which the Z axis points in the B direction.
+
+ The conventions for the par[2] argument are the following :
+ par[2] = 1 ==&gt; X axis in the LAB frame
+          2 ==&gt; Y axis in the LAB frame
+          3 ==&gt; Z axis in the LAB frame
+         -1 ==&gt; X axis in the Helix frame
+         -2 ==&gt; Y axis in the Helix frame
+         -3 ==&gt; Z axis in the Helix frame
+
+ Example :
+
+ To obtain an extrapolation to the plane Z=0 in the LAB frame
+ with an accuracy of 0.001 cm the input arguments would be
+ pars[0]=0  pars[1]=0.001  pars[2]=3  scale=0.01
+
+ Note : The default value for the scale is -1.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:20 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

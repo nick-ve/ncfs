@@ -1,0 +1,488 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:17 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcDataStreamStats</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcDataStreamStats','','NcDataStreamStats.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcDataStreamStats.h.html">header file</a>
+<a class="descrheadentry" href="src/NcDataStreamStats.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcDataStreamStats:description">class description</a> 
+<a class="descrheadentry" href="#NcDataStreamStats:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcDataStreamStats:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcDataStreamStats:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcDataStreamStats</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcDataStreamStats:description"></a>class NcDataStreamStats: public TTask</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcDataStreamStats.html#NcDataStreamStats:Class" title="TClass* NcDataStreamStats::Class()">Class</a> <a href="./NcDataStreamStats.html">NcDataStreamStats</a>
+ <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> derived class to perform statistics of event classification tags.
+
+ During data taking or online/offline processing one usually records
+ various tags for each event to indicate which trigger or filter criteria
+ were fulfilled. This also allows to provide different data streams.
+
+ It is common that a certain tag has the following two indicators
+ pass  : This means that the tag criteria have been fulfilled
+ write : This means that the event is actually labeled to be written
+
+ In case of high-frequency tag streams it is common that not every event
+ will be written to storage in order to limit the data volume.
+ In the DAQ system this is implemented by a downscaling of the corresponding
+ data stream via so-called prescaler settings.
+ The effect is that although for a certain tag the passing criteria have
+ been fulfilled (i.e. the <span class="string">"pass"</span> flag is set), the <span class="string">"write"</span> flag is not always set,
+ but for instance only after every 1000 instances of an activated <span class="string">"pass"</span> flag.
+ This results in a downscale factor of 1000 for that tag stream.
+
+ This class provides a processor to analyse data samples and provide an overview
+ of the various event tags that were encountered and the corresponding event rates.
+ Via the memberfunctions <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>() and <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>() the user can (de)activate
+ certain tags in order to investigate the effect in view of defining event samples
+ or background reduction.
+ In case none of these memberfunctions <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>() or <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>() are invoked,
+ all tags are regarded to be active.
+ The user selected re-tagging results are provided in addition to the regular tag statistics.
+ It should be noted that tags that are explicitly de-activated via <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>()
+ can not be activated anymore via invokation of <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>().
+ Please refer to the docs of these memberfunctions for further details.
+
+ The input data is specified via the memberfunction <a href="./NcDataStreamStats.html#NcDataStreamStats:AddInputFile" title="void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)">AddInputFile</a>().
+ All data files that contain <a href="./NcEvent.html">NcEvent</a> (or derived) data structures are allowed.
+ In order to obtain the required data, the <a href="./NcEvent.html">NcEvent</a> (or derived) structure should
+ contain a <a href="./NcDevice.html">NcDevice</a> with the corresponding name (e.g. DAQ, Trigger, Filter,...) and
+ in which each tag is stored as a Hit (=<a href="./NcSignal.html">NcSignal</a>) with the corresponding tag name (e.g. <span class="string">"LowPt"</span>).
+ Each Hit has to have at least 2 signal slots, each with the appropriate name to indicate
+ the <span class="string">"pass flag"</span> value and the <span class="string">"write flag"</span> value.
+ Instead of the names <span class="string">"pass"</span> and <span class="string">"write"</span>, various other naming conventions
+ (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>) are often used.
+ The name of the required device (e.g. <span class="string">"Filter"</span>) and the naming conventions of the
+ <span class="string">"pass flag"</span> and <span class="string">"write flag"</span> (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>, respectively) are
+ specified via the memberfunction <a href="./NcDataStreamStats.html#NcDataStreamStats:SetDeviceNames" title="void NcDataStreamStats::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>().
+
+ Once the user has provided all necessary information, the analysis is performed
+ by invoking the statement <span class="string">"ExecuteTask()"</span> as indicated in the example below.
+
+ This class is a generalisation of the original trigger-stats.cc and filter-stats.cc
+ ROOT macros of Nick van Eijndhoven (IIHE-VUB, Brussel, 09-dec-2009).
+
+ Example :
+
+
+ // This example performs an analysis of IceCube data
+ // contained as <a href="./IceEvent.html">IceEvent</a> structures in *.icepack files
+ // within a Branch <span class="string">"IceEvent"</span> of a Tree <span class="string">"T"</span>.
+
+ // Load the necessary libraries
+ gSystem-&gt;Load(<span class="string">"ncfspack"</span>);
+ gSystem-&gt;Load(<span class="string">"icepack"</span>);
+
+ // Initialisation to perform an analysis of IceCube event filter statistics
+ <a href="./NcDataStreamStats.html">NcDataStreamStats</a> fstat;
+
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:AddInputFile" title="void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)">AddInputFile</a>(<span class="string">"*.icepack"</span>,<span class="string">"T"</span>,<span class="string">"IceEvent"</span>);
+
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ListInputFiles" title="void NcDataStreamStats::ListInputFiles(Option_t* opt=&quot;&quot;)">ListInputFiles</a>();
+
+ // Activate some tags to investigate a certan event sample
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>);
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EHEAlert"</span>);
+
+ // De-activate some tags to investigate background reduction
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>);
+
+ // Provide a progress output line every 1000 events
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetPrintFrequency" title="void NcDataStreamStats::SetPrintFrequency(Int_t m)">SetPrintFrequency</a>(1000);
+
+ // Specify that we will access the <a href="./NcDevice.html">NcDevice</a> named <span class="string">"Filter"</span>
+ // and that the <span class="string">"pass flag"</span> is called <span class="string">"condition"</span>
+ // and the <span class="string">"write flag"</span> is called <span class="string">"prescale"</span>
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetDeviceNames" title="void NcDataStreamStats::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Filter"</span>,<span class="string">"condition"</span>,<span class="string">"prescale"</span>);
+
+ // The statement below shows the alternative for a <span class="string">"Trigger"</span> analysis
+ // where the trigger tags do not have <span class="string">"pass"</span> nor <span class="string">"write"</span> indicators.
+ // fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetDeviceNames" title="void NcDataStreamStats::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
+
+ // Perform the analysis.
+ fstat.<a href="./#TTask:ExecuteTask" title="void TTask::ExecuteTask(Option_t* option=&quot;0&quot;)">ExecuteTask</a>();
+
+
+--- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
+
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcDataStreamStats:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:NcDataStreamStats@1">NcDataStreamStats</a>(<span class="keyword">const</span> <a href="./NcDataStreamStats.html">NcDataStreamStats</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:NcDataStreamStats">NcDataStreamStats</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcDataStreamStats"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event tag statistics"</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:_NcDataStreamStats">~NcDataStreamStats</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:ActivateTag">ActivateTag</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Add"><span class="baseclass">TTask::</span>Add</a>(<a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>* task)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:AddInputFile">AddInputFile</a>(TString file, TString tree, TString branch)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Browse"><span class="baseclass">TTask::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:CleanTasks"><span class="baseclass">TTask::</span>CleanTasks</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Clear"><span class="baseclass">TTask::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Continue"><span class="baseclass">TTask::</span>Continue</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:DeactivateTag">DeactivateTag</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTask"><span class="baseclass">TTask::</span>ExecuteTask</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"0"</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTasks"><span class="baseclass">TTask::</span>ExecuteTasks</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakin"><span class="baseclass">TTask::</span>GetBreakin</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakout"><span class="baseclass">TTask::</span>GetBreakout</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TList*</td><td class="funcname"><a class="funcname" href="#TTask:GetListOfTasks"><span class="baseclass">TTask::</span>GetListOfTasks</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsActive"><span class="baseclass">TTask::</span>IsActive</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsFolder"><span class="baseclass">TTask::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:ListInputFiles">ListInputFiles</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcDataStreamStats.html">NcDataStreamStats</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcDataStreamStats.html">NcDataStreamStats</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetActive"><span class="baseclass">TTask::</span>SetActive</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> active = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakin"><span class="baseclass">TTask::</span>SetBreakin</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakin = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakout"><span class="baseclass">TTask::</span>SetBreakout</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakout = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetDeviceNames">SetDeviceNames</a>(TString dev, TString pass, TString write)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetMaxEvt">SetMaxEvt</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetMaxTag">SetMaxTag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetPrintFrequency">SetPrintFrequency</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcDataStreamStats:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcDataStreamStats:fAct"></a>fAct</td><td class="datadesc">Array with activated tags</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fActive"><span class="baseclass">TTask::</span>fActive</a></td><td class="datadesc">true if task is active</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fBranchname"></a>fBranchname</td><td class="datadesc">The name of the Branch containing the NcEvent (or derived) data structures</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
+<tr class="data"><td class="datatype">TChain*</td><td class="dataname"><a name="NcDataStreamStats:fData"></a>fData</td><td class="datadesc">The master data Chain used for the analysis</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcDataStreamStats:fDeact"></a>fDeact</td><td class="datadesc">Array with de-activated tags</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fDevname"></a>fDevname</td><td class="datadesc">The name of the NcDevice that contains the various event tags</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDataStreamStats:fMaxevt"></a>fMaxevt</td><td class="datadesc">Maximum number of events to be processed</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDataStreamStats:fMaxtag"></a>fMaxtag</td><td class="datadesc">Maximum number of tags to be processed</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fPassname"></a>fPassname</td><td class="datadesc">Name of the tag passing flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDataStreamStats:fPfreq"></a>fPfreq</td><td class="datadesc">The print frequency for producing a progress output line</td></tr>
+<tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fWritename"></a>fWritename</td><td class="datadesc">Name of the tag writing flag</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBeginTask"><span class="baseclass">TTask::</span>fgBeginTask</a></td><td class="datadesc">pointer to task initiator</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBreakPoint"><span class="baseclass">TTask::</span>fgBreakPoint</a></td><td class="datadesc">pointer to current break point</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcDataStreamStats:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcDataStreamStats_Lib" id="MapNcDataStreamStats_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcDataStreamStats_Inh" class="tabsel" href="inh/NcDataStreamStats_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcDataStreamStats_Inh.png');">Inheritance</a>
+<a id="imgNcDataStreamStats_InhMem" class="tab" href="inhmem/NcDataStreamStats_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcDataStreamStats_InhMem.png');">Inherited Members</a>
+<a id="imgNcDataStreamStats_Incl" class="tab" href="incl/NcDataStreamStats_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcDataStreamStats_Incl.png');">Includes</a>
+<a id="imgNcDataStreamStats_Lib" class="tab" href="lib/NcDataStreamStats_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcDataStreamStats_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcDataStreamStats_Inh" src="inh/NcDataStreamStats_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDataStreamStats:NcDataStreamStats" href="src/NcDataStreamStats.cxx.html#Ni7fqE">NcDataStreamStats</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcDataStreamStats"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event tag statistics"</span>)</span><br />
+<div class="funccomm"><pre> Constructor and initialisation of default parameters.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDataStreamStats:_NcDataStreamStats" href="src/NcDataStreamStats.cxx.html#WjYnD">~NcDataStreamStats</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDataStreamStats:NcDataStreamStats@1" href="src/NcDataStreamStats.cxx.html#ccI75">NcDataStreamStats</a>(<span class="keyword">const</span> <a href="./NcDataStreamStats.html">NcDataStreamStats</a>&amp; q)</span><br />
+<div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:Exec" href="src/NcDataStreamStats.cxx.html#OVk7aE">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funccomm"><pre> Perform the analysis.
+ The input argument <span class="string">"opt"</span> is irrelevant.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:AddInputFile" href="src/NcDataStreamStats.cxx.html#sKBXtC">AddInputFile</a>(TString file, TString tree, TString branch)</span><br />
+<div class="funccomm"><pre> <a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a> an input file containing <a href="./NcEvent.html">NcEvent</a> (or derived) data structures to be analysed.
+
+ Input arguments :
+
+ file   : Name of the input file containing the ROOT Tree (wildcards are allowed)
+ tree   : Name of the Tree containing the data
+ branch : Name of the Branch containing the <a href="./NcEvent.html">NcEvent</a> (or derived) data structures
+
+ Notes :
+
+ 1) This memberfunction may be invoked several times to accumulate data files.
+ 2) The <span class="string">"tree"</span> name may vary for different input files, but the <span class="string">"branch"</span> name
+    has to be the same for all the input files.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetMaxEvt" href="src/NcDataStreamStats.cxx.html#E0cLKE">SetMaxEvt</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Set the maximum number of events to be processed.
+ The default constructor has set n=0 which means no limitation.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetMaxTag" href="src/NcDataStreamStats.cxx.html#oxDpsB">SetMaxTag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Set the maximum number of tags to be processed.
+ The default constructor has set n=99.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetPrintFrequency" href="src/NcDataStreamStats.cxx.html#XeGJFD">SetPrintFrequency</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m)</span><br />
+<div class="funccomm"><pre> Set print frequency to provide a progress output line every <span class="string">"m"</span> events.
+ The default constructor has set m=0 which means that no progress printout is produced.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetDeviceNames" href="src/NcDataStreamStats.cxx.html#pKPhQD">SetDeviceNames</a>(TString dev, TString pass, TString write)</span><br />
+<div class="funccomm"><pre> Set the name of the <a href="./NcDevice.html">NcDevice</a> and the names of the tag passing criteria.
+ It is common that a certain tag has the following two indicators
+ pass  : This means that the tag criteria have been fulfilled
+ write : This means that the event is actually labeled to be written
+
+ In case of high-frequency tag streams it is common that not every event
+ will be written to storage in order to limit the data volume.
+ In the DAQ system this is implemented by a downscaling of the corresponding
+ data stream via so-called prescaler settings.
+ The effect is that although for a certain tag the passing criteria have
+ been fulfilled (i.e. the <span class="string">"pass"</span> flag is set), the <span class="string">"write"</span> flag is not always set,
+ but for instance only after every 1000 instances of an activated <span class="string">"pass"</span> flag.
+ This results in a downscale factor of 1000 for that tag stream.
+
+ Instead of the names <span class="string">"pass"</span> and <span class="string">"write"</span>, various other naming conventions
+ (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>) are often used.
+ Via this memberfunction one can specify the names used by the current experiment.
+
+ Note : In case passname=<span class="string">"*"</span> and/or writename=<span class="string">"*"</span>, no check will be made for the
+        corresponding flag setting and a value of 1 will be assumed for both.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:ListInputFiles" href="src/NcDataStreamStats.cxx.html#tNfCqE">ListInputFiles</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Provide an overview of the various input files.
+ The input argument <span class="string">"opt"</span> corresponds to the available options of TChain::<a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a>().
+ By default opt=<span class="string">""</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:ActivateTag" href="src/NcDataStreamStats.cxx.html#VfQab">ActivateTag</a>(TString name)</span><br />
+<div class="funccomm"><pre> Activate a certain tag for the combined pass*write statistics
+ which will enable to study user selected event samples.
+ It should be noted that this doesn't affect the results for the
+ regular individual <span class="string">"pass"</span> and <span class="string">"write"</span> statistics.
+
+ In case the specified <span class="string">"name"</span> matches (part of) a certain tag name, that
+ specific tag will be activated.
+ All characters in <span class="string">"name"</span> are taken literally, so wildcards are not allowed.
+
+ Example :
+
+ If name=<span class="string">"LowPt"</span> it would activate both tags <span class="string">"LowPtMuon"</span> and <span class="string">"LowPtPion"</span>.
+
+ Notes :
+
+ 1) If this memberfunction is not invoked, all tags are regarded as active.
+ 2) If this memberfunction is invoked, all tags that are not explicitly activated
+    by the user will be considered de-activated.
+ 3) This memberfunction may be invoked several times to activate
+    various tags before executing the task.
+ 4) Tags that are explicitly de-activated by the user via invokation of <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>()
+    can not be activated anymore.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:DeactivateTag" href="src/NcDataStreamStats.cxx.html#wjCA6C">DeactivateTag</a>(TString name)</span><br />
+<div class="funccomm"><pre> De-activate a certain tag for the combined pass*write statistics
+ which will enable to study background reduction.
+ It should be noted that this doesn't affect the results for the
+ regular individual <span class="string">"pass"</span> and <span class="string">"write"</span> statistics.
+
+ In case the specified <span class="string">"name"</span> matches (part of) a certain tag name, that
+ specific tag will be de-activated.
+ All characters in <span class="string">"name"</span> are taken literally, so wildcards are not allowed.
+
+ Example :
+
+ If name=<span class="string">"LowPt"</span> it would de-activate both tags <span class="string">"LowPtMuon"</span> and <span class="string">"LowPtPion"</span>.
+
+ Notes :
+
+ 1) This memberfunction may be invoked several times to de-activate
+    various tags before executing the task.
+ 3) Tags that are explicitly de-activated via this memberfunction
+    can not be activated anymore via invokation of <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcDataStreamStats:Clone" href="src/NcDataStreamStats.cxx.html#O6F31">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
+ This memberfunction enables automatic creation of new objects of the
+ correct type depending on the object type, a feature which may be very useful
+ for containers when adding objects in case the container owns the objects.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:18 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

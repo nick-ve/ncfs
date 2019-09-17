@@ -32,15 +32,20 @@
 ///////////////////////////////////////////////////////////////////////////
 // Class NcVersion
 // Facility to provide version information of the current release.
-// Instead of using SVN tags, which may get a bit complex to manage in the
-// case of various related sub-packages like e.g. IcePack, the Revision
-// of the total repository is used as a reference instead.
-// Invokation of NcVersion::Data() will always indicate a.o. the Revision of
-// a specific release. In case one wants a previous release, just go back
-// to one of the previous versions of NcVersion, check what the corresponding
-// Revision is and check-out that specific Revision from the repository for
-// all packages.
+// Instead of using separate branches and tags for the various related
+// sub-packages like e.g. IcePack, which may complicate the management
+// of the complete NCFS framework, the GIT revision tag identifier of
+// the Master branch of the total repository is used as a reference instead.
+// Invokation of NcVersion::Data() will always indicate a.o. the version of
+// a specific release. In case one wants a previous release, just select
+// the desired version (as provided by NcVersion::Data()), check what the
+// corresponding GIT revision tag is, and "pull" that specific revision tag
+// from the GIT repository for all packages.
 // This will always provide you with an integral working environment.
+//
+// The current version in the master branch may not yet have a GIT revision tag,
+// since development may still be going on before a version is frozen and released.
+// However, the master branch will always provide an integral working environment.
 //
 // As usual the version number consists of a major and minor version indicator.
 // Major version updates indicate changes that may have impact on the actual
@@ -48,7 +53,7 @@
 // improvements or extensions that are fully backward compatible.
 //
 //--- Author: Nick van Eijndhoven 24-sep-2009 NCFS
-//- Modified: NvE $Date: 2016-04-13 00:13:22 +0200 (Wed, 13 Apr 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB,  September 17, 2019 15:11
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcVersion.h"
@@ -59,14 +64,9 @@ ClassImp(NcVersion) // Class implementation to enable ROOT I/O
 NcVersion::NcVersion() : TObject()
 {
 // Default constructor to initialise all parameters
-// Latest update 13-apr-2016 by Nick van Eijndhoven, IIHE-VUB Brussels
- fVersion="2.1";
- fRev="$Revision: 117 $";
- fDate="$Date: 2016-04-13 00:13:22 +0200 (Wed, 13 Apr 2016) $";
-
- // Remove the $ signs from the SVN keywords
- fRev.ReplaceAll("$","");
- fDate.ReplaceAll("$","");
+ fVersion="2.2";
+ fRev="Branch: master";
+ fDate="September 17, 2019 14:48";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()
@@ -96,7 +96,7 @@ void NcVersion::Data() const
 {
 // Provide the version information for this release.
  cout << " *" << ClassName() << "* Version information." << endl;
- cout << " NCFS-Pack version : " << fVersion << " corresponding to SVN " << fRev << endl;
+ cout << " NCFS-Pack version : " << fVersion << " corresponding to GIT " << fRev << endl;
  cout << " Created at " << fDate << endl; 
 }
 ///////////////////////////////////////////////////////////////////////////

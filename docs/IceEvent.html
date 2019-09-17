@@ -1,0 +1,1005 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Thu Mar 21 09:34:58 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>IceEvent</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class IceEvent','','IceEvent.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/IceEvent.h.html">header file</a>
+<a class="descrheadentry" href="src/IceEvent.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#IceEvent:description">class description</a> 
+<a class="descrheadentry" href="#IceEvent:Function_Members">function members</a>
+<a class="descrheadentry" href="#IceEvent:Data_Members">data members</a>
+<a class="descrheadentry" href="#IceEvent:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">IceEvent</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="IceEvent:description"></a>class IceEvent: public <a href="./NcEvent.html">NcEvent</a></h1>
+<div class="classdescr">
+<pre>
+ <a href="./IceEvent.html#IceEvent:Class" title="TClass* IceEvent::Class()">Class</a> <a href="./IceEvent.html">IceEvent</a>
+ Handling of IceCube event data.
+ Basically this class provides an IceCube tailored user interface
+ to the functionality of the class <a href="./NcEvent.html">NcEvent</a>.
+
+ Notes :
+
+ * In the event structure MC tracks are labeled with a negative track ID,
+   whereas reconstructed tracks are labeled with a positive track ID.
+   This allows for a direct selection of either MC or Reco tracks via the
+   <a href="./NcJet.html#NcJet:GetIdTrack" title="NcTrack* NcJet::GetIdTrack(Int_t id)">GetIdTrack</a>() facility.
+ * The particle codes used for the various tracks are the PDG ones.
+   For IceCube specific <span class="string">"particle"</span> types (e.g. deltae) the PDG database
+   has been extended, as can be seen in the IceF2k class which provides
+   a conversion facility from the F2K into the Ralice/IcePack format.
+
+ Examples :
+
+
+ Creation and filling of an event with some fictitious module data
+
+ <a href="./IceEvent.html">IceEvent</a>* evt=new <a href="./IceEvent.html">IceEvent</a>();
+ evt-&gt;<a href="./NcEvent.html#NcEvent:SetOwner" title="void NcEvent::SetOwner(Bool_t own=kTRUE)">SetOwner</a>();
+
+ // The starting unique signal ID.
+ // In this example it will be increased everytime
+ // when a new signal is created.
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> sid=1;
+
+ // Amanda module
+ <a href="./IceAOM.html">IceAOM</a> m;
+ m.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(123);
+ m.<a href="./#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"OM123"</span>,<span class="string">"Amanda module"</span>);
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> pos[3]={1,2,3};
+ m.<a href="./NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(pos,<span class="string">"car"</span>);
+
+ <a href="./NcSignal.html">NcSignal</a> s;
+
+ s.SetSlotName(<span class="string">"ADC"</span>,1);
+ s.SetSlotName(<span class="string">"LE"</span>,2);
+ s.SetSlotName(<span class="string">"TOT"</span>,3);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM123 Hit 1"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(100,<span class="string">"ADC"</span>);
+ s.SetSignal(-100,<span class="string">"LE"</span>);
+ s.SetSignal(-1000,<span class="string">"TOT"</span>);
+ m.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM123 Hit 2"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(110,<span class="string">"ADC"</span>);
+ s.SetSignal(-101,<span class="string">"LE"</span>);
+ s.SetSignal(1001,<span class="string">"TOT"</span>);
+ m.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM123 Hit 3"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(120,<span class="string">"ADC"</span>);
+ s.SetSignal(-102,<span class="string">"LE"</span>);
+ s.SetSignal(-1002,<span class="string">"TOT"</span>);
+ m.AddHit(s);
+
+ evt-&gt;<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(m);
+
+ m.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ m.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(456);
+ m.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM456"</span>);
+
+ pos[0]=-4;
+ pos[1]=-5;
+ pos[2]=-6;
+ m.<a href="./NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(pos,<span class="string">"car"</span>);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM456 Hit 1"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(20,<span class="string">"ADC"</span>);
+ s.SetSignal(-200,<span class="string">"LE"</span>);
+ s.SetSignal(-2000,<span class="string">"TOT"</span>);
+ m.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM456 Hit 2"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(21,<span class="string">"ADC"</span>);
+ s.SetSignal(-201,<span class="string">"LE"</span>);
+ s.SetSignal(2001,<span class="string">"TOT"</span>);
+ m.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM456 Hit 3"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(22,<span class="string">"ADC"</span>);
+ s.SetSignal(-202,<span class="string">"LE"</span>);
+ s.SetSignal(-2002,<span class="string">"TOT"</span>);
+ m.AddHit(s);
+
+ evt-&gt;<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(m);
+
+ // IceCube in-ice DOM
+ <a href="./IceIDOM.html">IceIDOM</a> mid;
+ mid.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(958);
+ mid.<a href="./#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"OM958"</span>,<span class="string">"IceCube in-ice module"</span>);
+
+ pos[0]=9;
+ pos[1]=5;
+ pos[2]=8;
+ mid.<a href="./NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(pos,<span class="string">"car"</span>);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM958 Hit 1"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(40,<span class="string">"ADC"</span>);
+ s.SetSignal(-400,<span class="string">"LE"</span>);
+ s.SetSignal(-4000,<span class="string">"TOT"</span>);
+ mid.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM958 Hit 2"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(41,<span class="string">"ADC"</span>);
+ s.SetSignal(-401,<span class="string">"LE"</span>);
+ s.SetSignal(4001,<span class="string">"TOT"</span>);
+ mid.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM958 Hit 3"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(42,<span class="string">"ADC"</span>);
+ s.SetSignal(-402,<span class="string">"LE"</span>);
+ s.SetSignal(-4002,<span class="string">"TOT"</span>);
+ mid.AddHit(s);
+
+ evt-&gt;<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(mid);
+
+ // IceTop DOM
+ <a href="./IceTDOM.html">IceTDOM</a> mtd;
+ mtd.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(4958);
+ mtd.<a href="./#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"OM4958"</span>,<span class="string">"IceTop module"</span>);
+
+ pos[0]=49;
+ pos[1]=5;
+ pos[2]=8;
+ mtd.<a href="./NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(pos,<span class="string">"car"</span>);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM4958 Hit 1"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(50,<span class="string">"ADC"</span>);
+ s.SetSignal(-500,<span class="string">"LE"</span>);
+ s.SetSignal(-5000,<span class="string">"TOT"</span>);
+ mtd.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM4958 Hit 2"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(51,<span class="string">"ADC"</span>);
+ s.SetSignal(-501,<span class="string">"LE"</span>);
+ s.SetSignal(5001,<span class="string">"TOT"</span>);
+ mtd.AddHit(s);
+
+ s.<a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a>();
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM4958 Hit 3"</span>);
+ s.<a href="./#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(sid++);
+ s.SetSignal(52,<span class="string">"ADC"</span>);
+ s.SetSignal(-502,<span class="string">"LE"</span>);
+ s.SetSignal(-5002,<span class="string">"TOT"</span>);
+ mtd.AddHit(s);
+
+ evt-&gt;<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(mtd);
+
+ Investigation of the event contents
+
+ // Provide event data overview
+ evt-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+
+ // Select a specific device (i.e. OM) from the event
+ <a href="./NcDevice.html">NcDevice</a>* dx=(<a href="./NcDevice.html">NcDevice</a>*)evt-&gt;<a href="./NcEvent.html#NcEvent:GetIdDevice" title="NcDevice* NcEvent::GetIdDevice(Int_t id,TObjArray* devs=0) or overloads">GetIdDevice</a>(958);
+ if (dx) dx-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+
+ // Select a specific hit from the event
+ <a href="./NcSignal.html">NcSignal</a>* sx=evt-&gt;<a href="./NcEvent.html#NcEvent:GetIdHit" title="NcSignal* NcEvent::GetIdHit(Int_t id,const char* classname)">GetIdHit</a>(5,<span class="string">"IceGOM"</span>);
+ if (sx) sx-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+
+ // <a href="./#TObject:Dump" title="void TObject::Dump()">Dump</a> all the information for the various stored devices
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> ndev=evt-&gt;<a href="./NcEvent.html#NcEvent:GetNdevices" title="Int_t NcEvent::GetNdevices() or overloads">GetNdevices</a>();
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> idev=1; idev&lt;=ndev; idev++)
+ {
+  <a href="./IceGOM.html">IceGOM</a>* om=(<a href="./IceGOM.html">IceGOM</a>*)evt-&gt;<a href="./NcEvent.html#NcEvent:GetDevice" title="NcDevice* NcEvent::GetDevice(Int_t i) or overloads">GetDevice</a>(idev);
+  if (om) om-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+ }
+
+ // <a href="./#TObject:Dump" title="void TObject::Dump()">Dump</a> all the information for the various stored hits
+ // Obtain pointers to the hits for all generic OM's (i.e. <a href="./IceGOM.html">IceGOM</a>)
+ TObjArray* hits=evt-&gt;<a href="./NcEvent.html#NcEvent:GetHits" title="TObjArray* NcEvent::GetHits(const char* classname,TObjArray* hits=0,TString name=&quot;none&quot;,Int_t mode=0,Int_t opt=0)">GetHits</a>(<span class="string">"IceGOM"</span>);
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> nhits=0;
+ if (hits) nhits=hits-&gt;GetEntries();
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> ih=0; ih&lt;nhits; ih++)
+ {
+  <a href="./NcSignal.html">NcSignal</a>* sx=(<a href="./NcSignal.html">NcSignal</a>*)hits-&gt;At(ih);
+  if (sx) sx-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+ }
+
+ // Obtain the minimum and maximum recorded TOT value
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> vmin,vmax;
+ evt-&gt;<a href="./NcEvent.html#NcEvent:GetExtremes" title="void NcEvent::GetExtremes(const char* classname,Float_t&amp; vmin,Float_t&amp; vmax,Int_t idx=1,Int_t mode=1,Int_t deadcheck=1) or overloads">GetExtremes</a>(<span class="string">"IceGOM"</span>,vmin,vmax,<span class="string">"TOT"</span>);
+ <a href="./ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" Extreme values : vmin = "</span> &lt;&lt; vmin &lt;&lt; <span class="string">" vmax = "</span> &lt;&lt; vmax &lt;&lt; endl;
+
+ Some simple module and hit manipulations
+
+ // Ordered hits w.r.t. decreasing TOT
+ TObjArray* ordered=evt-&gt;<a href="./NcEvent.html#NcEvent:SortHits" title="TObjArray* NcEvent::SortHits(const char* classname,TString name,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0) or overloads">SortHits</a>(<span class="string">"IceGOM"</span>,<span class="string">"TOT"</span>,-1);
+ nhits=0;
+ if (ordered) nhits=ordered-&gt;GetEntries();
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;nhits; i++)
+ {
+  <a href="./NcSignal.html">NcSignal</a>* sx=(<a href="./NcSignal.html">NcSignal</a>*)ordered-&gt;At(i);
+  if (sx) sx-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+ }
+
+ // Ordered devices from the already ordered hit array
+ TObjArray* devs=evt-&gt;<a href="./NcEvent.html#NcEvent:SortDevices" title="TObjArray* NcEvent::SortDevices(const char* classname,TString name,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0) or overloads">SortDevices</a>(ordered,0,0);
+ ndev=0;
+ if (devs) ndev=devs-&gt;GetEntries();
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> id=0; id&lt;ndev; id++)
+ {
+  <a href="./NcDevice.html">NcDevice</a>* dx=(<a href="./NcDevice.html">NcDevice</a>*)devs-&gt;At(id);
+  if (dx) dx-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+ }
+
+ // Newly ordered devices w.r.t. decreasing ADC
+ TObjArray* devs=evt-&gt;<a href="./NcEvent.html#NcEvent:SortDevices" title="TObjArray* NcEvent::SortDevices(const char* classname,TString name,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0) or overloads">SortDevices</a>(<span class="string">"IceGOM"</span>,<span class="string">"ADC"</span>,-1);
+ ndev=0;
+ if (devs) ndev=devs-&gt;GetEntries();
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> id2=0; id2&lt;ndev; id2++)
+ {
+  <a href="./NcDevice.html">NcDevice</a>* dx=(<a href="./NcDevice.html">NcDevice</a>*)devs-&gt;At(id2);
+  if (dx) dx-&gt;<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+ }
+
+ A simple 3D event display of the modules
+
+ TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
+ c1-&gt;x3d();
+ TView* view=new TView(1);
+ view-&gt;SetRange(-50,-50,-50,50,50,50);
+ view-&gt;ShowAxis();
+
+ evt-&gt;<a href="./NcEvent.html#NcEvent:DisplayHits" title="void NcEvent::DisplayHits(const char* classname,TString name,Float_t scale=-1,Int_t dp=0,Int_t mode=1,Int_t mcol=4) or overloads">DisplayHits</a>(<span class="string">"IceGOM"</span>,<span class="string">"TOT"</span>,1e4,1);
+
+
+--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
+- Modified: NvE $<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>: 2016-08-24 13:11:33 +0200 (Wed, 24 Aug 2016) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="IceEvent:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceEvent:IceEvent">IceEvent</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceEvent:IceEvent@1">IceEvent</a>(<span class="keyword">const</span> <a href="./IceEvent.html">IceEvent</a>&amp; evt)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#IceEvent:_IceEvent">~IceEvent</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Add@1"><span class="baseclass">NcTimestamp::</span>Add</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> hours)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Add"><span class="baseclass">NcTimestamp::</span>Add</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:AddDevice"><span class="baseclass">NcEvent::</span>AddDevice</a>(<a href="./NcDevice.html">NcDevice</a>&amp; d)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:AddDevice@1"><span class="baseclass">NcEvent::</span>AddDevice</a>(<a href="./NcDevice.html">NcDevice</a>* d)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:AddJet"><span class="baseclass">NcVertex::</span>AddJet</a>(<a href="./NcJet.html">NcJet</a>&amp; j, <a href="./ListOfTypes.html#Int_t">Int_t</a> tracks = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:AddJet@1"><span class="baseclass">NcVertex::</span>AddJet</a>(<a href="./NcJet.html">NcJet</a>* j, <a href="./ListOfTypes.html#Int_t">Int_t</a> tracks = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:AddSec"><span class="baseclass">NcTimestamp::</span>AddSec</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> seconds)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:AddTrack"><span class="baseclass">NcJet::</span>AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:AddTrack@1"><span class="baseclass">NcJet::</span>AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:AddVertex"><span class="baseclass">NcVertex::</span>AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>&amp; v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:AddVertex@1"><span class="baseclass">NcVertex::</span>AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>* v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Almanac"><span class="baseclass">NcTimestamp::</span>Almanac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* dpsi = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* deps = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* eps = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* dl = 0, TString name = <span class="string">""</span>, <a href="./ListOfTypes.html#Double_t">Double_t</a>* el = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* eb = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* er = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* value = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsDouble"><span class="baseclass">TTimeStamp::</span>AsDouble</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsGAST"><span class="baseclass">TTimeStamp::</span>AsGAST</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> UT1Offset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsGMST"><span class="baseclass">TTimeStamp::</span>AsGMST</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> UT1Offset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsJulianDate"><span class="baseclass">TTimeStamp::</span>AsJulianDate</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsLAST"><span class="baseclass">TTimeStamp::</span>AsLAST</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Longitude, <a href="./ListOfTypes.html#Double_t">Double_t</a> UT1Offset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsLMST"><span class="baseclass">TTimeStamp::</span>AsLMST</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Longitude, <a href="./ListOfTypes.html#Double_t">Double_t</a> UT1Offset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsString"><span class="baseclass">TTimeStamp::</span>AsString</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#IceEvent:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#IceEvent:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Convert@1"><span class="baseclass">NcTimestamp::</span>Convert</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> days, <a href="./ListOfTypes.html#Int_t">Int_t</a> secs, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Convert@5"><span class="baseclass">NcTimestamp::</span>Convert</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> ss) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Convert"><span class="baseclass">NcTimestamp::</span>Convert</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> date, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; days, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; secs, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Convert@4"><span class="baseclass">NcTimestamp::</span>Convert</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> h, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; ss) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Convert@3"><span class="baseclass">NcTimestamp::</span>Convert</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Convert@2"><span class="baseclass">NcTimestamp::</span>Convert</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> h, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ss, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Cross"><span class="baseclass">Nc3Vector::</span>Cross</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:Data"><span class="baseclass">NcEvent::</span>Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Date"><span class="baseclass">NcTimestamp::</span>Date</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:DisplayHits"><span class="baseclass">NcEvent::</span>DisplayHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:DisplayHits@1"><span class="baseclass">NcEvent::</span>DisplayHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Dot"><span class="baseclass">Nc4Vector::</span>Dot</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:Draw"><span class="baseclass">NcVertex::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>*)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:Draw@1"><span class="baseclass">NcVertex::</span>Draw</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> secs, <a href="./ListOfTypes.html#Int_t">Int_t</a> cons = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> jets = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:DumpTMStruct"><span class="baseclass">TTimeStamp::</span>DumpTMStruct</a>(<span class="keyword">const</span> <a href="./ListOfTypes.html#tm_t">tm_t</a>&amp; tmstruct)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:Get3Momentum"><span class="baseclass">NcJet::</span>Get3Momentum</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Get3Vector"><span class="baseclass">Nc4Vector::</span>Get3Vector</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetBE@1"><span class="baseclass">NcTimestamp::</span>GetBE</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetBE"><span class="baseclass">NcTimestamp::</span>GetBE</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> date, TString mode = <span class="string">"jd"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetBeta"><span class="baseclass">Nc4Vector::</span>GetBeta</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetBetaVector"><span class="baseclass">Nc4Vector::</span>GetBetaVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetCharge"><span class="baseclass">NcJet::</span>GetCharge</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcPosition.html">NcPosition</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetCOG"><span class="baseclass">NcEvent::</span>GetCOG</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0, TString slotname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetCVAL"><span class="baseclass">NcEvent::</span>GetCVAL</a>(TObjArray* hits, TString obsname, TString weightname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDate"><span class="baseclass">TTimeStamp::</span>GetDate</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* year = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* month = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* day = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfWeek"><span class="baseclass">TTimeStamp::</span>GetDayOfWeek</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfWeek@1"><span class="baseclass">TTimeStamp::</span>GetDayOfWeek</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear@1"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetDayTime"><span class="baseclass">NcEvent::</span>GetDayTime</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetDevCopy"><span class="baseclass">NcEvent::</span>GetDevCopy</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetDevice"><span class="baseclass">NcEvent::</span>GetDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetDevice@1"><span class="baseclass">NcEvent::</span>GetDevice</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetDevices"><span class="baseclass">NcEvent::</span>GetDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* devices = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetDifference@2"><span class="baseclass">NcTimestamp::</span>GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* t, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString type = <span class="string">"UT"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetDifference@3"><span class="baseclass">NcTimestamp::</span>GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>&amp; t, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString type = <span class="string">"UT"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetDifference"><span class="baseclass">NcTimestamp::</span>GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; days, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, TString type = <span class="string">"UT"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetDifference@1"><span class="baseclass">NcTimestamp::</span>GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; days, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, TString type = <span class="string">"UT"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetDistance"><span class="baseclass">NcJet::</span>GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>* p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetDistance@1"><span class="baseclass">NcJet::</span>GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetDistance@2"><span class="baseclass">NcJet::</span>GetDistance</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetDistance@3"><span class="baseclass">NcJet::</span>GetDistance</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetDistance@4"><span class="baseclass">NcJet::</span>GetDistance</a>(<a href="./NcJet.html">NcJet</a>* j, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetDistance@5"><span class="baseclass">NcJet::</span>GetDistance</a>(<a href="./NcJet.html">NcJet</a>&amp; j, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetEl"><span class="baseclass">NcJet::</span>GetEl</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetEnergy"><span class="baseclass">NcJet::</span>GetEnergy</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetEpoch"><span class="baseclass">NcTimestamp::</span>GetEpoch</a>(TString mode)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetErrors"><span class="baseclass">Nc4Vector::</span>GetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetErrors@1"><span class="baseclass">Nc4Vector::</span>GetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetEscale"><span class="baseclass">NcJet::</span>GetEscale</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetEt"><span class="baseclass">NcJet::</span>GetEt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetEventNumber"><span class="baseclass">NcEvent::</span>GetEventNumber</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetExtremes"><span class="baseclass">NcEvent::</span>GetExtremes</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetExtremes@1"><span class="baseclass">NcEvent::</span>GetExtremes</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetGamma"><span class="baseclass">Nc4Vector::</span>GetGamma</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetGAST"><span class="baseclass">NcTimestamp::</span>GetGAST</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetGMST@1"><span class="baseclass">NcTimestamp::</span>GetGMST</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetGMST"><span class="baseclass">NcTimestamp::</span>GetGMST</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ss, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetHitPath"><span class="baseclass">NcEvent::</span>GetHitPath</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetHits"><span class="baseclass">NcEvent::</span>GetHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0, TString name = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetId"><span class="baseclass">NcJet::</span>GetId</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetIdDevice"><span class="baseclass">NcEvent::</span>GetIdDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, TObjArray* devs = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetIdDevice@1"><span class="baseclass">NcEvent::</span>GetIdDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetIdHit"><span class="baseclass">NcEvent::</span>GetIdHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <span class="keyword">const</span> <span class="keyword">char</span>* classname)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcJet.html">NcJet</a>*</td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetIdJet"><span class="baseclass">NcVertex::</span>GetIdJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcTrack.html">NcTrack</a>*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetIdTrack"><span class="baseclass">NcJet::</span>GetIdTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcVertex.html">NcVertex</a>*</td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetIdVertex"><span class="baseclass">NcVertex::</span>GetIdVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetIERSdatabase"><span class="baseclass">NcTimestamp::</span>GetIERSdatabase</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetInvariant"><span class="baseclass">Nc4Vector::</span>GetInvariant</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetInvmass"><span class="baseclass">NcJet::</span>GetInvmass</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD@2"><span class="baseclass">NcTimestamp::</span>GetJD</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD@3"><span class="baseclass">NcTimestamp::</span>GetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode = <span class="string">"J"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD@1"><span class="baseclass">NcTimestamp::</span>GetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; jd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD"><span class="baseclass">NcTimestamp::</span>GetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJE@1"><span class="baseclass">NcTimestamp::</span>GetJE</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJE"><span class="baseclass">NcTimestamp::</span>GetJE</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> date, TString mode = <span class="string">"jd"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcJet.html">NcJet</a>*</td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetJet"><span class="baseclass">NcVertex::</span>GetJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetJetCopy"><span class="baseclass">NcVertex::</span>GetJetCopy</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetLAST"><span class="baseclass">NcTimestamp::</span>GetLAST</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> offset)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetLMST"><span class="baseclass">NcTimestamp::</span>GetLMST</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> offset)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetLT"><span class="baseclass">NcTimestamp::</span>GetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> offset)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetMJD@2"><span class="baseclass">NcTimestamp::</span>GetMJD</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetMJD@3"><span class="baseclass">NcTimestamp::</span>GetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode = <span class="string">"J"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetMJD@1"><span class="baseclass">NcTimestamp::</span>GetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetMJD"><span class="baseclass">NcTimestamp::</span>GetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetMomentum"><span class="baseclass">NcJet::</span>GetMomentum</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetMonth"><span class="baseclass">TTimeStamp::</span>GetMonth</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetMt"><span class="baseclass">NcJet::</span>GetMt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetNanoSec"><span class="baseclass">TTimeStamp::</span>GetNanoSec</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetNdevices"><span class="baseclass">NcEvent::</span>GetNdevices</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetNdevices@1"><span class="baseclass">NcEvent::</span>GetNdevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetNhits"><span class="baseclass">NcEvent::</span>GetNhits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetNjets"><span class="baseclass">NcVertex::</span>GetNjets</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceEvent:GetNmodules">GetNmodules</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, TString classname)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceEvent:GetNmodules@1">GetNmodules</a>(<a href="./NcJet.html">NcJet</a>&amp; j, TString classname)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetNorm"><span class="baseclass">Nc3Vector::</span>GetNorm</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetNs"><span class="baseclass">NcTimestamp::</span>GetNs</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetNsignals"><span class="baseclass">NcJet::</span>GetNsignals</a>(TString classname = <span class="string">"TObject"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceEvent:GetNstrings">GetNstrings</a>(TString classname)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceEvent:GetNstrings@1">GetNstrings</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, TString classname)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceEvent:GetNstrings@2">GetNstrings</a>(<a href="./NcJet.html">NcJet</a>&amp; j, TString classname)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetNtracks@1"><span class="baseclass">NcJet::</span>GetNtracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetNtracks"><span class="baseclass">NcJet::</span>GetNtracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetNvertices"><span class="baseclass">NcVertex::</span>GetNvertices</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetOpeningAngle"><span class="baseclass">Nc4Vector::</span>GetOpeningAngle</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetOpeningAngle@1"><span class="baseclass">Nc4Vector::</span>GetOpeningAngle</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetPl"><span class="baseclass">NcJet::</span>GetPl</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcPosition.html">NcPosition</a>&amp;</td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPosition@2"><span class="baseclass">NcPosition::</span>GetPosition</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPosition"><span class="baseclass">NcPosition::</span>GetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPosition@1"><span class="baseclass">NcPosition::</span>GetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPositionErrors"><span class="baseclass">NcPosition::</span>GetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPositionErrors@1"><span class="baseclass">NcPosition::</span>GetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetPrimed"><span class="baseclass">Nc3Vector::</span>GetPrimed</a>(TRotMatrix* m) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetProjectileA"><span class="baseclass">NcEvent::</span>GetProjectileA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetProjectileId"><span class="baseclass">NcEvent::</span>GetProjectileId</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetProjectilePnuc"><span class="baseclass">NcEvent::</span>GetProjectilePnuc</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetProjectileZ"><span class="baseclass">NcEvent::</span>GetProjectileZ</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetPs"><span class="baseclass">NcTimestamp::</span>GetPs</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetPseudoRapidity"><span class="baseclass">Nc4Vector::</span>GetPseudoRapidity</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetPt"><span class="baseclass">NcJet::</span>GetPt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetRapidity"><span class="baseclass">NcJet::</span>GetRapidity</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcPosition.html">NcPosition</a>*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetReferencePoint"><span class="baseclass">NcJet::</span>GetReferencePoint</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetResultError"><span class="baseclass">Nc4Vector::</span>GetResultError</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetRunNumber"><span class="baseclass">NcEvent::</span>GetRunNumber</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScalar"><span class="baseclass">Nc4Vector::</span>GetScalar</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScalarFlag"><span class="baseclass">Nc4Vector::</span>GetScalarFlag</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#time_t">time_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetSec"><span class="baseclass">TTimeStamp::</span>GetSec</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetSignals"><span class="baseclass">NcJet::</span>GetSignals</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0, TObjArray* signals = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetSignalValue"><span class="baseclass">NcJet::</span>GetSignalValue</a>(TString classname, TString varname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 2)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#IceEvent:GetStringMax">GetStringMax</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a>* id = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a>* x = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a>* y = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTAI@1"><span class="baseclass">NcTimestamp::</span>GetTAI</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTAI"><span class="baseclass">NcTimestamp::</span>GetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; d, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTAI@2"><span class="baseclass">NcTimestamp::</span>GetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ss, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, TString type = <span class="string">"TAI"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetTargetA"><span class="baseclass">NcEvent::</span>GetTargetA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetTargetId"><span class="baseclass">NcEvent::</span>GetTargetId</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetTargetPnuc"><span class="baseclass">NcEvent::</span>GetTargetPnuc</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetTargetZ"><span class="baseclass">NcEvent::</span>GetTargetZ</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetTime"><span class="baseclass">TTimeStamp::</span>GetTime</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* hour = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* min = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* sec = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#timespec_t">timespec_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetTimeSpec"><span class="baseclass">TTimeStamp::</span>GetTimeSpec</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcTimestamp.html">NcTimestamp</a>*</td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetTimestamp"><span class="baseclass">NcPosition::</span>GetTimestamp</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTJD@2"><span class="baseclass">NcTimestamp::</span>GetTJD</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTJD@3"><span class="baseclass">NcTimestamp::</span>GetTJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode = <span class="string">"J"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTJD@1"><span class="baseclass">NcTimestamp::</span>GetTJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; tjd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTJD"><span class="baseclass">NcTimestamp::</span>GetTJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcTrack.html">NcTrack</a>*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetTrack"><span class="baseclass">NcJet::</span>GetTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetTrackCopy"><span class="baseclass">NcJet::</span>GetTrackCopy</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetTracks@1"><span class="baseclass">NcJet::</span>GetTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TObjArray* tracks = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetTracks"><span class="baseclass">NcJet::</span>GetTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0, TObjArray* tracks = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#IceEvent:GetTriggerTime">GetTriggerTime</a>(TString trigname, TObjArray* arr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> slc = 0, TArrayF* peaks = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetUnitScale"><span class="baseclass">NcPosition::</span>GetUnitScale</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetUnixTime"><span class="baseclass">NcTimestamp::</span>GetUnixTime</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetUnprimed"><span class="baseclass">Nc3Vector::</span>GetUnprimed</a>(TRotMatrix* m) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetUserData"><span class="baseclass">Nc4Vector::</span>GetUserData</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetUT@1"><span class="baseclass">NcTimestamp::</span>GetUT</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetUT"><span class="baseclass">NcTimestamp::</span>GetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ss, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetUTCparameters"><span class="baseclass">NcTimestamp::</span>GetUTCparameters</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; leap, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dut) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetUTCparameters@1"><span class="baseclass">NcTimestamp::</span>GetUTCparameters</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; leap, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dut) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVecLong"><span class="baseclass">Nc4Vector::</span>GetVecLong</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVector"><span class="baseclass">Nc4Vector::</span>GetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVector@1"><span class="baseclass">Nc4Vector::</span>GetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVecTrans"><span class="baseclass">Nc4Vector::</span>GetVecTrans</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcVertex.html">NcVertex</a>*</td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetVertex"><span class="baseclass">NcVertex::</span>GetVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:GetVertexCopy"><span class="baseclass">NcVertex::</span>GetVertexCopy</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetWeek"><span class="baseclass">TTimeStamp::</span>GetWeek</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetWeek@1"><span class="baseclass">TTimeStamp::</span>GetWeek</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:GetWeight"><span class="baseclass">NcEvent::</span>GetWeight</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetX"><span class="baseclass">Nc4Vector::</span>GetX</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetZoneOffset"><span class="baseclass">TTimeStamp::</span>GetZoneOffset</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:HasErrors"><span class="baseclass">Nc4Vector::</span>HasErrors</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:HasVector"><span class="baseclass">Nc4Vector::</span>HasVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:HeaderData"><span class="baseclass">NcEvent::</span>HeaderData</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#IceEvent:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:IsConnectTrack"><span class="baseclass">NcVertex::</span>IsConnectTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:IsJetTrack"><span class="baseclass">NcVertex::</span>IsJetTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:IsLeapYear@1"><span class="baseclass">TTimeStamp::</span>IsLeapYear</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:IsLeapYear"><span class="baseclass">TTimeStamp::</span>IsLeapYear</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:List"><span class="baseclass">NcVertex::</span>List</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:ListAll"><span class="baseclass">NcVertex::</span>ListAll</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Load"><span class="baseclass">Nc4Vector::</span>Load</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles"><span class="baseclass">NcTimestamp::</span>LoadUTCparameterFiles</a>(TString leapfile, TString dutfile)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#time_t">time_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:MktimeFromUTC"><span class="baseclass">TTimeStamp::</span>MktimeFromUTC</a>(<a href="./ListOfTypes.html#tm_t">tm_t</a>* tmstruct)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:operator_double"><span class="baseclass">TTimeStamp::</span>operator double</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator*"><span class="baseclass">Nc4Vector::</span>operator*</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator*_"><span class="baseclass">Nc4Vector::</span>operator*=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator+"><span class="baseclass">Nc4Vector::</span>operator+</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator+_"><span class="baseclass">Nc4Vector::</span>operator+=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator-"><span class="baseclass">Nc4Vector::</span>operator-</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator-_"><span class="baseclass">Nc4Vector::</span>operator-=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator/"><span class="baseclass">Nc4Vector::</span>operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator/_"><span class="baseclass">Nc4Vector::</span>operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./IceEvent.html">IceEvent</a>&amp;</td><td class="funcname"><a class="funcname" href="#IceEvent:operator_">operator=</a>(<span class="keyword">const</span> <a href="./IceEvent.html">IceEvent</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:PrintTime"><span class="baseclass">NcTimestamp::</span>PrintTime</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> h, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:RemoveDevice"><span class="baseclass">NcEvent::</span>RemoveDevice</a>(<a href="./NcDevice.html">NcDevice</a>* d)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:RemoveTimestamp"><span class="baseclass">NcPosition::</span>RemoveTimestamp</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:RemoveTrack"><span class="baseclass">NcJet::</span>RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:RemoveTracks@1"><span class="baseclass">NcJet::</span>RemoveTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:RemoveTracks"><span class="baseclass">NcJet::</span>RemoveTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:ReplaceTrack"><span class="baseclass">NcJet::</span>ReplaceTrack</a>(<a href="./NcTrack.html">NcTrack</a>* told, <a href="./NcTrack.html">NcTrack</a>* tnew)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceEvent:Reset">Reset</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:ResetPosition"><span class="baseclass">NcPosition::</span>ResetPosition</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:ResetVertices"><span class="baseclass">NcVertex::</span>ResetVertices</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:Set"><span class="baseclass">TTimeStamp::</span>Set</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:Set@3"><span class="baseclass">TTimeStamp::</span>Set</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> tloc, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> isUTC, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> dosDate)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:Set@2"><span class="baseclass">TTimeStamp::</span>Set</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> date, <a href="./ListOfTypes.html#Int_t">Int_t</a> time, <a href="./ListOfTypes.html#Int_t">Int_t</a> nsec, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> isUTC, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:Set@1"><span class="baseclass">TTimeStamp::</span>Set</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> year, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> hour, <a href="./ListOfTypes.html#Int_t">Int_t</a> min, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> nsec, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> isUTC, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector@1"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector@2"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector@3"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetDayTime"><span class="baseclass">NcEvent::</span>SetDayTime</a>(<a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>&amp; stamp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetDayTime@1"><span class="baseclass">NcEvent::</span>SetDayTime</a>(TDatime&amp; stamp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetDevCopy"><span class="baseclass">NcEvent::</span>SetDevCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetEpoch"><span class="baseclass">NcTimestamp::</span>SetEpoch</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetErrors"><span class="baseclass">Nc4Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetErrors@2"><span class="baseclass">Nc4Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetErrors@1"><span class="baseclass">Nc4Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e0, <a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:SetEscale"><span class="baseclass">NcJet::</span>SetEscale</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetEventNumber"><span class="baseclass">NcEvent::</span>SetEventNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> evt)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetGPS"><span class="baseclass">NcTimestamp::</span>SetGPS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> w, <a href="./ListOfTypes.html#Int_t">Int_t</a> sow, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> icycle = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetGPS@1"><span class="baseclass">NcTimestamp::</span>SetGPS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> w, <a href="./ListOfTypes.html#Int_t">Int_t</a> dow, <a href="./ListOfTypes.html#Int_t">Int_t</a> sod, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> icycle = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:SetId"><span class="baseclass">NcJet::</span>SetId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetInvariant"><span class="baseclass">Nc4Vector::</span>SetInvariant</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv2 = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetInvariantError"><span class="baseclass">Nc4Vector::</span>SetInvariantError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv2)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetJD@1"><span class="baseclass">NcTimestamp::</span>SetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> jd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetJD"><span class="baseclass">NcTimestamp::</span>SetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:SetJetCopy"><span class="baseclass">NcVertex::</span>SetJetCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetLT@3"><span class="baseclass">NcTimestamp::</span>SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetLT@2"><span class="baseclass">NcTimestamp::</span>SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, TString time, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetLT@4"><span class="baseclass">NcTimestamp::</span>SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetLT@1"><span class="baseclass">NcTimestamp::</span>SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> s, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetLT"><span class="baseclass">NcTimestamp::</span>SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetMJD@1"><span class="baseclass">NcTimestamp::</span>SetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mjd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetMJD"><span class="baseclass">NcTimestamp::</span>SetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:SetNanoSec"><span class="baseclass">TTimeStamp::</span>SetNanoSec</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nsec)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:SetNjmax"><span class="baseclass">NcVertex::</span>SetNjmax</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetNs"><span class="baseclass">NcTimestamp::</span>SetNs</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ns)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:SetNvmax"><span class="baseclass">NcVertex::</span>SetNvmax</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetOwner"><span class="baseclass">NcEvent::</span>SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@3"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@2"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@1"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r1, <a href="./ListOfTypes.html#Double_t">Double_t</a> r2, <a href="./ListOfTypes.html#Double_t">Double_t</a> r3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors@2"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors@1"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetProjectile"><span class="baseclass">NcEvent::</span>SetProjectile</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> pnuc, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetProjectile@1"><span class="baseclass">NcEvent::</span>SetProjectile</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetPs"><span class="baseclass">NcTimestamp::</span>SetPs</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ps)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:SetReferencePoint"><span class="baseclass">NcJet::</span>SetReferencePoint</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetRunNumber"><span class="baseclass">NcEvent::</span>SetRunNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> run)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalar"><span class="baseclass">Nc4Vector::</span>SetScalar</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv0 = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalarError"><span class="baseclass">Nc4Vector::</span>SetScalarError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:SetSec"><span class="baseclass">TTimeStamp::</span>SetSec</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> sec)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI@2"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tai, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(TString type, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI@1"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetTarget"><span class="baseclass">NcEvent::</span>SetTarget</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> pnuc, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetTarget@1"><span class="baseclass">NcEvent::</span>SetTarget</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetTimestamp"><span class="baseclass">NcPosition::</span>SetTimestamp</a>(<a href="./NcTimestamp.html">NcTimestamp</a>&amp; t)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTJD@1"><span class="baseclass">NcTimestamp::</span>SetTJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tjd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTJD"><span class="baseclass">NcTimestamp::</span>SetTJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> tjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:SetTrackCopy"><span class="baseclass">NcJet::</span>SetTrackCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetUnitScale"><span class="baseclass">NcPosition::</span>SetUnitScale</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUnixTime"><span class="baseclass">NcTimestamp::</span>SetUnixTime</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sec, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetUserData"><span class="baseclass">Nc4Vector::</span>SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>* s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetUserData@1"><span class="baseclass">Nc4Vector::</span>SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUT@3"><span class="baseclass">NcTimestamp::</span>SetUT</a>(TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUT@2"><span class="baseclass">NcTimestamp::</span>SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, TString time, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUT@4"><span class="baseclass">NcTimestamp::</span>SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUT@1"><span class="baseclass">NcTimestamp::</span>SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> s, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUT"><span class="baseclass">NcTimestamp::</span>SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUTCparameters"><span class="baseclass">NcTimestamp::</span>SetUTCparameters</a>(TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector@1"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector@3"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector@2"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:SetVertexCopy"><span class="baseclass">NcVertex::</span>SetVertexCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SetWeight"><span class="baseclass">NcEvent::</span>SetWeight</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> weight)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetZero"><span class="baseclass">Nc4Vector::</span>SetZero</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:ShowDevices"><span class="baseclass">NcEvent::</span>ShowDevices</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:ShowDevices@1"><span class="baseclass">NcEvent::</span>ShowDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:ShowHits"><span class="baseclass">NcEvent::</span>ShowHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceEvent:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:ShowSignals"><span class="baseclass">NcJet::</span>ShowSignals</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:ShowTracks"><span class="baseclass">NcJet::</span>ShowTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SortDevices"><span class="baseclass">NcEvent::</span>SortDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SortDevices@1"><span class="baseclass">NcEvent::</span>SortDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SortDevices@2"><span class="baseclass">NcEvent::</span>SortDevices</a>(TObjArray* hits, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SortDevices@3"><span class="baseclass">NcEvent::</span>SortDevices</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SortHits"><span class="baseclass">NcEvent::</span>SortHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:SortHits@1"><span class="baseclass">NcEvent::</span>SortHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:SortJets"><span class="baseclass">NcVertex::</span>SortJets</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* jets = 0, TObjArray* ordered = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:SortTracks"><span class="baseclass">NcJet::</span>SortTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* tracks = 0, TObjArray* ordered = 0)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceEvent:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceEvent:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:AddTrack@2"><span class="baseclass">NcJet::</span>AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> copy)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:AddTrack@3"><span class="baseclass">NcJet::</span>AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a> copy)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScaLong"><span class="baseclass">Nc4Vector::</span>GetScaLong</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScaTrans"><span class="baseclass">Nc4Vector::</span>GetScaTrans</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:Init"><span class="baseclass">NcVertex::</span>Init</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:LoadHits"><span class="baseclass">NcEvent::</span>LoadHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:RemoveTrack@1"><span class="baseclass">NcJet::</span>RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:SetNtinit"><span class="baseclass">NcJet::</span>SetNtinit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="IceEvent:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcVertex.html#NcVertex:fConnects"><span class="baseclass">NcVertex::</span>fConnects</a></td><td class="datadesc">Array to hold the pointers to the auto-generated connecting tracks</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcEvent.html#NcEvent:fDevCopy"><span class="baseclass">NcEvent::</span>fDevCopy</a></td><td class="datadesc">Flag to denote creation of private copies of the devices</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcEvent.html#NcEvent:fDevices"><span class="baseclass">NcEvent::</span>fDevices</a></td><td class="datadesc">Array to hold the pointers to the various devices</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcEvent.html#NcEvent:fDevs"><span class="baseclass">NcEvent::</span>fDevs</a></td><td class="datadesc">! Temp. array to hold references to user selected devices</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a href="./NcEvent.html#NcEvent:fDisplay"><span class="baseclass">NcEvent::</span>fDisplay</a></td><td class="datadesc">! Temp. pointer to hold objects which serve event displays</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fDresult"><span class="baseclass">Nc4Vector::</span>fDresult</a></td><td class="datadesc">! The error on the scalar result of an operation (e.g. dotproduct) </td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fDresult"><span class="baseclass">Nc3Vector::</span>fDresult</a></td><td class="datadesc">! Error on scalar result (e.g. norm or dotproduct)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fDut"><span class="baseclass">NcTimestamp::</span>fDut</a></td><td class="datadesc">The value of UT-UTC in seconds at the moment of the timestamp</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fDv0"><span class="baseclass">Nc4Vector::</span>fDv0</a></td><td class="datadesc">The error on the scalar part</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fDv2"><span class="baseclass">Nc4Vector::</span>fDv2</a></td><td class="datadesc">The error on the Lorentz invariant</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./NcJet.html#NcJet:fEscale"><span class="baseclass">NcJet::</span>fEscale</a></td><td class="datadesc">The scale of the energy/momentum units of the jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcEvent.html#NcEvent:fEvent"><span class="baseclass">NcEvent::</span>fEvent</a></td><td class="datadesc">The event number</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcEvent.html#NcEvent:fHits"><span class="baseclass">NcEvent::</span>fHits</a></td><td class="datadesc">! Temp. array to hold references to the registered NcDevice hits</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcVertex.html#NcVertex:fJetCopy"><span class="baseclass">NcVertex::</span>fJetCopy</a></td><td class="datadesc">Flag to denote creation of private copies in fJets</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcVertex.html#NcVertex:fJetTracks"><span class="baseclass">NcVertex::</span>fJetTracks</a></td><td class="datadesc">Array to hold the pointers to tracks introduced by jet addition</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcVertex.html#NcVertex:fJets"><span class="baseclass">NcVertex::</span>fJets</a></td><td class="datadesc">Array to hold the pointers to the jets</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fJns"><span class="baseclass">NcTimestamp::</span>fJns</a></td><td class="datadesc">Remaining fractional number of seconds (in nanoseconds) elapsed within the MJD</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fJps"><span class="baseclass">NcTimestamp::</span>fJps</a></td><td class="datadesc">Remaining fractional number of nanoseconds (in picoseconds) elapsed within the MJD</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fJsec"><span class="baseclass">NcTimestamp::</span>fJsec</a></td><td class="datadesc">Number of seconds elapsed within the MJD</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fLeap"><span class="baseclass">NcTimestamp::</span>fLeap</a></td><td class="datadesc">The cumulated number of leap seconds at the moment of the timestamp</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcVertex.html#NcVertex:fLines"><span class="baseclass">NcVertex::</span>fLines</a></td><td class="datadesc">! Array to (temporarily) store the 3D lines for the event display </td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fMJD"><span class="baseclass">NcTimestamp::</span>fMJD</a></td><td class="datadesc">Modified Julian Date</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcVertex.html#NcVertex:fNjets"><span class="baseclass">NcVertex::</span>fNjets</a></td><td class="datadesc">The number of jets</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcVertex.html#NcVertex:fNjmax"><span class="baseclass">NcVertex::</span>fNjmax</a></td><td class="datadesc">The maximum number of jets</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJet.html#NcJet:fNtinit"><span class="baseclass">NcJet::</span>fNtinit</a></td><td class="datadesc">The initial max. number of tracks for this jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJet.html#NcJet:fNtmax"><span class="baseclass">NcJet::</span>fNtmax</a></td><td class="datadesc">The maximum number of tracks for this Jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJet.html#NcJet:fNtrk"><span class="baseclass">NcJet::</span>fNtrk</a></td><td class="datadesc">The number of tracks in the jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fNv"><span class="baseclass">Nc3Vector::</span>fNv</a></td><td class="datadesc">The number of components of the array fV</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcVertex.html#NcVertex:fNvmax"><span class="baseclass">NcVertex::</span>fNvmax</a></td><td class="datadesc">The maximum number of (secondary) vertices</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcVertex.html#NcVertex:fNvtx"><span class="baseclass">NcVertex::</span>fNvtx</a></td><td class="datadesc">The number of (secondary) vertices</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcEvent.html#NcEvent:fOrdered"><span class="baseclass">NcEvent::</span>fOrdered</a></td><td class="datadesc">! Temp. array to hold references to various ordered objects</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./NcJet.html#NcJet:fQ"><span class="baseclass">NcJet::</span>fQ</a></td><td class="datadesc">The total charge of the jet </td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcPositionObj.html">NcPositionObj</a>*</td><td class="dataname"><a href="./NcJet.html#NcJet:fRef"><span class="baseclass">NcJet::</span>fRef</a></td><td class="datadesc">The reference-point of the jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcEvent.html#NcEvent:fRun"><span class="baseclass">NcEvent::</span>fRun</a></td><td class="datadesc">The run number</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fScalar"><span class="baseclass">Nc4Vector::</span>fScalar</a></td><td class="datadesc">Flag denoting scalar mode</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./NcPosition.html#NcPosition:fScale"><span class="baseclass">NcPosition::</span>fScale</a></td><td class="datadesc">The unit scale used for the position coordinates</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJet.html#NcJet:fSelected"><span class="baseclass">NcJet::</span>fSelected</a></td><td class="datadesc">! Temp. array to hold user selected or ordered objects</td></tr>
+<tr class="data"><td class="datatype">TArrayI*</td><td class="dataname"><a name="IceEvent:fStrings"></a>fStrings</td><td class="datadesc">! Temp. array to hold the string ids of fired modules</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fTmjd"><span class="baseclass">NcTimestamp::</span>fTmjd</a></td><td class="datadesc">Number of elapsed TAI days equivalent to MJD counting</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fTns"><span class="baseclass">NcTimestamp::</span>fTns</a></td><td class="datadesc">Remaining fractional number of seconds (in nanoseconds) elapsed within the TAI day</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fTps"><span class="baseclass">NcTimestamp::</span>fTps</a></td><td class="datadesc">Remaining fractional number of nanoseconds (in picoseconds) elapsed within the TAI day</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJet.html#NcJet:fTrackCopy"><span class="baseclass">NcJet::</span>fTrackCopy</a></td><td class="datadesc">Flag to denote creation of private copies in fTracks</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJet.html#NcJet:fTracks"><span class="baseclass">NcJet::</span>fTracks</a></td><td class="datadesc">Array to hold the pointers to the tracks of the jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fTsec"><span class="baseclass">NcTimestamp::</span>fTsec</a></td><td class="datadesc">Number of seconds elapsed within the TAI day</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcTimestamp.html">NcTimestamp</a>*</td><td class="dataname"><a href="./NcPosition.html#NcPosition:fTstamp"><span class="baseclass">NcPosition::</span>fTstamp</a></td><td class="datadesc">The timestamp for this position</td></tr>
+<tr class="datainh"><td class="datatype">TTree*</td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fUTCdata"><span class="baseclass">NcTimestamp::</span>fUTCdata</a></td><td class="datadesc">Internal tree to contain the daily leap second and UT-UTC values</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcSignal.html">NcSignal</a>*</td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fUser"><span class="baseclass">Nc4Vector::</span>fUser</a></td><td class="datadesc">NcSignal object containing user data</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJet.html#NcJet:fUserId"><span class="baseclass">NcJet::</span>fUserId</a></td><td class="datadesc">The user defined identifier</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fUtc"><span class="baseclass">NcTimestamp::</span>fUtc</a></td><td class="datadesc">Flag to denote that the UTC related info below has been provided (-1=auto 0=no 1=yes)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fV"><span class="baseclass">Nc4Vector::</span>fV</a></td><td class="datadesc">The 3-vector part</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a>*</td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fV"><span class="baseclass">Nc3Vector::</span>fV</a></td><td class="datadesc">[fNv] Vector in spherical (and errors in Cartesian) coordinates</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fV0"><span class="baseclass">Nc4Vector::</span>fV0</a></td><td class="datadesc">The scalar part</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fV2"><span class="baseclass">Nc4Vector::</span>fV2</a></td><td class="datadesc">The Lorentz invariant (v^i*v_i)</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcVertex.html#NcVertex:fVertexCopy"><span class="baseclass">NcVertex::</span>fVertexCopy</a></td><td class="datadesc">Flag to denote creation of private copies in fVertices</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcVertex.html#NcVertex:fVertices"><span class="baseclass">NcVertex::</span>fVertices</a></td><td class="datadesc">Array to hold the pointers to the (secondary) vertices</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="./NcEvent.html#NcEvent:fWeight"><span class="baseclass">NcEvent::</span>fWeight</a></td><td class="datadesc">The event weight</td></tr>
+
+</table></div>
+</div>
+<h2><a id="IceEvent:Class_Charts"></a>Class Charts</h2>
+<map name="MapIceEvent_Inh" id="MapIceEvent_Inh">
+<area shape="rect" id="node3" href="./NcEvent.html" title="NcEvent" alt="" coords="542,46,632,64"/>
+<area shape="rect" id="node4" href="./NcVertex.html" title="NcVertex" alt="" coords="407,37,497,55"/>
+<area shape="rect" id="node5" href="./NcTimestamp.html" title="NcTimestamp" alt="" coords="407,55,497,72"/>
+<area shape="rect" id="node6" href="./NcJet.html" title="NcJet" alt="" coords="271,19,361,37"/>
+<area shape="rect" id="node7" href="./NcPosition.html" title="NcPosition" alt="" coords="271,37,361,55"/>
+<area shape="rect" id="node10" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="136,19,226,37"/>
+<area shape="rect" id="node11" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="136,37,226,55"/>
+</map>
+<map name="MapIceEvent_InhMem" id="MapIceEvent_InhMem">
+<area shape="rect" id="graph9" href="./NcEvent.html" alt="" coords="1493,63,1581,113"/>
+<area shape="rect" id="graph10" href="./NcEvent.html" alt="" coords="1395,63,1483,143"/>
+<area shape="rect" id="graph11" href="./NcEvent.html" alt="" coords="1296,63,1384,143"/>
+<area shape="rect" id="graph12" href="./NcEvent.html" alt="" coords="1525,124,1549,145"/>
+<area shape="rect" id="graph13" href="./NcEvent.html" alt="" coords="1493,156,1581,455"/>
+<area shape="rect" id="graph14" href="./NcEvent.html" alt="" coords="1395,153,1483,467"/>
+<area shape="rect" id="graph15" href="./NcEvent.html" alt="" coords="1296,153,1384,467"/>
+<area shape="rect" id="graph8" href="./NcEvent.html" title="NcEvent" alt="" coords="1285,16,1592,477"/>
+<area shape="rect" id="graph18" href="./NcVertex.html" alt="" coords="1176,63,1264,143"/>
+<area shape="rect" id="graph19" href="./NcVertex.html" alt="" coords="1077,63,1165,143"/>
+<area shape="rect" id="graph20" href="./NcVertex.html" alt="" coords="979,63,1067,143"/>
+<area shape="rect" id="graph21" href="./NcVertex.html" alt="" coords="1208,153,1232,175"/>
+<area shape="rect" id="graph22" href="./NcVertex.html" alt="" coords="1176,185,1264,411"/>
+<area shape="rect" id="graph23" href="./NcVertex.html" alt="" coords="1077,185,1165,411"/>
+<area shape="rect" id="graph24" href="./NcVertex.html" alt="" coords="979,185,1067,411"/>
+<area shape="rect" id="graph17" href="./NcVertex.html" title="NcVertex" alt="" coords="968,16,1275,421"/>
+<area shape="rect" id="graph27" href="./NcTimestamp.html" alt="" coords="1176,1056,1264,1151"/>
+<area shape="rect" id="graph28" href="./NcTimestamp.html" alt="" coords="1077,1056,1165,1151"/>
+<area shape="rect" id="graph29" href="./NcTimestamp.html" alt="" coords="979,1056,1067,1151"/>
+<area shape="rect" id="graph30" href="./NcTimestamp.html" alt="" coords="1208,1161,1232,1183"/>
+<area shape="rect" id="graph31" href="./NcTimestamp.html" alt="" coords="1176,1193,1264,1463"/>
+<area shape="rect" id="graph32" href="./NcTimestamp.html" alt="" coords="1077,1164,1165,1463"/>
+<area shape="rect" id="graph33" href="./NcTimestamp.html" alt="" coords="979,1164,1067,1463"/>
+<area shape="rect" id="graph26" href="./NcTimestamp.html" title="NcTimestamp" alt="" coords="968,1009,1275,1473"/>
+<area shape="rect" id="graph36" href="./NcJet.html" alt="" coords="859,63,947,128"/>
+<area shape="rect" id="graph37" href="./NcJet.html" alt="" coords="760,63,848,143"/>
+<area shape="rect" id="graph38" href="./NcJet.html" alt="" coords="661,63,749,143"/>
+<area shape="rect" id="graph39" href="./NcJet.html" alt="" coords="891,139,915,160"/>
+<area shape="rect" id="graph40" href="./NcJet.html" alt="" coords="859,171,947,469"/>
+<area shape="rect" id="graph41" href="./NcJet.html" alt="" coords="760,171,848,469"/>
+<area shape="rect" id="graph42" href="./NcJet.html" alt="" coords="661,171,749,469"/>
+<area shape="rect" id="graph35" href="./NcJet.html" title="NcJet" alt="" coords="651,16,957,480"/>
+<area shape="rect" id="graph45" href="./NcPosition.html" alt="" coords="661,789,947,825"/>
+<area shape="rect" id="graph46" href="./NcPosition.html" alt="" coords="859,836,947,988"/>
+<area shape="rect" id="graph47" href="./NcPosition.html" alt="" coords="760,836,848,988"/>
+<area shape="rect" id="graph48" href="./NcPosition.html" alt="" coords="661,836,749,988"/>
+<area shape="rect" id="graph44" href="./NcPosition.html" title="NcPosition" alt="" coords="651,743,957,999"/>
+<area shape="rect" id="graph63" href="./Nc4Vector.html" alt="" coords="541,344,629,409"/>
+<area shape="rect" id="graph64" href="./Nc4Vector.html" alt="" coords="443,344,531,409"/>
+<area shape="rect" id="graph65" href="./Nc4Vector.html" alt="" coords="344,344,432,409"/>
+<area shape="rect" id="graph66" href="./Nc4Vector.html" alt="" coords="573,420,597,441"/>
+<area shape="rect" id="graph67" href="./Nc4Vector.html" alt="" coords="541,452,629,721"/>
+<area shape="rect" id="graph68" href="./Nc4Vector.html" alt="" coords="443,423,531,721"/>
+<area shape="rect" id="graph69" href="./Nc4Vector.html" alt="" coords="344,423,432,721"/>
+<area shape="rect" id="graph62" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="333,297,640,732"/>
+<area shape="rect" id="graph72" href="./Nc3Vector.html" alt="" coords="541,789,629,840"/>
+<area shape="rect" id="graph73" href="./Nc3Vector.html" alt="" coords="443,789,531,840"/>
+<area shape="rect" id="graph74" href="./Nc3Vector.html" alt="" coords="376,789,400,811"/>
+<area shape="rect" id="graph75" href="./Nc3Vector.html" alt="" coords="541,851,629,1061"/>
+<area shape="rect" id="graph76" href="./Nc3Vector.html" alt="" coords="443,851,531,1091"/>
+<area shape="rect" id="graph77" href="./Nc3Vector.html" alt="" coords="344,851,432,1091"/>
+<area shape="rect" id="graph71" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="333,743,640,1101"/>
+</map>
+<map name="MapIceEvent_Lib" id="MapIceEvent_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgIceEvent_Inh" class="tabsel" href="inh/IceEvent_Inh.png" onclick="javascript:return SetImg('Charts','inh/IceEvent_Inh.png');">Inheritance</a>
+<a id="imgIceEvent_InhMem" class="tab" href="inhmem/IceEvent_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/IceEvent_InhMem.png');">Inherited Members</a>
+<a id="imgIceEvent_Incl" class="tab" href="incl/IceEvent_Incl.png" onclick="javascript:return SetImg('Charts','incl/IceEvent_Incl.png');">Includes</a>
+<a id="imgIceEvent_Lib" class="tab" href="lib/IceEvent_Lib.png" onclick="javascript:return SetImg('Charts','lib/IceEvent_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapIceEvent_Inh" src="inh/IceEvent_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceEvent:IceEvent" href="src/IceEvent.cxx.html#tb_wQD">IceEvent</a>()</span><br />
+<div class="funccomm"><pre> Default constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceEvent:_IceEvent" href="src/IceEvent.cxx.html#L1bWiC">~IceEvent</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceEvent:IceEvent@1" href="src/IceEvent.cxx.html#krr2R">IceEvent</a>(<span class="keyword">const</span> <a href="./IceEvent.html">IceEvent</a>&amp; evt)</span><br />
+<div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceEvent:Reset" href="src/IceEvent.cxx.html#exMcp">Reset</a>()</span><br />
+<div class="funccomm"><pre> <a href="./IceEvent.html#IceEvent:Reset" title="void IceEvent::Reset()">Reset</a> all values.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceEvent:GetNstrings" href="src/IceEvent.cxx.html#OlmVCC">GetNstrings</a>(TString classname)</span><br />
+<div class="funccomm"><pre> Provide the number of fired strings of good modules of the specified classname for this event.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceEvent:GetNstrings@1" href="src/IceEvent.cxx.html#kh..0B">GetNstrings</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, TString classname)</span><br />
+<div class="funccomm"><pre> Provide the number of fired strings of modules of the specified classname,
+ associated with the specified track.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceEvent:GetNstrings@2" href="src/IceEvent.cxx.html#RlG9oD">GetNstrings</a>(<a href="./NcJet.html">NcJet</a>&amp; j, TString classname)</span><br />
+<div class="funccomm"><pre> Provide the number of fired strings of modules of the specified classname,
+ associated with the specified jet.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceEvent:GetNmodules" href="src/IceEvent.cxx.html#Of6hAD">GetNmodules</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, TString classname)</span><br />
+<div class="funccomm"><pre> Provide the number of fired (D)OMs of the specified classname,
+ associated with the specified track.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceEvent:GetNmodules@1" href="src/IceEvent.cxx.html#J0V6SD">GetNmodules</a>(<a href="./NcJet.html">NcJet</a>&amp; j, TString classname)</span><br />
+<div class="funccomm"><pre> Provide the number of fired (D)OMs of the specified classname,
+ associated with the specified track.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="IceEvent:GetStringMax" href="src/IceEvent.cxx.html#FuBNzE">GetStringMax</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a>* id = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a>* x = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a>* y = 0)</span><br />
+<div class="funccomm"><pre> Provide the max. number of fired good (D)OMs of the specified classname at a single string.
+ In case the arguments <span class="string">"id"</span>, <span class="string">"x"</span> or <span class="string">"y"</span> are specified, the following information
+ is returned via the corresponding pointer :
+
+ id : The ID of the string that had the maximum number of firing good (D)OMs
+ x  : The X coordinate (in m) of the string that had the maximum number of firing good (D)OMs
+ y  : The Y coordinate (in m) of the string that had the maximum number of firing good (D)OMs
+
+ By default id=0, x=0 and y=0 which implies that no info is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="IceEvent:GetTriggerTime" href="src/IceEvent.cxx.html#nRf7gE">GetTriggerTime</a>(TString trigname, TObjArray* arr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> slc = 0, TArrayF* peaks = 0) const</span><br />
+<div class="funccomm"><pre> Determination of the requested trigger time.
+
+ Input arguments :
+
+ trigname : The name of the requested trigger.
+ arr      : Array containing optical modules or hits to determine the median of recorded hit times.
+ slc      : Flag to denote to use (1) or not use (0) SLC hits for the trigger time determination
+ peaks    : Array with the hit time values where hit clusters (=peaks) were found in the hit time distr.
+
+ Notes :
+
+ 1) Specification of the trigger name <span class="string">"Average"</span> will provide the median of all the recorded
+    trigger times for the current event (provided no array <span class="string">"arr"</span> is specified as explained below).
+    In the determination of this median value the GLOBAL triggers are not taken into account.
+ 2) In case an array <span class="string">"arr"</span> is specified, the trigger time will be taken as the median of all
+    the recorded hit times.
+    When an array <span class="string">"arr"</span> is specified, the specified <span class="string">"trigname"</span> is irrelevant.
+ 3) The array <span class="string">"arr"</span> may either contain optical modules or hits, but NOT a mix of both.
+ 4) In case an array pointer <span class="string">"peaks"</span> is specified in addition to an array <span class="string">"arr"</span>, the hit time distribution
+    will be analysed for hit clusters (=peaks). The hit times corresponding to the peaks are returned via
+    this array <span class="string">"peaks"</span>. The number of detected peaks may be obtained via peaks-&gt;GetSize().
+
+ Default : arr=0, slc=0 and peaks=0.
+
+ In case of missing information a trigger time value of 0 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="IceEvent:Clone" href="src/IceEvent.cxx.html#cNlb9C">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
+ This memberfunction enables automatic creation of new objects of the
+ correct type depending on the object type, a feature which may be very useful
+ for containers like <a href="./NcEvent.html">NcEvent</a> when adding objects in case the
+ container owns the objects. This feature allows e.g. <a href="./NcEvent.html">NcEvent</a>
+ to store either <a href="./IceEvent.html">IceEvent</a> objects or objects derived from <a href="./IceEvent.html">IceEvent</a>
+ via tha <a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a> memberfunction, provided these derived classes also have
+ a proper <a href="./IceEvent.html#IceEvent:Clone" title="TObject* IceEvent::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Thu Mar 21 09:35:00 2019 </em><em>&raquo; Last generated: 2019-03-21 09:35</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

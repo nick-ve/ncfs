@@ -1,0 +1,1507 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:23 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcSignal</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcSignal','','NcSignal.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcSignal.h.html">header file</a>
+<a class="descrheadentry" href="src/NcSignal.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcSignal:description">class description</a> 
+<a class="descrheadentry" href="#NcSignal:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcSignal:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcSignal:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcSignal</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcSignal:description"></a>class NcSignal: public TNamed, public <a href="./NcPosition.html">NcPosition</a>, public <a href="./NcAttrib.html">NcAttrib</a></h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcSignal.html#NcSignal:Class" title="TClass* NcSignal::Class()">Class</a> <a href="./NcSignal.html">NcSignal</a>
+ Generic handling of (extrapolated) detector signals.
+
+ The user can decide to store either calibrated or uncalibrated signals.
+ Via the specification of a gain and offset or/and an explicit
+ (de)calibration function both calibrated and uncalibrated signals
+ can always be obtained. For details see the documentation of the
+ memberfunction <a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>() and the class <a href="./NcAttrib.html">NcAttrib</a>.
+ The explicit specification of a (de)calibration function offers the
+ maximum flexibility and also allows automatic indication whether
+ calibrated or uncalibrated data has been stored.
+ The latter can be achieved by only specifying a calibration function
+ (and no de-calibration function) in case uncalibrated data is stored,
+ whereas in case of stored calibrated data the user should only
+ provide a de-calibration function (and no calibration function).
+
+ Note :
+
+ Signal positions (r) and reference frames (f) are specified via
+ <a href="./NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(r,f) under the following conventions :
+
+ f=<span class="string">"car"</span> ==&gt; r is Cartesian   (x,y,z)
+ f=<span class="string">"sph"</span> ==&gt; r is Spherical   (r,theta,phi)
+ f=<span class="string">"cyl"</span> ==&gt; r is Cylindrical (rho,phi,z)
+
+ The same holds for <a href="./NcPosition.html#NcPosition:SetPositionErrors" title="void NcPosition::SetPositionErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">SetPositionErrors</a>().
+
+ All angles are in radians.
+
+ Example :
+
+
+ <a href="./NcSignal.html">NcSignal</a> s;
+ s.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"Start counter"</span>);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> pos[3]={-1,25,7};
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> err[3]={0.03,0.7,0.18};
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> signal=120.8;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> error=1.73;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> offset=-12.78;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> gain=250;
+ s.<a href="./NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(pos,<span class="string">"car"</span>);
+ s.<a href="./NcPosition.html#NcPosition:SetPositionErrors" title="void NcPosition::SetPositionErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">SetPositionErrors</a>(err,<span class="string">"car"</span>);
+ s.<a href="./NcSignal.html#NcSignal:SetSignal" title="void NcSignal::SetSignal(Double_t sig,Int_t j=1) or overloads">SetSignal</a>(signal);
+ s.<a href="./NcSignal.html#NcSignal:SetSignalError" title="void NcSignal::SetSignalError(Double_t dsig,Int_t j=1) or overloads">SetSignalError</a>(error);
+ s.<a href="./NcAttrib.html#NcAttrib:SetOffset" title="void NcAttrib::SetOffset(Double_t off,Int_t j=1) or overloads">SetOffset</a>(offset);
+ s.<a href="./NcAttrib.html#NcAttrib:SetGain" title="void NcAttrib::SetGain(Double_t gain,Int_t j=1) or overloads">SetGain</a>(gain);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> loc[3],dr[3],sigma;
+ s.<a href="./NcPosition.html#NcPosition:GetPosition" title="void NcPosition::GetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;,Float_t s=-1) or overloads">GetPosition</a>(loc,<span class="string">"sph"</span>);
+ s.<a href="./NcPosition.html#NcPosition:GetPositionErrors" title="void NcPosition::GetPositionErrors(Double_t* e,TString f,TString u=&quot;rad&quot;,Float_t s=-1) or overloads">GetPositionErrors</a>(dr,<span class="string">"sph"</span>);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> adc=s.<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>();
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> sigma=s.<a href="./NcSignal.html#NcSignal:GetSignalError" title="Float_t NcSignal::GetSignalError(Int_t j=1) or overloads">GetSignalError</a>();
+
+ <a href="./NcSignal.html">NcSignal</a> q;     // In the example below a signal contains the
+                 // following data : timing, ADC and dE/dx
+ q.<a href="./#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"Hybrid"</span>,<span class="string">"Test for multiple signal data"</span>);
+ q.<a href="./NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(pos,<span class="string">"car"</span>);
+ q.<a href="./NcPosition.html#NcPosition:SetPositionErrors" title="void NcPosition::SetPositionErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">SetPositionErrors</a>(err,<span class="string">"car"</span>);
+ signal=82.5; // e.g. signal time in ns
+ error=2.01;
+ offset=0.003;
+ q.<a href="./NcAttrib.html#NcAttrib:SetSlotName" title="void NcAttrib::SetSlotName(TString s,Int_t j=1)">SetSlotName</a>(<span class="string">"TOF"</span>,1);
+ q.<a href="./NcSignal.html#NcSignal:SetSignal" title="void NcSignal::SetSignal(Double_t sig,Int_t j=1) or overloads">SetSignal</a>(signal,1);
+ q.<a href="./NcSignal.html#NcSignal:SetSignalError" title="void NcSignal::SetSignalError(Double_t dsig,Int_t j=1) or overloads">SetSignalError</a>(error,1);
+ q.<a href="./NcAttrib.html#NcAttrib:SetOffset" title="void NcAttrib::SetOffset(Double_t off,Int_t j=1) or overloads">SetOffset</a>(offset,1);
+ signal=268.1; // e.g. ADC value of signal
+ error=3.75;
+ gain=120.78;
+ offset=1.5732;
+ // Addressing via name specification instead of index
+ q.<a href="./NcAttrib.html#NcAttrib:SetSlotName" title="void NcAttrib::SetSlotName(TString s,Int_t j=1)">SetSlotName</a>(<span class="string">"ADC"</span>,2);
+ q.<a href="./NcSignal.html#NcSignal:SetSignal" title="void NcSignal::SetSignal(Double_t sig,Int_t j=1) or overloads">SetSignal</a>(signal,<span class="string">"ADC"</span>);
+ q.<a href="./NcSignal.html#NcSignal:SetSignalError" title="void NcSignal::SetSignalError(Double_t dsig,Int_t j=1) or overloads">SetSignalError</a>(error,<span class="string">"ADC"</span>);
+ q.<a href="./NcAttrib.html#NcAttrib:SetGain" title="void NcAttrib::SetGain(Double_t gain,Int_t j=1) or overloads">SetGain</a>(gain,<span class="string">"ADC"</span>);
+ q.<a href="./NcAttrib.html#NcAttrib:SetOffset" title="void NcAttrib::SetOffset(Double_t off,Int_t j=1) or overloads">SetOffset</a>(offset,<span class="string">"ADC"</span>);
+ signal=23.7; // e.g. corresponding dE/dx value
+ error=0.48;
+ TF1 f=(<span class="string">"calib"</span>,<span class="string">"[0]*pow(x,2)+[1]"</span>); // dE/dx calib. function
+ f.SetParameter(0,3.285);
+ f.SetParameter(1,-18.67);
+ q.<a href="./NcAttrib.html#NcAttrib:SetSlotName" title="void NcAttrib::SetSlotName(TString s,Int_t j=1)">SetSlotName</a>(<span class="string">"dE/dx"</span>,3);
+ q.<a href="./NcAttrib.html#NcAttrib:SetCalFunction" title="void NcAttrib::SetCalFunction(TF1* f,Int_t j=1) or overloads">SetCalFunction</a>(&amp;f,<span class="string">"dE/dx"</span>);
+ q.<a href="./NcSignal.html#NcSignal:SetSignal" title="void NcSignal::SetSignal(Double_t sig,Int_t j=1) or overloads">SetSignal</a>(signal,<span class="string">"dE/dx"</span>);
+ q.<a href="./NcSignal.html#NcSignal:SetSignalError" title="void NcSignal::SetSignalError(Double_t dsig,Int_t j=1) or overloads">SetSignalError</a>(error,<span class="string">"dE/dx"</span>);
+
+ // Signal retrieval with various (de)calibration modes
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> tof=q.<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>(<span class="string">"TOF"</span>);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> adc=q.<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>(<span class="string">"ADC"</span>,1);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> dedx=q.<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>(<span class="string">"dE/dx"</span>,3);
+
+--- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
+- Modified: NvE $Date: 2016-09-01 18:50:25 +0200 (Thu, 01 Sep 2016) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcSignal:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcSignal:NcSignal">NcSignal</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcSignal:NcSignal@1">NcSignal</a>(<span class="keyword">const</span> <a href="./NcSignal.html">NcSignal</a>&amp; s)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcSignal:_NcSignal">~NcSignal</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:AddLink">AddLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:AddLink@1">AddLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:AddNamedSlot"><span class="baseclass">NcAttrib::</span>AddNamedSlot</a>(TString s)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:AddSignal">AddSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:AddSignal@1">AddSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:AddTrack">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcSignal:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Cross"><span class="baseclass">Nc3Vector::</span>Cross</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:Data">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:DecreaseEdgeValue"><span class="baseclass">NcAttrib::</span>DecreaseEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:DecreaseEdgeValue@1"><span class="baseclass">NcAttrib::</span>DecreaseEdgeValue</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:DeleteCalibrations"><span class="baseclass">NcAttrib::</span>DeleteCalibrations</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:DeleteSignals">DeleteSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:DeleteWaveform">DeleteWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:DeleteWaveform@1">DeleteWaveform</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Dot"><span class="baseclass">Nc3Vector::</span>Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalFunction"><span class="baseclass">NcAttrib::</span>GetCalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalFunction@1"><span class="baseclass">NcAttrib::</span>GetCalFunction</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalWord"><span class="baseclass">NcAttrib::</span>GetCalWord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalWord@1"><span class="baseclass">NcAttrib::</span>GetCalWord</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetDeadValue"><span class="baseclass">NcAttrib::</span>GetDeadValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetDeadValue@1"><span class="baseclass">NcAttrib::</span>GetDeadValue</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetDecalFunction"><span class="baseclass">NcAttrib::</span>GetDecalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetDecalFunction@1"><span class="baseclass">NcAttrib::</span>GetDecalFunction</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:GetDevice">GetDevice</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetDistance"><span class="baseclass">NcPosition::</span>GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetDistance@1"><span class="baseclass">NcPosition::</span>GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>* p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetEdgeValue"><span class="baseclass">NcAttrib::</span>GetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetEdgeValue@1"><span class="baseclass">NcAttrib::</span>GetEdgeValue</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetErrorFlag">GetErrorFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetErrorFlag@1">GetErrorFlag</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetErrors"><span class="baseclass">Nc3Vector::</span>GetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetErrors@1"><span class="baseclass">Nc3Vector::</span>GetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetGain"><span class="baseclass">NcAttrib::</span>GetGain</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetGain@1"><span class="baseclass">NcAttrib::</span>GetGain</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetGainFlag"><span class="baseclass">NcAttrib::</span>GetGainFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetGainFlag@1"><span class="baseclass">NcAttrib::</span>GetGainFlag</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTrack.html">NcTrack</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:GetIdTrack">GetIdTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetIndices">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TArrayI&amp; js, TArrayI&amp; ks) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetIndices@1">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TArrayI&amp; ks) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetIndices@2">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name, TArrayI&amp; ks) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetIndices@3">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TArrayI&amp; js, <a href="./ListOfTypes.html#Int_t">Int_t</a> k) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:GetLink">GetLink</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:GetLink@1">GetLink</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetLockValue"><span class="baseclass">NcAttrib::</span>GetLockValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetLockValue@1"><span class="baseclass">NcAttrib::</span>GetLockValue</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNcalflags"><span class="baseclass">NcAttrib::</span>GetNcalflags</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNcalfuncs"><span class="baseclass">NcAttrib::</span>GetNcalfuncs</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNdecalfuncs"><span class="baseclass">NcAttrib::</span>GetNdecalfuncs</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetNerrors">GetNerrors</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNgains"><span class="baseclass">NcAttrib::</span>GetNgains</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetNlinks">GetNlinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetNlinks@1">GetNlinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNnames"><span class="baseclass">NcAttrib::</span>GetNnames</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNoffsets"><span class="baseclass">NcAttrib::</span>GetNoffsets</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetNorm"><span class="baseclass">Nc3Vector::</span>GetNorm</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetNslots">GetNslots</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetNtracks">GetNtracks</a>(<a href="./NcTrack.html">NcTrack</a>* t = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetNvalues">GetNvalues</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetNwaveforms">GetNwaveforms</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetOffset"><span class="baseclass">NcAttrib::</span>GetOffset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetOffset@1"><span class="baseclass">NcAttrib::</span>GetOffset</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetOffsetFlag"><span class="baseclass">NcAttrib::</span>GetOffsetFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetOffsetFlag@1"><span class="baseclass">NcAttrib::</span>GetOffsetFlag</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetOpeningAngle"><span class="baseclass">Nc3Vector::</span>GetOpeningAngle</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcPosition.html">NcPosition</a>&amp;</td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPosition@2"><span class="baseclass">NcPosition::</span>GetPosition</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPosition"><span class="baseclass">NcPosition::</span>GetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPosition@1"><span class="baseclass">NcPosition::</span>GetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPositionErrors"><span class="baseclass">NcPosition::</span>GetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetPositionErrors@1"><span class="baseclass">NcPosition::</span>GetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetPrimed"><span class="baseclass">Nc3Vector::</span>GetPrimed</a>(TRotMatrix* m) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetPseudoRapidity"><span class="baseclass">Nc3Vector::</span>GetPseudoRapidity</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetResultError"><span class="baseclass">Nc3Vector::</span>GetResultError</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetSignal">GetSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetSignal@1">GetSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetSignalError">GetSignalError</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetSignalError@1">GetSignalError</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetSignalFlag">GetSignalFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetSignalFlag@1">GetSignalFlag</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetSlotIndex"><span class="baseclass">NcAttrib::</span>GetSlotIndex</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetSlotName"><span class="baseclass">NcAttrib::</span>GetSlotName</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetSwapMode">GetSwapMode</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcTimestamp.html">NcTimestamp</a>*</td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetTimestamp"><span class="baseclass">NcPosition::</span>GetTimestamp</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTrack.html">NcTrack</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:GetTrack">GetTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:GetUnitScale"><span class="baseclass">NcPosition::</span>GetUnitScale</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetUnprimed"><span class="baseclass">Nc3Vector::</span>GetUnprimed</a>(TRotMatrix* m) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetVecLong"><span class="baseclass">Nc3Vector::</span>GetVecLong</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetVector"><span class="baseclass">Nc3Vector::</span>GetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetVector@1"><span class="baseclass">Nc3Vector::</span>GetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetVecTrans"><span class="baseclass">Nc3Vector::</span>GetVecTrans</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TH1F*</td><td class="funcname"><a class="funcname" href="#NcSignal:GetWaveform">GetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TH1F*</td><td class="funcname"><a class="funcname" href="#NcSignal:GetWaveform@1">GetWaveform</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:GetWaveformIndex">GetWaveformIndex</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetX"><span class="baseclass">Nc3Vector::</span>GetX</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:HasErrors"><span class="baseclass">Nc3Vector::</span>HasErrors</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:HasVector"><span class="baseclass">Nc3Vector::</span>HasVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:IncreaseEdgeValue"><span class="baseclass">NcAttrib::</span>IncreaseEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:IncreaseEdgeValue@1"><span class="baseclass">NcAttrib::</span>IncreaseEdgeValue</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcSignal:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:List">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:List@1">List</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ListTrack">ListTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ListWaveform">ListWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Load"><span class="baseclass">Nc3Vector::</span>Load</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:Lock"><span class="baseclass">NcAttrib::</span>Lock</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:Lock@1"><span class="baseclass">NcAttrib::</span>Lock</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator*"><span class="baseclass">Nc3Vector::</span>operator*</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator*_"><span class="baseclass">Nc3Vector::</span>operator*=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator+"><span class="baseclass">Nc3Vector::</span>operator+</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator+_"><span class="baseclass">Nc3Vector::</span>operator+=</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator-"><span class="baseclass">Nc3Vector::</span>operator-</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator-_"><span class="baseclass">Nc3Vector::</span>operator-=</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator/"><span class="baseclass">Nc3Vector::</span>operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:operator/_"><span class="baseclass">Nc3Vector::</span>operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcSignal:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcSignal.html">NcSignal</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:RemoveTimestamp"><span class="baseclass">NcPosition::</span>RemoveTimestamp</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:RemoveTrack">RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:RemoveTracks">RemoveTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:Reset">Reset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:ResetGain"><span class="baseclass">NcAttrib::</span>ResetGain</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:ResetGain@1"><span class="baseclass">NcAttrib::</span>ResetGain</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ResetLink">ResetLink</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ResetLink@1">ResetLink</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ResetLinks">ResetLinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ResetLinks@1">ResetLinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:ResetOffset"><span class="baseclass">NcAttrib::</span>ResetOffset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:ResetOffset@1"><span class="baseclass">NcAttrib::</span>ResetOffset</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:ResetPosition"><span class="baseclass">NcPosition::</span>ResetPosition</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ResetSignals">ResetSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ResetWaveform">ResetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ResetWaveform@1">ResetWaveform</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetAlive"><span class="baseclass">NcAttrib::</span>SetAlive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetAlive@1"><span class="baseclass">NcAttrib::</span>SetAlive</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetCalFunction"><span class="baseclass">NcAttrib::</span>SetCalFunction</a>(TF1* f, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetCalFunction@1"><span class="baseclass">NcAttrib::</span>SetCalFunction</a>(TF1* f, TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetDead"><span class="baseclass">NcAttrib::</span>SetDead</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetDead@1"><span class="baseclass">NcAttrib::</span>SetDead</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetDecalFunction"><span class="baseclass">NcAttrib::</span>SetDecalFunction</a>(TF1* f, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetDecalFunction@1"><span class="baseclass">NcAttrib::</span>SetDecalFunction</a>(TF1* f, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetDevice">SetDevice</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* dev)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetEdgeOff"><span class="baseclass">NcAttrib::</span>SetEdgeOff</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetEdgeOff@1"><span class="baseclass">NcAttrib::</span>SetEdgeOff</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetEdgeOn"><span class="baseclass">NcAttrib::</span>SetEdgeOn</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetEdgeOn@1"><span class="baseclass">NcAttrib::</span>SetEdgeOn</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetEdgeValue"><span class="baseclass">NcAttrib::</span>SetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> val, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetEdgeValue@1"><span class="baseclass">NcAttrib::</span>SetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> val, TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:SetErrors"><span class="baseclass">Nc3Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:SetErrors@2"><span class="baseclass">Nc3Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:SetErrors@1"><span class="baseclass">Nc3Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetGain"><span class="baseclass">NcAttrib::</span>SetGain</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gain, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetGain@1"><span class="baseclass">NcAttrib::</span>SetGain</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gain, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetLink">SetLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetLink@1">SetLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetOffset"><span class="baseclass">NcAttrib::</span>SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetOffset@1"><span class="baseclass">NcAttrib::</span>SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@3"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@2"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@1"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r1, <a href="./ListOfTypes.html#Double_t">Double_t</a> r2, <a href="./ListOfTypes.html#Double_t">Double_t</a> r3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors@2"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors@1"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetSignal">SetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetSignal@1">SetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, TString name)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetSignalError">SetSignalError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dsig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetSignalError@1">SetSignalError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dsig, TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetSlotName"><span class="baseclass">NcAttrib::</span>SetSlotName</a>(TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetSwapMode">SetSwapMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> swap = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetTimestamp"><span class="baseclass">NcPosition::</span>SetTimestamp</a>(<a href="./NcTimestamp.html">NcTimestamp</a>&amp; t)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetUnitScale"><span class="baseclass">NcPosition::</span>SetUnitScale</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:SetVector"><span class="baseclass">Nc3Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:SetVector@2"><span class="baseclass">Nc3Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:SetVector@1"><span class="baseclass">Nc3Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetWaveform">SetWaveform</a>(TH1F* waveform, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:SetZero"><span class="baseclass">Nc3Vector::</span>SetZero</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:Unlock"><span class="baseclass">NcAttrib::</span>Unlock</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:Unlock@1"><span class="baseclass">NcAttrib::</span>Unlock</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetCalFlags"><span class="baseclass">NcAttrib::</span>SetCalFlags</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> gf, <a href="./ListOfTypes.html#Int_t">Int_t</a> of, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetSigFlags">SetSigFlags</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> is, <a href="./ListOfTypes.html#Int_t">Int_t</a> ie, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcSignal:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype">TArrayI*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fCalflags"><span class="baseclass">NcAttrib::</span>fCalflags</a></td><td class="datadesc">Flags to mark dead, edge, and gain/offset calibrated signals</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fCalfuncs"><span class="baseclass">NcAttrib::</span>fCalfuncs</a></td><td class="datadesc">Explicit signal calibration functions</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fDecalfuncs"><span class="baseclass">NcAttrib::</span>fDecalfuncs</a></td><td class="datadesc">Explicit signal de-calibration functions</td></tr>
+<tr class="data"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a name="NcSignal:fDevice"></a>fDevice</td><td class="datadesc">Pointer to the device that owns this signal</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fDresult"><span class="baseclass">Nc3Vector::</span>fDresult</a></td><td class="datadesc">! Error on scalar result (e.g. norm or dotproduct)</td></tr>
+<tr class="data"><td class="datatype">TArrayF*</td><td class="dataname"><a name="NcSignal:fDsignals"></a>fDsignals</td><td class="datadesc">Errors on signal values</td></tr>
+<tr class="datainh"><td class="datatype">TArrayF*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fGains"><span class="baseclass">NcAttrib::</span>fGains</a></td><td class="datadesc">Gain values</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcObjMatrix.html">NcObjMatrix</a>*</td><td class="dataname"><a name="NcSignal:fLinks"></a>fLinks</td><td class="datadesc">Pointers of objects related to the various slots</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fNames"><span class="baseclass">NcAttrib::</span>fNames</a></td><td class="datadesc">User defined names for the various slots</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fNv"><span class="baseclass">Nc3Vector::</span>fNv</a></td><td class="datadesc">The number of components of the array fV</td></tr>
+<tr class="datainh"><td class="datatype">TArrayF*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fOffsets"><span class="baseclass">NcAttrib::</span>fOffsets</a></td><td class="datadesc">Offset values</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./NcPosition.html#NcPosition:fScale"><span class="baseclass">NcPosition::</span>fScale</a></td><td class="datadesc">The unit scale used for the position coordinates</td></tr>
+<tr class="data"><td class="datatype">TArrayI*</td><td class="dataname"><a name="NcSignal:fSigflags"></a>fSigflags</td><td class="datadesc">Flags to mark setting of signal and/or error values </td></tr>
+<tr class="data"><td class="datatype">TArrayF*</td><td class="dataname"><a name="NcSignal:fSignals"></a>fSignals</td><td class="datadesc">Signal values</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcSignal:fTracks"></a>fTracks</td><td class="datadesc">Pointers to associated tracks</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcTimestamp.html">NcTimestamp</a>*</td><td class="dataname"><a href="./NcPosition.html#NcPosition:fTstamp"><span class="baseclass">NcPosition::</span>fTstamp</a></td><td class="datadesc">The timestamp for this position</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a>*</td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fV"><span class="baseclass">Nc3Vector::</span>fV</a></td><td class="datadesc">[fNv] Vector in spherical (and errors in Cartesian) coordinates</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcSignal:fWaveforms"></a>fWaveforms</td><td class="datadesc">The 1D histograms containing the signal waveforms</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcSignal:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcSignal_Inh" id="MapNcSignal_Inh">
+<area shape="rect" id="node4" href="./NcPosition.html" title="NcPosition" alt="" coords="101,34,167,47"/>
+<area shape="rect" id="node5" href="./NcAttrib.html" title="NcAttrib" alt="" coords="101,47,167,60"/>
+<area shape="rect" id="node7" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="1,34,68,47"/>
+<area shape="rect" id="node9" href="./NcDevice.html" title="NcDevice" alt="" coords="301,20,367,34"/>
+<area shape="rect" id="node10" href="./NcCalcluster.html" title="NcCalcluster" alt="" coords="301,34,367,47"/>
+<area shape="rect" id="node11" href="./NcCalmodule.html" title="NcCalmodule" alt="" coords="301,47,367,60"/>
+<area shape="rect" id="node12" href="./IceGOM.html" title="IceGOM" alt="" coords="401,7,467,20"/>
+<area shape="rect" id="node13" href="./NcCalorimeter.html" title="NcCalorimeter" alt="" coords="401,20,467,34"/>
+<area shape="rect" id="node14" href="./NcVeto.html" title="NcVeto" alt="" coords="401,34,467,47"/>
+<area shape="rect" id="node15" href="./IceAOM.html" title="IceAOM" alt="" coords="501,1,567,14"/>
+<area shape="rect" id="node16" href="./IceDOM.html" title="IceDOM" alt="" coords="501,14,567,27"/>
+<area shape="rect" id="node17" href="./IceIDOM.html" title="IceIDOM" alt="" coords="601,7,667,20"/>
+<area shape="rect" id="node18" href="./IceTDOM.html" title="IceTDOM" alt="" coords="601,20,667,34"/>
+<area shape="rect" id="node19" href="./IceDCDOM.html" title="IceDCDOM" alt="" coords="700,1,767,14"/>
+<area shape="rect" id="node20" href="./IceICDOM.html" title="IceICDOM" alt="" coords="700,14,767,27"/>
+</map>
+<map name="MapNcSignal_InhMem" id="MapNcSignal_InhMem">
+<area shape="rect" id="graph18" href="./NcPosition.html" alt="" coords="344,699,629,735"/>
+<area shape="rect" id="graph19" href="./NcPosition.html" alt="" coords="541,745,629,897"/>
+<area shape="rect" id="graph20" href="./NcPosition.html" alt="" coords="443,745,531,897"/>
+<area shape="rect" id="graph21" href="./NcPosition.html" alt="" coords="344,745,432,897"/>
+<area shape="rect" id="graph17" href="./NcPosition.html" title="NcPosition" alt="" coords="333,652,640,908"/>
+<area shape="rect" id="graph24" href="./NcAttrib.html" alt="" coords="541,965,629,1001"/>
+<area shape="rect" id="graph25" href="./NcAttrib.html" alt="" coords="443,965,531,1031"/>
+<area shape="rect" id="graph26" href="./NcAttrib.html" alt="" coords="344,965,432,1031"/>
+<area shape="rect" id="graph27" href="./NcAttrib.html" alt="" coords="573,1012,597,1033"/>
+<area shape="rect" id="graph28" href="./NcAttrib.html" alt="" coords="541,1044,629,1313"/>
+<area shape="rect" id="graph29" href="./NcAttrib.html" alt="" coords="443,1041,531,1340"/>
+<area shape="rect" id="graph30" href="./NcAttrib.html" alt="" coords="344,1041,432,1340"/>
+<area shape="rect" id="graph23" href="./NcAttrib.html" title="NcAttrib" alt="" coords="333,919,640,1351"/>
+<area shape="rect" id="graph42" href="./Nc3Vector.html" alt="" coords="224,699,312,749"/>
+<area shape="rect" id="graph43" href="./Nc3Vector.html" alt="" coords="125,699,213,749"/>
+<area shape="rect" id="graph44" href="./Nc3Vector.html" alt="" coords="59,699,83,720"/>
+<area shape="rect" id="graph45" href="./Nc3Vector.html" alt="" coords="224,760,312,971"/>
+<area shape="rect" id="graph46" href="./Nc3Vector.html" alt="" coords="125,760,213,1000"/>
+<area shape="rect" id="graph47" href="./Nc3Vector.html" alt="" coords="27,760,115,1000"/>
+<area shape="rect" id="graph41" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="16,652,323,1011"/>
+</map>
+<map name="MapNcSignal_Lib" id="MapNcSignal_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcSignal_Inh" class="tabsel" href="inh/NcSignal_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcSignal_Inh.png');">Inheritance</a>
+<a id="imgNcSignal_InhMem" class="tab" href="inhmem/NcSignal_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcSignal_InhMem.png');">Inherited Members</a>
+<a id="imgNcSignal_Incl" class="tab" href="incl/NcSignal_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcSignal_Incl.png');">Includes</a>
+<a id="imgNcSignal_Lib" class="tab" href="lib/NcSignal_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcSignal_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcSignal_Inh" src="inh/NcSignal_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcSignal:NcSignal" href="src/NcSignal.cxx.html#MqSxuC">NcSignal</a>()</span><br />
+<div class="funccomm"><pre> Creation of an <a href="./NcSignal.html">NcSignal</a> object and initialisation of parameters.
+ Several signal values (with errors) can be stored in different slots.
+ If needed, the storage for values (and errors) will be expanded automatically
+ when entering values and/or errors.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcSignal:_NcSignal" href="src/NcSignal.cxx.html#H5MlwC">~NcSignal</a>()</span><br />
+<div class="funccomm"><pre> Destructor to delete dynamically allocated memory
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcSignal:NcSignal@1" href="src/NcSignal.cxx.html#YpwAyB">NcSignal</a>(<span class="keyword">const</span> <a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
+<div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:Reset" href="src/NcSignal.cxx.html#nU7C_D">Reset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> all signal and position values and errors to 0.
+
+ mode = 0 <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> position and all signal values and their errors to 0.
+          The waveform histograms are reset, but the calibration
+          constants (i.e. gains and offsets) are kept.
+        1 <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> position and delete the signal and error storage arrays.
+          Also the waveform histograms, gains and offset arrays are deleted.
+
+ The default when invoking <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a>() corresponds to mode=0.
+
+ Note : In all cases the storage of the various links will be reset.
+        The UniqueID, name and title will NOT be reset.
+        In case the user wants to reset these attributes, this has to
+        be done explicitly via the SET facilities.
+
+ The usage of mode=0 allows to re-use the allocated memory for new
+ signal (and error) values. This behaviour is preferable (i.e. faster)
+ in case the various signals always contain the same number of values
+ and have the same calibration constants.
+ The usage of mode=1 is slower, but allows a more efficient memory
+ occupation (and smaller output file size) in case the different
+ signals have a variable number of values.
+
+ For more specific actions see <a href="./NcPosition.html#NcPosition:ResetPosition" title="void NcPosition::ResetPosition()">ResetPosition</a>(), <a href="./NcSignal.html#NcSignal:ResetSignals" title="void NcSignal::ResetSignals(Int_t mode=0)">ResetSignals</a>(),
+ <a href="./NcSignal.html#NcSignal:DeleteSignals" title="void NcSignal::DeleteSignals(Int_t mode=0)">DeleteSignals</a>(), <a href="./NcAttrib.html#NcAttrib:ResetGain" title="void NcAttrib::ResetGain(Int_t j=1) or overloads">ResetGain</a>(), <a href="./NcAttrib.html#NcAttrib:ResetOffset" title="void NcAttrib::ResetOffset(Int_t j=1) or overloads">ResetOffset</a>(), <a href="./NcSignal.html#NcSignal:ResetLink" title="void NcSignal::ResetLink(Int_t j=1,Int_t k=1) or overloads">ResetLink</a>(), <a href="./NcSignal.html#NcSignal:ResetWaveform" title="void NcSignal::ResetWaveform(Int_t j=1) or overloads">ResetWaveform</a>(),
+ <a href="./NcSignal.html#NcSignal:DeleteWaveform" title="void NcSignal::DeleteWaveform(Int_t j=1) or overloads">DeleteWaveform</a>() and <a href="./NcAttrib.html#NcAttrib:DeleteCalibrations" title="void NcAttrib::DeleteCalibrations(Int_t mode=0)">DeleteCalibrations</a>().
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ResetSignals" href="src/NcSignal.cxx.html#yfN4iC">ResetSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> various signal data according to user selection.
+
+ mode = 0 <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> all signal values, their errors and all waveform histos.
+        1 <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> only signal values and waveform histos.
+        2 <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> only signal errors and waveform histos.
+       -1 <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> only signal values.
+       -2 <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> only signal errors.
+
+ The default when invoking <a href="./NcSignal.html#NcSignal:ResetSignals" title="void NcSignal::ResetSignals(Int_t mode=0)">ResetSignals</a>() corresponds to mode=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:DeleteSignals" href="src/NcSignal.cxx.html#W0o_TD">DeleteSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> storage arrays of various signal data according to user selection.
+
+ mode = 0 <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> arrays of signal values, their errors and all waveform histos.
+        1 <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> only signal values array and waveform histos.
+        2 <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> only signal errors array and waveform histos.
+       -1 <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> only signal values array.
+       -2 <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> only signal errors array.
+
+ The default when invoking <a href="./NcSignal.html#NcSignal:DeleteSignals" title="void NcSignal::DeleteSignals(Int_t mode=0)">DeleteSignals</a>() corresponds to mode=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetSignal" href="src/NcSignal.cxx.html#fCUbx">SetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Store signal value for the j-th (default j=1) slot.
+ Notes :
+
+ 1) The first signal slot is at j=1.
+ 2) In case the 'lock' flag was set for the specified slot, the new
+    signal value will not be stored.
+    One has to unlock the specified slot first in case one really wants
+    to overwite the signal value.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for signal values, the number of reserved slots for the
+ signal values is increased automatically.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetSignal@1" href="src/NcSignal.cxx.html#s44zOE">SetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, TString name)</span><br />
+<div class="funccomm"><pre> Store signal value for the name-specified slot.
+
+ Note :
+
+ In case the 'lock' flag was set for the specified slot, the new
+ signal value will not be stored.
+ One has to unlock the specified slot first in case one really wants
+ to overwite the signal value.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:AddSignal" href="src/NcSignal.cxx.html#tMKbx">AddSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Add value to the signal of the j-th (default j=1) slot.
+ Notes :
+
+ 1) The first signal slot is at j=1.
+ 2) In case the 'lock' flag was set for the specified slot, the new
+    signal value will not be stored.
+    One has to unlock the specified slot first in case one really wants
+    to overwite the signal value.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for signal values, the number of reserved slots for the
+ signal values is increased automatically.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:AddSignal@1" href="src/NcSignal.cxx.html#Mwz4OE">AddSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, TString name)</span><br />
+<div class="funccomm"><pre> Add value to the signal of the name-specified slot.
+
+ Note :
+
+ In case the 'lock' flag was set for the specified slot, the new
+ signal value will not be stored.
+ One has to unlock the specified slot first in case one really wants
+ to overwite the signal value.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcSignal:GetSignal" href="src/NcSignal.cxx.html#R2xBjB">GetSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Provide signal value of the j-th (default j=1) slot.
+ Note : The first signal slot is at j=1.
+ In case no signal is present or the input argument <span class="string">"j"</span> or <span class="string">"mode"</span> is invalid,
+ the value 0 is returned.
+ The parameter <span class="string">"mode"</span> allows for automatic (de)calibration of the signal
+ (e.g. gain etc... correction or via explicit (de)calibration functions).
+
+ mode = 0 : Just the j-th signal is returned.
+        1 : The j-th signal is corrected for the gain, offset, dead flag etc...
+            In case the j-th slot was marked dead, 0 is returned.
+            In case the gain value was not set, gain=1 will be assumed.
+            In case the gain value was 0, a signal value of 0 is returned.
+            In case the offset value was not set, offset=0 will be assumed.
+        2 : Same as mode=1 but gain, offset dead flag etc... are taken from
+            the <a href="./NcDevice.html">NcDevice</a> which owns this <a href="./NcSignal.html">NcSignal</a> object.
+            The corresponding <a href="./NcDevice.html">NcDevice</a> slot is obtained via matching of
+            the slotnames. In case this fails, the slotindex <span class="string">"j"</span> of the
+            input argument will be used.
+            In case this <a href="./NcSignal.html">NcSignal</a> object has no parent <a href="./NcDevice.html">NcDevice</a>, just
+            the j-th signal is returned (like with mode=0).
+        3 : The j-th signal is corrected using the corresponding calibration
+            function.
+            In case the j-th slot was marked dead, 0 is returned.
+            In case no calibration function is present, just the j-th signal
+            is returned (like with mode=0).
+        4 : Same as mode=3 but the calibration function and dead flag are
+            taken from the <a href="./NcDevice.html">NcDevice</a> which owns this <a href="./NcSignal.html">NcSignal</a> object.
+            The corresponding <a href="./NcDevice.html">NcDevice</a> slot is obtained via matching of
+            the slotnames. In case this fails, the slotindex <span class="string">"j"</span> of the
+            input argument will be used.
+        5 : Same as mode=2 but in case no parent <a href="./NcDevice.html">NcDevice</a> is present
+            an automatic switch to mode=1 will be made.
+        6 : Same as mode=4 but in case no parent <a href="./NcDevice.html">NcDevice</a> is present
+            an automatic switch to mode=3 will be made.
+        7 : Same as mode=3 but in case no calibration function is present
+            an automatic switch to mode=4 will be made.
+        8 : Same as mode=7 but also the corresponding dead flag of the
+            parent device (if any) will be checked.
+            If either the dead flag of the requested signal slot of this
+            <a href="./NcSignal.html">NcSignal</a> object or the corresponding parent device slot is
+            set, 0 is returned.
+
+       &lt;0 : The corresponding de-correction or de-calibration is performed
+
+ The corrected signal (sigc) is determined as follows :
+
+              sigc=(signal/gain)-offset
+
+ The de-corrected signal is determined as follows :
+
+              signal=(sigc+offset)*gain
+
+ The default is mode=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcSignal:GetSignal@1" href="src/NcSignal.cxx.html#Z4P85C">GetSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Provide signal value of the name-specified slot.
+ In case no signal is present, 0 is returned.
+ The parameter <span class="string">"mode"</span> allows for automatic (de)calibration of the signal
+ (e.g. gain etc... correction or via explicit (de)calibration functions).
+ For further details about the (de)calibration modes, please refer to the
+ corresponding slot-index based memberfunction.
+
+ The default is mode=0.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetSignalError" href="src/NcSignal.cxx.html#lylA8B">SetSignalError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dsig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Store error on the signal for the j-th (default j=1) slot.
+ Notes :
+
+ 1) The first signal slot is at j=1.
+ 2) In case the 'lock' flag was set for the specified slot, the new
+    signal error value will not be stored.
+    One has to unlock the specified slot first in case one really wants
+    to overwite the signal error value.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for signal error values, the number of reserved slots for the
+ signal errors is increased automatically.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetSignalError@1" href="src/NcSignal.cxx.html#SwtpfC">SetSignalError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dsig, TString name)</span><br />
+<div class="funccomm"><pre> Store error on the signal for the name-specified slot.
+
+ Note :
+
+ In case the 'lock' flag was set for the specified slot, the new
+ signal error value will not be stored.
+ One has to unlock the specified slot first in case one really wants
+ to overwite the signal error value.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcSignal:GetSignalError" href="src/NcSignal.cxx.html#mmL9q">GetSignalError</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide error on the signal of the j-th (default j=1) slot.
+ Note : The first signal slot is at j=1.
+ In case no signal is present or the argument j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcSignal:GetSignalError@1" href="src/NcSignal.cxx.html#bhQm5C">GetSignalError</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide error on the signal of the name-specified slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:Data" href="src/NcSignal.cxx.html#jOjsbC">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funccomm"><pre> Provide all signal information within the coordinate frame f.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:List" href="src/NcSignal.cxx.html#VJUlb">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) const</span><br />
+<div class="funccomm"><pre> Provide signal information for the j-th slot.
+ The first slot is at j=1.
+ In case j=0 (default) the data of all slots will be listed.
+ In case j=-1 the data of all slots will be listed, but the header
+ information will be suppressed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:List@1" href="src/NcSignal.cxx.html#GfPE2B">List</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide signal information for the name-specified slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ListWaveform" href="src/NcSignal.cxx.html#ZB9Y3">ListWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) const</span><br />
+<div class="funccomm"><pre> Provide information for the j-th waveform.
+ The first waveform is at j=1.
+ In case j=0 (default) the info of all waveforms will be listed.
+ In case j=-1 the info of all waveforms will be listed, but the header
+ information will be suppressed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ListTrack" href="src/NcSignal.cxx.html#UFJ7ME">ListTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) const</span><br />
+<div class="funccomm"><pre> Provide information for the j-th associated track.
+ The first associated track is at j=1.
+ In case j=0 (default) the info of all associated tracks will be listed.
+ In case j=-1 the info of all tracks will be listed, but the header
+ information will be suppressed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetNvalues" href="src/NcSignal.cxx.html#hLYbcC">GetNvalues</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of values for this signal.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetNerrors" href="src/NcSignal.cxx.html#i8b7RC">GetNerrors</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number specified errors on the values for this signal.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetSigFlags" href="src/NcSignal.cxx.html#WhPzwC">SetSigFlags</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> is, <a href="./ListOfTypes.html#Int_t">Int_t</a> ie, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funccomm"><pre> Store signal and/or error value flags of the j-th (default j=1) slot.
+ Note : The first slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, the number of reserved slots for the flags is
+ increased automatically.
+ The value stored is : 10*signalflag + errorflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetSignalFlag" href="src/NcSignal.cxx.html#qO.EeE">GetSignalFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide signal value flag of the j-th (default j=1) slot.
+
+ flag = 1 : Signal value was set
+        0 : Signal value was not set
+
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetSignalFlag@1" href="src/NcSignal.cxx.html#RZr2V">GetSignalFlag</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide signal value flag of the name-specified slot.
+
+ flag = 1 : Signal value was set
+        0 : Signal value was not set
+
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetErrorFlag" href="src/NcSignal.cxx.html#m5OK_B">GetErrorFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide error value flag of the j-th (default j=1) slot.
+
+ flag = 1 : <a href="./#TObject:Error" title="void TObject::Error(const char* method,const char* msgfmt)">Error</a> value was set
+        0 : <a href="./#TObject:Error" title="void TObject::Error(const char* method,const char* msgfmt)">Error</a> value was not set
+
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetErrorFlag@1" href="src/NcSignal.cxx.html#kfEiRD">GetErrorFlag</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide error value flag of the name-specified slot.
+
+ flag = 1 : <a href="./#TObject:Error" title="void TObject::Error(const char* method,const char* msgfmt)">Error</a> value was set
+        0 : <a href="./#TObject:Error" title="void TObject::Error(const char* method,const char* msgfmt)">Error</a> value was not set
+
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetNslots" href="src/NcSignal.cxx.html#jWJRyB">GetNslots</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of existing slots.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetNwaveforms" href="src/NcSignal.cxx.html#Bglh9C">GetNwaveforms</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of specified waveforms for this signal.
+ Actually the return value is the highest index of the stored waveforms.
+ This allows an index dependent meaning of waveform info (e.g. waveforms
+ with various gain values).
+ So, when all waveforms are stored in consequetive positions (e.g. 1,2,3),
+ this memberfunction returns 3, being both the highest filled position
+ and the actual number of waveforms.
+ In case only waveforms are stored at positions 1,2,5,7 this memberfunction
+ returns a value 7 whereas only 4 actual waveforms are present.
+ This implies that when looping over the various waveform slots, one
+ always has to check whether the returned pointer value is non-zero
+ (which is a good practice anyhow).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TH1F* <a class="funcname" name="NcSignal:GetWaveform" href="src/NcSignal.cxx.html#Thf3t">GetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide pointer to the j-th waveform histogram.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TH1F* <a class="funcname" name="NcSignal:GetWaveform@1" href="src/NcSignal.cxx.html#MqU5CC">GetWaveform</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide pointer to the waveform histogram with the specified name.
+
+ Note :
+
+ In case the specified name matches a part of the full name of the
+ waveform histogram, the pointer to the corresponding histogram is returned.
+ However, the name pattern should match exactly, i.e. it is  case sensitive.
+ As such the name matching can be regarded as using wildcards.
+
+ In case no match is found, zero is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetWaveformIndex" href="src/NcSignal.cxx.html#dIDyjE">GetWaveformIndex</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide index to the waveform histogram with the specified name.
+
+ Note :
+
+ In case the specified name matches a part of the full name of the
+ waveform histogram, the index to the corresponding histogram is returned.
+ However, the name pattern should match exactly, i.e. it is  case sensitive.
+ As such the name matching can be regarded as using wildcards.
+
+ In case no match is found, zero is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetWaveform" href="src/NcSignal.cxx.html#qKRFIC">SetWaveform</a>(TH1F* waveform, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the 1D waveform histogram for the j-th waveform.
+
+ Notes :
+  The first waveform position at j=1.
+  j=1 is the default value.
+
+ In case the value of the index j exceeds the maximum number of reserved
+ positions for the waveforms, the number of reserved positions for the waveforms
+ is increased automatically.
+
+ In case the histo pointer argument has the same value as the current waveform
+ histogram pointer value, no action is taken since the user has already
+ modified the actual histogram.
+
+ In case the histo pointer argument is zero, the current waveform histogram
+ is deleted and the pointer set to zero.
+
+ In all other cases the current waveform histogram is deleted and a new
+ copy of the input histogram is created which becomes the current waveform
+ histogram.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ResetWaveform" href="src/NcSignal.cxx.html#m78rUB">ResetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> the histogram of the j-th (default j=1) waveform.
+ This memberfunction invokes TH1F::<a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a>() for the corresponding waveform(s).
+ To actually delete the histograms from memory, use <a href="./NcSignal.html#NcSignal:DeleteWaveform" title="void NcSignal::DeleteWaveform(Int_t j=1) or overloads">DeleteWaveform</a>().
+ Notes : The first position is at j=1.
+         j=0 ==&gt; All waveforms will be reset.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ResetWaveform@1" href="src/NcSignal.cxx.html#zBkFjC">ResetWaveform</a>(TString name)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> the waveform with the specified name.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:DeleteWaveform" href="src/NcSignal.cxx.html#IOnKMC">DeleteWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> the histogram of the j-th (default j=1) waveform.
+ Notes : The first position is at j=1.
+         j=0 ==&gt; All waveforms will be deleted.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:DeleteWaveform@1" href="src/NcSignal.cxx.html#BzZdYE">DeleteWaveform</a>(TString name)</span><br />
+<div class="funccomm"><pre> <a href="./#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a> the waveform with the specified name.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetNlinks" href="src/NcSignal.cxx.html#EFr.PE">GetNlinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) const</span><br />
+<div class="funccomm"><pre> Provide the number of links to the specified object for the j-th slot.
+ If j=0 (default) all slots will be scanned for the specified object.
+ If obj=0 (default) all encountered objects for the specified slot will be counted.
+ So, invokation of the default <a href="./NcSignal.html#NcSignal:GetNlinks" title="Int_t NcSignal::GetNlinks(TObject* obj=0,Int_t j=0) or overloads">GetNlinks</a>() will return the total number of
+ all references to all sorts of stored objects.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetNlinks@1" href="src/NcSignal.cxx.html#Kpkf1E">GetNlinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name) const</span><br />
+<div class="funccomm"><pre> Provide the number of links to the specified object for the name-spec. slot.
+ If obj=0 all encountered objects for the specified slot will be counted.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSignal:GetLink" href="src/NcSignal.cxx.html#ePBHmE">GetLink</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1) const</span><br />
+<div class="funccomm"><pre> Provide pointer of the object linked to the j-th slot at position k.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSignal:GetLink@1" href="src/NcSignal.cxx.html#ixCYw">GetLink</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1) const</span><br />
+<div class="funccomm"><pre> Provide pointer of the object linked to the name-spec. slot at position k.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetLink" href="src/NcSignal.cxx.html#cuFhn">SetLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</span><br />
+<div class="funccomm"><pre> Introduce a link (=pointer) to an object for the j-th slot at position k.
+ Only the pointer values are stored for (backward) reference, meaning
+ that the objects of which the pointers are stored are NOT owned
+ by the <a href="./NcSignal.html">NcSignal</a> object.
+
+ Notes :
+  The first slot is at j=1 and the first position is at k=1.
+  j=1 and k=1 are the default values.
+
+ If needed, the storage area for the links is increased automatically.
+
+ In case the pointer argument is zero, indeed a value of zero will be
+ stored at the specified position (k) for the specified slot (j).
+
+ In principle any object derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a> can be referred to by this
+ mechanism.
+ However, this <span class="string">"linking back"</span> facility was introduced to enable <a href="./NcSignal.html">NcSignal</a> slots
+ to refer directly to the various NcTracks to which the <a href="./NcSignal.html">NcSignal</a> object itself
+ is related (see <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:AddSignal" title="void NcTrack::AddSignal(NcSignal&amp; s,Int_t mode=0)">AddSignal</a>).
+ Therefore, in case the input argument <span class="string">"obj"</span> points to an <a href="./NcTrack.html">NcTrack</a> (or derived)
+ object, the current signal is automatically related to this <a href="./NcTrack.html">NcTrack</a>
+ (or derived) object.
+ Also a global link to this <a href="./NcTrack.html">NcTrack</a> (or derived) object will be stored
+ via the <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() facility.
+
+ IMPORTANT NOTE :
+
+ In case one just wants to relate the current <a href="./NcSignal.html">NcSignal</a> to a certain <a href="./NcTrack.html">NcTrack</a>
+ without a specific signal slot association, it is much more efficient
+ (both memory and CPU wise) to use the memberfunction <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() instead.
+
+ Please also have a look at the docs of the memberfunction <a href="./NcSignal.html#NcSignal:ResetLink" title="void NcSignal::ResetLink(Int_t j=1,Int_t k=1) or overloads">ResetLink</a>()
+ to prevent the situation of stored pointers to non-existent object.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetLink@1" href="src/NcSignal.cxx.html#u9PNTB">SetLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</span><br />
+<div class="funccomm"><pre> Introduce a link (=pointer) to an object for the name-spec. slot at position k.
+ Only the pointer values are stored for (backward) reference, meaning
+ that the objects of which the pointers are stored are NOT owned
+ by the <a href="./NcSignal.html">NcSignal</a> object.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+
+ In case the pointer argument is zero, indeed a value of zero will be
+ stored at the specified position (k) for the specified slotname.
+
+ In principle any object derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a> can be referred to by this
+ mechanism.
+ However, this <span class="string">"linking back"</span> facility was introduced to enable <a href="./NcSignal.html">NcSignal</a> slots
+ to refer directly to the various NcTracks to which the <a href="./NcSignal.html">NcSignal</a> object itself
+ is related (see <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:AddSignal" title="void NcTrack::AddSignal(NcSignal&amp; s,Int_t mode=0)">AddSignal</a>).
+ Therefore, in case the input argument <span class="string">"obj"</span> points to an <a href="./NcTrack.html">NcTrack</a> (or derived)
+ object, the current signal is automatically related to this <a href="./NcTrack.html">NcTrack</a>
+ (or derived) object.
+ Also a global link to this <a href="./NcTrack.html">NcTrack</a> (or derived) object will be stored
+ via the <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() facility.
+
+ IMPORTANT NOTE :
+
+ In case one just wants to relate the current <a href="./NcSignal.html">NcSignal</a> to a certain <a href="./NcTrack.html">NcTrack</a>
+ without a specific signal slot association, it is much more efficient
+ (both memory and CPU wise) to use the memberfunction <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() instead.
+
+ Please also have a look at the docs of the memberfunction <a href="./NcSignal.html#NcSignal:ResetLink" title="void NcSignal::ResetLink(Int_t j=1,Int_t k=1) or overloads">ResetLink</a>()
+ to prevent the situation of stored pointers to non-existent object.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:AddLink" href="src/NcSignal.cxx.html#gGilY">AddLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Introduce a link (=pointer) to an object for the j-th slot at the first
+ free position.
+ Only the pointer values are stored for (backward) reference, meaning
+ that the objects of which the pointers are stored are NOT owned
+ by the <a href="./NcSignal.html">NcSignal</a> object.
+
+ Notes :
+  The first slot is at j=1 and the first position is at k=1.
+  j=1 is the default value.
+
+ If needed, the storage area for the links is increased automatically.
+
+ In case the pointer argument is zero, no link will be added.
+
+ In principle any object derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a> can be referred to by this
+ mechanism.
+ However, this <span class="string">"linking back"</span> facility was introduced to enable <a href="./NcSignal.html">NcSignal</a> slots
+ to refer directly to the various NcTracks to which the <a href="./NcSignal.html">NcSignal</a> object itself
+ is related (see <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:AddSignal" title="void NcTrack::AddSignal(NcSignal&amp; s,Int_t mode=0)">AddSignal</a>).
+ Therefore, in case the input argument <span class="string">"obj"</span> points to an <a href="./NcTrack.html">NcTrack</a> (or derived)
+ object, the current signal is automatically related to this <a href="./NcTrack.html">NcTrack</a>
+ (or derived) object.
+ Also a global link to this <a href="./NcTrack.html">NcTrack</a> (or derived) object will be stored
+ via the <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() facility.
+
+ IMPORTANT NOTE :
+
+ In case one just wants to relate the current <a href="./NcSignal.html">NcSignal</a> to a certain <a href="./NcTrack.html">NcTrack</a>
+ without a specific signal slot association, it is much more efficient
+ (both memory and CPU wise) to use the memberfunction <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() instead.
+
+ Please also have a look at the docs of the memberfunction <a href="./NcSignal.html#NcSignal:ResetLink" title="void NcSignal::ResetLink(Int_t j=1,Int_t k=1) or overloads">ResetLink</a>()
+ to prevent the situation of stored pointers to non-existent object.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:AddLink@1" href="src/NcSignal.cxx.html#I30k4B">AddLink</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name)</span><br />
+<div class="funccomm"><pre> Introduce a link (=pointer) to an object for the name-spec slot at the first
+ free position.
+ Only the pointer values are stored for (backward) reference, meaning
+ that the objects of which the pointers are stored are NOT owned
+ by the <a href="./NcSignal.html">NcSignal</a> object.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+
+ In case the pointer argument is zero, indeed a value of zero will be
+ stored at the first free position of the specified slotname.
+
+ In principle any object derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a> can be referred to by this
+ mechanism.
+ However, this <span class="string">"linking back"</span> facility was introduced to enable <a href="./NcSignal.html">NcSignal</a> slots
+ to refer directly to the various NcTracks to which the <a href="./NcSignal.html">NcSignal</a> object itself
+ is related (see <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:AddSignal" title="void NcTrack::AddSignal(NcSignal&amp; s,Int_t mode=0)">AddSignal</a>).
+ Therefore, in case the input argument <span class="string">"obj"</span> points to an <a href="./NcTrack.html">NcTrack</a> (or derived)
+ object, the current signal is automatically related to this <a href="./NcTrack.html">NcTrack</a>
+ (or derived) object.
+ Also a global link to this <a href="./NcTrack.html">NcTrack</a> (or derived) object will be stored
+ via the <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() facility.
+
+ IMPORTANT NOTE :
+
+ In case one just wants to relate the current <a href="./NcSignal.html">NcSignal</a> to a certain <a href="./NcTrack.html">NcTrack</a>
+ without a specific signal slot association, it is much more efficient
+ (both memory and CPU wise) to use the memberfunction <a href="./NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>() instead.
+
+ Please also have a look at the docs of the memberfunction <a href="./NcSignal.html#NcSignal:ResetLink" title="void NcSignal::ResetLink(Int_t j=1,Int_t k=1) or overloads">ResetLink</a>()
+ to prevent the situation of stored pointers to non-existent object.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ResetLink" href="src/NcSignal.cxx.html#AogfwC">ResetLink</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> the link of the j-th slot at position k.
+
+ Notes :
+  The first slot is at j=1 and the first position is at k=1.
+  j=1 and k=1 are the default values.
+
+  This memberfunction is intended to reset only 1 specified link location.
+  For extended functionality, please refer to the memberfuction <a href="./NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>().
+
+ In general the user should take care of properly clearing the corresponding
+ pointer here when the referred object is deleted.
+ However, this <span class="string">"linking back"</span> facility was introduced to enable <a href="./NcSignal.html">NcSignal</a> slots
+ to refer directly to the various NcTracks to which the <a href="./NcSignal.html">NcSignal</a> object itself
+ is related (see <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:AddSignal" title="void NcTrack::AddSignal(NcSignal&amp; s,Int_t mode=0)">AddSignal</a>).
+ As such, the <a href="./NcTrack.html">NcTrack</a> destructor already takes care of clearing the corresponding
+ links from the various <a href="./NcSignal.html">NcSignal</a> slots for all the <a href="./NcSignal.html">NcSignal</a> objects that were
+ related to that <a href="./NcTrack.html">NcTrack</a>.
+ So, in case the link introduced via <a href="./NcSignal.html#NcSignal:SetLink" title="void NcSignal::SetLink(TObject* obj,Int_t j=1,Int_t k=1) or overloads">SetLink</a>() is the pointer of an <a href="./NcTrack.html">NcTrack</a> object,
+ the user doesn't have to worry about clearing the corresponding <a href="./NcTrack.html">NcTrack</a> link from
+ the <a href="./NcSignal.html">NcSignal</a> object when the corresponding <a href="./NcTrack.html">NcTrack</a> object is deleted.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ResetLink@1" href="src/NcSignal.cxx.html#ZrexRC">ResetLink</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> the link of the name-specified slot at position k.
+
+ This memberfunction is intended to reset only 1 specified link location.
+ For extended functionality, please refer to the memberfuction <a href="./NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>().
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ResetLinks" href="src/NcSignal.cxx.html#aRN3YC">ResetLinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> single or multiple slot link(s) according to user specified selections.
+
+ IMPORTANT NOTE :
+
+ This facility only acts on the slot related links.
+ The global track reference list will not be affected.
+ To remove all references to <a href="./NcTrack.html">NcTrack</a> (or derived) objects, please
+ use the <a href="./NcSignal.html#NcSignal:RemoveTrack" title="void NcSignal::RemoveTrack(NcTrack&amp; t,Int_t mode=1)">RemoveTrack</a>() of <a href="./NcSignal.html#NcSignal:RemoveTracks" title="void NcSignal::RemoveTracks(Int_t mode=1)">RemoveTracks</a>() memberfunctions.
+
+ A link is only reset if the stored reference matches the argument <span class="string">"obj"</span>.
+ In case obj=0 no check on the matching of the stored reference is performed
+ and the stored link is always reset in accordance with the other
+ selection criteria.
+
+ In case the slot argument <span class="string">"j"</span> is specified, only the links from that
+ specified slot will be deleted.
+ In case j=0 (default) no checking on the slot index is performed.
+
+ In case the position argument <span class="string">"k"</span> is specified, only the links from that
+ specified position will be deleted.
+ In case k=0 (default) no checking on the position index is performed.
+
+ So, invokation of <a href="./NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>(obj) will remove all references to the
+ object <span class="string">"obj"</span> from the total <a href="./NcSignal.html">NcSignal</a>, whereas <a href="./NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>(obj,j)
+ will remove all references to the object <span class="string">"obj"</span> only from slot <span class="string">"j"</span>.
+
+ Notes :
+
+ The first slot is indicated as j=1, whereas the first position is at k=1.
+
+ Invokation of <a href="./NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>(0,row,col) is equivalent to invoking the
+ memberfunction <a href="./NcSignal.html#NcSignal:ResetLink" title="void NcSignal::ResetLink(Int_t j=1,Int_t k=1) or overloads">ResetLink</a>(row,col).
+ Invoking the latter directly is slightly faster.
+
+ Invokation of <a href="./NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>(0) will reset all stored references in this <a href="./NcSignal.html">NcSignal</a>.
+
+ In general the user should take care of properly clearing the corresponding
+ pointer here when the referred object is deleted.
+ However, this <span class="string">"linking back"</span> facility was introduced to enable <a href="./NcSignal.html">NcSignal</a> slots
+ to refer directly to the various NcTracks to which the <a href="./NcSignal.html">NcSignal</a> object itself
+ is related (see <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:AddSignal" title="void NcTrack::AddSignal(NcSignal&amp; s,Int_t mode=0)">AddSignal</a>).
+ As such, the <a href="./NcTrack.html">NcTrack</a> destructor already takes care of clearing the corresponding
+ links from the various <a href="./NcSignal.html">NcSignal</a> slots for all the <a href="./NcSignal.html">NcSignal</a> objects that were
+ related to that <a href="./NcTrack.html">NcTrack</a>.
+ So, in case the link introduced via <a href="./NcSignal.html#NcSignal:SetLink" title="void NcSignal::SetLink(TObject* obj,Int_t j=1,Int_t k=1) or overloads">SetLink</a>() is the pointer of an <a href="./NcTrack.html">NcTrack</a> object,
+ the user doesn't have to worry about clearing the corresponding <a href="./NcTrack.html">NcTrack</a> link from
+ the <a href="./NcSignal.html">NcSignal</a> object when the corresponding <a href="./NcTrack.html">NcTrack</a> object is deleted.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:ResetLinks@1" href="src/NcSignal.cxx.html#Gg.mPD">ResetLinks</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> single or multiple slot link(s) according to user specified selections.
+
+ IMPORTANT NOTE :
+
+ This facility only acts on the slot related links.
+ The global track reference list will not be affected.
+ To remove all references to <a href="./NcTrack.html">NcTrack</a> (or derived) objects, please
+ use the <a href="./NcSignal.html#NcSignal:RemoveTrack" title="void NcSignal::RemoveTrack(NcTrack&amp; t,Int_t mode=1)">RemoveTrack</a>() of <a href="./NcSignal.html#NcSignal:RemoveTracks" title="void NcSignal::RemoveTracks(Int_t mode=1)">RemoveTracks</a>() memberfunctions.
+
+ A link is only reset if the stored reference matches the argument <span class="string">"obj"</span>.
+ In case obj=0 no check on the matching of the stored reference is performed
+ and the stored link is always reset in accordance with the other
+ selection criteria.
+
+ In case the position argument <span class="string">"k"</span> is specified, only the links from that
+ specified position will be deleted.
+ In case k=0 (default) no checking on the position index is performed.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+
+ In general the user should take care of properly clearing the corresponding
+ pointer here when the referred object is deleted.
+ However, this <span class="string">"linking back"</span> facility was introduced to enable <a href="./NcSignal.html">NcSignal</a> slots
+ to refer directly to the various NcTracks to which the <a href="./NcSignal.html">NcSignal</a> object itself
+ is related (see <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:AddSignal" title="void NcTrack::AddSignal(NcSignal&amp; s,Int_t mode=0)">AddSignal</a>).
+ As such, the <a href="./NcTrack.html">NcTrack</a> destructor already takes care of clearing the corresponding
+ links from the various <a href="./NcSignal.html">NcSignal</a> slots for all the <a href="./NcSignal.html">NcSignal</a> objects that were
+ related to that <a href="./NcTrack.html">NcTrack</a>.
+ So, in case the link introduced via <a href="./NcSignal.html#NcSignal:SetLink" title="void NcSignal::SetLink(TObject* obj,Int_t j=1,Int_t k=1) or overloads">SetLink</a>() is the pointer of an <a href="./NcTrack.html">NcTrack</a> object,
+ the user doesn't have to worry about clearing the corresponding <a href="./NcTrack.html">NcTrack</a> link from
+ the <a href="./NcSignal.html">NcSignal</a> object when the corresponding <a href="./NcTrack.html">NcTrack</a> object is deleted.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetIndices" href="src/NcSignal.cxx.html#NMjaj">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TArrayI&amp; js, TArrayI&amp; ks) const</span><br />
+<div class="funccomm"><pre> Provide the slot and position indices of all the storage locations
+ of the specified object.
+ The slot (j) and pos. (k) indices are returned in the two separate TArrayI arrays
+ from which the (j,k) pairs can be obtained from the corresponding
+ array indices like (j,k)=(js.At(i),ks.At(i)).
+ The integer return argument represents the number of (j,k) pairs which
+ were encountered for the specified object.
+
+ If obj=0 no object selection is performed and all (j,k) indices
+ of the stored references for all objects are returned.
+
+ Notes :
+
+ As usual the convention is that slot and position numbering starts at 1.
+
+ This memberfunction always resets the two TArrayI arrays at the start.
+
+ This memberfunction can only be used to obtain the (j,k) indices
+ of the object as stored via the <a href="./NcSignal.html#NcSignal:SetLink" title="void NcSignal::SetLink(TObject* obj,Int_t j=1,Int_t k=1) or overloads">SetLink</a>() or <a href="./NcSignal.html#NcSignal:AddLink" title="void NcSignal::AddLink(TObject* obj,Int_t j=1) or overloads">AddLink</a>() memberfunction.
+ This means that in case the user has entered a TObjArray as object
+ (to increase the dimension of the resulting structure), the (j,k)
+ indices of that TObjArray are obtained and NOT the indices of the
+ actual objects contained in that TObjArray structure.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetIndices@1" href="src/NcSignal.cxx.html#G14v.B">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TArrayI&amp; ks) const</span><br />
+<div class="funccomm"><pre> Provide the position indices of all the storage locations of the
+ specified object in the j-th slot of this <a href="./NcSignal.html">NcSignal</a>.
+ The position indices are returned in the TArrayI array.
+ The integer return argument represents the number of storage locations which
+ were encountered for the specified object in the j-th slot.
+
+ If obj=0 no object selection is performed and all position indices
+ of the stored references for all objects of the j-th slot are returned.
+
+ If j=0 all slots will be scanned and all position indices matching the
+ object selection are returned.
+ Note that in this case multiple appearances of the same position index
+ will only be recorded once in the returned TArrayI array.
+
+ Notes :
+
+ As usual the convention is that slot and position numbering starts at 1.
+
+ This memberfunction always resets the TArrayI array at the start.
+
+ This memberfunction can only be used to obtain the position indices
+ of the object as stored via the <a href="./NcSignal.html#NcSignal:SetLink" title="void NcSignal::SetLink(TObject* obj,Int_t j=1,Int_t k=1) or overloads">SetLink</a>() or <a href="./NcSignal.html#NcSignal:AddLink" title="void NcSignal::AddLink(TObject* obj,Int_t j=1) or overloads">AddLink</a>() memberfunction.
+ This means that in case the user has entered a TObjArray as object
+ (to increase the dimension of the resulting structure), the position
+ indices of that TObjArray are obtained and NOT the indices of the
+ actual objects contained in that TObjArray structure.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetIndices@2" href="src/NcSignal.cxx.html#gyqSDD">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name, TArrayI&amp; ks) const</span><br />
+<div class="funccomm"><pre> Provide the position indices of all the storage locations of the
+ specified object in the name-specified slot of this <a href="./NcSignal.html">NcSignal</a>.
+ The position indices are returned in the TArrayI array.
+ The integer return argument represents the number of storage locations which
+ were encountered for the specified object in the j-th slot.
+
+ If obj=0 no object selection is performed and all position indices
+ of the stored references for all objects of the j-th slot are returned.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetIndices@3" href="src/NcSignal.cxx.html#jUbewB">GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TArrayI&amp; js, <a href="./ListOfTypes.html#Int_t">Int_t</a> k) const</span><br />
+<div class="funccomm"><pre> Provide the slot indices of all the storage locations of the
+ specified object for the k-th position in this <a href="./NcSignal.html">NcSignal</a>.
+ The slot indices are returned in the TArrayI array.
+ The integer return argument represents the number of storage locations which
+ were encountered for the specified object in the k-th position.
+
+ If obj=0 no object selection is performed and all slot indices
+ of the stored references for all objects in the k-th position are returned.
+
+ If k=0 all positions will be scanned and all slot indices matching the
+ object selection are returned.
+ Note that in this case multiple appearances of the same slot index
+ will only be recorded once in the returned TArrayI array.
+
+ Notes :
+
+ As usual the convention is that slot and position numbering starts at 1.
+
+ This memberfunction always resets the TArrayI array at the start.
+
+ This memberfunction can only be used to obtain the slot indices
+ of the object as stored via the <a href="./NcSignal.html#NcSignal:SetLink" title="void NcSignal::SetLink(TObject* obj,Int_t j=1,Int_t k=1) or overloads">SetLink</a>() or <a href="./NcSignal.html#NcSignal:AddLink" title="void NcSignal::AddLink(TObject* obj,Int_t j=1) or overloads">AddLink</a>() memberfunction.
+ This means that in case the user has entered a TObjArray as object
+ (to increase the dimension of the resulting structure), the slot
+ indices of that TObjArray are obtained and NOT the indices of the
+ actual objects contained in that TObjArray structure.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetSwapMode" href="src/NcSignal.cxx.html#NV2T3E">SetSwapMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> swap = 1)</span><br />
+<div class="funccomm"><pre> Set swapmode flag for the internal link storage.
+ In case for the stored links the maximum slot number differs considerably
+ from the maximum position number, it might be more efficient
+ (w.r.t. memory usage and/or output file size) to internally store the
+ link reference matrix with the rows and colums swapped.
+ This swapping is only related with the internal storage and as such
+ is completely hidden for the user.
+ At invokation of this memberfunction the default argument is swap=1.
+
+ Note : The swap mode can only be set as <a href="./ListOfTypes.html#long">long</a> as no links are
+        stored in the <a href="./NcSignal.html">NcSignal</a> (i.e. a new instance of <a href="./NcSignal.html">NcSignal</a>
+        or after invokation of the <a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a>() or <a href="./NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>() function).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetSwapMode" href="src/NcSignal.cxx.html#qf9PDC">GetSwapMode</a>() const</span><br />
+<div class="funccomm"><pre> Provide swapmode flag of the link storage.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetDevice" href="src/NcSignal.cxx.html#T8gXmC">SetDevice</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* dev)</span><br />
+<div class="funccomm"><pre> Store the pointer to the device which owns this <a href="./NcSignal.html">NcSignal</a> object.
+ This memberfunction is meant for internal use in <a href="./NcDevice.html">NcDevice</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcSignal:GetDevice" href="src/NcSignal.cxx.html#OHCy4D">GetDevice</a>() const</span><br />
+<div class="funccomm"><pre> Provide the pointer to the device which owns this <a href="./NcSignal.html">NcSignal</a> object.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:AddTrack" href="src/NcSignal.cxx.html#Nc3a3">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
+<div class="funccomm"><pre> Relate an <a href="./NcTrack.html">NcTrack</a> object to this signal.
+ Only the pointer values are stored for (backward) reference, meaning
+ that the tracks of which the pointers are stored are NOT owned
+ by the <a href="./NcSignal.html">NcSignal</a> object.
+
+ mode = 0 : Only the reference to the specified track is stored in
+            the current signal, without storing the (backward) reference
+            to this signal into the <a href="./NcTrack.html">NcTrack</a> structure.
+        1 : The (backward) reference to the current signal is also automatically
+            stored into the <a href="./NcTrack.html">NcTrack</a> (or derived) object specified in the
+            input argument.
+
+ The default is mode=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:RemoveTrack" href="src/NcSignal.cxx.html#T5BgeC">RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
+<div class="funccomm"><pre> Remove related <a href="./NcTrack.html">NcTrack</a> object from this signal.
+ Also all references (if any) to this track in the slot links area
+ are removed.
+
+ mode = 0 : All references to the specified track are removed from
+            the current signal, without removing the (backward) reference
+            to this signal from the <a href="./NcTrack.html">NcTrack</a> structure.
+        1 : The (backward) reference to the current signal is also automatically
+            removed from the <a href="./NcTrack.html">NcTrack</a> (or derived) object specified in the
+            input argument.
+
+ The default is mode=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:RemoveTracks" href="src/NcSignal.cxx.html#RAyPoB">RemoveTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
+<div class="funccomm"><pre> Remove all related <a href="./NcTrack.html">NcTrack</a> objects from this signal.
+ Also all references (if any) to the related tracks in the slot links area
+ are removed.
+
+ mode = 0 : All track references are removed from the current signal,
+            without removing the (backward) references to this signal from
+            the corresponding <a href="./NcTrack.html">NcTrack</a> objects.
+        1 : The (backward) references to the current signal are also automatically
+            removed from the corresponding <a href="./NcTrack.html">NcTrack</a> (or derived) objects.
+
+ The default is mode=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSignal:GetNtracks" href="src/NcSignal.cxx.html#zFPLTB">GetNtracks</a>(<a href="./NcTrack.html">NcTrack</a>* t = 0) const</span><br />
+<div class="funccomm"><pre> Provide the number of related NcTracks.
+ In case an <a href="./NcTrack.html">NcTrack</a> pointer is specified as input argument,
+ the number returned will be the number of occurrences (i.e. 0 or 1)
+ for that specified track.
+ By default t=0, which implies that just the number of all associated
+ tracks will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcTrack.html">NcTrack</a>* <a class="funcname" name="NcSignal:GetTrack" href="src/NcSignal.cxx.html#zRsMr">GetTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
+<div class="funccomm"><pre> Provide the related <a href="./NcTrack.html">NcTrack</a> number j.
+ Note : j=1 denotes the first track.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcTrack.html">NcTrack</a>* <a class="funcname" name="NcSignal:GetIdTrack" href="src/NcSignal.cxx.html#ijtvnB">GetIdTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
+<div class="funccomm"><pre> Return the track with user identifier <span class="string">"id"</span> of this signal
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSignal:Clone" href="src/NcSignal.cxx.html#H62zzC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
+ This memberfunction enables automatic creation of new objects of the
+ correct type depending on the object type, a feature which may be very useful
+ for containers when adding objects in case the container owns the objects.
+ This feature allows e.g. <a href="./NcTrack.html">NcTrack</a> to store either <a href="./NcSignal.html">NcSignal</a> objects or
+ objects derived from <a href="./NcSignal.html">NcSignal</a> via the <a href="./NcSignal.html#NcSignal:AddSignal" title="void NcSignal::AddSignal(Double_t sig,Int_t j=1) or overloads">AddSignal</a> memberfunction, provided
+ these derived classes also have a proper <a href="./NcSignal.html#NcSignal:Clone" title="TObject* NcSignal::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:24 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

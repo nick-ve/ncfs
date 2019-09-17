@@ -1,0 +1,830 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:14 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcAttrib</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcAttrib','','NcAttrib.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcAttrib.h.html">header file</a>
+<a class="descrheadentry" href="src/NcAttrib.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcAttrib:description">class description</a> 
+<a class="descrheadentry" href="#NcAttrib:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcAttrib:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcAttrib:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcAttrib</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcAttrib:description"></a>class NcAttrib</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcAttrib.html#NcAttrib:Class" title="TClass* NcAttrib::Class()">Class</a> <a href="./NcAttrib.html">NcAttrib</a>
+ Generic handling of detector signal (calibration) attributes.
+ Normally this class is only used as a base class to provide the various
+ attributes to the derived class. An example of this is <a href="./NcSignal.html">NcSignal</a>.
+ However, one can of course also use this class on its own as shown
+ in the simple example hereafter.
+
+ Example :
+
+ <a href="./NcAttrib.html">NcAttrib</a> a;
+ a.<a href="./NcAttrib.html#NcAttrib:SetSlotName" title="void NcAttrib::SetSlotName(TString s,Int_t j=1)">SetSlotName</a>(<span class="string">"PMT amplitude in Volt"</span>);
+ a.<a href="./NcAttrib.html#NcAttrib:SetGain" title="void NcAttrib::SetGain(Double_t gain,Int_t j=1) or overloads">SetGain</a>(250.7);
+ a.<a href="./NcAttrib.html#NcAttrib:SetSlotName" title="void NcAttrib::SetSlotName(TString s,Int_t j=1)">SetSlotName</a>(<span class="string">"Time of flight in ns"</span>,2);
+ a.<a href="./NcAttrib.html#NcAttrib:SetOffset" title="void NcAttrib::SetOffset(Double_t off,Int_t j=1) or overloads">SetOffset</a>(-22.5,2);
+ a.<a href="./NcAttrib.html#NcAttrib:SetSlotName" title="void NcAttrib::SetSlotName(TString s,Int_t j=1)">SetSlotName</a>(<span class="string">"PMT amplitude in ADC"</span>,3);
+ a.<a href="./NcAttrib.html#NcAttrib:SetGain" title="void NcAttrib::SetGain(Double_t gain,Int_t j=1) or overloads">SetGain</a>(1340,3);
+ a.<a href="./NcAttrib.html#NcAttrib:SetSlotName" title="void NcAttrib::SetSlotName(TString s,Int_t j=1)">SetSlotName</a>(<span class="string">"TDC"</span>,4);
+ a.<a href="./NcAttrib.html#NcAttrib:SetOffset" title="void NcAttrib::SetOffset(Double_t off,Int_t j=1) or overloads">SetOffset</a>(10.75,<span class="string">"TDC"</span>);
+ a.<a href="./NcAttrib.html#NcAttrib:SetEdgeOn" title="void NcAttrib::SetEdgeOn(Int_t j=1) or overloads">SetEdgeOn</a>(3);
+ a.<a href="./NcAttrib.html#NcAttrib:SetDead" title="void NcAttrib::SetDead(Int_t j=1) or overloads">SetDead</a>(1);
+ a.<a href="./NcAttrib.html#NcAttrib:List" title="void NcAttrib::List(Int_t j=0) or overloads">List</a>();
+
+--- Author: Nick van Eijndhoven 18-sep-2003 Utrecht University
+- Modified: NvE $Date: 2012-07-18 16:51:01 +0200 (Wed, 18 Jul 2012) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcAttrib:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcAttrib:NcAttrib">NcAttrib</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcAttrib:NcAttrib@1">NcAttrib</a>(<span class="keyword">const</span> <a href="./NcAttrib.html">NcAttrib</a>&amp; a)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcAttrib:_NcAttrib">~NcAttrib</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:AddNamedSlot">AddNamedSlot</a>(TString s)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcAttrib:Class">Class</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:DecreaseEdgeValue">DecreaseEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:DecreaseEdgeValue@1">DecreaseEdgeValue</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:DeleteCalibrations">DeleteCalibrations</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="#NcAttrib:GetCalFunction">GetCalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="#NcAttrib:GetCalFunction@1">GetCalFunction</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetCalWord">GetCalWord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetCalWord@1">GetCalWord</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetDeadValue">GetDeadValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetDeadValue@1">GetDeadValue</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="#NcAttrib:GetDecalFunction">GetDecalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="#NcAttrib:GetDecalFunction@1">GetDecalFunction</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetEdgeValue">GetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetEdgeValue@1">GetEdgeValue</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetGain">GetGain</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetGain@1">GetGain</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetGainFlag">GetGainFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetGainFlag@1">GetGainFlag</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetLockValue">GetLockValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetLockValue@1">GetLockValue</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetNcalflags">GetNcalflags</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetNcalfuncs">GetNcalfuncs</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetNdecalfuncs">GetNdecalfuncs</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetNgains">GetNgains</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetNnames">GetNnames</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetNoffsets">GetNoffsets</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetNslots">GetNslots</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetOffset">GetOffset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetOffset@1">GetOffset</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetOffsetFlag">GetOffsetFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetOffsetFlag@1">GetOffsetFlag</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAttrib:GetSlotIndex">GetSlotIndex</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="#NcAttrib:GetSlotName">GetSlotName</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:IncreaseEdgeValue">IncreaseEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:IncreaseEdgeValue@1">IncreaseEdgeValue</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcAttrib:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:List">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:List@1">List</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:Load">Load</a>(<a href="./NcAttrib.html">NcAttrib</a>&amp; a, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:Load@1">Load</a>(<a href="./NcAttrib.html">NcAttrib</a>&amp; a, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:Lock">Lock</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:Lock@1">Lock</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcAttrib.html">NcAttrib</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcAttrib:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcAttrib.html">NcAttrib</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:ResetGain">ResetGain</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:ResetGain@1">ResetGain</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:ResetOffset">ResetOffset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:ResetOffset@1">ResetOffset</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetAlive">SetAlive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetAlive@1">SetAlive</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetCalFunction">SetCalFunction</a>(TF1* f, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetCalFunction@1">SetCalFunction</a>(TF1* f, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetDead">SetDead</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetDead@1">SetDead</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetDecalFunction">SetDecalFunction</a>(TF1* f, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetDecalFunction@1">SetDecalFunction</a>(TF1* f, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetEdgeOff">SetEdgeOff</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetEdgeOff@1">SetEdgeOff</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetEdgeOn">SetEdgeOn</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetEdgeOn@1">SetEdgeOn</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetEdgeValue">SetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> val, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetEdgeValue@1">SetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> val, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetGain">SetGain</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gain, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetGain@1">SetGain</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gain, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetOffset">SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetOffset@1">SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetSlotName">SetSlotName</a>(TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:Unlock">Unlock</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:Unlock@1">Unlock</a>(TString name)</td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAttrib:SetCalFlags">SetCalFlags</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> gf, <a href="./ListOfTypes.html#Int_t">Int_t</a> of, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcAttrib:Data_Members"></a>Data Members</h2>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype">TArrayI*</td><td class="dataname"><a name="NcAttrib:fCalflags"></a>fCalflags</td><td class="datadesc">Flags to mark dead, edge, and gain/offset calibrated signals</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcAttrib:fCalfuncs"></a>fCalfuncs</td><td class="datadesc">Explicit signal calibration functions</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcAttrib:fDecalfuncs"></a>fDecalfuncs</td><td class="datadesc">Explicit signal de-calibration functions</td></tr>
+<tr class="data"><td class="datatype">TArrayF*</td><td class="dataname"><a name="NcAttrib:fGains"></a>fGains</td><td class="datadesc">Gain values</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcAttrib:fNames"></a>fNames</td><td class="datadesc">User defined names for the various slots</td></tr>
+<tr class="data"><td class="datatype">TArrayF*</td><td class="dataname"><a name="NcAttrib:fOffsets"></a>fOffsets</td><td class="datadesc">Offset values</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcAttrib:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcAttrib_Inh" id="MapNcAttrib_Inh">
+<area shape="rect" id="node3" href="./NcSignal.html" title="NcSignal" alt="" coords="116,39,193,54"/>
+<area shape="rect" id="node4" href="./NcAttribObj.html" title="NcAttribObj" alt="" coords="116,54,193,69"/>
+<area shape="rect" id="node5" href="./NcDevice.html" title="NcDevice" alt="" coords="231,24,307,39"/>
+<area shape="rect" id="node6" href="./NcCalcluster.html" title="NcCalcluster" alt="" coords="231,39,307,54"/>
+<area shape="rect" id="node7" href="./NcCalmodule.html" title="NcCalmodule" alt="" coords="231,54,307,69"/>
+<area shape="rect" id="node8" href="./IceGOM.html" title="IceGOM" alt="" coords="346,8,422,24"/>
+<area shape="rect" id="node9" href="./NcCalorimeter.html" title="NcCalorimeter" alt="" coords="346,24,422,39"/>
+<area shape="rect" id="node10" href="./NcVeto.html" title="NcVeto" alt="" coords="346,39,422,54"/>
+<area shape="rect" id="node11" href="./IceAOM.html" title="IceAOM" alt="" coords="461,1,537,16"/>
+<area shape="rect" id="node12" href="./IceDOM.html" title="IceDOM" alt="" coords="461,16,537,31"/>
+<area shape="rect" id="node13" href="./IceIDOM.html" title="IceIDOM" alt="" coords="575,8,652,24"/>
+<area shape="rect" id="node14" href="./IceTDOM.html" title="IceTDOM" alt="" coords="575,24,652,39"/>
+<area shape="rect" id="node15" href="./IceDCDOM.html" title="IceDCDOM" alt="" coords="690,1,767,16"/>
+<area shape="rect" id="node16" href="./IceICDOM.html" title="IceICDOM" alt="" coords="690,16,767,31"/>
+</map>
+<map name="MapNcAttrib_Lib" id="MapNcAttrib_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcAttrib_Inh" class="tabsel" href="inh/NcAttrib_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcAttrib_Inh.png');">Inheritance</a>
+<a id="imgNcAttrib_InhMem" class="tab" href="inhmem/NcAttrib_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcAttrib_InhMem.png');">Inherited Members</a>
+<a id="imgNcAttrib_Incl" class="tab" href="incl/NcAttrib_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcAttrib_Incl.png');">Includes</a>
+<a id="imgNcAttrib_Lib" class="tab" href="lib/NcAttrib_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcAttrib_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcAttrib_Inh" src="inh/NcAttrib_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcAttrib:NcAttrib" href="src/NcAttrib.cxx.html#wmrZ0E">NcAttrib</a>()</span><br />
+<div class="funccomm"><pre> Creation of an <a href="./NcAttrib.html">NcAttrib</a> object and initialisation of parameters.
+ Several values of the same type (e.g. gain) can be stored in different slots.
+ If needed, the storage for values will be expanded automatically
+ when entering values.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcAttrib:_NcAttrib" href="src/NcAttrib.cxx.html#O6p0JB">~NcAttrib</a>()</span><br />
+<div class="funccomm"><pre> Destructor to delete dynamically allocated memory
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcAttrib:NcAttrib@1" href="src/NcAttrib.cxx.html#qgukaC">NcAttrib</a>(<span class="keyword">const</span> <a href="./NcAttrib.html">NcAttrib</a>&amp; a)</span><br />
+<div class="funccomm"><pre> Copy constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetNgains" href="src/NcAttrib.cxx.html#w0Nv8D">GetNgains</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of specified gains for this attribute.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetNoffsets" href="src/NcAttrib.cxx.html#VUn0MD">GetNoffsets</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of specified offsets for this attribute.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetNcalflags" href="src/NcAttrib.cxx.html#y1PBM">GetNcalflags</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of specified calib. flags for this attribute.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetNnames" href="src/NcAttrib.cxx.html#iomw8D">GetNnames</a>() const</span><br />
+<div class="funccomm"><pre> Provide the maximum number of specified names for this attribute.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetGain" href="src/NcAttrib.cxx.html#ufq8e">SetGain</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gain, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Store gain value of the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for gain values, the number of reserved slots for the gain
+ values is increased automatically.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetGain@1" href="src/NcAttrib.cxx.html#Ck45MB">SetGain</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gain, TString name)</span><br />
+<div class="funccomm"><pre> Store gain value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetOffset" href="src/NcAttrib.cxx.html#e3M_2C">SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Store offset value of the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for offset values, the number of reserved slots for the offset
+ values is increased automatically.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetOffset@1" href="src/NcAttrib.cxx.html#jek8dB">SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, TString name)</span><br />
+<div class="funccomm"><pre> Store offset value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetCalFlags" href="src/NcAttrib.cxx.html#AOEI2E">SetCalFlags</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> gf, <a href="./ListOfTypes.html#Int_t">Int_t</a> of, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funccomm"><pre> Store calibration flags of the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the calib. flags, the number of reserved slots for the calib.
+ flags is increased automatically.
+ The value stored is : 10000*edge +1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetGainFlag" href="src/NcAttrib.cxx.html#oiF99C">GetGainFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide gain flag of the j-th (default j=1) attribute slot.
+
+ flag = 1 : Gain was set
+        0 : Gain was not set
+
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetGainFlag@1" href="src/NcAttrib.cxx.html#XfwYnC">GetGainFlag</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide gain flag of the name-specified attribute slot.
+
+ flag = 1 : Gain was set
+        0 : Gain was not set
+
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetOffsetFlag" href="src/NcAttrib.cxx.html#UaNfYE">GetOffsetFlag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide offset flag of the j-th (default j=1) attribute slot.
+
+ flag = 1 : Offset was set
+        0 : Offset was not set
+
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetOffsetFlag@1" href="src/NcAttrib.cxx.html#DKydUB">GetOffsetFlag</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide ofset flag of the name-specified attribute slot.
+
+ flag = 1 : Offset was set
+        0 : Offset was not set
+
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetCalWord" href="src/NcAttrib.cxx.html#FBQ0hE">GetCalWord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide calib. word of the j-th (default j=1) attribute slot.
+ The word value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetCalWord@1" href="src/NcAttrib.cxx.html#Y4zFYC">GetCalWord</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide calib. word of the name-specified attribute slot.
+ The word value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcAttrib:GetGain" href="src/NcAttrib.cxx.html#ZniaQC">GetGain</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide gain value of the j-th (default j=1) attribute slot.
+ The first attribute slot is at j=1.
+ In case no gain value was set or the argument j is invalid, 0 is returned.
+ Note : Use <a href="./NcAttrib.html#NcAttrib:GetGainFlag" title="Int_t NcAttrib::GetGainFlag(Int_t j=1) or overloads">GetGainFlag</a>(j) to check whether this gain was set or not.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcAttrib:GetGain@1" href="src/NcAttrib.cxx.html#Tul7JE">GetGain</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide gain value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcAttrib:GetOffset" href="src/NcAttrib.cxx.html#QVhWL">GetOffset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide offset value of the j-th (default j=1) attribute slot.
+ The first attribute slot at j=1.
+ In case no offset value was set or the argument j is invalid, 0 is returned.
+ Note : Use <a href="./NcAttrib.html#NcAttrib:GetOffsetFlag" title="Int_t NcAttrib::GetOffsetFlag(Int_t j=1) or overloads">GetOffsetFlag</a>(j) to check whether this offset was set or not.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcAttrib:GetOffset@1" href="src/NcAttrib.cxx.html#dJRCbE">GetOffset</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide offset value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:ResetGain" href="src/NcAttrib.cxx.html#dz3V1D">ResetGain</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Reset the gain value of the j-th (default j=1) attribute slot.
+ Notes : The first attribute slot is at j=1.
+         j=0 ==&gt; All gain values will be reset.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:ResetGain@1" href="src/NcAttrib.cxx.html#TF2knE">ResetGain</a>(TString name)</span><br />
+<div class="funccomm"><pre> Reset the gain value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:ResetOffset" href="src/NcAttrib.cxx.html#UZ2B2C">ResetOffset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Reset the offset value of the j-th (default j=1) attribute slot.
+ Notes : The first attribute slot is at j=1.
+         j=0 ==&gt; All offset values will be reset.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:ResetOffset@1" href="src/NcAttrib.cxx.html#SuVRp">ResetOffset</a>(TString name)</span><br />
+<div class="funccomm"><pre> Reset the offset value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:DeleteCalibrations" href="src/NcAttrib.cxx.html#SI0HOC">DeleteCalibrations</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> User selected delete of all gains and/or offsets.
+ mode = 0 : All attributes (names,gains,offsets,(de)calfuncs, edge and dead values) are deleted.
+        1 : Only the gains are deleted.
+        2 : Only the offsets are deleted.
+        3 : Gains, offsets and (de)calfuncs are deleted, but names, edge and dead values are kept.
+        4 : Only the calib. functions are deleted.
+        5 : Only the de-calib. functions are deleted.
+        6 : Only the calib. and de-calib. functions are deleted.
+
+ The default when invoking <a href="./NcAttrib.html#NcAttrib:DeleteCalibrations" title="void NcAttrib::DeleteCalibrations(Int_t mode=0)">DeleteCalibrations</a>() corresponds to mode=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetDead" href="src/NcAttrib.cxx.html#piN0GC">SetDead</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the dead flag to 1 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, the number of reserved slots for the flags
+ is increased automatically.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetDead@1" href="src/NcAttrib.cxx.html#Jfz3iE">SetDead</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the dead flag to 1 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetAlive" href="src/NcAttrib.cxx.html#mqMg4C">SetAlive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the dead flag to 0 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, no action is taken since by default the dead flag is 0.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetAlive@1" href="src/NcAttrib.cxx.html#GU1Dt">SetAlive</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the dead flag to 0 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:Lock" href="src/NcAttrib.cxx.html#pLTafE">Lock</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the lock flag to 1 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, the number of reserved slots for the flags
+ is increased automatically.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:Lock@1" href="src/NcAttrib.cxx.html#nwrH2C">Lock</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the lock flag to 1 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:Unlock" href="src/NcAttrib.cxx.html#rSuHWE">Unlock</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the lock flag to 0 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, no action is taken since by default the dead flag is 0.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:Unlock@1" href="src/NcAttrib.cxx.html#rFIVbE">Unlock</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the lock flag to 0 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetEdgeOn" href="src/NcAttrib.cxx.html#WpLGfD">SetEdgeOn</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the edge value to 1 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, the number of reserved slots for the flags
+ is increased automatically.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetEdgeOn@1" href="src/NcAttrib.cxx.html#huEbbD">SetEdgeOn</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the edge value to 1 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetEdgeOff" href="src/NcAttrib.cxx.html#H9Y84B">SetEdgeOff</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the edge value to 0 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, no action is taken since by default the edge flag is 0.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetEdgeOff@1" href="src/NcAttrib.cxx.html#LB2IzC">SetEdgeOff</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the edge value to 0 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetEdgeValue" href="src/NcAttrib.cxx.html#kU4IiE">SetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> val, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the edge value to <span class="string">"val"</span> for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, the number of reserved slots for the flags
+ is increased automatically.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetEdgeValue@1" href="src/NcAttrib.cxx.html#UY10WD">SetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> val, TString name)</span><br />
+<div class="funccomm"><pre> Set the edge value to <span class="string">"val"</span> for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:IncreaseEdgeValue" href="src/NcAttrib.cxx.html#CBaFCD">IncreaseEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Increase the edge value by 1 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, the number of reserved slots for the flags
+ is increased automatically.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:IncreaseEdgeValue@1" href="src/NcAttrib.cxx.html#oJp5PE">IncreaseEdgeValue</a>(TString name)</span><br />
+<div class="funccomm"><pre> Increase the edge value by 1 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:DecreaseEdgeValue" href="src/NcAttrib.cxx.html#ABaFCB">DecreaseEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Decrease the edge value by 1 for the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the flags, the number of reserved slots for the flags
+ is increased automatically.
+ The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:DecreaseEdgeValue@1" href="src/NcAttrib.cxx.html#JIp5PE">DecreaseEdgeValue</a>(TString name)</span><br />
+<div class="funccomm"><pre> Decrease the edge value by 1 for the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetEdgeValue" href="src/NcAttrib.cxx.html#YRfywB">GetEdgeValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide edge value of the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetEdgeValue@1" href="src/NcAttrib.cxx.html#n0a8R">GetEdgeValue</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide edge value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetDeadValue" href="src/NcAttrib.cxx.html#c9oouB">GetDeadValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide dead value of the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetDeadValue@1" href="src/NcAttrib.cxx.html#L3a3WB">GetDeadValue</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide dead value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetLockValue" href="src/NcAttrib.cxx.html#k47UiB">GetLockValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide lock value of the j-th (default j=1) attribute slot.
+ Note : The first attribute slot is at j=1.
+ In case j is invalid, 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetLockValue@1" href="src/NcAttrib.cxx.html#BhzplC">GetLockValue</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide lock value of the name-specified attribute slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetNslots" href="src/NcAttrib.cxx.html#HrO36D">GetNslots</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of existing slots.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:AddNamedSlot" href="src/NcAttrib.cxx.html#n4ZBWE">AddNamedSlot</a>(TString s)</span><br />
+<div class="funccomm"><pre> Add a new slot with the specified name.
+ In case a slot with the specified name already exists, no action is taken.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetSlotName" href="src/NcAttrib.cxx.html#ZFvD8D">SetSlotName</a>(TString s, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set a user defined name for the j-th (default j=1) slot.
+ Note : The first attribute slot is at j=1.
+ In case the value of the index j exceeds the maximum number of reserved
+ slots for the names, the number of reserved slots for the names
+ is increased automatically to the corresponding value.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcAttrib:GetSlotName" href="src/NcAttrib.cxx.html#AcLVw">GetSlotName</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide the user defined name for the j-th (default j=1) slot.
+ Note : The first attribute slot is at j=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetSlotIndex" href="src/NcAttrib.cxx.html#y6tA7D">GetSlotIndex</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) const</span><br />
+<div class="funccomm"><pre> Provide the slot index for the matching name.
+
+ opt = 0 --&gt; The specified name has to match exactly the slotname
+       1 --&gt; The specified name string has to be contained in the slotname
+
+ The default is opt=0.
+
+ If no matching name is found, 0 is returned.
+ Note : The first attribute slot is at j=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:List" href="src/NcAttrib.cxx.html#uAFYKE">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) const</span><br />
+<div class="funccomm"><pre> Provide attribute information for the j-th slot.
+ The first slot is at j=1.
+ In case j=0 (default) the data of all slots will be listed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:List@1" href="src/NcAttrib.cxx.html#T_ZwDD">List</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide attribute information for the name-specified slot.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:Load" href="src/NcAttrib.cxx.html#ZYtflC">Load</a>(<a href="./NcAttrib.html">NcAttrib</a>&amp; a, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcAttrib.html#NcAttrib:Load" title="void NcAttrib::Load(NcAttrib&amp; a,Int_t j=0) or overloads">Load</a> attributes of the j-th slot of the input <a href="./NcAttrib.html">NcAttrib</a> into this <a href="./NcAttrib.html">NcAttrib</a> object.
+
+ Note : if j=0, then all attributes of all slots are loaded
+
+ The default is j=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:Load@1" href="src/NcAttrib.cxx.html#EplhM">Load</a>(<a href="./NcAttrib.html">NcAttrib</a>&amp; a, TString name)</span><br />
+<div class="funccomm"><pre> <a href="./NcAttrib.html#NcAttrib:Load" title="void NcAttrib::Load(NcAttrib&amp; a,Int_t j=0) or overloads">Load</a> attributes of the name-specified slot of the input <a href="./NcAttrib.html">NcAttrib</a> into
+ this <a href="./NcAttrib.html">NcAttrib</a> object.
+
+ This procedure involves a slot-index search based on the specified name
+ at each invokation. This may become slow in case many slots have been
+ defined and/or when this procedure is invoked many times.
+ In such cases it is preferable to use indexed addressing in the user code
+ either directly or via a few invokations of <a href="./NcAttrib.html#NcAttrib:GetSlotIndex" title="Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt=0)">GetSlotIndex</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetNcalfuncs" href="src/NcAttrib.cxx.html#Knq9f">GetNcalfuncs</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of specified calib. functions for this attribute.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAttrib:GetNdecalfuncs" href="src/NcAttrib.cxx.html#nY6df">GetNdecalfuncs</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of specified de-calib. functions for this attribute.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1* <a class="funcname" name="NcAttrib:GetCalFunction" href="src/NcAttrib.cxx.html#SFluqD">GetCalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide pointer to the calib. function of the j-th (default j=1) slot.
+ Note : The first attribute slot is at j=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1* <a class="funcname" name="NcAttrib:GetCalFunction@1" href="src/NcAttrib.cxx.html#izHeP">GetCalFunction</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide pointer to the calib. function of the name-specified slot.
+ In case no match is found, zero is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetCalFunction" href="src/NcAttrib.cxx.html#CutHDD">SetCalFunction</a>(TF1* f, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the calib. function of the j-th (default j=1) slot.
+ Note : The first attribute slot is at j=1.
+
+ In case the value of the index j exceeds the maximum number of reserved
+ positions for the functions, the number of reserved positions for the functions
+ is increased automatically.
+
+ In case the function pointer argument has the same value as the current function
+ pointer value, no action is taken since the user has already modified the actual
+ function.
+
+ In case the function pointer argument is zero, the current function
+ is deleted and the pointer set to zero.
+
+ In all other cases the current function is deleted and a new
+ copy of the input function is created which becomes the current function.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetCalFunction@1" href="src/NcAttrib.cxx.html#iofD7D">SetCalFunction</a>(TF1* f, TString name)</span><br />
+<div class="funccomm"><pre> Set the calib. function of the name-specified slot.
+
+ In case the function pointer argument has the same value as the current function
+ pointer value, no action is taken since the user has already modified the actual
+ function.
+
+ In case the function pointer argument is zero, the current function
+ is deleted and the pointer set to zero.
+
+ In all other cases the current function is deleted and a new
+ copy of the input function is created which becomes the current function.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1* <a class="funcname" name="NcAttrib:GetDecalFunction" href="src/NcAttrib.cxx.html#Wp9l.">GetDecalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) const</span><br />
+<div class="funccomm"><pre> Provide pointer to the de-calib. function of the j-th (default j=1) slot.
+ Note : The first attribute slot is at j=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1* <a class="funcname" name="NcAttrib:GetDecalFunction@1" href="src/NcAttrib.cxx.html#MA9NdE">GetDecalFunction</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide pointer to the de-calib. function of the name-specified slot.
+ In case no match is found, zero is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetDecalFunction" href="src/NcAttrib.cxx.html#brG0VC">SetDecalFunction</a>(TF1* f, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Set the de-calib. function of the j-th (default j=1) slot.
+ Note : The first attribute slot is at j=1.
+
+ In case the value of the index j exceeds the maximum number of reserved
+ positions for the functions, the number of reserved positions for the functions
+ is increased automatically.
+
+ In case the function pointer argument has the same value as the current function
+ pointer value, no action is taken since the user has already modified the actual
+ function.
+
+ In case the function pointer argument is zero, the current function
+ is deleted and the pointer set to zero.
+
+ In all other cases the current function is deleted and a new
+ copy of the input function is created which becomes the current function.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAttrib:SetDecalFunction@1" href="src/NcAttrib.cxx.html#BI01CC">SetDecalFunction</a>(TF1* f, TString name)</span><br />
+<div class="funccomm"><pre> Set the de-calib. function of the name-specified slot.
+
+ In case the function pointer argument has the same value as the current function
+ pointer value, no action is taken since the user has already modified the actual
+ function.
+
+ In case the function pointer argument is zero, the current function
+ is deleted and the pointer set to zero.
+
+ In all other cases the current function is deleted and a new
+ copy of the input function is created which becomes the current function.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:14 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

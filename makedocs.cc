@@ -6,11 +6,11 @@
 //
 // $ root -b -q makedocs.cc >docs.log
 //
-// The html documentation will be located in the ncfs/htmldoc
+// The (html) documentation will be located in the ncfs/docs
 // directory and the produced log messages in the file docs.log.
 //
 // The (class) index in the html documentation can be accessed directly
-// via the html link index.html in ncfs/htmldoc.
+// via the html link index.html in ncfs/docs.
 //
 // Note : All necessary libraries have to be available for the classes
 //        for which the documentation is requested before running
@@ -26,7 +26,7 @@
  gEnv->SetValue("Root.Html.Description","///////////");
  gEnv->SetValue("Root.Html.Author","//--- Author:");
  gEnv->SetValue("Root.Html.LastUpdate","//- Modified:");
- gEnv->SetValue("Root.Html.OutputDir","$(NCFS)/htmldoc");
+ gEnv->SetValue("Root.Html.OutputDir","$(NCFS)/docs");
 
  THtml q;
  q.SetProductName("NCFS");

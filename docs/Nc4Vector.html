@@ -1,0 +1,784 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:12 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Nc4Vector</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class Nc4Vector','','Nc4Vector.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/Nc4Vector.h.html">header file</a>
+<a class="descrheadentry" href="src/Nc4Vector.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#Nc4Vector:description">class description</a> 
+<a class="descrheadentry" href="#Nc4Vector:Function_Members">function members</a>
+<a class="descrheadentry" href="#Nc4Vector:Data_Members">data members</a>
+<a class="descrheadentry" href="#Nc4Vector:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">Nc4Vector</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="Nc4Vector:description"></a>class Nc4Vector</h1>
+<div class="classdescr">
+<pre>
+ <a href="./Nc4Vector.html#Nc4Vector:Class" title="TClass* Nc4Vector::Class()">Class</a> <a href="./Nc4Vector.html">Nc4Vector</a>
+ Handling of Lorentz 4-vectors in various reference frames.
+
+ This class is meant to serve as a base class for all objects
+ that have Lorentz 4-vector characteristics.
+ Error propagation is performed automatically.
+
+ All 4-vectors are treated in the contravariant form and the convention
+ for the metric and the 4-vector components is according to the one
+ used in the book <span class="string">"Classical Electrodynamics"</span> by J.D. Jackson.
+
+ A 4-vector is said to have a scalar part and a 3-vector part,
+ which is indicated by the notation
+
+    x^i = (x^0,x^1,x^2,x^3)
+
+ The scalar part   = x^0
+ The 3-vector part = (x^1,x^2,x^3)
+
+ In view of accuracy and the fact that e.g. particle identity (mass)
+ is preserved in many physics processes, the Lorentz invariant
+ (x^i*x_i) is internally saved together with the scalar part.
+
+ This allows the following two modes of functionality :
+
+ Scalar mode    : The scalar part and the 3-vector part are considered
+                  as basic quantities and the invariant with its error
+                  is derived from these.
+ Invariant mode : The invariant and the 3-vector part are considered
+                  as basic quantities and the scalar with its error
+                  is derived from these.
+
+ The philosophy followed here is the following :
+
+
+ 1) Invokation of <a href="./Nc4Vector.html#Nc4Vector:SetVector" title="void Nc4Vector::SetVector(Double_t v0,Nc3Vector&amp; v) or overloads">SetVector</a>() sets the scalar and 3-vector parts
+    and the invariant is calculated from these.
+    Automatically the scalar mode is selected and invokation of
+    <a href="./Nc4Vector.html#Nc4Vector:SetErrors" title="void Nc4Vector::SetErrors(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetErrors</a>() will calculate the error on the invariant.
+
+ 2) In case the scalar part is modified via <a href="./Nc4Vector.html#Nc4Vector:SetScalar" title="void Nc4Vector::SetScalar(Double_t v0,Double_t dv0=0)">SetScalar</a>(), scalar mode is
+    automatically selected and the Lorentz invariant (x^i*x_i) and its
+    error are updated accordingly.
+    The 3-vector part is NOT modified.
+    This situation arises when one e.g. precisely determines the time
+    or energy (x^0).
+
+ 3) In case the Lorentz invariant (x^i*x_i) is modified via <a href="./Nc4Vector.html#Nc4Vector:SetInvariant" title="void Nc4Vector::SetInvariant(Double_t v2,Double_t dv2=0)">SetInvariant</a>(),
+    invariant mode is selected automatically and the scalar part and its
+    error are updated accordingly.
+    The 3-vector part is NOT modified.
+    This situation arises when one e.g. precisely determines the mass.
+
+ 4) In case the vector part is modified via <a href="./Nc4Vector.html#Nc4Vector:Set3Vector" title="void Nc4Vector::Set3Vector(Nc3Vector&amp; v) or overloads">Set3Vector</a>(), then the
+    current mode determines whether the scalar or the invariant is updated.
+    Scalar mode    : The Lorentz invariant (x^i*x_i) and its error are updated;
+                     the scalar part and its error are NOT modified.
+                     This situation arises when one e.g. improves the 3-position
+                     vector for a particle with a very precise timing.
+    Invariant mode : The scalar part and its error are updated;
+                     the Lorentz invariant (x^i*x_i) and its error are NOT modified.
+                     This situation arises when one e.g. improves the 3-momentum
+                     vector for a particle with known mass.
+
+ The dotproduct is defined such that p.<a href="./Nc4Vector.html#Nc4Vector:Dot" title="Double_t Nc4Vector::Dot(Nc4Vector&amp; q)">Dot</a>(p) yields the Lorentz invariant
+ scalar of the 4-vector p (i.e. m**2 in case p is a 4-momentum).
+
+ Note :
+
+ Vectors (v), Errors (e), reference frames (f) and angular units (u)
+ are specified via
+ <a href="./Nc4Vector.html#Nc4Vector:SetVector" title="void Nc4Vector::SetVector(Double_t v0,Nc3Vector&amp; v) or overloads">SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v,TString f,TString u)
+ <a href="./Nc4Vector.html#Nc4Vector:SetErrors" title="void Nc4Vector::SetErrors(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e,TString f,TString u)
+ under the following conventions :
+
+ f=<span class="string">"car"</span> ==&gt; v in Cartesian coordinates   (x,y,z)
+ f=<span class="string">"sph"</span> ==&gt; v in Spherical coordinates   (r,theta,phi)
+ f=<span class="string">"cyl"</span> ==&gt; v in Cylindrical coordinates (rho,phi,z)
+
+ u=<span class="string">"rad"</span> ==&gt; angles in radians
+ u=<span class="string">"deg"</span> ==&gt; angles in degrees
+
+ The <span class="string">"f"</span> and <span class="string">"u"</span> facilities only serve as a convenient user interface.
+ Internally the actual storage of the various components is performed
+ in a unique way. This allows setting/retrieval of vector components in a
+ user selected frame/unit convention at any time.
+
+ Example :
+
+
+ <a href="./Nc4Vector.html">Nc4Vector</a> a;
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> v[4]={25,-1,3,7};
+ a.<a href="./Nc4Vector.html#Nc4Vector:SetVector" title="void Nc4Vector::SetVector(Double_t v0,Nc3Vector&amp; v) or overloads">SetVector</a>(v,<span class="string">"car"</span>);
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> vec[4];
+ a.<a href="./Nc4Vector.html#Nc4Vector:GetVector" title="void Nc4Vector::GetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">GetVector</a>(vec,<span class="string">"sph"</span>,<span class="string">"deg"</span>);
+
+ <a href="./Nc4Vector.html">Nc4Vector</a> b;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> v2[4]={33,6,-18,2};
+ b.<a href="./Nc4Vector.html#Nc4Vector:SetVector" title="void Nc4Vector::SetVector(Double_t v0,Nc3Vector&amp; v) or overloads">SetVector</a>(v2,<span class="string">"car"</span>);
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> dotpro=a.<a href="./Nc4Vector.html#Nc4Vector:Dot" title="Double_t Nc4Vector::Dot(Nc4Vector&amp; q)">Dot</a>(b);
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> x0=16;
+ <a href="./Nc3Vector.html">Nc3Vector</a> x;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> vec2[3]={1,2,3};
+ x.<a href="./Nc4Vector.html#Nc4Vector:SetVector" title="void Nc4Vector::SetVector(Double_t v0,Nc3Vector&amp; v) or overloads">SetVector</a>(vec2,<span class="string">"car"</span>);
+
+ <a href="./Nc4Vector.html">Nc4Vector</a> c;
+ c.<a href="./Nc4Vector.html#Nc4Vector:SetVector" title="void Nc4Vector::SetVector(Double_t v0,Nc3Vector&amp; v) or overloads">SetVector</a>(x0,x);
+ c.<a href="./Nc4Vector.html#Nc4Vector:GetVector" title="void Nc4Vector::GetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">GetVector</a>(vec,<span class="string">"car"</span>);
+ c.<a href="./Nc4Vector.html#Nc4Vector:Data" title="void Nc4Vector::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>(<span class="string">"cyl"</span>);
+ c=a+b;
+ c=a-b;
+ c=a*5;
+
+--- Author: Nick van Eijndhoven 01-apr-1999 Utrecht University
+- Modified: NvE $Date: 2011-11-09 11:10:37 +0100 (Wed, 09 Nov 2011) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="Nc4Vector:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Nc4Vector">Nc4Vector</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Nc4Vector@1">Nc4Vector</a>(<span class="keyword">const</span> <a href="./Nc4Vector.html">Nc4Vector</a>&amp; v)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#Nc4Vector:_Nc4Vector">~Nc4Vector</a>()</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#Nc4Vector:Class">Class</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Data">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Dot">Dot</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Get3Vector">Get3Vector</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetBeta">GetBeta</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetBetaVector">GetBetaVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetErrors">GetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetErrors@1">GetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetGamma">GetGamma</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetInvariant">GetInvariant</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetOpeningAngle">GetOpeningAngle</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetOpeningAngle@1">GetOpeningAngle</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetPseudoRapidity">GetPseudoRapidity</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetResultError">GetResultError</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetScalar">GetScalar</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetScalarFlag">GetScalarFlag</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetUserData">GetUserData</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetVecLong">GetVecLong</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetVector">GetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetVector@1">GetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetVecTrans">GetVecTrans</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetX">GetX</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:HasErrors">HasErrors</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:HasVector">HasVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#Nc4Vector:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Load">Load</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator*">operator*</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator*_">operator*=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator+">operator+</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator+_">operator+=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator-">operator-</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator-_">operator-=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator/">operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator/_">operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc4Vector:operator_">operator=</a>(<span class="keyword">const</span> <a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Set3Vector">Set3Vector</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Set3Vector@1">Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Set3Vector@2">Set3Vector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Set3Vector@3">Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetErrors">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetErrors@2">SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetErrors@1">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e0, <a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetInvariant">SetInvariant</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv2 = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetInvariantError">SetInvariantError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv2)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetScalar">SetScalar</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv0 = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetScalarError">SetScalarError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetUserData">SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>* s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetUserData@1">SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetVector">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetVector@1">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetVector@3">SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetVector@2">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:SetZero">SetZero</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc4Vector:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetScaLong">GetScaLong</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc4Vector:GetScaTrans">GetScaTrans</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="Nc4Vector:Data_Members"></a>Data Members</h2>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a name="Nc4Vector:fDresult"></a>fDresult</td><td class="datadesc">! The error on the scalar result of an operation (e.g. dotproduct) </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a name="Nc4Vector:fDv0"></a>fDv0</td><td class="datadesc">The error on the scalar part</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a name="Nc4Vector:fDv2"></a>fDv2</td><td class="datadesc">The error on the Lorentz invariant</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="Nc4Vector:fScalar"></a>fScalar</td><td class="datadesc">Flag denoting scalar mode</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcSignal.html">NcSignal</a>*</td><td class="dataname"><a name="Nc4Vector:fUser"></a>fUser</td><td class="datadesc">NcSignal object containing user data</td></tr>
+<tr class="data"><td class="datatype"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="dataname"><a name="Nc4Vector:fV"></a>fV</td><td class="datadesc">The 3-vector part</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a name="Nc4Vector:fV0"></a>fV0</td><td class="datadesc">The scalar part</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a name="Nc4Vector:fV2"></a>fV2</td><td class="datadesc">The Lorentz invariant (v^i*v_i)</td></tr>
+
+</table></div>
+</div>
+<h2><a id="Nc4Vector:Class_Charts"></a>Class Charts</h2>
+<map name="MapNc4Vector_Inh" id="MapNc4Vector_Inh">
+<area shape="rect" id="node3" href="./NcJet.html" title="NcJet" alt="" coords="165,1,275,23"/>
+<area shape="rect" id="node4" href="./Nc4VectorObj.html" title="Nc4VectorObj" alt="" coords="165,23,275,45"/>
+<area shape="rect" id="node5" href="./NcTrack.html" title="NcTrack" alt="" coords="165,45,275,66"/>
+<area shape="rect" id="node6" href="./NcVertex.html" title="NcVertex" alt="" coords="329,1,439,23"/>
+<area shape="rect" id="node7" href="./NcEvent.html" title="NcEvent" alt="" coords="493,1,603,23"/>
+<area shape="rect" id="node8" href="./IceEvent.html" title="IceEvent" alt="" coords="657,1,766,23"/>
+</map>
+<map name="MapNc4Vector_Lib" id="MapNc4Vector_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNc4Vector_Inh" class="tabsel" href="inh/Nc4Vector_Inh.png" onclick="javascript:return SetImg('Charts','inh/Nc4Vector_Inh.png');">Inheritance</a>
+<a id="imgNc4Vector_InhMem" class="tab" href="inhmem/Nc4Vector_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/Nc4Vector_InhMem.png');">Inherited Members</a>
+<a id="imgNc4Vector_Incl" class="tab" href="incl/Nc4Vector_Incl.png" onclick="javascript:return SetImg('Charts','incl/Nc4Vector_Incl.png');">Includes</a>
+<a id="imgNc4Vector_Lib" class="tab" href="lib/Nc4Vector_Lib.png" onclick="javascript:return SetImg('Charts','lib/Nc4Vector_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNc4Vector_Inh" src="inh/Nc4Vector_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="Nc4Vector:Nc4Vector" href="src/Nc4Vector.cxx.html#ye3Dr">Nc4Vector</a>()</span><br />
+<div class="funccomm"><pre> Creation of a contravariant 4-vector and initialisation of parameters.
+ All values are initialised to 0.
+ Scalar mode is initially selected.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="Nc4Vector:_Nc4Vector" href="src/Nc4Vector.cxx.html#sezdZB">~Nc4Vector</a>()</span><br />
+<div class="funccomm"><pre> Destructor to delete dynamically allocated memory
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="Nc4Vector:Nc4Vector@1" href="src/Nc4Vector.cxx.html#gELrHD">Nc4Vector</a>(<span class="keyword">const</span> <a href="./Nc4Vector.html">Nc4Vector</a>&amp; v)</span><br />
+<div class="funccomm"><pre> Copy constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a>&amp; <a class="funcname" name="Nc4Vector:operator_" href="src/Nc4Vector.cxx.html#AxccNE">operator=</a>(<span class="keyword">const</span> <a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Set the current vector equal to vector q.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:Load" href="src/Nc4Vector.cxx.html#n6o3mB">Load</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> <a href="./Nc4Vector.html#Nc4Vector:Load" title="void Nc4Vector::Load(Nc4Vector&amp; q)">Load</a> all attributes of the input <a href="./Nc4Vector.html">Nc4Vector</a> into this <a href="./Nc4Vector.html">Nc4Vector</a> object.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetZero" href="src/Nc4Vector.cxx.html#DVPqBC">SetZero</a>()</span><br />
+<div class="funccomm"><pre> (Re)set all attributes to zero.
+ Note : The (de)selection of the scalar mode is not modified.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetVector" href="src/Nc4Vector.cxx.html#xSy6NE">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</span><br />
+<div class="funccomm"><pre> Store contravariant vector.
+ The error on the scalar part is initialised to 0.
+ The errors on the vector part are taken from the input <a href="./Nc3Vector.html">Nc3Vector</a>.
+ Scalar mode is automatically selected.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetVector@1" href="src/Nc4Vector.cxx.html#Fzd89C">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store vector according to reference frame f.
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ Scalar mode is automatically selected.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetVector@2" href="src/Nc4Vector.cxx.html#Q2bzwC">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store vector according to reference frame f.
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ Scalar mode is automatically selected.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:GetVector" href="src/Nc4Vector.cxx.html#Za2j9C">GetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide 4-vector components according to reference frame f
+ and according to the current mode.
+ Scalar mode    : The scalar part is directly returned via v[0].
+ Invariant mode : The scalar part is re-calculated via the value
+                  of the Lorentz invariant and then returned via v[0].
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetVector@3" href="src/Nc4Vector.cxx.html#rsOzM">SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store vector according to reference frame f.
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ All errors are initialised to 0.
+
+ Scalar mode is automatically selected.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:GetVector@1" href="src/Nc4Vector.cxx.html#DedkM">GetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide 4-vector components according to reference frame f
+ and according to the current mode.
+ Scalar mode    : The scalar part is directly returned via v[0].
+ Invariant mode : The scalar part is re-calculated via the value
+                  of the Lorentz invariant and then returned via v[0].
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetScalar" href="src/Nc4Vector.cxx.html#z5hYSE">GetScalar</a>()</span><br />
+<div class="funccomm"><pre> Provide the scalar part.
+ The error on the scalar value is available via <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./Nc4Vector.html#Nc4Vector:GetScalar" title="Double_t Nc4Vector::GetScalar()">GetScalar</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="Nc4Vector:HasVector" href="src/Nc4Vector.cxx.html#XQ9wwD">HasVector</a>() const</span><br />
+<div class="funccomm"><pre> Check whether the 3-vector components have been set.
+ In case the 3-vector components have been set, the value 1 is returned.
+ Otherwise, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="Nc4Vector:HasErrors" href="src/Nc4Vector.cxx.html#fwMtYB">HasErrors</a>() const</span><br />
+<div class="funccomm"><pre> Check whether the errors on the 3-vector components have been set.
+ In case the errors have been set, the value 1 is returned.
+ Otherwise, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetResultError" href="src/Nc4Vector.cxx.html#XtvbnD">GetResultError</a>() const</span><br />
+<div class="funccomm"><pre> Provide the error on the result of an operation yielding a scalar
+ E.g. <a href="./Nc4Vector.html#Nc4Vector:GetScalar" title="Double_t Nc4Vector::GetScalar()">GetScalar</a>(), <a href="./Nc4Vector.html#Nc4Vector:GetInvariant" title="Double_t Nc4Vector::GetInvariant()">GetInvariant</a>() or <a href="./Nc4Vector.html#Nc4Vector:Dot" title="Double_t Nc4Vector::Dot(Nc4Vector&amp; q)">Dot</a>()
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetScalar" href="src/Nc4Vector.cxx.html#F5p0yD">SetScalar</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv0 = 0)</span><br />
+<div class="funccomm"><pre> Modify the scalar part (v0) and its error (dv0).
+ The default value for dv0 is 0.
+ The vector part is not modified.
+ Scalar mode is automatically selected
+ ==&gt; Lorentz invariant and its error are updated.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetScalarError" href="src/Nc4Vector.cxx.html#jE1WID">SetScalarError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv0)</span><br />
+<div class="funccomm"><pre> Set the error on the scalar part.
+ If in scalar mode, update error on the invariant accordingly.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:Set3Vector" href="src/Nc4Vector.cxx.html#wRrVHE">Set3Vector</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</span><br />
+<div class="funccomm"><pre> Set the 3-vector part, the errors are taken from the input <a href="./Nc3Vector.html">Nc3Vector</a>
+ Scalar mode    : The scalar part and its error are not modified,
+                  the Lorentz invariantand its error are re-calculated.
+ Invariant mode : The Lorentz invariant and its error are not modified,
+                  the scalar part and its error are re-calculated.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:Set3Vector@1" href="src/Nc4Vector.cxx.html#NpcgeB">Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Set the 3-vector part according to reference frame f
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ Scalar mode    : The scalar part and its error are not modified,
+                  the Lorentz invariantand its error are re-calculated.
+ Invariant mode : The Lorentz invariant and its error are not modified,
+                  the scalar part and its error are re-calculated.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:Set3Vector@2" href="src/Nc4Vector.cxx.html#SEFPDD">Set3Vector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Set the 3-vector part according to reference frame f
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ The Lorentz invariant is not modified
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:Set3Vector@3" href="src/Nc4Vector.cxx.html#HeVhIC">Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Set the 3-vector part according to reference frame f
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ Scalar mode    : The scalar part and its error are not modified,
+                  the Lorentz invariantand its error are re-calculated.
+ Invariant mode : The Lorentz invariant and its error are not modified,
+                  the scalar part and its error are re-calculated.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetInvariant" href="src/Nc4Vector.cxx.html#HenCvD">SetInvariant</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv2 = 0)</span><br />
+<div class="funccomm"><pre> Modify the Lorentz invariant (v2) quantity v^i*v_i and its error (dv2).
+ The default value for the error dv2 is 0.
+ The vector part is not modified.
+ Invariant mode is automatically selected
+ ==&gt; the scalar part and its error are updated.
+ The error on scalar result operations is reset to 0.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetInvariantError" href="src/Nc4Vector.cxx.html#Mviut">SetInvariantError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv2)</span><br />
+<div class="funccomm"><pre> Set the error on the Lorentz invariant.
+ If in invariant mode, update error on the scalar part accordingly.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetInvariant" href="src/Nc4Vector.cxx.html#oCFpCC">GetInvariant</a>()</span><br />
+<div class="funccomm"><pre> Provide the Lorentz invariant v^i*v_i.
+ The error on the Lorentz invariant is available via <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./Nc4Vector.html#Nc4Vector:GetInvariant" title="Double_t Nc4Vector::GetInvariant()">GetInvariant</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc4Vector:Get3Vector" href="src/Nc4Vector.cxx.html#fuPyS">Get3Vector</a>() const</span><br />
+<div class="funccomm"><pre> Provide the 3-vector part
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetErrors" href="src/Nc4Vector.cxx.html#ScIzRE">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store errors for vector v^i according to reference frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ If in scalar mode, update error on the invariant accordingly.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetErrors@1" href="src/Nc4Vector.cxx.html#Ec7FTE">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e0, <a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store errors for vector v^i according to reference frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ If in scalar mode, update error on the invariant accordingly.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetErrors@2" href="src/Nc4Vector.cxx.html#Ic8jFC">SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store errors for vector v^i according to reference frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ If in scalar mode, update error on the invariant accordingly.
+ The error on scalar result operations is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:GetErrors" href="src/Nc4Vector.cxx.html#mDhaRE">GetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide errors for vector v^i according to reference frame f
+ and according to the current mode.
+ Scalar mode    : The error on the scalar part is directly returned via e[0].
+ Invariant mode : The error on the scalar part is re-calculated via the error
+                  value on the Lorentz invariant and then returned via e[0].
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:GetErrors@1" href="src/Nc4Vector.cxx.html#o0j8FC">GetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide errors for vector v^i according to reference frame f
+ and according to the current mode.
+ Scalar mode    : The error on the scalar part is directly returned via e[0].
+ Invariant mode : The error on the scalar part is re-calculated via the error
+                  value on the Lorentz invariant and then returned via e[0].
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:Data" href="src/Nc4Vector.cxx.html#rV8orE">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Print contravariant vector components and errors according to
+ reference frame f and according to the current mode.
+ Scalar mode    : The scalar part and its error are directly returned.
+ Invariant mode : The scalar part and its error are re-calculated via the
+                  value (and error) of the Lorentz invariant.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:Dot" href="src/Nc4Vector.cxx.html#kiU3p">Dot</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Provide the dot product of the current vector with vector q
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a> <a class="funcname" name="Nc4Vector:operator+" href="src/Nc4Vector.cxx.html#raTbI">operator+</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Add 4-vector q to the current 4-vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a> <a class="funcname" name="Nc4Vector:operator-" href="src/Nc4Vector.cxx.html#DMiMH">operator-</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Subtract 4-vector q from the current 4-vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a> <a class="funcname" name="Nc4Vector:operator*" href="src/Nc4Vector.cxx.html#qCiMqD">operator*</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</span><br />
+<div class="funccomm"><pre> Multiply the current 4-vector with a scalar s
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a> <a class="funcname" name="Nc4Vector:operator/" href="src/Nc4Vector.cxx.html#iMYWoD">operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</span><br />
+<div class="funccomm"><pre> Divide the current vector by a scalar s
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a>&amp; <a class="funcname" name="Nc4Vector:operator+_" href="src/Nc4Vector.cxx.html#ENBKpB">operator+=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Add 4-vector q to the current 4-vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a>&amp; <a class="funcname" name="Nc4Vector:operator-_" href="src/Nc4Vector.cxx.html#kNBKpB">operator-=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Subtract 4-vector q from the current 4-vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a>&amp; <a class="funcname" name="Nc4Vector:operator*_" href="src/Nc4Vector.cxx.html#GC6kCE">operator*=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</span><br />
+<div class="funccomm"><pre> Multiply the current 4-vector with a scalar s
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc4Vector.html">Nc4Vector</a>&amp; <a class="funcname" name="Nc4Vector:operator/_" href="src/Nc4Vector.cxx.html#gfcClB">operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</span><br />
+<div class="funccomm"><pre> Divide the current vector by a scalar s
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="Nc4Vector:GetScalarFlag" href="src/Nc4Vector.cxx.html#F0aMvD">GetScalarFlag</a>() const</span><br />
+<div class="funccomm"><pre> Provide the value of the <a href="./Nc4Vector.html#Nc4Vector:fScalar" title="Int_t Nc4Vector::fScalar">fScalar</a> flag (for internal use only).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc4Vector:GetVecTrans" href="src/Nc4Vector.cxx.html#CI6M_C">GetVecTrans</a>() const</span><br />
+<div class="funccomm"><pre> Provide the transverse vector part w.r.t. z-axis.
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc4Vector:GetVecLong" href="src/Nc4Vector.cxx.html#o.XaSB">GetVecLong</a>() const</span><br />
+<div class="funccomm"><pre> Provide the longitudinal vector part w.r.t. z-axis.
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetScaTrans" href="src/Nc4Vector.cxx.html#D_ZHMB">GetScaTrans</a>()</span><br />
+<div class="funccomm"><pre> Provide the <span class="string">"transverse value"</span> of the scalar part w.r.t. z-axis.
+ This provides a basis for e.g. E_trans calculation.
+ Note : the returned value is always positive or zero.
+ The error on the value is available via <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./Nc4Vector.html#Nc4Vector:GetScaTrans" title="Double_t Nc4Vector::GetScaTrans()">GetScaTrans</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetScaLong" href="src/Nc4Vector.cxx.html#BgKp.">GetScaLong</a>()</span><br />
+<div class="funccomm"><pre> Provide the <span class="string">"longitudinal value"</span> of the scalar part w.r.t. z-axis.
+ This provides a basis for e.g. E_long calculation.
+ Note : the returned value can also be negative.
+ The error on the value is available via <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./Nc4Vector.html#Nc4Vector:GetScaLong" title="Double_t Nc4Vector::GetScaLong()">GetScaLong</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetPseudoRapidity" href="src/Nc4Vector.cxx.html#wAVC3E">GetPseudoRapidity</a>()</span><br />
+<div class="funccomm"><pre> Provide the pseudorapidity value of the vector part w.r.t. z-axis.
+ The error on the value is available via <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./Nc4Vector.html#Nc4Vector:GetPseudoRapidity" title="Double_t Nc4Vector::GetPseudoRapidity()">GetPseudoRapidity</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc4Vector:GetBetaVector" href="src/Nc4Vector.cxx.html#i2ueaD">GetBetaVector</a>() const</span><br />
+<div class="funccomm"><pre> Provide the beta 3-vector corresponding to this 4-vector.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetBeta" href="src/Nc4Vector.cxx.html#GVmJ6E">GetBeta</a>()</span><br />
+<div class="funccomm"><pre> Provide the beta value (i.e. v/c) corresponding to this 4-vector.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetGamma" href="src/Nc4Vector.cxx.html#T1rISE">GetGamma</a>()</span><br />
+<div class="funccomm"><pre> Provide the Lorentz gamma factor corresponding to this 4-vector.
+ In case the gamma factor is infinite a value of -1 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetX" href="src/Nc4Vector.cxx.html#h1lmoB">GetX</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide i-th vector component according to reference frame f.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ The vector components are addressed via the generic x0,x1,x2,x3 notation.
+ So, i=0 denotes the scalar component and i=1 denotes the first 3-vector component.
+ The error on the selected component can be obtained via the
+ usual <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>() facility.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetOpeningAngle" href="src/Nc4Vector.cxx.html#wACurB">GetOpeningAngle</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide the opening angle between 3-vector parts with 4-vector q.
+ The string argument <span class="string">"u"</span> allows to choose between different output units.
+ u = <span class="string">"rad"</span> : opening angle provided in radians
+     <span class="string">"deg"</span> : opening angle provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc4Vector:GetOpeningAngle@1" href="src/Nc4Vector.cxx.html#UjBurB">GetOpeningAngle</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide the opening angle between the 3-vector part and 3-vector q.
+ The string argument <span class="string">"u"</span> allows to choose between different output units.
+ u = <span class="string">"rad"</span> : opening angle provided in radians
+     <span class="string">"deg"</span> : opening angle provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetUserData" href="src/Nc4Vector.cxx.html#vAEqeC">SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>* s)</span><br />
+<div class="funccomm"><pre> Enter the <a href="./NcSignal.html">NcSignal</a> object containing the user data.
+
+ The main goal of these user data is to provide a flexible facility
+ to provide user defined observables to tracks and events, which
+ can in turn be retreived into the produced Tree structure of <a href="./NcTreeMaker.html">NcTreeMaker</a>.
+ It is also possible to use the user data to perform a specific sorting
+ or selection of tracks or events.
+ The name of the user defined variable is taken from the <a href="./NcSignal.html">NcSignal</a> slotname
+ and the value of the variable is taken from the corresponding signal value.
+ As such it is advised to use only <a href="./ListOfTypes.html#short">short</a>, single named variable names.
+ Furthermore, the variable name should not contain mathematical symbols
+ like <span class="string">'+'</span>, <span class="string">'-'</span> etc... otherwise an analysis via the ROOT TreeViewer
+ gets confused.
+
+ In case an object to hold user data was already present, this
+ will be deleted first before the new one is stored.
+ This means that <a href="./Nc4Vector.html#Nc4Vector:SetUserData" title="void Nc4Vector::SetUserData(NcSignal* s) or overloads">SetUserData</a>(0) can be used to just remove the
+ existing object with the user data.
+
+ Note : The entered <a href="./NcSignal.html">NcSignal</a> object is owned by this <a href="./Nc4Vector.html">Nc4Vector</a> instance.
+        As such, a private copy of it will be stored using the Clone()
+        memberfunction.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="Nc4Vector:GetUserData" href="src/Nc4Vector.cxx.html#eSsGjE">GetUserData</a>() const</span><br />
+<div class="funccomm"><pre> Provide the pointer to the <a href="./NcSignal.html">NcSignal</a> object containing the user data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc4Vector:SetUserData" href="src/Nc4Vector.h.html#BOJmMD">SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>* s)</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:12 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

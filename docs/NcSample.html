@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:23 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcSample</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcSample','','NcSample.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcSample.h.html">header file</a>
+<a class="descrheadentry" href="src/NcSample.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcSample:description">class description</a> 
+<a class="descrheadentry" href="#NcSample:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcSample:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcSample:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcSample</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcSample:description"></a>class NcSample</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcSample.html#NcSample:Class" title="TClass* NcSample::Class()">Class</a> <a href="./NcSample.html">NcSample</a>
+ Perform statistics on various multi-dimensional data samples.
+ A data sample can be filled using the <span class="string">"Enter"</span> and/or <span class="string">"Remove"</span> functions,
+ whereas the <span class="string">"Reset"</span> function resets the complete sample to 'empty'.
+ The info which can be extracted from a certain data sample are the
+ sum, mean, variance, sigma, covariance and correlation.
+ The <span class="string">"Data"</span> function provides all statistics data for a certain sample.
+ The variables for which these stat. parameters have to be calculated
+ are indicated by the index of the variable which is passed as an
+ argument to the various member functions.
+ The index convention for a data point (x,y) is : x=1  y=2
+
+ Example :
+
+ For an <a href="./NcSample.html">NcSample</a> s a data point (x,y) can be entered as s.<a href="./NcSample.html#NcSample:Enter" title="void NcSample::Enter(Double_t x) or overloads">Enter</a>(x,y) and
+ the mean_x can be obtained as s.<a href="./NcSample.html#NcSample:GetMean" title="Double_t NcSample::GetMean(Int_t i)">GetMean</a>(1) whereas the mean_y is obtained
+ via s.<a href="./NcSample.html#NcSample:GetMean" title="Double_t NcSample::GetMean(Int_t i)">GetMean</a>(2).
+ The correlation between x and y is available via s.<a href="./NcSample.html#NcSample:GetCor" title="Double_t NcSample::GetCor(Int_t i,Int_t j)">GetCor</a>(1,2).
+ The x-statistics are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data() or overloads">Data</a>(1), y-statistics via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data() or overloads">Data</a>(2),
+ and the covariance and correlation between x and y via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data() or overloads">Data</a>(1,2).
+ All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data() or overloads">Data</a>().
+
+--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
+- Modified: NvE $Date: 2012-10-05 18:31:56 +0200 (vr, 05 okt 2012) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcSample:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcSample:NcSample">NcSample</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcSample:NcSample@1">NcSample</a>(<span class="keyword">const</span> <a href="./NcSample.html">NcSample</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcSample:_NcSample">~NcSample</a>()</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcSample:Class">Class</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Data">Data</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Data@1">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Data@2">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Enter">Enter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Enter@1">Enter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Enter@2">Enter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCor">GetCor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCov">GetCov</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetDimension">GetDimension</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMaximum">GetMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMean">GetMean</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMedian">GetMedian</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMedian@1">GetMedian</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMinimum">GetMinimum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetN">GetN</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile@1">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSigma">GetSigma</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread">GetSpread</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread@1">GetSpread</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetStoreMode">GetStoreMode</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSum">GetSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetVar">GetVar</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcSample:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcSample:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcSample.html">NcSample</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@1">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@2">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Reset">Reset</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:SetStoreMode">SetStoreMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+
+</table></div>
+<div class="access" id="funcpriv"><b>private:</b>
+<table class="func" id="tabfuncpriv" cellspacing="0">
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Compute">Compute</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcSample:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="data"><td class="datatype">enum  { </td><td class="dataname"><a name="NcSample:fMaxdim"></a>fMaxdim</td><td></td></tr>
+<tr class="data"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="datapriv"><b>private:</b>
+<table class="data" id="tabdatapriv" cellspacing="0">
+<tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fArr"></a>fArr</td><td class="datadesc">Temp. storage array for ordering</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fCor"></a>fCor[3][3]</td><td class="datadesc">Correlations of pairs of variables</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fCov"></a>fCov[3][3]</td><td class="datadesc">Covariances of pairs of variables</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fDim"></a>fDim</td><td class="datadesc">Dimension of the sample</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMax"></a>fMax[3]</td><td class="datadesc">Maximum value for each variable</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMean"></a>fMean[3]</td><td class="datadesc">Mean for each variable</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMin"></a>fMin[3]</td><td class="datadesc">Minimum value for each variable</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fN"></a>fN</td><td class="datadesc">Number of entries of the sample</td></tr>
+<tr class="data"><td class="datatype"><span class="keyword">char</span></td><td class="dataname"><a name="NcSample:fNames"></a>fNames[3]</td><td class="datadesc">Variable names i.e. X,Y,Z</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fRemove"></a>fRemove</td><td class="datadesc">Flag to indicate that some entry has been removed</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fSigma"></a>fSigma[3]</td><td class="datadesc">Standard deviation for each variable</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fStore"></a>fStore</td><td class="datadesc">Flag to denote storage of all entered data </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fSum"></a>fSum[3]</td><td class="datadesc">Total sum for each variable</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fSum2"></a>fSum2[3][3]</td><td class="datadesc">Total sum**2 for each variable</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fVar"></a>fVar[3]</td><td class="datadesc">Variation for each variable</td></tr>
+<tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fX"></a>fX</td><td class="datadesc">Storage array for the 1st variable (e.g. X)</td></tr>
+<tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fY"></a>fY</td><td class="datadesc">Storage array for the 2nd variable (e.g. Y)</td></tr>
+<tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fZ"></a>fZ</td><td class="datadesc">Storage array for the 3rd variable (e.g. Z)</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcSample:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcSample_Lib" id="MapNcSample_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcSample_Inh" class="tabsel" href="inh/NcSample_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcSample_Inh.png');">Inheritance</a>
+<a id="imgNcSample_InhMem" class="tab" href="inhmem/NcSample_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcSample_InhMem.png');">Inherited Members</a>
+<a id="imgNcSample_Incl" class="tab" href="incl/NcSample_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcSample_Incl.png');">Includes</a>
+<a id="imgNcSample_Lib" class="tab" href="lib/NcSample_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcSample_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcSample_Inh" src="inh/NcSample_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcSample:NcSample" href="src/NcSample.cxx.html#HK70FB">NcSample</a>()</span><br />
+<div class="funccomm"><pre> Creation of an Ncample object and resetting the statistics values
+ The dimension is initialised to maximum
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcSample:_NcSample" href="src/NcSample.cxx.html#aq8HhB">~NcSample</a>()</span><br />
+<div class="funccomm"><pre> Default destructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Reset" href="src/NcSample.cxx.html#YAPDPE">Reset</a>()</span><br />
+<div class="funccomm"><pre> Resetting the statistics values for a certain Sample object
+ Dimension and storage flag are NOT changed
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Enter" href="src/NcSample.cxx.html#OvemzC">Enter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x)</span><br />
+<div class="funccomm"><pre> Entering a value into a 1-dim. sample
+ In case of first entry the dimension is set to 1
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Remove" href="src/NcSample.cxx.html#pt20Y">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x)</span><br />
+<div class="funccomm"><pre> Removing a value from a 1-dim. sample
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Enter@1" href="src/NcSample.cxx.html#UV3DPE">Enter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y)</span><br />
+<div class="funccomm"><pre> Entering a pair (x,y) into a 2-dim. sample
+ In case of first entry the dimension is set to 2
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Remove@1" href="src/NcSample.cxx.html#uvUqBE">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y)</span><br />
+<div class="funccomm"><pre> Removing a pair (x,y) from a 2-dim. sample
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Enter@2" href="src/NcSample.cxx.html#E4pftD">Enter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)</span><br />
+<div class="funccomm"><pre> Entering a set (x,y,z) into a 3-dim. sample
+ In case of first entry the dimension is set to 3
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Remove@2" href="src/NcSample.cxx.html#aSD67C">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)</span><br />
+<div class="funccomm"><pre> Removing a set (x,y,z) from a 3-dim. sample
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Compute" href="src/NcSample.cxx.html#ayZ7rB">Compute</a>()</span><br />
+<div class="funccomm"><pre> Computation of the various statistical values
+ after each entering or removing action on a certain sample
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetDimension" href="src/NcSample.cxx.html#A.UCu">GetDimension</a>() const</span><br />
+<div class="funccomm"><pre> Provide the dimension of a certain sample
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetN" href="src/NcSample.cxx.html#P57HuB">GetN</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of entries of a certain sample
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSum" href="src/NcSample.cxx.html#NmoOiE">GetSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the sum of a certain variable
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMean" href="src/NcSample.cxx.html#AV4.bB">GetMean</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the mean of a certain variable
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetVar" href="src/NcSample.cxx.html#x9PKiE">GetVar</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the variance of a certain variable
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSigma" href="src/NcSample.cxx.html#vOjfrB">GetSigma</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the standard deviation of a certain variable
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCov" href="src/NcSample.cxx.html#RuOq">GetCov</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
+<div class="funccomm"><pre> Provide the covariance between variables i and j
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCor" href="src/NcSample.cxx.html#ZkYgK">GetCor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
+<div class="funccomm"><pre> Provide the correlation between variables i and j
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Data" href="src/NcSample.cxx.html#TmU5AD">Data</a>()</span><br />
+<div class="funccomm"><pre> Printing of statistics of all variables
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Data@1" href="src/NcSample.cxx.html#gt8SjB">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Printing of statistics of ith variable
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Data@2" href="src/NcSample.cxx.html#r5Dwj">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
+<div class="funccomm"><pre> Printing of covariance and correlation between variables i and j
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:SetStoreMode" href="src/NcSample.cxx.html#YAvZh">SetStoreMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
+<div class="funccomm"><pre> Set storage mode for all entered data.
+
+ mode = 0 : Entered data will not be stored
+        1 : All data will be stored as entered
+
+ By default the storage mode is set to 0 in the constructor of this class.
+ The default at invokation of this memberfunction is mode=1.
+
+ For normal statistics evaluation (e.g. mean, sigma, covariance etc...)
+ storage of entered data is not needed. This is the default mode
+ of operation and is the most efficient w.r.t. cpu time and memory.
+ However, when calculation of a median, minimum or maximum is required,
+ then the data storage mode has be activated, unless the statistics
+ are obtained from a specified input histogram.
+
+ Note : Activation of storage mode can only be performed before the
+        first data item is entered.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetStoreMode" href="src/NcSample.cxx.html#DCR7nC">GetStoreMode</a>() const</span><br />
+<div class="funccomm"><pre> Provide the storage mode
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetQuantile" href="src/NcSample.cxx.html#yduqiC">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Provide the value of the i-th variable that marks the quantile with
+ fraction <span class="string">"f"</span> of the sample.
+ By definition <span class="string">"f"</span> belongs to the interval [0,1] where f=0.5 indicates
+ the median of the specified variable.
+ For this functionality the storage mode has to be activated.
+
+ In the case of incompatible data the value 0 is returned.
+
+ Note : For large datasets it is more efficient to determine the quantile
+        via the specification of a histogram.
+        See the other <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a> memberfunction for details.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMedian" href="src/NcSample.cxx.html#mwmT6C">GetMedian</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Provide the median of the i-th variable.
+ For this functionality the storage mode has to be activated.
+
+ In the case of incompatible data the value 0 is returned.
+
+ The median is determined by invokation of <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>(0.5,i).
+ Please refer to the documentation of the corresponding <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>()
+ memberfunction for further details.
+
+ Note : For large datasets it is more efficient to determine the median
+        via the specification of a histogram.
+        See the other <a href="./NcSample.html#NcSample:GetMedian" title="Double_t NcSample::GetMedian(Int_t i) or overloads">GetMedian</a> memberfunction for details.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSpread" href="src/NcSample.cxx.html#Sx93yC">GetSpread</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Provide the spread w.r.t. the median of a certain variable.
+ The spread is defined as the average of |median-val(i)|.
+ For this functionality the storage mode has to be activated.
+
+ Note : For large datasets it is more efficient to determine the spread
+        via the specification of a histogram.
+        See the other <a href="./NcSample.html#NcSample:GetSpread" title="Double_t NcSample::GetSpread(Int_t i) or overloads">GetSpread</a> memberfunction for details.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMinimum" href="src/NcSample.cxx.html#PGNCn">GetMinimum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the minimum value of a certain variable.
+ In case entries have been removed from the sample, a correct value can
+ only be obtained if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMaximum" href="src/NcSample.cxx.html#X8W4l">GetMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the maxmum value of a certain variable.
+ In case entries have been removed from the sample, a correct value can
+ only be obtained if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetQuantile@1" href="src/NcSample.cxx.html#NCnEnE">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Provide the value of the variable X or Y from the specified 1D histogram
+ that marks the quantile with fraction <span class="string">"f"</span> for the selected variable.
+ By definition <span class="string">"f"</span> belongs to the interval [0,1] where f=0.5 indicates
+ the median of the specified variable.
+ For this functionality it is not needed to activate the storage mode.
+
+ In the case of incompatible data the value 0 is returned.
+
+ In case of an X-quantile this facility uses TH1::GetQuantiles, which
+ provides a value which in general is different from any of the
+ central bin X values. The user may force the returned X-value to be
+ the corresponding central bin X value via the <span class="string">"mode"</span> input argument.
+
+ mode = 0 ==&gt; The pure TH1::GetQuantiles X-quantile value is returned.
+        1 ==&gt; The corresponding central bin X value is returned as X-quantile.
+        2 ==&gt; The Y-quantile value is returned.
+
+ By default mode=0 will be used to agree with standard ROOT processing.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMedian@1" href="src/NcSample.cxx.html#SYseUD">GetMedian</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Provide the median of the variable X or Y from the specified 1D histogram.
+ For this functionality it is not needed to activate the storage mode.
+
+ In the case of incompatible data the value 0 is returned.
+
+ The median is determined by invokation of <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>(0.5,histo,mode).
+ Please refer to the documentation of the corresponding <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>()
+ memberfunction for further details.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSpread@1" href="src/NcSample.cxx.html#TaLxFC">GetSpread</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Provide the spread w.r.t. the X or Y median for the specified 1D histogram.
+ The spread is defined as the average of |median-val|.
+ For this functionality it is not needed to activate the storage mode.
+
+ In the case of incompatible data the value 0 is returned.
+
+ In case of X-spread, this facility uses TH1::GetQuantiles to determine
+ the X-median, which provides a median value which in general is different
+ from any of the central bin X values. The user may force the used X-median
+ to be the corresponding central bin X value via the <span class="string">"mode"</span> input argument.
+
+ mode = 0 ==&gt; The pure TH1::GetQuantiles X-median value is used
+        1 ==&gt; The corresponding central bin X value is used as X-median
+        2 ==&gt; The spread in Y-values w.r.t. the Y-median will be provided
+
+ By default mode=0 will be used to agree with standard ROOT processing.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetEntry" href="src/NcSample.cxx.html#Qi7bPB">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
+<div class="funccomm"><pre> Provide the value of the i-th entry for the j-th variable.
+ The first entry is indicated by i=1 and the first variable is j=1.
+
+ Note : This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcSample:NcSample" href="src/NcSample.h.html#iN3jRE">NcSample</a>()</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:23 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

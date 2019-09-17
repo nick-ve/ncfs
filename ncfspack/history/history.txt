@@ -1114,3 +1114,8 @@
                 to provide access to the CFITSIO header file "fitsio.h" on various systems.
 14-apr-2019 NvE Class NcFITSIO re-designed to provide new, backward compatible, access methods.
 15-sep-2019 NvE Text of all copyright notices updated.
+17-sep-2019 NvE Directory /docs added to the top directory to contain the documentation information
+                for all the classes of the complete NCFS framework and the ROOT macro makedocs.cc 
+                updated accordingly in the top directory. Also NcVersion modified to reflect the
+                GIT management structure instead of the old SVN and the version indicator in NcVersion
+                has been updated to 2.2.

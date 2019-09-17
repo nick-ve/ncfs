@@ -1,0 +1,592 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:25 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcTreeMaker</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcTreeMaker','','NcTreeMaker.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcTreeMaker.h.html">header file</a>
+<a class="descrheadentry" href="src/NcTreeMaker.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcTreeMaker:description">class description</a> 
+<a class="descrheadentry" href="#NcTreeMaker:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcTreeMaker:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcTreeMaker:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcTreeMaker</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcTreeMaker:description"></a>class NcTreeMaker: public TTask</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcTreeMaker.html#NcTreeMaker:Class" title="TClass* NcTreeMaker::Class()">Class</a> <a href="./NcTreeMaker.html">NcTreeMaker</a>
+ <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> based processor to convert NCFS generic event structures into a plain
+ ROOT tree structure.
+
+ The selection of the specific observables to appear in the output tree
+ is performed via the <a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a> memberfunction.
+ The user may define a restricted set of tracks to be processed via the
+ memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>.
+ The user may define a restricted set of devices to be processed via the
+ memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>.
+
+ By making use of setting the so called <span class="string">"user data words"</span> of tracks and events
+ the user can have full flexibility on the data to appear in the output tree.
+ The <a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a> memberfunction allows to specify also which <span class="string">"user data words"</span> one wants
+ to obtain in the output tree for tracks and/or events.
+
+ Note : Tracks without vector information will be skipped.
+
+ An <a href="./NcAstrolab.html">NcAstrolab</a> object may be specified via the memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:SetAstrolab" title="void NcTreeMaker::SetAstrolab(NcAstrolab* lab)">SetAstrolab</a>.
+ The available (astrophysical) reference objects will lead to so called <span class="string">"astrotracks"</span>.
+ The astrotrack directions correspond to hypothetical tracks of messengers arriving
+ from the (astrophysical) reference object.
+ These directions (in radians) are provided in the local lab coordinate system from the
+ location where the (astrophysical) phenomenon would be at the time of the current event.
+ The timestamps of the astrotracks correspond to the timestamps as stored for the
+ reference objects in the <a href="./NcAstrolab.html">NcAstrolab</a>, which in general is the actual timestamp
+ of the astrophysical observation.
+ The latter allows investigation of a possible time difference between the observation
+ of an (astrophysical) phenomenon and the regular detected tracks/signals in the detector.
+ Also the ICRS longitude (l) and latitude (b) of the (astrophysical) reference objects
+ are provided in radians.
+
+ Example :
+
+ gSystem-&gt;Load(<span class="string">"ncfspack"</span>);
+
+ <a href="./NcTreeMaker.html">NcTreeMaker</a> mktree;
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:SetOutputFile" title="void NcTreeMaker::SetOutputFile(TString fname,TString ftitle,TString tname=&quot;Data&quot;,TString ttitle=&quot;All event data&quot;)">SetOutputFile</a>(<span class="string">"gentest.root"</span>,<span class="string">"NcCollider data in plain ROOT tree format"</span>);
+
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"e-"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"e+"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"pi-"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"pi+"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"K-"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"K+"</span>);
+
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a>(<span class="string">"track"</span>,<span class="string">"p"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a>(<span class="string">"track"</span>,<span class="string">"e"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a>(<span class="string">"track"</span>,<span class="string">"m"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a>(<span class="string">"track"</span>,<span class="string">"q"</span>);
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a>(<span class="string">"track"</span>,<span class="string">"user"</span>,<span class="string">"length"</span>);
+
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a>(<span class="string">"event"</span>,<span class="string">"*"</span>);
+
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> nevents=100; // Number of events to be generated
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> jrun=1;      // The run number of this batch of generated events
+
+ <a href="./NcCollider.html">NcCollider</a> gen;
+ gen.SetRunNumber(jrun);
+ gen.SetPrintFreq(10);
+ gen.Init(<span class="string">"cms"</span>,<span class="string">"p"</span>,<span class="string">"pbar"</span>,2000);
+
+ <a href="./NcJob.html">NcJob</a> q;
+ q.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;mktree);
+
+ <a href="./NcEvent.html">NcEvent</a>* evt=0;
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;nevents; i++)
+ {
+  gen.MakeEvent();
+  evt=gen.GetEvent();
+
+  q.ProcessObject(evt);
+ }
+
+ mktree.<a href="./NcTreeMaker.html#NcTreeMaker:CloseTree" title="void NcTreeMaker::CloseTree()">CloseTree</a>();
+
+--- Author: Nick van Eijndhoven 03-apr-2008 Utrecht University
+- Modified: NvE $Date: 2014-02-06 20:59:16 +0100 (Thu, 06 Feb 2014) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcTreeMaker:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:NcTreeMaker@1">NcTreeMaker</a>(<span class="keyword">const</span> <a href="./NcTreeMaker.html">NcTreeMaker</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:NcTreeMaker">NcTreeMaker</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTreeMaker"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"ROOT tree data generation"</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcTreeMaker:_NcTreeMaker">~NcTreeMaker</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Add"><span class="baseclass">TTask::</span>Add</a>(<a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>* task)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Browse"><span class="baseclass">TTask::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:CleanTasks"><span class="baseclass">TTask::</span>CleanTasks</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Clear"><span class="baseclass">TTask::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:CloseTree">CloseTree</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Continue"><span class="baseclass">TTask::</span>Continue</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTask"><span class="baseclass">TTask::</span>ExecuteTask</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"0"</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTasks"><span class="baseclass">TTask::</span>ExecuteTasks</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcAstrolab.html">NcAstrolab</a>*</td><td class="funcname"><a class="funcname" href="#NcTreeMaker:GetAstrolab">GetAstrolab</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakin"><span class="baseclass">TTask::</span>GetBreakin</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakout"><span class="baseclass">TTask::</span>GetBreakout</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TList*</td><td class="funcname"><a class="funcname" href="#TTask:GetListOfTasks"><span class="baseclass">TTask::</span>GetListOfTasks</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcTreeMaker:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsActive"><span class="baseclass">TTask::</span>IsActive</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsFolder"><span class="baseclass">TTask::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTreeMaker.html">NcTreeMaker</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcTreeMaker:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcTreeMaker.html">NcTreeMaker</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Select">Select</a>(TString type, TString obs, TString uname = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetActive"><span class="baseclass">TTask::</span>SetActive</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> active = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:SetAstrolab">SetAstrolab</a>(<a href="./NcAstrolab.html">NcAstrolab</a>* lab)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakin"><span class="baseclass">TTask::</span>SetBreakin</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakin = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakout"><span class="baseclass">TTask::</span>SetBreakout</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakout = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:SetOutputFile">SetOutputFile</a>(TString fname, TString ftitle, TString tname = <span class="string">"Data"</span>, TString ttitle = <span class="string">"All event data"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:SetTrackMaximum">SetTrackMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:UseDevices">UseDevices</a>(TString classname)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:UseTracks">UseTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:AstroTrack">AstroTrack</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Device">Device</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Event">Event</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTreeMaker:Track">Track</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcTreeMaker:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fActive"><span class="baseclass">TTask::</span>fActive</a></td><td class="datadesc">true if task is active</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcAstrolab.html">NcAstrolab</a>*</td><td class="dataname"><a name="NcTreeMaker:fAstrolab"></a>fAstrolab</td><td class="datadesc">Pointer to the astrolab</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fDeviceNdevs"></a>fDeviceNdevs</td><td class="datadesc">Device class number of fired devices selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fDeviceNhits"></a>fDeviceNhits</td><td class="datadesc">Device class number of hits selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fDeviceflag"></a>fDeviceflag</td><td class="datadesc">Flag to indicate usage of device selection criteria</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fDndev"></a>fDndev</td><td class="datadesc">! Variable for device data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fDnhit"></a>fDnhit</td><td class="datadesc">! Variable for device data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcTreeMaker:fEe"></a>fEe</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEjevt"></a>fEjevt</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEjrun"></a>fEjrun</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcTreeMaker:fEm"></a>fEm</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcTreeMaker:fEmjd"></a>fEmjd</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcTreeMaker:fEp"></a>fEp</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcTreeMaker:fEphip"></a>fEphip</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcTreeMaker:fEq"></a>fEq</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcTreeMaker:fEsec"></a>fEsec</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcTreeMaker:fEthetap"></a>fEthetap</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fEuser"></a>fEuser</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventCharges"></a>fEventCharges</td><td class="datadesc">Event charge selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventEnergies"></a>fEventEnergies</td><td class="datadesc">Event energy selection flag </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventJevts"></a>fEventJevts</td><td class="datadesc">Event event number selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventJruns"></a>fEventJruns</td><td class="datadesc">Event run number selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventMasses"></a>fEventMasses</td><td class="datadesc">Event invariant mass selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventMjds"></a>fEventMjds</td><td class="datadesc">Event MJD selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventMomenta"></a>fEventMomenta</td><td class="datadesc">Event momentum selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventSecs"></a>fEventSecs</td><td class="datadesc">Event elapsed seconds selection flag</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcTreeMaker:fEventUnames"></a>fEventUnames</td><td class="datadesc">The names of the event user words to be selected </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventWeights"></a>fEventWeights</td><td class="datadesc">Event weight selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fEventflag"></a>fEventflag</td><td class="datadesc">Flag to indicate usage of total event selection criteria</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcEvent.html">NcEvent</a>*</td><td class="dataname"><a name="NcTreeMaker:fEvt"></a>fEvt</td><td class="datadesc">Pointer to the current event structure</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcTreeMaker:fEweight"></a>fEweight</td><td class="datadesc">! Variable for event data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fFirst"></a>fFirst</td><td class="datadesc">Flag to indicate first invokation</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fNtkmax"></a>fNtkmax</td><td class="datadesc">The maximum number of tracks per name in the output tree</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
+<tr class="data"><td class="datatype">TFile*</td><td class="dataname"><a name="NcTreeMaker:fOutfile"></a>fOutfile</td><td class="datadesc">The output file</td></tr>
+<tr class="data"><td class="datatype">TTree*</td><td class="dataname"><a name="NcTreeMaker:fOuttree"></a>fOuttree</td><td class="datadesc">The output tree</td></tr>
+<tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTe"></a>fTe</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTid"></a>fTid</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTm"></a>fTm</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTmjd"></a>fTmjd</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTn"></a>fTn</td><td class="datadesc">! Number of tracks in the output tree storage array</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTnsig"></a>fTnsig</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTp"></a>fTp</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTphip"></a>fTphip</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTq"></a>fTq</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackCharges"></a>fTrackCharges</td><td class="datadesc">Track charge selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackEnergies"></a>fTrackEnergies</td><td class="datadesc">Track energy selection flag </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackIds"></a>fTrackIds</td><td class="datadesc">Track Ids selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackMasses"></a>fTrackMasses</td><td class="datadesc">Track mass selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackMjds"></a>fTrackMjds</td><td class="datadesc">Track MJD selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackMomenta"></a>fTrackMomenta</td><td class="datadesc">Track momentum selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackNsigs"></a>fTrackNsigs</td><td class="datadesc">Track number of associated signals selection flag</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackSecs"></a>fTrackSecs</td><td class="datadesc">Track elapsed seconds selection flag</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcTreeMaker:fTrackUnames"></a>fTrackUnames</td><td class="datadesc">The names of the track user words to be selected </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTreeMaker:fTrackflag"></a>fTrackflag</td><td class="datadesc">Flag to indicate usage of individual track selection criteria</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcTreeMaker:fTrees"></a>fTrees</td><td class="datadesc">Array with pointers of all created trees with observables</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTsec"></a>fTsec</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcTreeMaker:fTthetap"></a>fTthetap</td><td class="datadesc">! Array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>**</td><td class="dataname"><a name="NcTreeMaker:fTuser"></a>fTuser</td><td class="datadesc">! Matrix array for track data storage in output tree</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcTreeMaker:fUseDevices"></a>fUseDevices</td><td class="datadesc">The device classes to be used </td></tr>
+<tr class="data"><td class="datatype">TArrayI*</td><td class="dataname"><a name="NcTreeMaker:fUseNtk"></a>fUseNtk</td><td class="datadesc">The max. numbers of the various track names to be used</td></tr>
+<tr class="data"><td class="datatype">TArrayI*</td><td class="dataname"><a name="NcTreeMaker:fUseTkMode"></a>fUseTkMode</td><td class="datadesc">The modes for the retrieval of the various tracks from the event based on the name (pattern)</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcTreeMaker:fUseTracks"></a>fUseTracks</td><td class="datadesc">The track names to be used </td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBeginTask"><span class="baseclass">TTask::</span>fgBeginTask</a></td><td class="datadesc">pointer to task initiator</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBreakPoint"><span class="baseclass">TTask::</span>fgBreakPoint</a></td><td class="datadesc">pointer to current break point</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcTreeMaker:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcTreeMaker_Lib" id="MapNcTreeMaker_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcTreeMaker_Inh" class="tabsel" href="inh/NcTreeMaker_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcTreeMaker_Inh.png');">Inheritance</a>
+<a id="imgNcTreeMaker_InhMem" class="tab" href="inhmem/NcTreeMaker_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcTreeMaker_InhMem.png');">Inherited Members</a>
+<a id="imgNcTreeMaker_Incl" class="tab" href="incl/NcTreeMaker_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcTreeMaker_Incl.png');">Includes</a>
+<a id="imgNcTreeMaker_Lib" class="tab" href="lib/NcTreeMaker_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcTreeMaker_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcTreeMaker_Inh" src="inh/NcTreeMaker_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:NcTreeMaker" href="src/NcTreeMaker.cxx.html#TavkYC">NcTreeMaker</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTreeMaker"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"ROOT tree data generation"</span>)</span><br />
+<div class="funccomm"><pre> Default constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:_NcTreeMaker" href="src/NcTreeMaker.cxx.html#stn1I">~NcTreeMaker</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:NcTreeMaker@1" href="src/NcTreeMaker.cxx.html#p5_BrC">NcTreeMaker</a>(<span class="keyword">const</span> <a href="./NcTreeMaker.html">NcTreeMaker</a>&amp; q)</span><br />
+<div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetOutputFile" href="src/NcTreeMaker.cxx.html#qJRTuB">SetOutputFile</a>(TString fname, TString ftitle, TString tname = <span class="string">"Data"</span>, TString ttitle = <span class="string">"All event data"</span>)</span><br />
+<div class="funccomm"><pre> Create the output file for the ROOT data tree.
+ Also the overall output tree is created.
+
+ fname  : Name of the output file to be created.
+ ftitle : Title of the output file to be created.
+ tname  : Name of the overall output tree to be created.
+ ttitle : Title of the overall output tree to be created.
+
+ By default tname=<span class="string">"Data"</span> and ttitle=<span class="string">"All event data"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:CloseTree" href="src/NcTreeMaker.cxx.html#n5172B">CloseTree</a>()</span><br />
+<div class="funccomm"><pre> Proper writing and closing of the output tree structure(s).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetTrackMaximum" href="src/NcTreeMaker.cxx.html#pZ23HC">SetTrackMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Set maximum number of tracks per name in the output tree.
+ In the constructor n is set to a default of 1000, which implies that each
+ trackname can occur at maximum 1000 times in the output tree storage.
+ For instance this means that the momenta etc... of <span class="string">"pi+"</span> can be stored
+ up to a maximum of 1000 <span class="string">"pi+"</span> tracks in case <span class="string">"pi+"</span> was selected for the
+ output tree via the invokation of <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"pi+"</span>).
+
+ Note : In case all tracks are selected via invokation of <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"*"</span>)
+        then the generic name <span class="string">"trk"</span> will be given to each track in the
+        produced output tree.
+        This implies that the argument <span class="string">"n"</span> (or the default 1000) defines
+        the total number of tracks per event that can occur in the produced
+        output tree.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:UseTracks" href="src/NcTreeMaker.cxx.html#hZmIFC">UseTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Specification of the track names to be used for the investigation
+ of individual track observables.
+
+ name : Specifies the track name (e.g. <span class="string">"IceDwalk"</span>)
+        In case name=<span class="string">"*"</span> all track names will be accepted.
+
+ n : Specifies the max. number of these tracks to be used
+
+ mode = 0 : The provided name should exactly match the trackname
+        1 : The provided name should be part of the trackname
+
+ Notes :
+
+ 1) n&lt;0 will use all the existing tracks of the specified name.
+    See the remarks in the docs of memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:SetTrackMaximum" title="void NcTreeMaker::SetTrackMaximum(Int_t n)">SetTrackMaximum</a>
+    concerning the maximum number of tracks that can appear in the
+    produced output tree.
+
+ 2) The provided name (specifically with mode=1) should be unique among
+    all the provided names, since these names will define the various
+    variable names in the output tree.
+
+ The defaults are n=-1 and mode=0.
+
+ Consecutive invokations of this memberfunction with different names
+ will result in an incremental effect.
+
+ Example :
+
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"IceDwalk"</span>,5);
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"IceLinefit"</span>,2);
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"Pythia"</span>);
+
+ This will use the first 5 <a href="./IceDwalk.html">IceDwalk</a>, the first 2 <a href="./IceLinefit.html">IceLinefit</a> and all the
+ Pythia tracks which are encountered in the event structure.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:UseDevices" href="src/NcTreeMaker.cxx.html#Y01xVB">UseDevices</a>(TString classname)</span><br />
+<div class="funccomm"><pre> Specification of the device classes to be used for the various observables.
+
+ classname : Specifies the device class (e.g. <span class="string">"IceGOM"</span>).
+
+ All devices of (or derived from) the specified classname will be taken
+ into account as well as all the hits which belong to them.
+
+ Note : Specification of classname=<span class="string">"TObject"</span> will result in using
+        all existing devices (and recorded hits).
+
+ Consecutive invokations of this memberfunction with different names
+ will result in an incremental effect.
+
+ Example :
+
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceAOM);</span>
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceIDOM);</span>
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceTDOM"</span>);
+
+ This will take into account all devices (derived from) <a href="./IceAOM.html">IceAOM</a>, <a href="./IceIDOM.html">IceIDOM</a>
+ and <a href="./IceTDOM.html">IceTDOM</a> as well as all the hits of these devices.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Select" href="src/NcTreeMaker.cxx.html#S29rOB">Select</a>(TString type, TString obs, TString uname = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre> <a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a> the observable to appear in the output tree.
+
+ type  : Selection type specifier (e.g. <span class="string">"track"</span>, <span class="string">"event"</span> or <span class="string">"device"</span>).
+ obs   : Observable specification.
+ uname : Name of the user data word to be stored (only for <span class="string">"track"</span> or <span class="string">"event"</span>)
+
+ The various observables that are available for selection are :
+
+ obs : <span class="string">"p"</span>      ==&gt; Momentum in spherical coordinates (p,theta,phi) in GeV/c and radians
+       <span class="string">"e"</span>      ==&gt; Energy value in GeV
+       <span class="string">"m"</span>      ==&gt; (Invariant) mass in GeV/c^2
+       <span class="string">"q"</span>      ==&gt; Charge (electron charge is defined as -1)
+       <span class="string">"mjd"</span>    ==&gt; (Fractional) Modified Julian Date
+       <span class="string">"sec"</span>    ==&gt; (Fractional) Number of elapsed seconds in the MJD
+       <span class="string">"id"</span>     ==&gt; <a href="./NcTreeMaker.html#NcTreeMaker:Track" title="void NcTreeMaker::Track()">Track</a> identifier (for tracks only)
+       <span class="string">"nsig"</span>   ==&gt; Number of associated signals (for tracks only)
+                    Note : Only signals of selected devices (see <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>) will be considered
+       <span class="string">"jrun"</span>   ==&gt; Run number (for event only)
+       <span class="string">"jevt"</span>   ==&gt; <a href="./NcTreeMaker.html#NcTreeMaker:Event" title="void NcTreeMaker::Event()">Event</a> number (for event only)
+       <span class="string">"weight"</span> ==&gt; <a href="./NcTreeMaker.html#NcTreeMaker:Event" title="void NcTreeMaker::Event()">Event</a> weight (for event only)
+       <span class="string">"ndev"</span>   ==&gt; Number of fired devices (for device only)
+       <span class="string">"nhit"</span>   ==&gt; Number of hits (for device only)
+       <span class="string">"user"</span>   ==&gt; User data words (for tracks and events only)
+       <span class="string">"*"</span>      ==&gt; All possible observables (except user data words) for the specified selection type
+
+ Note :
+
+ A track or event can have various user data words.
+ These user data words can be specified here one by one through subsequent invokations
+ of this member function with the observable name <span class="string">"user"</span> and the required user data word name <span class="string">"uname"</span>.
+
+ In the default constructor all observables are de-activated for selection.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetAstrolab" href="src/NcTreeMaker.cxx.html#Gb2AIC">SetAstrolab</a>(<a href="./NcAstrolab.html">NcAstrolab</a>* lab)</span><br />
+<div class="funccomm"><pre> Specify the astrolab to be used.
+ This will lead to the appearance of so called <span class="string">"astrotracks"</span> from
+ (astrophysical) reference objects in the produced output tree.
+
+ In case lab=0 no <span class="string">"astrotracks"</span> are produced.
+
+ Note :
+
+ An internal copy of the specified Astrolab will be made.
+ In case one wants to modify the Astrolab, this should be done via
+ the corresponding pointer which is provided via <a href="./NcTreeMaker.html#NcTreeMaker:GetAstrolab" title="NcAstrolab* NcTreeMaker::GetAstrolab()">GetAstrolab</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcAstrolab.html">NcAstrolab</a>* <a class="funcname" name="NcTreeMaker:GetAstrolab" href="src/NcTreeMaker.cxx.html#sIGZAD">GetAstrolab</a>() const</span><br />
+<div class="funccomm"><pre> Provide pointer to the astrolab.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Exec" href="src/NcTreeMaker.cxx.html#LkjvRE">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funccomm"><pre> Implementation of the ouput tree creation and filling.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Track" href="src/NcTreeMaker.cxx.html#w2cU_B">Track</a>()</span><br />
+<div class="funccomm"><pre> Obtain individual track observables.
+ Note : Tracks without vector information will be skipped.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Event" href="src/NcTreeMaker.cxx.html#AmQ8o">Event</a>()</span><br />
+<div class="funccomm"><pre> Obtain total event observables.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Device" href="src/NcTreeMaker.cxx.html#RRC8mC">Device</a>()</span><br />
+<div class="funccomm"><pre> Obtain device observables.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:AstroTrack" href="src/NcTreeMaker.cxx.html#OtXux">AstroTrack</a>()</span><br />
+<div class="funccomm"><pre> Create individual track observables from (astrophysical) reference objects.
+ The astrotrack directions correspond to hypothetical tracks of messengers arriving
+ from the (astrophysical) reference object.
+ These directions (in radians) are provided in the local lab coordinate system from the
+ location where the (astrophysical) phenomenon would be at the time of the current event.
+ The timestamps of the astrotracks correspond to the timestamps as stored for the
+ reference objects in the <a href="./NcAstrolab.html">NcAstrolab</a>, which in general is the actual timestamp
+ of the astrophysical observation.
+ The latter allows investigation of a possible time difference between the observation
+ of an (astrophysical) phenomenon and the regular detected tracks/signals in the detector.
+ Also the ICRS longitude (l) and latitude (b) of the (astrophysical) reference objects
+ are provided in radians.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcTreeMaker:Clone" href="src/NcTreeMaker.cxx.html#EqgRP">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
+ This memberfunction enables automatic creation of new objects of the
+ correct type depending on the object type, a feature which may be very useful
+ for containers when adding objects in case the container owns the objects.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:25 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

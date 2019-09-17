@@ -1,0 +1,1080 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:16 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcCollider</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcCollider','','NcCollider.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcCollider.h.html">header file</a>
+<a class="descrheadentry" href="src/NcCollider.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcCollider:description">class description</a> 
+<a class="descrheadentry" href="#NcCollider:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcCollider:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcCollider:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcCollider</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcCollider:description"></a>class NcCollider: public TPythia6</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcCollider.html#NcCollider:Class" title="TClass* NcCollider::Class()">Class</a> <a href="./NcCollider.html">NcCollider</a>
+ Pythia based universal (astro)physics event generator.
+ This class is derived from <a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a> and has some extensions to
+ support also generation of nucleus-nucleus interactions and to allow
+ investigation of the effect of detector resolving power.
+ Furthermore, the produced event information is provided in a format
+ using the <a href="./NcEvent.html">NcEvent</a> structure.
+ For the produced <a href="./NcTrack.html">NcTrack</a> objects, the particle ID code is set to the
+ Pythia KF value, which is compatible with the PDG identifier.
+ This will allow a direct analysis of the produced data using the
+ NCFSPack physics analysis tools.
+
+ For further details concerning the produced output structure,
+ see the docs of the memberfunctions <a href="./NcCollider.html#NcCollider:SetVertexMode" title="void NcCollider::SetVertexMode(Int_t mode)">SetVertexMode</a> and <a href="./NcCollider.html#NcCollider:SetResolution" title="void NcCollider::SetResolution(Double_t res)">SetResolution</a>.
+
+ Example job of minimum biased Pb+Pb interactions :
+
+ {
+  gSystem-&gt;Load(<span class="string">"libEG"</span>);
+  gSystem-&gt;Load(<span class="string">"libEGPythia6"</span>);
+  gSystem-&gt;Load(<span class="string">"ncfspack"</span>);
+
+  <a href="./NcCollider.html">NcCollider</a>* gen=new <a href="./NcCollider.html">NcCollider</a>();
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:SetOutputFile" title="void NcCollider::SetOutputFile(TString name)">SetOutputFile</a>(<span class="string">"test.root"</span>);
+  gen-&gt;<a href="./NcCollider.html#NcCollider:SetVertexMode" title="void NcCollider::SetVertexMode(Int_t mode)">SetVertexMode</a>(3);
+  gen-&gt;<a href="./NcCollider.html#NcCollider:SetResolution" title="void NcCollider::SetResolution(Double_t res)">SetResolution</a>(1e-6); // 1 micron vertex resolution
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:SetRunNumber" title="void NcCollider::SetRunNumber(Int_t run)">SetRunNumber</a>(1);
+
+  <a href="./ListOfTypes.html#Int_t">Int_t</a> zp=82;
+  <a href="./ListOfTypes.html#Int_t">Int_t</a> ap=208;
+  <a href="./ListOfTypes.html#Int_t">Int_t</a> zt=82;
+  <a href="./ListOfTypes.html#Int_t">Int_t</a> at=208;
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>(<span class="string">"fixt"</span>,zp,ap,zt,at,158);
+
+  gen-&gt;<a href="./#TNamed:SetTitle" title="void TNamed::SetTitle(const char* title=&quot;&quot;)">SetTitle</a>(<span class="string">"SPS Pb-Pb collision at 158A GeV/c beam energy"</span>);
+
+  <a href="./ListOfTypes.html#Int_t">Int_t</a> nevents=5;
+
+  <a href="./NcRandom.html">NcRandom</a> rndm;
+  <a href="./ListOfTypes.html#Float_t">Float_t</a>* rans=new <a href="./ListOfTypes.html#Float_t">Float_t</a>[nevents];
+  rndm.Uniform(rans,nevents,2,ap+at);
+  <a href="./ListOfTypes.html#Int_t">Int_t</a> npart;
+  for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;nevents; i++)
+  {
+   npart=rans[i];
+   gen-&gt;<a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>(npart);
+
+   <a href="./NcEvent.html">NcEvent</a>* evt=gen-&gt;<a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>();
+
+   evt-&gt;List();
+  }
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:EndRun" title="void NcCollider::EndRun()">EndRun</a>();
+ }
+
+
+ Example job of a cosmic nu+p atmospheric interaction.
+
+ {
+  gSystem-&gt;Load(<span class="string">"libEG"</span>);
+  gSystem-&gt;Load(<span class="string">"libEGPythia6"</span>);
+  gSystem-&gt;Load(<span class="string">"ncfspack"</span>);
+
+  <a href="./NcCollider.html">NcCollider</a>* gen=new <a href="./NcCollider.html">NcCollider</a>();
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:SetOutputFile" title="void NcCollider::SetOutputFile(TString name)">SetOutputFile</a>(<span class="string">"test.root"</span>);
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:SetRunNumber" title="void NcCollider::SetRunNumber(Int_t run)">SetRunNumber</a>(1);
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>(<span class="string">"fixt"</span>,<span class="string">"nu_mu"</span>,<span class="string">"p"</span>,1e11);
+
+  gen-&gt;<a href="./#TNamed:SetTitle" title="void TNamed::SetTitle(const char* title=&quot;&quot;)">SetTitle</a>(<span class="string">"Atmospheric nu_mu-p interaction at 1e20 eV"</span>);
+
+  <a href="./ListOfTypes.html#Int_t">Int_t</a> nevents=10;
+
+  for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;nevents; i++)
+  {
+   gen-&gt;<a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>(0,1);
+
+   <a href="./NcEvent.html">NcEvent</a>* evt=gen-&gt;<a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>();
+
+   evt-&gt;Data();
+  }
+
+  gen-&gt;<a href="./NcCollider.html#NcCollider:EndRun" title="void NcCollider::EndRun()">EndRun</a>();
+ }
+
+
+--- Author: Nick van Eijndhoven 22-nov-2002 Utrecht University
+- Modified: NvE $Date: 2016-05-26 15:01:32 +0200 (Thu, 26 May 2016) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcCollider:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcCollider:NcCollider">NcCollider</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcCollider:NcCollider@1">NcCollider</a>(<span class="keyword">const</span> <a href="./NcCollider.html">NcCollider</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcCollider:_NcCollider">~NcCollider</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:Browse"><span class="baseclass">TGenerator::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcCollider:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TNamed:Clone"><span class="baseclass">TNamed::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:CloseFortranFile"><span class="baseclass">TPythia6::</span>CloseFortranFile</a>(<span class="keyword">int</span> lun)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:DistancetoPrimitive"><span class="baseclass">TGenerator::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:Draw"><span class="baseclass">TGenerator::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:EndRun">EndRun</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:ExecuteEvent"><span class="baseclass">TGenerator::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GenerateEvent"><span class="baseclass">TPythia6::</span>GenerateEvent</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetBRAT"><span class="baseclass">TPythia6::</span>GetBRAT</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetCKIN"><span class="baseclass">TPythia6::</span>GetCKIN</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetEcmsMin">GetEcmsMin</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetElastic">GetElastic</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcEvent.html">NcEvent</a>*</td><td class="funcname"><a class="funcname" href="#NcCollider:GetEvent">GetEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> select = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetIMSS"><span class="baseclass">TPythia6::</span>GetIMSS</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetK"><span class="baseclass">TPythia6::</span>GetK</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetKCHG"><span class="baseclass">TPythia6::</span>GetKCHG</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetKFDP"><span class="baseclass">TPythia6::</span>GetKFDP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPythia6:GetKFIN"><span class="baseclass">TPythia6::</span>GetKFIN</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual TObjArray*</td><td class="funcname"><a class="funcname" href="#TGenerator:GetListOfParticles"><span class="baseclass">TGenerator::</span>GetListOfParticles</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMDCY"><span class="baseclass">TPythia6::</span>GetMDCY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMDME"><span class="baseclass">TPythia6::</span>GetMDME</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMINT"><span class="baseclass">TPythia6::</span>GetMINT</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMRPY"><span class="baseclass">TPythia6::</span>GetMRPY</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSEL"><span class="baseclass">TPythia6::</span>GetMSEL</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSELPD"><span class="baseclass">TPythia6::</span>GetMSELPD</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTI"><span class="baseclass">TPythia6::</span>GetMSTI</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTJ"><span class="baseclass">TPythia6::</span>GetMSTJ</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTP"><span class="baseclass">TPythia6::</span>GetMSTP</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTU"><span class="baseclass">TPythia6::</span>GetMSTU</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSUB"><span class="baseclass">TPythia6::</span>GetMSUB</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetMultiple">GetMultiple</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMWID"><span class="baseclass">TPythia6::</span>GetMWID</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetN"><span class="baseclass">TPythia6::</span>GetN</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetNGENPD"><span class="baseclass">TPythia6::</span>GetNGENPD</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetNPAD"><span class="baseclass">TPythia6::</span>GetNPAD</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:GetNumberOfParticles"><span class="baseclass">TGenerator::</span>GetNumberOfParticles</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetP"><span class="baseclass">TPythia6::</span>GetP</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:GetParameter"><span class="baseclass">TGenerator::</span>GetParameter</a>(<span class="keyword">const</span> <span class="keyword">char</span>*) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARF"><span class="baseclass">TPythia6::</span>GetPARF</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARI"><span class="baseclass">TPythia6::</span>GetPARI</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARJ"><span class="baseclass">TPythia6::</span>GetPARJ</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARP"><span class="baseclass">TPythia6::</span>GetPARP</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual TParticle*</td><td class="funcname"><a class="funcname" href="#TGenerator:GetParticle"><span class="baseclass">TGenerator::</span>GetParticle</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARU"><span class="baseclass">TPythia6::</span>GetPARU</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPMAS"><span class="baseclass">TPythia6::</span>GetPMAS</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual TObjArray*</td><td class="funcname"><a class="funcname" href="#TGenerator:GetPrimaries"><span class="baseclass">TGenerator::</span>GetPrimaries</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetPrintFreq">GetPrintFreq</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPROC"><span class="baseclass">TPythia6::</span>GetPROC</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:GetPtCut"><span class="baseclass">TGenerator::</span>GetPtCut</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">Pybins_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPybins"><span class="baseclass">TPythia6::</span>GetPybins</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pydat1_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat1"><span class="baseclass">TPythia6::</span>GetPydat1</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pydat2_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat2"><span class="baseclass">TPythia6::</span>GetPydat2</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pydat3_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat3"><span class="baseclass">TPythia6::</span>GetPydat3</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pydat4_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat4"><span class="baseclass">TPythia6::</span>GetPydat4</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pydatr_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydatr"><span class="baseclass">TPythia6::</span>GetPydatr</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint1_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint1"><span class="baseclass">TPythia6::</span>GetPyint1</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint2_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint2"><span class="baseclass">TPythia6::</span>GetPyint2</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint3_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint3"><span class="baseclass">TPythia6::</span>GetPyint3</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint4_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint4"><span class="baseclass">TPythia6::</span>GetPyint4</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint5_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint5"><span class="baseclass">TPythia6::</span>GetPyint5</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint6_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint6"><span class="baseclass">TPythia6::</span>GetPyint6</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint7_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint7"><span class="baseclass">TPythia6::</span>GetPyint7</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint8_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint8"><span class="baseclass">TPythia6::</span>GetPyint8</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyint9_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint9"><span class="baseclass">TPythia6::</span>GetPyint9</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyints_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyints"><span class="baseclass">TPythia6::</span>GetPyints</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyjets_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyjets"><span class="baseclass">TPythia6::</span>GetPyjets</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pymssm_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPymssm"><span class="baseclass">TPythia6::</span>GetPymssm</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pypars_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPypars"><span class="baseclass">TPythia6::</span>GetPypars</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pyssmt_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyssmt"><span class="baseclass">TPythia6::</span>GetPyssmt</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">Pysubs_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPysubs"><span class="baseclass">TPythia6::</span>GetPysubs</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetRandomSeed">GetRandomSeed</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetResolution">GetResolution</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetRMSS"><span class="baseclass">TPythia6::</span>GetRMSS</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetRRPY"><span class="baseclass">TPythia6::</span>GetRRPY</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetRunNumber">GetRunNumber</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetSelectionFlag">GetSelectionFlag</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetSMW"><span class="baseclass">TPythia6::</span>GetSMW</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetSMZ"><span class="baseclass">TPythia6::</span>GetSMZ</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetSpectatorPmin">GetSpectatorPmin</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetUMIX"><span class="baseclass">TPythia6::</span>GetUMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetUserControl">GetUserControl</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetV"><span class="baseclass">TPythia6::</span>GetV</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetVCKM"><span class="baseclass">TPythia6::</span>GetVCKM</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetVertexMode">GetVertexMode</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetVINT"><span class="baseclass">TPythia6::</span>GetVINT</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetVMIX"><span class="baseclass">TPythia6::</span>GetVMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetWIDS"><span class="baseclass">TPythia6::</span>GetWIDS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:GetWin">GetWin</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetZMIX"><span class="baseclass">TPythia6::</span>GetZMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual TObjArray*</td><td class="funcname"><a class="funcname" href="#TPythia6:ImportParticles@1"><span class="baseclass">TPythia6::</span>ImportParticles</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPythia6:ImportParticles"><span class="baseclass">TPythia6::</span>ImportParticles</a>(TClonesArray* particles, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:Init">Init</a>(TString frame, TString beam, TString target, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:Init@1">Init</a>(TString frame, <a href="./ListOfTypes.html#Int_t">Int_t</a> zp, <a href="./ListOfTypes.html#Int_t">Int_t</a> ap, <a href="./ListOfTypes.html#Int_t">Int_t</a> zt, <a href="./ListOfTypes.html#Int_t">Int_t</a> at, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Initialize"><span class="baseclass">TPythia6::</span>Initialize</a>(<span class="keyword">const</span> <span class="keyword">char</span>* frame, <span class="keyword">const</span> <span class="keyword">char</span>* beam, <span class="keyword">const</span> <span class="keyword">char</span>* target, <span class="keyword">float</span> win)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a>*</td><td class="funcname"><a class="funcname" href="#TPythia6:Instance"><span class="baseclass">TPythia6::</span>Instance</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcCollider:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:MakeEvent">MakeEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> npt = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mlist = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> medit = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:OpenFortranFile"><span class="baseclass">TPythia6::</span>OpenFortranFile</a>(<span class="keyword">int</span> lun, <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:Paint"><span class="baseclass">TGenerator::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Py1ent"><span class="baseclass">TPythia6::</span>Py1ent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> line, <a href="./ListOfTypes.html#Int_t">Int_t</a> kf, <a href="./ListOfTypes.html#Double_t">Double_t</a> pe, <a href="./ListOfTypes.html#Double_t">Double_t</a> theta, <a href="./ListOfTypes.html#Double_t">Double_t</a> phi)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pychge"><span class="baseclass">TPythia6::</span>Pychge</a>(<span class="keyword">int</span> kf)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pycomp"><span class="baseclass">TPythia6::</span>Pycomp</a>(<span class="keyword">int</span> kf)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pydiff"><span class="baseclass">TPythia6::</span>Pydiff</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyedit"><span class="baseclass">TPythia6::</span>Pyedit</a>(<span class="keyword">int</span> medit)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyevnt"><span class="baseclass">TPythia6::</span>Pyevnt</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyexec"><span class="baseclass">TPythia6::</span>Pyexec</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pygive"><span class="baseclass">TPythia6::</span>Pygive</a>(<span class="keyword">const</span> <span class="keyword">char</span>* param)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyhepc"><span class="baseclass">TPythia6::</span>Pyhepc</a>(<span class="keyword">int</span> mconv)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyinit"><span class="baseclass">TPythia6::</span>Pyinit</a>(<span class="keyword">char</span>* frame, <span class="keyword">char</span>* beam, <span class="keyword">char</span>* target, <span class="keyword">double</span> wint)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pylist"><span class="baseclass">TPythia6::</span>Pylist</a>(<span class="keyword">int</span> flag)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pymass"><span class="baseclass">TPythia6::</span>Pymass</a>(<span class="keyword">int</span> kf)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyname"><span class="baseclass">TPythia6::</span>Pyname</a>(<span class="keyword">int</span> kf, <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyr"><span class="baseclass">TPythia6::</span>Pyr</a>(<span class="keyword">int</span> idummy)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyrget"><span class="baseclass">TPythia6::</span>Pyrget</a>(<span class="keyword">int</span> lun, <span class="keyword">int</span> move)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyrset"><span class="baseclass">TPythia6::</span>Pyrset</a>(<span class="keyword">int</span> lun, <span class="keyword">int</span> move)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pystat"><span class="baseclass">TPythia6::</span>Pystat</a>(<span class="keyword">int</span> flag)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pytest"><span class="baseclass">TPythia6::</span>Pytest</a>(<span class="keyword">int</span> flag)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pytune"><span class="baseclass">TPythia6::</span>Pytune</a>(<span class="keyword">int</span> itune)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyupda"><span class="baseclass">TPythia6::</span>Pyupda</a>(<span class="keyword">int</span> mupda, <span class="keyword">int</span> lun)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SelectEvent">SelectEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetBRAT"><span class="baseclass">TPythia6::</span>SetBRAT</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> b)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetCKIN"><span class="baseclass">TPythia6::</span>SetCKIN</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> c)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetEcmsMin">SetEcmsMin</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ecms)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetElastic">SetElastic</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetIMSS"><span class="baseclass">TPythia6::</span>SetIMSS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetK"><span class="baseclass">TPythia6::</span>SetK</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">int</span> k)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetKCHG"><span class="baseclass">TPythia6::</span>SetKCHG</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">int</span> k)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetKFDP"><span class="baseclass">TPythia6::</span>SetKFDP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> k)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetKFIN"><span class="baseclass">TPythia6::</span>SetKFIN</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> kfin = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMDCY"><span class="baseclass">TPythia6::</span>SetMDCY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMDME"><span class="baseclass">TPythia6::</span>SetMDME</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMINT"><span class="baseclass">TPythia6::</span>SetMINT</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetMomentum">SetMomentum</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMRPY"><span class="baseclass">TPythia6::</span>SetMRPY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSEL"><span class="baseclass">TPythia6::</span>SetMSEL</a>(<span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSELPD"><span class="baseclass">TPythia6::</span>SetMSELPD</a>(<span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTI"><span class="baseclass">TPythia6::</span>SetMSTI</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTJ"><span class="baseclass">TPythia6::</span>SetMSTJ</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTP"><span class="baseclass">TPythia6::</span>SetMSTP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTU"><span class="baseclass">TPythia6::</span>SetMSTU</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSUB"><span class="baseclass">TPythia6::</span>SetMSUB</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetMultiple">SetMultiple</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMWID"><span class="baseclass">TPythia6::</span>SetMWID</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetN"><span class="baseclass">TPythia6::</span>SetN</a>(<span class="keyword">int</span> n)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetNGENPD"><span class="baseclass">TPythia6::</span>SetNGENPD</a>(<span class="keyword">int</span> n)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetNPAD"><span class="baseclass">TPythia6::</span>SetNPAD</a>(<span class="keyword">int</span> n)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetOutputFile">SetOutputFile</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetP"><span class="baseclass">TPythia6::</span>SetP</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetParameter"><span class="baseclass">TGenerator::</span>SetParameter</a>(<span class="keyword">const</span> <span class="keyword">char</span>*, <a href="./ListOfTypes.html#Double_t">Double_t</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARF"><span class="baseclass">TPythia6::</span>SetPARF</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARI"><span class="baseclass">TPythia6::</span>SetPARI</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARJ"><span class="baseclass">TPythia6::</span>SetPARJ</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARP"><span class="baseclass">TPythia6::</span>SetPARP</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARU"><span class="baseclass">TPythia6::</span>SetPARU</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPMAS"><span class="baseclass">TPythia6::</span>SetPMAS</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetPrintFreq">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetPtCut"><span class="baseclass">TGenerator::</span>SetPtCut</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> ptcut = 0)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetRandomSeed">SetRandomSeed</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> iseed)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetResolution">SetResolution</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> res)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetRMSS"><span class="baseclass">TPythia6::</span>SetRMSS</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> r)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetRRPY"><span class="baseclass">TPythia6::</span>SetRRPY</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> r)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetRunNumber">SetRunNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> run)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetSMW"><span class="baseclass">TPythia6::</span>SetSMW</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetSMZ"><span class="baseclass">TPythia6::</span>SetSMZ</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetSpectatorPmin">SetSpectatorPmin</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pmin)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetStable">SetStable</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cls = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetUMIX"><span class="baseclass">TPythia6::</span>SetUMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> u)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetupTest"><span class="baseclass">TPythia6::</span>SetupTest</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetUserControl">SetUserControl</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetV"><span class="baseclass">TPythia6::</span>SetV</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> v)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetVCKM"><span class="baseclass">TPythia6::</span>SetVCKM</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> v)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:SetVertexMode">SetVertexMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetViewRadius"><span class="baseclass">TGenerator::</span>SetViewRadius</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> rbox = 1000)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetViewRange"><span class="baseclass">TGenerator::</span>SetViewRange</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = -10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> ymin = -10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmin = -10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> ymax = 10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmax = 10000)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetVINT"><span class="baseclass">TPythia6::</span>SetVINT</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> v)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetWIDS"><span class="baseclass">TPythia6::</span>SetWIDS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> w)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetZMIX"><span class="baseclass">TPythia6::</span>SetZMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> z)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:ShowNeutrons"><span class="baseclass">TGenerator::</span>ShowNeutrons</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> show = 1)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcCollider:GetFractions">GetFractions</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> zp, <a href="./ListOfTypes.html#Float_t">Float_t</a> ap, <a href="./ListOfTypes.html#Float_t">Float_t</a> zt, <a href="./ListOfTypes.html#Float_t">Float_t</a> at)</td></tr>
+<tr class="func"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="#NcCollider:GetPyname">GetPyname</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> kf)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcCollider:IsSelected">IsSelected</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a>&amp;</td><td class="funcname"><a class="funcname" href="#TPythia6:operator_"><span class="baseclass">TPythia6::</span>operator=</a>(<span class="keyword">const</span> <a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a>&amp;)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcCollider:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fAproj"></a>fAproj</td><td class="datadesc">A of the projectile particle</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fAtarg"></a>fAtarg</td><td class="datadesc">A of the target particle</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcTrack.html">NcTrack</a></td><td class="dataname"><a name="NcCollider:fBeam"></a>fBeam</td><td class="datadesc">Track parameters for the beam particle in the selected experimental frame</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcCollider:fEcmsmin"></a>fEcmsmin</td><td class="datadesc">Minimal CMS energy (in GeV) for events to get generated</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fElastic"></a>fElastic</td><td class="datadesc">Flag to denote inclusion of elastic and difractive processes.</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcEvent.html">NcEvent</a>*</td><td class="dataname"><a name="NcCollider:fEvent"></a>fEvent</td><td class="datadesc">The produced event structure</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fEventnum"></a>fEventnum</td><td class="datadesc">The automatically updated event number</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcCollider:fFracnn"></a>fFracnn</td><td class="datadesc">Fraction of n+n collisions</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcCollider:fFracnp"></a>fFracnp</td><td class="datadesc">Fraction of n+p collisions</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcCollider:fFracpn"></a>fFracpn</td><td class="datadesc">Fraction of p+n collisions</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcCollider:fFracpp"></a>fFracpp</td><td class="datadesc">Fraction of p+p collisions</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcCollider:fFrame"></a>fFrame</td><td class="datadesc">The Pythia frame indicator</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcBoost.html">NcBoost</a></td><td class="dataname"><a name="NcCollider:fLorbo"></a>fLorbo</td><td class="datadesc">The Lorentz boost for the case of forced CMS processing</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fMultiple"></a>fMultiple</td><td class="datadesc">Flag to denote inclusion of multiple interactions.</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fNucl"></a>fNucl</td><td class="datadesc">Flag to denote nucleus-nucleus (1) or standard Pythia (0) running</td></tr>
+<tr class="data"><td class="datatype">TFile*</td><td class="dataname"><a name="NcCollider:fOutFile"></a>fOutFile</td><td class="datadesc">The user defined output data file </td></tr>
+<tr class="data"><td class="datatype">TTree*</td><td class="dataname"><a name="NcCollider:fOutTree"></a>fOutTree</td><td class="datadesc">The standard ROOT output tree</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="#TGenerator:fParticles"><span class="baseclass">TGenerator::</span>fParticles</a></td><td class="datadesc">-&gt;static container of the primary particles</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fPrintfreq"></a>fPrintfreq</td><td class="datadesc">The user selected print frequency</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="#TGenerator:fPtCut"><span class="baseclass">TGenerator::</span>fPtCut</a></td><td class="datadesc">!Pt cut. Do not show primaries below</td></tr>
+<tr class="datainh"><td class="datatype">Pybins_t*</td><td class="dataname"><a href="#TPythia6:fPybins"><span class="baseclass">TPythia6::</span>fPybins</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pydat1_t*</td><td class="dataname"><a href="#TPythia6:fPydat1"><span class="baseclass">TPythia6::</span>fPydat1</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pydat2_t*</td><td class="dataname"><a href="#TPythia6:fPydat2"><span class="baseclass">TPythia6::</span>fPydat2</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pydat3_t*</td><td class="dataname"><a href="#TPythia6:fPydat3"><span class="baseclass">TPythia6::</span>fPydat3</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pydat4_t*</td><td class="dataname"><a href="#TPythia6:fPydat4"><span class="baseclass">TPythia6::</span>fPydat4</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pydatr_t*</td><td class="dataname"><a href="#TPythia6:fPydatr"><span class="baseclass">TPythia6::</span>fPydatr</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint1_t*</td><td class="dataname"><a href="#TPythia6:fPyint1"><span class="baseclass">TPythia6::</span>fPyint1</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint2_t*</td><td class="dataname"><a href="#TPythia6:fPyint2"><span class="baseclass">TPythia6::</span>fPyint2</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint3_t*</td><td class="dataname"><a href="#TPythia6:fPyint3"><span class="baseclass">TPythia6::</span>fPyint3</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint4_t*</td><td class="dataname"><a href="#TPythia6:fPyint4"><span class="baseclass">TPythia6::</span>fPyint4</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint5_t*</td><td class="dataname"><a href="#TPythia6:fPyint5"><span class="baseclass">TPythia6::</span>fPyint5</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint6_t*</td><td class="dataname"><a href="#TPythia6:fPyint6"><span class="baseclass">TPythia6::</span>fPyint6</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint7_t*</td><td class="dataname"><a href="#TPythia6:fPyint7"><span class="baseclass">TPythia6::</span>fPyint7</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint8_t*</td><td class="dataname"><a href="#TPythia6:fPyint8"><span class="baseclass">TPythia6::</span>fPyint8</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyint9_t*</td><td class="dataname"><a href="#TPythia6:fPyint9"><span class="baseclass">TPythia6::</span>fPyint9</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyints_t*</td><td class="dataname"><a href="#TPythia6:fPyints"><span class="baseclass">TPythia6::</span>fPyints</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyjets_t*</td><td class="dataname"><a href="#TPythia6:fPyjets"><span class="baseclass">TPythia6::</span>fPyjets</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pymssm_t*</td><td class="dataname"><a href="#TPythia6:fPymssm"><span class="baseclass">TPythia6::</span>fPymssm</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pypars_t*</td><td class="dataname"><a href="#TPythia6:fPypars"><span class="baseclass">TPythia6::</span>fPypars</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pyssmt_t*</td><td class="dataname"><a href="#TPythia6:fPyssmt"><span class="baseclass">TPythia6::</span>fPyssmt</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">Pysubs_t*</td><td class="dataname"><a href="#TPythia6:fPysubs"><span class="baseclass">TPythia6::</span>fPysubs</a></td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./NcRandom.html">NcRandom</a></td><td class="dataname"><a name="NcCollider:fRan"></a>fRan</td><td class="datadesc">Random number generator</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcCollider:fResolution"></a>fResolution</td><td class="datadesc">The resolution (in meter) for resolving (sec.) vertices </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fRunnum"></a>fRunnum</td><td class="datadesc">The user defined run number</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fSelect"></a>fSelect</td><td class="datadesc">Flag to indicate whether the total event is selected (1) or not (0)</td></tr>
+<tr class="data"><td class="datatype">TArrayI*</td><td class="dataname"><a name="NcCollider:fSelections"></a>fSelections</td><td class="datadesc">The particle KC codes for event selection</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TGenerator:fShowNeutrons"><span class="baseclass">TGenerator::</span>fShowNeutrons</a></td><td class="datadesc">!display neutrons if true</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcCollider:fSpecpmin"></a>fSpecpmin</td><td class="datadesc">The minimal momentum for spectator tracks to be stored</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcTrack.html">NcTrack</a></td><td class="dataname"><a name="NcCollider:fTarget"></a>fTarget</td><td class="datadesc">Track parameters for the target particle in the selected experimental frame</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fUserctrl"></a>fUserctrl</td><td class="datadesc">Flag to denote the user control selection w.r.t. MC parameters</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fVertexmode"></a>fVertexmode</td><td class="datadesc">The vertex structure creation mode</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcCollider:fWin"></a>fWin</td><td class="datadesc">The Pythia energy indicator</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fWxsec"></a>fWxsec</td><td class="datadesc">Flag to denote event weighting by cross section for variable energy runs</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fZproj"></a>fZproj</td><td class="datadesc">Z of the projectile particle</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcCollider:fZtarg"></a>fZtarg</td><td class="datadesc">Z of the target particle</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a>*</td><td class="dataname"><a href="#TPythia6:fgInstance"><span class="baseclass">TPythia6::</span>fgInstance</a></td><td></td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcCollider:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcCollider_Lib" id="MapNcCollider_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcCollider_Inh" class="tabsel" href="inh/NcCollider_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcCollider_Inh.png');">Inheritance</a>
+<a id="imgNcCollider_InhMem" class="tab" href="inhmem/NcCollider_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcCollider_InhMem.png');">Inherited Members</a>
+<a id="imgNcCollider_Incl" class="tab" href="incl/NcCollider_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcCollider_Incl.png');">Includes</a>
+<a id="imgNcCollider_Lib" class="tab" href="lib/NcCollider_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcCollider_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcCollider_Inh" src="inh/NcCollider_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:NcCollider" href="src/NcCollider.cxx.html#Ug_nXC">NcCollider</a>()</span><br />
+<div class="funccomm"><pre> Default constructor.
+ All variables initialised to default values.
+
+ Some Pythia default MC parameters are automatically modified to provide
+ more suitable running conditions for soft processes in view of
+ nucleus-nucleus interactions and astrophysical processes.
+ The user may initialise the generator with all the default Pythia
+ parameters and obtain full user control to modify the settings by means
+ of the <a href="./NcCollider.html#NcCollider:SetUserControl" title="void NcCollider::SetUserControl(Int_t flag)">SetUserControl</a> memberfunction.
+
+ Refer to the <a href="./NcCollider.html#NcCollider:SetElastic" title="void NcCollider::SetElastic(Int_t flag)">SetElastic</a> memberfunction for the inclusion of elastic
+ and diffractive processes.
+ By default these processes are not included.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:_NcCollider" href="src/NcCollider.cxx.html#ohfgaC">~NcCollider</a>()</span><br />
+<div class="funccomm"><pre> Default destructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetOutputFile" href="src/NcCollider.cxx.html#QlYpKD">SetOutputFile</a>(TString name)</span><br />
+<div class="funccomm"><pre> Create the output file containing all the data in ROOT output format.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetVertexMode" href="src/NcCollider.cxx.html#mPKhO">SetVertexMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
+<div class="funccomm"><pre> Set the mode of the vertex structure creation.
+
+ By default all generated tracks will only appear in the <a href="./NcEvent.html">NcEvent</a>
+ structure without any primary (and secondary) vertex structure.
+ The user can build the vertex structure if he/she wants by means
+ of the beginpoint location of each <a href="./NcTrack.html">NcTrack</a>.
+
+ However, one can also let <a href="./NcCollider.html">NcCollider</a> automatically create
+ the primary (and secondary) vertex structure(s).
+ In this case the primary vertex is given Id=1 and all sec. vertices
+ are given Id's 2,3,4,....
+ All vertices are created as standalone entities in the <a href="./NcEvent.html">NcEvent</a> structure
+ without any linking between the various vertices.
+ For this automated process, the user-selected resolution
+ (see <a href="./NcCollider.html#NcCollider:SetResolution" title="void NcCollider::SetResolution(Double_t res)">SetResolution</a>) is used to decide whether or not certain vertex
+ locations can be resolved.
+ In case no vertex creation is selected (i.e. the default mode=0),
+ the value of the resolution is totally irrelevant.
+
+ The user can also let <a href="./NcCollider.html">NcCollider</a> automatically connect the sec. vertices
+ to the primary vertex (i.e. mode=3). This process will also automatically
+ generate the tracks connecting the vertices.
+ Note that the result of the mode=3 operation may be very sensitive to
+ the resolution parameter. Therefore, no attempt is made to distinguish
+ between secondary, tertiary etc... vertices. All sec. vertices are
+ linked to the primary one.
+
+ Irrespective of the selected mode, all generated tracks can be obtained
+ directly from the <a href="./NcEvent.html">NcEvent</a> structure.
+ In case (sec.) vertex creation is selected, all generated vertices can
+ also be obtained directly from the <a href="./NcEvent.html">NcEvent</a> structure.
+ These (sec.) vertices contain only the corresponding pointers to the various
+ tracks which are stored in the <a href="./NcEvent.html">NcEvent</a> structure.
+
+ Overview of vertex creation modes :
+
+ mode = 0 ==&gt; No vertex structure will be created
+        1 ==&gt; Only primary vertex structure will be created
+        2 ==&gt; Unconnected primary and secondary vertices will be created
+        3 ==&gt; Primary and secondary vertices will be created where all the
+              sec. vertices will be connected to the primary vertex.
+              Also the vertex connecting tracks will be automatically
+              generated.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetVertexMode" href="src/NcCollider.cxx.html#Fd.AKD">GetVertexMode</a>() const</span><br />
+<div class="funccomm"><pre> Provide the current mode for vertex structure creation.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetResolution" href="src/NcCollider.cxx.html#Z_qRsC">SetResolution</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> res)</span><br />
+<div class="funccomm"><pre> Set the resolution (in meter) for resolving (sec.) vertices.
+ By default this resolution is set to 0.1 micron.
+ Note : In case no vertex creation has been selected, the value of
+        the resolution is totally irrelevant.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcCollider:GetResolution" href="src/NcCollider.cxx.html#c1JAa">GetResolution</a>() const</span><br />
+<div class="funccomm"><pre> Provide the current resolution (in meter) for resolving (sec.) vertices.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetRunNumber" href="src/NcCollider.cxx.html#n3LJn">SetRunNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> run)</span><br />
+<div class="funccomm"><pre> Set the user defined run number.
+ By default the run number is set to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetRunNumber" href="src/NcCollider.cxx.html#a3MkVC">GetRunNumber</a>() const</span><br />
+<div class="funccomm"><pre> Provide the user defined run number.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetPrintFreq" href="src/NcCollider.cxx.html#gkebmB">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Set the print frequency for every <span class="string">'n'</span> events.
+ By default the printfrequency is set to 1 (i.e. every event).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetPrintFreq" href="src/NcCollider.cxx.html#Hj4MLE">GetPrintFreq</a>() const</span><br />
+<div class="funccomm"><pre> Provide the user selected print frequency.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetUserControl" href="src/NcCollider.cxx.html#Q0frIE">SetUserControl</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
+<div class="funccomm"><pre> Set the user control flag w.r.t. disabling automatic optimisation
+ of some Pythia default MC parameters for soft interactions in view of
+ nucleus-nucleus collisions and astrophysical processes.
+ Flag = 0 : Limited user control (automatic optimisation enabled)
+        1 : Full user control (automatic optimisation disabled)
+ By default the user control is set to 0 (i.e. automatic optimisation).
+ See the <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>() memberfunctions for further details w.r.t. the optimisations.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetUserControl" href="src/NcCollider.cxx.html#Ay29DE">GetUserControl</a>() const</span><br />
+<div class="funccomm"><pre> Provide the value of the user control flag.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetElastic" href="src/NcCollider.cxx.html#wlX_lB">SetElastic</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
+<div class="funccomm"><pre> Set the flag w.r.t. inclusion of elastic and diffractive processes.
+ By default these processes are not included.
+ Flag = 0 : Do not include elastic and diffractive processes
+        1 : Elastic and diffractive processes will be included
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetElastic" href="src/NcCollider.cxx.html#vIYnmB">GetElastic</a>() const</span><br />
+<div class="funccomm"><pre> Provide the value of the control flag for elastic and diffractive processes.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetMultiple" href="src/NcCollider.cxx.html#yGqRYB">SetMultiple</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
+<div class="funccomm"><pre> Set the flag w.r.t. inclusion of multiple interactions.
+ By default these processes are included.
+ Flag = 0 : Do not include multiple interactions
+        1 : Multiple interactions will be included
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetMultiple" href="src/NcCollider.cxx.html#W2wcID">GetMultiple</a>() const</span><br />
+<div class="funccomm"><pre> Provide the value of the control flag for multiple interactions.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetEcmsMin" href="src/NcCollider.cxx.html#sR7e.C">SetEcmsMin</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ecms)</span><br />
+<div class="funccomm"><pre> Set the minimal CMS energy (in GeV) for events to get generated.
+ Notes :
+
+ 1) This memberfunction may be invoked at will before the initialisation
+    or before the generation of any event.
+ 2) By default a minimal CMS energy of 2.7 GeV is required for event generation.
+    At lower values the underlying Pythia event generation gets rather slow
+    because of the limited available phase-space.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcCollider:GetEcmsMin" href="src/NcCollider.cxx.html#LiBnFC">GetEcmsMin</a>() const</span><br />
+<div class="funccomm"><pre> Provide the minimal CMS energy (in GeV) for events to get generated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetRandomSeed" href="src/NcCollider.cxx.html#nhzrKC">SetRandomSeed</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> iseed)</span><br />
+<div class="funccomm"><pre> Initialise the random number generator with a specific sequence.
+ Regular allowed values are 0&lt;=iseed&lt;=900000000.
+ However, also the specification iseed&lt;0 is allowed to obtain an
+ automatic sequence selection as explained below.
+
+ Notes :
+
+ 1) In case the user does not invoke this memberfunction, the default
+    Pythia seed will be used.
+ 2) This memberfunction may be invoked at will before the initialisation
+    or before the generation of any event.
+ 3) A convenient way to automatically start each <a href="./NcCollider.html">NcCollider</a> run with a
+    different seed is to construct the seed from e.g. the date and time.
+    An automatic (quasi unique) seed generation based on date and time information
+    (with second precision) is obtained by providing iseed&lt;0 as input argument.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetRandomSeed" href="src/NcCollider.cxx.html#uG0RFE">GetRandomSeed</a>()</span><br />
+<div class="funccomm"><pre> Provide the value of the current random number sequence seed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcCollider:GetWin" href="src/NcCollider.cxx.html#vToprB">GetWin</a>() const</span><br />
+<div class="funccomm"><pre> Provide the value of the Pythia energy indicator (in GeV) used for initialisation.
+ For regular frame=<span class="string">"free"</span> processing the value is set to -1, whereas a positive value
+ indicates forced CMS processing. See <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>() for further details.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:Init" href="src/NcCollider.cxx.html#nAMsEB">Init</a>(TString frame, TString beam, TString target, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 0)</span><br />
+<div class="funccomm"><pre> Initialisation of the underlying Pythia generator package.
+ The event number is reset to 0.
+
+ Input arguments :
+
+ frame   : <span class="string">"cms"</span>  --&gt; Colliding beam experiment in the CM frame (beam=+z, target=-z direction)
+           <span class="string">"fixt"</span> --&gt; Fixed target experiment with beam in the +z direction
+           <span class="string">"free"</span> --&gt; System defined by the user via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>
+ beam    : Beam particle specification (see below).
+ target  : Target particle specification (see below).
+ win     : Energy of the system depending on the frame specification.
+           frame=<span class="string">"cms"</span>  --&gt; win is the total cms energy in GeV
+           frame=<span class="string">"fixt"</span> --&gt; win is the beam particle momentum in GeV/c
+           frame=<span class="string">"free"</span> --&gt; win&gt;=0 forces event generation in the CMS followed by a Lorentz boost (using <a href="./NcBoost.html">NcBoost</a>)
+                            according to the user defined conditions via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span> (see below).
+                            For win&gt;0 the CM energy (Ecms) for cross section initialisations is set to the value of <span class="string">"win"</span>.
+                            Consequently, the use of the parameter <span class="string">"fact"</span> (see below) is de-activated.
+                            For win=0 the Ecms for cross section initialisations is determined on basis of the specified
+                            <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span> and the setting of <span class="string">"fact"</span> is taken into account.
+                            Note that events will always be generated according to the actual settings of <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>.
+                            For very large boosts (e.g. Cosmic Ray physics above 10 PeV/c) the Pythia boost facility yields
+                            incorrect results due to accuracy issues. The more accurate <a href="./NcBoost.html">NcBoost</a> facility is used instead.
+                            This implies that for win&gt;=0 the Pythia event data will reflect the situation in the CM frame
+                            and that the event data in the user frame (defined via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>) is only available
+                            from the produced <a href="./NcEvent.html">NcEvent</a> structure (see memberfunction <a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>).
+                            Due to internal Pythia accuracy issues it turns out that forcing the event generation
+                            in the CMS may also result in faster processing.
+                            In case win&lt;0 it is a dummy parameter of which the value is irrelevant and the cross section
+                            initialisations are based on the settings of <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span> with the setting of <span class="string">"fact"</span>
+                            taken into account.
+ pbeam   : Beam particle 3-momentum in GeV/c   (only to be provided if frame=<span class="string">"free"</span>).
+ ptarget : Target particle 3-momentum in GeV/c (only to be provided if frame=<span class="string">"free"</span>).
+ wxsec   : Cross section weighting (1) or not (0) in the case frame=<span class="string">"free"</span>.
+           Weighting by cross section is necessary to obtain correct particle spectra when running
+           at different energies within the same generation run via frame=<span class="string">"free"</span> and <a href="./NcCollider.html#NcCollider:SetMomentum" title="void NcCollider::SetMomentum(Nc3Vector&amp; p,Int_t mode)">SetMomentum</a>().
+           The most accurate weighting is obtained by invoking this <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>() function at the interaction
+           energy with the highest cross section. In general this is just the highest foreseen energy
+           (e.g. hadron-hadron interactions) or at some resonance (e.g. e+e- interactions).
+           To use a certain interaction energy for cross section initialisations without changing the actual
+           beam and/or target 3-momenta, please refer to the <span class="string">"fact"</span> input argument outlined hereafter.
+           Note that with weighting sometimes no event is generated after invoking <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>()
+           to preserve the correct relative number of events for different energies.
+           The information whether an event has been generated or not is indicated via the
+           return argument of <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>().
+ fact    : Multiplication factor for the beam or target 3-momentum to be used for initialisation purposes
+           (e.g. selection of processes and cross sections) only.
+           Initialisation at a different interaction energy than the one corresponding to the specified
+           beam and target 3-momenta might be needed as explained above, or to ensure activation of the
+           relevant processes in case interactions are to be studied around threshold energies.
+           The latter may save considerable cpu time at the event generation, since most of the phase space
+           has been scanned already at the initialisation step.
+           Note that also disabling multiple interactions via <a href="./NcCollider.html#NcCollider:SetMultiple" title="void NcCollider::SetMultiple(Int_t flag)">SetMultiple</a>() may speed up the event generation
+           significantly around threshold energies.
+           The value of <span class="string">"fact"</span> is only relevant when frame=<span class="string">"free"</span> and win&lt;=0 (see above) are specified.
+           fact=0 --&gt; The provided beam and target 3-momenta are used for intialisation.
+           fact&gt;0 --&gt; The beam 3-momentum is multiplied by the value of <span class="string">"fact"</span> for intialisation.
+           fact&lt;0 --&gt; The target 3-momentum is multiplied by the absolute value of <span class="string">"fact"</span> for initialisation.
+
+ By default pbeam=0, ptarget=0, wxsec=1 and fact=0.
+
+ Return value :
+
+ In case an error occurred, a value 1 will be returned. Otherwise the return value is 0.
+
+ For the beam and target particle specifications the following naming conventions are used :
+
+ Leptons :
+
+ <span class="string">"e-"</span>, <span class="string">"e+"</span>, <span class="string">"mu-"</span>, <span class="string">"mu+"</span>, <span class="string">"tau-"</span>, <span class="string">"tau+"</span>, <span class="string">"nue"</span>, <span class="string">"numu"</span>, <span class="string">"nutau"</span>
+
+ Mesons :
+
+ <span class="string">"pi+"</span>, <span class="string">"pi-"</span>, <span class="string">"pi0"</span>, <span class="string">"K+"</span>, <span class="string">"K-"</span>, <span class="string">"KS0"</span>, <span class="string">"KL0"</span>
+
+ Baryons :
+
+ <span class="string">"p"</span>, <span class="string">"n"</span>, <span class="string">"Lambda0"</span>, <span class="string">"Sigma+"</span>, <span class="string">"Sigma-"</span>, <span class="string">"Sigma0"</span>, <span class="string">"Xi-"</span>, <span class="string">"Xi0"</span>, <span class="string">"Omega-"</span>
+
+ (Virtual) Photons :
+
+ <span class="string">"gamma"</span>      : Real photon
+ <span class="string">"gamma/e-"</span>   : Virtual photon in an <span class="string">"e-"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"e-"</span> energy;   not possible with frame=<span class="string">"free"</span>
+ <span class="string">"gamma/e+"</span>   : Virtual photon in an <span class="string">"e+"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"e+"</span> energy;   not possible with frame=<span class="string">"free"</span>
+ <span class="string">"gamma/mu-"</span>  : Virtual photon in a <span class="string">"mu-"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"mu-"</span> energy;  not possible with frame=<span class="string">"free"</span>
+ <span class="string">"gamma/mu+"</span>  : Virtual photon in a <span class="string">"mu+"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"mu+"</span> energy;  not possible with frame=<span class="string">"free"</span>
+ <span class="string">"gamma/tau-"</span> : Virtual photon in a <span class="string">"tau-"</span> beam; <span class="string">"win"</span> refers to the <span class="string">"tau-"</span> energy; not possible with frame=<span class="string">"free"</span>
+ <span class="string">"gamma/tau+"</span> : Virtual photon in a <span class="string">"tau+"</span> beam; <span class="string">"win"</span> refers to the <span class="string">"tau+"</span> energy; not possible with frame=<span class="string">"free"</span>
+
+ Note : Anti-particles are specified by denoting <span class="string">"bar"</span> at the end of the name.
+        So, <span class="string">"pbar"</span> for an anti-proton, <span class="string">"nuebar"</span> for an electron anti-neutrino etc.
+
+ Some Pythia default MC parameters are automatically modified to provide
+ more suitable running conditions for soft processes in view of
+ astrophysical processes.
+
+ The optimisations consist of :
+
+ * Usage of real photons for photon beams or targets
+ * No minimum CMS energy is required for initialisation (see <a href="./NcCollider.html#NcCollider:SetEcmsMin" title="void NcCollider::SetEcmsMin(Double_t ecms)">SetEcmsMin</a>).
+ * Activation of the default K factor values
+   with separate settings for ordinary and color annihilation graphs.
+ * Setting of the measured mass for the Higgs.
+
+ The user may initialise the generator with all the default Pythia
+ parameters and obtain full user control to modify the settings by means
+ of invoking the <a href="./NcCollider.html#NcCollider:SetUserControl" title="void NcCollider::SetUserControl(Int_t flag)">SetUserControl</a> memberfunction before this initialisation.
+ Note that the inclusion of elastic and diffractive processes is controlled
+ by invokation of the <a href="./NcCollider.html#NcCollider:SetElastic" title="void NcCollider::SetElastic(Int_t flag)">SetElastic</a>() memberfunction before this initialisation,
+ irrespective of the UserControl selection. The same is <a href="./ListOfTypes.html#bool">true</a> for the disabling
+ of multiple interactions via the memberfunction <a href="./NcCollider.html#NcCollider:SetMultiple" title="void NcCollider::SetMultiple(Int_t flag)">SetMultiple</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:Init@1" href="src/NcCollider.cxx.html#CThu1E">Init</a>(TString frame, <a href="./ListOfTypes.html#Int_t">Int_t</a> zp, <a href="./ListOfTypes.html#Int_t">Int_t</a> ap, <a href="./ListOfTypes.html#Int_t">Int_t</a> zt, <a href="./ListOfTypes.html#Int_t">Int_t</a> at, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1)</span><br />
+<div class="funccomm"><pre> Initialisation of the underlying Pythia generator package for the generation
+ of nucleus-nucleus interactions.
+ The event number is reset to 0.
+
+ Input arguments :
+
+ frame   : <span class="string">"cms"</span>  --&gt; Colliding beam experiment in the nucleon-nucleon CM frame (beam=+z, target=-z direction)
+           <span class="string">"fixt"</span> --&gt; Fixed target experiment with beam in the +z direction
+           <span class="string">"free"</span> --&gt; System defined by the user via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>
+ zp      : Z value for the (Z,A) projectile nucleus
+ ap      : A value for the (Z,A) projectile nucleus
+ zt      : Z value for the (Z,A) target nucleus
+ at      : A value for the (Z,A) target nucleus
+ win     : Energy of the system depending on the frame specification.
+           frame=<span class="string">"cms"</span>  --&gt; win is the total cms energy (in GeV) per nucleon-nucleon collision
+           frame=<span class="string">"fixt"</span> --&gt; win is the momentum (in GeV/c) per nucleon of the beam
+           frame=<span class="string">"free"</span> --&gt; win&gt;=0 forces event generation in the nucleon-nucleon CMS followed by a Lorentz boost (using <a href="./NcBoost.html">NcBoost</a>)
+                            according to the user defined conditions via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span> (see below).
+                            For win&gt;0 the nucleon-nucleon CM energy (Ecms) for cross section initialisations is set to the value of <span class="string">"win"</span>.
+                            For win=0 the Ecms for cross section initialisations is determined on basis of the specified
+                            <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>.
+                            Note that events will always be generated according to the actual settings of <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>.
+                            For very large boosts (e.g. Cosmic Ray physics above 10 PeV/c) the Pythia boost facility yields
+                            incorrect results due to accuracy issues. The more accurate <a href="./NcBoost.html">NcBoost</a> facility is used instead.
+                            This implies that for win&gt;=0 the Pythia event data will reflect the situation in the nucleon-nucleon CM frame
+                            and that the event data in the user frame (defined via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>) is only available
+                            from the produced <a href="./NcEvent.html">NcEvent</a> structure (see memberfunction <a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>).
+                            Due to internal Pythia accuracy issues it turns out that forcing the event generation
+                            in the CMS may also result in faster processing.
+                            In case win&lt;0 it is a dummy parameter of which the value is irrelevant and the cross section
+                            initialisations are based on the settings of <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>.
+ pbeam   : Beam 3-momentum in GeV/c per nucleon   (only to be provided if frame=<span class="string">"free"</span>).
+ ptarget : Target 3-momentum in GeV/c per nucleon (only to be provided if frame=<span class="string">"free"</span>).
+ wxsec   : Cross section weighting (1) or not (0) in the case frame=<span class="string">"free"</span>.
+           Weighting by cross section is necessary to obtain correct particle spectra when running
+           at different energies within the same generation run via frame=<span class="string">"free"</span> and <a href="./NcCollider.html#NcCollider:SetMomentum" title="void NcCollider::SetMomentum(Nc3Vector&amp; p,Int_t mode)">SetMomentum</a>().
+           The most accurate weighting is obtained by invoking this <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>() function at the interaction
+           energy with the highest cross section. In general this is just the highest foreseen energy
+           (e.g. hadron-hadron interactions) or at some resonance (e.g. e+e- interactions).
+           Note that with weighting sometimes no event is generated after invoking <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>()
+           to preserve the correct relative number of events for different energies.
+           The information whether an event has been generated or not is indicated via the
+           return argument of <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>().
+
+ By default pbeam=0, ptarget=0 and wxsec=1.
+
+ Return value :
+
+ In case an error occurred, a value 1 will be returned. Otherwise the return value is 0.
+
+ Some Pythia default MC parameters are automatically modified to provide
+ more suitable running conditions for soft processes in view of
+ nucleus-nucleus interactions and astrophysical processes.
+
+ The optimisations consist of :
+
+ * No minimum CMS energy is required for initialisation (see <a href="./NcCollider.html#NcCollider:SetEcmsMin" title="void NcCollider::SetEcmsMin(Double_t ecms)">SetEcmsMin</a>).
+ * Activation of the default K factor values
+   with separate settings for ordinary and color annihilation graphs.
+ * Setting of the measured mass for the Higgs.
+
+ The user may initialise the generator with all the default Pythia
+ parameters and obtain full user control to modify the settings by means
+ of invoking the <a href="./NcCollider.html#NcCollider:SetUserControl" title="void NcCollider::SetUserControl(Int_t flag)">SetUserControl</a> memberfunction before this initialisation.
+ Note that the inclusion of elastic and diffractive processes is controlled
+ by invokation of the <a href="./NcCollider.html#NcCollider:SetElastic" title="void NcCollider::SetElastic(Int_t flag)">SetElastic</a> memberfunction before this initialisation,
+ irrespective of the UserControl selection. The same is <a href="./ListOfTypes.html#bool">true</a> for the disabling
+ of multiple interactions via the memberfunction <a href="./NcCollider.html#NcCollider:SetMultiple" title="void NcCollider::SetMultiple(Int_t flag)">SetMultiple</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:GetFractions" href="src/NcCollider.cxx.html#RIhUMD">GetFractions</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> zp, <a href="./ListOfTypes.html#Float_t">Float_t</a> ap, <a href="./ListOfTypes.html#Float_t">Float_t</a> zt, <a href="./ListOfTypes.html#Float_t">Float_t</a> at)</span><br />
+<div class="funccomm"><pre> Determine the fractions for the various N-N collision processes.
+ The various processes are : p+p, n+p, p+n and n+n.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetMomentum" href="src/NcCollider.cxx.html#Ue74XD">SetMomentum</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
+<div class="funccomm"><pre> Set c.q. modify the beam or target particle 3-momentum in the case frame=<span class="string">"free"</span>.
+ Invokation of this function only has effect after the initialisation via <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>().
+
+ Input argument :
+
+ p : Momentum 3-vector in GeV/c
+ mode : 1 ==&gt; Modify the beam particle 3-momentum
+        2 ==&gt; Modify the target particle 3-momentum
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:MakeEvent" href="src/NcCollider.cxx.html#NQl01C">MakeEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> npt = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mlist = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> medit = 1)</span><br />
+<div class="funccomm"><pre> Generate one event.
+ In case of a nucleus-nucleus interaction, the argument 'npt' denotes
+ the total number of participant nucleons.
+ So, the range of 'npt' is given by [2,(Abeam+Atarget)].
+ Normally also the spectator tracks will be stored into the event structure.
+ The spectator tracks have a negative user Id to distinguish them from the
+ ordinary generated tracks.
+ In case the user has selected the creation of vertex structures, the spectator
+ tracks will be linked to the primary vertex.
+ However, specification of npt&lt;0 will suppress the storage of spectator tracks.
+ In the latter case abs(npt) will be taken as the number of participants.
+ In case of a standard Pythia run for 'elementary' particle interactions,
+ the value of npt is totally irrelevant.
+
+ The argument 'mlist' denotes the list mode used for <a href="./#TPythia6:Pylist" title="void TPythia6::Pylist(int flag)">Pylist</a>().
+ Note : mlist&lt;0 suppresses the invokation of <a href="./#TPythia6:Pylist" title="void TPythia6::Pylist(int flag)">Pylist</a>().
+ By default, no listing is produced (i.e. mlist=-1).
+
+ The argument 'medit' denotes the edit mode used for <a href="./#TPythia6:Pyedit" title="void TPythia6::Pyedit(int medit)">Pyedit</a>().
+ Note : medit&lt;0 suppresses the invokation of <a href="./#TPythia6:Pyedit" title="void TPythia6::Pyedit(int medit)">Pyedit</a>().
+ By default, only 'stable' final particles are kept (i.e. medit=1).
+
+ In the case of a standard Pythia run concerning 'elementary' particle
+ interactions, the projectile and target particle ID's for the created
+ event structure are set to the corresponding Pythia KF codes.
+ All the A and Z values are in that case set to zero.
+ In case of a nucleus-nucleus interaction, the proper A and Z values for
+ the projectile and target particles are set in the event structure.
+ However, in this case both particle ID's are set to zero.
+
+ Note : Only in case an event passed the selection criteria as specified
+        via <a href="./NcCollider.html#NcCollider:SelectEvent" title="void NcCollider::SelectEvent(Int_t id)">SelectEvent</a>(), the event will appear on the output file.
+
+ The return argument will indicate that an event has been generated (1) or not (0)
+ or that an error occurred (-1).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcEvent.html">NcEvent</a>* <a class="funcname" name="NcCollider:GetEvent" href="src/NcCollider.cxx.html#QMtiS">GetEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> select = 0) const</span><br />
+<div class="funccomm"><pre> Provide pointer to the generated event structure.
+
+ select = 0 : Always return the pointer to the generated event.
+          1 : Only return the pointer to the generated event in case
+              the event passed the selection criteria as specified via
+              <a href="./NcCollider.html#NcCollider:SelectEvent" title="void NcCollider::SelectEvent(Int_t id)">SelectEvent</a>(). Otherwise the value 0 will be returned.
+
+ By invoking <a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>() the default of select=0 will be used.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:EndRun" href="src/NcCollider.cxx.html#XRaU8C">EndRun</a>()</span><br />
+<div class="funccomm"><pre> Properly flush last data to the output file and close it (if needed).
+ This will also delete the existing output tree connected to this file
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetStable" href="src/NcCollider.cxx.html#IYJatC">SetStable</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cls = 0)</span><br />
+<div class="funccomm"><pre> Declare whether a particle (class) must be regarded as stable or not.
+
+ Input arguments :
+
+ id    = The Pythia KF particle code, which basically is the PDG particle identifier code.
+       = 0 ==&gt; Will invoke the setting for a whole particle class (see below).
+ mode  = 1 : The specified particle (class) will be regarded as stable.
+         0 : The specified particle (class) will be able to decay.
+ cls   = 1 : Quarks
+         2 : Leptons
+         3 : Gauge Bosons (including photons and the Higgs)
+         4 : Mesons
+         5 : Baryons
+
+ In case the user does NOT explicitly invoke this function, the standard
+ Pythia settings for the decay tables are used.
+
+ Default values are mode=1 and cls=0.
+
+ Notes :
+
+ 1) This function should be invoked after the initialisation call
+    to <a href="./NcCollider.html">NcCollider</a>::<a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>.
+ 2) Due to the internals of Pythia, there is no need to specify particles
+    and their corresponding anti-particles separately as (un)stable.
+    Once a particle has been declared (un)stable, the corresponding
+    anti-particle will be treated in the same way.
+ 3) After declaring a whole particle class stable/unstable, specific particles
+    can be (re)declared unstable/stable by invoking this function again
+    for the specific particle(s).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SelectEvent" href="src/NcCollider.cxx.html#OoTIcE">SelectEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id)</span><br />
+<div class="funccomm"><pre> Add a particle to the event selection list.
+ The parameter <span class="string">"id"</span> indicates the Pythia KF particle code, which
+ basically is the PDG particle identifier code.
+ In case the user has built a selection list via this procedure, only the
+ events in which one of the particles specified in the list was generated
+ will be kept.
+ The investigation of the generated particles takes place when the complete
+ event is in memory, including all (shortlived) mother particles and resonances.
+ So, the settings of the various particle decay modes have no influence on
+ the event selection described here.
+
+ If no list has been specified, all events will be accepted.
+
+ Note : id=0 will delete the selection list.
+
+ Be aware of the fact that severe selection criteria (i.e. selecting only
+ rare events) may result in <a href="./ListOfTypes.html#long">long</a> runtimes before an event sample has been
+ obtained.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetSelectionFlag" href="src/NcCollider.cxx.html#vYqQsC">GetSelectionFlag</a>() const</span><br />
+<div class="funccomm"><pre> Return the value of the selection flag for the total event.
+ When the event passed the selection criteria as specified via
+ <a href="./NcCollider.html#NcCollider:SelectEvent" title="void NcCollider::SelectEvent(Int_t id)">SelectEvent</a>() the value 1 is returned, otherwise the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:IsSelected" href="src/NcCollider.cxx.html#LItWhC">IsSelected</a>()</span><br />
+<div class="funccomm"><pre> Check whether the generated (sub)event contains one of the particles
+ specified in the selection list via <a href="./NcCollider.html#NcCollider:SelectEvent" title="void NcCollider::SelectEvent(Int_t id)">SelectEvent</a>().
+ If this is the case or when no selection list is present, the value 1
+ will be returned, indicating the event is selected to be kept.
+ Otherwise the value 0 will be returned.
+
+ Note : In case no event was generated (due to possible kinematical constraints),
+        also a value 0 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetSpectatorPmin" href="src/NcCollider.cxx.html#RxuOOC">SetSpectatorPmin</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pmin)</span><br />
+<div class="funccomm"><pre> Set minimal momentum in GeV/c for spectator tracks to be stored.
+ Spectator tracks with a momentum below this threshold will not be stored
+ in the (output) event structure.
+ This facility allows to minimise the output file size.
+ Note that when the user wants to boost the event into another reference
+ frame these spectator tracks might have got momenta above the threshold.
+ However, when the spectator tracks were not stored in the event structure
+ in the original frame, there is no way to retreive them anymore.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcCollider:GetSpectatorPmin" href="src/NcCollider.cxx.html#nUN8EE">GetSpectatorPmin</a>() const</span><br />
+<div class="funccomm"><pre> Provide the minimal spectator momentum in GeV/c.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcCollider:GetPyname" href="src/NcCollider.cxx.html#MxEpuC">GetPyname</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> kf)</span><br />
+<div class="funccomm"><pre> Provide the correctly truncated Pythia particle name for PGD code kf
+
+ The <a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a>::<a href="./#TPythia6:Pyname" title="void TPythia6::Pyname(int kf,char* name)">Pyname</a> returned name is copied into a TString and truncated
+ at the first blank to prevent funny trailing characters due to incorrect
+ stripping of empty characters in <a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a>::<a href="./#TPythia6:Pyname" title="void TPythia6::Pyname(int kf,char* name)">Pyname</a>.
+ The truncation at the first blank is allowed due to the Pythia convention
+ that particle names never contain blanks.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:NcCollider" href="src/NcCollider.h.html#G6.VCC">NcCollider</a>()</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:17 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

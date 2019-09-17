@@ -1,0 +1,791 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:23 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcRandom</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcRandom','','NcRandom.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcRandom.h.html">header file</a>
+<a class="descrheadentry" href="src/NcRandom.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcRandom:description">class description</a> 
+<a class="descrheadentry" href="#NcRandom:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcRandom:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcRandom:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcRandom</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcRandom:description"></a>class NcRandom: public TObject</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcRandom.html#NcRandom:Class" title="TClass* NcRandom::Class()">Class</a> <a href="./NcRandom.html">NcRandom</a>
+ Generate universal random numbers and sequences on all common machines.
+
+ Available distributions :
+ <a href="./NcRandom.html#NcRandom:Uniform" title="Float_t NcRandom::Uniform() or overloads">Uniform</a>, Gaussian, <a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a> and <a href="./NcRandom.html#NcRandom:User" title="Float_t NcRandom::User() or overloads">User</a> defined function.
+ In addition this class provides a facility to generate random outcomes
+ of counting experiments belonging to the Bernoulli class B_m.
+
+ Features :
+
+ 1) Period = 2**144
+ 2) Same sequence of 24-bit real numbers on all common machines
+
+ Reference :
+
+ G.Marsaglia and A.Zaman, FSU-SCRI-87-50, Florida State University, 1987.
+
+ Coding example :
+
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> rndm;          // Variable to hold a single random number
+ const <a href="./ListOfTypes.html#Int_t">Int_t</a> n=1000;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> rvec[n];       // Vector to hold n random numbers
+
+ <a href="./NcRandom.html">NcRandom</a> r;            // Create a Random object with default sequence
+
+ rndm=r.<a href="./NcRandom.html#NcRandom:Uniform" title="Float_t NcRandom::Uniform() or overloads">Uniform</a>();      // Provide a uniform random number in &lt;0,1&gt;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> a=3.;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> b=5.;
+ rndm=r.<a href="./NcRandom.html#NcRandom:Uniform" title="Float_t NcRandom::Uniform() or overloads">Uniform</a>(a,b);   // Provide a uniform random number in &lt;a,b&gt;
+ r.<a href="./NcRandom.html#NcRandom:Uniform" title="Float_t NcRandom::Uniform() or overloads">Uniform</a>(rvec,n);     // Provide n uniform randoms in &lt;0,1&gt; in rvec
+ r.<a href="./NcRandom.html#NcRandom:Uniform" title="Float_t NcRandom::Uniform() or overloads">Uniform</a>(rvec,n,a,b); // Provide n uniform randoms in &lt;a,b&gt; in rvec
+
+ rndm=r.<a href="./NcRandom.html#NcRandom:Gauss" title="Float_t NcRandom::Gauss() or overloads">Gauss</a>();             // Provide a Gaussian random number with
+                             // mean=0 and sigma=1
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> mean=25.;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> sigma=5.;
+ rndm=r.<a href="./NcRandom.html#NcRandom:Gauss" title="Float_t NcRandom::Gauss() or overloads">Gauss</a>(mean,sigma);   // Provide a Gaussian random number
+                             // with specified mean and sigma
+ r.<a href="./NcRandom.html#NcRandom:Gauss" title="Float_t NcRandom::Gauss() or overloads">Gauss</a>(rvec,n);            // n Gaussian randoms mean=0 sigma=1
+ r.<a href="./NcRandom.html#NcRandom:Gauss" title="Float_t NcRandom::Gauss() or overloads">Gauss</a>(rvec,n,mean,sigma); // n Gaussian randoms with specified
+                             //  mean and sigma
+
+ rndm=r.<a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a>(mean);  // Provide a <a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a> random number with
+                        // specified mean
+ r.<a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a>(rvec,nmean); // n <a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a> randoms with specified mean
+
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> seed=1837724
+ <a href="./NcRandom.html">NcRandom</a> p(seed);         // Create a Random object with specified seed.
+                           // The sequence is started from scratch.
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt1=25;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt2=8;
+ <a href="./NcRandom.html">NcRandom</a> q(seed,cnt1,cnt2);  // Create a Random object with specified seed
+                              // The sequence is started at the location
+                              // denoted by the counters cnt1 and cnt2.
+
+ q.<a href="./NcRandom.html#NcRandom:Data" title="void NcRandom::Data()">Data</a>();     // <a href="./#TObject:Print" title="void TObject::Print(Option_t* option=&quot;&quot;)">Print</a> the current seed, cnt1 and cnt2 values.
+ q.<a href="./NcRandom.html#NcRandom:GetSeed" title="Int_t NcRandom::GetSeed()">GetSeed</a>();  // Provide the current seed value.
+ q.<a href="./NcRandom.html#NcRandom:GetCnt1" title="Int_t NcRandom::GetCnt1()">GetCnt1</a>();  // Provide the current cnt1 value.
+ q.<a href="./NcRandom.html#NcRandom:GetCnt2" title="Int_t NcRandom::GetCnt2()">GetCnt2</a>();  // Provide the current cnt2 value.
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> udist(<a href="./ListOfTypes.html#Float_t">Float_t</a> x) // A user defined distribution
+ {
+  return x*x-4.*x;
+ }
+
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins=100;
+ q.<a href="./NcRandom.html#NcRandom:SetUser" title="void NcRandom::SetUser(Float_t a,Float_t b,Int_t n,Float_t (*)(Float_t) f) or overloads">SetUser</a>(a,b,nbins,udist); // Initialise generator for udist distribution
+ q.<a href="./NcRandom.html#NcRandom:User" title="Float_t NcRandom::User() or overloads">User</a>(); // Provide a random number according to the udist distribution
+ q.<a href="./NcRandom.html#NcRandom:User" title="Float_t NcRandom::User() or overloads">User</a>(rvec,n); // Provide n randoms according to the udist distribution
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a>* x=new <a href="./ListOfTypes.html#Float_t">Float_t</a>[nbins];
+ <a href="./ListOfTypes.html#Float_t">Float_t</a>* y=new <a href="./ListOfTypes.html#Float_t">Float_t</a>[nbins];
+
+ ... code to fill x[] and y[] ..
+
+ <a href="./NcRandom.html">NcRandom</a> s;
+ s.<a href="./NcRandom.html#NcRandom:SetUser" title="void NcRandom::SetUser(Float_t a,Float_t b,Int_t n,Float_t (*)(Float_t) f) or overloads">SetUser</a>(x,y,nbins); // Initialise generator for (x[i],y[i]) distribution
+ s.<a href="./NcRandom.html#NcRandom:User" title="Float_t NcRandom::User() or overloads">User</a>(); // Provide a random number according to the user distribution
+ s.<a href="./NcRandom.html#NcRandom:User" title="Float_t NcRandom::User() or overloads">User</a>(rvec,n); // Provide n randoms according to the user distribution
+
+ Notes :
+
+ 1) Allowed seed values : 0 &lt;= seed &lt;= 921350143
+    Default seed = 53310452
+ 2) To ensure a unique sequence for each run, one can automatically
+    construct a seed value by e.g. using the date and time.
+ 3) Using the rvec facility saves a lot of CPU time for large n values.
+
+--- Author: Nick van Eijndhoven 11-oct-1997 Utrecht University
+- Modified: NvE $Date: 2014-10-27 11:13:13 +0100 (Mon, 27 Oct 2014) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcRandom:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcRandom:NcRandom">NcRandom</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcRandom:NcRandom@3">NcRandom</a>(<span class="keyword">const</span> <a href="./NcRandom.html">NcRandom</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcRandom:NcRandom@1">NcRandom</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcRandom:NcRandom@2">NcRandom</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt2, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcRandom:_NcRandom">~NcRandom</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcRandom:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Clear"><span class="baseclass">TObject::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:Clone"><span class="baseclass">TObject::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Compare"><span class="baseclass">TObject::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Copy"><span class="baseclass">TObject::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; object) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Data">Data</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:Gauss">Gauss</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:Gauss@1">Gauss</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> mean, <a href="./ListOfTypes.html#Float_t">Float_t</a> sigma)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Gauss@2">Gauss</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Gauss@3">Gauss</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> mean, <a href="./ListOfTypes.html#Float_t">Float_t</a> sigma)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:GetCnt1">GetCnt1</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:GetCnt2">GetCnt2</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetName"><span class="baseclass">TObject::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:GetSeed">GetSeed</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetTitle"><span class="baseclass">TObject::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Hash"><span class="baseclass">TObject::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcRandom:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsSortable"><span class="baseclass">TObject::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ls"><span class="baseclass">TObject::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcRandom.html">NcRandom</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcRandom:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcRandom.html">NcRandom</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:Poisson">Poisson</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> mean)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Poisson@1">Poisson</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> mean)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Print"><span class="baseclass">TObject::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:RanBm">RanBm</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> nr, <a href="./ListOfTypes.html#Double_t">Double_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* na = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* psia = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> psi0 = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0, TH1* psih = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* nrx = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:SetUser@1">SetUser</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* x, <a href="./ListOfTypes.html#Float_t">Float_t</a>* y, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:SetUser">SetUser</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> a, <a href="./ListOfTypes.html#Float_t">Float_t</a> b, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> (*)(<a href="./ListOfTypes.html#Float_t">Float_t</a>) f)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:Uniform">Uniform</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:Uniform@1">Uniform</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> a, <a href="./ListOfTypes.html#Float_t">Float_t</a> b)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Uniform@2">Uniform</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Uniform@3">Uniform</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> a, <a href="./ListOfTypes.html#Float_t">Float_t</a> b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcRandom:User">User</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:User@1">User</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+
+</table></div>
+<div class="access" id="funcpriv"><b>private:</b>
+<table class="func" id="tabfuncpriv" cellspacing="0">
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Start">Start</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt2, <a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Uniform@4">Uniform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcRandom:Unpack">Unpack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; i, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; j, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; k, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; l)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcRandom:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="datapriv"><b>private:</b>
+<table class="data" id="tabdatapriv" cellspacing="0">
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcRandom:fC"></a>fC</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcRandom:fCd"></a>fCd</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcRandom:fClip"></a>fClip</td><td class="datadesc">Indices, seed and counters</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcRandom:fCm"></a>fCm</td><td class="datadesc">The Fibonacci parameters</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcRandom:fCnt1"></a>fCnt1</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcRandom:fCnt2"></a>fCnt2</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcRandom:fI"></a>fI</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a>*</td><td class="dataname"><a name="NcRandom:fIbins"></a>fIbins</td><td class="datadesc">! The bin numbers of the random x candidates</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcRandom:fJ"></a>fJ</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcRandom:fNa"></a>fNa</td><td class="datadesc">! The number of bins of the area function</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcRandom:fSeed"></a>fSeed</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcRandom:fU"></a>fU[97]</td><td></td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcRandom:fXa"></a>fXa</td><td class="datadesc">! The binned x values of the area function</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a>*</td><td class="dataname"><a name="NcRandom:fYa"></a>fYa</td><td class="datadesc">! The corresponding y values of the area function</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcRandom:fYamax"></a>fYamax</td><td class="datadesc">! The min. and max. y values of the area function</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcRandom:fYamin"></a>fYamin</td><td></td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcRandom:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcRandom_Lib" id="MapNcRandom_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcRandom_Inh" class="tabsel" href="inh/NcRandom_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcRandom_Inh.png');">Inheritance</a>
+<a id="imgNcRandom_InhMem" class="tab" href="inhmem/NcRandom_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcRandom_InhMem.png');">Inherited Members</a>
+<a id="imgNcRandom_Incl" class="tab" href="incl/NcRandom_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcRandom_Incl.png');">Includes</a>
+<a id="imgNcRandom_Lib" class="tab" href="lib/NcRandom_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcRandom_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcRandom_Inh" src="inh/NcRandom_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcRandom:NcRandom" href="src/NcRandom.cxx.html#rZom_">NcRandom</a>()</span><br />
+<div class="funccomm"><pre> Creation of an <a href="./NcRandom.html">NcRandom</a> object and default initialisation.
+ The random sequence will be started from scratch.
+
+ A seed is used to create the initial u[97] table.
+ This seed is converted into four startup parameters i j k and l
+ as outlined in the docs of the internal member function <a href="./NcRandom.html#NcRandom:Unpack" title="void NcRandom::Unpack(Int_t seed,Int_t&amp; i,Int_t&amp; j,Int_t&amp; k,Int_t&amp; l)">Unpack</a>().
+
+ Suggested test values : i=12 j=34 k=56 l=78 (see article)
+ which corresponds to  : seed=53310452
+
+ This seed value of 53310452 is used in this default initialisation.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcRandom:NcRandom@1" href="src/NcRandom.cxx.html#y02H7C">NcRandom</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0)</span><br />
+<div class="funccomm"><pre> Creation of an <a href="./NcRandom.html">NcRandom</a> object and user defined initialisation.
+ The random sequence will be started from scratch.
+
+ The range of the seed is : 0 &lt;= seed &lt;= 921350143
+
+ Note :
+
+ If seed&lt;0 a unique seed value will be automatically generated based on the provided <a href="./NcTimestamp.html">NcTimestamp</a>
+ and the sequence will be started from scratch.
+ If ts=0 the actual timestamp at the moment of invoking this member function will be used.
+ The seed is created as : seed=10000*(sssss.ss)+dd where <span class="string">"sssss.ss"</span> indicates the fractional second count
+ in the Julian day and <span class="string">"dd"</span> are the 2 last digits of the Julian day count.
+ This will ensure different random sequences for different <a href="./NcRandom.html">NcRandom</a> instances that are created
+ at least 0.01 seconds apart, with a negligible probability of repetition after 99 days.
+ Different random sequences are essential to prevent repetition in for instance large batch processing
+ of many Monte Carlo samples.
+
+ In case the provided seed value exceeds the maximum value of 921350143 the seed will be set
+ to the default value of 53310452.
+
+ The default value is ts=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcRandom:NcRandom@2" href="src/NcRandom.cxx.html#SdHpFD">NcRandom</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt2, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0)</span><br />
+<div class="funccomm"><pre> Creation of an <a href="./NcRandom.html">NcRandom</a> object and user defined initialisation.
+ The random sequence is started from a user defined point specified via <span class="string">"cnt1"</span> and <span class="string">"cnt2"</span>
+ as outlined below.
+
+ The range of the seed is : 0 &lt;= seed &lt;= 921350143
+
+ Note :
+
+ If seed&lt;0 a unique seed value will be automatically generated based on the provided <a href="./NcTimestamp.html">NcTimestamp</a>
+ and the sequence will be started from scratch.
+ If ts=0 the actual timestamp at the moment of invoking this member function will be used.
+ This means that in case seed&lt;0 both counters cnt1 and cnt2 will be set to zero.
+ The seed is created as : seed=10000*(sssss.ss)+dd where <span class="string">"sssss.ss"</span> indicates the fractional second count
+ in the Julian day and <span class="string">"dd"</span> are the 2 last digits of the Julian day count.
+ This will ensure different random sequences for different <a href="./NcRandom.html">NcRandom</a> instances that are created
+ at least 0.01 seconds apart, with a negligible probability of repetition after 99 days.
+ Different random sequences are essential to prevent repetition in for instance large batch processing
+ of many Monte Carlo samples.
+
+ In case the provided seed value exceeds the maximum value of 921350143 the seed will be set
+ to the default value of 53310452.
+
+ cnt1 and cnt2 are the parameters for the counting system
+ to enable a start of the sequence at a certain point.
+ The current values of seed, cnt1 and cnt2 can be obtained
+ via the member functions <span class="string">"GetSeed"</span>, <span class="string">"GetCnt1"</span> and <span class="string">"GetCnt2"</span> respectively.
+ To start a sequence from scratch one should select : cnt1=0 and cnt2=0.
+
+ The default value is ts=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcRandom:_NcRandom" href="src/NcRandom.cxx.html#HemhT">~NcRandom</a>()</span><br />
+<div class="funccomm"><pre> Destructor to delete memory allocated for the area function arrays
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Start" href="src/NcRandom.cxx.html#cHSKtC">Start</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt2, <a href="./NcTimestamp.html">NcTimestamp</a>* ts)</span><br />
+<div class="funccomm"><pre> Internal member function to start a certain sequence from scratch or from a user defined point.
+
+ The algorithm to start from scratch is based on the routine RSTART
+ as described in the report by G.Marsaglia and A.Zaman
+ (FSU-SCRI-87-50 Florida State University 1987).
+
+ seed is the seed to create the initial u[97] table.
+ This seed is converted into four startup parameters i j k and l
+ as outlined in the docs of the internal member function <a href="./NcRandom.html#NcRandom:Unpack" title="void NcRandom::Unpack(Int_t seed,Int_t&amp; i,Int_t&amp; j,Int_t&amp; k,Int_t&amp; l)">Unpack</a>().
+
+ The range of the seed is : 0 &lt;= seed &lt;= 921350143
+
+ Note :
+
+ If seed&lt;0 a unique seed value will be automatically generated based on the provided <a href="./NcTimestamp.html">NcTimestamp</a>.
+ and the sequence will be started from scratch.
+ If ts=0 the actual timestamp at the moment of invoking this member function will be used.
+ This means that in case seed&lt;0 both counters cnt1 and cnt2 will be set to zero.
+ The seed is created as : seed=10000*(sssss.ss)+dd where <span class="string">"sssss.ss"</span> indicates the fractional second count
+ in the Julian day and <span class="string">"dd"</span> are the 2 last digits of the Julian day count. In this way the automatically
+ generated seed value will always fall in the allowed range.
+ This will ensure different random sequences for different <a href="./NcRandom.html">NcRandom</a> instances that are created
+ at least 0.01 seconds apart, with a negligible probability of repetition after 99 days.
+ Different random sequences are essential to prevent repetition in for instance large batch processing
+ of many Monte Carlo samples.
+
+ Suggested test values : i=12 j=34 k=56 l=78 (see article)
+ which corresponds to  : seed=53310452
+
+ In case the provided seed value exceeds the maximum value of 921350143 the seed will be set
+ to the default value of 53310452.
+
+ cnt1 and cnt2 are the parameters for the counting system
+ to enable a start of the sequence at a certain point.
+ The current values of seed, cnt1 and cnt2 can be obtained
+ via the member functions <span class="string">"GetSeed"</span>, <span class="string">"GetCnt1"</span> and <span class="string">"GetCnt2"</span> resp.
+ To start from scratch one should select : cnt1=0 and cnt2=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Unpack" href="src/NcRandom.cxx.html#JHaGCE">Unpack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> seed, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; i, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; j, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; k, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; l)</span><br />
+<div class="funccomm"><pre> Internal member function to unpack the seed into the four startup parameters i,j,k and l.
+
+ The range of the seed is : 0 &lt;= seed &lt;= 921350143
+
+ From the article :
+ The i,j and k values may be chosen in the interval : 1 &lt;= n &lt;= 178
+ The l value may be in the interval : 0 &lt;= l &lt;= 168
+
+ Taking into account the period of the 3-lagged Fibonacci sequence
+ The following <span class="string">"bad"</span> combinations have to be ruled out :
+
+   i    j    k    l   period
+   1    1    1    X      1
+ 178    1    1    X      4
+   1  178    1    X      2
+   1    1  178    X      4
+ 178  178    1    X      4
+ 178    1  178    X      2
+   1  178  178    X      4
+ 178  178  178    X      1
+
+ To rule these <span class="string">"bad"</span> combinations out all together, we choose
+ the following allowed ranges :
+ The i,j and k values may be chosen in the interval : 2 &lt;= n &lt;= 177
+ The l value may be in the interval : 0 &lt;= l &lt;= 168
+
+ and use the formula :
+ seed = (i-2)*176*176*169 + (j-2)*176*169 + (k-2)*169 + l
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcRandom:GetSeed" href="src/NcRandom.cxx.html#ZuozRE">GetSeed</a>() const</span><br />
+<div class="funccomm"><pre> Provide the current seed value
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcRandom:GetCnt1" href="src/NcRandom.cxx.html#ICJGqC">GetCnt1</a>() const</span><br />
+<div class="funccomm"><pre> Provide the current value of the counter cnt1
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcRandom:GetCnt2" href="src/NcRandom.cxx.html#EHELlC">GetCnt2</a>() const</span><br />
+<div class="funccomm"><pre> Provide the current value of the counter cnt2
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Data" href="src/NcRandom.cxx.html#ao.ocB">Data</a>() const</span><br />
+<div class="funccomm"><pre> <a href="./#TObject:Print" title="void TObject::Print(Option_t* option=&quot;&quot;)">Print</a> the current seed, cnt1 and cnt2 values
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcRandom:Uniform" href="src/NcRandom.cxx.html#cLC8mE">Uniform</a>()</span><br />
+<div class="funccomm"><pre> Generate uniform random numbers in the interval &lt;0,1&gt;
+
+ The algorithm is based on lagged Fibonacci sequences (first part)
+ combined with a congruential method (second part)
+ as described in the report by G.Marsaglia and A.Zaman
+ (FSU-SCRI-87-50 Florida State University 1987).
+
+ Features :
+ 1) Period = 2**144
+ 2) Same sequence of 24-bit real numbers on all common machines
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcRandom:Uniform@1" href="src/NcRandom.cxx.html#ZfWZyB">Uniform</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> a, <a href="./ListOfTypes.html#Float_t">Float_t</a> b)</span><br />
+<div class="funccomm"><pre> Generate uniform random numbers in the interval &lt;a,b&gt;
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Uniform@3" href="src/NcRandom.cxx.html#zmpRBB">Uniform</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> a, <a href="./ListOfTypes.html#Float_t">Float_t</a> b)</span><br />
+<div class="funccomm"><pre> Generate a vector of uniform random numbers in the interval &lt;a,b&gt;
+ This saves lots of (member)function calls in case many random
+ numbers are needed at once.
+
+ n = The number of random numbers to be generated
+
+ The algorithm is based on lagged Fibonacci sequences (first part)
+ combined with a congruential method (second part)
+ as described in the report by G.Marsaglia and A.Zaman
+ (FSU-SCRI-87-50 Florida State University 1987).
+
+ Features :
+ 1) Period = 2**144
+ 2) Same sequence of 24-bit real numbers on all common machines
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Uniform@2" href="src/NcRandom.cxx.html#kziRvE">Uniform</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Generate a vector of uniform random numbers in the interval &lt;0,1&gt;
+ This saves lots of (member)function calls in case many random
+ numbers are needed at once.
+
+ n = The number of random numbers to be generated
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Uniform@4" href="src/NcRandom.cxx.html#gZc3eB">Uniform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Internal member function to generate n uniform random numbers in one go.
+ This saves lots of (member)function calls in case one needs to skip
+ to a certain point in a sequence.
+
+ n = The number of random numbers to be generated
+
+ Note : No check is made here to exclude 0 from the range.
+        It's only the number of generated randoms that counts
+
+ The algorithm is based on lagged Fibonacci sequences (first part)
+ combined with a congruential method (second part)
+ as described in the report by G.Marsaglia and A.Zaman
+ (FSU-SCRI-87-50 Florida State University 1987).
+
+ Features :
+ 1) Period = 2**144
+ 2) Same sequence of 24-bit real numbers on all common machines
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcRandom:Gauss@1" href="src/NcRandom.cxx.html#q8nl2">Gauss</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> mean, <a href="./ListOfTypes.html#Float_t">Float_t</a> sigma)</span><br />
+<div class="funccomm"><pre> Generate gaussian distributed random numbers with certain mean and sigma
+
+ Method :
+ P(x) = The gaussian distribution function
+ --&gt; ln(P) provides an expression for (x-xmean)**2 from which
+     the following expression for x can be obtained
+
+           x = xmean +/- sigma * sqrt(-2*ln(q))
+
+ in which q is an expression in terms of pi, sigma and p and lies within
+ the interval &lt;0,1&gt;.
+
+ The gaussian distributed x values are obtained as follows :
+
+ 1) Two uniform random numbers q1 and q2 in &lt;0,1&gt; are generated.
+ 2) q1 is in fact a uniform generated value for P which is substituted
+    directly in the formula above.
+ 3) The value of q2 determines whether we use the + or - sign.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcRandom:Gauss" href="src/NcRandom.cxx.html#D78_YE">Gauss</a>()</span><br />
+<div class="funccomm"><pre> Generate gaussian distributed random numbers with mean=0 and sigma=1
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Gauss@3" href="src/NcRandom.cxx.html#tnv9TC">Gauss</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> mean, <a href="./ListOfTypes.html#Float_t">Float_t</a> sigma)</span><br />
+<div class="funccomm"><pre> Generate a vector of gaussian random numbers with certain mean and sigma
+ This saves lots of (member)function calls in case many random
+ numbers are needed at once.
+
+ n = The number of random numbers to be generated
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Gauss@2" href="src/NcRandom.cxx.html#cVaMjE">Gauss</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Generate a vector of gaussian random numbers with mean=0 and sigma=1
+ This saves lots of (member)function calls in case many random
+ numbers are needed at once.
+
+ n = The number of random numbers to be generated
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcRandom:Poisson" href="src/NcRandom.cxx.html#xXPwq">Poisson</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> mean)</span><br />
+<div class="funccomm"><pre> Generate <a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a> distributed random numbers with certain mean
+
+ Method :
+
+ P(n) = exp(-mean)*mean**n/n! is the <a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a> distribution function
+
+ with : n  = 0,1,2,3,...   and  mean &gt; 0
+
+ To generate the distribution, the <span class="string">"sum trick"</span> is used as mentioned
+ in <span class="string">"Formulae and Methods in Experimental data Evaluation Vol. 1"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:Poisson@1" href="src/NcRandom.cxx.html#KHKgXE">Poisson</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> mean)</span><br />
+<div class="funccomm"><pre> Generate a vector of <a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a> dist. random numbers with certain mean
+ This saves lots of (member)function calls in case many random
+ numbers are needed at once.
+
+ n = The number of random numbers to be generated
+
+ Method :
+
+ P(n) = exp(-mean)*mean**n/n! is the <a href="./NcRandom.html#NcRandom:Poisson" title="Float_t NcRandom::Poisson(Float_t mean) or overloads">Poisson</a> distribution function
+
+ with : n  = 0,1,2,3,...   and  mean &gt; 0
+
+ To generate the distribution, the <span class="string">"sum trick"</span> is used as mentioned
+ in <span class="string">"Formulae and Methods in Experimental data Evaluation Vol. 1"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:SetUser" href="src/NcRandom.cxx.html#XtOWYB">SetUser</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> a, <a href="./ListOfTypes.html#Float_t">Float_t</a> b, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a> (*)(<a href="./ListOfTypes.html#Float_t">Float_t</a>) f)</span><br />
+<div class="funccomm"><pre> Determine the area under f(x) as a function of x
+ This is called the <span class="string">"area function"</span> and serves as a basis to
+ provide random numbers in [a,b] according to the user defined
+ distribution f(x).
+ The area function is normalised such that the most extreme
+ value is 1 or -1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:SetUser@1" href="src/NcRandom.cxx.html#aGotSC">SetUser</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* x, <a href="./ListOfTypes.html#Float_t">Float_t</a>* y, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Determine the area under y[i] as a function of x[i]
+ This is called the <span class="string">"area function"</span> and serves as a basis to
+ provide random numbers in x according to the user provided
+ distribution (x[i],y[i]).
+ The area function is normalised such that the most extreme
+ value is 1 or -1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcRandom:User" href="src/NcRandom.cxx.html#c0H0dD">User</a>()</span><br />
+<div class="funccomm"><pre> Provide a random number according to the user defined distribution
+
+ Method :
+
+ Select by a uniform random number a certain area fraction (from <a href="./NcRandom.html#NcRandom:fYa" title="Float_t* NcRandom::fYa">fYa</a>[])
+ of the area function.
+ The required random number is given by the corresponding x value (<a href="./NcRandom.html#NcRandom:fXa" title="Float_t* NcRandom::fXa">fXa</a>[])
+ of the area function.
+ In case of more than one x value candidate, select randomly one of them.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcRandom:User@1" href="src/NcRandom.cxx.html#KgsyWC">User</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* vec, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Generate a vector of random numbers according to a user defined dist.
+ This saves lots of (member)function calls in case many random
+ numbers are needed at once.
+
+ n = The number of random numbers to be generated
+
+ Method :
+
+ Select by a uniform random number a certain area fraction (from <a href="./NcRandom.html#NcRandom:fYa" title="Float_t* NcRandom::fYa">fYa</a>[])
+ of the area function.
+ The required random number is given by the corresponding x value (<a href="./NcRandom.html#NcRandom:fXa" title="Float_t* NcRandom::fXa">fXa</a>[])
+ of the area function.
+ In case of more than one x value candidate, select randomly one of them.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcRandom:RanBm" href="src/NcRandom.cxx.html#zegjc">RanBm</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> nr, <a href="./ListOfTypes.html#Double_t">Double_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* na = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* psia = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> psi0 = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0, TH1* psih = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* nrx = 0)</span><br />
+<div class="funccomm"><pre> Perform <span class="string">"nr"</span> repetitions (and provide the corresponding statistics) of a
+ counting experiment corresponding to a Bernoulli class hypothesis B_m
+ with <span class="string">"n"</span> independent random trials.
+ The hypothesis B_m represents a counting experiment with m different
+ possible outcomes and is completely defined by the probabilities
+ of the various outcomes (and the requirement that the sum of all these
+ probabilities equals 1).
+
+ The Psi value of n trials of B_m provides (in dB scale) the amount of support
+ that the data can maximally give to any Bernoulli class hypothesis different
+ from the currently specified B_m.
+
+ To be specific : Psi=-10*log[p(D|B_m I)]
+
+ where p(D|B_m I) represents the likelihood of the data D under the condition
+ that B_m and some prior I are <a href="./ListOfTypes.html#bool">true</a>.
+
+ A Psi value of zero indicates a perfect match between the observations
+ and the specified hypothesis.
+ Further mathematical details can be found in the publication
+ N. van Eijndhoven, Astropart. Phys. 28 (2008) 540 (astro-ph/0702029).
+
+ The arguments of this memberfunction :
+
+ nr   : The number of repetitions (see note 4) of the counting experiment with n independent random trials.
+ n    : The number of independent random trials of each counting experiment (see note 1).
+ m    : The number of different possible outcomes of the counting experiment.
+ p    : The probabilities of the different outcomes according to the hypothesis.
+ na   : Array with the signal c.q. (cumulative) observed numbers of occurrences of the different outcomes.
+ psia : Array of observed <span class="string">"nr"</span> (see notes 2 and 4) psi values.
+ psi0 : A user specified threshold psi value to provide P-value statistics.
+ f    : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
+        or the exact Bayesian expression (f=0).
+ psih : Histogram with observed psi values (see notes 2 and 4).
+ ncut : Number of psi&gt;=psi0 values to be obtained to trigger an (early stop) of the number of repetitions (see note 4).
+        In case ncut=0 all the specified <span class="string">"nr"</span> repetitions will be performed.
+ nrx  : Returned number of actually performed repetitions (only if a non-zero <span class="string">"nrx"</span> value is provided on input)
+
+ Notes :
+
+ 1) When provided, the array <span class="string">"na"</span> may be used to retrieve the (cumulative) observed numbers
+    of occurrences of the different outcomes, but also to specify a specific configuration
+    representing a signal on invokation of this memberfunction.
+    In case <span class="string">"na"</span> is used to specify a specific signal configuration, the number of
+    independent random B_m (background) trials <span class="string">"n"</span> has to be entered as a negative number.
+    This is meant as a safety measure to prevent unintended signal configurations in case
+    one only wants to use <span class="string">"na"</span> to retrieve statistics, but omitted to set all the <span class="string">"na"</span> elements
+    explicitly to zero before invoking this memberfunction.
+    A provided signal configuration will be stored internally and after taking the <span class="string">"n"</span>
+    independent random (background) trials, the signal configuration will be superimposed
+    <span class="string">"as is"</span> on the resulting outcome of each B_m repetition. So, the signal configuration
+    itself will not be randomised.
+    This will allow investigation of the sensitivity for various signal configurations
+    superimposed on a randomised background of <span class="string">"n"</span> observations.
+    After the randomisation procedure, the array <span class="string">"na"</span> will contain the (cumulative) statistics
+    of the observations of the signal configuration and the randomised background.
+    Obviously, in the case of a specified signal configuration all returned statistics will
+    be determined for the total number of <span class="string">"n+nsig"</span> trials.
+
+ 2) When provided, the arrays <span class="string">"na"</span> and <span class="string">"p"</span> should be of dimension <span class="string">"m"</span>,
+    whereas the array <span class="string">"psia"</span> should be of dimension <span class="string">"nr"</span>.
+    An alternative way of retrieving the observed psi values is via the user defined histogram <span class="string">"psih"</span>,
+    which obviously is more convenient than the array <span class="string">"psia"</span> in the case of a large number of repetitions <span class="string">"nr"</span>.
+    Note : Retrieval of psi values via <span class="string">"psia"</span> and <span class="string">"psih"</span> can be used simultaneously.
+
+ 3) The number of repetitions <span class="string">"nr"</span>, random trials <span class="string">"n"</span> and the observed
+    numbers of occurrences of the different outcomes c.q. signal configuration <span class="string">"na"</span>
+    are of type <span class="string">"double"</span> to allow for large numbers.
+    Obviously all these variables are meant to represent only integer counts.
+
+ 4) In case a non-zero input argument <span class="string">"ncut"</span> is provided, the number of repetitions will be stopped
+    as soon as <span class="string">"ncut"</span> values of psi&gt;=psi0 are obtained.
+    When a large number of repetitions <span class="string">"nr"</span> was specified, this allows an <span class="string">"early stop"</span> and as such
+    a significant reduction of the CPU time. In case the number <span class="string">"ncut"</span> was not reached, the repetition
+    of the counting experiment wil stop as soon as <span class="string">"nr"</span> repetitions have been performed.
+    However, when nr=0 was specified the counting experiment will be repeated until the number <span class="string">"ncut"</span>
+    is reached or when the number of repetitions has reached the maximum allowed value of 1e19.
+    In case a non-zero input argument <span class="string">"nrx"</span> is provided the number of actually performed repetitions
+    will be returned via this same argument <span class="string">"nrx"</span>.
+
+ For practical reasons the maximum values of <span class="string">"nr"</span> and <span class="string">"n"</span> have been limited
+ to 1e19, which is about the corresponding maximum value of an <a href="./ListOfTypes.html#unsigned">unsigned</a> 64-bit integer.
+
+ In case no probabilities are given (i.e. p=0), a uniform distribution is assumed.
+ In case the other arrays or histogram are not specified (i.e. 0), the corresponding statistics
+ are not returned.
+
+ The default values are p=0, na=0, psia=0, psi0=-1, f=0, psih=0, ncut=0 and nrx=0.
+
+ The return value :
+
+ In case nr=1, the corresponding Psi value of that single random experiment is returned.
+ In case nr&gt;1 (or nr=0) and psi0&lt;0, the minimal encountered Psi value is returned.
+ In case nr&gt;1 (or nr=0) and psi0&gt;=0, the number of encountered Psi values with Psi&gt;=psi0 is returned.
+ In the case of inconsistent input, a value of -1 is returned.
+
+--- NvE 16-nov-2008 NCFS
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcRandom:NcRandom" href="src/NcRandom.h.html#DEagFB">NcRandom</a>()</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:23 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

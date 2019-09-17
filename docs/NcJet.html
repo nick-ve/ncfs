@@ -1,0 +1,1127 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:21 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcJet</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcJet','','NcJet.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcJet.h.html">header file</a>
+<a class="descrheadentry" href="src/NcJet.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcJet:description">class description</a> 
+<a class="descrheadentry" href="#NcJet:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcJet:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcJet:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcJet</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcJet:description"></a>class NcJet: public TNamed, public <a href="./Nc4Vector.html">Nc4Vector</a></h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcJet.html#NcJet:Class" title="TClass* NcJet::Class()">Class</a> <a href="./NcJet.html">NcJet</a>
+ Creation and investigation of a jet of particle tracks.
+ An <a href="./NcJet.html">NcJet</a> can be constructed by adding NcTracks.
+
+ To provide maximal flexibility to the user, two modes of track storage
+ are provided by means of the memberfunction <a href="./NcJet.html#NcJet:SetTrackCopy" title="void NcJet::SetTrackCopy(Int_t j)">SetTrackCopy</a>().
+
+ a) <a href="./NcJet.html#NcJet:SetTrackCopy" title="void NcJet::SetTrackCopy(Int_t j)">SetTrackCopy</a>(0) (which is the default).
+    Only the pointers of the 'added' tracks are stored.
+    This mode is typically used by making jet studies based on a fixed list
+    of tracks which stays under user control or is contained for instance
+    in an <a href="./NcEvent.html">NcEvent</a>.
+    In this way the <a href="./NcJet.html">NcJet</a> just represents a 'logical structure' for the
+    physics analysis which can be embedded in e.g. an <a href="./NcEvent.html">NcEvent</a> or <a href="./NcVertex.html">NcVertex</a>.
+
+    Note :
+    Modifications made to the original tracks also affect the <a href="./NcTrack.html">NcTrack</a> objects
+    which are stored in the <a href="./NcJet.html">NcJet</a>.
+
+ b) <a href="./NcJet.html#NcJet:SetTrackCopy" title="void NcJet::SetTrackCopy(Int_t j)">SetTrackCopy</a>(1).
+    Of every 'added' track a private copy will be made of which the pointer
+    will be stored.
+    In this way the <a href="./NcJet.html">NcJet</a> represents an entity on its own and modifications
+    made to the original tracks do not affect the <a href="./NcTrack.html">NcTrack</a> objects which are
+    stored in the <a href="./NcJet.html">NcJet</a>.
+    This mode will allow 'adding' many different NcTracks into an <a href="./NcJet.html">NcJet</a> by
+    creating only one <a href="./NcTrack.html">NcTrack</a> instance in the main programme and using the
+    <a href="./NcTrack.html">NcTrack</a>::<a href="./NcTrack.html#NcTrack:Reset" title="void NcTrack::Reset()">Reset</a>() and <a href="./NcTrack.html">NcTrack</a> parameter setting memberfunctions.
+
+ See also the documentation provided for the memberfunction <a href="./NcJet.html#NcJet:SetOwner" title="void NcJet::SetOwner(Bool_t own=kTRUE)">SetOwner</a>().
+
+ Coding example to make 2 jets j1 and j2.
+
+ j1 contains the NcTracks t1 and t2
+ j2 contains 10 different NcTracks via tx
+
+ <a href="./NcTrack.html">NcTrack</a> t1,t2;
+
+  ... // code to fill the <a href="./NcTrack.html">NcTrack</a> data
+
+ <a href="./NcJet.html">NcJet</a> j1();
+ j1.<a href="./NcJet.html#NcJet:AddTrack" title="void NcJet::AddTrack(NcTrack&amp; t) or overloads">AddTrack</a>(t1);
+ j1.<a href="./NcJet.html#NcJet:AddTrack" title="void NcJet::AddTrack(NcTrack&amp; t) or overloads">AddTrack</a>(t2);
+
+ <a href="./NcJet.html">NcJet</a> j2();
+ j2.<a href="./NcJet.html#NcJet:SetTrackCopy" title="void NcJet::SetTrackCopy(Int_t j)">SetTrackCopy</a>(1);
+ <a href="./NcTrack.html">NcTrack</a>* tx=new <a href="./NcTrack.html">NcTrack</a>();
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;10; i++)
+ {
+
+  ... // code to set momentum etc... of the track tx
+
+  j2.<a href="./NcJet.html#NcJet:AddTrack" title="void NcJet::AddTrack(NcTrack&amp; t) or overloads">AddTrack</a>(tx);
+  tx-&gt;<a href="./NcJet.html#NcJet:Reset" title="void NcJet::Reset()">Reset</a>();
+ }
+
+ j1.<a href="./NcJet.html#NcJet:Data" title="void NcJet::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+ j2.<a href="./NcJet.html#NcJet:Data" title="void NcJet::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>(<span class="string">"sph"</span>);
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> e1=j1.<a href="./NcJet.html#NcJet:GetEnergy" title="Double_t NcJet::GetEnergy(Float_t scale=-1)">GetEnergy</a>();
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> pnorm=j1-&gt;<a href="./NcJet.html#NcJet:GetMomentum" title="Double_t NcJet::GetMomentum(Float_t scale=-1)">GetMomentum</a>();
+ <a href="./Nc3Vector.html">Nc3Vector</a> p=j1-&gt;<a href="./NcJet.html#NcJet:Get3Momentum" title="Nc3Vector NcJet::Get3Momentum(Float_t scale=-1)">Get3Momentum</a>();
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> m=j1.<a href="./NcJet.html#NcJet:GetInvmass" title="Double_t NcJet::GetInvmass(Float_t scale=-1)">GetInvmass</a>();
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> ntk=j1.<a href="./NcJet.html#NcJet:GetNtracks" title="Int_t NcJet::GetNtracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0) or overloads">GetNtracks</a>();
+ <a href="./NcTrack.html">NcTrack</a>* tj=j1.<a href="./NcJet.html#NcJet:GetTrack" title="NcTrack* NcJet::GetTrack(Int_t i)">GetTrack</a>(1);
+
+ delete tx;
+
+ Note : By default all quantities are in GeV, GeV/c or GeV/c**2
+        but the user can indicate the usage of a different scale
+        for the energy-momentum units via the <a href="./NcJet.html#NcJet:SetEscale" title="void NcJet::SetEscale(Float_t scale)">SetEscale</a>() memberfunction.
+        The actual energy-momentum unit scale can be obtained via the
+        <a href="./NcJet.html#NcJet:GetEscale" title="Float_t NcJet::GetEscale()">GetEscale</a>() memberfunction.
+
+--- Author: Nick van Eijndhoven 10-jul-1997 Utrecht University
+- Modified: NvE $Date: 2016-05-19 20:01:23 +0200 (Thu, 19 May 2016) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcJet:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcJet:NcJet">NcJet</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcJet:NcJet@1">NcJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcJet:NcJet@2">NcJet</a>(<span class="keyword">const</span> <a href="./NcJet.html">NcJet</a>&amp; j)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcJet:_NcJet">~NcJet</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:AddTrack">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:AddTrack@1">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcJet:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcJet:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:Data">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Dot"><span class="baseclass">Nc4Vector::</span>Dot</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#NcJet:Get3Momentum">Get3Momentum</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Get3Vector"><span class="baseclass">Nc4Vector::</span>Get3Vector</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetBeta"><span class="baseclass">Nc4Vector::</span>GetBeta</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetBetaVector"><span class="baseclass">Nc4Vector::</span>GetBetaVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetCharge">GetCharge</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetDistance">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>* p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetDistance@1">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetDistance@2">GetDistance</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetDistance@3">GetDistance</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetDistance@4">GetDistance</a>(<a href="./NcJet.html">NcJet</a>* j, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetDistance@5">GetDistance</a>(<a href="./NcJet.html">NcJet</a>&amp; j, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetEl">GetEl</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetEnergy">GetEnergy</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetErrors"><span class="baseclass">Nc4Vector::</span>GetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetErrors@1"><span class="baseclass">Nc4Vector::</span>GetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetEscale">GetEscale</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetEt">GetEt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetGamma"><span class="baseclass">Nc4Vector::</span>GetGamma</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetId">GetId</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTrack.html">NcTrack</a>*</td><td class="funcname"><a class="funcname" href="#NcJet:GetIdTrack">GetIdTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetInvariant"><span class="baseclass">Nc4Vector::</span>GetInvariant</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetInvmass">GetInvmass</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetMomentum">GetMomentum</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetMt">GetMt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetNsignals">GetNsignals</a>(TString classname = <span class="string">"TObject"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetNtracks@1">GetNtracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetNtracks">GetNtracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetOpeningAngle"><span class="baseclass">Nc4Vector::</span>GetOpeningAngle</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetOpeningAngle@1"><span class="baseclass">Nc4Vector::</span>GetOpeningAngle</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetPl">GetPl</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetPseudoRapidity"><span class="baseclass">Nc4Vector::</span>GetPseudoRapidity</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetPt">GetPt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetRapidity">GetRapidity</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcPosition.html">NcPosition</a>*</td><td class="funcname"><a class="funcname" href="#NcJet:GetReferencePoint">GetReferencePoint</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetResultError"><span class="baseclass">Nc4Vector::</span>GetResultError</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScalar"><span class="baseclass">Nc4Vector::</span>GetScalar</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScalarFlag"><span class="baseclass">Nc4Vector::</span>GetScalarFlag</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="#NcJet:GetSignals">GetSignals</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0, TObjArray* signals = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetSignalValue">GetSignalValue</a>(TString classname, TString varname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 2)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTrack.html">NcTrack</a>*</td><td class="funcname"><a class="funcname" href="#NcJet:GetTrack">GetTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcJet:GetTrackCopy">GetTrackCopy</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="#NcJet:GetTracks@1">GetTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TObjArray* tracks = 0)</td></tr>
+<tr class="func"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="#NcJet:GetTracks">GetTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0, TObjArray* tracks = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetUserData"><span class="baseclass">Nc4Vector::</span>GetUserData</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVecLong"><span class="baseclass">Nc4Vector::</span>GetVecLong</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVector"><span class="baseclass">Nc4Vector::</span>GetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVector@1"><span class="baseclass">Nc4Vector::</span>GetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetVecTrans"><span class="baseclass">Nc4Vector::</span>GetVecTrans</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetX"><span class="baseclass">Nc4Vector::</span>GetX</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:HasErrors"><span class="baseclass">Nc4Vector::</span>HasErrors</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:HasVector"><span class="baseclass">Nc4Vector::</span>HasVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcJet:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:List">List</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:ListAll">ListAll</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Load"><span class="baseclass">Nc4Vector::</span>Load</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator*"><span class="baseclass">Nc4Vector::</span>operator*</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator*_"><span class="baseclass">Nc4Vector::</span>operator*=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator+"><span class="baseclass">Nc4Vector::</span>operator+</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator+_"><span class="baseclass">Nc4Vector::</span>operator+=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator-"><span class="baseclass">Nc4Vector::</span>operator-</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator-_"><span class="baseclass">Nc4Vector::</span>operator-=</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator/"><span class="baseclass">Nc4Vector::</span>operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./Nc4Vector.html">Nc4Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:operator/_"><span class="baseclass">Nc4Vector::</span>operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcJet.html">NcJet</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcJet:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcJet.html">NcJet</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:RemoveTrack">RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:RemoveTracks@1">RemoveTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:RemoveTracks">RemoveTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:ReplaceTrack">ReplaceTrack</a>(<a href="./NcTrack.html">NcTrack</a>* told, <a href="./NcTrack.html">NcTrack</a>* tnew)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:Reset">Reset</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector@1"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector@2"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Set3Vector@3"><span class="baseclass">Nc4Vector::</span>Set3Vector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetErrors"><span class="baseclass">Nc4Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetErrors@2"><span class="baseclass">Nc4Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetErrors@1"><span class="baseclass">Nc4Vector::</span>SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e0, <a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:SetEscale">SetEscale</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:SetId">SetId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetInvariant"><span class="baseclass">Nc4Vector::</span>SetInvariant</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv2 = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetInvariantError"><span class="baseclass">Nc4Vector::</span>SetInvariantError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv2)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:SetOwner">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:SetReferencePoint">SetReferencePoint</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalar"><span class="baseclass">Nc4Vector::</span>SetScalar</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv0 = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalarError"><span class="baseclass">Nc4Vector::</span>SetScalarError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:SetTrackCopy">SetTrackCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetUserData"><span class="baseclass">Nc4Vector::</span>SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>* s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetUserData@1"><span class="baseclass">Nc4Vector::</span>SetUserData</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector@1"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector@3"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetVector@2"><span class="baseclass">Nc4Vector::</span>SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetZero"><span class="baseclass">Nc4Vector::</span>SetZero</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:ShowSignals">ShowSignals</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:ShowTracks">ShowTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="#NcJet:SortTracks">SortTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* tracks = 0, TObjArray* ordered = 0)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:AddTrack@2">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> copy)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:AddTrack@3">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a> copy)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScaLong"><span class="baseclass">Nc4Vector::</span>GetScaLong</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScaTrans"><span class="baseclass">Nc4Vector::</span>GetScaTrans</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:Init">Init</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:RemoveTrack@1">RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcJet:SetNtinit">SetNtinit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcJet:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fDresult"><span class="baseclass">Nc4Vector::</span>fDresult</a></td><td class="datadesc">! The error on the scalar result of an operation (e.g. dotproduct) </td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fDv0"><span class="baseclass">Nc4Vector::</span>fDv0</a></td><td class="datadesc">The error on the scalar part</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fDv2"><span class="baseclass">Nc4Vector::</span>fDv2</a></td><td class="datadesc">The error on the Lorentz invariant</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcJet:fEscale"></a>fEscale</td><td class="datadesc">The scale of the energy/momentum units of the jet</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcJet:fNtinit"></a>fNtinit</td><td class="datadesc">The initial max. number of tracks for this jet</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcJet:fNtmax"></a>fNtmax</td><td class="datadesc">The maximum number of tracks for this Jet</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcJet:fNtrk"></a>fNtrk</td><td class="datadesc">The number of tracks in the jet</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcJet:fQ"></a>fQ</td><td class="datadesc">The total charge of the jet </td></tr>
+<tr class="data"><td class="datatype"><a href="./NcPositionObj.html">NcPositionObj</a>*</td><td class="dataname"><a name="NcJet:fRef"></a>fRef</td><td class="datadesc">The reference-point of the jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fScalar"><span class="baseclass">Nc4Vector::</span>fScalar</a></td><td class="datadesc">Flag denoting scalar mode</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcJet:fSelected"></a>fSelected</td><td class="datadesc">! Temp. array to hold user selected or ordered objects</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcJet:fTrackCopy"></a>fTrackCopy</td><td class="datadesc">Flag to denote creation of private copies in fTracks</td></tr>
+<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcJet:fTracks"></a>fTracks</td><td class="datadesc">Array to hold the pointers to the tracks of the jet</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcSignal.html">NcSignal</a>*</td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fUser"><span class="baseclass">Nc4Vector::</span>fUser</a></td><td class="datadesc">NcSignal object containing user data</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcJet:fUserId"></a>fUserId</td><td class="datadesc">The user defined identifier</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fV"><span class="baseclass">Nc4Vector::</span>fV</a></td><td class="datadesc">The 3-vector part</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fV0"><span class="baseclass">Nc4Vector::</span>fV0</a></td><td class="datadesc">The scalar part</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fV2"><span class="baseclass">Nc4Vector::</span>fV2</a></td><td class="datadesc">The Lorentz invariant (v^i*v_i)</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcJet:Class_Charts"></a>Class Charts</h2>
+<map name="MapNcJet_Inh" id="MapNcJet_Inh">
+<area shape="rect" id="node4" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="136,19,226,37"/>
+<area shape="rect" id="node7" href="./NcVertex.html" title="NcVertex" alt="" coords="407,10,497,28"/>
+<area shape="rect" id="node8" href="./NcEvent.html" title="NcEvent" alt="" coords="542,10,632,28"/>
+<area shape="rect" id="node9" href="./IceEvent.html" title="IceEvent" alt="" coords="677,10,767,28"/>
+</map>
+<map name="MapNcJet_InhMem" id="MapNcJet_InhMem">
+<area shape="rect" id="graph18" href="./Nc4Vector.html" alt="" coords="541,344,629,409"/>
+<area shape="rect" id="graph19" href="./Nc4Vector.html" alt="" coords="443,344,531,409"/>
+<area shape="rect" id="graph20" href="./Nc4Vector.html" alt="" coords="344,344,432,409"/>
+<area shape="rect" id="graph21" href="./Nc4Vector.html" alt="" coords="573,420,597,441"/>
+<area shape="rect" id="graph22" href="./Nc4Vector.html" alt="" coords="541,452,629,721"/>
+<area shape="rect" id="graph23" href="./Nc4Vector.html" alt="" coords="443,423,531,721"/>
+<area shape="rect" id="graph24" href="./Nc4Vector.html" alt="" coords="344,423,432,721"/>
+<area shape="rect" id="graph17" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="333,297,640,732"/>
+</map>
+<map name="MapNcJet_Lib" id="MapNcJet_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNcJet_Inh" class="tabsel" href="inh/NcJet_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcJet_Inh.png');">Inheritance</a>
+<a id="imgNcJet_InhMem" class="tab" href="inhmem/NcJet_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcJet_InhMem.png');">Inherited Members</a>
+<a id="imgNcJet_Incl" class="tab" href="incl/NcJet_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcJet_Incl.png');">Includes</a>
+<a id="imgNcJet_Lib" class="tab" href="lib/NcJet_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcJet_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcJet_Inh" src="inh/NcJet_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJet:NcJet" href="src/NcJet.cxx.html#KJEVPB">NcJet</a>()</span><br />
+<div class="funccomm"><pre> Default constructor
+ All variables initialised to 0
+ Initial maximum number of tracks is set to the default value
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:Init" href="src/NcJet.cxx.html#Y8yWU">Init</a>()</span><br />
+<div class="funccomm"><pre> Initialisation of pointers etc...
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJet:NcJet@1" href="src/NcJet.cxx.html#a9NnFC">NcJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Create a jet to hold initially a maximum of n tracks
+ All variables initialised to 0
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJet:_NcJet" href="src/NcJet.cxx.html#YIlfKC">~NcJet</a>()</span><br />
+<div class="funccomm"><pre> Default destructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:SetOwner" href="src/NcJet.cxx.html#FnKkhC">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Set ownership of all added objects.
+ The default parameter is own=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+
+ Invokation of this memberfunction also sets all the copy modes
+ (e.g. TrackCopy &amp; co.) according to the value of own.
+
+ This function (with own=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) is particularly useful when reading data
+ from a tree/file, since <a href="./NcJet.html#NcJet:Reset" title="void NcJet::Reset()">Reset</a>() will then actually remove all the
+ added objects from memory irrespective of the copy mode settings
+ during the tree/file creation process. In this way it provides a nice way
+ of preventing possible memory leaks in the reading/analysis process.
+
+ In addition this memberfunction can also be used as a shortcut to set all
+ copy modes in one go during a tree/file creation process.
+ However, in this case the user has to take care to only set/change the
+ ownership (and copy mode) for empty objects (e.g. newly created objects
+ or after invokation of the <a href="./NcJet.html#NcJet:Reset" title="void NcJet::Reset()">Reset</a>() memberfunction) otherwise it will
+ very likely result in inconsistent destructor behaviour.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJet:NcJet@2" href="src/NcJet.cxx.html#qFvtOC">NcJet</a>(<span class="keyword">const</span> <a href="./NcJet.html">NcJet</a>&amp; j)</span><br />
+<div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:SetNtinit" href="src/NcJet.cxx.html#WoYoYD">SetNtinit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</span><br />
+<div class="funccomm"><pre> Set the initial maximum number of tracks for this jet
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:Reset" href="src/NcJet.cxx.html#OjmO9">Reset</a>()</span><br />
+<div class="funccomm"><pre> <a href="./NcJet.html#NcJet:Reset" title="void NcJet::Reset()">Reset</a> all variables to 0
+ The max. number of tracks is set to the initial value again
+ Note : The scale for the energy/momentum units will not be changed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:AddTrack" href="src/NcJet.cxx.html#WKWI1D">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t)</span><br />
+<div class="funccomm"><pre> Add a track to the jet.
+ In case the maximum number of tracks has been reached
+ space will be extended to hold an additional amount of tracks as
+ was initially reserved.
+ See <a href="./NcJet.html#NcJet:SetTrackCopy" title="void NcJet::SetTrackCopy(Int_t j)">SetTrackCopy</a>() to tailor the functionality of the stored structures.
+
+ Notes :
+
+ In case a private copy is made, this is performed via the <a href="./NcJet.html#NcJet:Clone" title="TObject* NcJet::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
+ All <a href="./NcTrack.html">NcTrack</a> and derived classes have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcJet.html#NcJet:Clone" title="TObject* NcJet::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
+ However, derived classes generally contain an internal data structure which may
+ include pointers to other objects. Therefore it is recommended to provide
+ for all derived classes a specific copy constructor and override the default <a href="./NcJet.html#NcJet:Clone" title="TObject* NcJet::Clone(const char* name=&quot;&quot;)">Clone</a>()
+ memberfunction using this copy constructor.
+ An example for this may be seen from <a href="./NcTrack.html">NcTrack</a>.
+
+ In case NO private copy is made, a check will be performed if this
+ specific track is already present in the jet.
+ If this is the case, no action is performed to prevent multiple
+ additions of the same track.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:AddTrack@2" href="src/NcJet.cxx.html#kSw7OD">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> copy)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to actually add a track to the jet.
+ In case the maximum number of tracks has been reached
+ space will be extended to hold an additional amount of tracks as
+ was initially reserved.
+
+ If copy=0 NO copy of the track will be made, irrespective of the setting
+ of the TrackCopy flag.
+ This allows a proper treatment of automatically generated connecting
+ tracks between vertices.
+
+ In case NO copy of the track is made, a check will be performed if this
+ specific track is already present in the jet.
+ If this is the case, no action is performed to prevent multiple
+ additions of the same track.
+
+ Note :
+ In case a private copy is made, this is performed via the <a href="./NcJet.html#NcJet:Clone" title="TObject* NcJet::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:Data" href="src/NcJet.cxx.html#JDB0l">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide jet information within the coordinate frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:List" href="src/NcJet.cxx.html#Z.fK1B">List</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</span><br />
+<div class="funccomm"><pre> Provide jet and primary track information within the coordinate frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
+
+ In case the user provides the array <span class="string">"tracks"</span> with selected track pointers, all tracks
+ from that user array will be shown.
+ In case tracks=0, all the available tracks from this jet will be shown.
+
+ The default is tracks=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:ListAll" href="src/NcJet.cxx.html#G3DkZB">ListAll</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</span><br />
+<div class="funccomm"><pre> Provide jet and prim.+sec. track information within the coordinate frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
+
+ In case the user provides the array <span class="string">"tracks"</span> with selected track pointers, all tracks
+ from that user array will be shown.
+ In case tracks=0, all the available tracks from this jet will be shown.
+
+ The default is tracks=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcJet:GetNtracks" href="src/NcJet.cxx.html#XcoouB">GetNtracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0)</span><br />
+<div class="funccomm"><pre> Provide the number of user selected tracks in this jet based on the
+ idmode, chmode and pcode selections as specified by the user.
+ For specification of the selection parameters see <a href="./NcJet.html#NcJet:GetTracks" title="TObjArray* NcJet::GetTracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0,TObjArray* tracks=0) or overloads">GetTracks</a>().
+ The default parameters correspond to no selection, which implies
+ that invokation of <a href="./NcJet.html#NcJet:GetNtracks" title="Int_t NcJet::GetNtracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0) or overloads">GetNtracks</a>() just returns the total number of
+ tracks registered in this jet.
+
+ Note : In case certain selections are specified, this function
+        invokes <a href="./NcJet.html#NcJet:GetTracks" title="TObjArray* NcJet::GetTracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0,TObjArray* tracks=0) or overloads">GetTracks</a>(idmode,chmode,pcode) to determine the
+        number of tracks corresponding to the selections.
+        In case of many invokations of this memberfunction, invokation
+        of <a href="./NcJet.html#NcJet:GetTracks" title="TObjArray* NcJet::GetTracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0,TObjArray* tracks=0) or overloads">GetTracks</a>(idmode,chmode,pcode,tracks) with a user provided array <span class="string">"tracks"</span>
+        and subsequently invoking GetEntries() of the array might be slightly
+        faster.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcJet:GetNtracks@1" href="src/NcJet.cxx.html#wWcFYB">GetNtracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Provide the number of tracks with the specified name.
+ If name=<span class="string">"*"</span> all tracks will be provided, irrespective of the value of <span class="string">"mode"</span>.
+
+ mode = 0 : The provided name should exactly match the trackname
+        1 : The provided name should be part of the trackname
+
+ The default value is mode=0.
+
+ Note :
+
+ In case of many invokations of this memberfunction, invokation
+ of <a href="./NcJet.html#NcJet:GetTracks" title="TObjArray* NcJet::GetTracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0,TObjArray* tracks=0) or overloads">GetTracks</a>(name,mode,tracks) with a user provided array <span class="string">"tracks"</span>
+ and subsequently invoking GetEntries() of the array might be slightly
+ faster.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetEnergy" href="src/NcJet.cxx.html#yfETfD">GetEnergy</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Return the total energy of the jet.
+ By default the energy is returned in the units as it was stored in the jet
+ structure. However, the user can select a different energy unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV, so specification
+ of scale=0.001 will provide the energy in MeV.
+ The error can be obtained by invoking <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>() after
+ invokation of <a href="./NcJet.html#NcJet:GetEnergy" title="Double_t NcJet::GetEnergy(Float_t scale=-1)">GetEnergy</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetMomentum" href="src/NcJet.cxx.html#ri.EYB">GetMomentum</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Return the value of the total jet 3-momentum
+ By default the momentum is returned in the units as it was stored in the jet
+ structure. However, the user can select a different momentum unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV/c, so specification
+ of scale=0.001 will provide the momentum in MeV/c.
+ The error can be obtained by invoking <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>() after
+ invokation of <a href="./NcJet.html#NcJet:GetMomentum" title="Double_t NcJet::GetMomentum(Float_t scale=-1)">GetMomentum</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="NcJet:Get3Momentum" href="src/NcJet.cxx.html#W73wQ">Get3Momentum</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1) const</span><br />
+<div class="funccomm"><pre> Return the the total jet 3-momentum
+ By default the components of the 3-momentum are returned in the units
+ as they were stored in the jet structure.
+ However, the user can select a different momentum unit scale for the
+ components by specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV/c, so specification
+ of scale=0.001 will provide the 3-momentum in MeV/c.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetInvmass" href="src/NcJet.cxx.html#OctspB">GetInvmass</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Return the invariant mass of the jet.
+ By default the mass is returned in the units as it was stored in the jet
+ structure. However, the user can select a different mass unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV/c**2, so specification
+ of scale=0.001 will provide the invariant mass in MeV/c**2.
+ The error can be obtained by invoking <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>() after
+ invokation of <a href="./NcJet.html#NcJet:GetInvmass" title="Double_t NcJet::GetInvmass(Float_t scale=-1)">GetInvmass</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcJet:GetCharge" href="src/NcJet.cxx.html#Az28S">GetCharge</a>() const</span><br />
+<div class="funccomm"><pre> Return the total charge of the jet
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcTrack.html">NcTrack</a>* <a class="funcname" name="NcJet:GetTrack" href="src/NcJet.cxx.html#VGXo0">GetTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Return the i-th track of this jet
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcTrack.html">NcTrack</a>* <a class="funcname" name="NcJet:GetIdTrack" href="src/NcJet.cxx.html#LiD6O">GetIdTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
+<div class="funccomm"><pre> Return the track with user identifier <span class="string">"id"</span> of this jet
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJet:GetTracks" href="src/NcJet.cxx.html#XupKO">GetTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0, TObjArray* tracks = 0)</span><br />
+<div class="funccomm"><pre> Provide references to user selected tracks based on the idmode, chmode
+ and pcode selections as specified by the user.
+
+ The following selection combinations are available :
+
+ idmode = -1 ==&gt; Select tracks with negative user identifier <span class="string">"id"</span>
+           0 ==&gt; No selection on user identifier
+           1 ==&gt; Select tracks with positive user identifier <span class="string">"id"</span>
+
+ chmode = -1 ==&gt; Select tracks with negative charge
+           0 ==&gt; Select neutral tracks
+           1 ==&gt; Select tracks with positive charge
+           2 ==&gt; No selection on charge
+           3 ==&gt; Select all charged tracks
+
+ pcode  =  0 ==&gt; No selection on particle code
+           X ==&gt; Select tracks with particle code +X or -X
+                 This allows selection of both particles and anti-particles
+                 in case of PDG particle codes.
+                 Selection of either particles or anti-particles can be
+                 obtained in combination with the <span class="string">"chmode"</span> selector.
+
+ Examples :
+
+ idmode=-1 chmode=0 pcode=0   : Selection of all neutral tracks with negative id.
+ idmode=0  chmode=2 pcode=211 : Selection of all charged pions (PDG convention).
+ idmode=0  chmode=1 pcode=321 : Selection of all positive kaons (PDG convention).
+
+ The default values are idmode=0 chmode=2 pcode=0 (i.e. no selections applied) and tracks=0.
+
+ Notes :
+
+ 1) In case the user has labeled simulated tracks with negative id and
+    reconstructed tracks with positive id, this memberfunction provides
+    easy access to either all simulated or reconstructed tracks.
+ 2) Subsequent invokations of this memberfunction with e.g. chmode=-1 and chmode=1
+    provides a convenient way to investigate particle pairs with opposite charge
+    (e.g. for invariant mass analysis).
+ 3) In case tracks=0 the selected track pointers are returned via a multi-purpose array,
+    which will be overwritten by subsequent selections (not restricted to track selections).
+    It is recommended to provide a user defined array via the argument <span class="string">"tracks"</span>
+    to omit the danger of overwriting the selection and to allow to use the selected track list
+    amongst other selections.
+    In case a user defined array <span class="string">"tracks"</span> is provided, this memberfunction returns 0 for the
+    return argument.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJet:GetTracks@1" href="src/NcJet.cxx.html#JB0ImE">GetTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TObjArray* tracks = 0)</span><br />
+<div class="funccomm"><pre> Provide references to all tracks with the specified name.
+ If name=<span class="string">"*"</span> all tracks will be provided, irrespective of the value of <span class="string">"mode"</span>.
+
+ mode = 0 : The provided name should exactly match the trackname
+        1 : The provided name should be part of the trackname
+
+ The default values are mode=0 and tracks=0.
+
+ Notes :
+
+ 1) In case the user has labeled reconstructed tracks with the name of
+    the applied reconstruction algorithm, this memberfunction provides
+    easy access to all tracks reconstructed by a certain method.
+ 2) In case tracks=0 the selected track pointers are returned via a multi-purpose array,
+    which will be overwritten by subsequent selections (not restricted to track selections).
+    It is recommended to provide a user defined array via the argument <span class="string">"tracks"</span>
+    to omit the danger of overwriting the selection and to allow to use the selected track list
+    amongst other selections.
+    In case a user defined array <span class="string">"tracks"</span> is provided, this memberfunction returns 0 for the
+    return argument.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:RemoveTrack" href="src/NcJet.cxx.html#nTc9z">RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t)</span><br />
+<div class="funccomm"><pre> Remove the track with the specified reference.
+ In case t=0 no action will be taken.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:RemoveTracks@1" href="src/NcJet.cxx.html#FDimAB">RemoveTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Remove all tracks with the specified name.
+ If name=<span class="string">"*"</span> all tracks will be removed, irrespective of the value of <span class="string">"mode"</span>.
+
+ mode = 0 : The provided name should exactly match the trackname
+        1 : The provided name should be part of the trackname
+
+ The default value is mode=0.
+
+ Note :
+
+ In case the user has labeled reconstructed tracks with the name of
+ the applied reconstruction algorithm, this memberfunction provides
+ easy removal of all tracks reconstructed by a certain method.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:RemoveTracks" href="src/NcJet.cxx.html#orNThE">RemoveTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> chmode = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> pcode = 0)</span><br />
+<div class="funccomm"><pre> Remove user selected tracks based on the idmode, chmode and pcode
+ selections as specified by the user.
+ For defintions of these selections see the corresponding <a href="./NcJet.html#NcJet:GetTracks" title="TObjArray* NcJet::GetTracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0,TObjArray* tracks=0) or overloads">GetTracks</a>()
+ memberfunction.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:ReplaceTrack" href="src/NcJet.cxx.html#o3TBUE">ReplaceTrack</a>(<a href="./NcTrack.html">NcTrack</a>* told, <a href="./NcTrack.html">NcTrack</a>* tnew)</span><br />
+<div class="funccomm"><pre> Replace the existing track <span class="string">"told"</span> with the <span class="string">"tnew"</span> one.
+ In case told=0 or tnew=0 no action will be taken.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:RemoveTrack@1" href="src/NcJet.cxx.html#IjmjEC">RemoveTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to remove a track from the jet.
+ In case t=0 no action will be taken.
+
+ The input argument <span class="string">"compress"</span> allows to select whether or not the storage
+ array will be compressed after each track removal.
+ Since the storage array dimension (and number of stored tracks) will change
+ after each track removal with compression, it is advised to remove tracks
+ without compression when invoked from within a loop and compress the array
+ (and update the <a href="./NcJet.html#NcJet:fNtrk" title="Int_t NcJet::fNtrk">fNtrk</a> counter) after all tracks have been removed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:ShowTracks" href="src/NcJet.cxx.html#a87nPD">ShowTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</span><br />
+<div class="funccomm"><pre> Provide an overview of the available tracks.
+ The argument mode determines the amount of information as follows :
+ mode = 0 ==&gt; Only printout of the number of tracks
+        1 ==&gt; Provide a listing with 1 line of info for each track
+        2 ==&gt; Provide full listing of all primary tracks
+        3 ==&gt; Provide full listing of all primary and secondary tracks.
+
+ The default is mode=1.
+
+ The arguments <span class="string">"f"</span> and <span class="string">"u"</span> have the same meaning as in the memberfunction <a href="./NcJet.html#NcJet:Data" title="void NcJet::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>().
+
+ In case the user provides the array <span class="string">"tracks"</span> with selected track pointers, all tracks
+ from that user array will be shown.
+ In case tracks=0, all the available tracks will be shown.
+
+ The default is tracks=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetPt" href="src/NcJet.cxx.html#Qlb9LE">GetPt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide the transverse momentum value w.r.t. z-axis.
+ By default the value is returned in the units as it was stored in the jet
+ structure. However, the user can select a different momentum unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV/c, so specification
+ of scale=0.001 will provide the transverse momentum in MeV/c.
+ The error on the value can be obtained by <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./NcJet.html#NcJet:GetPt" title="Double_t NcJet::GetPt(Float_t scale=-1)">GetPt</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetPl" href="src/NcJet.cxx.html#cWq_LE">GetPl</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide the longitudinal momentum value w.r.t. z-axis.
+ By default the value is returned in the units as it was stored in the jet
+ structure. However, the user can select a different momentum unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV/c, so specification
+ of scale=0.001 will provide the longitudinal momentum in MeV/c.
+ Note : the returned value can also be negative.
+ The error on the value can be obtained by <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./NcJet.html#NcJet:GetPl" title="Double_t NcJet::GetPl(Float_t scale=-1)">GetPl</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetEt" href="src/NcJet.cxx.html#sCO9LE">GetEt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide transverse energy value w.r.t. z-axis.
+ By default the value is returned in the units as it was stored in the jet
+ structure. However, the user can select a different energy unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV, so specification
+ of scale=0.001 will provide the transverse energy in MeV.
+ The error on the value can be obtained by <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./NcJet.html#NcJet:GetEt" title="Double_t NcJet::GetEt(Float_t scale=-1)">GetEt</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetEl" href="src/NcJet.cxx.html#E0c_LE">GetEl</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide longitudinal energy value w.r.t. z-axis.
+ By default the value is returned in the units as it was stored in the jet
+ structure. However, the user can select a different energy unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV, so specification
+ of scale=0.001 will provide the longitudinal energy in MeV.
+ Note : the returned value can also be negative.
+ The error on the value can be obtained by <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./NcJet.html#NcJet:GetEl" title="Double_t NcJet::GetEl(Float_t scale=-1)">GetEl</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetMt" href="src/NcJet.cxx.html#kME9LE">GetMt</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide transverse mass value w.r.t. z-axis.
+ By default the value is returned in the units as it was stored in the jet
+ structure. However, the user can select a different energy unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to GeV, so specification
+ of scale=0.001 will provide the transverse mass in MeV.
+ The error on the value can be obtained by <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./NcJet.html#NcJet:GetMt" title="Double_t NcJet::GetMt(Float_t scale=-1)">GetMt</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetRapidity" href="src/NcJet.cxx.html#kw1fxC">GetRapidity</a>()</span><br />
+<div class="funccomm"><pre> Provide rapidity value w.r.t. z-axis.
+ The error on the value can be obtained by <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>()
+ after invokation of <a href="./NcJet.html#NcJet:GetRapidity" title="Double_t NcJet::GetRapidity()">GetRapidity</a>().
+ Note : Also <a href="./Nc4Vector.html#Nc4Vector:GetPseudoRapidity" title="Double_t Nc4Vector::GetPseudoRapidity()">GetPseudoRapidity</a>() is available since this class is
+        derived from <a href="./Nc4Vector.html">Nc4Vector</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:SetTrackCopy" href="src/NcJet.cxx.html#eUmqT">SetTrackCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funccomm"><pre> (De)activate the creation of private copies of the added tracks.
+ j=0 ==&gt; No private copies are made; pointers of original tracks are stored.
+ j=1 ==&gt; Private copies of the tracks are made and these pointers are stored.
+
+ Note : Once the storage contains pointer(s) to <a href="./NcTrack.html">NcTrack</a>(s) one cannot
+        change the TrackCopy mode anymore.
+        To change the TrackCopy mode for an existing <a href="./NcJet.html">NcJet</a> containing
+        tracks one first has to invoke <a href="./NcJet.html#NcJet:Reset" title="void NcJet::Reset()">Reset</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcJet:GetTrackCopy" href="src/NcJet.cxx.html#K0JPME">GetTrackCopy</a>() const</span><br />
+<div class="funccomm"><pre> Provide value of the TrackCopy mode.
+ 0 ==&gt; No private copies are made; pointers of original tracks are stored.
+ 1 ==&gt; Private copies of the tracks are made and these pointers are stored.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:SetId" href="src/NcJet.cxx.html#gM7amC">SetId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id)</span><br />
+<div class="funccomm"><pre> Set a user defined identifier for this jet.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcJet:GetId" href="src/NcJet.cxx.html#vb0us">GetId</a>() const</span><br />
+<div class="funccomm"><pre> Provide the user defined identifier of this jet.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:SetReferencePoint" href="src/NcJet.cxx.html#jU83BB">SetReferencePoint</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p)</span><br />
+<div class="funccomm"><pre> Store the position of the jet reference-point.
+ The reference-point of a jet provides a means to define a generic
+ space-time location for the jet as a whole.
+ This doesn't have to be necessarily the location where all the constituent
+ tracks originate (e.g. a bundle of parallel tracks doesn't have such
+ a location). As such the meaning of this reference-point is different from
+ a normal vertex position and allows to provide complimentary information.
+ This reference point is the preferable point to start e.g. extrapolations
+ and investigate coincidences in space and/or time.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcPosition.html">NcPosition</a>* <a class="funcname" name="NcJet:GetReferencePoint" href="src/NcJet.cxx.html#pj.77B">GetReferencePoint</a>()</span><br />
+<div class="funccomm"><pre> Provide the position of the jet reference-point.
+ The reference-point of a jet provides a means to define a generic
+ space-time location for the jet as a whole.
+ This doesn't have to be necessarily the location where all the constituent
+ tracks originate (e.g. a bundle of parallel tracks doesn't have such
+ a location). As such the meaning of this reference-point is different from
+ a normal vertex position and allows to provide complimentary information.
+ This reference point is the preferable point to start e.g. extrapolations
+ and investigate coincidences in space and/or time.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJet:SortTracks" href="src/NcJet.cxx.html#OKPXnB">SortTracks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* tracks = 0, TObjArray* ordered = 0)</span><br />
+<div class="funccomm"><pre> Order the references to an array of tracks by looping over the input array <span class="string">"tracks"</span>
+ and checking the value of a certain observable.
+ The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
+ or as a returned pointer.
+ In case tracks=0 (default), the registered tracks of the current jet are used.
+ Note that the original track array is not modified.
+ Via the <span class="string">"mode"</span> argument the user can specify the observable to be checked upon
+ and specify whether sorting should be performed in decreasing order (mode&lt;0)
+ or in increasing order (mode&gt;0).
+
+ The convention for the observable selection is the following :
+ mode : 1 ==&gt; Number of signals associated to the track
+        2 ==&gt; Track energy
+        3 ==&gt; Track momentum
+        4 ==&gt; Mass of the track
+        5 ==&gt; Transverse momentum of the track
+        6 ==&gt; Longitudinal momentum of the track
+        7 ==&gt; Transverse energy of the track
+        8 ==&gt; Longitudinal energy of the track
+        9 ==&gt; Transverse mass of the track
+       10 ==&gt; Track rapidity
+       11 ==&gt; Pseudo-rapidity of the track
+       12 ==&gt; Charge of the track
+       13 ==&gt; Probability of the track hypothesis
+
+ The default values are :  mode=-1, tracks=0 and ordered=0.
+
+ Note :
+
+ In case ordered=0 the ordered track pointers are returned via a multi-purpose array,
+ which may be overwritten by other memberfunctions (not restricted to track ordering).
+ It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
+ the danger of overwriting (or being overwritten by) other selections and to allow to use
+ the ordered track list amongst other selections.
+ In case a user defined array <span class="string">"ordered"</span> is provided, this memberfunction returns 0 for the
+ return argument.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetDistance" href="src/NcJet.cxx.html#OPna5B">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>* p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide distance of the current jet to the position p.
+ The error on the result can be obtained as usual by invoking
+ <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>() afterwards.
+
+ By default the distance will be provided in the metric unit scale of
+ the <a href="./NcPosition.html">NcPosition</a> p.
+ However, the user can select a different metric unit scale by
+ specification of the scale parameter.
+ The convention is that scale=1 corresponds to meter, so specification
+ of scale=0.01 will provide the distance in cm.
+ As such it is possible to obtain a correctly computed distance even in case
+ the jet parameters have a different unit scale.
+ However, it is recommended to work always with one single unit scale.
+
+ Note : In case of incomplete information, a distance value of -1 is
+        returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetDistance@2" href="src/NcJet.cxx.html#p7pi5E">GetDistance</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide distance of the current jet to the track t.
+ The error on the result can be obtained as usual by invoking
+ <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>() afterwards.
+
+ By default the distance will be provided in the metric unit scale of
+ the current jet.
+ However, the user can specify a required metric unit scale by specification
+ of the scale parameter.
+ The convention is that scale=1 corresponds to meter, so specification
+ of scale=0.01 will provide the distance in cm.
+ As such it is possible to obtain a correctly computed distance even in case
+ the jet and track parameters have a different unit scale.
+ However, it is recommended to work always with one single unit scale.
+
+ Note : In case of incomplete information, a distance value of -1 is
+        returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetDistance@4" href="src/NcJet.cxx.html#YIJCIB">GetDistance</a>(<a href="./NcJet.html">NcJet</a>* j, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funccomm"><pre> Provide distance of the current jet to the jet j.
+ The error on the result can be obtained as usual by invoking
+ <a href="./Nc4Vector.html#Nc4Vector:GetResultError" title="Double_t Nc4Vector::GetResultError()">GetResultError</a>() afterwards.
+
+ By default the distance will be provided in the metric unit scale of
+ the current jet.
+ This implies that the results of j1.<a href="./NcJet.html#NcJet:GetDistance" title="Double_t NcJet::GetDistance(NcPosition* p,Float_t scale=-1) or overloads">GetDistance</a>(j2) and j2.<a href="./NcJet.html#NcJet:GetDistance" title="Double_t NcJet::GetDistance(NcPosition* p,Float_t scale=-1) or overloads">GetDistance</a>(j1)
+ may be numerically different in case j1 and j2 have different metric units.
+ However, the user can specify a required metric unit scale by specification
+ of the scale parameter.
+ The convention is that scale=1 corresponds to meter, so specification
+ of scale=0.01 will provide the distance in cm.
+ As such it is possible to obtain a correctly computed distance even in case
+ the jet parameters have a different unit scale.
+ However, it is recommended to work always with one single unit scale.
+
+ Note : In case of incomplete information, a distance value of -1 is
+        returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcJet:GetNsignals" href="src/NcJet.cxx.html#sFkMTC">GetNsignals</a>(TString classname = <span class="string">"TObject"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0) const</span><br />
+<div class="funccomm"><pre> Provide the number of signals (derived) of the specified class that are
+ associated to the jet tracks.
+ Multiple occurrences of the same signal are only counted once.
+
+ par = 0 ==&gt; The signal itself has to be (derived) of the specified class
+       1 ==&gt; The parent device of the signal has to be (derived) of the specified class
+       2 ==&gt; The signal or the parent device has to be (derived) of the specified class
+
+ The default is classname=<span class="string">"TObject"</span> and par=0, which implies that in case no
+ argument is provided the number of all associated signals is returned.
+ This is backward compatible with the previous implementation of this member function.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJet:GetSignals" href="src/NcJet.cxx.html#HGTloC">GetSignals</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0, TObjArray* signals = 0)</span><br />
+<div class="funccomm"><pre> Provide references to the signals (derived) of the specified class that are
+ associated to the jet tracks.
+ Multiple occurrences of the same signal will only appear once.
+
+ par = 0 ==&gt; The signal itself has to be (derived) of the specified class
+       1 ==&gt; The parent device of the signal has to be (derived) of the specified class
+       2 ==&gt; The signal or the parent device has to be (derived) of the specified class
+
+ The default is par=0.
+
+ Note :
+
+ In case signals=0 the selected signal pointers are returned via a multi-purpose array,
+ which will be overwritten by subsequent selections (not restricted to signal selections).
+ It is recommended to provide a user defined array via the argument <span class="string">"signals"</span>
+ to omit the danger of overwriting the selection and to allow to use the selected signal list
+ amongst other selections.
+ In case a user defined array <span class="string">"signals"</span> is provided, this memberfunction returns 0 for the
+ return argument.
+
+ The default is signals=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:ShowSignals" href="src/NcJet.cxx.html#dXzXDC">ShowSignals</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Show all signals (derived) from the specified class that are associated to the jet tracks.
+
+ par  = 0 ==&gt; The signal itself has to be (derived) of the specified class
+        1 ==&gt; The parent device of the signal has to be (derived) of the specified class
+        2 ==&gt; The signal or the parent device has to be (derived) of the specified class
+
+ mode = 0 ==&gt; Only the number of signals will be provided.
+        1 ==&gt; Full listing of all the signals will be provided.
+        2 ==&gt; Same as mode=1 but with additional location info of the owning device.
+
+ Default values are par=0 and mode=1.
+
+ The arguments <span class="string">"f"</span> and <span class="string">"u"</span> have the same meaning as in the memberfunction <a href="./NcJet.html#NcJet:Data" title="void NcJet::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetSignalValue" href="src/NcJet.cxx.html#hiwPoC">GetSignalValue</a>(TString classname, TString varname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 2)</span><br />
+<div class="funccomm"><pre> Provide the total sum of the value of variable <span class="string">"varname"</span> of all the
+ signals (derived) from the specified class that are associated to the jet tracks.
+
+ par  = 0 ==&gt; The signal itself has to be (derived) of the specified class
+        1 ==&gt; The parent device of the signal has to be (derived) of the specified class
+        2 ==&gt; The signal or the parent device has to be (derived) of the specified class
+
+ The default is par=2.
+
+ The argument <span class="string">"mode"</span> has the same meaning as in the memberfunction GetSignal()
+ of the class <a href="./NcSignal.html">NcSignal</a>.
+ Also here the default value is mode=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:SetEscale" href="src/NcJet.cxx.html#oiu8.B">SetEscale</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> scale)</span><br />
+<div class="funccomm"><pre> Indicate the energy/momentum scale as used by the user.
+ The convention is that scale=1 indicates values in units
+ of GeV, GeV/c or GeV/c**2.
+ So, in case one decides to store values in units of MeV, MeV/c or MeV/c**2
+ the scale indicator should be set to scale=0.001.
+
+ By default scale=1 is set in the constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcJet:GetEscale" href="src/NcJet.cxx.html#DTyRr">GetEscale</a>() const</span><br />
+<div class="funccomm"><pre> Provide the energy/momentum scale as used by the user.
+ The convention is that scale=1 indicates values in units
+ of GeV, GeV/c or GeV/c**2.
+ So, a value of scale=0.001 indicates that energy/momentum values are
+ stored in units of MeV, MeV/c or MeV/c**2.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcJet:Clone" href="src/NcJet.cxx.html#Jp64R">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
+ This memberfunction enables automatic creation of new objects of the
+ correct type depending on the object type, a feature which may be very useful
+ for containers when adding objects in case the container owns the objects.
+ This feature allows e.g. <a href="./NcVertex.html">NcVertex</a> to store either <a href="./NcJet.html">NcJet</a> objects or
+ objects derived from <a href="./NcJet.html">NcJet</a> via the AddJet memberfunction, provided
+ these derived classes also have a proper <a href="./NcJet.html#NcJet:Clone" title="TObject* NcJet::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:AddTrack" href="src/NcJet.h.html#hSSnf">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t)</span><br />
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJet:AddTrack@1" href="src/NcJet.h.html#pzBWI">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./NcJet.html#NcJet:AddTrack" title="void NcJet::AddTrack(NcTrack&amp; t) or overloads">AddTrack</a>(*t); }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetDistance" href="src/NcJet.h.html#vF4s2C">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>* p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetDistance@1" href="src/NcJet.h.html#Nb3ZJB">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./NcJet.html#NcJet:GetDistance" title="Double_t NcJet::GetDistance(NcPosition* p,Float_t scale=-1) or overloads">GetDistance</a>(&amp;p,scale); }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcJet:GetDistance@2" href="src/NcJet.h.html#G5VqBD">GetDistance</a>(<a href="./NcTrack.html">NcTrack</a>* t, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:21 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

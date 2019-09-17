@@ -1,0 +1,527 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:11 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Nc3Vector</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class Nc3Vector','','Nc3Vector.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/Nc3Vector.h.html">header file</a>
+<a class="descrheadentry" href="src/Nc3Vector.cxx.html">source file</a>
+
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#Nc3Vector:description">class description</a> 
+<a class="descrheadentry" href="#Nc3Vector:Function_Members">function members</a>
+<a class="descrheadentry" href="#Nc3Vector:Data_Members">data members</a>
+<a class="descrheadentry" href="#Nc3Vector:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">Nc3Vector</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="Nc3Vector:description"></a>class Nc3Vector</h1>
+<div class="classdescr">
+<pre>
+ <a href="./Nc3Vector.html#Nc3Vector:Class" title="TClass* Nc3Vector::Class()">Class</a> <a href="./Nc3Vector.html">Nc3Vector</a>
+ Handling of 3-vectors in various reference frames.
+
+ This class is meant to serve as a base class for NCFS (derived) objects
+ that have 3-dimensional vector characteristics.
+ Error propagation is performed automatically.
+
+ Note :
+
+ Vectors (v), Errors (e), reference frames (f) and angular units (u)
+ are specified via
+ <a href="./Nc3Vector.html#Nc3Vector:SetVector" title="void Nc3Vector::SetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v,TString f,TString u)
+ <a href="./Nc3Vector.html#Nc3Vector:SetErrors" title="void Nc3Vector::SetErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e,TString f,TString u)
+ under the following conventions :
+
+ f=<span class="string">"car"</span> ==&gt; v in Cartesian coordinates   (x,y,z)
+ f=<span class="string">"sph"</span> ==&gt; v in Spherical coordinates   (r,theta,phi)
+ f=<span class="string">"cyl"</span> ==&gt; v in Cylindrical coordinates (rho,phi,z)
+
+ u=<span class="string">"rad"</span> ==&gt; angles in radians
+ u=<span class="string">"deg"</span> ==&gt; angles in degrees
+
+ The <span class="string">"f"</span> and <span class="string">"u"</span> facilities only serve as a convenient user interface.
+ Internally the actual storage of the various components is performed
+ in a unique way. This allows setting/retrieval of vector components in a
+ user selected frame/unit convention at any time.
+
+ Example :
+
+
+ <a href="./Nc3Vector.html">Nc3Vector</a> a;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> v[3]={-1,25,7};
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> e[3]={0.03,0.5,0.21};
+ a.<a href="./Nc3Vector.html#Nc3Vector:SetVector" title="void Nc3Vector::SetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetVector</a>(v,<span class="string">"car"</span>);
+ a.<a href="./Nc3Vector.html#Nc3Vector:SetErrors" title="void Nc3Vector::SetErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">SetErrors</a>(e,<span class="string">"car"</span>);
+ a.<a href="./Nc3Vector.html#Nc3Vector:Data" title="void Nc3Vector::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> vec[3];
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> err[3];
+ a.<a href="./Nc3Vector.html#Nc3Vector:GetVector" title="void Nc3Vector::GetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">GetVector</a>(vec,<span class="string">"sph"</span>,<span class="string">"deg"</span>);
+ a.<a href="./Nc3Vector.html#Nc3Vector:GetErrors" title="void Nc3Vector::GetErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">GetErrors</a>(vec,<span class="string">"sph"</span>,<span class="string">"deg"</span>);
+
+ <a href="./Nc3Vector.html">Nc3Vector</a> b;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> v2[3]={6,-18,33};
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> e2[3]={0.19,0.45,0.93};
+ b.<a href="./Nc3Vector.html#Nc3Vector:SetVector" title="void Nc3Vector::SetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetVector</a>(v2,<span class="string">"car"</span>);
+ b.<a href="./Nc3Vector.html#Nc3Vector:SetErrors" title="void Nc3Vector::SetErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">SetErrors</a>(e2,<span class="string">"car"</span>);
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> dotpro=a.<a href="./Nc3Vector.html#Nc3Vector:Dot" title="Double_t Nc3Vector::Dot(Nc3Vector&amp; q)">Dot</a>(b);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> doterror=a.<a href="./Nc3Vector.html#Nc3Vector:GetResultError" title="Double_t Nc3Vector::GetResultError()">GetResultError</a>();
+
+ <a href="./Nc3Vector.html">Nc3Vector</a> c=a.<a href="./Nc3Vector.html#Nc3Vector:Cross" title="Nc3Vector Nc3Vector::Cross(Nc3Vector&amp; q)">Cross</a>(b);
+ c.<a href="./Nc3Vector.html#Nc3Vector:Data" title="void Nc3Vector::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>(<span class="string">"sph"</span>);
+ c.<a href="./Nc3Vector.html#Nc3Vector:GetVector" title="void Nc3Vector::GetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">GetVector</a>(vec,<span class="string">"cyl"</span>);
+ c.<a href="./Nc3Vector.html#Nc3Vector:GetErrors" title="void Nc3Vector::GetErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">GetErrors</a>(err,<span class="string">"cyl"</span>);
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> norm=c.<a href="./Nc3Vector.html#Nc3Vector:GetNorm" title="Double_t Nc3Vector::GetNorm()">GetNorm</a>();
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> normerror=c.<a href="./Nc3Vector.html#Nc3Vector:GetResultError" title="Double_t Nc3Vector::GetResultError()">GetResultError</a>();
+
+ c=a+b;
+ c=a-b;
+ c=a*5;
+
+--- Author: Nick van Eijndhoven 30-mar-1999 Utrecht University
+- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="Nc3Vector:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Nc3Vector">Nc3Vector</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Nc3Vector@1">Nc3Vector</a>(<span class="keyword">const</span> <a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#Nc3Vector:_Nc3Vector">~Nc3Vector</a>()</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#Nc3Vector:Class">Class</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Cross">Cross</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Data">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Dot">Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetErrors">GetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetErrors@1">GetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetNorm">GetNorm</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetOpeningAngle">GetOpeningAngle</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetPrimed">GetPrimed</a>(TRotMatrix* m) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetPseudoRapidity">GetPseudoRapidity</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetResultError">GetResultError</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetUnprimed">GetUnprimed</a>(TRotMatrix* m) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetVecLong">GetVecLong</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetVector">GetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetVector@1">GetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetVecTrans">GetVecTrans</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:GetX">GetX</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:HasErrors">HasErrors</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:HasVector">HasVector</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#Nc3Vector:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Load">Load</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator*">operator*</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator*_">operator*=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator+">operator+</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator+_">operator+=</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator-">operator-</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator-_">operator-=</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator/">operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator/_">operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator_">operator=</a>(<span class="keyword">const</span> <a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetErrors">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetErrors@2">SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetErrors@1">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetVector">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetVector@2">SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetVector@1">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetZero">SetZero</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="Nc3Vector:Data_Members"></a>Data Members</h2>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a name="Nc3Vector:fDresult"></a>fDresult</td><td class="datadesc">! Error on scalar result (e.g. norm or dotproduct)</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="Nc3Vector:fNv"></a>fNv</td><td class="datadesc">The number of components of the array fV</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a>*</td><td class="dataname"><a name="Nc3Vector:fV"></a>fV</td><td class="datadesc">[fNv] Vector in spherical (and errors in Cartesian) coordinates</td></tr>
+
+</table></div>
+</div>
+<h2><a id="Nc3Vector:Class_Charts"></a>Class Charts</h2>
+<map name="MapNc3Vector_Inh" id="MapNc3Vector_Inh">
+<area shape="rect" id="node3" href="./Nc3VectorObj.html" title="Nc3VectorObj" alt="" coords="101,43,167,57"/>
+<area shape="rect" id="node4" href="./NcPosition.html" title="NcPosition" alt="" coords="101,57,167,70"/>
+<area shape="rect" id="node5" href="./NcSignal.html" title="NcSignal" alt="" coords="201,37,267,50"/>
+<area shape="rect" id="node6" href="./NcVertex.html" title="NcVertex" alt="" coords="201,57,267,70"/>
+<area shape="rect" id="node7" href="./NcPositionObj.html" title="NcPositionObj" alt="" coords="201,70,267,83"/>
+<area shape="rect" id="node8" href="./NcDevice.html" title="NcDevice" alt="" coords="301,20,367,34"/>
+<area shape="rect" id="node9" href="./NcEvent.html" title="NcEvent" alt="" coords="301,60,367,73"/>
+<area shape="rect" id="node10" href="./NcCalcluster.html" title="NcCalcluster" alt="" coords="301,34,367,47"/>
+<area shape="rect" id="node11" href="./NcCalmodule.html" title="NcCalmodule" alt="" coords="301,47,367,60"/>
+<area shape="rect" id="node12" href="./IceGOM.html" title="IceGOM" alt="" coords="401,7,467,20"/>
+<area shape="rect" id="node13" href="./IceEvent.html" title="IceEvent" alt="" coords="401,60,467,73"/>
+<area shape="rect" id="node14" href="./NcCalorimeter.html" title="NcCalorimeter" alt="" coords="401,20,467,34"/>
+<area shape="rect" id="node15" href="./NcVeto.html" title="NcVeto" alt="" coords="401,34,467,47"/>
+<area shape="rect" id="node16" href="./IceAOM.html" title="IceAOM" alt="" coords="501,1,567,14"/>
+<area shape="rect" id="node17" href="./IceDOM.html" title="IceDOM" alt="" coords="501,14,567,27"/>
+<area shape="rect" id="node18" href="./IceIDOM.html" title="IceIDOM" alt="" coords="601,7,667,20"/>
+<area shape="rect" id="node19" href="./IceTDOM.html" title="IceTDOM" alt="" coords="601,20,667,34"/>
+<area shape="rect" id="node20" href="./IceDCDOM.html" title="IceDCDOM" alt="" coords="700,1,767,14"/>
+<area shape="rect" id="node21" href="./IceICDOM.html" title="IceICDOM" alt="" coords="700,14,767,27"/>
+</map>
+<map name="MapNc3Vector_Lib" id="MapNc3Vector_Lib">
+<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
+</map>
+<div class="tabs">
+<a id="imgNc3Vector_Inh" class="tabsel" href="inh/Nc3Vector_Inh.png" onclick="javascript:return SetImg('Charts','inh/Nc3Vector_Inh.png');">Inheritance</a>
+<a id="imgNc3Vector_InhMem" class="tab" href="inhmem/Nc3Vector_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/Nc3Vector_InhMem.png');">Inherited Members</a>
+<a id="imgNc3Vector_Incl" class="tab" href="incl/Nc3Vector_Incl.png" onclick="javascript:return SetImg('Charts','incl/Nc3Vector_Incl.png');">Includes</a>
+<a id="imgNc3Vector_Lib" class="tab" href="lib/Nc3Vector_Lib.png" onclick="javascript:return SetImg('Charts','lib/Nc3Vector_Lib.png');">Libraries</a><br/>
+</div><div class="classcharts"><div class="classchartswidth"></div>
+<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNc3Vector_Inh" src="inh/Nc3Vector_Inh.png"/></div>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="Nc3Vector:Nc3Vector" href="src/Nc3Vector.cxx.html#OLR7q">Nc3Vector</a>()</span><br />
+<div class="funccomm"><pre> Creation of an <a href="./Nc3Vector.html">Nc3Vector</a> object and initialisation of parameters
+ All attributes initialised to 0
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="Nc3Vector:_Nc3Vector" href="src/Nc3Vector.cxx.html#seBPoB">~Nc3Vector</a>()</span><br />
+<div class="funccomm"><pre> Destructor to delete dynamically allocated memory
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="Nc3Vector:Nc3Vector@1" href="src/Nc3Vector.cxx.html#cZtYRB">Nc3Vector</a>(<span class="keyword">const</span> <a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</span><br />
+<div class="funccomm"><pre> Copy constructor
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a>&amp; <a class="funcname" name="Nc3Vector:operator_" href="src/Nc3Vector.cxx.html#InaXME">operator=</a>(<span class="keyword">const</span> <a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Set the current vector equal to vector q.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:Load" href="src/Nc3Vector.cxx.html#zLGaEC">Load</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> <a href="./Nc3Vector.html#Nc3Vector:Load" title="void Nc3Vector::Load(Nc3Vector&amp; q)">Load</a> all attributes of the input <a href="./Nc3Vector.html">Nc3Vector</a> into this <a href="./Nc3Vector.html">Nc3Vector</a> object.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:SetZero" href="src/Nc3Vector.cxx.html#X8npBC">SetZero</a>()</span><br />
+<div class="funccomm"><pre> (Re)set all attributes to zero.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:SetVector" href="src/Nc3Vector.cxx.html#Za2j2C">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store vector according to reference frame f.
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:SetVector@1" href="src/Nc3Vector.cxx.html#GeKLtD">SetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v1, <a href="./ListOfTypes.html#Double_t">Double_t</a> v2, <a href="./ListOfTypes.html#Double_t">Double_t</a> v3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store vector according to reference frame f.
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:GetVector" href="src/Nc3Vector.cxx.html#J627xC">GetVector</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* v, TString f, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funccomm"><pre> Provide vector according to reference frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:SetVector@2" href="src/Nc3Vector.cxx.html#LUnaF">SetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store vector according to reference frame f.
+ Only vector components will be stored, no errors.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:GetVector@1" href="src/Nc3Vector.cxx.html#xitZDC">GetVector</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* v, TString f, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funccomm"><pre> Provide vector according to reference frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:SetErrors" href="src/Nc3Vector.cxx.html#eNXkAE">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store errors according to reference frame f.
+
+ Note : The errors can only be set after the vector components have
+        been specified via the <a href="./Nc3Vector.html#Nc3Vector:SetVector" title="void Nc3Vector::SetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetVector</a> memberfunction.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ The error on scalar results is reset to 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:SetErrors@1" href="src/Nc3Vector.cxx.html#uSWrk">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store errors according to reference frame f.
+
+ Note : The errors can only be set after the vector components have
+        been specified via the <a href="./Nc3Vector.html#Nc3Vector:SetVector" title="void Nc3Vector::SetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetVector</a> memberfunction.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ The error on scalar results is reset to 0
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:GetErrors" href="src/Nc3Vector.cxx.html#BmukZ">GetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funccomm"><pre> Provide errors according to reference frame f.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:SetErrors@2" href="src/Nc3Vector.cxx.html#YIQQ5B">SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Store errors according to reference frame f.
+
+ Note : The errors can only be set after the vector components have
+        been specified via the <a href="./Nc3Vector.html#Nc3Vector:SetVector" title="void Nc3Vector::SetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">SetVector</a> memberfunction.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ The error on scalar results is reset to 0
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:GetErrors@1" href="src/Nc3Vector.cxx.html#JHPugD">GetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funccomm"><pre> Provide errors according to reference frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:Data" href="src/Nc3Vector.cxx.html#fCq9WE">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funccomm"><pre> Print vector components according to reference frame f
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The defaults are f=<span class="string">"car"</span> and  u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="Nc3Vector:HasVector" href="src/Nc3Vector.cxx.html#m8QdE">HasVector</a>() const</span><br />
+<div class="funccomm"><pre> Check whether the vector components have been set.
+ In case the vector components have been set, the value 1 is returned.
+ Otherwise, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="Nc3Vector:HasErrors" href="src/Nc3Vector.cxx.html#qhbenC">HasErrors</a>() const</span><br />
+<div class="funccomm"><pre> Check whether the errors on the vector components have been set.
+ In case the errors have been set, the value 1 is returned.
+ Otherwise, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc3Vector:GetNorm" href="src/Nc3Vector.cxx.html#O3Ie5E">GetNorm</a>()</span><br />
+<div class="funccomm"><pre> Provide the norm of the current vector
+ The error on the scalar result (norm) is updated accordingly
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc3Vector:GetPseudoRapidity" href="src/Nc3Vector.cxx.html#sFQHyD">GetPseudoRapidity</a>()</span><br />
+<div class="funccomm"><pre> Provide the pseudo-rapidity w.r.t. the z-axis.
+ In other words : eta=-log(tan(theta/2))
+ The error on the scalar result (pseudo-rap.) is updated accordingly
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc3Vector:Dot" href="src/Nc3Vector.cxx.html#DPoj9C">Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Provide the dot product of the current vector with vector q
+ The error on the scalar result (dotproduct) is updated accordingly
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc3Vector:GetResultError" href="src/Nc3Vector.cxx.html#YtvbnD">GetResultError</a>() const</span><br />
+<div class="funccomm"><pre> Provide the error on the result of an operation yielding a scalar
+ E.g. <a href="./Nc3Vector.html#Nc3Vector:GetNorm" title="Double_t Nc3Vector::GetNorm()">GetNorm</a>() or <a href="./Nc3Vector.html#Nc3Vector:Dot" title="Double_t Nc3Vector::Dot(Nc3Vector&amp; q)">Dot</a>()
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:Cross" href="src/Nc3Vector.cxx.html#xGKOPB">Cross</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) const</span><br />
+<div class="funccomm"><pre> Provide the cross product of the current vector with vector q
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:operator+" href="src/Nc3Vector.cxx.html#aVjmSE">operator+</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) const</span><br />
+<div class="funccomm"><pre> Add vector q to the current vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:operator-" href="src/Nc3Vector.cxx.html#OVjmSE">operator-</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) const</span><br />
+<div class="funccomm"><pre> Subtract vector q from the current vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:operator*" href="src/Nc3Vector.cxx.html#FsXdVC">operator*</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s) const</span><br />
+<div class="funccomm"><pre> Multiply the current vector with a scalar s.
+ Error propagation is performed automatically.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:operator/" href="src/Nc3Vector.cxx.html#dO1.y">operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s) const</span><br />
+<div class="funccomm"><pre> Divide the current vector by a scalar s
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a>&amp; <a class="funcname" name="Nc3Vector:operator+_" href="src/Nc3Vector.cxx.html#MDLMpB">operator+=</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Add vector q to the current vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a>&amp; <a class="funcname" name="Nc3Vector:operator-_" href="src/Nc3Vector.cxx.html#sDLMpB">operator-=</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</span><br />
+<div class="funccomm"><pre> Subtract vector q from the current vector
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a>&amp; <a class="funcname" name="Nc3Vector:operator*_" href="src/Nc3Vector.cxx.html#O92kCE">operator*=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</span><br />
+<div class="funccomm"><pre> Multiply the current vector with a scalar s
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a>&amp; <a class="funcname" name="Nc3Vector:operator/_" href="src/Nc3Vector.cxx.html#oaZClB">operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</span><br />
+<div class="funccomm"><pre> Divide the current vector by a scalar s
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:GetVecTrans" href="src/Nc3Vector.cxx.html#rWrbvB">GetVecTrans</a>() const</span><br />
+<div class="funccomm"><pre> Provide the transverse vector w.r.t. z-axis.
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:GetVecLong" href="src/Nc3Vector.cxx.html#BxmLhC">GetVecLong</a>() const</span><br />
+<div class="funccomm"><pre> Provide the longitudinal vector w.r.t. z-axis.
+ Error propagation is performed automatically
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:GetPrimed" href="src/Nc3Vector.cxx.html#EvLhTE">GetPrimed</a>(TRotMatrix* m) const</span><br />
+<div class="funccomm"><pre> Provide vector components (and errors) in a rotated frame.
+ The orientation of the rotated frame is described by the TRotMatrix
+ input argument.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="Nc3Vector:GetUnprimed" href="src/Nc3Vector.cxx.html#WS5fC">GetUnprimed</a>(TRotMatrix* m) const</span><br />
+<div class="funccomm"><pre> Provide original vector components (and errors) from the rotated ones.
+ The orientation of the rotated frame is described by the TRotMatrix
+ input argument.
+ So, this is the inverse of the <a href="./Nc3Vector.html#Nc3Vector:GetPrimed" title="Nc3Vector Nc3Vector::GetPrimed(TRotMatrix* m)">GetPrimed</a>() memberfunction.
+ This memberfunction makes use of the fact that the inverse of a certain
+ TRotMatrix is given by its transposed matrix.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc3Vector:GetX" href="src/Nc3Vector.cxx.html#FYDnoB">GetX</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide i-th vector component according to reference frame f.
+
+ The string argument <span class="string">"u"</span> allows to choose between different angular units
+ in case e.g. a spherical frame is selected.
+ u = <span class="string">"rad"</span> : angles provided in radians
+     <span class="string">"deg"</span> : angles provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+
+ The vector components are addressed via the generic x1,x2,x3 notation.
+ So, i=1 denotes the first vector component.
+ The error on the selected component can be obtained via the
+ usual <a href="./Nc3Vector.html#Nc3Vector:GetResultError" title="Double_t Nc3Vector::GetResultError()">GetResultError</a>() facility.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc3Vector:GetOpeningAngle" href="src/Nc3Vector.cxx.html#sFfQsB">GetOpeningAngle</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funccomm"><pre> Provide the opening angle with vector q.
+ The string argument <span class="string">"u"</span> allows to choose between different output units.
+ u = <span class="string">"rad"</span> : opening angle provided in radians
+     <span class="string">"deg"</span> : opening angle provided in degrees
+
+ The default is u=<span class="string">"rad"</span>.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Sep 15 08:01:12 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,977 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Sep 15 08:01:20 2019            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcHelix - source file</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="../ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="../ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<div id="codeAndLineNumbers"><pre class="listing">
+<span class="comment">/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ *                                                                             *
+ * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
+ *          The Inter-university Institute for High Energies (IIHE).           *                 
+ *                    Website : http://www.iihe.ac.be                          *
+ *            Contact : Nick van Eijndhoven (nickve.nl@gmail.com)              *
+ *                                                                             *
+ * Contributors are mentioned in the code where appropriate.                   *
+ *                                                                             * 
+ * No part of this software may be used, copied, modified or distributed       *
+ * by any means nor transmitted or translated into machine language for        *
+ * commercial purposes without written permission by the IIHE representative.  *
+ * Permission to use the software strictly for non-commercial purposes         *
+ * is hereby granted without fee, provided that the above copyright notice     *
+ * appears in all copies and that both the copyright notice and this           *
+ * permission notice appear in the supporting documentation.                   *
+ * This software is provided <span class="string">"as is"</span> without express or implied warranty.      *
+ * The authors make no claims that this software is free of error, or is       *
+ * consistent with any particular standard of merchantability, or that it      *
+ * will meet your requirements for any particular application, other than      *
+ * indicated in the corresponding documentation.                               *
+ * This software should not be relied on for solving a problem whose           *
+ * incorrect solution could result in injury to a person or loss of property.  *
+ * If you do use this software in such a manner, it is at your own risk.       *
+ * The authors disclaim all liability for direct or consequential damage       *
+ * resulting from your use of this software.                                   *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */</span>
+
+<span class="comment">// $Id: <a href="../NcHelix.html">NcHelix</a>.cxx 5 2010-03-19 10:10:02Z nickve $</span>
+
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<span class="comment">// <a href="../NcHelix.html#NcHelix:Class" title="TClass* NcHelix::Class()">Class</a> <a href="../NcHelix.html">NcHelix</a></span>
+<span class="comment">// Representation and extrapolation of NcTracks in a magnetic field.</span>
+<span class="comment">//</span>
+<span class="comment">// This class is meant to provide a means to display and extrapolate</span>
+<span class="comment">// <a href="../NcTrack.html">NcTrack</a> objects in the presence of a constant homogeneous magnetic field. </span>
+<span class="comment">//</span>
+<span class="comment">// For track/event displays the line width, colour etc... can be set using the</span>
+<span class="comment">// standard facilities (see <a href="../#TAttLine:TAttLine" title="TAttLine TAttLine::TAttLine() or overloads">TAttLine</a>).</span>
+<span class="comment">// By default the linewith is set to 2 and the colour set to -1 in the constructor.</span>
+<span class="comment">// The latter results in an automatic colour coding according to the track charge</span>
+<span class="comment">// with the convention positive=red neutral=green negative=blue.</span>
+<span class="comment">//</span>
+<span class="comment">// To indicate the track starting point, the memberfunction <a href="../NcHelix.html#NcHelix:SetMarker" title="void NcHelix::SetMarker(Int_t marker=8,Float_t size=0.2,Int_t color=-1)">SetMarker</a>()</span>
+<span class="comment">// may be used.</span>
+<span class="comment">// By default no marker will be displayed. </span>
+<span class="comment">//</span>
+<span class="comment">// Examples :</span>
+<span class="comment">// ==========</span>
+<span class="comment">//</span>
+<span class="comment">// <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> and extrapolation of individual tracks </span>
+<span class="comment">// ----------------------------------------------</span>
+<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> vec[3];</span>
+<span class="comment">// <a href="../NcPosition.html">NcPosition</a> r1;</span>
+<span class="comment">// <a href="../Nc3Vector.html">Nc3Vector</a> p;</span>
+<span class="comment">// <a href="../NcTrack.html">NcTrack</a> t;</span>
+<span class="comment">//</span>
+<span class="comment">// vec[0]=0;</span>
+<span class="comment">// vec[1]=0;</span>
+<span class="comment">// vec[2]=0;</span>
+<span class="comment">// r1.SetVector(vec,<span class="string">"car"</span>);</span>
+<span class="comment">//</span>
+<span class="comment">// vec[0]=1;</span>
+<span class="comment">// vec[1]=0;</span>
+<span class="comment">// vec[2]=0.3;</span>
+<span class="comment">// p.SetVector(vec,<span class="string">"car"</span>);</span>
+<span class="comment">//</span>
+<span class="comment">// t.Set3Momentum(p);</span>
+<span class="comment">// t.SetBeginPoint(r1);</span>
+<span class="comment">// t.SetCharge(-1);</span>
+<span class="comment">// t.SetMass(0.139);</span>
+<span class="comment">//</span>
+<span class="comment">// // The magnetic field vector in Tesla</span>
+<span class="comment">// <a href="../Nc3Vector.html">Nc3Vector</a> b;</span>
+<span class="comment">// vec[0]=0;</span>
+<span class="comment">// vec[1]=0;</span>
+<span class="comment">// vec[2]=1;</span>
+<span class="comment">// b.SetVector(vec,<span class="string">"car"</span>);</span>
+<span class="comment">//</span>
+<span class="comment">// <a href="../NcHelix.html">NcHelix</a>* helix=new <a href="../NcHelix.html">NcHelix</a>();</span>
+<span class="comment">// helix-&gt;<a href="../NcHelix.html#NcHelix:SetB" title="void NcHelix::SetB(Nc3Vector&amp; b)">SetB</a>(b);</span>
+<span class="comment">// helix-&gt;<a href="../NcHelix.html#NcHelix:SetTofmax" title="void NcHelix::SetTofmax(Float_t tof)">SetTofmax</a>(1e-7);</span>
+<span class="comment">//</span>
+<span class="comment">// TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);</span>
+<span class="comment">// TView* view=new TView(1);</span>
+<span class="comment">// view-&gt;<a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);</span>
+<span class="comment">// view-&gt;ShowAxis();</span>
+<span class="comment">//</span>
+<span class="comment">// // Track displays </span>
+<span class="comment">// <a href="../ListOfTypes.html#Double_t">Double_t</a> range[2]={0,600};</span>
+<span class="comment">// helix-&gt;<a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(&amp;t,range,3);</span>
+<span class="comment">// t.SetCharge(-t.GetCharge());</span>
+<span class="comment">// helix-&gt;<a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(&amp;t);</span>
+<span class="comment">//</span>
+<span class="comment">// // Track extrapolation</span>
+<span class="comment">// <a href="../ListOfTypes.html#Double_t">Double_t</a> pars[3]={550,0.001,3};</span>
+<span class="comment">// <a href="../NcPosition.html">NcPosition</a>* rext=helix-&gt;<a href="../NcHelix.html#NcHelix:Extrapolate" title="NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars=0,Double_t scale=-1)">Extrapolate</a>(&amp;t,pars);</span>
+<span class="comment">// if (rext) rext-&gt;Data();</span>
+<span class="comment">// ======================================================================</span>
+<span class="comment">//</span>
+<span class="comment">// Online display of events generated via <a href="../NcCollider.html">NcCollider</a></span>
+<span class="comment">// -------------------------------------------------- </span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> nevents=5;   // Number of events to be generated</span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> jrun=1;      // The run number of this batch of generated events</span>
+<span class="comment">//</span>
+<span class="comment">// <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;</span>
+<span class="comment">// <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *** NcCollider run for "</span> &lt;&lt; nevents &lt;&lt; <span class="string">" events."</span> &lt;&lt; endl; </span>
+<span class="comment">// <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;</span>
+<span class="comment">//</span>
+<span class="comment">// <a href="../NcCollider.html">NcCollider</a>* gen=new <a href="../NcCollider.html">NcCollider</a>();</span>
+<span class="comment">//</span>
+<span class="comment">// gen-&gt;OpenFortranFile(6,<span class="string">"dump.log"</span>);</span>
+<span class="comment">//</span>
+<span class="comment">// gen-&gt;SetVertexMode(2);</span>
+<span class="comment">// gen-&gt;SetResolution(1e-4);</span>
+<span class="comment">//</span>
+<span class="comment">// gen-&gt;SetRunNumber(jrun);</span>
+<span class="comment">// gen-&gt;SetPrintFreq(1);</span>
+<span class="comment">//</span>
+<span class="comment">// gen-&gt;SetSpectatorPmin(0.01);</span>
+<span class="comment">//</span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> zp=1;</span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> ap=1;</span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> zt=2;</span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> at=4;</span>
+<span class="comment">//</span>
+<span class="comment">// gen-&gt;Init(<span class="string">"fixt"</span>,zp,ap,zt,at,158);</span>
+<span class="comment">//</span>
+<span class="comment">// <a href="../NcHelix.html">NcHelix</a>* helix=new <a href="../NcHelix.html">NcHelix</a>();</span>
+<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> vec[3]={0,2,0};</span>
+<span class="comment">// <a href="../Nc3Vector.html">Nc3Vector</a> b;</span>
+<span class="comment">// b.SetVector(vec,<span class="string">"car"</span>);</span>
+<span class="comment">// helix-&gt;<a href="../NcHelix.html#NcHelix:SetB" title="void NcHelix::SetB(Nc3Vector&amp; b)">SetB</a>(b);</span>
+<span class="comment">//</span>
+<span class="comment">// helix-&gt;<a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>(-1); // <a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a> display after each event</span>
+<span class="comment">//</span>
+<span class="comment">// TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);</span>
+<span class="comment">// TView* view=new TView(1);</span>
+<span class="comment">// view-&gt;<a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-200,-200,-200,200,200,200);</span>
+<span class="comment">// view-&gt;ShowAxis();</span>
+<span class="comment">//</span>
+<span class="comment">// // Prepare random number sequence for this run</span>
+<span class="comment">// // to obtain the number of participants for each event</span>
+<span class="comment">// <a href="../NcRandom.html">NcRandom</a> rndm(abs(jrun));</span>
+<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a>* rans=new <a href="../ListOfTypes.html#Float_t">Float_t</a>[nevents];</span>
+<span class="comment">// rndm.Uniform(rans,nevents,2,ap+at);</span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> npart=0;</span>
+<span class="comment">// <a href="../ListOfTypes.html#Int_t">Int_t</a> ntk=0;</span>
+<span class="comment">// for (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;nevents; i++)</span>
+<span class="comment">// {</span>
+<span class="comment">//  npart=rans[i];</span>
+<span class="comment">//  gen-&gt;MakeEvent(npart);</span>
+<span class="comment">//  <a href="../NcEvent.html">NcEvent</a>* evt=gen-&gt;GetEvent();</span>
+<span class="comment">//  if (evt)</span>
+<span class="comment">//  {</span>
+<span class="comment">//   helix-&gt;<a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(evt);</span>
+<span class="comment">//   c1-&gt;Update();</span>
+<span class="comment">//   gSystem-&gt;Sleep(5000); // Some delay to keep the display on screen</span>
+<span class="comment">//  }</span>
+<span class="comment">// }</span>
+<span class="comment">// ======================================================================</span>
+<span class="comment">//</span>
+<span class="comment">//--- Author: Nick van Eijndhoven 17-jun-2004 Utrecht University</span>
+<span class="comment">//- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS</span>
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+
+<span class="cpp">#include "<a href="../NcHelix.h">NcHelix.h</a>"</span>
+<span class="cpp">#include "Riostream.h"</span>
+ 
+ClassImp(<a href="../NcHelix.html">NcHelix</a>) <span class="comment">// <a href="../NcHelix.html#NcHelix:Class" title="TClass* NcHelix::Class()">Class</a> implementation to enable ROOT I/O</span>
+ 
+<a name="P7gtUD"></a><a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:NcHelix" title="NcHelix NcHelix::NcHelix() or overloads">NcHelix</a>() : <a href="../#THelix:THelix" title="THelix THelix::THelix() or overloads">THelix</a>()
+{
+<span class="comment">// Default constructor</span>
+ <a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>=0;
+ <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>=0;
+ <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>=0;
+ <a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>=1e-8;
+ <a href="../NcHelix.html#NcHelix:fMstyle" title="Int_t NcHelix::fMstyle">fMstyle</a>=-1;
+ <a href="../NcHelix.html#NcHelix:fMsize" title="Float_t NcHelix::fMsize">fMsize</a>=0;
+ <a href="../NcHelix.html#NcHelix:fMcol" title="Int_t NcHelix::fMcol">fMcol</a>=0;
+ <a href="../NcHelix.html#NcHelix:fEnduse" title="Int_t NcHelix::fEnduse">fEnduse</a>=1;
+
+ fLineWidth=2;
+ fLineColor=-1;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="fxz_9"></a><a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:_NcHelix" title="void NcHelix::~NcHelix()">~NcHelix</a>()
+{
+<span class="comment">// Destructor to delete dynamically allocated memory.</span>
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>)
+ {
+  <span class="keyword">delete</span> <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>;
+  <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>=0;
+ }
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>)
+ {
+  <span class="keyword">delete</span> <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>;
+  <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>=0;
+ }
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="HocgFB"></a><a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:NcHelix" title="NcHelix NcHelix::NcHelix() or overloads">NcHelix</a>(<span class="keyword">const</span> <a href="../NcHelix.html">NcHelix</a>&amp; h) : <a href="../#THelix:THelix" title="THelix THelix::THelix() or overloads">THelix</a>(h)
+{
+<span class="comment">// <a href="../#THelix:Copy" title="void THelix::Copy(TObject&amp; helix)">Copy</a> constructor</span>
+ <a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>=h.<a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>;
+ <a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>=h.<a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>;
+ <a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>=h.<a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>;
+ <a href="../NcHelix.html#NcHelix:fMstyle" title="Int_t NcHelix::fMstyle">fMstyle</a>=h.<a href="../NcHelix.html#NcHelix:fMstyle" title="Int_t NcHelix::fMstyle">fMstyle</a>;
+ <a href="../NcHelix.html#NcHelix:fMsize" title="Float_t NcHelix::fMsize">fMsize</a>=h.<a href="../NcHelix.html#NcHelix:fMsize" title="Float_t NcHelix::fMsize">fMsize</a>;
+ <a href="../NcHelix.html#NcHelix:fMcol" title="Int_t NcHelix::fMcol">fMcol</a>=h.<a href="../NcHelix.html#NcHelix:fMcol" title="Int_t NcHelix::fMcol">fMcol</a>;
+ <a href="../NcHelix.html#NcHelix:fEnduse" title="Int_t NcHelix::fEnduse">fEnduse</a>=h.<a href="../NcHelix.html#NcHelix:fEnduse" title="Int_t NcHelix::fEnduse">fEnduse</a>;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="h22hVB"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:SetB" title="void NcHelix::SetB(Nc3Vector&amp; b)">SetB</a>(<a href="../Nc3Vector.html">Nc3Vector</a>&amp; b)
+{
+<span class="comment">// Set the magnetic field vector in Tesla.</span>
+ <a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>=b;
+
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>.<a href="../Nc3Vector.html#Nc3Vector:GetNorm" title="Double_t Nc3Vector::GetNorm()">GetNorm</a>()&gt;0)
+ {
+  <a href="../ListOfTypes.html#Double_t">Double_t</a> axis[3];
+  <a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>.<a href="../Nc3Vector.html#Nc3Vector:GetVector" title="void Nc3Vector::GetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">GetVector</a>(axis,<span class="string">"car"</span>);
+  <a href="../#THelix:SetAxis" title="void THelix::SetAxis(Double_t* axis) or overloads">SetAxis</a>(axis);
+ }
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="grY0IB"></a><a href="../Nc3Vector.html">Nc3Vector</a>&amp; <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:GetB" title="Nc3Vector&amp; NcHelix::GetB()">GetB</a>()
+{
+<span class="comment">// Provide the magnetic field vector in Tesla.</span>
+ <span class="keyword">return</span> <a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="f_UwjE"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:SetTofmax" title="void NcHelix::SetTofmax(Float_t tof)">SetTofmax</a>(<a href="../ListOfTypes.html#Float_t">Float_t</a> tof)
+{
+<span class="comment">// Set the maximum time of flight for straight tracks in seconds.</span>
+<span class="comment">// This maximum tof will be used for drawing etc... in case no begin</span>
+<span class="comment">// and endpoints can be determined from the track info.</span>
+<span class="comment">// Notes :</span>
+<span class="comment">// -------</span>
+<span class="comment">// 1) In case the user specifies an explicit range, it will override</span>
+<span class="comment">//    the maximum tof limit.</span>
+<span class="comment">// 2) By default the tofmax is set to 10 ns in the <a href="../NcHelix.html">NcHelix</a> constructor.</span>
+ <a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>=tof;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="TiwSH"></a><a href="../ListOfTypes.html#Float_t">Float_t</a> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:GetTofmax" title="Float_t NcHelix::GetTofmax()">GetTofmax</a>() <span class="keyword">const</span>
+{
+<span class="comment">// Provide the maximum time of flight for straight tracks in seconds.</span>
+ <span class="keyword">return</span> <a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="DTvLiD"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:SetMarker" title="void NcHelix::SetMarker(Int_t marker=8,Float_t size=0.2,Int_t color=-1)">SetMarker</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> style,<a href="../ListOfTypes.html#Float_t">Float_t</a> size,<a href="../ListOfTypes.html#Int_t">Int_t</a> col)
+{
+<span class="comment">// Specify the marker (style, size and colour) to indicate the starting point</span>
+<span class="comment">// of a track in a display.</span>
+<span class="comment">// In case col&lt;0 the marker will have the same color as the track itself.</span>
+<span class="comment">// </span>
+<span class="comment">// Defaults are style=8, size=0.2 and col=-1.</span>
+ 
+ <a href="../NcHelix.html#NcHelix:fMstyle" title="Int_t NcHelix::fMstyle">fMstyle</a>=style;
+ <a href="../NcHelix.html#NcHelix:fMsize" title="Float_t NcHelix::fMsize">fMsize</a>=size;
+ <a href="../NcHelix.html#NcHelix:fMcol" title="Int_t NcHelix::fMcol">fMcol</a>=col;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="s85w1D"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:UseEndPoint" title="void NcHelix::UseEndPoint(Int_t mode=1)">UseEndPoint</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> mode)
+{
+<span class="comment">// Select usage of track endpoint in drawing and extrapolation.</span>
+<span class="comment">// This allows correct event displays even for very <a href="../ListOfTypes.html#long">long</a> tracks.</span>
+<span class="comment">//</span>
+<span class="comment">// mode = 0 : Do not use the track endpoint</span>
+<span class="comment">//        1 : Use the track endpoint</span>
+<span class="comment">// </span>
+<span class="comment">// The default value is mode=1 (which is also set in the constructor).</span>
+
+ <span class="keyword">if</span> (mode==0 || mode==1) <a href="../NcHelix.html#NcHelix:fEnduse" title="Int_t NcHelix::fEnduse">fEnduse</a>=mode; 
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="uXkTh"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:MakeCurve" title="void NcHelix::MakeCurve(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1)">MakeCurve</a>(<a href="../NcTrack.html">NcTrack</a>* t,<a href="../ListOfTypes.html#Double_t">Double_t</a>* range,<a href="../ListOfTypes.html#Int_t">Int_t</a> iaxis,<a href="../ListOfTypes.html#Double_t">Double_t</a> scale)
+{
+<span class="comment">// Make the helix curve for the specified <a href="../NcTrack.html">NcTrack</a>.</span>
+<span class="comment">// Detailed information of all the helix points can be obtained via the</span>
+<span class="comment">// <a href="../#TPolyLine3D:GetN" title="Int_t TPolyLine3D::GetN()">GetN</a>() and <a href="../#TPolyLine3D:GetP" title="Float_t* TPolyLine3D::GetP()">GetP</a>() memberfunctions of <a href="../#TPolyLine3D:TPolyLine3D" title="TPolyLine3D TPolyLine3D::TPolyLine3D() or overloads">TPolyLine3D</a>.</span>
+<span class="comment">// In case one wants to display or extrapolate an <a href="../NcTrack.html">NcTrack</a> it is preferable</span>
+<span class="comment">// to use the <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>() or <a href="../NcHelix.html#NcHelix:Extrapolate" title="NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars=0,Double_t scale=-1)">Extrapolate</a>() memberfunctions.</span>
+<span class="comment">// It is assumed that the track charge is stored in elementary units</span>
+<span class="comment">// (i.e. charge=1 for a proton).</span>
+<span class="comment">// The input argument <span class="string">"scale"</span> specifies the unit scale for the various</span>
+<span class="comment">// locations where scale=0.01 indicates unit scales in cm etc...</span>
+<span class="comment">// In case scale&lt;=0, the unit scale for locations is determined from the</span>
+<span class="comment">// begin, reference or endpoint of the track. If neither of these</span>
+<span class="comment">// positions is present, all locations are assumed to be given in meter.</span>
+<span class="comment">// The lower and upper bounds for the range are specified by range[0] and</span>
+<span class="comment">// range[1] and the argument <span class="string">"iaxis"</span> indicates along which axis this range</span>
+<span class="comment">// is specified.</span>
+<span class="comment">// The range can be specified either in the LAB frame or in the Helix frame.</span>
+<span class="comment">// The latter is the frame in which the Z axis points in the B direction.</span>
+<span class="comment">//</span>
+<span class="comment">// The conventions for the <span class="string">"iaxis"</span> argument are the following :</span>
+<span class="comment">// iaxis = 1 ==&gt; X axis in the LAB frame</span>
+<span class="comment">//         2 ==&gt; Y axis in the LAB frame</span>
+<span class="comment">//         3 ==&gt; Z axis in the LAB frame</span>
+<span class="comment">//        -1 ==&gt; X axis in the Helix frame</span>
+<span class="comment">//        -2 ==&gt; Y axis in the Helix frame</span>
+<span class="comment">//        -3 ==&gt; Z axis in the Helix frame</span>
+<span class="comment">//</span>
+<span class="comment">// In case range=0 the begin/end/reference points of the <a href="../NcTrack.html">NcTrack</a> and the</span>
+<span class="comment">// maximum time of flight (see the <a href="../NcHelix.html#NcHelix:SetTofmax" title="void NcHelix::SetTofmax(Float_t tof)">SetTofmax</a>() memberfunction) will be used</span>
+<span class="comment">// and an appropriate choice for the iaxis parameter will be made automatically</span>
+<span class="comment">// based on the track kinematics.</span>
+<span class="comment">// In case the reference point is not present, the begin or endpoint will be used</span>
+<span class="comment">// as reference point for the 3-momentum specification. If neither of these positions</span>
+<span class="comment">// is present, (0,0,0) will be taken as the reference point.</span>
+<span class="comment">// </span>
+<span class="comment">// The default values are range=0, iaxis=3 and scale=-1.</span>
+
+ <a href="../#TPolyLine3D:SetPolyLine" title="void TPolyLine3D::SetPolyLine(Int_t n,Option_t* option=&quot;&quot;) or overloads">SetPolyLine</a>(0); <span class="comment">// Reset the polyline data points</span>
+
+ <span class="keyword">if</span> (!t || (range &amp;&amp; !iaxis)) <span class="keyword">return</span>;
+
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> energy=t-&gt;GetEnergy(1); <span class="comment">// Track energy in GeV</span>
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> betanorm=t-&gt;GetBeta();
+
+ <span class="keyword">if</span> (energy&lt;=0 || betanorm&lt;=0) <span class="keyword">return</span>;
+
+ <a href="../NcPosition.html">NcPosition</a>* rbeg=t-&gt;GetBeginPoint();
+ <a href="../NcPosition.html">NcPosition</a>* rend=0;
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fEnduse" title="Int_t NcHelix::fEnduse">fEnduse</a>) rend=t-&gt;GetEndPoint();
+ <a href="../NcPosition.html">NcPosition</a>* rref=t-&gt;GetReferencePoint();
+
+ <span class="comment">// Magnetic field vector or default Z-direction</span>
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> bvec[3]={0,0,1};
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>.<a href="../Nc3Vector.html#Nc3Vector:GetNorm" title="Double_t Nc3Vector::GetNorm()">GetNorm</a>()&gt;0) <a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>.<a href="../Nc3Vector.html#Nc3Vector:GetVector" title="void Nc3Vector::GetVector(Double_t* v,TString f,TString u=&quot;rad&quot;) or overloads">GetVector</a>(bvec,<span class="string">"car"</span>);
+
+ <span class="comment">// The unit scale for locations if not specified by the user</span>
+ <span class="keyword">if</span> (scale&lt;=0)
+ {
+  scale=1; <span class="comment">// Set default to meter</span>
+  <span class="keyword">if</span> (rbeg)
+  {
+   scale=rbeg-&gt;GetUnitScale();
+  }
+  <span class="keyword">else</span> <span class="keyword">if</span> (rend)
+  {
+   scale=rend-&gt;GetUnitScale();
+  }
+  <span class="keyword">else</span> <span class="keyword">if</span> (rref)
+  {
+   scale=rref-&gt;GetUnitScale();
+  }
+ }
+
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> c=2.99792458e8/scale; <span class="comment">// Lightspeed in the selected unit scale</span>
+
+ <span class="comment">// The helix angular frequency</span>
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> w=9e7*(t-&gt;GetCharge()*<a href="../NcHelix.html#NcHelix:fB" title="Nc3Vector NcHelix::fB">fB</a>.<a href="../Nc3Vector.html#Nc3Vector:GetNorm" title="Double_t Nc3Vector::GetNorm()">GetNorm</a>())/energy;
+
+ <span class="comment">// The particle velocity in the LAB frame</span>
+ <a href="../Nc3Vector.html">Nc3Vector</a> beta=t-&gt;GetBetaVector();
+ <a href="../Nc3Vector.html">Nc3Vector</a> v=beta*c;
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> vel[3];
+ v.GetVector(vel,<span class="string">"car"</span>);
+
+ <span class="comment">// The particle velocity in the Helix frame</span>
+ <a href="../Nc3Vector.html">Nc3Vector</a> betaprim=beta.GetPrimed(fRotMat);
+ v=v.GetPrimed(fRotMat);
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> velprim[3];
+ v.GetVector(velprim,<span class="string">"car"</span>);
+
+ <span class="comment">// Check compatibility of velocity and range specification.</span>
+ <span class="keyword">if</span> (range)
+ {
+  <a href="../ListOfTypes.html#Double_t">Double_t</a> betavec[3];
+  <span class="keyword">if</span> (iaxis&gt;0) beta.GetVector(betavec,<span class="string">"car"</span>);
+  <span class="keyword">if</span> (iaxis&lt;0) betaprim.GetVector(betavec,<span class="string">"car"</span>);
+  <span class="keyword">if</span> (fabs(betavec[abs(iaxis)-1])/betanorm&lt;1e-10) <span class="keyword">return</span>;
+ }
+
+ <span class="comment">// The LAB location in which the velocity of the particle is defined</span>
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> loc[3]={0,0,0};
+ <a href="../Nc3Vector.html">Nc3Vector</a> rx;
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> scalex=-1;
+ <span class="keyword">if</span> (rref)
+ {
+  rx=(<a href="../Nc3Vector.html">Nc3Vector</a>)(*rref);
+  scalex=rref-&gt;GetUnitScale();
+ }
+ <span class="keyword">else</span> <span class="keyword">if</span> (rbeg)
+ {
+  rx=(<a href="../Nc3Vector.html">Nc3Vector</a>)(*rbeg);
+  scalex=rbeg-&gt;GetUnitScale();
+ }
+ <span class="keyword">else</span> <span class="keyword">if</span> (rend)
+ {
+  rx=(<a href="../Nc3Vector.html">Nc3Vector</a>)(*rend);
+  scalex=rend-&gt;GetUnitScale();
+ }
+
+ <span class="keyword">if</span> (scalex&gt;0 &amp;&amp; (scalex/scale&gt;1.1 || scale/scalex&gt;1.1)) rx*=scalex/scale;
+ rx.GetVector(loc,<span class="string">"car"</span>);
+
+ <span class="comment">// Initialisation of Helix kinematics</span>
+ <a href="../#THelix:SetHelix" title="void THelix::SetHelix(Double_t* xyz,Double_t* v,Double_t w,Double_t* range=0,EHelixRangeType type=kUnchanged,Double_t* axis=0)">SetHelix</a>(loc,vel,w,0,kUnchanged,bvec);
+
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> bend=0;
+ <span class="keyword">if</span> (fabs(w)&gt;0 &amp;&amp; fabs(fVt)&gt;0) bend=1;
+
+ <span class="comment">// Flight time boundaries.</span>
+ <span class="comment">// The time origin t=0 is chosen to indicate the position in which</span>
+ <span class="comment">// the particle velocity was defined.</span>
+ <span class="comment">// The total flight time is initialised to the (user specified) tofmax.</span>
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> tmin=0,tmax=0;
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> tof=<a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>;
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> dum=0;
+
+ <span class="comment">// The trajectory begin and end points</span>
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> vec1[3]={0,0,0};
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> vec2[3]={0,0,0};
+ <a href="../Nc3Vector.html">Nc3Vector</a> r1;
+ <a href="../Nc3Vector.html">Nc3Vector</a> r2;
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> scale1=1;
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> scale2=1;
+
+ <span class="keyword">if</span> (!bend)
+ {
+  <span class="comment">////////////////////////////////////////</span>
+  <span class="comment">// Treatment of straight trajectories //</span>
+  <span class="comment">////////////////////////////////////////</span>
+  <a href="../Nc3Vector.html">Nc3Vector</a> r;
+  <span class="keyword">if</span> (range) <span class="comment">// Specified range allows for exact flight time boundaries</span>
+  {
+   <span class="keyword">if</span> (iaxis&gt;0)
+   {
+    tmin=(range[0]-loc[iaxis-1])/vel[iaxis-1];
+    tmax=(range[1]-loc[iaxis-1])/vel[iaxis-1];
+   }
+   <span class="keyword">else</span>
+   {
+    loc[0]=fX0;
+    loc[1]=fY0;
+    loc[2]=fZ0;
+    tmin=(range[0]-loc[abs(iaxis)-1])/velprim[abs(iaxis)-1];
+    tmax=(range[1]-loc[abs(iaxis)-1])/velprim[abs(iaxis)-1];
+   }
+   <span class="keyword">if</span> (tmax&lt;tmin)
+   {
+    dum=tmin;
+    tmin=tmax;
+    tmax=dum;
+   }
+   <span class="comment">// Make the 'curve' in the LAB frame and exit.</span>
+   <span class="comment">// Use the parametrisation : r(t)=r0+t*v</span>
+   <span class="comment">// using the range based flight time boundaries.</span>
+   <span class="comment">// An additional point in the middle of the trajectory is</span>
+   <span class="comment">// generated in view of accuracy in the case of extrapolations.</span>
+   tof=tmax-tmin;
+   v=beta*c;
+   r1=rx;
+   r=v*tmin;
+   r1=r1+r;
+   r1.GetVector(vec1,<span class="string">"car"</span>);
+   <a href="../#TPolyLine3D:SetNextPoint" title="Int_t TPolyLine3D::SetNextPoint(Double_t x,Double_t y,Double_t z)">SetNextPoint</a>(<span class="keyword">float</span>(vec1[0]),<span class="keyword">float</span>(vec1[1]),<span class="keyword">float</span>(vec1[2]));
+   r=v*(tof/2.);
+   r2=r1+r;
+   r2.GetVector(vec2,<span class="string">"car"</span>);
+   <a href="../#TPolyLine3D:SetNextPoint" title="Int_t TPolyLine3D::SetNextPoint(Double_t x,Double_t y,Double_t z)">SetNextPoint</a>(<span class="keyword">float</span>(vec2[0]),<span class="keyword">float</span>(vec2[1]),<span class="keyword">float</span>(vec2[2]));
+   r=v*tof;
+   r2=r1+r;
+   r2.GetVector(vec2,<span class="string">"car"</span>);
+   <a href="../#TPolyLine3D:SetNextPoint" title="Int_t TPolyLine3D::SetNextPoint(Double_t x,Double_t y,Double_t z)">SetNextPoint</a>(<span class="keyword">float</span>(vec2[0]),<span class="keyword">float</span>(vec2[1]),<span class="keyword">float</span>(vec2[2]));
+  }
+  <span class="keyword">else</span> <span class="comment">// Automatic range determination</span>
+  {
+   <span class="comment">// Initially the point with Z=0 in the Helix frame is taken as a starting point.</span>
+   <span class="comment">// In case this point can't be reached, the point in which the particle velocity</span>
+   <span class="comment">// was defined is taken as the starting point.</span>
+   <span class="comment">// The endpoint is initially obtained by applying the tofmax from the start point.</span>
+   tmin=0;
+   <span class="keyword">if</span> (fabs(fVz)&gt;0) tmin=-fZ0/fVz;
+   v=beta*c;
+   r1=rx;
+   r=v*tmin;
+   r1=r1+r;
+
+   <span class="comment">// Override the initial begin and endpoint settings by the track data</span>
+   <span class="keyword">if</span> (rbeg)
+   {
+    r1=(<a href="../Nc3Vector.html">Nc3Vector</a>)(*rbeg); 
+    scale1=rbeg-&gt;GetUnitScale();
+    <span class="comment">// All coordinates in the selected unit scale</span>
+    <span class="keyword">if</span> (scale1/scale&gt;1.1 || scale/scale1&gt;1.1) r1*=scale1/scale;
+   }
+
+   r=v*<a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>;
+   r2=r1+r;
+   <span class="keyword">if</span> (rend)
+   {
+    r2=(<a href="../Nc3Vector.html">Nc3Vector</a>)(*rend); 
+    scale2=rend-&gt;GetUnitScale();
+    <span class="comment">// All coordinates in the selected unit scale</span>
+    <span class="keyword">if</span> (scale2/scale&gt;1.1 || scale/scale2&gt;1.1) r2*=scale2/scale;
+   }
+   
+   r1.GetVector(vec1,<span class="string">"car"</span>);
+   r2.GetVector(vec2,<span class="string">"car"</span>);
+
+   <span class="comment">// Make the 'curve' in the LAB frame and exit.</span>
+   <a href="../#TPolyLine3D:SetNextPoint" title="Int_t TPolyLine3D::SetNextPoint(Double_t x,Double_t y,Double_t z)">SetNextPoint</a>(<span class="keyword">float</span>(vec1[0]),<span class="keyword">float</span>(vec1[1]),<span class="keyword">float</span>(vec1[2]));
+   <a href="../#TPolyLine3D:SetNextPoint" title="Int_t TPolyLine3D::SetNextPoint(Double_t x,Double_t y,Double_t z)">SetNextPoint</a>(<span class="keyword">float</span>(vec2[0]),<span class="keyword">float</span>(vec2[1]),<span class="keyword">float</span>(vec2[2]));
+  }
+ }
+ <span class="keyword">else</span>
+ {
+  <span class="comment">//////////////////////////////////////</span>
+  <span class="comment">// Treatment of curved trajectories //</span>
+  <span class="comment">//////////////////////////////////////</span>
+
+  <span class="comment">// Initialisation of the flight time boundaries.</span>
+  <span class="comment">// Based on the constant motion of the particle along the Helix Z-axis,</span>
+  <span class="comment">// the parametrisation z(t)=z0+fVz*t in the Helix frame is used. </span>
+  <span class="comment">// If possible the point with Z=0 in the Helix frame is taken as a starting point.</span>
+  <span class="comment">// In case this point can't be reached, the point in which the particle velocity</span>
+  <span class="comment">// was defined is taken as the starting point.</span>
+  tmin=0;
+  <span class="keyword">if</span> (fabs(fVz)&gt;0) tmin=-fZ0/fVz;
+  tmax=tmin+<a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>;
+
+  <span class="keyword">if</span> (tmax&lt;tmin)
+  {
+   dum=tmin;
+   tmin=tmax;
+   tmax=dum;
+  }
+
+  <span class="comment">// Determination of the range in the helix frame</span>
+
+  <span class="keyword">if</span> (!range) <span class="comment">// Automatic range determination</span>
+  {
+   scale1=1;
+   scale2=1;
+   <span class="keyword">if</span> (rbeg)
+   {
+    r1=rbeg-&gt;GetPrimed(fRotMat);
+    scale1=rbeg-&gt;GetUnitScale();
+    <span class="comment">// All coordinates in the selected unit scale</span>
+    <span class="keyword">if</span> (scale1/scale&gt;1.1 || scale/scale1&gt;1.1) r1*=scale1/scale;
+    <span class="comment">// Re-calculate the tmin for this new starting point</span>
+    r1.GetVector(vec1,<span class="string">"car"</span>);
+    <span class="keyword">if</span> (fabs(fVz)&gt;0) tmin=(vec1[2]-fZ0)/fVz;
+    tmax=tmin+<a href="../NcHelix.html#NcHelix:fTofmax" title="Float_t NcHelix::fTofmax">fTofmax</a>;
+   }
+   <span class="keyword">if</span> (rend)
+   {
+    r2=rend-&gt;GetPrimed(fRotMat);
+    scale2=rend-&gt;GetUnitScale();
+    <span class="comment">// All coordinates in the selected unit scale</span>
+    <span class="keyword">if</span> (scale2/scale&gt;1.1 || scale/scale2&gt;1.1) r2*=scale2/scale;
+    r2.GetVector(vec2,<span class="string">"car"</span>);
+    <span class="keyword">if</span> (fabs(fVz)&gt;0) tmax=(vec2[2]-fZ0)/fVz;
+   }
+   <span class="comment">// Make the curve on basis of the flight time boundaries and exit</span>
+   <span class="keyword">if</span> (tmax&lt;tmin)
+   {
+    dum=tmin;
+    tmin=tmax;
+    tmax=dum;
+   }
+   <a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(tmin,tmax,kHelixT);
+  }
+  <span class="keyword">else</span> <span class="comment">// User explicitly specified range</span>
+  {
+   vec1[abs(iaxis)-1]=range[0];
+   vec2[abs(iaxis)-1]=range[1];
+   r1.SetVector(vec1,<span class="string">"car"</span>);
+   r2.SetVector(vec2,<span class="string">"car"</span>);
+   <span class="keyword">if</span> (iaxis&gt;0) <span class="comment">// Range specified in LAB frame</span>
+   {
+    r1=r1.GetPrimed(fRotMat);
+    r1.GetVector(vec1,<span class="string">"car"</span>);
+    r2=r2.GetPrimed(fRotMat);
+    r2.GetVector(vec2,<span class="string">"car"</span>);
+   } 
+   <span class="comment">// Determination of the axis component with the</span>
+   <span class="comment">// largest range difference</span>
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> dmax=0;
+   <a href="../ListOfTypes.html#Int_t">Int_t</a> imax=0;
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> test=0;
+   <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;3; i++)
+   {
+    test=fabs(vec1[i]-vec2[i]);
+    <span class="keyword">if</span> (test&gt;dmax)
+    {
+     dmax=test;
+     imax=i;
+    }
+   }
+
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> rmin=vec1[imax];
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> rmax=vec2[imax];
+   <span class="keyword">if</span> (rmax&lt;rmin)
+   {
+    dum=rmin;
+    rmin=rmax;
+    rmax=dum;
+   }
+
+   <span class="comment">// The kinematic range boundaries in the helix frame</span>
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> xmin=fX0-fVt/fW;
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> xmax=fX0+fVt/fW;
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> ymin=fY0-fVt/fW;
+   <a href="../ListOfTypes.html#Double_t">Double_t</a> ymax=fY0+fVt/fW;
+
+   <span class="keyword">if</span> (xmax&lt;xmin)
+   {
+    dum=xmin;
+    xmin=xmax;
+    xmax=dum;
+   }
+   <span class="keyword">if</span> (ymax&lt;ymin)
+   {
+    dum=ymin;
+    ymin=ymax;
+    ymax=dum;
+   }
+
+   <span class="comment">// Set the range for the helix</span>
+   <span class="keyword">if</span> (imax==2 &amp;&amp; dmax&gt;0) <a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(rmin,rmax,kHelixZ);
+   <span class="keyword">if</span> (imax==1)
+   {
+    <span class="comment">// Limit range to kinematic boundaries if needed</span>
+    <span class="keyword">if</span> (rmin&lt;=ymin) rmin=ymin+1e-6*dmax;
+    <span class="keyword">if</span> (rmax&gt;=ymax) rmax=ymax-1e-6*dmax;
+    <span class="keyword">if</span> (rmin&lt;rmax) <a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(rmin,rmax,kHelixY);
+   }
+   <span class="keyword">if</span> (imax==0)
+   {
+    <span class="comment">// Limit range to kinematic boundaries if needed</span>
+    <span class="keyword">if</span> (rmin&lt;=xmin) rmin=xmin+1e-6*dmax;
+    <span class="keyword">if</span> (rmax&gt;=xmax) rmax=xmax-1e-6*dmax;
+    <span class="keyword">if</span> (rmin&lt;rmax) <a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(rmin,rmax,kHelixX);
+   }
+  }
+ }
+ <span class="keyword">return</span>;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="MdgBzB"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(<a href="../NcTrack.html">NcTrack</a>* t,<a href="../ListOfTypes.html#Double_t">Double_t</a>* range,<a href="../ListOfTypes.html#Int_t">Int_t</a> iaxis,<a href="../ListOfTypes.html#Double_t">Double_t</a> scale)
+{
+<span class="comment">// <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> the helix curve of an <a href="../NcTrack.html">NcTrack</a>.</span>
+<span class="comment">// Various curves can be displayed together or individually; please refer to</span>
+<span class="comment">// the memberfunction <a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>() for further details.</span>
+<span class="comment">// It is assumed that the track charge is stored in elementary units</span>
+<span class="comment">// (i.e. charge=1 for a proton).</span>
+<span class="comment">// The input argument <span class="string">"scale"</span> specifies the unit scale for the various</span>
+<span class="comment">// locations where scale=0.01 indicates unit scales in cm etc...</span>
+<span class="comment">// In case scale&lt;=0, the unit scale for locations is determined from the</span>
+<span class="comment">// begin, reference or endpoint of the track. If neither of these</span>
+<span class="comment">// positions is present, all locations are assumed to be given in meter.</span>
+<span class="comment">// The lower and upper bounds for the range are specified by range[0] and</span>
+<span class="comment">// range[1] and the argument <span class="string">"iaxis"</span> indicates along which axis this range</span>
+<span class="comment">// is specified.</span>
+<span class="comment">// The range can be specified either in the LAB frame or in the Helix frame.</span>
+<span class="comment">// The latter is the frame in which the Z axis points in the B direction.</span>
+<span class="comment">//</span>
+<span class="comment">// The conventions for the <span class="string">"iaxis"</span> argument are the following :</span>
+<span class="comment">// iaxis = 1 ==&gt; X axis in the LAB frame</span>
+<span class="comment">//         2 ==&gt; Y axis in the LAB frame</span>
+<span class="comment">//         3 ==&gt; Z axis in the LAB frame</span>
+<span class="comment">//        -1 ==&gt; X axis in the Helix frame</span>
+<span class="comment">//        -2 ==&gt; Y axis in the Helix frame</span>
+<span class="comment">//        -3 ==&gt; Z axis in the Helix frame</span>
+<span class="comment">//</span>
+<span class="comment">// In case range=0 the begin/end/reference points of the <a href="../NcTrack.html">NcTrack</a> and the</span>
+<span class="comment">// maximum time of flight (see the <a href="../NcHelix.html#NcHelix:SetTofmax" title="void NcHelix::SetTofmax(Float_t tof)">SetTofmax</a>() memberfunction) will be used</span>
+<span class="comment">// and an appropriate choice for the iaxis parameter will be made automatically</span>
+<span class="comment">// based on the track kinematics.</span>
+<span class="comment">// In case the reference point is not present, the begin or endpoint will be used</span>
+<span class="comment">// as reference point for the 3-momentum specification. If neither of these positions</span>
+<span class="comment">// is present, (0,0,0) will be taken as the reference point.</span>
+<span class="comment">// </span>
+<span class="comment">// The default values are range=0, iaxis=3 and scale=-1.</span>
+<span class="comment">//</span>
+<span class="comment">// Note :</span>
+<span class="comment">// ------</span>
+<span class="comment">// Before any display activity, a TCanvas and a TView have to be initiated</span>
+<span class="comment">// first by the user like for instance</span>
+<span class="comment">// </span>
+<span class="comment">// TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);</span>
+<span class="comment">// TView* view=new TView(1);</span>
+<span class="comment">// view-&gt;<a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);</span>
+<span class="comment">// view-&gt;ShowAxis();</span>
+<span class="comment">//</span>
+<span class="comment">// The user can also use the 3D viewing facilities from the TCanvas menu</span>
+<span class="comment">// to open an appropriate view. </span>
+
+ <span class="keyword">if</span> (!t || (range &amp;&amp; !iaxis)) <span class="keyword">return</span>;
+
+ <a href="../NcHelix.html#NcHelix:MakeCurve" title="void NcHelix::MakeCurve(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1)">MakeCurve</a>(t,range,iaxis,scale);
+
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>&gt;0) <a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>(<a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>);
+
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> np=<a href="../#TPolyLine3D:GetLastPoint" title="Int_t TPolyLine3D::GetLastPoint()">GetLastPoint</a>()+1;
+ <span class="keyword">if</span> (!np) <span class="keyword">return</span>;
+
+ <a href="../ListOfTypes.html#Float_t">Float_t</a>* points=<a href="../#TPolyLine3D:GetP" title="Float_t* TPolyLine3D::GetP()">GetP</a>();
+ <a href="../#TPolyLine3D:TPolyLine3D" title="TPolyLine3D TPolyLine3D::TPolyLine3D() or overloads">TPolyLine3D</a>* curve=<span class="keyword">new</span> <a href="../#TPolyLine3D:TPolyLine3D" title="TPolyLine3D TPolyLine3D::TPolyLine3D() or overloads">TPolyLine3D</a>(np,points);
+
+ curve-&gt;<a href="../#TAttLine:SetLineWidth" title="void TAttLine::SetLineWidth(Width_t lwidth)">SetLineWidth</a>(fLineWidth);
+ <span class="keyword">if</span> (fLineColor&lt;0)
+ {
+  <a href="../ListOfTypes.html#Float_t">Float_t</a> q=t-&gt;GetCharge();
+  curve-&gt;<a href="../#TAttLine:SetLineColor" title="void TAttLine::SetLineColor(Color_t lcolor)">SetLineColor</a>(kGreen);
+  <span class="keyword">if</span> (q&gt;0) curve-&gt;<a href="../#TAttLine:SetLineColor" title="void TAttLine::SetLineColor(Color_t lcolor)">SetLineColor</a>(kRed);
+  <span class="keyword">if</span> (q&lt;0) curve-&gt;<a href="../#TAttLine:SetLineColor" title="void TAttLine::SetLineColor(Color_t lcolor)">SetLineColor</a>(kBlue);
+ }
+ <span class="keyword">else</span>
+ {
+  curve-&gt;<a href="../#TAttLine:SetLineColor" title="void TAttLine::SetLineColor(Color_t lcolor)">SetLineColor</a>(fLineColor);
+ }
+ curve-&gt;<a href="../#THelix:Draw" title="void THelix::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+
+ <span class="keyword">if</span> (!<a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>)
+ {
+  <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>=<span class="keyword">new</span> TObjArray();
+  <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>-&gt;SetOwner();
+ }
+ <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>-&gt;Add(curve);
+
+ <span class="comment">// <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> the marker for the track starting point</span>
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fMstyle" title="Int_t NcHelix::fMstyle">fMstyle</a>&gt;0)
+ {
+  TPolyMarker3D* m=<span class="keyword">new</span> TPolyMarker3D();
+  m-&gt;<a href="../#TPolyLine3D:SetPoint" title="void TPolyLine3D::SetPoint(Int_t point,Double_t x,Double_t y,Double_t z)">SetPoint</a>(0,points[0],points[1],points[2]);
+  m-&gt;SetMarkerStyle(<a href="../NcHelix.html#NcHelix:fMstyle" title="Int_t NcHelix::fMstyle">fMstyle</a>);
+  m-&gt;SetMarkerSize(<a href="../NcHelix.html#NcHelix:fMsize" title="Float_t NcHelix::fMsize">fMsize</a>);
+  <a href="../ListOfTypes.html#Int_t">Int_t</a> col=curve-&gt;<a href="../#TAttLine:GetLineColor" title="Color_t TAttLine::GetLineColor()">GetLineColor</a>();
+  <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fMcol" title="Int_t NcHelix::fMcol">fMcol</a>&gt;0) col=<a href="../NcHelix.html#NcHelix:fMcol" title="Int_t NcHelix::fMcol">fMcol</a>;
+  m-&gt;SetMarkerColor(col);
+  m-&gt;<a href="../#THelix:Draw" title="void THelix::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+  <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>-&gt;Add(m);
+ }
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="kuHy_D"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> mode)
+{
+<span class="comment">// <a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a> the display screen before showing the next curve.</span>
+<span class="comment">//</span>
+<span class="comment">// mode = 0 : refreshing fully under user control.</span>
+<span class="comment">//        1 : the display screen will be refreshed automatically</span>
+<span class="comment">//            at each individual track display.</span>
+<span class="comment">//       -1 : the display screen will be refreshed automatically</span>
+<span class="comment">//            at each event display.</span>
+<span class="comment">//</span>
+<span class="comment">// The default is mode=0.</span>
+
+ <span class="keyword">if</span> (abs(mode)&lt;2) <a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>=mode;
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>) <a href="../NcHelix.html#NcHelix:fCurves" title="TObjArray* NcHelix::fCurves">fCurves</a>-&gt;<a href="../#TObject:Delete" title="void TObject::Delete(Option_t* option=&quot;&quot;)">Delete</a>();
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="nA8BmE"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(<a href="../NcEvent.html">NcEvent</a>* evt,<a href="../ListOfTypes.html#Double_t">Double_t</a>* range,<a href="../ListOfTypes.html#Int_t">Int_t</a> iaxis,<a href="../ListOfTypes.html#Double_t">Double_t</a> scale)
+{
+<span class="comment">// <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> the helix curves of all tracks of the specified event.</span>
+<span class="comment">// Various events can be displayed together or individually; please refer to</span>
+<span class="comment">// the memberfunction <a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>() for further details.</span>
+<span class="comment">// Please refer to the track display memberfunction for further details</span>
+<span class="comment">// on the input arguments.</span>
+<span class="comment">// </span>
+<span class="comment">// The default values are range=0, iaxis=3 and scale=-1.</span>
+<span class="comment">//</span>
+<span class="comment">// Note :</span>
+<span class="comment">// ------</span>
+<span class="comment">// Before any display activity, a TCanvas and a TView have to be initiated</span>
+<span class="comment">// first by the user like for instance</span>
+<span class="comment">// </span>
+<span class="comment">// TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);</span>
+<span class="comment">// TView* view=new TView(1);</span>
+<span class="comment">// view-&gt;<a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);</span>
+<span class="comment">// view-&gt;ShowAxis();</span>
+<span class="comment">//</span>
+<span class="comment">// The user can also use the 3D viewing facilities from the TCanvas menu</span>
+<span class="comment">// to open an appropriate view. </span>
+
+ <span class="keyword">if</span> (!evt) <span class="keyword">return</span>;
+
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>&lt;0) <a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>(<a href="../NcHelix.html#NcHelix:fRefresh" title="Int_t NcHelix::fRefresh">fRefresh</a>);
+
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> ntk=evt-&gt;GetNtracks();
+ <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> jtk=1; jtk&lt;=ntk; jtk++)
+ {
+  <a href="../NcTrack.html">NcTrack</a>* tx=evt-&gt;GetTrack(jtk);
+  <span class="keyword">if</span> (tx) <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(tx,range,iaxis,scale);
+ }
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="yGosH"></a><span class="keyword">void</span> <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(TObjArray* arr,<a href="../ListOfTypes.html#Double_t">Double_t</a>* range,<a href="../ListOfTypes.html#Int_t">Int_t</a> iaxis,<a href="../ListOfTypes.html#Double_t">Double_t</a> scale)
+{
+<span class="comment">// <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a> the helix curves of all tracks in the specified array.</span>
+<span class="comment">// A convenient way to obtain an array with selected tracks from e.g. an <a href="../NcEvent.html">NcEvent</a></span>
+<span class="comment">// is to make use of its GetTracks() selection facility.</span>
+<span class="comment">// Various arrays can be displayed together or individually; please refer to</span>
+<span class="comment">// the memberfunction <a href="../NcHelix.html#NcHelix:Refresh" title="void NcHelix::Refresh(Int_t mode=0)">Refresh</a>() for further details.</span>
+<span class="comment">// Please refer to the track display memberfunction for further details</span>
+<span class="comment">// on the input arguments.</span>
+<span class="comment">// </span>
+<span class="comment">// The default values are range=0, iaxis=3 and scale=-1.</span>
+<span class="comment">//</span>
+<span class="comment">// Note :</span>
+<span class="comment">// ------</span>
+<span class="comment">// Before any display activity, a TCanvas and a TView have to be initiated</span>
+<span class="comment">// first by the user like for instance</span>
+<span class="comment">// </span>
+<span class="comment">// TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);</span>
+<span class="comment">// TView* view=new TView(1);</span>
+<span class="comment">// view-&gt;<a href="../#THelix:SetRange" title="void THelix::SetRange(Double_t* range,EHelixRangeType rtype=kHelixZ) or overloads">SetRange</a>(-1000,-1000,-1000,1000,1000,1000);</span>
+<span class="comment">// view-&gt;ShowAxis();</span>
+<span class="comment">//</span>
+<span class="comment">// The user can also use the 3D viewing facilities from the TCanvas menu</span>
+<span class="comment">// to open an appropriate view. </span>
+
+ <span class="keyword">if</span> (!arr) <span class="keyword">return</span>;
+
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> ntk=arr-&gt;GetEntries();
+ <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> jtk=0; jtk&lt;ntk; jtk++)
+ {
+  <a href="../#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj=arr-&gt;At(jtk);
+  <span class="keyword">if</span> (!obj) <span class="keyword">continue</span>;
+  <span class="keyword">if</span> (!(obj-&gt;<a href="../#TObject:InheritsFrom" title="Bool_t TObject::InheritsFrom(const char* classname) or overloads">InheritsFrom</a>(<span class="string">"NcTrack"</span>))) <span class="keyword">continue</span>;
+  <a href="../NcTrack.html">NcTrack</a>* tx=(<a href="../NcTrack.html">NcTrack</a>*)obj;
+  <a href="../NcHelix.html#NcHelix:Display" title="void NcHelix::Display(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1) or overloads">Display</a>(tx,range,iaxis,scale);
+ }
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+<a name="u0ZgvE"></a><a href="../NcPosition.html">NcPosition</a>* <a href="../NcHelix.html">NcHelix</a>::<a href="../NcHelix.html#NcHelix:Extrapolate" title="NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars=0,Double_t scale=-1)">Extrapolate</a>(<a href="../NcTrack.html">NcTrack</a>* t,<a href="../ListOfTypes.html#Double_t">Double_t</a>* pars,<a href="../ListOfTypes.html#Double_t">Double_t</a> scale)
+{
+<span class="comment">// <a href="../NcHelix.html#NcHelix:Extrapolate" title="NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars=0,Double_t scale=-1)">Extrapolate</a> an <a href="../NcTrack.html">NcTrack</a> according to the corresponding helix curve</span>
+<span class="comment">// and provide a pointer to the impact position w.r.t. a specified plane.</span>
+<span class="comment">// In case the track can never reach the specified plane, the returned</span>
+<span class="comment">// position pointer is zero.</span>
+<span class="comment">// Detailed information of all the helix points used in the extrapolation</span>
+<span class="comment">// can be obtained via the <a href="../#TPolyLine3D:GetN" title="Int_t TPolyLine3D::GetN()">GetN</a>() and <a href="../#TPolyLine3D:GetP" title="Float_t* TPolyLine3D::GetP()">GetP</a>() memberfunctions of <a href="../#TPolyLine3D:TPolyLine3D" title="TPolyLine3D TPolyLine3D::TPolyLine3D() or overloads">TPolyLine3D</a>.</span>
+<span class="comment">// It is assumed that the track charge is stored in elementary units</span>
+<span class="comment">// (i.e. charge=1 for a proton).</span>
+<span class="comment">// The input argument <span class="string">"scale"</span> specifies the unit scale for the various</span>
+<span class="comment">// locations where scale=0.01 indicates unit scales in cm etc...</span>
+<span class="comment">// In case scale&lt;=0, the unit scale for locations is determined from the</span>
+<span class="comment">// begin, reference or endpoint of the track. If neither of these</span>
+<span class="comment">// positions is present, all locations are assumed to be given in meter.</span>
+<span class="comment">// The extrapolation parameters for the impact plane and required accuracy</span>
+<span class="comment">// are specified by pars[0], pars[1] and pars[2], respectively.</span>
+<span class="comment">// pars[0] = coordinate value of the plane for the impact point</span>
+<span class="comment">// pars[1] = required accuracy on the specified impact plane coordinate</span>
+<span class="comment">// pars[2] = the axis along which the value of par[0] is specified</span>
+<span class="comment">//</span>
+<span class="comment">// The parameters can be specified either w.r.t. the LAB frame or the Helix frame.</span>
+<span class="comment">// The latter is the frame in which the Z axis points in the B direction.</span>
+<span class="comment">//</span>
+<span class="comment">// The conventions for the par[2] argument are the following :</span>
+<span class="comment">// par[2] = 1 ==&gt; X axis in the LAB frame</span>
+<span class="comment">//          2 ==&gt; Y axis in the LAB frame</span>
+<span class="comment">//          3 ==&gt; Z axis in the LAB frame</span>
+<span class="comment">//         -1 ==&gt; X axis in the Helix frame</span>
+<span class="comment">//         -2 ==&gt; Y axis in the Helix frame</span>
+<span class="comment">//         -3 ==&gt; Z axis in the Helix frame</span>
+<span class="comment">//</span>
+<span class="comment">// Example :</span>
+<span class="comment">// ---------</span>
+<span class="comment">// To obtain an extrapolation to the plane Z=0 in the LAB frame</span>
+<span class="comment">// with an accuracy of 0.001 cm the input arguments would be</span>
+<span class="comment">// pars[0]=0  pars[1]=0.001  pars[2]=3  scale=0.01</span>
+<span class="comment">//</span>
+<span class="comment">// Note : The default value for the scale is -1.</span>
+
+ <span class="keyword">if</span> (<a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>)
+ {
+  <span class="keyword">delete</span> <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>;
+  <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>=0;
+ }
+
+ <span class="keyword">if</span> (!t || !pars) <span class="keyword">return</span> <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>;
+
+ <a href="../NcPosition.html">NcPosition</a>* rbeg=t-&gt;GetBeginPoint();
+ <a href="../NcPosition.html">NcPosition</a>* rend=t-&gt;GetEndPoint();
+ <a href="../NcPosition.html">NcPosition</a>* rref=t-&gt;GetReferencePoint();
+
+ <span class="comment">// The unit scale for locations if not specified by the user</span>
+ <span class="keyword">if</span> (scale&lt;=0)
+ {
+  scale=1; <span class="comment">// Set default to meter</span>
+  <span class="keyword">if</span> (rbeg)
+  {
+   scale=rbeg-&gt;GetUnitScale();
+  }
+  <span class="keyword">else</span> <span class="keyword">if</span> (rend)
+  {
+   scale=rend-&gt;GetUnitScale();
+  }
+  <span class="keyword">else</span> <span class="keyword">if</span> (rref)
+  {
+   scale=rref-&gt;GetUnitScale();
+  }
+ }
+
+ <a href="../ListOfTypes.html#Double_t">Double_t</a> range[2];
+ range[0]=pars[0]-fabs(pars[1])/2.;
+ range[1]=pars[0]+fabs(pars[1])/2.;
+
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> iaxis=<span class="keyword">int</span>(pars[2]);
+
+ <a href="../NcHelix.html#NcHelix:MakeCurve" title="void NcHelix::MakeCurve(NcTrack* t,Double_t* range=0,Int_t iaxis=3,Double_t scale=-1)">MakeCurve</a>(t,range,iaxis,scale);
+
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> np=<a href="../#TPolyLine3D:GetLastPoint" title="Int_t TPolyLine3D::GetLastPoint()">GetLastPoint</a>()+1;
+ <span class="keyword">if</span> (!np) <span class="keyword">return</span> <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>;
+
+ <a href="../ListOfTypes.html#Float_t">Float_t</a>* points=<a href="../#TPolyLine3D:GetP" title="Float_t* TPolyLine3D::GetP()">GetP</a>();
+
+ <span class="comment">// First point of the curve around the impact</span>
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> ip=0;
+ <a href="../ListOfTypes.html#Float_t">Float_t</a> first[3]={points[3*ip],points[3*ip+1],points[3*ip+2]};
+
+ <span class="comment">// Last point of the curve around the impact</span>
+ ip=<a href="../#TPolyLine3D:GetLastPoint" title="Int_t TPolyLine3D::GetLastPoint()">GetLastPoint</a>();
+ <a href="../ListOfTypes.html#Float_t">Float_t</a> last[3]={points[3*ip],points[3*ip+1],points[3*ip+2]};
+
+ <span class="comment">// The accuracy on the impact point </span>
+ <a href="../ListOfTypes.html#Float_t">Float_t</a> err[3];
+ err[0]=fabs(first[0]-last[0]);
+ err[1]=fabs(first[1]-last[1]);
+ err[2]=fabs(first[2]-last[2]);
+
+ <span class="comment">// Take the middle point as impact location</span>
+ ip=np/2;
+ <a href="../ListOfTypes.html#Float_t">Float_t</a> imp[3]={points[3*ip],points[3*ip+1],points[3*ip+2]};
+
+ <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>=<span class="keyword">new</span> <a href="../NcPosition.html">NcPosition</a>();
+ <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>-><a href="../NcPosition.html#NcPosition:SetUnitScale" title="void NcPosition::SetUnitScale(Float_t s)">SetUnitScale</a>(scale);
+ <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>-><a href="../NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(imp,<span class="string">"car"</span>);
+ <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>-><a href="../NcPosition.html#NcPosition:SetPositionErrors" title="void NcPosition::SetPositionErrors(Double_t* e,TString f,TString u=&quot;rad&quot;) or overloads">SetPositionErrors</a>(err,<span class="string">"car"</span>);
+
+ <span class="keyword">return</span> <a href="../NcHelix.html#NcHelix:fExt" title="NcPosition* NcHelix::fExt">fExt</a>;
+}
+<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+</pre>
+<div id="linenums"><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="1" href="#1" class="ln">1</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="2" href="#2" class="ln">2</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="3" href="#3" class="ln">3</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="4" href="#4" class="ln">4</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="5" href="#5" class="ln">5</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="6" href="#6" class="ln">6</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="7" href="#7" class="ln">7</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="8" href="#8" class="ln">8</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="9" href="#9" class="ln">9</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="10" href="#10" class="ln">10</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="11" href="#11" class="ln">11</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="12" href="#12" class="ln">12</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="13" href="#13" class="ln">13</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="14" href="#14" class="ln">14</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="15" href="#15" class="ln">15</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="16" href="#16" class="ln">16</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="17" href="#17" class="ln">17</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="18" href="#18" class="ln">18</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="19" href="#19" class="ln">19</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="20" href="#20" class="ln">20</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="21" href="#21" class="ln">21</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="22" href="#22" class="ln">22</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="23" href="#23" class="ln">23</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="24" href="#24" class="ln">24</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="25" href="#25" class="ln">25</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="26" href="#26" class="ln">26</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="27" href="#27" class="ln">27</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="28" href="#28" class="ln">28</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="29" href="#29" class="ln">29</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="30" href="#30" class="ln">30</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="31" href="#31" class="ln">31</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="32" href="#32" class="ln">32</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="33" href="#33" class="ln">33</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="34" href="#34" class="ln">34</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="35" href="#35" class="ln">35</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="36" href="#36" class="ln">36</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="37" href="#37" class="ln">37</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="38" href="#38" class="ln">38</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="39" href="#39" class="ln">39</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="40" href="#40" class="ln">40</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="41" href="#41" class="ln">41</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="42" href="#42" class="ln">42</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="43" href="#43" class="ln">43</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="44" href="#44" class="ln">44</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="45" href="#45" class="ln">45</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="46" href="#46" class="ln">46</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="47" href="#47" class="ln">47</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="48" href="#48" class="ln">48</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="49" href="#49" class="ln">49</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="50" href="#50" class="ln">50</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="51" href="#51" class="ln">51</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="52" href="#52" class="ln">52</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="53" href="#53" class="ln">53</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="54" href="#54" class="ln">54</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="55" href="#55" class="ln">55</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="56" href="#56" class="ln">56</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="57" href="#57" class="ln">57</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="58" href="#58" class="ln">58</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="59" href="#59" class="ln">59</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="60" href="#60" class="ln">60</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="61" href="#61" class="ln">61</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="62" href="#62" class="ln">62</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="63" href="#63" class="ln">63</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="64" href="#64" class="ln">64</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="65" href="#65" class="ln">65</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="66" href="#66" class="ln">66</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="67" href="#67" class="ln">67</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="68" href="#68" class="ln">68</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="69" href="#69" class="ln">69</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="70" href="#70" class="ln">70</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="71" href="#71" class="ln">71</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="72" href="#72" class="ln">72</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="73" href="#73" class="ln">73</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="74" href="#74" class="ln">74</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="75" href="#75" class="ln">75</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="76" href="#76" class="ln">76</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="77" href="#77" class="ln">77</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="78" href="#78" class="ln">78</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="79" href="#79" class="ln">79</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="80" href="#80" class="ln">80</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="81" href="#81" class="ln">81</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="82" href="#82" class="ln">82</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="83" href="#83" class="ln">83</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="84" href="#84" class="ln">84</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="85" href="#85" class="ln">85</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="86" href="#86" class="ln">86</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="87" href="#87" class="ln">87</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="88" href="#88" class="ln">88</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="89" href="#89" class="ln">89</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="90" href="#90" class="ln">90</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="91" href="#91" class="ln">91</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="92" href="#92" class="ln">92</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="93" href="#93" class="ln">93</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="94" href="#94" class="ln">94</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="95" href="#95" class="ln">95</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="96" href="#96" class="ln">96</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="97" href="#97" class="ln">97</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="98" href="#98" class="ln">98</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="99" href="#99" class="ln">99</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="100" href="#100" class="ln">100</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="101" href="#101" class="ln">101</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="102" href="#102" class="ln">102</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="103" href="#103" class="ln">103</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="104" href="#104" class="ln">104</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="105" href="#105" class="ln">105</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="106" href="#106" class="ln">106</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="107" href="#107" class="ln">107</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="108" href="#108" class="ln">108</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="109" href="#109" class="ln">109</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="110" href="#110" class="ln">110</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="111" href="#111" class="ln">111</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="112" href="#112" class="ln">112</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="113" href="#113" class="ln">113</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="114" href="#114" class="ln">114</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="115" href="#115" class="ln">115</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="116" href="#116" class="ln">116</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="117" href="#117" class="ln">117</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="118" href="#118" class="ln">118</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="119" href="#119" class="ln">119</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="120" href="#120" class="ln">120</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="121" href="#121" class="ln">121</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="122" href="#122" class="ln">122</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="123" href="#123" class="ln">123</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="124" href="#124" class="ln">124</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="125" href="#125" class="ln">125</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="126" href="#126" class="ln">126</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="127" href="#127" class="ln">127</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="128" href="#128" class="ln">128</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="129" href="#129" class="ln">129</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="130" href="#130" class="ln">130</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="131" href="#131" class="ln">131</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="132" href="#132" class="ln">132</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="133" href="#133" class="ln">133</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="134" href="#134" class="ln">134</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="135" href="#135" class="ln">135</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="136" href="#136" class="ln">136</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="137" href="#137" class="ln">137</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="138" href="#138" class="ln">138</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="139" href="#139" class="ln">139</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="140" href="#140" class="ln">140</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="141" href="#141" class="ln">141</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="142" href="#142" class="ln">142</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="143" href="#143" class="ln">143</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="144" href="#144" class="ln">144</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="145" href="#145" class="ln">145</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="146" href="#146" class="ln">146</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="147" href="#147" class="ln">147</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="148" href="#148" class="ln">148</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="149" href="#149" class="ln">149</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="150" href="#150" class="ln">150</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="151" href="#151" class="ln">151</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="152" href="#152" class="ln">152</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="153" href="#153" class="ln">153</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="154" href="#154" class="ln">154</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="155" href="#155" class="ln">155</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="156" href="#156" class="ln">156</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="157" href="#157" class="ln">157</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="158" href="#158" class="ln">158</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="159" href="#159" class="ln">159</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="160" href="#160" class="ln">160</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="161" href="#161" class="ln">161</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="162" href="#162" class="ln">162</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="163" href="#163" class="ln">163</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="164" href="#164" class="ln">164</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="165" href="#165" class="ln">165</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="166" href="#166" class="ln">166</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="167" href="#167" class="ln">167</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="168" href="#168" class="ln">168</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="169" href="#169" class="ln">169</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="170" href="#170" class="ln">170</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="171" href="#171" class="ln">171</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="172" href="#172" class="ln">172</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="173" href="#173" class="ln">173</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="174" href="#174" class="ln">174</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="175" href="#175" class="ln">175</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="176" href="#176" class="ln">176</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="177" href="#177" class="ln">177</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="178" href="#178" class="ln">178</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="179" href="#179" class="ln">179</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="180" href="#180" class="ln">180</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="181" href="#181" class="ln">181</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="182" href="#182" class="ln">182</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="183" href="#183" class="ln">183</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="184" href="#184" class="ln">184</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="185" href="#185" class="ln">185</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="186" href="#186" class="ln">186</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="187" href="#187" class="ln">187</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="188" href="#188" class="ln">188</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="189" href="#189" class="ln">189</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="190" href="#190" class="ln">190</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="191" href="#191" class="ln">191</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="192" href="#192" class="ln">192</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="193" href="#193" class="ln">193</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="194" href="#194" class="ln">194</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="195" href="#195" class="ln">195</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="196" href="#196" class="ln">196</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="197" href="#197" class="ln">197</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="198" href="#198" class="ln">198</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="199" href="#199" class="ln">199</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="200" href="#200" class="ln">200</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="201" href="#201" class="ln">201</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="202" href="#202" class="ln">202</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="203" href="#203" class="ln">203</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="204" href="#204" class="ln">204</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="205" href="#205" class="ln">205</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="206" href="#206" class="ln">206</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="207" href="#207" class="ln">207</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="208" href="#208" class="ln">208</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="209" href="#209" class="ln">209</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="210" href="#210" class="ln">210</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="211" href="#211" class="ln">211</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="212" href="#212" class="ln">212</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="213" href="#213" class="ln">213</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="214" href="#214" class="ln">214</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="215" href="#215" class="ln">215</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="216" href="#216" class="ln">216</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="217" href="#217" class="ln">217</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="218" href="#218" class="ln">218</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="219" href="#219" class="ln">219</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="220" href="#220" class="ln">220</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="221" href="#221" class="ln">221</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="222" href="#222" class="ln">222</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="223" href="#223" class="ln">223</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="224" href="#224" class="ln">224</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="225" href="#225" class="ln">225</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="226" href="#226" class="ln">226</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="227" href="#227" class="ln">227</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="228" href="#228" class="ln">228</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="229" href="#229" class="ln">229</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="230" href="#230" class="ln">230</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="231" href="#231" class="ln">231</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="232" href="#232" class="ln">232</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="233" href="#233" class="ln">233</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="234" href="#234" class="ln">234</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="235" href="#235" class="ln">235</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="236" href="#236" class="ln">236</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="237" href="#237" class="ln">237</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="238" href="#238" class="ln">238</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="239" href="#239" class="ln">239</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="240" href="#240" class="ln">240</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="241" href="#241" class="ln">241</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="242" href="#242" class="ln">242</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="243" href="#243" class="ln">243</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="244" href="#244" class="ln">244</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="245" href="#245" class="ln">245</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="246" href="#246" class="ln">246</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="247" href="#247" class="ln">247</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="248" href="#248" class="ln">248</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="249" href="#249" class="ln">249</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="250" href="#250" class="ln">250</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="251" href="#251" class="ln">251</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="252" href="#252" class="ln">252</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="253" href="#253" class="ln">253</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="254" href="#254" class="ln">254</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="255" href="#255" class="ln">255</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="256" href="#256" class="ln">256</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="257" href="#257" class="ln">257</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="258" href="#258" class="ln">258</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="259" href="#259" class="ln">259</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="260" href="#260" class="ln">260</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="261" href="#261" class="ln">261</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="262" href="#262" class="ln">262</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="263" href="#263" class="ln">263</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="264" href="#264" class="ln">264</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="265" href="#265" class="ln">265</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="266" href="#266" class="ln">266</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="267" href="#267" class="ln">267</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="268" href="#268" class="ln">268</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="269" href="#269" class="ln">269</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="270" href="#270" class="ln">270</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="271" href="#271" class="ln">271</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="272" href="#272" class="ln">272</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="273" href="#273" class="ln">273</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="274" href="#274" class="ln">274</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="275" href="#275" class="ln">275</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="276" href="#276" class="ln">276</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="277" href="#277" class="ln">277</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="278" href="#278" class="ln">278</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="279" href="#279" class="ln">279</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="280" href="#280" class="ln">280</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="281" href="#281" class="ln">281</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="282" href="#282" class="ln">282</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="283" href="#283" class="ln">283</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="284" href="#284" class="ln">284</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="285" href="#285" class="ln">285</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="286" href="#286" class="ln">286</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="287" href="#287" class="ln">287</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="288" href="#288" class="ln">288</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="289" href="#289" class="ln">289</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="290" href="#290" class="ln">290</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="291" href="#291" class="ln">291</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="292" href="#292" class="ln">292</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="293" href="#293" class="ln">293</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="294" href="#294" class="ln">294</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="295" href="#295" class="ln">295</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="296" href="#296" class="ln">296</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="297" href="#297" class="ln">297</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="298" href="#298" class="ln">298</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="299" href="#299" class="ln">299</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="300" href="#300" class="ln">300</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="301" href="#301" class="ln">301</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="302" href="#302" class="ln">302</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="303" href="#303" class="ln">303</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="304" href="#304" class="ln">304</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="305" href="#305" class="ln">305</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="306" href="#306" class="ln">306</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="307" href="#307" class="ln">307</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="308" href="#308" class="ln">308</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="309" href="#309" class="ln">309</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="310" href="#310" class="ln">310</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="311" href="#311" class="ln">311</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="312" href="#312" class="ln">312</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="313" href="#313" class="ln">313</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="314" href="#314" class="ln">314</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="315" href="#315" class="ln">315</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="316" href="#316" class="ln">316</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="317" href="#317" class="ln">317</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="318" href="#318" class="ln">318</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="319" href="#319" class="ln">319</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="320" href="#320" class="ln">320</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="321" href="#321" class="ln">321</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="322" href="#322" class="ln">322</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="323" href="#323" class="ln">323</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="324" href="#324" class="ln">324</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="325" href="#325" class="ln">325</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="326" href="#326" class="ln">326</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="327" href="#327" class="ln">327</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="328" href="#328" class="ln">328</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="329" href="#329" class="ln">329</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="330" href="#330" class="ln">330</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="331" href="#331" class="ln">331</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="332" href="#332" class="ln">332</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="333" href="#333" class="ln">333</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="334" href="#334" class="ln">334</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="335" href="#335" class="ln">335</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="336" href="#336" class="ln">336</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="337" href="#337" class="ln">337</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="338" href="#338" class="ln">338</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="339" href="#339" class="ln">339</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="340" href="#340" class="ln">340</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="341" href="#341" class="ln">341</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="342" href="#342" class="ln">342</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="343" href="#343" class="ln">343</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="344" href="#344" class="ln">344</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="345" href="#345" class="ln">345</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="346" href="#346" class="ln">346</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="347" href="#347" class="ln">347</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="348" href="#348" class="ln">348</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="349" href="#349" class="ln">349</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="350" href="#350" class="ln">350</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="351" href="#351" class="ln">351</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="352" href="#352" class="ln">352</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="353" href="#353" class="ln">353</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="354" href="#354" class="ln">354</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="355" href="#355" class="ln">355</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="356" href="#356" class="ln">356</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="357" href="#357" class="ln">357</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="358" href="#358" class="ln">358</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="359" href="#359" class="ln">359</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="360" href="#360" class="ln">360</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="361" href="#361" class="ln">361</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="362" href="#362" class="ln">362</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="363" href="#363" class="ln">363</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="364" href="#364" class="ln">364</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="365" href="#365" class="ln">365</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="366" href="#366" class="ln">366</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="367" href="#367" class="ln">367</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="368" href="#368" class="ln">368</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="369" href="#369" class="ln">369</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="370" href="#370" class="ln">370</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="371" href="#371" class="ln">371</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="372" href="#372" class="ln">372</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="373" href="#373" class="ln">373</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="374" href="#374" class="ln">374</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="375" href="#375" class="ln">375</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="376" href="#376" class="ln">376</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="377" href="#377" class="ln">377</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="378" href="#378" class="ln">378</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="379" href="#379" class="ln">379</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="380" href="#380" class="ln">380</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="381" href="#381" class="ln">381</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="382" href="#382" class="ln">382</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="383" href="#383" class="ln">383</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="384" href="#384" class="ln">384</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="385" href="#385" class="ln">385</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="386" href="#386" class="ln">386</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="387" href="#387" class="ln">387</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="388" href="#388" class="ln">388</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="389" href="#389" class="ln">389</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="390" href="#390" class="ln">390</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="391" href="#391" class="ln">391</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="392" href="#392" class="ln">392</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="393" href="#393" class="ln">393</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="394" href="#394" class="ln">394</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="395" href="#395" class="ln">395</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="396" href="#396" class="ln">396</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="397" href="#397" class="ln">397</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="398" href="#398" class="ln">398</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="399" href="#399" class="ln">399</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="400" href="#400" class="ln">400</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="401" href="#401" class="ln">401</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="402" href="#402" class="ln">402</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="403" href="#403" class="ln">403</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="404" href="#404" class="ln">404</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="405" href="#405" class="ln">405</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="406" href="#406" class="ln">406</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="407" href="#407" class="ln">407</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="408" href="#408" class="ln">408</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="409" href="#409" class="ln">409</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="410" href="#410" class="ln">410</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="411" href="#411" class="ln">411</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="412" href="#412" class="ln">412</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="413" href="#413" class="ln">413</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="414" href="#414" class="ln">414</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="415" href="#415" class="ln">415</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="416" href="#416" class="ln">416</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="417" href="#417" class="ln">417</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="418" href="#418" class="ln">418</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="419" href="#419" class="ln">419</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="420" href="#420" class="ln">420</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="421" href="#421" class="ln">421</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="422" href="#422" class="ln">422</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="423" href="#423" class="ln">423</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="424" href="#424" class="ln">424</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="425" href="#425" class="ln">425</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="426" href="#426" class="ln">426</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="427" href="#427" class="ln">427</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="428" href="#428" class="ln">428</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="429" href="#429" class="ln">429</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="430" href="#430" class="ln">430</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="431" href="#431" class="ln">431</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="432" href="#432" class="ln">432</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="433" href="#433" class="ln">433</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="434" href="#434" class="ln">434</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="435" href="#435" class="ln">435</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="436" href="#436" class="ln">436</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="437" href="#437" class="ln">437</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="438" href="#438" class="ln">438</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="439" href="#439" class="ln">439</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="440" href="#440" class="ln">440</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="441" href="#441" class="ln">441</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="442" href="#442" class="ln">442</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="443" href="#443" class="ln">443</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="444" href="#444" class="ln">444</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="445" href="#445" class="ln">445</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="446" href="#446" class="ln">446</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="447" href="#447" class="ln">447</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="448" href="#448" class="ln">448</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="449" href="#449" class="ln">449</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="450" href="#450" class="ln">450</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="451" href="#451" class="ln">451</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="452" href="#452" class="ln">452</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="453" href="#453" class="ln">453</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="454" href="#454" class="ln">454</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="455" href="#455" class="ln">455</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="456" href="#456" class="ln">456</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="457" href="#457" class="ln">457</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="458" href="#458" class="ln">458</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="459" href="#459" class="ln">459</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="460" href="#460" class="ln">460</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="461" href="#461" class="ln">461</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="462" href="#462" class="ln">462</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="463" href="#463" class="ln">463</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="464" href="#464" class="ln">464</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="465" href="#465" class="ln">465</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="466" href="#466" class="ln">466</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="467" href="#467" class="ln">467</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="468" href="#468" class="ln">468</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="469" href="#469" class="ln">469</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="470" href="#470" class="ln">470</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="471" href="#471" class="ln">471</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="472" href="#472" class="ln">472</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="473" href="#473" class="ln">473</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="474" href="#474" class="ln">474</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="475" href="#475" class="ln">475</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="476" href="#476" class="ln">476</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="477" href="#477" class="ln">477</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="478" href="#478" class="ln">478</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="479" href="#479" class="ln">479</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="480" href="#480" class="ln">480</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="481" href="#481" class="ln">481</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="482" href="#482" class="ln">482</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="483" href="#483" class="ln">483</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="484" href="#484" class="ln">484</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="485" href="#485" class="ln">485</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="486" href="#486" class="ln">486</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="487" href="#487" class="ln">487</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="488" href="#488" class="ln">488</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="489" href="#489" class="ln">489</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="490" href="#490" class="ln">490</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="491" href="#491" class="ln">491</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="492" href="#492" class="ln">492</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="493" href="#493" class="ln">493</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="494" href="#494" class="ln">494</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="495" href="#495" class="ln">495</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="496" href="#496" class="ln">496</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="497" href="#497" class="ln">497</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="498" href="#498" class="ln">498</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="499" href="#499" class="ln">499</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="500" href="#500" class="ln">500</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="501" href="#501" class="ln">501</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="502" href="#502" class="ln">502</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="503" href="#503" class="ln">503</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="504" href="#504" class="ln">504</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="505" href="#505" class="ln">505</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="506" href="#506" class="ln">506</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="507" href="#507" class="ln">507</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="508" href="#508" class="ln">508</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="509" href="#509" class="ln">509</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="510" href="#510" class="ln">510</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="511" href="#511" class="ln">511</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="512" href="#512" class="ln">512</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="513" href="#513" class="ln">513</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="514" href="#514" class="ln">514</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="515" href="#515" class="ln">515</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="516" href="#516" class="ln">516</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="517" href="#517" class="ln">517</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="518" href="#518" class="ln">518</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="519" href="#519" class="ln">519</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="520" href="#520" class="ln">520</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="521" href="#521" class="ln">521</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="522" href="#522" class="ln">522</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="523" href="#523" class="ln">523</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="524" href="#524" class="ln">524</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="525" href="#525" class="ln">525</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="526" href="#526" class="ln">526</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="527" href="#527" class="ln">527</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="528" href="#528" class="ln">528</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="529" href="#529" class="ln">529</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="530" href="#530" class="ln">530</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="531" href="#531" class="ln">531</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="532" href="#532" class="ln">532</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="533" href="#533" class="ln">533</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="534" href="#534" class="ln">534</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="535" href="#535" class="ln">535</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="536" href="#536" class="ln">536</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="537" href="#537" class="ln">537</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="538" href="#538" class="ln">538</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="539" href="#539" class="ln">539</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="540" href="#540" class="ln">540</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="541" href="#541" class="ln">541</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="542" href="#542" class="ln">542</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="543" href="#543" class="ln">543</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="544" href="#544" class="ln">544</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="545" href="#545" class="ln">545</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="546" href="#546" class="ln">546</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="547" href="#547" class="ln">547</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="548" href="#548" class="ln">548</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="549" href="#549" class="ln">549</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="550" href="#550" class="ln">550</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="551" href="#551" class="ln">551</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="552" href="#552" class="ln">552</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="553" href="#553" class="ln">553</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="554" href="#554" class="ln">554</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="555" href="#555" class="ln">555</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="556" href="#556" class="ln">556</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="557" href="#557" class="ln">557</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="558" href="#558" class="ln">558</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="559" href="#559" class="ln">559</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="560" href="#560" class="ln">560</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="561" href="#561" class="ln">561</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="562" href="#562" class="ln">562</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="563" href="#563" class="ln">563</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="564" href="#564" class="ln">564</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="565" href="#565" class="ln">565</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="566" href="#566" class="ln">566</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="567" href="#567" class="ln">567</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="568" href="#568" class="ln">568</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="569" href="#569" class="ln">569</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="570" href="#570" class="ln">570</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="571" href="#571" class="ln">571</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="572" href="#572" class="ln">572</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="573" href="#573" class="ln">573</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="574" href="#574" class="ln">574</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="575" href="#575" class="ln">575</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="576" href="#576" class="ln">576</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="577" href="#577" class="ln">577</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="578" href="#578" class="ln">578</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="579" href="#579" class="ln">579</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="580" href="#580" class="ln">580</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="581" href="#581" class="ln">581</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="582" href="#582" class="ln">582</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="583" href="#583" class="ln">583</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="584" href="#584" class="ln">584</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="585" href="#585" class="ln">585</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="586" href="#586" class="ln">586</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="587" href="#587" class="ln">587</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="588" href="#588" class="ln">588</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="589" href="#589" class="ln">589</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="590" href="#590" class="ln">590</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="591" href="#591" class="ln">591</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="592" href="#592" class="ln">592</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="593" href="#593" class="ln">593</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="594" href="#594" class="ln">594</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="595" href="#595" class="ln">595</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="596" href="#596" class="ln">596</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="597" href="#597" class="ln">597</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="598" href="#598" class="ln">598</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="599" href="#599" class="ln">599</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="600" href="#600" class="ln">600</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="601" href="#601" class="ln">601</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="602" href="#602" class="ln">602</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="603" href="#603" class="ln">603</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="604" href="#604" class="ln">604</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="605" href="#605" class="ln">605</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="606" href="#606" class="ln">606</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="607" href="#607" class="ln">607</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="608" href="#608" class="ln">608</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="609" href="#609" class="ln">609</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="610" href="#610" class="ln">610</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="611" href="#611" class="ln">611</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="612" href="#612" class="ln">612</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="613" href="#613" class="ln">613</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="614" href="#614" class="ln">614</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="615" href="#615" class="ln">615</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="616" href="#616" class="ln">616</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="617" href="#617" class="ln">617</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="618" href="#618" class="ln">618</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="619" href="#619" class="ln">619</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="620" href="#620" class="ln">620</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="621" href="#621" class="ln">621</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="622" href="#622" class="ln">622</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="623" href="#623" class="ln">623</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="624" href="#624" class="ln">624</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="625" href="#625" class="ln">625</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="626" href="#626" class="ln">626</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="627" href="#627" class="ln">627</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="628" href="#628" class="ln">628</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="629" href="#629" class="ln">629</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="630" href="#630" class="ln">630</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="631" href="#631" class="ln">631</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="632" href="#632" class="ln">632</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="633" href="#633" class="ln">633</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="634" href="#634" class="ln">634</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="635" href="#635" class="ln">635</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="636" href="#636" class="ln">636</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="637" href="#637" class="ln">637</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="638" href="#638" class="ln">638</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="639" href="#639" class="ln">639</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="640" href="#640" class="ln">640</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="641" href="#641" class="ln">641</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="642" href="#642" class="ln">642</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="643" href="#643" class="ln">643</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="644" href="#644" class="ln">644</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="645" href="#645" class="ln">645</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="646" href="#646" class="ln">646</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="647" href="#647" class="ln">647</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="648" href="#648" class="ln">648</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="649" href="#649" class="ln">649</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="650" href="#650" class="ln">650</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="651" href="#651" class="ln">651</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="652" href="#652" class="ln">652</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="653" href="#653" class="ln">653</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="654" href="#654" class="ln">654</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="655" href="#655" class="ln">655</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="656" href="#656" class="ln">656</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="657" href="#657" class="ln">657</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="658" href="#658" class="ln">658</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="659" href="#659" class="ln">659</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="660" href="#660" class="ln">660</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="661" href="#661" class="ln">661</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="662" href="#662" class="ln">662</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="663" href="#663" class="ln">663</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="664" href="#664" class="ln">664</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="665" href="#665" class="ln">665</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="666" href="#666" class="ln">666</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="667" href="#667" class="ln">667</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="668" href="#668" class="ln">668</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="669" href="#669" class="ln">669</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="670" href="#670" class="ln">670</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="671" href="#671" class="ln">671</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="672" href="#672" class="ln">672</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="673" href="#673" class="ln">673</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="674" href="#674" class="ln">674</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="675" href="#675" class="ln">675</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="676" href="#676" class="ln">676</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="677" href="#677" class="ln">677</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="678" href="#678" class="ln">678</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="679" href="#679" class="ln">679</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="680" href="#680" class="ln">680</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="681" href="#681" class="ln">681</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="682" href="#682" class="ln">682</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="683" href="#683" class="ln">683</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="684" href="#684" class="ln">684</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="685" href="#685" class="ln">685</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="686" href="#686" class="ln">686</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="687" href="#687" class="ln">687</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="688" href="#688" class="ln">688</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="689" href="#689" class="ln">689</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="690" href="#690" class="ln">690</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="691" href="#691" class="ln">691</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="692" href="#692" class="ln">692</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="693" href="#693" class="ln">693</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="694" href="#694" class="ln">694</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="695" href="#695" class="ln">695</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="696" href="#696" class="ln">696</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="697" href="#697" class="ln">697</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="698" href="#698" class="ln">698</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="699" href="#699" class="ln">699</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="700" href="#700" class="ln">700</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="701" href="#701" class="ln">701</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="702" href="#702" class="ln">702</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="703" href="#703" class="ln">703</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="704" href="#704" class="ln">704</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="705" href="#705" class="ln">705</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="706" href="#706" class="ln">706</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="707" href="#707" class="ln">707</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="708" href="#708" class="ln">708</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="709" href="#709" class="ln">709</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="710" href="#710" class="ln">710</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="711" href="#711" class="ln">711</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="712" href="#712" class="ln">712</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="713" href="#713" class="ln">713</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="714" href="#714" class="ln">714</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="715" href="#715" class="ln">715</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="716" href="#716" class="ln">716</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="717" href="#717" class="ln">717</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="718" href="#718" class="ln">718</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="719" href="#719" class="ln">719</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="720" href="#720" class="ln">720</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="721" href="#721" class="ln">721</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="722" href="#722" class="ln">722</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="723" href="#723" class="ln">723</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="724" href="#724" class="ln">724</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="725" href="#725" class="ln">725</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="726" href="#726" class="ln">726</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="727" href="#727" class="ln">727</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="728" href="#728" class="ln">728</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="729" href="#729" class="ln">729</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="730" href="#730" class="ln">730</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="731" href="#731" class="ln">731</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="732" href="#732" class="ln">732</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="733" href="#733" class="ln">733</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="734" href="#734" class="ln">734</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="735" href="#735" class="ln">735</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="736" href="#736" class="ln">736</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="737" href="#737" class="ln">737</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="738" href="#738" class="ln">738</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="739" href="#739" class="ln">739</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="740" href="#740" class="ln">740</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="741" href="#741" class="ln">741</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="742" href="#742" class="ln">742</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="743" href="#743" class="ln">743</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="744" href="#744" class="ln">744</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="745" href="#745" class="ln">745</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="746" href="#746" class="ln">746</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="747" href="#747" class="ln">747</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="748" href="#748" class="ln">748</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="749" href="#749" class="ln">749</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="750" href="#750" class="ln">750</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="751" href="#751" class="ln">751</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="752" href="#752" class="ln">752</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="753" href="#753" class="ln">753</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="754" href="#754" class="ln">754</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="755" href="#755" class="ln">755</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="756" href="#756" class="ln">756</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="757" href="#757" class="ln">757</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="758" href="#758" class="ln">758</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="759" href="#759" class="ln">759</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="760" href="#760" class="ln">760</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="761" href="#761" class="ln">761</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="762" href="#762" class="ln">762</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="763" href="#763" class="ln">763</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="764" href="#764" class="ln">764</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="765" href="#765" class="ln">765</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="766" href="#766" class="ln">766</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="767" href="#767" class="ln">767</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="768" href="#768" class="ln">768</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="769" href="#769" class="ln">769</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="770" href="#770" class="ln">770</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="771" href="#771" class="ln">771</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="772" href="#772" class="ln">772</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="773" href="#773" class="ln">773</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="774" href="#774" class="ln">774</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="775" href="#775" class="ln">775</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="776" href="#776" class="ln">776</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="777" href="#777" class="ln">777</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="778" href="#778" class="ln">778</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="779" href="#779" class="ln">779</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="780" href="#780" class="ln">780</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="781" href="#781" class="ln">781</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="782" href="#782" class="ln">782</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="783" href="#783" class="ln">783</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="784" href="#784" class="ln">784</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="785" href="#785" class="ln">785</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="786" href="#786" class="ln">786</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="787" href="#787" class="ln">787</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="788" href="#788" class="ln">788</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="789" href="#789" class="ln">789</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="790" href="#790" class="ln">790</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="791" href="#791" class="ln">791</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="792" href="#792" class="ln">792</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="793" href="#793" class="ln">793</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="794" href="#794" class="ln">794</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="795" href="#795" class="ln">795</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="796" href="#796" class="ln">796</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="797" href="#797" class="ln">797</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="798" href="#798" class="ln">798</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="799" href="#799" class="ln">799</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="800" href="#800" class="ln">800</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="801" href="#801" class="ln">801</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="802" href="#802" class="ln">802</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="803" href="#803" class="ln">803</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="804" href="#804" class="ln">804</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="805" href="#805" class="ln">805</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="806" href="#806" class="ln">806</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="807" href="#807" class="ln">807</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="808" href="#808" class="ln">808</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="809" href="#809" class="ln">809</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="810" href="#810" class="ln">810</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="811" href="#811" class="ln">811</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="812" href="#812" class="ln">812</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="813" href="#813" class="ln">813</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="814" href="#814" class="ln">814</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="815" href="#815" class="ln">815</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="816" href="#816" class="ln">816</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="817" href="#817" class="ln">817</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="818" href="#818" class="ln">818</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="819" href="#819" class="ln">819</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="820" href="#820" class="ln">820</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="821" href="#821" class="ln">821</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="822" href="#822" class="ln">822</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="823" href="#823" class="ln">823</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="824" href="#824" class="ln">824</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="825" href="#825" class="ln">825</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="826" href="#826" class="ln">826</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="827" href="#827" class="ln">827</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="828" href="#828" class="ln">828</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="829" href="#829" class="ln">829</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="830" href="#830" class="ln">830</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="831" href="#831" class="ln">831</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="832" href="#832" class="ln">832</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="833" href="#833" class="ln">833</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="834" href="#834" class="ln">834</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="835" href="#835" class="ln">835</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="836" href="#836" class="ln">836</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="837" href="#837" class="ln">837</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="838" href="#838" class="ln">838</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="839" href="#839" class="ln">839</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="840" href="#840" class="ln">840</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="841" href="#841" class="ln">841</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="842" href="#842" class="ln">842</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="843" href="#843" class="ln">843</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="844" href="#844" class="ln">844</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="845" href="#845" class="ln">845</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="846" href="#846" class="ln">846</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="847" href="#847" class="ln">847</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="848" href="#848" class="ln">848</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="849" href="#849" class="ln">849</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="850" href="#850" class="ln">850</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="851" href="#851" class="ln">851</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="852" href="#852" class="ln">852</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="853" href="#853" class="ln">853</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="854" href="#854" class="ln">854</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="855" href="#855" class="ln">855</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="856" href="#856" class="ln">856</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="857" href="#857" class="ln">857</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="858" href="#858" class="ln">858</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="859" href="#859" class="ln">859</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="860" href="#860" class="ln">860</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="861" href="#861" class="ln">861</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="862" href="#862" class="ln">862</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="863" href="#863" class="ln">863</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="864" href="#864" class="ln">864</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="865" href="#865" class="ln">865</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="866" href="#866" class="ln">866</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="867" href="#867" class="ln">867</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="868" href="#868" class="ln">868</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="869" href="#869" class="ln">869</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="870" href="#870" class="ln">870</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="871" href="#871" class="ln">871</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="872" href="#872" class="ln">872</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="873" href="#873" class="ln">873</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="874" href="#874" class="ln">874</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="875" href="#875" class="ln">875</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="876" href="#876" class="ln">876</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="877" href="#877" class="ln">877</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="878" href="#878" class="ln">878</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="879" href="#879" class="ln">879</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="880" href="#880" class="ln">880</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="881" href="#881" class="ln">881</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="882" href="#882" class="ln">882</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="883" href="#883" class="ln">883</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="884" href="#884" class="ln">884</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="885" href="#885" class="ln">885</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="886" href="#886" class="ln">886</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="887" href="#887" class="ln">887</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="888" href="#888" class="ln">888</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="889" href="#889" class="ln">889</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="890" href="#890" class="ln">890</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="891" href="#891" class="ln">891</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="892" href="#892" class="ln">892</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="893" href="#893" class="ln">893</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="894" href="#894" class="ln">894</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="895" href="#895" class="ln">895</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="896" href="#896" class="ln">896</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="897" href="#897" class="ln">897</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="898" href="#898" class="ln">898</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="899" href="#899" class="ln">899</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="900" href="#900" class="ln">900</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="901" href="#901" class="ln">901</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="902" href="#902" class="ln">902</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="903" href="#903" class="ln">903</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="904" href="#904" class="ln">904</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="905" href="#905" class="ln">905</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="906" href="#906" class="ln">906</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="907" href="#907" class="ln">907</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="908" href="#908" class="ln">908</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="909" href="#909" class="ln">909</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="910" href="#910" class="ln">910</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="911" href="#911" class="ln">911</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="912" href="#912" class="ln">912</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="913" href="#913" class="ln">913</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="914" href="#914" class="ln">914</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="915" href="#915" class="ln">915</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="916" href="#916" class="ln">916</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="917" href="#917" class="ln">917</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="918" href="#918" class="ln">918</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="919" href="#919" class="ln">919</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="920" href="#920" class="ln">920</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="921" href="#921" class="ln">921</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="922" href="#922" class="ln">922</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="923" href="#923" class="ln">923</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="924" href="#924" class="ln">924</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="925" href="#925" class="ln">925</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="926" href="#926" class="ln">926</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="927" href="#927" class="ln">927</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="928" href="#928" class="ln">928</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="929" href="#929" class="ln">929</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="930" href="#930" class="ln">930</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="931" href="#931" class="ln">931</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="932" href="#932" class="ln">932</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="933" href="#933" class="ln">933</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="934" href="#934" class="ln">934</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="935" href="#935" class="ln">935</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="936" href="#936" class="ln">936</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="937" href="#937" class="ln">937</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="938" href="#938" class="ln">938</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="939" href="#939" class="ln">939</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="940" href="#940" class="ln">940</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="941" href="#941" class="ln">941</a></div><div class="ln">&nbsp;<span class="lnfile">NcHelix.cxx:</span><a name="942" href="#942" class="ln">942</a></div></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: 2019-09-15 08:01 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>
