@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcVersion.cxx 117 2016-04-12 22:13:22Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcVersion
 // Facility to provide version information of the current release.

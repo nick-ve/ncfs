@@ -3,8 +3,6 @@
 // Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcVersion.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "TObject.h"
 #include "TString.h"
  
