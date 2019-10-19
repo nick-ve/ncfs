@@ -150,8 +150,13 @@ within the proper "NCFS environment".
 The proper "NCFS environment" may be obtained automatically by invoking the following
 scripts which are provided in this "ncfs" top directory :
 
-    ncfs.bat : To initialise the proper "NCFS environment" for Windows.
-    ncfs.sh  : To initialise the proper "NCFS environment" for bash shells.
+    ncfs.bat    : To initialise the proper "NCFS environment" for Windows.
+    ncfs.sh     : To initialise the proper "NCFS environment" for bash shells.
+    ncfs-win.sh : To initialise the proper "NCFS environment" for Windows (Ubuntu) powershells,
+                  with transparent communication between the (Ubuntu) powershell (for library
+                  c.q. docs creation and job execution) and the standard Windows file system
+                  (where the NCFS source code resides).
+                  This will allow a single location for the source code (and docs) management. 
 
 Note that after invokation of one of the above "environment setting scripts", the
 command prompt should be "ncfs>" to indicate that the environment has been set correctly.

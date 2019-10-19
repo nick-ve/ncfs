@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: Nc3Vector.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class Nc3Vector
 // Handling of 3-vectors in various reference frames.
@@ -94,7 +92,7 @@
 // c=a*5;
 //
 //--- Author: Nick van Eijndhoven 30-mar-1999 Utrecht University
-//- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, October 19, 2019  15:56
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Nc3Vector.h"
@@ -213,6 +211,7 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
  fV=new Double32_t[fNv];
 
  Double_t pi=acos(-1.);
+ Double_t twopi=2.*pi;
 
  Double_t fu=1.;
  if (u == "deg") fu=pi/180.;
@@ -238,12 +237,12 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    }
    else
    {
-    if (z<0.) theta=pi;
+    if (z<0) theta=pi;
    }
-   if (theta<0.) theta+=2.*pi;
+   if (theta<0) theta+=twopi;
    phi=0;
    if (x || y) phi=atan2(y,x);
-   if (phi<0.) phi+=2.*pi;
+   if (phi<0) phi+=twopi;
 
    fV[0]=r;
    fV[1]=theta;
@@ -251,9 +250,34 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    break;
 
   case 2: // Spherical coordinates
-   fV[0]=v[0];
-   fV[1]=v[1]*fu;
-   fV[2]=v[2]*fu;
+   r=v[0];
+   theta=v[1]*fu;
+   phi=v[2]*fu;
+
+   // Limit theta to the interval [0,pi]
+   while (theta<0)
+   {
+    theta+=twopi;
+   }
+   while (theta>twopi)
+   {
+    theta-=twopi;
+   }
+   if (theta>pi) theta=twopi-theta;
+
+   // Limit phi to the interval [0,twopi]
+   while (phi<0)
+   {
+    phi+=twopi;
+   }
+   while (phi>twopi)
+   {
+    phi-=twopi;
+   }
+ 
+   fV[0]=r;
+   fV[1]=theta;
+   fV[2]=phi;
    break;
 
   case 3: // Cylindrical coordinates
@@ -261,7 +285,6 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    phi=v[1]*fu;
    z=v[2];
    r=sqrt(rho*rho+z*z);
-   if (phi<0.) phi+=2.*pi;
    theta=0;
    if (r && fabs(z/r)<=1.)
    {
@@ -269,9 +292,19 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    }
    else
    {
-    if (z<0.) theta=pi;
+    if (z<0) theta=pi;
    }
-   if (theta<0.) theta+=2.*pi;
+   if (theta<0) theta+=twopi;
+
+   // Limit phi to the interval [0,twopi]
+   while (phi<0)
+   {
+    phi+=twopi;
+   }
+   while (phi>twopi)
+   {
+    phi-=twopi;
+   }
 
    fV[0]=r;
    fV[1]=theta;
@@ -279,7 +312,7 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    break;
 
   default: // Unsupported reference frame
-   cout << "*Nc3Vector::SetVector* Unsupported frame : " << f.Data() << endl
+   cout << "*Nc3Vector::SetVector* Unsupported frame : " << f << endl
         << " Possible frames are 'car', 'sph' and 'cyl'." << endl; 
 
    fNv=0;

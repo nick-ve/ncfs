@@ -1119,3 +1119,7 @@
                 updated accordingly in the top directory. Also NcVersion modified to reflect the
                 GIT management structure instead of the old SVN and the version indicator in NcVersion
                 has been updated to 2.2.
+19-oct-2019 NvE Nc3Vector updated to store always theta in the interval [0,pi] and phi in the interval [0,twopi].
+                Also the ncfs-win.sh example script added to the top directory for initialisation of the
+                NCFS environment in a Windows (Ubuntu) powershell.
+                The version indicator in NcVersion has been updated to 3.0.
