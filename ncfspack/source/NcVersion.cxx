@@ -62,9 +62,9 @@ ClassImp(NcVersion) // Class implementation to enable ROOT I/O
 NcVersion::NcVersion() : TObject()
 {
 // Default constructor to initialise all parameters
- fVersion="3.0";
+ fVersion="3.1";
  fRev="Branch: master";
- fDate="October 19, 2019  15:56";
+ fDate="January 26, 2020  17:35";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()
@@ -93,8 +93,10 @@ NcVersion& NcVersion::operator=(const NcVersion& q)
 void NcVersion::Data() const
 {
 // Provide the version information for this release.
+ cout << endl;
  cout << " *" << ClassName() << "* Version information." << endl;
  cout << " NCFS-Pack version : " << fVersion << " corresponding to GIT " << fRev << endl;
- cout << " Created at " << fDate << endl; 
+ cout << " Created at " << fDate << endl;
+ cout << endl;
 }
 ///////////////////////////////////////////////////////////////////////////

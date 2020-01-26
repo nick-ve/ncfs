@@ -1123,3 +1123,5 @@
                 Also the ncfs-win.sh example script added to the top directory for initialisation of the
                 NCFS environment in a Windows (Ubuntu) powershell.
                 The version indicator in NcVersion has been updated to 3.0.
+26-jan-2020 NvE Bug fixed in Nc3Vector update of 19-oct-2019, which affected (accuracy of) astronomical positions.
+                The version indicator in NcVersion has been updated to 3.1.

@@ -230,18 +230,19 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    y=v[1];
    z=v[2];
    r=sqrt(x*x+y*y+z*z);
+
+   // Determine theta in [0,pi]
    theta=0;
-   if (r && fabs(z/r)<=1.)
+   if (z<0) theta=pi;
+   if (r)
    {
-    theta=acos(z/r);
+    if (fabs(z/r)<=1) theta=acos(z/r); // Puts theta in [0,pi]
    }
-   else
-   {
-    if (z<0) theta=pi;
-   }
-   if (theta<0) theta+=twopi;
+   if (theta<0) theta=fabs(theta); // To catch possible accuracy issue
+
+   // Determine phi in [0,twopi]
    phi=0;
-   if (x || y) phi=atan2(y,x);
+   if (x || y) phi=atan2(y,x); // Puts phi in [-pi,pi]
    if (phi<0) phi+=twopi;
 
    fV[0]=r;
@@ -254,17 +255,6 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    theta=v[1]*fu;
    phi=v[2]*fu;
 
-   // Limit theta to the interval [0,pi]
-   while (theta<0)
-   {
-    theta+=twopi;
-   }
-   while (theta>twopi)
-   {
-    theta-=twopi;
-   }
-   if (theta>pi) theta=twopi-theta;
-
    // Limit phi to the interval [0,twopi]
    while (phi<0)
    {
@@ -274,7 +264,24 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    {
     phi-=twopi;
    }
- 
+
+   // Limit theta to the interval [-pi,pi]
+   while (theta<-pi)
+   {
+    theta+=twopi;
+   }
+   while (theta>pi)
+   {
+    theta-=twopi;
+   }
+   // Limit theta to the interval [0,pi]
+   if (theta<0)
+   {
+    theta=fabs(theta);
+    phi+=pi;
+    if (phi>twopi) phi-=twopi;
+   }
+
    fV[0]=r;
    fV[1]=theta;
    fV[2]=phi;
@@ -285,16 +292,6 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    phi=v[1]*fu;
    z=v[2];
    r=sqrt(rho*rho+z*z);
-   theta=0;
-   if (r && fabs(z/r)<=1.)
-   {
-    theta=acos(z/r);
-   }
-   else
-   {
-    if (z<0) theta=pi;
-   }
-   if (theta<0) theta+=twopi;
 
    // Limit phi to the interval [0,twopi]
    while (phi<0)
@@ -305,6 +302,15 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
    {
     phi-=twopi;
    }
+
+   // Determine theta in [0,pi]
+   theta=0;
+   if (z<0) theta=pi;
+   if (rho && r)
+   {
+    if (fabs(z/r)<=1) theta=acos(z/r); // Puts theta in [0,pi]
+   }
+   if (theta<0) theta=fabs(theta); // To catch possible accuracy issue
 
    fV[0]=r;
    fV[1]=theta;
