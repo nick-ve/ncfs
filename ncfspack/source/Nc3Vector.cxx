@@ -92,7 +92,7 @@
 // c=a*5;
 //
 //--- Author: Nick van Eijndhoven 30-mar-1999 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, October 19, 2019  15:56
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 26, 2020  15:26
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Nc3Vector.h"

@@ -3,8 +3,6 @@
 // Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcAstrolab.h 139 2017-09-20 08:30:45Z nickve $
-
 #include <math.h>
 
 #include "TTask.h"
@@ -21,6 +19,10 @@
 #include "TMarker.h"
 #include "TF1.h"
 #include "TArrayD.h"
+#include "TStyle.h"
+#include "TFile.h"
+#include "TChain.h"
+#include "TLeaf.h"
 
 #include "NcTimestamp.h"
 #include "NcPosition.h"
@@ -28,6 +30,7 @@
 #include "NcDevice.h"
 #include "NcRandom.h"
 #include "NcMath.h"
+#include "NcSample.h"
  
 class NcAstrolab : public TTask,public NcTimestamp
 {
@@ -40,8 +43,10 @@ class NcAstrolab : public TTask,public NcTimestamp
   void SetLabPosition(Nc3Vector& r);                                  // Set lab position in terrestrial frame
   void SetLabPosition(Double_t l,Double_t b,TString u="deg");         // Set lab terrestrial position
   void SetExperiment(TString name);                                   // Set position and local frame for the specified experiment
+  void SetLabTimeOffset(Double_t dt);                                 // Set the lab time offset w.r.t. UT
   NcPosition GetLabPosition() const;                                  // Provide the lab terrestrial position 
   void GetLabPosition(Double_t& l,Double_t& b,TString u="deg") const; // Provide the lab terrestrial position
+  Double_t GetLabTimeOffset() const;                                  // Provide the lab time offset w.r.t. UT
   void SetRandomiser(Int_t iseed,Int_t cnt1=0,Int_t cnt2=0,NcTimestamp* ts=0); // (Re)initialise the internal NcRandom randomisation facility 
   NcRandom* GetRandomiser(Int_t& iseed,Int_t& cnt1,Int_t& cnt2) const;         // Provide the current internal NcRandom randomiser parameters
   using NcTimestamp::GetLT;
@@ -95,7 +100,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj="ham",Int_t clr=0,Int_t type=0); // Display stored signal
   void DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj="ham",Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1); // Display all stored signals
   void SetMarkerSize(Float_t size,Int_t type); // Set size for the marker symbols of the skymaps and related histograms 
-  void SetCentralMeridian(Double_t phi,TString u="deg");  // Set central meridian for the sky display
+  void SetCentralMeridian(Int_t mode=0,Double_t phi=0,TString u="deg");  // Set central meridian and orientation for the sky display
   void SetPhysicalParameter(TString name,Double_t value); // Facility to modify physical parameter values
   Double_t GetPhysicalParameter(TString name) const;      // Provide the (modified) value of a physical parameter
   Double_t GetPhysicalDistance(Double_t z,TString u="Mpc",Int_t t=1) const; // Provide physical distance of an object with redshift z in a flat universe
@@ -107,8 +112,10 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetHubbleParameter(Double_t z,TString u="Mpc") const; // Provide the Hubble parameter for a certain redshift z in a flat universe
   Double_t GetNuclearMass(Int_t z,Int_t n,Int_t mode=1) const; // Provide the nuclear mass or binding energy for a nucleus (Z,N)
   Double_t GetNeutrinoXsection(Int_t mode,Int_t type,Double_t egev,Double_t xscale=1,Double_t* eprimgev=0,Double_t* alpha=0) const; // Provide neutrino cross section
+  Double_t GetNeutrinoAngle(Double_t E,TString u,Int_t mode,TF1* f=0); // Provide the kinematic opening angle between a neutrino and the CC produced corresponding lepton
   void RandomPosition(Nc3Vector& v,Double_t thetamin,Double_t thetamax,Double_t phimin,Double_t phimax); // Random angular position according to an isotropic solid angle distribution
   void SmearPosition(Nc3Vector& v,Double_t sigma); // Smear angular position according to the specified angular accuracy
+  void ShiftPosition(Nc3Vector& v,Double_t angle); // Shift the position with the specified angular offset to a random location on a cone around the original position
   TH1F GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin=-1,Double_t dxmin=-1,Double_t dxmax=-1) const; // Provide dx distribution of histogram entries 
   TH1F GetDifHistogram(TH1* hin,Int_t mode,TString s="",TF1* f=0) const;  // Construct the differential dy/dx vs. x histogram from a 1D y vs. x histogram
   TH1F GetCountsHistogram(TF1& spec,Int_t nbins,Double_t xmin, Double_t xmax,Int_t mode,TString s="") const;  // Construct the counts (N) vs. x histogram from a 1D differential spectrum dN/dx
@@ -124,6 +131,27 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t KolmogorovTest(TString mode,TH1* h1,TH1* h2=0,TF1* pdf=0,Double_t nr=1000,TH1F* ksh=0,Int_t ncut=0,Double_t* nrx=0,Int_t mark=1); // Perform a K-S test
   TH1F GetCumulHistogram(TH1* h,TString name,TString mode="F") const; // Provide the Cumulative Distribution Histogram from an input histogram
   TH1F GetCumulHistogram(TF1* f,TString name,Int_t nbins,Double_t xmin,Double_t xmax,TString mode="F") const; // Provide the Cumulative Distribution Histogram from an input function
+
+  // Facilities for transient burst investigation
+  void SetBurstParameter(TString name,Double_t value); // Specification of a certain transient burst parameter setting
+  NcDevice* GetBurstParameters();    // Provide the device containing all the burst parameter settings
+  void ListBurstParameters() const;  // Listing of all the burst parameter settings
+  void LoadBurstGCNdata(TString file,TString tree,Int_t date1=0,Int_t date2=0,Int_t nmax=-1,TString type="GRB");  // Load observed burst GCN data
+  void GenBurstGCNdata(Int_t n,TString name="GRB"); // Generate fictative burst GCN data
+  void GenBurstSignals(); // Generate detector signals from the stored transient bursts
+  void ListBurstHistograms() const;            // Provide a list of all the stored transient burst histograms
+  void WriteBurstHistograms(TString filename); // Write all stored transient burst histograms to a ROOT output file
+  void MakeBurstZdist(TString file,TString tree,TString name,Int_t nb=200,Float_t zmin=0,Float_t zmax=20); // Make transient burst observed redshift distribution
+  void MakeBurstT90dist(TString file,TString tree,TString name,Int_t nb=50,Float_t xmin=-5,Float_t xmax=5); // Make transient burst observed T90 distribution
+  void MakeBurstBkgEdist(TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000);
+  void MakeBurstEdist(TF1& spec,Double_t Emin,Double_t Emax,Int_t nbins=1000);
+  void MakeBurstEdist(Double_t gamma,Double_t Emin,Double_t Emax,Int_t nbins=1000);
+  Double_t GetBurstSignalEnergy(Double_t Emin=-1,Double_t Emax=-1) const;
+  Double_t GetBurstBackgroundEnergy(Double_t Emin=-1,Double_t Emax=-1) const;
+  TH1* GetBurstBayesianSignalRate(Double_t p,Double_t& rlow,Double_t& rup,Int_t n=1000); // Provide transient burst Bayesian signal rate and credible interval 
+  Double_t GetBurstLiMaSignificance() const;                         // Provide the transient burst Li-Ma signal significance
+  void GetBurstBayesianPsiStatistics(TString type,Int_t ndt=2,Double_t nr=-1,Int_t ncut=10,Int_t freq=0); // Provide transient burst Bayesian Psi statistics
+  void GetBurstChi2Statistics(TString type,Int_t ndt=2);             // Provide the transient burst Chi-squared statistics
  
  protected:
   NcPosition fLabPos;    // Position of the lab in the terrestrial longitude-latitude frame
@@ -173,7 +201,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetDifference(Int_t i,Int_t j,TString au,Double_t& dt,TString tu,Int_t mode=1); // Provide space and time difference
 
   // The skymap display facilities
-  Int_t fUsMeridian;      // Flag to denote that the user has selected the central meridian (1) or not (0)
+  Int_t fUsMeridian;      // Flag to denote the (user) selection of the central meridian and display mode
   Double_t fMeridian;     //! Central meridian (in rad) for the sky display
   TString fProj;          //! Projection which is currently in use
   TCanvas* fCanvas;       //! The canvas for the skymap
@@ -220,11 +248,20 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t fHbarc;   // The value of the conversion constant hbar*c in MeV fm
   Double_t fHbarc2;  // The value of the conversion constant (hbar*c)^2 in GeV^2 barn
 
+  // Function to parametrize the Neutrino-Lepton kinematic opening angle
+  TF1* fNuAngle;
+
   // Actual calculation of the posterior Bayesian probability for background c.q. source signal rates
   Double_t GetBackgroundRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a background rate "b"
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
+  // Storage for transient burst investigations
+  NcDevice* fBurstParameters; // Various parameters describing the transient burst
+  TObjArray fBurstHistos;     // Storage of all the produced transient burst histograms
+
+  // Internal function for transient burst investigations
+  void BurstCompensate(Int_t& nmugrb,Float_t Grbnu,Float_t Ngrbs,Int_t Inburst,Float_t Dtnu,Float_t Dtnus,Float_t Angres,Float_t Timres,Float_t Datype,Float_t Dawin);
  
- ClassDef(NcAstrolab,29) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,30) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

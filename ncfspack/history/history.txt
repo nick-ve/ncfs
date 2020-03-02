@@ -1125,3 +1125,7 @@
                 The version indicator in NcVersion has been updated to 3.0.
 26-jan-2020 NvE Bug fixed in Nc3Vector update of 19-oct-2019, which affected (accuracy of) astronomical positions.
                 The version indicator in NcVersion has been updated to 3.1.
+02-mar-2020 NvE Class NcAstrolab extended with a beta version of a toy model for the investigation of signals
+                from (astrophysical) transient phenomena. Also the printout c.q. functionality of the member functions
+                ListSignals(), SetCentralMeridian() and DisplaySignals() of class NcAstrolab has been extended.
+                The version indicator in NcVersion has been updated to 3.2.

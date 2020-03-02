@@ -6,4 +6,7 @@
 06-sep-2012 NvE Fix introduced in grbmodel.cc to prevent overfluctuation of the number of GRB muons
                 in case the user has selected the non-fluctuation mode (grbnu<0).
                 Thanks Lionel Brayeur.
+02-mar-2020 NvE ROOT macro burst-model.cc introduced to provide a generic tool to study (astrophysical)
+                transient phenomena using the NcAstrolab facility. The latter has recently been extended
+                to contain the functionality of the previous (and now obsolete) grbmodel.cc macro.
 
