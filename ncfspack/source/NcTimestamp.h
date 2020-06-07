@@ -95,7 +95,7 @@ class NcTimestamp : public TTimeStamp
   void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time,TString utc="A",Int_t leap=0,Double_t dut=0);                 // Set data according to LT
   void SetLT(Double_t dt,TString date,TString time,Int_t mode,TString utc="A",Int_t leap=0,Double_t dut=0);                 // Set data according to LT
   void SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns=0,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set data according to LT based on elapsed days, secs etc...
-  Double_t Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name="",Double_t* el=0,Double_t* eb=0,Double_t* er=0,Double_t* value=0,Int_t j=0); // Provide astronomical observables
+  Double_t Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name="",Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0); // Provide astronomical observables
   void SetEpoch(Double_t e,TString mode,TString utc="A",Int_t leap=0,Double_t dut=0); // Set time parameters according to the specified epoch
   Double_t GetEpoch(TString mode); // Provide the requested epoch
 
@@ -119,6 +119,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,8) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,9) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

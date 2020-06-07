@@ -278,8 +278,8 @@
 //  cout << endl;
 // }
 //
-//--- Author: Nick van Eijndhoven March 13, 2019 03:40 IIHE-VUB, Brussel
-//- Modified: Nick van Eijndhoven April 12, 2019 10:25 IIHE-VUB, Brussel
+//--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 19, 2020  12:37
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -1832,6 +1832,7 @@ UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,TArrayI ilast,TArrayI
  }
 
  UInt_t npix=npixels;
+ delete[] pixels;
  return npix;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1926,6 +1927,7 @@ UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,UInt_t npix)
  }
 
  UInt_t nread=npixels;
+ delete[] pixels;
  return nread;
 }
 ///////////////////////////////////////////////////////////////////////////

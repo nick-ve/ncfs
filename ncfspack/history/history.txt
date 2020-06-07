@@ -1129,3 +1129,14 @@
                 from (astrophysical) transient phenomena. Also the printout c.q. functionality of the member functions
                 ListSignals(), SetCentralMeridian() and DisplaySignals() of class NcAstrolab has been extended.
                 The version indicator in NcVersion has been updated to 3.2.
+19-apr-2020 NvE In the memberfunctions GetImageArray() of class NcFITSIO the statement "delete[] pixels"
+                has been added to prevent possible memory leak.
+29-may-2020 NvE Functionality of memberfunction GetDxHistogram() of class NcAstrolab has been extended and the
+                memberfunctions GetBurstBayesianPsiStatistics() and GetBurstChi2Statistics() modified accordingly.
+                Also in GetBurstBayesianPsiStatistics() the range of the background Delta-t histogram has now
+                been auto-determined instead of taking the same range as for the actually observed Delta-t histogram.
+                This prevents entries to fall outside the histogram range and into the overflow area.
+                For the range of the corresponding background Delta-t PDF the maximum range of both histograms is taken.
+07-jun-2020 NvE Functionality of memberfunction Almanac() of class NcTimestamp has been extended with the
+                Equation of Time and the printout of the memberfunction Date() has been extended accordingly.
+                The version indicator in NcVersion has been updated to 3.3.

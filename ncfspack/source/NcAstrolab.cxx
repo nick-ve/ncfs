@@ -152,7 +152,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 2, 2020  11:46
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 7, 2020 11:46
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -609,7 +609,7 @@ void NcAstrolab::SetExperiment(TString name)
  {
   SetNameTitle("Amanda","Antarctic Muon And Neutrino Detector Array");
   SetLabPosition(0,-90,"deg"); // South Pole
-  // Right handed Amanda local frame has Y-North (to Greenwich), X-East and Z-Zenith
+  // Right handed Amanda local grid frame has Y-North (to Greenwich), X-East and Z-Zenith
   SetLocalFrame(90,90,90,180,0,0);
   return;
  }
@@ -621,7 +621,7 @@ void NcAstrolab::SetExperiment(TString name)
   l=-63.453056;
   b=-89.99;
   SetLabPosition(l,b,"deg"); // South Pole
-  // Right handed IceCube local frame has Y-North (to Greenwich), X-East and Z-Zenith
+  // Right handed IceCube local grid frame has Y-North (to Greenwich), X-East and Z-Zenith
   SetLocalFrame(90,90.+l,90,180.+l,0,0);
   return;
  }
@@ -630,7 +630,7 @@ void NcAstrolab::SetExperiment(TString name)
  {
   SetNameTitle("WSRT","The Westerbork Synthesis Radio Telescope");
   SetLabPosition(63612.74,525454.33,"dms");
-  // Right handed WSRT local frame has Y-North, X-East and Z-Zenith
+  // Right handed WSRT local grid frame has Y-North, X-East and Z-Zenith
   SetLocalFrame(90,90,90,180,0,0);
   return;
  }
@@ -639,7 +639,7 @@ void NcAstrolab::SetExperiment(TString name)
  {
   SetNameTitle("Astron","The Netherlands Institute for Radio Astronomy");
   SetLabPosition(62346.23,524843.99,"dms");
-  // Right handed Astron local frame has Y-North, X-East and Z-Zenith
+  // Right handed Astron local grid frame has Y-North, X-East and Z-Zenith
   SetLocalFrame(90,90,90,180,0,0);
   return;
  }
@@ -648,7 +648,7 @@ void NcAstrolab::SetExperiment(TString name)
  {
   SetNameTitle("ARA","The Askaryan Radio Array at the South Pole");
   SetLabPosition(0,-90,"deg"); // South Pole
-  // Right handed ARA local frame has Y-North (to Greenwich), X-East and Z-Zenith
+  // Right handed ARA local grid frame has Y-North (to Greenwich), X-East and Z-Zenith
   SetLocalFrame(90,90,90,180,0,0);
   return;
  }
@@ -659,7 +659,7 @@ void NcAstrolab::SetExperiment(TString name)
   l=-38.46;
   b=72.58;
   SetLabPosition(l,b,"deg"); // Summit Station
-  // Right handed RNO-G local frame has Y-North, X-East and Z-Zenith
+  // Right handed RNO-G local grid frame has Y-North, X-East and Z-Zenith
   SetLocalFrame(90,90,90,180,0,0);
   return;
  }
@@ -6724,32 +6724,50 @@ void NcAstrolab::ShiftPosition(Nc3Vector& v,Double_t angle)
  if (ier) v.SetErrors(err,"car");
 }
 ///////////////////////////////////////////////////////////////////////////
-TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,Double_t dxmax) const
+TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,Double_t dxmax,Int_t mode,Double_t fact)
 {
-// Provide interval size (dx) distribution of X-axis intervals containing
-// exactly "nc" consecutive histogram entries of the specified input histogram.
+// Provide the interval size (dx) distribution of X-axis intervals between a certain
+// fixed amount of consecutive histogram entries of the specified input histogram.
 // This facility can for instance be used to investigate the distribution
 // of time intervals between observed events.
 //
 // Input arguments :
 // -----------------
-// hx    : The input histogram
-// nc    : The required number of consecutive entries within the interval dx
-// dxbin : The bin size of the X-axis for the dx distribution (see also the note below)
-//         dxbin=0  ==> Bin size taken the same as the input histogram hx
-//         dxbin=-1 ==> Bin size taken to be the minimal encountered dx interval
-//                     (or hx bin size in case the minimal encountered dx was 0) 
-//         dxbin=-2 ==> Bin size taken to be nc times the bin size of the input histogram hx
-// dxmin : The lower bound of the produced histogram
-//         dxmin<0 ==> Lower bound taken to be the minimal encountered dx interval           
-// dxmax : The upper bound of the produced histogram
+// hx    : The input histogram.
+// nc    : The step count to arrive at the required consecutive entry (see example below).
+// dxbin : The bin size of the X-axis for the dx distribution (see also the note below).
+//         dxbin=0  ==> Bin size taken the same as the input histogram "hx".
+//         dxbin=-1 ==> Bin size taken to be the minimal encountered dx interval,
+//                      or "fact" times the bin size of the input histogram "hx", if the latter
+//                      is the larger. This provides a protection against too small bin sizes,
+//                      and consequently a very large number of bins, in case an extremely small
+//                      dx interval value is encountered.
+//                      In case "fact<=0" and the minimal dx interval encountered was 0,
+//                      the bin size of the input histogram "hx" is taken. 
+//         dxbin=-2 ==> Bin size taken to be "nc" times the bin size of the input histogram "hx".
+// dxmin : The lower bound of the produced histogram.
+//         dxmin<0 ==> Lower bound taken to be the minimal encountered dx interval.
+// dxmax : The upper bound of the produced histogram.
 //         dxmax<0 ==> Upper bound taken to be the maximal encountered dx interval
 //                     increased with one additional bin size to contain the maximal
-//                     encountered dx interval value in the output histogram  
+//                     encountered dx interval value in the output histogram.
+// mode  : 0 ==> Bin contents of the input histogram "hx" are regarded as event counts
+//               (rounded to the nearest integer) with as x-value the center of the bin.
+//               Multiple entries in the same bin are treated as multiple events with exactly
+//               the same x-value, possibly resulting in interval values dx=0.
+//               See also note 1) below.
+//         1 ==> Same as "mode=0", but the x-value of each entry of the input histogram "hx" will be
+//               assigned to a uniform random value within the corresponding bin. See note 1) below.  
+//         2 ==> Bin contents of the input histogram "hx" are treated as (weighted) values.
+//               Each filled bin is treated as a single event with as x-value the center of the bin.
+//         3 ==> Same as "mode=2", but the x-value of each entry of the input histogram "hx" will be
+//               assigned to a uniform random value within the corresponding bin. See also note 1) below.
+// fact  : Multiplication factor applied to the bin size of the input histogram "hx" to provide
+//         a lower limit to the bin size of the produced Dx histogram when "dxbin=-1". See note 1) below.
 //
 // Returned object : The 1-D histogram (TH1F) containing the dx distribution.
 //
-// Default values : dxbin=-1, dxmin=-1 and dxmax=-1. 
+// Default values : dxbin=-1, dxmin=-1, dxmax=-1, mode=1 and fact=1.
 //
 // Note : A too coarse bin size "dxbin" may lead to binning effects which may affect
 //        a statistical interpretation of the resulting histogram, for instance in the
@@ -6765,72 +6783,121 @@ TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,D
 //
 // Example :
 // ---------
-// Histogram "hx" contains the event times according to a Poisson distribution.
-// Specifying nc=1 will provide the histogram of dt intervals in which exactly 1 event happened,
-// in other words the dt between consecutive events.
-// Specifying nc=2 will provide the histogram of dt intervals in which exactly 2 events happened.
+// Histogram "hx" contains the counts of event times according to a Poisson distribution.
+// Specifying "nc=1" will provide the histogram of dt intervals between each consecutive event,
+// i.e. the distribution of time intervals between the events (1,2), (2,3), (3,4) etc.
+// Specifying "nc=2" will provide the histogram of dt intervals between every 2nd consecutive event,
+// i.e. the distribution of time intervals between the events (1,3), (2,4), (3,5) etc.
 // In this case of a Poissonian input histogram these produced dt distributions are known
-// as the Erlang distributions (see also class NcMath).
+// as the Erlang distributions (see also class NcMath), for which each time interval contains
+// exactly "nc" events of which the last event occurs right at the end of the interval.
 //
 // Notes :
 // -------
-// 1) In case a certain bin of the input histogram hx contains several entries, all these
-//    entries are treated as separate entities with exactly the same x-value.
-//    Consequently, this may result in (several) dx intervals of value 0 containing the
-//    requested "nc" consecutive entries, resulting in entries at 0 in the output histogram.
-// 2) In case dxmax<0 the actual bin size of the output histogram (slightly) differs from the
-//    provided one because of the addition of one bin size to the auto-detected dxmax.
-//    If one wants multiple output histograms resulting from multiple invokations of this
-//    function to have identical range and bin size, the user is advised to obtain the output
-//    histogram parameters from the first produced histogram and pass these to the subsequent invokations. 
-// 3) This member function is used recursively.
+// 1) In case a certain bin of the input histogram "hx" contains several entries, all these
+//    entries are regarded as separate entities with exactly the same x-value.
+//    Consequently, this may result in (several) dx intervals of value 0, resulting in
+//    entries at 0 in the output histogram.
+//    In case one wants to avoid this effect, the binning of the input histogram "hx" could be
+//    chosen fine enough to reflect a basically unbinned situation.
+//    Another way to avoid this effect is to specify "mode=1", for which all entries in the
+//    input histogram "hx" will be assigned a uniform random value within the corresponding bin,
+//    instead of the usual center of bin value.
+//    The "sensitivity" to this randomisation effect can be tuned by the input argument "fact"
+//    which controls the minimal bin size of the produced Dx histogram.
+//    Yet another way of avoiding this effect is to specify "mode=2" or "mode=3", which will treat
+//    every filled bin of the input histogram as a single event, irrespective of the bin content.
+//    These modes 2 or 3 allow the treatment of input histograms for which the bin contents do
+//    not represent event counts, e.g. histograms which have been rescaled or filled with weights.
+// 2) In case "dxmax<0" the actual bin size of the output histogram (slightly) differs from the
+//    provided one because of the addition of one or two bin size(s) to the auto-detected dxmax
+//    in order to prevent entries to fall outside the histogram range. 
+//    If one wants multiple output histograms resulting from multiple invokations of this function
+//    to have identical range and bin size, the user is advised to obtain the output histogram
+//    parameters from the first produced histogram and pass these to the subsequent invokations.
+// 3) For "mode=1" and "mode=3" a random number sequence is used, which may yield (slightly) different
+//    results for multiple invokations. The start of the random number sequence may be synchronised
+//    by invokation of the member function SetRandomiser().
+// 4) This member function is used recursively.
 
  TH1F hdx;
 
+ if (mode<0 || mode>3) return hdx;
+
  if (!hx) return hdx;
+
+ if (nc<1) return hdx;
  
  Int_t nenhx=hx->GetEntries();
- if (!nenhx) return hdx;
+ if (nenhx<=nc) return hdx;
+
+ Int_t idxbin=TMath::Nint(dxbin);
+ if (idxbin<-2) return hdx;
 
  // Create the output histogram if all parameters have been specified or determined automatically.
  // If not, this will be done at a recursive invokation (see below) once (some of) the
  // parameters have been determined automatically from the input histogram.
  if (dxmin>=0 && dxmax>=dxmin && dxbin>0)
  {
-  Int_t nbins=int((dxmax-dxmin)/dxbin);
+  Int_t nbins=1;
+  Double_t range=dxmax-dxmin;
+  if (range>dxbin) nbins=TMath::Nint(range/dxbin);
   hdx.SetBins(nbins,dxmin,dxmax);
 
   // Add histogram and axes titles
   TString s;
 
-  s="Dx interval distribution to contain ";
+  s="Dx interval distribution between ";
+  s+=nc+1;
+  s+=" consecutive entries (nc=";
   s+=nc;
-  s+=" consecutive entries";
+  s+=", mode=";
+  s+=mode;
+  s+=")";
   hdx.SetNameTitle("DxHistogram",s.Data());
 
   Double_t binwidth=hdx.GetXaxis()->GetBinWidth(1);
-  s.Form("Counts per %-10.3g",binwidth);
+  s.Form("Counts per bin of size %-10.3g",binwidth);
   hdx.GetXaxis()->SetTitle("Dx interval");
   hdx.GetYaxis()->SetTitle(s.Data());
  }
 
+ // If needed, initialise the randomiser with a "date/time driven" seed
+ // using the timestamp of the moment of this invokation of the member function.
+ // This will ensure different random sequences if the user repeats analyses
+ // under identical conditions without explicit initialisation of the randomiser
+ // by the user at the start of the analysis.
+ if (!fRan) fRan=new NcRandom(-1);
+
  // Determine the minimum and maximum encountered dx or fill the output histogram
  Double_t x1,x2,deltax;
  Int_t nx1,nx2;
- Double_t deltaxmin=99999;
- Double_t deltaxmax=-99999;
+ Double_t deltaxmin=0;
+ Double_t deltaxmax=0;
+ Bool_t found=kFALSE;
  Int_t ndxcount=0;
  Int_t jstart;
 
  Int_t nbhx=hx->GetNbinsX();
+ Double_t value=0;
+ Double_t xlow=0;
+ Double_t xup=0;
+ Double_t bsize=0;
  for (Int_t i=1; i<=nbhx; i++)
  {
   deltax=-1;
   ndxcount=0;
-  nx1=int(hx->GetBinContent(i)+1e-3);
+  xlow=hx->GetBinLowEdge(i);
+  bsize=hx->GetBinWidth(i);
+  xup=xlow+bsize;
   x1=hx->GetBinCenter(i);
+  if (mode==1 || mode==3) x1=fRan->Uniform(xlow,xup);
+  value=hx->GetBinContent(i);
+  nx1=0;
+  if (value) nx1=1;
+  if (mode<2) nx1=TMath::Nint(value);
 
-  while (nx1)
+  while (nx1>0)
   {
    // Check for multiple counts (left) in this bin
    jstart=i+1;
@@ -6838,8 +6905,15 @@ TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,D
 
    for (Int_t j=jstart; j<=nbhx; j++)
    {
-    nx2=int(hx->GetBinContent(j)+1e-3);
+    xlow=hx->GetBinLowEdge(j);
+    bsize=hx->GetBinWidth(j);
+    xup=xlow+bsize;
     x2=hx->GetBinCenter(j);
+    if (mode==1 || mode==3) x2=fRan->Uniform(xlow,xup);
+    value=hx->GetBinContent(j);
+    nx2=0;
+    if (value) nx2=1;
+    if (mode<2) nx2=TMath::Nint(value);
 
     if (j==i) nx2=nx1-1; // Counting within the same bin
 
@@ -6850,17 +6924,18 @@ TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,D
 
     if (ndxcount>=nc)
     {
-     deltax=x2-x1;
+     deltax=fabs(x2-x1);
      if (dxmin>=0 && dxmax>=dxmin && dxbin>0) // Output histogram has been initialised
      {
       hdx.Fill(deltax);
      }
      else // Auto-determination of the output histogram range
      {
-      if (deltax<deltaxmin) deltaxmin=deltax;
-      if (deltax>deltaxmax) deltaxmax=deltax;
+       if (!found || deltax<deltaxmin) deltaxmin=deltax;
+       if (!found || deltax>deltaxmax) deltaxmax=deltax;
      }
      ndxcount=0;
+     found=kTRUE;
      break;
     }
    }
@@ -6868,29 +6943,52 @@ TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin,Double_t dxmin,D
   }
  }
 
+ // Check if a suitable configuration of entries was encountered
+ if (!found) return hdx;
+
  // Check if a recursive call is needed to actually create and fill the output histogram
  Int_t nen=hdx.GetEntries();
  if (!nen)
  {
   // Set the bin size (if needed) for the output histogram
-  if (!dxbin) dxbin=hx->GetBinWidth(1);
-  if (dxbin==-1)
+  if (!idxbin) dxbin=hx->GetBinWidth(1);
+  if (idxbin==-1)
   {
-   dxbin=hx->GetBinWidth(1);
-   if (deltaxmin>0) dxbin=deltaxmin;
+   dxbin=(hx->GetBinWidth(1))*fact;
+   if (deltaxmin>0 && deltaxmin>dxbin) dxbin=deltaxmin;
+   if (dxbin<=0) dxbin=hx->GetBinWidth(1);
   }
-  if (dxbin==-2)
+  if (idxbin==-2)
   {
    dxbin=hx->GetBinWidth(1);
    dxbin=dxbin*float(nc);
   }
 
   // Set the auto-determined range of the output histogram
-  if (dxmin<0) dxmin=deltaxmin;
-  if (dxmax<0) dxmax=deltaxmax+dxbin;
+  if (dxmin<0)
+  {
+   dxmin=deltaxmin;
+   // Compensate for randomized x-values within the input histogram bins
+   if (mode==1 || mode==3)
+   {
+    bsize=hx->GetBinWidth(1);
+    dxmin=dxmin-2.*bsize;
+    if (dxmin<0) dxmin=0;
+   }
+  }
+  if (dxmax<0)
+  {
+   dxmax=deltaxmax+dxbin;
+   // Compensate for randomized x-values within the input histogram bins
+   if (mode==1 || mode==3)
+   {
+    bsize=hx->GetBinWidth(1);
+    dxmax=dxmax+2.*bsize;
+   }
+  }
 
   // Invoke the recursive call to create and fill the output histogram
-  hdx=GetDxHistogram(hx,nc,dxbin,dxmin,dxmax);
+  hdx=GetDxHistogram(hx,nc,dxbin,dxmin,dxmax,mode,fact);
  }
 
  return hdx;
@@ -8379,9 +8477,6 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 // Tbin      // Time bin size in seconds (0=variable bins  <0 will result in a mean Nbkg counts/bin)
 // VarTbin   // Size (in sec) of the first time bin in case of variable time bins
 // Abin      // Angular bin size in degrees (<0 will result in a mean Nbkg counts/bin)
-// Npsi      // Number of psi entries for bkg psi-value distributions (<0 : time shuffling)
-// Usetott   // Use the observed tott number of entries in case of time shuffling 
-// Grbpos    // Use the original burst locations (1) or random ones (0) for bkg studies
 
  if (!fBurstParameters)
  {
@@ -8477,15 +8572,6 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
   name="Abin";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(1,name);
-  name="Npsi";
-  fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(0,name);
-  name="UseTott";
-  fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(1,name);
-  name="Grbpos";
-  fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(1,name);
 
   // Remove all histograms related to burst investigations
   fBurstHistos.Clear();
@@ -8578,9 +8664,6 @@ void NcAstrolab::ListBurstParameters() const
  Float_t fTbin=fBurstParameters->GetSignal("Tbin");
  Float_t fVarTbin=fBurstParameters->GetSignal("VarTbin");
  Float_t fAbin=fBurstParameters->GetSignal("Abin");
- Int_t fNpsi=fBurstParameters->GetSignal("Npsi");
- Int_t fUsetott=fBurstParameters->GetSignal("Usetott");
- Int_t fGrbpos=fBurstParameters->GetSignal("Grbpos");
 
  // Derived parameters
  Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
@@ -8687,24 +8770,7 @@ void NcAstrolab::ListBurstParameters() const
  {
   cout << " Angular bin size in degrees : " << fAbin << endl;
  }
- if (fNpsi)
- {
-  cout << " Number of psi entries for bkg psi-value distributions : " << abs(fNpsi);
-  if (fNpsi<0)
-  {
-   cout << " by means of time shuffling";
-   if (fUsetott) cout << " of the observed tott number of entries";
-  }
-  cout << endl;
- }
- if (fGrbpos)
- {
-  cout << " Original burst locations are used for bkg studies" << endl;
- }
- else
- {
-  cout << " Random burst locations are used for bkg studies" << endl;
- }
+
  cout << endl;
  cout << " ============================== Derived parameters ====================================" << endl;
  cout << " Solid angle coverage (in steradian) corresponding to the selected declination band : " << fOmegaDecl << endl;
@@ -10337,7 +10403,7 @@ Double_t NcAstrolab::GetBurstLiMaSignificance() const
  return sigma;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Int_t ndt,Double_t nr,Int_t ncut,Int_t freq)
+void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t ncut,Int_t ndt,Int_t mode, Double_t fact,Int_t freq)
 {
 // Provide the transient burst Bayesian Psi statistics for the (stacked) distributions of the
 // observed arrival times and opening angles w.r.t. the corresponding bursts.
@@ -10359,7 +10425,7 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Int_t ndt,Double_t n
 // To be specific : Psi=-10*log[p(D|B_m I)]
 //
 // where p(D|B_m I) represents the likelihood of the data D under the condition
-// that B_m (given some prior information I) are true.
+// that B_m (given some prior information I) is true.
 //
 // In our current situation, the hypotheses B_m (i.e. Probability Distribution Functions)
 // for the various observed distributions are known and "m" just represents the number
@@ -10384,16 +10450,22 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Int_t ndt,Double_t n
 //                    This will investigate the deviation from a uniform background cos(angle) spectrum 
 //        "dt"    --> Provide statistics for the time intervals between the observed arrival times
 //                    This will investigate the deviation from dt spectrum expected from Poisson statistics
-// ndt  : Number of events within a dt cell for which the dt statistics will be performed 
 // nr   : (Maximum) number of randomised configurations for psi P-value determination.
 //        nr<0 implies that no psi P-values will be determined (saves CPU time).
 //        nr=0 implies the allowed maximum of 1e19 randomisations.
 // ncut : Number of obtained randomised psi entries above the actual observed psi value
 //        at which randomisations will be terminated (to save CPU time).
 //        ncut=0 implies no early termination.
-// freq : Use frequentist's approximation (1) or exact Bayesian expression (0)
+// ndt  : The step count to arrive at the required consecutive entry to perform the dt statistics.
+//        Specifying "ndt=1" will provide the statistics of dt intervals between each consecutive event,
+//        i.e. time intervals between the events (1,2), (2,3), (3,4) etc.
+//        Specifying "ndt=2" will provide the statistics of dt intervals between every 2nd consecutive event,
+//        i.e. time intervals between the events (1,3), (2,4), (3,5) etc.
+// mode : The "mode" parameter as documented in the member function GetDxHistogram().
+// fact : The "fact" parameter as documented in the member function GetDxHistogram().
+// freq : Use frequentist's approximation (1) or exact Bayesian expression (0) for psi.
 //
-// The default values are ndt=2, nr=-1, ncut=10 and freq=0.
+// The default values are nr=-1, ncut=10, ndt=2, mode=1, fact=1 and freq=0.
 
  NcMath math;
 
@@ -10617,25 +10689,22 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Int_t ndt,Double_t n
   namebkg+=ndt;
   TH1F* htotdt=(TH1F*)fBurstHistos.FindObject(nametot.Data());
   TH1F* hbkgdt=(TH1F*)fBurstHistos.FindObject(namebkg.Data());
-  Double_t deltatbin=0, deltatmin=0, deltatmax=0;
   if (!htotdt && !hbkgdt)
   {
-   htotdt=(TH1F*)(GetDxHistogram(tot,ndt,-1,0,-1).Clone(nametot.Data()));
-   deltatbin=htotdt->GetXaxis()->GetBinWidth(1);
-   deltatmin=htotdt->GetXaxis()->GetXmin();
-   deltatmax=htotdt->GetXaxis()->GetXmax();
-   hbkgdt=(TH1F*)(GetDxHistogram(bkg,ndt,deltatbin,deltatmin,deltatmax).Clone(namebkg.Data()));
+   htotdt=(TH1F*)(GetDxHistogram(tot,ndt,-1,0,-1,mode,fact).Clone(nametot.Data()));
+   Double_t deltatbin=htotdt->GetXaxis()->GetBinWidth(1);
+   hbkgdt=(TH1F*)(GetDxHistogram(bkg,ndt,deltatbin,0,-1,mode,fact).Clone(namebkg.Data()));
 
    // Create titles and labels for the delta t histograms
-   TString title="Time intervals containing ";
-   title+=ndt;
+   TString title="Time intervals between ";
+   title+=ndt+1;
    title+=" consecutive events in the on-source time window";
    title+=";dt (in sec);Counts per bin of size %-10.3g";
    TString s=title.Format(title.Data(),deltatbin);
    htotdt->SetTitle(s.Data());
 
-   title="Time intervals containing ";
-   title+=ndt;
+   title="Time intervals between ";
+   title+=ndt+1;
    title+=" consecutive events in the off-source time window";
    title+=";dt (in sec);Counts per bin of size %-10.3g";
    s=title.Format(title.Data(),deltatbin);
@@ -10686,13 +10755,15 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Int_t ndt,Double_t n
   // Provide the dt PDFs as histograms in the output file
   if (!hpdftotdt && !hpdfbkgdt)
   {
-   deltatmax=htotdt->GetXaxis()->GetXmax();
-   fdttot.SetRange(0,deltatmax);
+   Double_t deltatmax=htotdt->GetXaxis()->GetXmax();
+   Double_t xmaxfdt=deltatmax;
+   deltatmax=hbkgdt->GetXaxis()->GetXmax();
+   if (deltatmax>xmaxfdt) xmaxfdt=deltatmax;
+   fdttot.SetRange(0,xmaxfdt);
    fdttot.SetNpx(10000);
    hpdftotdt=(TH1*)fdttot.GetHistogram()->Clone();
    hpdftotdt->SetName(nametot.Data());
-   deltatmax=hbkgdt->GetXaxis()->GetXmax();
-   fdtbkg.SetRange(0,deltatmax);
+   fdtbkg.SetRange(0,xmaxfdt);
    fdtbkg.SetNpx(10000);
    hpdfbkgdt=(TH1*)fdtbkg.GetHistogram()->Clone();
    hpdfbkgdt->SetName(namebkg.Data());
@@ -10777,7 +10848,7 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Int_t ndt,Double_t n
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt)
+void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Int_t mode,Double_t fact)
 {
 // Provide the transient burst Chi-squared statistics for the (stacked) distributions
 // of the observed arrival times and opening angles w.r.t. the corresponding bursts.
@@ -10796,9 +10867,15 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt)
 //                    This will investigate the deviation from a uniform background cos(angle) spectrum 
 //        "dt"    --> Provide statistics for the time intervals between the observed arrival times
 //                    This will investigate the deviation from dt spectrum expected from Poisson statistics
-// ndt  : Number of events within a dt cell for which the dt statistics will be performed 
+// ndt  : The step count to arrive at the required consecutive entry to perform the dt statistics.
+//        Specifying "ndt=1" will provide the statistics of dt intervals between each consecutive event,
+//        i.e. time intervals between the events (1,2), (2,3), (3,4) etc.
+//        Specifying "ndt=2" will provide the statistics of dt intervals between every 2nd consecutive event,
+//        i.e. time intervals between the events (1,3), (2,4), (3,5) etc.
+// mode : The "mode" parameter as documented in the member function GetDxHistogram().
+// fact : The "fact" parameter as documented in the member function GetDxHistogram().
 //
-// The default value is ndt=2.
+// The default values are ndt=2, mode=1 and fact=1.
 
  NcMath math;
 
@@ -10889,22 +10966,22 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt)
   Double_t deltatbin=0, deltatmin=0, deltatmax=0;
   if (!htotdt && !hbkgdt)
   {
-   htotdt=(TH1F*)(GetDxHistogram(tot,ndt,-1,0,-1).Clone(nametot.Data()));
+   htotdt=(TH1F*)(GetDxHistogram(tot,ndt,-1,0,-1,mode,fact).Clone(nametot.Data()));
    deltatbin=htotdt->GetXaxis()->GetBinWidth(1);
    deltatmin=htotdt->GetXaxis()->GetXmin();
    deltatmax=htotdt->GetXaxis()->GetXmax();
-   hbkgdt=(TH1F*)(GetDxHistogram(bkg,ndt,deltatbin,deltatmin,deltatmax).Clone(namebkg.Data()));
+   hbkgdt=(TH1F*)(GetDxHistogram(bkg,ndt,deltatbin,deltatmin,deltatmax,mode,fact).Clone(namebkg.Data()));
 
    // Create titles and labels for the delta t histograms
-   TString title="Time intervals containing ";
-   title+=ndt;
+   TString title="Time intervals between ";
+   title+=ndt+1;
    title+=" consecutive events in the on-source time window";
    title+=";dt (in sec);Counts per bin of size %-10.3g";
    TString s=title.Format(title.Data(),deltatbin);
    htotdt->SetTitle(s.Data());
 
-   title="Time intervals containing ";
-   title+=ndt;
+   title="Time intervals between ";
+   title+=ndt+1;
    title+=" consecutive events in the off-source time window";
    title+=";dt (in sec);Counts per bin of size %-10.3g";
    s=title.Format(title.Data(),deltatbin);

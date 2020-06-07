@@ -333,7 +333,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven February 27, 2019 18:19 IIHE-VUB, Brussel
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 7, 2020 13:46
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -413,17 +413,17 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 {
 // Print date/time info.
 //
-// mode = 1 ==> Only the UT yy-mm-dd hh:mm:ss.sss and GMST info is printed
-//        2 ==> Only the Julian parameter info (incl. TAI MJD, if available) is printed
-//        3 ==> Both the UT, GMST and Julian parameter info (incl. TAI MJD, if available) is printed
-//        4 ==> Only the UTC and TAI related date/time is printed
-//       -1 ==> Only the UT yy-mm-dd hh:mm:ss.sss and GAST info is printed
-//       -3 ==> Both the UT, GAST and Julian parameter info (incl. TAI MJD, if available) is printed
+// mode = 1 ==> Only the date/time info for UT and GMST and the Equation of Time (EoT) and Equinoxes (EoX) is listed
+//        2 ==> Only the Julian parameter info (incl. TAI MJD, if available) is listed
+//        3 ==> Both UT, GMST, EoT, EoX and Julian parameter info (incl. TAI MJD, if available) is listed
+//        4 ==> Only the UTC and TAI related date/time is listed
+//       -1 ==> Only the date/time info for UT, GMST, EoT, EoX, GAT and GAST is listed
+//       -3 ==> Both UT, GMST, EoT, EoX, GAT, GAST and Julian parameter info (incl. TAI MJD, if available) is listed
 //
 // offset : Local time offset from UT (and also GMST) in fractional hours.
 //
 // When an offset value is specified, the corresponding local times
-// LT and LMST (or LAST) are printed as well.
+// LMT and LMST (or LAT and LAST) are printed as well.
 //
 // The default values are mode=3 and offset=0.
 //
@@ -438,7 +438,8 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
  TString day[7]={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
  UInt_t y,m,d,wd;
  Int_t hh,mm,ss,ns,ps;
- Double_t gast;
+ Double_t gat,gast;
+ Bool_t date=kFALSE;
  
  // The UT date and time
  if (abs(mode)==1 || abs(mode)==3)
@@ -449,36 +450,59 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
    wd=GetDayOfWeek(kTRUE,0);
    cout << " " << day[wd-1].Data() << ", " << setfill('0') << setw(2) << d << " "
         << setfill(' ') << month[m-1].Data() << " " << y << " ";
+   date=kTRUE;
   }
   else
   {
    cout << " Time ";
+   date=kFALSE;
   }
   GetUT(hh,mm,ss,ns,ps);
   cout << setfill('0') << setw(2) << hh << ":"
        << setw(2) << mm << ":" << setw(2) << ss << "."
        << setw(9) << ns << setw(3) << ps << " (UT)  ";
 
-  // The Siderial time information
-  if (mode>0)
-  {
-   GetGMST(hh,mm,ss,ns,ps);
-  }
-  else
-  {
-   gast=GetGAST();
-   Convert(gast,hh,mm,ss,ns,ps);
-  }
+  // The GMST time information
+  GetGMST(hh,mm,ss,ns,ps);
   cout << setfill('0') << setw(2) << hh << ":"
        << setw(2) << mm << ":" << setw(2) << ss << "."
-       << setw(9) << ns << setw(3) << ps;
-  if (mode>0)
+       << setw(9) << ns << setw(3) << ps << " (GMST)" << endl;
+
+  // Equation of Time and Equation of Equinoxes
+  Double_t eot;
+  Double_t eox=Almanac(0,0,0,0,"Sun",0,0,0,&eot,10);
+  // Convert to fractional hours
+  eox/=3600.;
+  eot/=3600.;
+  if (date)
   {
-   cout << " (GMST)" << endl;
+   cout << "                 ";
   }
   else
   {
-   cout << " (GAST)" << endl;
+   cout << "     ";
+  }
+  if (eot>=0) cout << " ";
+  PrintTime(eot,3); cout << " (LAT-LMT)";
+  cout << "     ";
+  if (eox>=0) cout << " ";
+  PrintTime(eox,3); cout << " (LAST-LMST)"; cout << endl;
+
+  // Greenwich apparent time information
+  if (mode<0)
+  {
+   gat=GetLT(eot); // Obtain GAT via the Equation of Time as offset
+   gast=GetGAST();
+   if (date)
+   {
+    cout << "                  ";
+   }
+   else
+   {
+    cout << "      ";
+   }
+   PrintTime(gat,12); cout << " (GAT) ";
+   PrintTime(gast,12); cout << " (GAST)" << endl;
   }
 
   // Local time information
@@ -495,30 +519,29 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
     wd=t2.GetDayOfWeek(kTRUE,0);
     cout << " " << day[wd-1].Data() << ", " << setfill('0') << setw(2) << d << " "
          << setfill(' ') << month[m-1].Data() << " " << y << " ";
+    date=kTRUE;
    }
    else
    {
     cout << " Time ";
+    date=kFALSE;
    }
    // Determine the local time by including the offset w.r.t. the original timestamp
-   Double_t hlt=GetLT(offset);
+   Double_t hlt=0;
    Double_t hlst=0;
    if (mode>0)
    {
+    hlt=GetLT(offset);
     hlst=GetLMST(offset);
+    PrintTime(hlt,12);  cout << " (LMT) ";
+    PrintTime(hlst,12); cout << " (LMST)" << endl;
    }
    else
    {
+    hlt=GetLT(offset+eot); // Obtain LAT via the Equation of Time as extra offset
     hlst=GetLAST(offset);
-   }
-   PrintTime(hlt,12); cout << " (LT)  "; PrintTime(hlst,12);
-   if (mode>0)
-   {
-    cout << " (LMST)" << endl;
-   }
-   else
-   {
-    cout << " (LAST)" << endl;
+    PrintTime(hlt,12);  cout << " (LAT) ";
+    PrintTime(hlst,12); cout << " (LAST)" << endl;
    }
   }
  }
@@ -556,18 +579,18 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
   // A dummy timestamp is used to obtain the TAI corresponding date indicator
   NcTimestamp tx;
   tx.SetMJD(fTmjd,fTsec,fTns,fTps);
-  Int_t timeonly=0;
   if (fTmjd>=40587 && (fTmjd<65442 || (fTmjd==65442 && fTsec<8047)))
   {
    tx.GetDate(kTRUE,0,&y,&m,&d);
    wd=tx.GetDayOfWeek(kTRUE,0);
    cout << " " << day[wd-1].Data() << ", " << setfill('0') << setw(2) << d << " "
         << setfill(' ') << month[m-1].Data() << " " << y << " ";
+   date=kTRUE;
   }
   else
   {
-    timeonly=1;
-    cout << " Time ";
+   cout << " Time ";
+   date=kFALSE;
   }
 
   // Determine the TAI derived times
@@ -582,9 +605,9 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
        << setw(9) << ns << setw(3) << ps << " (UTC)" << endl;
 
   GetTAI(hh,mm,ss,ns,ps,"GPS");
-  if (timeonly)
+  if (!date)
   {
-    cout << " Time ";
+    cout << "      ";
   }
   else
   {
@@ -4212,7 +4235,7 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
 // eb      : Ecliptic latitude (in degrees) of the selected solar system body w.r.t. the equinox of date
 // dr      : Distance of the selected solar system body w.r.t. the selected origin
 // value   : One of the additional observable values mentioned below
-// j       : Index to select an observable value such that value=val[j]
+// j       : Index to select an observable value such that value=obs[j] as mentioned below
 //
 // Apart from some generic parameters, the user may select via the input argument "name"
 // a specific solar system body for which various astronomical data are retrieved.
@@ -4244,16 +4267,17 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
 //
 // Available additional observable values :
 // ---------------------------------------- 
-// val[0] : Semi major axis (in AU) of the orbit
-// val[1] : Eccentricity of the orbit
-// val[2] : Inclination (in degrees) of the orbit with the ecliptic
-// val[3] : Mean ecliptic longitude (in degrees) of the ascending node
-// val[4] : Mean orbital longitude (in degrees) of the perihelion
-// val[5] : Mean orbital longitude (in degrees) of the body
-// val[6] : Orbital argument (in degrees) of the perihelion
-// val[7] : Mean orbital anomaly (in degrees) of the body
-// val[8] : Equation of the center (in degrees)
-// val[9] : True anomaly (in degrees) of the body
+// obs[0]  : Semi major axis (in AU) of the orbit
+// obs[1]  : Eccentricity of the orbit
+// obs[2]  : Inclination (in degrees) of the orbit with the ecliptic
+// obs[3]  : Mean ecliptic longitude (in degrees) of the ascending node
+// obs[4]  : Mean orbital longitude (in degrees) of the perihelion
+// obs[5]  : Mean orbital longitude (in degrees) of the body
+// obs[6]  : Orbital argument (in degrees) of the perihelion
+// obs[7]  : Mean orbital anomaly (in degrees) of the body
+// obs[8]  : Equation of the center (in degrees)
+// obs[9]  : True anomaly (in degrees) of the body
+// obs[10] : Equation of Time (in seconds)
 //
 // All generic shifts are determined for the current timestamp with
 // J2000.0 (i.e. 01-jan-2000 12:00:00 UT) as the reference epoch.
@@ -4266,7 +4290,7 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
 //
 // Notes :
 // -------
-// 1) The default values are dpsi=0, deps=0, eps=0, dl=0, name="", el=0, eb=0, dr=0, value=0, j=0,
+// 1) The default values are dpsi=0, deps=0, eps=0, dl=0, name="", el=0, eb=0, dr=0, value=0 and j=0,
 //    which implies that the default invokation Almanac() will only return the equation of the equinoxes in sec.
 // 2) The definitions and expressions are the ones used in the book of Jean Meeus
 //    "Astronomical Algorithms" (2nd edition of August 2009), esp. chapters 31-33.
@@ -4297,11 +4321,13 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
 
  Double_t td;      // Time difference in fractional Julian days w.r.t. the start of J2000.
  Double_t tc;      // Time difference in fractional Julian centuries w.r.t. the start of J2000.
- const Int_t nvals=10;
+ Double_t tm;      // Time difference in fractional Julian millennia w.r.t. the start of J2000.
+ const Int_t nvals=11;
  Double_t val[nvals]; // Array to hold the additional (orbital) parameters
  
  td=GetJD()-2451545.0;
  tc=td/36525.;
+ tm=tc/10.;
 
  // Fundamental solar system variables (in arcseconds) w.r.t. the J2000.0 equinox.
  // The expressions are taken from the USNO circular 179.
@@ -4593,6 +4619,57 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
   val[9]=nu;
  }
 
+ // Determination of the Equation of Time via a recursive invokation
+ if (j==10)
+ {
+  Double_t xdpsi,xdeps,xeps,xlambda,xbeta;
+  Almanac(&xdpsi,&xdeps,&xeps,0,"Sun",&xlambda,&xbeta);
+
+  // Convert from arcsec to degrees
+  xdpsi/=3600.;
+  xdeps/=3600.;
+  xeps/=3600.;
+
+  // Correct for nutation to get the true values
+  xeps+=xdeps;
+  xlambda+=xdpsi;
+
+  while (xlambda<0) { xlambda+=360.; }
+  while (xlambda>360) { xlambda-=360.; }
+
+  // Convert to radians for gonio
+  Double_t epsr=xeps*pi/180.;
+  Double_t lambdar=xlambda*pi/180.;
+  Double_t betar=xbeta*pi/180.;
+
+  // True Right Ascension of the Sun (see Ch.13 p.93 of J. Meeus) 
+  Double_t x=sin(lambdar)*cos(epsr)-tan(betar)*sin(epsr);
+  Double_t y=cos(lambdar);
+  Double_t alpha=0;
+  if (x || y) alpha=atan2(x,y)*180./pi;
+
+  while (alpha<0) { alpha+=360.; }
+  while (alpha>360) { alpha-=360.; }
+
+  // Mean longitude of the Sun (see Ch.28 p.183 of J. Meeus)
+  Double_t L0=280.4664567+360007.6982779*tm+0.03032028*pow(tm,2)+pow(tm,3)/49931.-pow(tm,4)/15300.-pow(tm,5)/2000000.;
+
+  while (L0<0) { L0+=360.; }
+  while (L0>360) { L0-=360.; }
+
+  // Determine the Equation of Time in degrees (see Ch.28 p.183 of J. Meeus)
+  Double_t eot=L0-0.0057183-alpha+xdpsi*cos(xeps*pi/180.);
+
+  // The Equation of Time never exceeds 20 minutes (= 5 degrees)
+  while (eot<-5) { eot+=360.; }
+  while (eot>5) { eot-=360.; }
+
+  // Convert the Equation of Time from degrees to seconds
+  eot*=240.;
+
+  val[10]=eot;
+ }
+ 
  // Make requested value available
  if (value)
  {
