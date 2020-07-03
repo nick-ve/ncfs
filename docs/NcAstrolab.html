@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jun  7 13:52:34 2020            -->
+<!--   Date: Fri Jul  3 15:53:33 2020            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -183,7 +183,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 7, 2020 11:46
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC July 3, 2020 15:30
 
 </pre></div>
 </div></div>
@@ -3982,14 +3982,51 @@ return false;}
  Angres    // Detector angular resolution (degrees)
  Timres    // Detector time resolution (sec)
  Bkgrate   // Mean rate (in Hz) of background events for the specified [Declmin,Declmax] interval (&lt;0 : rate per steradian)
+ Tmin      // Lower bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
+ Tmax      // Upper bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
  Dtwin     // Total search time window (in sec) centered at the burst trigger
  Dawin     // Angular search circle (&lt;0 is local zenith band) in degrees or sigma around (above/below) the burst position
  Datype    // Type of angular window specification (0=in degrees 1=in units of combined burst/track sigma)
  Nbkg      // Mean number of counts per bin for auto-binning
- Tbint90   // Time bin size in units of average T90 (0 : Time bin size determined by Tbin)
- Tbin      // Time bin size in seconds (0=variable bins  &lt;0 will result in a mean Nbkg counts/bin)
+ Tbint90   // Flag to indicate whether Tbin represents seconds (0) or units of average T90 (1)
+ Tbin      // Time bin size (&gt;0=seconds or units of average T90  0=variable bins  &lt;0 will result in a mean Nbkg counts/bin)
  VarTbin   // Size (in sec) of the first time bin in case of variable time bins
  Abin      // Angular bin size in degrees (&lt;0 will result in a mean Nbkg counts/bin)
+
+ Note :
+
+ In case variable time bins are selected, the search time window [Tmin,Tmax] will be centered
+ around the burst trigger time (i.e. t=0) and the first bin will have a size of VarTbin.
+ The size of subsequent time bins is multiplied by the average redshift factor (z+1) at each step.
+ This is done in order to acount for the cosmological time dilation, which stretches all time differences.
+
+ Default settings :
+
+ Nmax=-1
+ [Declmin,Declmax]=[-90,90]
+ [T90min,T90max]=[1e-6,1e6]
+ [Zmin,Zmax]=[-1e-6,9999]
+ Sigmagrb=-2.5
+ Maxsigma=999
+ Grbnu=-0.03
+ Avgrbz=-1
+ Avgrbt90=-1
+ Inburst=0
+ Dtnu=-60
+ Dtnus=-0.5
+ Kinangle=3
+ Angres=0.5
+ Timres=1e-5
+ Bkgrate=-0.003/(2.*pi)
+ Tmin=-3600
+ Tmax=3600
+ Dawin=5
+ Datype=0
+ Nbkg=0.5
+ Tbint90=1
+ Tbin=1
+ VarTbin=10
+ Abin=1
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcAstrolab:GetBurstParameters" href="src/NcAstrolab.cxx.html#MC0xRB">GetBurstParameters</a>()</span><br />
@@ -4397,7 +4434,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Jun  7 13:52:35 2020 </em><em>&raquo; Last generated: 2020-06-07 13:52</em><br />
+<em>&raquo; Last changed: Fri Jul  3 15:53:35 2020 </em><em>&raquo; Last generated: 2020-07-03 15:53</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

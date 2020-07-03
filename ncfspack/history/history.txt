@@ -1140,3 +1140,6 @@
 07-jun-2020 NvE Functionality of memberfunction Almanac() of class NcTimestamp has been extended with the
                 Equation of Time and the printout of the memberfunction Date() has been extended accordingly.
                 The version indicator in NcVersion has been updated to 3.3.
+03-jul-2020 NvE Asymmetric time windows implemented in the burst analysis of NcAstrolab.
+                Also the functionality of the burst parameters Tbint90 and Tbin redefined and the default settings
+                of some burst parameters updated.  

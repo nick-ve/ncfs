@@ -152,7 +152,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 7, 2020 11:46
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC July 3, 2020 15:30
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -8469,14 +8469,51 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 // Angres    // Detector angular resolution (degrees)
 // Timres    // Detector time resolution (sec)
 // Bkgrate   // Mean rate (in Hz) of background events for the specified [Declmin,Declmax] interval (<0 : rate per steradian)
+// Tmin      // Lower bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
+// Tmax      // Upper bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
 // Dtwin     // Total search time window (in sec) centered at the burst trigger
 // Dawin     // Angular search circle (<0 is local zenith band) in degrees or sigma around (above/below) the burst position
 // Datype    // Type of angular window specification (0=in degrees 1=in units of combined burst/track sigma) 
 // Nbkg      // Mean number of counts per bin for auto-binning
-// Tbint90   // Time bin size in units of average T90 (0 : Time bin size determined by Tbin) 
-// Tbin      // Time bin size in seconds (0=variable bins  <0 will result in a mean Nbkg counts/bin)
+// Tbint90   // Flag to indicate whether Tbin represents seconds (0) or units of average T90 (1)
+// Tbin      // Time bin size (>0=seconds or units of average T90  0=variable bins  <0 will result in a mean Nbkg counts/bin)
 // VarTbin   // Size (in sec) of the first time bin in case of variable time bins
 // Abin      // Angular bin size in degrees (<0 will result in a mean Nbkg counts/bin)
+//
+// Note :
+// ------
+// In case variable time bins are selected, the search time window [Tmin,Tmax] will be centered
+// around the burst trigger time (i.e. t=0) and the first bin will have a size of VarTbin.
+// The size of subsequent time bins is multiplied by the average redshift factor (z+1) at each step.
+// This is done in order to acount for the cosmological time dilation, which stretches all time differences.
+//
+// Default settings :
+// ------------------
+// Nmax=-1
+// [Declmin,Declmax]=[-90,90]
+// [T90min,T90max]=[1e-6,1e6]
+// [Zmin,Zmax]=[-1e-6,9999]
+// Sigmagrb=-2.5
+// Maxsigma=999
+// Grbnu=-0.03
+// Avgrbz=-1
+// Avgrbt90=-1
+// Inburst=0
+// Dtnu=-60
+// Dtnus=-0.5
+// Kinangle=3
+// Angres=0.5
+// Timres=1e-5
+// Bkgrate=-0.003/(2.*pi)
+// Tmin=-3600
+// Tmax=3600
+// Dawin=5
+// Datype=0
+// Nbkg=0.5
+// Tbint90=1
+// Tbin=1
+// VarTbin=10
+// Abin=1
 
  if (!fBurstParameters)
  {
@@ -8491,6 +8528,8 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
  }
  else
  {
+  Double_t pi=acos(-1.);
+
   name="Nmax";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(-1,name);
@@ -8520,7 +8559,7 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
   fBurstParameters->SetSignal(999,name);
   name="Grbnu";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(-0.05,name);
+  fBurstParameters->SetSignal(-0.03,name);
   name="Avgrbz";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(-1,name);
@@ -8547,10 +8586,13 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
   fBurstParameters->SetSignal(1e-5,name);
   name="Bkgrate";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(0.003,name);
-  name="Dtwin";
+  fBurstParameters->SetSignal(-0.003/(2.*pi),name);
+  name="Tmin";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(7200,name);
+  fBurstParameters->SetSignal(-3600,name);
+  name="Tmax";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(3600,name);
   name="Dawin";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(5,name);
@@ -8581,6 +8623,27 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
  ///////////////////////////////////
  // Store some derived parameters //
  ///////////////////////////////////
+
+ // The total search time window in seconds
+ Float_t fTmin=fBurstParameters->GetSignal("Tmin");
+ Float_t fTmax=fBurstParameters->GetSignal("Tmax");
+ Float_t Dtwin=fTmax-fTmin;
+ name="Dtwin";
+ fBurstParameters->AddNamedSlot(name);
+ fBurstParameters->SetSignal(Dtwin,name);
+
+ Float_t fTbin=fBurstParameters->GetSignal("Tbin");
+ if (!fTbin) // Center the time window around the burst trigger for variable time bins
+ {
+  fTmin=-Dtwin/2.;
+  fTmax=Dtwin/2.;
+  name="Tmin";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(fTmin,name);
+  name="Tmax";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(fTmax,name);
+ }
 
  // The solid angle corresponding to the selected declination band
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
@@ -8656,6 +8719,8 @@ void NcAstrolab::ListBurstParameters() const
  Float_t fAngres=fBurstParameters->GetSignal("Angres");
  Float_t fTimres=fBurstParameters->GetSignal("Timres");
  Float_t fBkgrate=fBurstParameters->GetSignal("Bkgrate");
+ Float_t fTmin=fBurstParameters->GetSignal("Tmin");
+ Float_t fTmax=fBurstParameters->GetSignal("Tmax");
  Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
  Float_t fDawin=fBurstParameters->GetSignal("Dawin");
  Int_t fDatype=fBurstParameters->GetSignal("Datype");
@@ -8724,7 +8789,7 @@ void NcAstrolab::ListBurstParameters() const
  cout << " Angular resolution (degrees) of the detector : " << fAngres << endl;
  cout << " Time resolution (sec) of the detector : " << fTimres << endl;
  cout << " Mean rate (Hz) of background events for the specified declination interval (<0 : rate per steradian) " << fBkgrate << endl;
- cout << " Total search time window (in sec) centered at the burst trigger : " << fDtwin << endl;
+ cout << " Total search time window (in sec) with the burst trigger at t=0 : [" << fTmin << "," << fTmax << "]" << endl;
  if (fDawin>=0)
  {
   if (!fDatype)
@@ -8753,8 +8818,8 @@ void NcAstrolab::ListBurstParameters() const
  {
   if (fTbint90)
   {
-   cout << " Time bin size in average T90 units : " << fTbint90;
-   if (fAvgrbt90>0 || fNgrbs>0) cout << " (=" << fTbin << " sec)";
+   cout << " Time bin size in average T90 units : " << fTbin;
+   if (fAvgrbt90>0 || fNgrbs>0) cout << " (=" << fTbin*fabs(fAvgrbt90) << " sec)";
    cout << endl;
   }
   else
@@ -9667,6 +9732,8 @@ void NcAstrolab::GenBurstSignals()
  Float_t fAvgrbz=fBurstParameters->GetSignal("Avgrbz");
  Float_t fAvgrbt90=fBurstParameters->GetSignal("Avgrbt90");
  Float_t fBkgrate=fBurstParameters->GetSignal("Bkgrate");
+ Float_t fTmin=fBurstParameters->GetSignal("Tmin");
+ Float_t fTmax=fBurstParameters->GetSignal("Tmax");
  Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
  Float_t fDawin=fBurstParameters->GetSignal("Dawin");
  Float_t fDatype=fBurstParameters->GetSignal("Datype");
@@ -9762,7 +9829,7 @@ void NcAstrolab::GenBurstSignals()
  {
   if (fTbin>0) // User specified time binning
   {
-   if (fTbint90) fTbin=fTbint90*fabs(fAvgrbt90); 
+   if (fTbint90) fTbin=fTbin*fabs(fAvgrbt90); 
    ntbins=int(fDtwin/fTbin);
   }
   else // Automatic time binning to get the specified maximal bkg counts per bin
@@ -9824,13 +9891,13 @@ void NcAstrolab::GenBurstSignals()
  title="Arrival times of off-source events in time window";
  title+=";Event arrival time (in sec) w.r.t. burst trigger;Counts per bin of size %-10.3g";
  s=title.Format(title.Data(),tbinfine);
- TH1F* bkgtfine=new TH1F("bkgtfine",s.Data(),ntbinsfine,-fDtwin/2.,fDtwin/2.);
+ TH1F* bkgtfine=new TH1F("bkgtfine",s.Data(),ntbinsfine,fTmin,fTmax);
  fBurstHistos.Add(bkgtfine);
 
  title="Arrival times of on-source events in time window";
  title+=";Event arrival time (in sec) w.r.t. burst trigger;Counts per bin of size %-10.3g";
  s=title.Format(title.Data(),tbinfine);
- TH1F* tottfine=new TH1F("tottfine",s.Data(),ntbinsfine,-fDtwin/2.,fDtwin/2.);
+ TH1F* tottfine=new TH1F("tottfine",s.Data(),ntbinsfine,fTmin,fTmax);
  fBurstHistos.Add(tottfine);
 
  TH1F* bkgt=0;
@@ -9839,21 +9906,21 @@ void NcAstrolab::GenBurstSignals()
  TH2F* tot2=0;
  if (fabs(fTbin)>0) // Fixed time bins
  {
-  bkgt=new TH1F("bkgt","Arrival times of off-source events in time window",ntbins,-fDtwin/2.,fDtwin/2.);
-  tott=new TH1F("tott","Arrival times of on-source events in time window",ntbins,-fDtwin/2.,fDtwin/2.);
+  bkgt=new TH1F("bkgt","Arrival times of off-source events in time window",ntbins,fTmin,fTmax);
+  tott=new TH1F("tott","Arrival times of on-source events in time window",ntbins,fTmin,fTmax);
   bkg2=new TH2F("bkg2","Arrival time vs. opening angle of off-source events in time window",
-                nabins/10,danglow,dangup,ntbins,-fDtwin/2.,fDtwin/2.);
+                nabins,danglow,dangup,ntbins,fTmin,fTmax);
   tot2=new TH2F("tot2","Arrival time vs. opening angle of on-soure events in time window",
-                nabins/10,danglow,dangup,ntbins,-fDtwin/2.,fDtwin/2.);
+                nabins,danglow,dangup,ntbins,fTmin,fTmax);
  }
  else // Variable time bins
  {
   bkgt=new TH1F("bkgt","Arrival times of off-source events in time window",ntbins,binarr);
   tott=new TH1F("tott","Arrival times of on-source events in time window",ntbins,binarr);
   bkg2=new TH2F("bkg2","Arrival time vs. opening angle of off-source events in time window",
-                nabins/10,danglow,dangup,ntbins,binarr);
+                nabins,danglow,dangup,ntbins,binarr);
   tot2=new TH2F("tot2","Arrival time  vs. opening angle of on-source events in time window",
-                nabins/10,danglow,dangup,ntbins,binarr);
+                nabins,danglow,dangup,ntbins,binarr);
  }
  fBurstHistos.Add(bkgt);
  fBurstHistos.Add(tott);
@@ -9876,17 +9943,14 @@ void NcAstrolab::GenBurstSignals()
  fBurstHistos.Add(bkgcosa);
  fBurstHistos.Add(totcosa);
 
- Int_t itbin=int(fTbin);
- if (fTbin<0) itbin=int(fDtwin/float(ntbins));
- s="Counts per ";
+ // Set titles for the various arrival time histos
+ Float_t bsize=fTbin;
+ if (fTbin<0) bsize=fDtwin/float(ntbins);
+ s="Counts per time bin";
  if (fabs(fTbin)>0)
  {
-  s+=itbin;
-  s+=" seconds";
- }
- else
- {
-  s+="time bin";
+  TString stemp="Counts per bin of size %-10.3g";
+  s=stemp.Format(stemp.Data(),bsize);
  }
  bkgt->GetXaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
  bkgt->GetYaxis()->SetTitle(s.Data());
@@ -9973,8 +10037,8 @@ void NcAstrolab::GenBurstSignals()
    nmu=int(fRan->Poisson(fNbkgWin));
    for (Int_t imu=0; imu<nmu; imu++)
    {
-    ranlow=-fDtwin/2.;
-    ranup=fDtwin/2.;
+    ranlow=fTmin;
+    ranup=fTmax;
     dt=fRan->Uniform(ranlow,ranup);
 /************
 @@@@@@@@@@@@
@@ -10144,7 +10208,6 @@ void NcAstrolab::GenBurstSignals()
  // Update internal statistics
  fBurstParameters->SetSignal(fAvgrbz,"Avgrbz");
  fBurstParameters->SetSignal(fAvgrbt90,"Avgrbt90");
- fBurstParameters->SetSignal(fTbin,"Tbin");
  fBurstParameters->AddNamedSlot("solidangle");
  fBurstParameters->SetSignal(solidangle,"solidangle");
  fBurstParameters->AddNamedSlot("nentot");
