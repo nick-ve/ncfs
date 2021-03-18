@@ -66,6 +66,13 @@
 // These facilities will enable a background c.q. blind analysis in studying
 // correlations with external (astrophysical) phenomena.
 //
+// This NcAstrolab class also provides a facility to model c.q. perform the
+// analysis of transient phenomena by means of (stacked) time series observations.
+// It reflects the observation of neutrinos based on gamma/GW burst alerts, but the
+// procedure may of course be used for any kind of messenger particles.
+// For a worked out example, please refer to the macro "burst-model.cc"
+// in the folder "/ncfs/physics/macros".
+//
 // By default different random sequences are ensured for different NcAstrolab instances,
 // even with identical stored measurements and reference signals.  
 // In case the user wants to control the random sequence (e.g. to obtain reproducible results),
@@ -119,7 +126,7 @@
 // // Mimic a GRB 5 seconds before the occurrence of Event10372
 // ts.Add(0,-5,0);
 // lab.SetSignal(1,327.531,"deg",-35.8903,"deg","gal",&ts,-1,"T","GRB890730");
-// ts.Add(0,5,0);
+// ts.Add(0,5,0); // Restore the time stamp
 //
 // // List all stored objects
 // cout << endl;
@@ -152,7 +159,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC July 3, 2020 15:30
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 18, 2021  09:30Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -7580,8 +7587,7 @@ TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff
  // Correct the off source observation for different coverage and detection efficiency
  // with respect to the actual on source measurement
  rNoff=rNoff*Ra*Re;
- Noff=rNoff;
- if ((rNoff-double(Noff))>0.5) Noff+=1;
+ Noff=TMath::Nint(rNoff);
  rNoff=Noff;
 
  if (bmax<0) bmax=100.*rNoff/Toff;
@@ -8453,27 +8459,36 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 // Nmax;     // Maximal number of bursts to be accepted for analysis (<0 : no limitation)
 // Declmin   // Minimal declination (J2000 in degrees) for burst position acceptance
 // Declmax   // Maximal declination (J2000 in degrees) for burst position acceptance
-// T90min    // Minimal duration (t90 in sec) for burst acceptance (<0 : [|T90min|,T90max] with random T90 when T90 or T100 is unknown)
+// T90min    // Minimal duration (t90 in sec) for burst acceptance (<0 : [|T90min|,T90max] with random T90 when missing in loaded data)
 // T90max    // Maximal duration (t90 in sec) for burst acceptance
-// Zmin      // Minimal redshift for burst acceptance (<0 : [|fZmin|,fZmax] with random z when redshift is unknown)
+// Zmin      // Minimal redshift for burst acceptance (<0 : [|Zmin|,Zmax] with random z when missing in loaded data)
 // Zmax      // Maximal redshift for burst acceptance
-// Sigmagrb  // Angular uncertainty (sigma in degrees) on burst position (<0 : determine from observations)
-// Maxsigma  // Maximal combined burst position and track angular uncertainty (sigma in degrees) for acceptance
-// Grbnu     // Maximum number of detectable neutrinos per burst (<0 : no stat. fluct.)
+// Sigmamin  // Minimal position uncertainty (sigma in degrees) for burst acceptance (<0 : [|Sigmamin|,Sigmamax] with random sigma when missing in loaded data)
+// Sigmamax  // Maximal position uncertainty (sigma in degrees) for burst acceptance
+// Grbnu     // Maximum number of detectable neutrinos per burst (<0 : no statistical fluctuations)
 // Avgrbz    // Average burst redshift (<0 : determine from observations)
 // Avgrbt90  // Average burst duration (T90) in seconds (<0 : determine from observations)
 // Inburst   // Flag to indicate that neutrinos are produced coupled (1) or not (0) to the burst duration
 // Dtnu      // Mean time diff. (in sec) between gamma/GW and nu production (decoupled) or in T90 units w.r.t. trigger (coupled)
 // Dtnus     // Sigma of time difference (in sec) between gamma/GW and nu production (<0 is in T90 units)
+// Emin      // Minimal event energy (in GeV) for event acceptance
+// Emax      // Maximal event energy (in GeV) for event acceptance
+// Alphasig  // Spectral index for a default dN/dE=E^-Alphasig burst induced signal energy spectrum within [Emin,Emax]. See also MakeBurstEnergydist() 
+// Alphabkg  // Spectral index for a default dN/dE=E^-Alphabkg background energy spectrum within [Emin,Emax]. See also MakeBurstEnergydist()
 // Kinangle  // Neutrino-lepton kinematic opening angle selection for CC interactions (0=none 1=mean 2=median 3=draw from pdf)
-// Angres    // Detector angular resolution (degrees)
-// Timres    // Detector time resolution (sec)
+// Angresmin // Minimal event reco angular resolution (sigma in degrees) for event acceptance
+// Angresmax // Maximal event reco angular resolution (sigma in degrees) for event acceptance
+// Angresfix // Fixed event reco angular resolution within [Angresmin,Angresmax] (also used when no distribution (value) is available)
+// Recoangle // Reconstruction angular uncertainty selection (0=use Angresfix value  1=mean 2=median 3=draw from distribution)
+// Sumsigmas // Sigma (summation) selection (-1=reco sigma only  0=burst sigma only  1=linear summation  2=quadratic summation)
+// Timres    // Neutrino detector time resolution (sec)
+// Sensarea  // Area (in m^2) covered c.q. overlooked by the neutrino detector sensors (<=0 means not specified) 
 // Bkgrate   // Mean rate (in Hz) of background events for the specified [Declmin,Declmax] interval (<0 : rate per steradian)
 // Tmin      // Lower bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
 // Tmax      // Upper bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
 // Dtwin     // Total search time window (in sec) centered at the burst trigger
-// Dawin     // Angular search circle (<0 is local zenith band) in degrees or sigma around (above/below) the burst position
-// Datype    // Type of angular window specification (0=in degrees 1=in units of combined burst/track sigma) 
+// Dawin     // Angular search circle (<0 is local zenith band) in degrees or units of sigma around (above/below) the burst position
+// Datype    // Type of angular window specification (0=in degrees 1=in units of combined max. burst/track sigma 2=in units of combined actual burst/track sigma) 
 // Nbkg      // Mean number of counts per bin for auto-binning
 // Tbint90   // Flag to indicate whether Tbin represents seconds (0) or units of average T90 (1)
 // Tbin      // Time bin size (>0=seconds or units of average T90  0=variable bins  <0 will result in a mean Nbkg counts/bin)
@@ -8487,23 +8502,29 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 // The size of subsequent time bins is multiplied by the average redshift factor (z+1) at each step.
 // This is done in order to acount for the cosmological time dilation, which stretches all time differences.
 //
-// Default settings :
-// ------------------
+// Default settings (tailored for IceCube 86 strings) :
+// ----------------------------------------------------
 // Nmax=-1
 // [Declmin,Declmax]=[-90,90]
-// [T90min,T90max]=[1e-6,1e6]
-// [Zmin,Zmax]=[-1e-6,9999]
-// Sigmagrb=-2.5
-// Maxsigma=999
+// [T90min,T90max]=[1e-5,1e5]
+// [Zmin,Zmax]=[-1e-6,20]
+// [Sigmamin,Sigmamax]=[0,2]
 // Grbnu=-0.03
 // Avgrbz=-1
 // Avgrbt90=-1
 // Inburst=0
-// Dtnu=-60
+// Dtnu=0
 // Dtnus=-0.5
+// [Emin,Emax]=[200,1e7]
+// Alphasig=2
+// Alphabkg=3.5
 // Kinangle=3
-// Angres=0.5
+// [Angresmin,Angresmax]=[0,2]
+// Angresfix=1
+// Recoangle=3
+// Sumsigmas=2
 // Timres=1e-5
+// Sensarea=1e6
 // Bkgrate=-0.003/(2.*pi)
 // Tmin=-3600
 // Tmax=3600
@@ -8541,22 +8562,22 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
   fBurstParameters->SetSignal(90,name);
   name="T90min";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(1e-6,name);
+  fBurstParameters->SetSignal(1e-5,name);
   name="T90max";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(1e6,name);
+  fBurstParameters->SetSignal(1e5,name);
   name="Zmin";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(-1e-6,name);
   name="Zmax";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(9999,name);
-  name="Sigmagrb";
+  fBurstParameters->SetSignal(20,name);
+  name="Sigmamin";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(-2.5,name);
-  name="Maxsigma";
+  fBurstParameters->SetSignal(0,name);
+  name="Sigmamax";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(999,name);
+  fBurstParameters->SetSignal(2,name);
   name="Grbnu";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(-0.03,name);
@@ -8571,19 +8592,46 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
   fBurstParameters->SetSignal(0,name);
   name="Dtnu";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(-60,name);
+  fBurstParameters->SetSignal(0,name);
   name="Dtnus";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(-0.5,name);
+  name="Emin";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(200,name);
+  name="Emax";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(1e7,name);
+  name="Alphasig";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(2,name);
+  name="Alphabkg";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(3.5,name);
   name="Kinangle";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(3,name);
-  name="Angres";
+  name="Angresmin";
   fBurstParameters->AddNamedSlot(name);
-  fBurstParameters->SetSignal(0.5,name);
+  fBurstParameters->SetSignal(0,name);
+  name="Angresmax";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(2,name);
+  name="Angresfix";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(1,name);
+  name="Recoangle";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(3,name);
+  name="Sumsigmas";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(2,name);
   name="Timres";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(1e-5,name);
+  name="Sensarea";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(1e6,name);
   name="Bkgrate";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(-0.003/(2.*pi),name);
@@ -8623,6 +8671,33 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
  ///////////////////////////////////
  // Store some derived parameters //
  ///////////////////////////////////
+
+ // Combined burst position and event reconstruction angular uncertainty interval (sigma in degrees)
+ Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
+ Int_t fRecoangle=TMath::Nint(fBurstParameters->GetSignal("Recoangle"));
+ Float_t fSigmamin=fabs(fBurstParameters->GetSignal("Sigmamin"));
+ Float_t fAngresmin=fBurstParameters->GetSignal("Angresmin");
+ Float_t fAngresfix=fBurstParameters->GetSignal("Angresfix");
+ if (!fRecoangle) fAngresmin=fAngresfix;
+ Float_t Minsigmatot=-1;
+ if (fSumsigmas==-1) Minsigmatot=fAngresmin;
+ if (fSumsigmas==0) Minsigmatot=fSigmamin;
+ if (fSumsigmas==1) Minsigmatot=fSigmamin+fAngresmin;
+ if (fSumsigmas==2) Minsigmatot= sqrt(fSigmamin*fSigmamin+fAngresmin*fAngresmin);
+ name="Minsigmatot";
+ fBurstParameters->AddNamedSlot(name);
+ fBurstParameters->SetSignal(Minsigmatot,name);
+ Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
+ Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
+ if (!fRecoangle) fAngresmax=fAngresfix;
+ Float_t Maxsigmatot=-1;
+ if (fSumsigmas==-1) Maxsigmatot=fAngresmax;
+ if (fSumsigmas==0) Maxsigmatot=fSigmamax;
+ if (fSumsigmas==1) Maxsigmatot=fSigmamax+fAngresmax;
+ if (fSumsigmas==2) Maxsigmatot= sqrt(fSigmamax*fSigmamax+fAngresmax*fAngresmax);
+ name="Maxsigmatot";
+ fBurstParameters->AddNamedSlot(name);
+ fBurstParameters->SetSignal(Maxsigmatot,name);
 
  // The total search time window in seconds
  Float_t fTmin=fBurstParameters->GetSignal("Tmin");
@@ -8700,45 +8775,56 @@ void NcAstrolab::ListBurstParameters() const
 // **********************************************************************************
 
  // User provided settings
- Int_t fNmax=fBurstParameters->GetSignal("Nmax");
+ Int_t fNmax=TMath::Nint(fBurstParameters->GetSignal("Nmax"));
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
  Float_t fT90min=fBurstParameters->GetSignal("T90min");
  Float_t fT90max=fBurstParameters->GetSignal("T90max");
  Float_t fZmin=fBurstParameters->GetSignal("Zmin");
  Float_t fZmax=fBurstParameters->GetSignal("Zmax");
- Float_t fSigmagrb=fBurstParameters->GetSignal("Sigmagrb");
- Float_t fMaxsigma=fBurstParameters->GetSignal("Maxsigma");
+ Float_t fSigmamin=fBurstParameters->GetSignal("Sigmamin");
+ Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
  Float_t fGrbnu=fBurstParameters->GetSignal("Grbnu");
  Float_t fAvgrbz=fBurstParameters->GetSignal("Avgrbz");
  Float_t fAvgrbt90=fBurstParameters->GetSignal("Avgrbt90");
- Int_t fInburst=fBurstParameters->GetSignal("Inburst");
+ Float_t fAvgrbsigma=fBurstParameters->GetSignal("Avgrbsigma");
+ Int_t fInburst=TMath::Nint(fBurstParameters->GetSignal("Inburst"));
  Float_t fDtnu=fBurstParameters->GetSignal("Dtnu");
  Float_t fDtnus=fBurstParameters->GetSignal("Dtnus");
- Int_t fKinangle=fBurstParameters->GetSignal("Kinangle");
- Float_t fAngres=fBurstParameters->GetSignal("Angres");
+ Float_t fEmin=fBurstParameters->GetSignal("Emin");
+ Float_t fEmax=fBurstParameters->GetSignal("Emax");
+ Float_t fAlphasig=fBurstParameters->GetSignal("Alphasig");
+ Float_t fAlphabkg=fBurstParameters->GetSignal("Alphabkg");
+ Int_t fKinangle=TMath::Nint(fBurstParameters->GetSignal("Kinangle"));
+ Float_t fAngresmin=fBurstParameters->GetSignal("Angresmin");
+ Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
+ Float_t fAngresfix=fBurstParameters->GetSignal("Angresfix");
+ Int_t fRecoangle=TMath::Nint(fBurstParameters->GetSignal("Recoangle"));
+ Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
  Float_t fTimres=fBurstParameters->GetSignal("Timres");
+ Float_t fSensarea=fBurstParameters->GetSignal("Sensarea");
  Float_t fBkgrate=fBurstParameters->GetSignal("Bkgrate");
  Float_t fTmin=fBurstParameters->GetSignal("Tmin");
  Float_t fTmax=fBurstParameters->GetSignal("Tmax");
- Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
  Float_t fDawin=fBurstParameters->GetSignal("Dawin");
- Int_t fDatype=fBurstParameters->GetSignal("Datype");
+ Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
  Float_t fNbkg=fBurstParameters->GetSignal("Nbkg");
- Float_t fTbint90=fBurstParameters->GetSignal("Tbint90");
+ Int_t fTbint90=TMath::Nint(fBurstParameters->GetSignal("Tbint90"));
  Float_t fTbin=fBurstParameters->GetSignal("Tbin");
  Float_t fVarTbin=fBurstParameters->GetSignal("VarTbin");
  Float_t fAbin=fBurstParameters->GetSignal("Abin");
 
  // Derived parameters
+ Float_t fMaxsigmatot=fBurstParameters->GetSignal("Maxsigmatot");
+ Float_t fMinsigmatot=fBurstParameters->GetSignal("Minsigmatot");
+ Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
  Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
  Float_t fRbkgDecl=fBurstParameters->GetSignal("RbkgDecl");
  Float_t fNbkgHour=fBurstParameters->GetSignal("NbkgHour");
  Float_t fNbkgWin=fBurstParameters->GetSignal("NbkgWin");
 
  // Internal statistics
- Int_t fNgrbs=fBurstParameters->GetSignal("Ngrbs");
- Float_t fMaxtotsigma=fBurstParameters->GetSignal("Maxtotsigma");
+ Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
 
  cout << " ========================= User provided burst settings ===============================" << endl;
  if (fNmax<0)
@@ -8754,27 +8840,27 @@ void NcAstrolab::ListBurstParameters() const
  if (fT90min<0) cout << " Random values taken from T90-distribution in case T90 and T100 were missing" << endl;
  cout << " Redshift interval for burst acceptance : [" << fabs(fZmin) << "," << fZmax << "]" << endl;
  if (fZmin<0) cout << " Random redshift values taken from z-distribution in case of unknown redshift" << endl;
- if (fSigmagrb>=0) cout << " Fixed burst position uncertainty (sigma in degrees) : " << fSigmagrb << endl;
- cout << " Maximal combined burst position and track angular uncertainty (sigma in degrees) for acceptance : " << fMaxsigma << endl;
+ cout << " Position uncertainty interval (sigma in degrees) for burst acceptance : [" << fabs(fSigmamin) << "," << fSigmamax << "]" << endl;
+ if (fSigmamin<0) cout << " Random sigma values taken from sigma-distribution when missing in loaded data" << endl;
  if (fAvgrbz>=0) cout << " User defined average burst redshift : " << fAvgrbz << endl;
- if (fAvgrbt90>=0) cout << " User defined average burst T90 duration : " << fAvgrbt90 << endl;
+ if (fAvgrbt90>=0) cout << " User defined average burst T90 duration (in sec.) : " << fAvgrbt90 << endl;
  if (!fInburst)
  {
   cout << " Neutrino production was assumed to be NOT coupled to the observed burst duration" << endl;
-  cout << " Mean decoupled time difference (in sec) between burst gammas/GW and nus : " << fDtnu << endl;
+  cout << " Mean decoupled time difference (in sec) between burst gammas/GW and neutrinos : " << fDtnu << endl;
  }
  else
  {
   cout << " Neutrino production was assumed to be coupled to the observed burst duration" << endl;
-  cout << " Mean coupled time difference (in units of T90 w.r.t. trigger) between burst gammas/GW and nus : " << fDtnu << endl;
+  cout << " Mean coupled time difference (in units of T90 w.r.t. trigger) between burst gammas/GW and neutrinos : " << fDtnu << endl;
  }
  if (fDtnus>=0)
  {
- cout << " Sigma of mean time difference (in sec) between burst gammas/GW and nus : " << fDtnus << endl;
+ cout << " Sigma of mean time difference (in sec) between burst gammas/GW and neutrinos : " << fDtnus << endl;
  }
  else
  {
- cout << " Sigma of mean time difference (in units of T90) between burst gammas/GW and nus : " << fabs(fDtnus) << endl;
+ cout << " Sigma of mean time difference (in units of T90) between burst gammas/GW and neutrinos : " << fabs(fDtnus) << endl;
  }
  if (fGrbnu<0)
  {
@@ -8785,32 +8871,30 @@ void NcAstrolab::ListBurstParameters() const
   cout << " Maximum number of generated neutrinos per burst : " << fGrbnu << endl;
   cout << " The actual number of neutrinos may be less due to statistical fluctuations" << endl;
  }
+ cout << " Event energy interval (in GeV) for event acceptance : [" << fEmin << "," << fEmax << "]" << endl;
+ cout << " Default spectral index for a dN/dE=E^-alpha burst induced signal energy spectrum within [" << fEmin << "," << fEmax << "] GeV : " << fAlphasig << endl;
+ cout << " Default spectral index for a dN/dE=E^-alpha background energy spectrum within [" << fEmin << "," << fEmax << "] GeV : " << fAlphabkg << endl;
+ cout << " --- The user may have changed the spectra by invokation of the memberfunction MakeBurstEnergydist()." << endl; 
  cout << " Neutrino-lepton kinematic opening angle selection for CC interactions (0=none 1=mean 2=median 3=draw from pdf) : " << fKinangle << endl;
- cout << " Angular resolution (degrees) of the detector : " << fAngres << endl;
- cout << " Time resolution (sec) of the detector : " << fTimres << endl;
- cout << " Mean rate (Hz) of background events for the specified declination interval (<0 : rate per steradian) " << fBkgrate << endl;
+ cout << " Event reco angular resolution interval (sigma in degrees) for event acceptance : [" << fAngresmin << "," << fAngresmax << "]" << endl;
+ cout << " Fixed event reco angular resolution (sigma in degrees), also used when no distribution (value) is available : " << fAngresfix << endl;
+ cout << " Event reconstruction angular uncertainty selection (0=use fixed value  1=mean 2=median 3=draw from distribution) : " << fRecoangle << endl;
+ cout << " Sigma (summation) selection (-1=reco sigma only  0=burst sigma only  1=linear summation  2=quadratic summation) : " << fSumsigmas << endl;
+ cout << " Time resolution (sec) of the neutrino detector : " << fTimres << endl;
+ cout << " Area (in m^2) covered c.q. overlooked by the neutrino detector : " << fSensarea << endl;
+ cout << " Mean rate (Hz) of background events for the specified declination interval (<0 : rate per steradian) : " << fBkgrate << endl;
  cout << " Total search time window (in sec) with the burst trigger at t=0 : [" << fTmin << "," << fTmax << "]" << endl;
  if (fDawin>=0)
  {
-  if (!fDatype)
-  {
-   cout << " Angular search circle (in degrees) around the burst position : " << fDawin << endl;
-  }
-  else
-  {
-   cout << " Angular search circle (in combined burst/track sigma) around the burst position : " << fDawin << endl;
-  }
+  if (!fDatype) cout << " Fixed angular search circle (in degrees) around the burst position : " << fDawin << endl;
+  if (fDatype==1) cout << " Fixed angular search circle (in combined max. burst/track sigma) around the burst position : " << fDawin << endl;
+  if (fDatype==2) cout << " Variable angular search circle (in combined actual burst/track sigma) around the burst position : " << fDawin << endl;
  }
  else
  {
-  if (!fDatype)
-  {
-   cout << " Angular local zenith band (in degrees) above/below the burst position : " << fabs(fDawin) << endl;
-  }
-  else
-  {
-   cout << " Angular local zenith band (in combined burst/track sigma) above/below the burst position : " << fabs(fDawin) << endl;
-  }
+  if (!fDatype) cout << " Fixed angular local zenith band (in degrees) above/below the burst position : " << fabs(fDawin) << endl;
+  if (fDatype==1) cout << " Fixed angular local zenith band (in combined max. burst/track sigma) above/below the burst position : " << fabs(fDawin) << endl;
+  if (fDatype==2) cout << " Variable angular local zenith band (in combined actual burst/track sigma) above/below the burst position : " << fabs(fDawin) << endl;
  }
  if (fTbin<0) cout << " Automatic time binning with as mean number of bkg counts/bin : " << fNbkg << endl;
  if (!fTbin) cout << " Variable time binning with as size (in sec) for the first time : " << fVarTbin << endl;
@@ -8838,6 +8922,7 @@ void NcAstrolab::ListBurstParameters() const
 
  cout << endl;
  cout << " ============================== Derived parameters ====================================" << endl;
+ cout << " Combined burst position and event reco angular uncertainty interval (sigma in degrees) : [" << fMinsigmatot << "," << fMaxsigmatot << "]" << endl;
  cout << " Solid angle coverage (in steradian) corresponding to the selected declination band : " << fOmegaDecl << endl;
  cout << " Background event rate (Hz) for the selected declination band : " << fRbkgDecl << endl;
  cout << " Mean number of background events per hour from the selected declination band : " << fNbkgHour << endl;
@@ -8845,8 +8930,9 @@ void NcAstrolab::ListBurstParameters() const
  if (fNgrbs>0)
  {
   cout << " Number of bursts accepted for analysis : " << fNgrbs << endl;
-  cout << " Median redshift from the data sample : " << fabs(fAvgrbz) << endl;
-  cout << " Median T90 duration from the data sample : " << fabs(fAvgrbt90) << endl;
+  cout << " Median burst redshift from the data sample : " << fabs(fAvgrbz) << endl;
+  cout << " Median burst T90 duration (in sec.) from the data sample : " << fabs(fAvgrbt90) << endl;
+  cout << " Median burst position uncertainty (sigma in degrees) from the data sample : " << fAvgrbsigma << endl;
  }
  cout << " ======================================================================================" << endl;
  cout << endl;
@@ -8864,15 +8950,15 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
 // The input data has to be provided via a ROOT Tree which will be searched
 // for data on the variable names specified below.
 // In case data for a certain variable is not present, the non-physical value -999
-// will be stored, unless the user has selected random generation of T90 and/or z
-// as specified via SetBurstParameter(). 
+// will be stored, unless the user has selected random generation of the variables
+// T90 and/or z and/or sigmapos as specified via SetBurstParameter(). 
 //
 //  Name             Description
 // ---------------------------------------------------------------
 // "date"        Observation date as yyyymmdd
 // "ra"          Right ascension (J2000) in decimal degrees
 // "dec"         Declination (J2000) in decimal degrees
-// "sigmapos"    The error on the burst position in decimal degrees
+// "sigmapos"    The 1-sigma angular uncertainty on the burst position in decimal degrees
 // "t90"         The T90 burst duration in seconds
 // "mjdtrig"     The (fractional) MJD of the burst trigger
 // "mjdt90start" The (fractional) MJD of the T90 start time
@@ -8895,20 +8981,18 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
 //        to accumulate data.
 
  // Retreive the needed parameters
- Int_t fNmax=fBurstParameters->GetSignal("Nmax");
+ Int_t fNmax=TMath::Nint(fBurstParameters->GetSignal("Nmax"));
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
- Float_t fSigmagrb=fBurstParameters->GetSignal("Sigmagrb");
- Float_t fMaxsigma=fBurstParameters->GetSignal("Maxsigma");
  Float_t fT90min=fBurstParameters->GetSignal("T90min");
  Float_t fT90max=fBurstParameters->GetSignal("T90max");
  Float_t fZmin=fBurstParameters->GetSignal("Zmin");
  Float_t fZmax=fBurstParameters->GetSignal("Zmax");
- Float_t fAngres=fBurstParameters->GetSignal("Angres");
+ Float_t fSigmamin=fBurstParameters->GetSignal("Sigmamin");
+ Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
 
  // Internal statistics
- Int_t fNgrbs=fBurstParameters->GetSignal("Ngrbs");
- Float_t fMaxtotsigma=fBurstParameters->GetSignal("Maxtotsigma");
+ Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
 
  // Get access to a redshift distribution to draw randomly redshifts if needed
  TH1* zdist=0;
@@ -8964,6 +9048,33 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
   }
  }
 
+ // Get access to a 1-sigma position uncertainty distribution to draw randomly position uncertaintes
+ TH1* sigmaposdist=0;
+ if (fSigmamin<0)
+ {
+  sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmapos");
+  if (!sigmaposdist)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadBurstGCNdata* Archival observed position uncertainty distribution not found." << endl;
+   cout << " A Landau fit from observed data will be used to provide random 1-sigma uncertainty values." << endl;
+
+   sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmaposfit");
+   if (!sigmaposdist)
+   { 
+    TF1 fsigmapos("fsigmapos","245.2*TMath::Landau(x,-2.209,0.6721,1)");
+    fsigmapos.SetRange(0,90);
+    fsigmapos.SetNpx(10000);
+    TH1* hfsigmapos=fsigmapos.GetHistogram();
+    sigmaposdist=(TH1*)hfsigmapos->Clone();
+    sigmaposdist->SetNameTitle("hsigmaposfit","Landau fit for burst 1-sigma position uncertainty data");
+    sigmaposdist->GetXaxis()->SetTitle("Burst position uncertainty (sigma in degrees)");
+    sigmaposdist->GetYaxis()->SetTitle("Counts");
+    fBurstHistos.Add(sigmaposdist);
+   }
+  }
+ }
+
  // The TTree containing the burst data
  TChain gcn(tree.Data());
  gcn.Add(file.Data());
@@ -8972,11 +9083,10 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
  Float_t ra,dec,sigmapos,t90,t100,fluence,z;
  Double_t mjdtrig,mjdt90start;
 
- Float_t sigmagrb=fSigmagrb;
- Float_t totsigma=0;
  fNgrbs=GetNsignals(0);
+ Float_t sigmagrb=0;
  Float_t t90grb=0;
- Double_t zgrb=0;
+ Float_t zgrb=0;
  Int_t idate=0;
  TString grbname;
  NcTimestamp ts;
@@ -9025,15 +9135,8 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
   if (date2 && date>date2) continue;
 
   if (mjdtrig<0 || mjdt90start<0) continue;
-
-  // Use the GCN 1 sigma position uncertainty (in degrees) if requested
-  if (fSigmagrb<0) sigmagrb=fabs(sigmapos);
-
-  // Determine the combined GRB position and track resolution uncertainty.
-  totsigma=sigmagrb*sigmagrb+fAngres*fAngres;
-  totsigma=sqrt(totsigma);
    
-  if (dec<fDeclmin || dec>fDeclmax || totsigma>fMaxsigma) continue;
+  if (dec<fDeclmin || dec>fDeclmax) continue;
 
   t90grb=t90;
   if (t90grb<=0) t90grb=t100;
@@ -9045,6 +9148,11 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
   if (fZmin<0 && zgrb<0 && zdist) zgrb=zdist->GetRandom();
 
   if (zgrb<fabs(fZmin) || zgrb>fZmax) continue;
+
+  sigmagrb=sigmapos;
+  if (fSigmamin<0 && sigmagrb<0 && sigmaposdist) sigmagrb=sigmaposdist->GetRandom();
+
+  if (sigmagrb<fabs(fSigmamin) || sigmagrb>fSigmamax) continue;
 
   idate=date%1000000;
   grbname=type;
@@ -9060,24 +9168,19 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
   sx->SetSignal(t90grb,"t90");
   sx->AddNamedSlot("sigmagrb");
   sx->SetSignal(sigmagrb,"sigmagrb");
-  sx->AddNamedSlot("totsigma");
-  sx->SetSignal(totsigma,"totsigma");
   sx->AddNamedSlot("fluence");
   sx->SetSignal(fluence,"fluence");
   sx->AddNamedSlot("z");
   sx->SetSignal(zgrb,"z");
 
-  if (totsigma>fMaxtotsigma) fMaxtotsigma=totsigma;
  }
 
  // Update internal statistics
- fBurstParameters->AddNamedSlot("Maxtotsigma");
- fBurstParameters->SetSignal(fMaxtotsigma,"Maxtotsigma");
  fNgrbs=GetNsignals(0);
  fBurstParameters->AddNamedSlot("Ngrbs");
  fBurstParameters->SetSignal(fNgrbs,"Ngrbs");
 
- cout << "*" << ClassName() << "::LoadBurstGCNdata* " << ngcn << " bursts of type " << type
+ cout << " *" << ClassName() << "::LoadBurstGCNdata* " << ngcn << " bursts of type " << type
       << " were stored from Tree:" << tree << " of file(s):" << file << endl;
  cout << " Total number of stored bursts : " << fNgrbs << endl;
 }
@@ -9094,28 +9197,26 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
 // **********************************************************************************
 
  // Retreive the needed parameters
- Int_t fNmax=fBurstParameters->GetSignal("Nmax");
+ Int_t fNmax=TMath::Nint(fBurstParameters->GetSignal("Nmax"));
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
- Float_t fSigmagrb=fBurstParameters->GetSignal("Sigmagrb");
- Float_t fMaxsigma=fBurstParameters->GetSignal("Maxsigma");
  Float_t fT90min=fBurstParameters->GetSignal("T90min");
  Float_t fT90max=fBurstParameters->GetSignal("T90max");
  Float_t fZmin=fBurstParameters->GetSignal("Zmin");
  Float_t fZmax=fBurstParameters->GetSignal("Zmax");
- Float_t fAngres=fBurstParameters->GetSignal("Angres");
+ Float_t fSigmamin=fBurstParameters->GetSignal("Sigmamin");
+ Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
 
  // Internal statistics
- Int_t fNgrbs=fBurstParameters->GetSignal("Ngrbs");
- Float_t fMaxtotsigma=fBurstParameters->GetSignal("Maxtotsigma");
+ Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
 
  // Get access to a redshift distribution to draw randomly redshifts
  TH1* zdist=(TH1*)fBurstHistos.FindObject("hz");
  if (!zdist)
  {
+  cout << endl;
   cout << " *" << ClassName() << "::GenBurstGCNdata* Archival observed redshift distribution not found." << endl;
   cout << " A Landau fit from Swift GRB redshift data will be used to provide random z values." << endl;
-  cout << endl;
 
   zdist=(TH1*)fBurstHistos.FindObject("hzfit");
   if (!zdist)
@@ -9136,9 +9237,9 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
  TH1* t90dist=(TH1*)fBurstHistos.FindObject("ht90");
  if (!t90dist)
  {
+  cout << endl;
   cout << " *" << ClassName() << "::GenBurstGCNData* Observational T90 distribution not found." << endl;
   cout << " A double Gaussian fit from Fermi GRB T90 data will be used to provide random T90 values." << endl;
-  cout << endl;
 
   t90dist=(TH1*)fBurstHistos.FindObject("ht90fit");
   if (!t90dist)
@@ -9155,6 +9256,29 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
   } 
  }
 
+ // Get access to a 1-sigma position uncertainty distribution to draw randomly position uncertaintes
+ TH1* sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmapos");
+ if (!sigmaposdist)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::GenBurstGCNdata* Archival observed position uncertainty distribution not found." << endl;
+  cout << " A Landau fit from observed data will be used to provide random 1-sigma uncertainty values." << endl;
+
+  sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmaposfit");
+  if (!sigmaposdist)
+  { 
+   TF1 fsigmapos("fsigmapos","245.2*TMath::Landau(x,-2.209,0.6721,1)");
+   fsigmapos.SetRange(0,90);
+   fsigmapos.SetNpx(10000);
+   TH1* hfsigmapos=fsigmapos.GetHistogram();
+   sigmaposdist=(TH1*)hfsigmapos->Clone();
+   sigmaposdist->SetNameTitle("hsigmaposfit","Landau fit for burst 1-sigma position uncertainty data");
+   sigmaposdist->GetXaxis()->SetTitle("Burst position uncertainty (sigma in degrees)");
+   sigmaposdist->GetYaxis()->SetTitle("Counts");
+   fBurstHistos.Add(sigmaposdist);
+  }
+ }
+
  Float_t thlow=fDeclmin+90.;
  Float_t thup=fDeclmax+90.;
  if (thup>180) thup=180;
@@ -9162,10 +9286,9 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
  NcSignal* sx=0;
  NcPosition rgrb;
  Float_t t90grb=0;
- Double_t zgrb=0;
+ Float_t zgrb=0;
+ Float_t sigmagrb=0;
  TString grbname;
- Float_t sigmagrb=fabs(fSigmagrb);
- Float_t totsigma=0;
  Double_t thetagrb,phigrb;
  Int_t ngen=0;
  fNgrbs=GetNsignals(0);
@@ -9175,32 +9298,36 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
   if (fNmax>=0 && (fNgrbs+ngen)>=fNmax) break;
 
   zgrb=-1;
+  if (fabs(fZmin)==fZmax) zgrb=fZmax; 
   while (zgrb<fabs(fZmin) || zgrb>fZmax)
   {
    zgrb=zdist->GetRandom();
   }
-  rgrb.SetPosition(zgrb,0,0,"sph","deg");
-  RandomPosition(rgrb,thlow,thup,0,360);
-  thetagrb=rgrb.GetX(2,"sph","deg");
-  phigrb=rgrb.GetX(3,"sph","deg");
 
   t90grb=-1;
+  if (fabs(fT90min)==fT90max) t90grb=fT90max; 
   while (t90grb<fabs(fT90min) || t90grb>fT90max)
   {
    t90grb=t90dist->GetRandom();
    t90grb=pow(float(10),t90grb);
   }
-
-  // Determine the combined GRB position and track resolution uncertainty.
-  totsigma=sigmagrb*sigmagrb+fAngres*fAngres;
-  totsigma=sqrt(totsigma);
    
-  if (totsigma>fMaxsigma) continue;
+  sigmagrb=-1;
+  if (fabs(fSigmamin)==fSigmamax) sigmagrb=fSigmamax; 
+  while (sigmagrb<fabs(fSigmamin) || sigmagrb>fSigmamax)
+  {
+   sigmagrb=sigmaposdist->GetRandom();
+  }
+
+  rgrb.SetPosition(1,0,0,"sph","deg");
+  RandomPosition(rgrb,thlow,thup,0,360);
+  thetagrb=rgrb.GetX(2,"sph","deg");
+  phigrb=rgrb.GetX(3,"sph","deg");
 
   grbname="Random-";
   grbname+=name;
   grbname+=igrb;
-  sx=SetSignal(zgrb,thetagrb,"deg",phigrb,"deg","loc",0,-1,"M",grbname);
+  sx=SetSignal(1,thetagrb,"deg",phigrb,"deg","loc",0,-1,"M",grbname);
 
   if (!sx) continue;
 
@@ -9210,22 +9337,18 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
   sx->SetSignal(t90grb,"t90");
   sx->AddNamedSlot("sigmagrb");
   sx->SetSignal(sigmagrb,"sigmagrb");
-  sx->AddNamedSlot("totsigma");
-  sx->SetSignal(totsigma,"totsigma");
   sx->AddNamedSlot("z");
   sx->SetSignal(zgrb,"z");
 
-  if (totsigma>fMaxtotsigma) fMaxtotsigma=totsigma;
  }
 
  // Update internal statistics
- fBurstParameters->AddNamedSlot("Maxtotsigma");
- fBurstParameters->SetSignal(fMaxtotsigma,"Maxtotsigma");
  fNgrbs=GetNsignals(0);
  fBurstParameters->AddNamedSlot("Ngrbs");
  fBurstParameters->SetSignal(fNgrbs,"Ngrbs");
 
- cout << "*" << ClassName() << "::GenBurstGCNdata* " << ngen << " generated bursts with name " << name << " were stored." << endl;
+ cout << endl;
+ cout << " *" << ClassName() << "::GenBurstGCNdata* " << ngen << " generated bursts with name " << name << " were stored." << endl;
  cout << " Total number of stored bursts : " << fNgrbs << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -9268,7 +9391,7 @@ void NcAstrolab::MakeBurstZdist(TString file,TString tree,TString name,Int_t nb,
 
  if (!nen || !lx)
  {
-  cout << "*" << ClassName() << "::MakeBurstZdist* Missing information for tree variable:" << name << endl;
+  cout << " *" << ClassName() << "::MakeBurstZdist* Missing information for tree variable:" << name << endl;
   cout << " of Tree:" << tree << " with " << nen <<  " entries in file:" << file << endl;
   return;
  }
@@ -9316,7 +9439,7 @@ void NcAstrolab::MakeBurstZdist(TString file,TString tree,TString name,Int_t nb,
   hd->Fill(d);
  }
 
- cout << "*" << ClassName() << "::MakeBurstZdist* " << nz << " archival z-values have been obtained from tree variable:" << name
+ cout << " *" << ClassName() << "::MakeBurstZdist* " << nz << " archival z-values have been obtained from tree variable:" << name
       << " of Tree:" << tree << " in file(s):" << file << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -9357,7 +9480,7 @@ void NcAstrolab::MakeBurstT90dist(TString file,TString tree,TString name,Int_t n
 
  if (!nen || !lx)
  {
-  cout << "*" << ClassName() << "::MakeBurstT90dist* Missing information for tree variable:" << name << endl;
+  cout << " *" << ClassName() << "::MakeBurstT90dist* Missing information for tree variable:" << name << endl;
   cout << " of Tree:" << tree << " with " << nen <<  " entries in file:" << file << endl;
   return;
  }
@@ -9367,7 +9490,7 @@ void NcAstrolab::MakeBurstT90dist(TString file,TString tree,TString name,Int_t n
  if (!t90dist)
  {
   // Creation of observed burst t90 duration histo
-  TH1F* ht90=new TH1F("ht90","Archival data of observed burst durations",50,-5,5);
+  TH1F* ht90=new TH1F("ht90","Archival data of observed burst durations",nb,xmin,xmax);
   fBurstHistos.Add(ht90);
   ht90->GetXaxis()->SetTitle("Burst duration ^{10}log(T90) in sec.");
   ht90->GetYaxis()->SetTitle("Counts");
@@ -9393,17 +9516,219 @@ void NcAstrolab::MakeBurstT90dist(TString file,TString tree,TString name,Int_t n
   }
  }
 
- cout << "*" << ClassName() << "::MakeBurstT90dist* " << nt90 << " archival T90 values have been obtained from variable:" << name
+ cout << " *" << ClassName() << "::MakeBurstT90dist* " << nt90 << " archival T90 values have been obtained from variable:" << name
       << " of Tree:" << tree << " in file(s):" << file << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::MakeBurstBkgEdist(TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb)
+void NcAstrolab::MakeBurstSigmaPosdist(TString file,TString tree,TString name,TString u,Int_t nb,Float_t xmin,Float_t xmax)
 {
-// Create a background energy distribution on the interval [Emin,Emax] GeV
-// based on observed archival energy data. 
-// If this memberfunction is invoked before GenBurstSignals(), the resulting
-// log10(E) distribution will be used to draw random Energy values
-// for the background events.
+// Read observed archival 1-sigma burst position uncertainty data and create the corresponding distribution.
+// If this memberfunction is invoked before LoadBurstGCNdata() or GenBurstGCNdata(),
+// the resulting distribution will be used to draw random 1-sigma burst position uncertainty values
+// (if requested) for the bursts without localisation uncertainty information.
+//
+// **********************************************************************************
+// * This is a beta test version, so currently no backward compatibility guaranteed *
+// **********************************************************************************
+//
+// The input data has to be provided via a ROOT Tree which contains at least
+// the specified variable name indicated below.
+//
+// Input arguments :
+// -----------------
+// file   : Name of the input file containing the ROOT Tree (wildcards are allowed)
+// tree   : Name of the Tree containing the data
+// name   : Name of the variable in the Tree containing the 1-sigma angular localisation uncertainty data
+// u      : Units of the angular localisation uncertainty input data (see below)
+// nb     : Number of bins for the resulting distribution
+// xmin   : Minimal value for the 1-sigma position uncertainty in degrees
+// xmax   : Maximal value for the 1-sigma position uncertainty in degrees
+//
+// Specification of the angular units :
+// ------------------------------------ 
+// "rad" : angular uncertainty provided in radians
+// "deg" : angular uncertainty provided in degrees
+// "dms" : angular uncertainty provided in dddmmss.sss
+// "hms" : angular uncertainty provided in hhmmss.sss
+// "hrs" : angular uncertainty provided in fractional hours
+//
+// The default values are nb=900, xmin=0 and xmax=90.
+//
+// Note : This memberfunction may be invoked several times to read different files
+//        to accumulate data.
+
+ // The Tree containing the burst data
+ TChain data(tree.Data());
+ data.Add(file.Data());
+
+ Int_t nen=data.GetEntries();
+ TLeaf* lx=data.FindLeaf(name.Data());
+
+ if (!nen || !lx)
+ {
+  cout << " *" << ClassName() << "::MakeBurstSigmaPosdist* Missing information for tree variable:" << name << endl;
+  cout << " of Tree:" << tree << " with " << nen <<  " entries in file:" << file << endl;
+  return;
+ }
+
+ // Create a new distribution in case a burst position uncertainty distribution is not yet present
+ TH1* sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmapos");
+ if (!sigmaposdist)
+ {
+  // Creation of observed 1-sigma burst position uncertainty histo
+  TH1F* hsigmapos=new TH1F("hsigmapos","Archival data of observed 1-sigma burst position uncertainties",nb,xmin,xmax);
+  fBurstHistos.Add(hsigmapos);
+  hsigmapos->GetXaxis()->SetTitle("Burst position uncertainty (sigma in degrees)");
+  hsigmapos->GetYaxis()->SetTitle("Counts");
+ }
+
+ // Get pointer to the relevant histogram 
+ TH1* hsigmapos=(TH1*)fBurstHistos.FindObject("hsigmapos");
+
+ Int_t nsigmapos=0;
+ Double_t sigmapos=0;
+ for (Int_t ien=0; ien<nen; ien++)
+ {
+  data.GetEntry(ien);
+
+  lx=data.GetLeaf(name.Data());
+  if (!lx) continue;
+
+  sigmapos=lx->GetValue();
+
+  // Convert declination to degrees if needed
+  sigmapos=ConvertAngle(sigmapos,u,"deg");
+
+  if (sigmapos<xmin || sigmapos>xmax) continue;
+
+  hsigmapos->Fill(sigmapos);
+  nsigmapos++;
+ }
+
+ cout << " *" << ClassName() << "::MakeBurstSigmaPosdist* " << nsigmapos << " archival sigmapos values have been obtained from variable:" << name
+      << " of Tree:" << tree << " in file(s):" << file << endl;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::MakeBurstEnergydist(Int_t mode,TF1& spec,Double_t Emin,Double_t Emax,Int_t nbins)
+{
+// Create a background (mode=1) or burst induced signal (mode=2) energy distribution
+// on the interval [Emin,Emax] GeV based on the spectral function "spec" describing dN/dE.
+// If this memberfunction is invoked before GenBurstSignals(), the resulting 
+// energy distribution will be used to draw random energy values for either the
+// generated background or burst induced signal events via the memberfunctions
+// GetBurstBackgroundEnergy() and GetBurstSignalEnergy(), respectively.
+//
+// **********************************************************************************
+// * This is a beta test version, so currently no backward compatibility guaranteed *
+// **********************************************************************************
+//
+// Example: To make a dN/dE=E^-2 burst induced signal energy distribution for 100 Gev < E < 10 PeV
+//
+// mode=2;
+// TF1 spec("spec","pow(x,-2.)");
+// xmin=100;
+// xmax=1e7;
+// nbins=1000;
+// MakeBurstEnergydist(mode,spec,Emin,Emax,nbins);
+//
+// The default value is nbins=1000.
+
+ if (Emin<=0) Emin=1e-10;
+
+ if ((mode!=1 && mode!=2) || Emax<=Emin)
+ {
+  cout << " *" << ClassName() << "::MakeBurstEnergydist* Inconsistent data: mode=" << mode << " Emin=" << Emin << " Emax=" << Emax << endl;
+  return;
+ }
+
+ // Convert the energy boundaries to the log10 scale of the X-axis
+ Double_t xmin=log10(Emin);
+ Double_t xmax=log10(Emax);
+
+ TString sf="dN/dx=";
+ sf+=spec.GetExpFormula("p");
+ if (mode==1) sf+=" background";
+ if (mode==2) sf+=" signal";
+ sf+=" distribution for x=E";
+ TString sh="";
+ if (mode==1) sh="Burst background energy distribution;^{10}Log(E) in GeV;";
+ if (mode==2) sh="Burst induced signal energy distribution;^{10}Log(E) in GeV;";
+ sh+=sf;
+ TH1F his=GetCountsHistogram(spec,nbins,xmin,xmax,1,sh);
+
+ // Remove the corresponding old distribution (if any) from the storage
+ TH1* dist=0;
+ if (mode==1) dist=(TH1*)fBurstHistos.FindObject("hbkgE");
+ if (mode==2) dist=(TH1*)fBurstHistos.FindObject("hsigE");
+ if (dist)
+ {
+  fBurstHistos.Remove(dist);
+  fBurstHistos.Compress();
+  delete dist;
+  dist=0;
+ }
+
+ // Store the newly created distribution
+ // and set a flag to indicate a parametrized distribution
+ if (mode==1)
+ {
+  TH1F* hbkgE=(TH1F*)his.Clone();
+  hbkgE->SetName("hbkgE");
+  fBurstHistos.Add(hbkgE);
+  fBurstParameters->AddNamedSlot("PDFbkgE");
+  fBurstParameters->SetSignal(1,"PDFbkgE");
+ }
+ if (mode==2)
+ {
+  TH1F* hsigE=(TH1F*)his.Clone();
+  hsigE->SetName("hsigE");
+  fBurstHistos.Add(hsigE);
+  fBurstParameters->AddNamedSlot("PDFsigE");
+  fBurstParameters->SetSignal(1,"PDFsigE");
+ }
+
+ cout << " *" << ClassName() << "::MakeBurstEnergydist* Created a " << sf
+      << " on [Emin,Emax]=[" << Emin << "," << Emax << "] GeV" << endl;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::MakeBurstEnergydist(Int_t mode,Double_t alpha,Double_t Emin,Double_t Emax,Int_t nbins)
+{
+// Create a background (mode=1) or burst induced signal (mode=2) energy distribution
+// on the interval [Emin,Emax] GeV based on a single power law with 
+// spectral index "alpha" describing dN/dE=E^-alpha.
+// If this memberfunction is invoked before GenBurstSignals(), the resulting 
+// energy distribution will be used to draw random energy values for either the
+// generated background or burst induced signal events via the memberfunctions
+// GetBurstBackgroundEnergy() and GetBurstSignalEnergy(), respectively.
+//
+// **********************************************************************************
+// * This is a beta test version, so currently no backward compatibility guaranteed *
+// **********************************************************************************
+//
+// Example: To make a dN/dE=E^-2 burst induced signal energy distribution for 100 Gev < E < 10 PeV
+//
+// mode=2;
+// alpha=2;
+// Emin=100;
+// Emax=1e7;
+// nbins=1000;
+// MakeBurstEnergydist(mode,alpha,Emin,Emax,nbins);
+//
+// The default value is nbins=1000.
+
+ TF1 spec("spec","pow(x,[0])");
+ spec.SetParameter(0,-alpha);
+ MakeBurstEnergydist(mode,spec,Emin,Emax,nbins);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb)
+{
+// Create a background (mode=1) or burst induced signal (mode=2) energy distribution
+// on the interval [Emin,Emax] GeV based on archival energy data.
+// If this memberfunction is invoked before GenBurstSignals(), the resulting 
+// log10(E) distribution will be used to draw random energy values for either the
+// generated background or burst induced signal events via the memberfunctions
+// GetBurstBackgroundEnergy() and GetBurstSignalEnergy(), respectively.
 //
 // Note : Only those data will be used that correspond with the selected
 //        declination interval for the burst investigations.
@@ -9415,30 +9740,46 @@ void NcAstrolab::MakeBurstBkgEdist(TString file,TString tree,TString name1,TStri
 // The input data has to be provided via a ROOT Tree which contains at least
 // the specified variable names indicated below.
 //
+// Notes :
+// -------
+// 1) With mode<0 (see below) this memberfunction may be invoked several times to
+//    read different files to accumulate data.
+// 2) In case a corresponding parametrized energy distribution exists,
+//    this will always be replaced by a new energy distribution based on data.
+//
 // Input arguments :
 // -----------------
+// mode   :  1 --> Always create a new energy distribution for background events.
+//        :  2 --> Always create a new energy distribution for burst induced signal events.
+//        : -1 --> Create a new (if needed) or add data to an energy distribution for background events.
+//        : -2 --> Create a new (if needed) or add data to an energy distribution for burst induced signal events.
 // file   : Name of the input file containing the ROOT Tree (wildcards are allowed)
 // tree   : Name of the Tree containing the data
 // name1  : Name of the tree variable containing the log10(E) data (in GeV)
-// name2  : Name of the tree variable containing the declination data (in degrees)
-// u      : The units ("deg"=degrees or "rad"=radians) of the declination data
+// name2  : Name of the tree variable containing the declination data
+// u      : The units (see below) of the declination data
 // Emin   : Minimal energy value in GeV
 // Emax   : Maximal energy value in GeV
 // nb     : Number of bins for the Energy distribution
 //
-// The default value is nb=1000.
+// Specification of the angular units :
+// ------------------------------------ 
+// "rad" : input angle provided in radians
+// "deg" : input angle provided in degrees
+// "dms" : input angle provided in dddmmss.sss
+// "hms" : input angle provided in hhmmss.sss
+// "hrs" : input angle provided in fractional hours
 //
-// Note : This memberfunction may be invoked several times to read different files
-//        to accumulate data.
+// The default value is nb=1000.
 
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
 
  if (Emin<=0) Emin=1e-10;
 
- if (Emax<=Emin)
+ if ((abs(mode)!=1 && abs(mode)!=2) || Emax<=Emin)
  {
-  cout << "*" << ClassName() << "::MakeBurstBkgEdist* Inconsistent data: Emin=" << Emin << " Emax=" << Emax << endl;
+  cout << " *" << ClassName() << "::MakeBurstEnergydist* Inconsistent data: mode=" << mode << " Emin=" << Emin << " Emax=" << Emax << endl;
   return;
  }
 
@@ -9454,25 +9795,61 @@ void NcAstrolab::MakeBurstBkgEdist(TString file,TString tree,TString name1,TStri
 
  if (!nen || !data.FindLeaf(name1.Data()) || !data.FindLeaf(name2.Data()))
  {
-  cout << "*" << ClassName() << "::MakeBurstBkgEdist* Missing information for tree variable:" << name1
+  cout << " *" << ClassName() << "::MakeBurstEnergydist* Missing information for tree variable:" << name1
        << " and/or tree variable:" << name2 << endl;
   cout << " of Tree:" << tree << " with " << nen <<  " entries in file:" << file << endl;
   return;
  }
 
- // Create a new distribution in case an energy distribution is not yet present
- TH1* Edist=(TH1*)fBurstHistos.FindObject("hbkgE");
+ // A corresponding parametrized distribution will always be removed
+ Int_t flag=0;
+ if (abs(mode)==1) flag=TMath::Nint(fBurstParameters->GetSignal("PDFbkgE"));
+ if (abs(mode)==2) flag=TMath::Nint(fBurstParameters->GetSignal("PDFsigE"));
+
+ if (flag) mode=abs(mode);
+
+ // Remove the corresponding old distribution (if requested) from the storage
+ TH1* Edist=0;
+ if (abs(mode)==1) Edist=(TH1*)fBurstHistos.FindObject("hbkgE");
+ if (abs(mode)==2) Edist=(TH1*)fBurstHistos.FindObject("hsigE");
+
+ if (mode>0 && Edist)
+ {
+  fBurstHistos.Remove(Edist);
+  fBurstHistos.Compress();
+  delete Edist;
+  Edist=0;
+ }
+ 
+ // Create a new distribution if needed
  if (!Edist)
  {
-  // Creation of the observed background energy histo
-  TH1F* hbkgE=new TH1F("hbkgE","Archival data of observed energies",nb,xmin,xmax);
-  fBurstHistos.Add(hbkgE);
-  hbkgE->GetXaxis()->SetTitle("^{10}log(Energy) in GeV");
-  hbkgE->GetYaxis()->SetTitle("Counts");
+  mode=abs(mode);
+  if (mode==1)
+  {
+   // Creation of the observed background energy histo
+   TH1F* hbkgE=new TH1F("hbkgE","Archival data of observed background energies",nb,xmin,xmax);
+   fBurstHistos.Add(hbkgE);
+   hbkgE->GetXaxis()->SetTitle("^{10}log(Energy) in GeV");
+   hbkgE->GetYaxis()->SetTitle("Counts");
+   fBurstParameters->AddNamedSlot("PDFbkgE");
+   fBurstParameters->SetSignal(0,"PDFbkgE");
+  }
+  if (mode==2)
+  {
+   // Creation of the observed signal energy histo
+   TH1F* hsigE=new TH1F("hsigE","Archival data of observed signal energies",nb,xmin,xmax);
+   fBurstHistos.Add(hsigE);
+   hsigE->GetXaxis()->SetTitle("^{10}log(Energy) in GeV");
+   hsigE->GetYaxis()->SetTitle("Counts");
+   fBurstParameters->AddNamedSlot("PDFsigE");
+   fBurstParameters->SetSignal(0,"PDFsigE");
+  }
  }
 
  // Get pointer to the relevant histogram 
- TH1* hbkgE=(TH1*)fBurstHistos.FindObject("hbkgE");
+ if (abs(mode)==1) Edist=(TH1*)fBurstHistos.FindObject("hbkgE");
+ if (abs(mode)==2) Edist=(TH1*)fBurstHistos.FindObject("hsigE");
 
  Int_t nE=0;
  Double_t logE=0;
@@ -9493,46 +9870,88 @@ void NcAstrolab::MakeBurstBkgEdist(TString file,TString tree,TString name1,TStri
   dec=lx->GetValue();
 
   // Convert declination to degrees if needed
-  if (u=="rad") dec*=180./acos(-1.); 
+  dec=ConvertAngle(dec,u,"deg");
 
   if (dec>=fDeclmin && dec<=fDeclmax)
   {
-   hbkgE->Fill(logE);
+   Edist->Fill(logE);
    nE++;
   }
  }
 
- cout << "*" << ClassName() << "::MakeBurstBkgEdist* " << nE << " archival Energy values have been obtained from variable:" << name1
+ TString smode="";
+ if (abs(mode)==1) smode="archival background";
+ if (abs(mode)==2) smode="archival signal";
+
+ if (mode>0)
+ {
+  cout << " *" << ClassName() << "::MakeBurstEnergydist* A new " << smode
+       << " energy distribution has been created." << endl; 
+ }
+ else
+ {
+  cout << " *" << ClassName() << "::MakeBurstEnergydist* Statistics of the existing " << smode
+       << " energy distribution have been increased." << endl; 
+ }
+
+ cout << "  " << nE << " energy values have been obtained from variable:" << name1
       << " of Tree:" << tree << " in file(s):" << file << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::MakeBurstEdist(TF1& spec,Double_t Emin,Double_t Emax,Int_t nbins)
+void NcAstrolab::MakeBurstRecoAngresdist(TString file,TString tree,TString name1,TString name2,TString ua,TString name3,TString ud,Double_t Emin,Double_t Emax,Int_t nbe,Int_t nba)
 {
-// Create an energy distribution on the interval [Emin,Emax] GeV based on the 
-// provided spectral function "spec" describing dN/dE.
-// If this memberfunction is invoked before GenBurstSignals(), the resulting 
-// energy distribution will be used to draw random energy values
-// for the burst induced signal events.
+// Create a reconstruction angle resolution vs. energy distribution on the interval [Emin,Emax] GeV
+// based on observed or simulated archival data.
+// The angular resolution range is fixed to [0,180] degrees. 
+// If this memberfunction is invoked before GenBurstSignals(), the resulting
+// distribution will be used to determine the reconstruction angular uncertainty
+// for individual events by invokation of GetBurstRecoAngres().
+//
+// Note : Only those data will be used that correspond with the selected
+//        declination interval for the burst investigations.
 //
 // **********************************************************************************
 // * This is a beta test version, so currently no backward compatibility guaranteed *
 // **********************************************************************************
 //
-// Example: To make a dN/dE=E^-2 energy spectrum for 100 Gev < E < 10 PeV
+// The input data has to be provided via a ROOT Tree which contains at least
+// the specified variable names indicated below.
 //
-// TF1 spec("spec","pow(x,-2.)");
-// xmin=100;
-// xmax=1e7;
-// nbins=1000;
-// MakeBurstEdist(spec,Emin,Emax,nbins);
+// Input arguments :
+// -----------------
+// file   : Name of the input file containing the ROOT Tree (wildcards are allowed)
+// tree   : Name of the Tree containing the data
+// name1  : Name of the tree variable containing the log10(E) data (in GeV)
+// name2  : Name of the tree variable containing the reconstruction angle uncertainty
+// ua     : The units (see below) of the angular uncertainty data
+// name3  : Name of the tree variable containing the declination data
+// ud     : The units (see below) of the declination data
+// Emin   : Minimal energy value in GeV
+// Emax   : Maximal energy value in GeV
+// nbe    : Number of bins for the Energy axis
+// nba    : Number of bins for the Angular axis
 //
-// The default value is nbins=1000.
+// Specification of the angular units :
+// ------------------------------------ 
+// "rad" : input angle provided in radians
+// "deg" : input angle provided in degrees
+// "dms" : input angle provided in dddmmss.sss
+// "hms" : input angle provided in hhmmss.sss
+// "hrs" : input angle provided in fractional hours
+//
+// The default values are nbe=100 and nba=1000.
+//
+// Note : This memberfunction may be invoked several times to read different files
+//        to accumulate data.
+
+ Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
+ Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
 
  if (Emin<=0) Emin=1e-10;
 
  if (Emax<=Emin)
  {
-  cout << "*" << ClassName() << "::MakeBurstEdist* Inconsistent data: Emin=" << Emin << " Emax=" << Emax << endl;
+  cout << " *" << ClassName() << "::MakeBurstRecoAngresdist* Inconsistent data: Emin=" << Emin << " Emax=" << Emax << endl;
   return;
  }
 
@@ -9540,38 +9959,74 @@ void NcAstrolab::MakeBurstEdist(TF1& spec,Double_t Emin,Double_t Emax,Int_t nbin
  Double_t xmin=log10(Emin);
  Double_t xmax=log10(Emax);
 
- TString s="Burst induced signal energy distribution;^{10}Log(Energy) in GeV;pdf";
- TH1F his=GetCountsHistogram(spec,nbins,xmin,xmax,1,s);
- TH1F* hpdfE=(TH1F*)his.Clone();
- hpdfE->SetName("hpdfE");
- fBurstHistos.Add(hpdfE);
-}
-///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::MakeBurstEdist(Double_t gamma,Double_t Emin,Double_t Emax,Int_t nbins)
-{
-// Create an energy distribution on the interval [Emin,Emax] GeV based on a 
-// a single power law with spectral index "gamma" describing dN/dE.
-// If this memberfunction is invoked before GenBurstSignals(), the resulting 
-// energy distribution will be used to draw random energy values
-// for the burst induced signal events.
-//
-// **********************************************************************************
-// * This is a beta test version, so currently no backward compatibility guaranteed *
-// **********************************************************************************
-//
-// Example: To make a dN/dE=E^-2 energy spectrum for 100 Gev < E < 10 PeV
-//
-// gamma=2;
-// Emin=100;
-// Emax=1e7;
-// nbins=1000;
-// MakeBurstEdist(gamma,Emin,Emax,nbins);
-//
-// The default value is nbins=1000.
+ // The Tree containing the burst data
+ TChain data(tree.Data());
+ data.Add(file.Data());
 
- TF1 spec("spec","pow(x,[0])");
- spec.SetParameter(0,-gamma);
- MakeBurstEdist(spec,Emin,Emax,nbins);
+ Int_t nen=data.GetEntries();
+
+ if (!nen || !data.FindLeaf(name1.Data()) || !data.FindLeaf(name2.Data()) || !data.FindLeaf(name3.Data()))
+ {
+  cout << " *" << ClassName() << "::MakeBurstRecoAngresdist* Missing information for tree variable:" << name1
+       << " and/or tree variable:" << name2 << " and/or tree variable:" << name3 << endl;
+  cout << " of Tree:" << tree << " with " << nen <<  " entries in file:" << file << endl;
+  return;
+ }
+
+ // Create a new distribution in case a reconstruction angle resolution vs. energy distribution is not yet present
+ TH2* Angresdist=(TH2*)fBurstHistos.FindObject("hAngresE");
+ if (!Angresdist)
+ {
+  // Creation of the observed reconstruction angle resolution vs. energy histo
+  TH2F* hAngresE=new TH2F("hAngresE","Archival data of observed reconstruction angle resolution vs. energy",
+  nbe,xmin,xmax,nba,0,180.1);
+  fBurstHistos.Add(hAngresE);
+  hAngresE->GetXaxis()->SetTitle("^{10}log(Energy) in GeV");
+  hAngresE->GetYaxis()->SetTitle("Angular resolution in degrees");
+ }
+
+ // Get pointer to the relevant histogram 
+ TH2* hAngresE=(TH2*)fBurstHistos.FindObject("hAngresE");
+
+ Int_t nE=0;
+ Double_t logE=0;
+ Double_t dec=0;
+ Double_t dang=0;
+ TLeaf* lx=0;
+ for (Int_t ien=0; ien<nen; ien++)
+ {
+  data.GetEntry(ien);
+
+  lx=data.GetLeaf(name1.Data());
+  if (!lx) continue;
+
+  logE=lx->GetValue();
+
+  lx=data.GetLeaf(name2.Data());
+  if (!lx) continue;
+
+  dang=lx->GetValue();
+
+  // Convert declination to degrees if needed
+  dang=ConvertAngle(dang,ua,"deg");
+
+  lx=data.GetLeaf(name3.Data());
+  if (!lx) continue;
+
+  dec=lx->GetValue();
+
+  // Convert declination to degrees if needed
+  dec=ConvertAngle(dec,ud,"deg");
+
+  if (dec>=fDeclmin && dec<=fDeclmax)
+  {
+   hAngresE->Fill(logE,dang);
+   nE++;
+  }
+ }
+
+ cout << " *" << ClassName() << "::MakeBurstRecoAngresdist* " << nE << " archival entries have been obtained for variables:" << name2
+      << " vs. " << name1 << " of Tree:" << tree << " in file(s):" << file << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin,Double_t Emax) const
@@ -9583,8 +10038,8 @@ Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin,Double_t Emax) const
 // * This is a beta test version, so currently no backward compatibility guaranteed *
 // **********************************************************************************
 //
-// If Emin<0 the lower boundary of the provided spectrum will be used as Emin. 
-// If Emax<0 the upper boundary of the provided spectrum will be used as Emax.
+// If Emin<=0 the lower boundary of the provided spectrum will be used as Emin. 
+// If Emax<=0 the upper boundary of the provided spectrum will be used as Emax.
 //
 // In case of inconsistent data the value -1 is returned.
 //
@@ -9593,15 +10048,16 @@ Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin,Double_t Emax) const
  Double_t E=-1;
 
  // Get pointer to the relevant histogram 
- TH1* hpdfE=(TH1*)fBurstHistos.FindObject("hpdfE");
+ TH1* hsigE=(TH1*)fBurstHistos.FindObject("hsigE");
 
- if (!hpdfE) return E;
+ if (!hsigE) return E;
 
- Int_t nbins=hpdfE->GetNbinsX();
+ Int_t nbins=hsigE->GetNbinsX();
+ Int_t nentries=hsigE->GetEntries();
 
- if (nbins<=0) return E;
+ if (nbins<=0 || nentries<=0) return E;
 
- TAxis* xaxis=hpdfE->GetXaxis();
+ TAxis* xaxis=hsigE->GetXaxis();
  
  if (!xaxis) return E;
 
@@ -9609,7 +10065,7 @@ Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin,Double_t Emax) const
  Double_t xup=xaxis->GetBinUpEdge(nbins);
 
  Double_t logEmin=0;
- if (Emin<0)
+ if (Emin<=0)
  {
   logEmin=xlow;
  }
@@ -9619,7 +10075,7 @@ Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin,Double_t Emax) const
  }
 
  Double_t logEmax=0;
- if (Emax<0)
+ if (Emax<=0)
  {
   logEmax=xup;
  }
@@ -9632,7 +10088,7 @@ Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin,Double_t Emax) const
 
  while (E<logEmin || E>logEmax)
  {
-  E=hpdfE->GetRandom();
+  E=hsigE->GetRandom();
  }
 
  E=pow(float(10),E);
@@ -9649,8 +10105,8 @@ Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin,Double_t Emax) const
 // * This is a beta test version, so currently no backward compatibility guaranteed *
 // **********************************************************************************
 //
-// If Emin<0 the lower boundary of the provided spectrum will be used as Emin. 
-// If Emax<0 the upper boundary of the provided spectrum will be used as Emax.
+// If Emin<=0 the lower boundary of the provided spectrum will be used as Emin. 
+// If Emax<=0 the upper boundary of the provided spectrum will be used as Emax.
 //
 // In case of inconsistent data the value -1 is returned.
 //
@@ -9664,8 +10120,9 @@ Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin,Double_t Emax) const
  if (!hbkgE) return E;
 
  Int_t nbins=hbkgE->GetNbinsX();
+ Int_t nentries=hbkgE->GetEntries();
 
- if (nbins<=0) return E;
+ if (nbins<=0 || nentries<=0) return E;
 
  TAxis* xaxis=hbkgE->GetXaxis();
  
@@ -9675,7 +10132,7 @@ Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin,Double_t Emax) const
  Double_t xup=xaxis->GetBinUpEdge(nbins);
 
  Double_t logEmin=0;
- if (Emin<0)
+ if (Emin<=0)
  {
   logEmin=xlow;
  }
@@ -9685,7 +10142,7 @@ Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin,Double_t Emax) const
  }
 
  Double_t logEmax=0;
- if (Emax<0)
+ if (Emax<=0)
  {
   logEmax=xup;
  }
@@ -9706,6 +10163,133 @@ Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin,Double_t Emax) const
  return E;
 }
 ///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetBurstRecoAngres(Double_t Emin,Double_t Emax,Double_t Amin,Double_t Amax) const
+{
+// Provide the reconstruction angle resolution (in degrees) for the energy interval [Emin,Emax] GeV.
+// Depending on the burst parameter setting "Recoangle", the returned value is either constant
+// (i.e. the value of the burst parameter "Angresfix") or determined from the user provided distribution
+// as produced by MakeBurstRecoAngresdist().
+// In case the user has requested the reconstruction angle resolution to be drawn randomly
+// from the distribution, the returned value will be within the interval [Amin,Amax] degrees.
+//
+// Note : In case no distribution is available, the constant value of "Angresfix" is returned.
+//
+// **********************************************************************************
+// * This is a beta test version, so currently no backward compatibility guaranteed *
+// **********************************************************************************
+//
+// If Emin<=0 the lower boundary of the provided spectrum will be used as Emin. 
+// If Emax<=0 the upper boundary of the provided spectrum will be used as Emax.
+//
+// In case of inconsistent data the value -1 is returned.
+//
+// The default values are Emin=-1, Emax=-1, Amin=0 and Amax=999.
+
+ Double_t dang=-1;
+
+ if (Amin<0) Amin=0;
+
+ Int_t fRecoangle=TMath::Nint(fBurstParameters->GetSignal("Recoangle"));
+ Float_t fAngresfix=fBurstParameters->GetSignal("Angresfix");
+
+ // The user requested a fixed angular resolution value "Angresfix"
+ if (!fRecoangle)
+ {
+  dang=fAngresfix;
+  return dang;
+ }
+
+ // The user requested an angular resolution based on a distribution
+
+ // Get pointer to the reco angle resolution vs. energy distribution histogram 
+ TH2* hAngresE=(TH2*)fBurstHistos.FindObject("hAngresE");
+
+ // No distribution available -> Return the user provided "Angresfix" value
+ if (!hAngresE)
+ {
+  dang=fAngresfix;
+  return dang;
+ }
+
+ // Obtain the projected reco angle resolution distribution within the [Emin,Emax] interval
+
+ Int_t nbins=hAngresE->GetNbinsX();
+ Int_t nentries=hAngresE->GetEntries();
+
+ if (nbins<=0 || nentries<=0) return dang;
+
+ TAxis* xaxis=hAngresE->GetXaxis();
+ 
+ if (!xaxis) return dang;
+
+ Double_t xlow=xaxis->GetBinLowEdge(1);
+ Double_t xup=xaxis->GetBinUpEdge(nbins);
+
+ Double_t logEmin=0;
+ if (Emin<=0)
+ {
+  logEmin=xlow;
+ }
+ else
+ {
+  logEmin=log10(Emin);
+ }
+
+ Double_t logEmax=0;
+ if (Emax<=0)
+ {
+  logEmax=xup;
+ }
+ else
+ {
+  logEmax=log10(Emax);
+ }
+
+ if (logEmax<logEmin || logEmin>=xup || logEmax<=xlow) return dang;
+
+ Int_t ilow=xaxis->FindBin(logEmin);
+ Int_t iup=xaxis->FindBin(logEmax);
+
+ TH1D* hproj=hAngresE->ProjectionY("hproj",ilow,iup);
+
+ if (!hproj) return dang;
+
+ nbins=hproj->GetNbinsX();
+ nentries=hproj->GetEntries();
+
+ if (nbins<=0 || nentries<=0) return dang;
+
+ if (fRecoangle==1) dang=hproj->GetMean();
+
+ if (fRecoangle==2)
+ {
+  NcSample q;
+  dang=q.GetMedian(hproj);
+ }
+
+ if (fRecoangle==3)
+ {
+  xaxis=hproj->GetXaxis();
+ 
+  if (!xaxis) return dang;
+
+  xlow=xaxis->GetBinLowEdge(1);
+  xup=xaxis->GetBinUpEdge(nbins);
+
+  if (Amax<=Amin || Amin>=xup || Amax<=xlow) return dang;
+  
+  dang=Amin-1.;
+  while (dang<Amin || dang>Amax)
+  {
+   dang=hproj->GetRandom();
+  }
+ }
+
+ if (hproj) delete hproj;
+
+ return dang;
+}
+///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::GenBurstSignals()
 {
 // Generate detector signals from transient bursts.
@@ -9724,11 +10308,23 @@ void NcAstrolab::GenBurstSignals()
  // Retreive the needed parameters
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
- Float_t fSigmagrb=fBurstParameters->GetSignal("Sigmagrb");
- Float_t fMaxtotsigma=fBurstParameters->GetSignal("Maxtotsigma");
+ Float_t fT90min=fBurstParameters->GetSignal("T90min");
+ Float_t fT90max=fBurstParameters->GetSignal("T90max");
+ Float_t fZmin=fBurstParameters->GetSignal("Zmin");
+ Float_t fZmax=fBurstParameters->GetSignal("Zmax");
+ Float_t fSigmamin=fBurstParameters->GetSignal("Sigmamin");
+ Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
  Float_t fTimres=fBurstParameters->GetSignal("Timres");
- Int_t fKinangle=fBurstParameters->GetSignal("Kinangle");
- Float_t fAngres=fBurstParameters->GetSignal("Angres");
+ Float_t fEmin=fBurstParameters->GetSignal("Emin");
+ Float_t fEmax=fBurstParameters->GetSignal("Emax");
+ Float_t fAlphasig=fBurstParameters->GetSignal("Alphasig");
+ Float_t fAlphabkg=fBurstParameters->GetSignal("Alphabkg");
+ Int_t fKinangle=TMath::Nint(fBurstParameters->GetSignal("Kinangle"));
+ Float_t fAngresmin=fBurstParameters->GetSignal("Angresmin");
+ Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
+ Float_t fAngresfix=fBurstParameters->GetSignal("Angresfix");
+ Int_t fRecoangle=TMath::Nint(fBurstParameters->GetSignal("Recoangle"));
+ Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
  Float_t fAvgrbz=fBurstParameters->GetSignal("Avgrbz");
  Float_t fAvgrbt90=fBurstParameters->GetSignal("Avgrbt90");
  Float_t fBkgrate=fBurstParameters->GetSignal("Bkgrate");
@@ -9736,25 +10332,31 @@ void NcAstrolab::GenBurstSignals()
  Float_t fTmax=fBurstParameters->GetSignal("Tmax");
  Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
  Float_t fDawin=fBurstParameters->GetSignal("Dawin");
- Float_t fDatype=fBurstParameters->GetSignal("Datype");
+ Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
  Float_t fTbin=fBurstParameters->GetSignal("Tbin");
- Float_t fTbint90=fBurstParameters->GetSignal("Tbint90");
+ Int_t fTbint90=TMath::Nint(fBurstParameters->GetSignal("Tbint90"));
  Float_t fNbkg=fBurstParameters->GetSignal("Nbkg");
  Float_t fVarTbin=fBurstParameters->GetSignal("VarTbin");
  Float_t fAbin=fBurstParameters->GetSignal("Abin");
  Float_t fGrbnu=fBurstParameters->GetSignal("Grbnu");
- Int_t fInburst=fBurstParameters->GetSignal("Inburst");
+ Int_t fInburst=TMath::Nint(fBurstParameters->GetSignal("Inburst"));
  Float_t fDtnu=fBurstParameters->GetSignal("Dtnu");
  Float_t fDtnus=fBurstParameters->GetSignal("Dtnus");
 
  // Derived parameters
+ Float_t fMaxsigmatot=fBurstParameters->GetSignal("Maxsigmatot");
+ Float_t fMinsigmatot=fBurstParameters->GetSignal("Minsigmatot");
  Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
  Float_t fRbkgDecl=fBurstParameters->GetSignal("RbkgDecl");
  Float_t fNbkgHour=fBurstParameters->GetSignal("NbkgHour");
  Float_t fNbkgWin=fBurstParameters->GetSignal("NbkgWin");
 
- Float_t t90,z;
- TString name;
+ // Set default energy spectra if needed
+ TH1* edist=0;
+ edist=(TH1*)fBurstHistos.FindObject("hsigE");
+ if (!edist) MakeBurstEnergydist(2,fAlphasig,fEmin,fEmax,10000);
+ edist=(TH1*)fBurstHistos.FindObject("hbkgE");
+ if (!edist) MakeBurstEnergydist(1,fAlphabkg,fEmin,fEmax,10000);
 
  ////////////////////////////////////////////////
  // Some Burst statistics from the loaded data //
@@ -9762,23 +10364,132 @@ void NcAstrolab::GenBurstSignals()
 
  Int_t fNgrbs=GetNsignals(0);
 
- // Creation of the burst position uncertainty histo
- TH1F* hsigmagrb=new TH1F("hsigmagrb","Burst position uncertainty",450,0,90);
- fBurstHistos.Add(hsigmagrb);
- hsigmagrb->GetXaxis()->SetTitle("Burst position uncertainty (sigma in degrees)");
- hsigmagrb->GetYaxis()->SetTitle("Counts");
+ Float_t xmin=0;
+ Float_t xmax=0;
+ Float_t range=0;
+ Int_t nbins=0;
 
- // Creation of the combined burst position and track resolution uncertainty histo
- TH1F* htotsigma=new TH1F("htotsigma","Combined burst position and event direction uncertainty",450,0,90);
- fBurstHistos.Add(htotsigma);
- htotsigma->GetXaxis()->SetTitle("Combined burst position and event direction uncertainty (sigma in degrees)");
- htotsigma->GetYaxis()->SetTitle("Counts");
+ // Creation of the burst redshift histo
+ xmin=fabs(fZmin);
+ xmax=fZmax;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hzburst=new TH1F("hzburst","Burst redshifts in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hzburst);
+ hzburst->GetXaxis()->SetTitle("Burst redshift");
+ hzburst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the corresponding physical distance histo
+ xmin=GetPhysicalDistance(xmin);
+ xmax=GetPhysicalDistance(xmax);
+ TH1F* hdburst=new TH1F("hdburst","Burst distances in the final sample derived from the redshifts",nbins,xmin,xmax);
+ fBurstHistos.Add(hdburst);
+ hdburst->GetXaxis()->SetTitle("Burst physical distance in Mpc");
+ hdburst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the burst t90 duration histo
+ xmin=-5;
+ if (fabs(fT90min)>0) xmin=log10(fabs(fT90min));
+ xmax=5;
+ if (fT90max>0) xmax=log10(fT90max);
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.2); // Bins of 0.2
+ if (nbins<1)
+ {
+  xmin=xmin-1.;
+  xmax=xmax+1.;
+  nbins=10;
+ }
+ TH1F* ht90burst=new TH1F("ht90burst","Burst durations in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(ht90burst);
+ ht90burst->GetXaxis()->SetTitle("Burst duration ^{10}log(T90) in sec.");
+ ht90burst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the burst position uncertainty histos
+ xmin=fabs(fSigmamin);
+ xmax=fSigmamax;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hsigmaburst=new TH1F("hsigmaburst","Burst position uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hsigmaburst);
+ hsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
+ hsigmaburst->GetYaxis()->SetTitle("Counts");
+
+ TH1F* hbkgsigmaburst=new TH1F("hbkgsigmaburst","Off-source burst position uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hbkgsigmaburst);
+ hbkgsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
+ hbkgsigmaburst->GetYaxis()->SetTitle("Counts");
+
+ TH1F* htotsigmaburst=new TH1F("htotsigmaburst","On-source burst position uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(htotsigmaburst);
+ htotsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
+ htotsigmaburst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the off-source and on-source event reconstruction uncertainty histos
+ xmin=fabs(fAngresmin);
+ xmax=fAngresmax+0.001;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hbkgsigmareco=new TH1F("hbkgsigmareco","Off-source event reconstruction uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hbkgsigmareco);
+ hbkgsigmareco->GetXaxis()->SetTitle("Event angular reconstruction uncertainty (sigma in degrees)");
+ hbkgsigmareco->GetYaxis()->SetTitle("Counts");
+
+ TH1F* htotsigmareco=new TH1F("htotsigmareco","On-source event reconstruction uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(htotsigmareco);
+ htotsigmareco->GetXaxis()->SetTitle("Event angular reconstruction uncertainty (sigma in degrees)");
+ htotsigmareco->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the off-source and on-source combined burst position and track resolution uncertainty histo
+ xmin=fMinsigmatot;
+ xmax=fMaxsigmatot+0.001;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hbkgsigmacomb=new TH1F("hbkgsigmacomb","Off-source combined burst position and event reconstruction uncertainty",nbins,xmin,xmax);
+ fBurstHistos.Add(hbkgsigmacomb);
+ hbkgsigmacomb->GetXaxis()->SetTitle("Combined burst position and event reco angular uncertainty (sigma in degrees)");
+ hbkgsigmacomb->GetYaxis()->SetTitle("Counts");
+
+ TH1F* htotsigmacomb=new TH1F("htotsigmacomb","On-source combined burst position and event reconstruction uncertainty",nbins,xmin,xmax);
+ fBurstHistos.Add(htotsigmacomb);
+ htotsigmacomb->GetXaxis()->SetTitle("Combined burst position and event reco angular uncertainty (sigma in degrees)");
+ htotsigmacomb->GetYaxis()->SetTitle("Counts");
 
  NcSignal* sx=0;
+ Float_t zgrb=0;
+ Double_t dgrb=0;
+ Float_t t90grb=0;
+ Float_t sigmagrb=0;
  NcSample zsample;
  zsample.SetStoreMode();
  NcSample t90sample;
  t90sample.SetStoreMode();
+ NcSample sigmasample;
+ sigmasample.SetStoreMode();
  Int_t nsig=GetNsignals(0,1);
  for (Int_t i=1; i<=nsig; i++)
  {
@@ -9786,11 +10497,19 @@ void NcAstrolab::GenBurstSignals()
 
   if (!sx) continue;
 
-  hsigmagrb->Fill(sx->GetSignal("sigmagrb"));
-  htotsigma->Fill(sx->GetSignal("totsigma"));
+  zgrb=sx->GetSignal("z");
+  dgrb=GetPhysicalDistance(zgrb);
+  t90grb=sx->GetSignal("t90");
+  sigmagrb=sx->GetSignal("sigmagrb");
 
-  if (fAvgrbz<0) zsample.Enter(sx->GetSignal("z"));
-  if (fAvgrbt90<0) t90sample.Enter(sx->GetSignal("t90"));
+  hzburst->Fill(zgrb);
+  hdburst->Fill(dgrb);
+  if (t90grb>0) ht90burst->Fill(log10(t90grb));
+  hsigmaburst->Fill(sigmagrb);
+
+  if (fAvgrbz<0) zsample.Enter(zgrb);
+  if (fAvgrbt90<0) t90sample.Enter(t90grb);
+  sigmasample.Enter(sigmagrb);
  }
 
  // Determine median redshift if requested
@@ -9807,6 +10526,8 @@ void NcAstrolab::GenBurstSignals()
   fAvgrbt90*=-1.;
  }
 
+ Float_t fAvgrbsigma=sigmasample.GetMedian(1);
+
  //////////////////////////////////////////////
  // The implementation of the actual program //
  //////////////////////////////////////////////
@@ -9815,7 +10536,7 @@ void NcAstrolab::GenBurstSignals()
 
  Float_t danglow=0;     // Lower value (in degrees) of angular difference histo
  Float_t dangup=fDawin; // Upper value (in degrees) of angular difference histo
- if (fDatype) dangup=fDawin*fabs(fMaxtotsigma);
+ if (fDatype) dangup=fDawin*fabs(fMaxsigmatot);
  if (dangup<0 || dangup>180) dangup=180;
 
  //////////////////////////////////////////////////////////////////////////
@@ -9881,8 +10602,6 @@ void NcAstrolab::GenBurstSignals()
  if (ntbins<2) ntbins=2;
  if (nabins<2) nabins=2;
  if (nabins2<2) nabins2=2;
-
- gStyle->SetOptStat("e"); // Only display number of entries in stats box
 
  Float_t tbinfine=0.1; // Bin size (in sec) for the fine binned histos
  Int_t ntbinsfine=int(fDtwin/tbinfine);
@@ -9966,27 +10685,38 @@ void NcAstrolab::GenBurstSignals()
  // based on the provided user settings                  //
  //////////////////////////////////////////////////////////
 
- Float_t t90grb=0;
- Double_t zgrb=0;
- Float_t sigmagrb=0;
- Float_t totsigma=0;
  NcPosition rgrb;
  Int_t nmu;
  Double_t thetagrb,phigrb;
  Double_t dmu,thetamu,phimu,cost;
  Float_t dt=0;
- NcPosition rgrb2; // Actual GRB position from which the neutrinos/muons arrive
+ NcPosition rgrb2; // Unknown actual GRB position from which the neutrinos/muons arrive
  NcPosition rmu;
  Float_t dang;
+ Float_t dangmax=0;
+ Float_t dangmaxon=0;
+ Float_t dangmaxoff=0;
  Float_t thlow,thup;
  Float_t ranlow,ranup;
  Int_t nmugrb=0;
  NcTimestamp* tx=0;
  NcTimestamp tmu;
- Float_t solidangle=0; // Total stacked solid angle
- Float_t ramu,decmu;   // Temporary RA and DEC of muon for background creation
+ Float_t solidangle=0;
+ Float_t ramu,decmu; // Temporary RA and DEC of muon for background creation
+ Double_t E=0;
+ Double_t ang=0;
+ Double_t sigmareco=0;
+ Float_t sigmatot=0;
+ TString name;
+ Int_t fixedwinset=0; // Flag to indicate whether a fixed angular search window is set (1) or not (0) for this burst
+ Float_t nbkgOn=0;
 
- // Obtain the (fictative) GRB space-time positions in the declination acceptance
+ // Storage for total on-source and off-source observed and signal injected energies
+ fBurstParameters->AddNamedSlot("EnergyOn");
+ fBurstParameters->AddNamedSlot("EnergyOff");
+ fBurstParameters->AddNamedSlot("EnergySig");
+
+ // Loop over the (fictative) GRB space-time positions in the declination acceptance
  for (Int_t igrb=0; igrb<fNgrbs; igrb++)
  {
   sx=GetSignal(igrb+1);
@@ -9994,41 +10724,82 @@ void NcAstrolab::GenBurstSignals()
   if (!sx) continue;
 
   tx=sx->GetTimestamp();
+  zgrb=sx->GetSignal("z");
   t90grb=sx->GetSignal("t90");
   sigmagrb=sx->GetSignal("sigmagrb");
-  totsigma=sx->GetSignal("totsigma");
-  GetSignal(zgrb,thetagrb,"deg",phigrb,"deg","loc",tx,igrb+1);
-  rgrb.SetPosition(zgrb,thetagrb,phigrb,"sph","deg");
+  GetSignal(dgrb,thetagrb,"deg",phigrb,"deg","loc",tx,igrb+1);
+  rgrb.SetPosition(1,thetagrb,phigrb,"sph","deg");
 
-  // Update the total stacked solid angle that is probed
-  if (fDawin<0) // Local zenith band
+  dangmax=-1;
+  if (!fDatype) dangmax=fabs(fDawin);
+  if (fDatype==1)
   {
-   if (!fDatype)
-   {
-    thlow=thetagrb-0.5*fabs(fDawin);
-    thup=thetagrb+0.5*fabs(fDawin);
-   }
-   else
-   {
-    thlow=thetagrb-0.5*fabs(fDawin*totsigma);
-    thup=thetagrb+0.5*fabs(fDawin*totsigma);
-   }
+   dangmax=0;
+   if (fMaxsigmatot>0) dangmax=fabs(fDawin*fMaxsigmatot);
   }
-  else // Circle around GRB position
+
+  if (fDatype==2)
   {
-   if (!fDatype)
+   if (!fSumsigmas) dangmax=fabs(fDawin*sigmagrb);
+   if (!fRecoangle)
    {
-    thlow=0;
-    thup=fabs(fDawin);
-   }
-   else
-   {
-    thlow=0;
-    thup=fabs(fDawin*totsigma);
+    sigmatot=-1;
+    if (fSumsigmas==-1) sigmatot=fAngresfix;
+    if (fSumsigmas==1) sigmatot=sigmagrb+fAngresfix;
+    if (fSumsigmas==2) sigmatot=sqrt(sigmagrb*sigmagrb+fAngresfix*fAngresfix);
+    if (sigmatot>=0) dangmax=fabs(fDawin*sigmatot);
    }
   }
 
-  solidangle+=GetSolidAngle(thlow,thup,"deg",0,360,"deg");    
+  fixedwinset=1;
+  if (dangmax<0) fixedwinset=0;
+
+  // Indicate incompatible input for sigma summation
+  if (fDatype==1 && fMaxsigmatot<0) dangmax=-1;
+
+  // New signal slots for storage of maximum angular differences and corresponding solid angles
+  name="fixedwinset";
+  sx->AddNamedSlot(name);
+  sx->SetSignal(fixedwinset,name);
+  name="dangmaxOn";
+  sx->AddNamedSlot(name);
+  sx->SetSignal(-1,name);
+  name="dangmaxOff";
+  sx->AddNamedSlot(name);
+  sx->SetSignal(-1,name);
+  name="OmegaOn";
+  sx->AddNamedSlot(name);
+  sx->SetSignal(0,name);
+  name="OmegaOff";
+  sx->AddNamedSlot(name);
+  sx->SetSignal(0,name);
+
+  // Store the On-source and Off-source maximum (solid) angles for this burst
+  if (fixedwinset && dangmax>=0)
+  {
+   if (fDawin<0) // Local zenith band
+   {
+    thlow=thetagrb-0.5*dangmax;
+    thup=thetagrb+0.5*dangmax;
+    solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+   }
+   else // Circle around GRB position
+   {
+    thlow=0;
+    thup=dangmax;
+    solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+   }
+   sx->SetSignal(dangmax,"dangmaxOn");
+   sx->SetSignal(solidangle,"OmegaOn");
+   sx->SetSignal(dangmax,"dangmaxOff");
+   sx->SetSignal(solidangle,"OmegaOff");
+  }
+  else // Initialize the encountered dynamic On-source and Off-source maximum angles for this burst
+  {
+   dangmaxon=0;
+   if (fSumsigmas==0 || fSumsigmas==1 || fSumsigmas==2) dangmaxon=fabs(fDawin*sigmagrb);
+   dangmaxoff=dangmaxon;
+  }
 
   // Generate the background events in the search time window 
   // for both this GRB angular cone and the corresponding "opposite RA" bkg patch
@@ -10037,20 +10808,16 @@ void NcAstrolab::GenBurstSignals()
    nmu=int(fRan->Poisson(fNbkgWin));
    for (Int_t imu=0; imu<nmu; imu++)
    {
+    // Obtain a random event time within the search time window
     ranlow=fTmin;
     ranup=fTmax;
     dt=fRan->Uniform(ranlow,ranup);
-/************
-@@@@@@@@@@@@
-    // Smear the time difference with the Gaussian time resolution
-    if (fTimres>0) dt=fRan->Gauss(dt,fTimres); //@@@ Is this needed ?
-**********/
-//@@@@@@@@    RandomPosition(rmu,90,180,0,360);
+
     // Create a random background event within the user selected burst declination interval
     // and convert to local detector coordinates to allow a local zenith band selection.
     // For the conversion, a temp. reference signal will be created, since measurements may get scrambled.
-    thlow=90.-fDeclmax;
-    thup=90.-fDeclmin;
+    thlow=90.-fDeclmax; // Lower theta angle in overall Earth spherical coordinates (North Pole is theta=0)
+    thup=90.-fDeclmin;  // Upper theta angle in overall Earth spherical coordinates (North Pole is theta=0)
     RandomPosition(rmu,thlow,thup,0,360);
     decmu=90.-rmu.GetX(2,"sph","deg");
     ramu=rmu.GetX(3,"sph","deg");
@@ -10059,13 +10826,6 @@ void NcAstrolab::GenBurstSignals()
     SetSignal(1,ramu,"deg",decmu,"deg","equ",&tmu,fNgrbs+1,"J","bkgtemp",0);
     GetSignal(dmu,thetamu,"deg",phimu,"deg","loc",&tmu,fNgrbs+1);
     rmu.SetPosition(1,thetamu,phimu,"sph","deg");
-/************
-@@@@@@@@@@
-    // Smear the direction of the upgoing bkg muon according to  the detector resolution
-    SmearPosition(rmu,fAngres); //@@@ Is this needed
-*********/
-//@@@@    thetamu=rmu.GetX(2,"sph","deg");
-//@@@@    phimu=rmu.GetX(3,"sph","deg");
 
     if (fDawin<0) // Local zenith band
     {
@@ -10076,26 +10836,64 @@ void NcAstrolab::GenBurstSignals()
      dang=rgrb.GetOpeningAngle(rmu,"deg");
     }
 
-    if ((!fDatype && dang>fabs(fDawin)) || (fDatype && dang>fabs(fDawin*totsigma))) continue;
+    // Check if event lies outside the allowed angular area
+    if (fixedwinset && dang>dangmax) continue;
+
+    // The energy of the background signal
+    E=GetBurstBackgroundEnergy();
+
+    if (E<0 || E<fEmin || E>fEmax) continue;
+
+    // The reconstruction angular resolution of the background signal
+    sigmareco=GetBurstRecoAngres(E,E);
+    if (sigmareco<0) sigmareco=fAngresfix;
+
+    if (sigmareco<fAngresmin || sigmareco>fAngresmax) continue;
+
+    sigmatot=-1;
+    if (fSumsigmas==-1) sigmatot=sigmareco;
+    if (fSumsigmas==0) sigmatot=sigmagrb;
+    if (fSumsigmas==1) sigmatot=sigmagrb+sigmareco;
+    if (fSumsigmas==2) sigmatot=sqrt(sigmagrb*sigmagrb+sigmareco*sigmareco);
+
+    // Determine the dynamic angular window including the track reco uncertainty
+    if (!fixedwinset)
+    {
+     dangmax=-1;
+     if (sigmatot>=0) dangmax=fabs(fDawin*sigmatot);
+    }
+
+    if (dang>dangmax) continue;
 
     if (!bkgpatch)
     {
+     htotsigmaburst->Fill(sigmagrb);
+     htotsigmareco->Fill(sigmareco);
+     htotsigmacomb->Fill(sigmatot);
      tottfine->Fill(dt);
      tott->Fill(dt);
      tota->Fill(dang);
      totcosa->Fill(cos(dang*pi/180.));
      tot2->Fill(dang,dt);
+     if (dangmax>dangmaxon) dangmaxon=dangmax;
+     nbkgOn=nbkgOn+1.;
+     fBurstParameters->AddSignal(E,"EnergyOn");
     }
     else
     {
+     hbkgsigmaburst->Fill(sigmagrb);
+     hbkgsigmareco->Fill(sigmareco);
+     hbkgsigmacomb->Fill(sigmatot);
      bkgtfine->Fill(dt);
      bkgt->Fill(dt);
      bkga->Fill(dang);
      bkgcosa->Fill(cos(dang*pi/180.));
      bkg2->Fill(dang,dt);
+     if (dangmax>dangmaxoff) dangmaxoff=dangmax;
+     fBurstParameters->AddSignal(E,"EnergyOff");
     }
-   }
-  }
+   } // End of loop over the background tracks of this patch
+  } // End of loop over the patches
 
   // Generate the GRB related signal event(s) in the search window.
   // The GRB position gets Gaussian smeared to reflect the actual position.
@@ -10105,70 +10903,125 @@ void NcAstrolab::GenBurstSignals()
   // w.r.t. the neutrino direction and Gaussian smeared by the detector angular resolution.
 
   // Prevent statistical overfluctuation in number of GRB signal events if requested by fGrbnu<0
-  if (fGrbnu<0 && nmugrb>=int(fabs(fGrbnu)*float(fNgrbs))) continue;
-
-  // Obtain actual GRB position
-  rgrb2.Load(rgrb);
-  SmearPosition(rgrb2,sigmagrb);
-
-  nmu=int(fabs(fGrbnu));
-  if (!nmu && fRan->Uniform()<fabs(fGrbnu)) nmu=1;
-  for (Int_t imu=0; imu<nmu; imu++)
+  if (fGrbnu>=0 || nmugrb<int(fabs(fGrbnu)*float(fNgrbs)))
   {
-   nmugrb++;
-   if (!fInburst) // Neutrino and gamma production decoupled
-   {
-    if (fDtnus<0) // Sigma in units of T90
-    {
-     dt=fRan->Gauss(fDtnu,fabs(fDtnus)*t90grb);
-    }
-    else
-    {
-     dt=fRan->Gauss(fDtnu,fDtnus);
-    }
-    dt=dt*(zgrb+1.);
-   }
-   else // Coupled neutrino and gamma production
-   {
-    if (fDtnus<0) // Sigma in units of T90
-    {
-     dt=fRan->Gauss(fDtnu*t90grb,fabs(fDtnus)*t90grb);
-    }
-    else
-    {
-     dt=fRan->Gauss(fDtnu*t90grb,fDtnus);
-    }
-   }
-   if (fTimres>0) dt=fRan->Gauss(dt,fTimres);
+   // Obtain actual GRB position
+   rgrb2.Load(rgrb);
+   SmearPosition(rgrb2,sigmagrb);
 
-   // The direction of the GRB signal muon
-   rmu.Load(rgrb2);
-
-   // Modification to account for the neutrino-lepton kinematic opening angle
-   if (fKinangle>0)
+   nmu=int(fabs(fGrbnu));
+   if (!nmu && fRan->Uniform()<fabs(fGrbnu)) nmu=1;
+   for (Int_t imu=0; imu<nmu; imu++)
    {
-    Double_t E=GetBurstSignalEnergy();
-    if (E>0)
+    nmugrb++;
+    if (!fInburst) // Neutrino and gamma production decoupled
+    {
+     if (fDtnus<0) // Sigma in units of T90
+     {
+      dt=fRan->Gauss(fDtnu,fabs(fDtnus)*t90grb);
+     }
+     else
+     {
+      dt=fRan->Gauss(fDtnu,fDtnus);
+     }
+     dt=dt*(zgrb+1.);
+    }
+    else // Coupled neutrino and gamma production
+    {
+     if (fDtnus<0) // Sigma in units of T90
+     {
+      dt=fRan->Gauss(fDtnu*t90grb,fabs(fDtnus)*t90grb);
+     }
+     else
+     {
+      dt=fRan->Gauss(fDtnu*t90grb,fDtnus);
+     }
+    }
+    if (fTimres>0) dt=fRan->Gauss(dt,fTimres);
+
+    // The direction of the GRB signal
+    rmu.Load(rgrb2);
+
+    // The energy of the GRB signal
+    E=GetBurstSignalEnergy();
+
+    if (E<0 || E<fEmin || E>fEmax) continue;
+
+    // Modification to account for the neutrino-lepton kinematic opening angle
+    if (fKinangle>0)
     {
      Int_t mode=fKinangle-1;
-     Double_t ang=GetNeutrinoAngle(E,"deg",mode);
+     ang=GetNeutrinoAngle(E,"deg",mode);
      if (ang>0) ShiftPosition(rmu,ang);
     }
+
+    // Smearing according to the reconstruction angular resolution
+    sigmareco=GetBurstRecoAngres(E,E);
+    if (sigmareco<0) sigmareco=fAngresfix;
+
+    if (sigmareco<fAngresmin || sigmareco>fAngresmax) continue;
+
+    SmearPosition(rmu,sigmareco);
+
+    // Determine angular difference w.r.t. the presumed GRB position
+    dang=rgrb.GetOpeningAngle(rmu,"deg");
+
+    sigmatot=-1;
+    if (fSumsigmas==-1) sigmatot=sigmareco;
+    if (fSumsigmas==0) sigmatot=sigmagrb;
+    if (fSumsigmas==1) sigmatot=sigmagrb+sigmareco;
+    if (fSumsigmas==2) sigmatot=sqrt(sigmagrb*sigmagrb+sigmareco*sigmareco);
+
+    // Determine the dynamic angular window including the track reco uncertainty
+    if (!fixedwinset)
+    {
+     dangmax=-1;
+     if (sigmatot>=0) dangmax=fabs(fDawin*sigmatot);
+    }
+
+    if (dang>dangmax) continue;
+
+    htotsigmaburst->Fill(sigmagrb);
+    htotsigmareco->Fill(sigmareco);
+    htotsigmacomb->Fill(sigmatot);
+    tottfine->Fill(dt);
+    tott->Fill(dt);
+    tota->Fill(dang);
+    totcosa->Fill(cos(dang*pi/180.));
+    tot2->Fill(dang,dt);
+    if (dangmax>dangmaxon) dangmaxon=dangmax;
+    fBurstParameters->AddSignal(E,"EnergyOn");
+    fBurstParameters->AddSignal(E,"EnergySig");
    }
+  } // End of loop over the signal events of this burst
 
-   // Smearing according to the detector resolution
-   if (fAngres>0) SmearPosition(rmu,fAngres);
+  if (fixedwinset) continue;
 
-   // Determine angular difference w.r.t. the presumed GRB position
-   dang=rgrb.GetOpeningAngle(rmu,"deg");
-
-   if ((!fDatype && dang>fabs(fDawin)) || (fDatype && dang>fabs(fDawin*totsigma))) continue;
-
-   tottfine->Fill(dt);
-   tott->Fill(dt);
-   tota->Fill(dang);
-   totcosa->Fill(cos(dang*pi/180.));
-   tot2->Fill(dang,dt);
+  // Store the dynamic On-source and Off-source maximum (solid) angles that are encountered for this burst
+  if (fDawin<0) // Local zenith band
+  {
+   thlow=thetagrb-0.5*dangmaxon;
+   thup=thetagrb+0.5*dangmaxon;
+   solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+   sx->SetSignal(dangmaxon,"dangmaxOn");
+   sx->SetSignal(solidangle,"OmegaOn");
+   thlow=thetagrb-0.5*dangmaxoff;
+   thup=thetagrb+0.5*dangmaxoff;
+   solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+   sx->SetSignal(dangmaxoff,"dangmaxOff");
+   sx->SetSignal(solidangle,"OmegaOff");
+  }
+  else // Circle around GRB position
+  {
+   thlow=0;
+   thup=dangmaxon;
+   solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+   sx->SetSignal(solidangle,"OmegaOn");
+   sx->SetSignal(dangmaxon,"dangmaxOn");
+   thup=dangmaxoff;
+   solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+   sx->SetSignal(dangmaxoff,"dangmaxOff");
+   sx->SetSignal(solidangle,"OmegaOff");
   }
  } // End of loop over the individual GRBs
 
@@ -10176,7 +11029,26 @@ void NcAstrolab::GenBurstSignals()
  if (fNgrbs>0) RemoveSignal(fNgrbs+1,0,0);
 
  // Compensate statistical underfluctuation in number of GRB signal events if requested by fGrbnu<0
- if (fGrbnu<0) BurstCompensate(nmugrb,fGrbnu,fNgrbs,fInburst,fDtnu,fDtnus,fAngres,fTimres,fDatype,fDawin);
+ if (fGrbnu<0) BurstCompensate(nmugrb);
+
+ // Determine the On-source and Off-source total stacked solid angles that have been encountered
+ name="SolidangleOn";
+ fBurstParameters->AddNamedSlot(name);
+ fBurstParameters->SetSignal(0,name);
+ name="SolidangleOff";
+ fBurstParameters->AddNamedSlot(name);
+ fBurstParameters->SetSignal(0,name);
+ for (Int_t igrb=1; igrb<=fNgrbs; igrb++)
+ {
+  sx=GetSignal(igrb);
+
+  if (!sx) continue;
+
+  solidangle=sx->GetSignal("OmegaOn");
+  fBurstParameters->AddSignal(solidangle,"SolidangleOn");
+  solidangle=sx->GetSignal("OmegaOff");
+  fBurstParameters->AddSignal(solidangle,"SolidangleOff");
+ }
 
  // Determination of total and background event rates
  Int_t nbt=tott->GetNbinsX();
@@ -10192,22 +11064,161 @@ void NcAstrolab::GenBurstSignals()
  overflow=bkgt->GetBinContent(nbt+1);
  nenbkg=nenbkg-(underflow+overflow);
 
- Float_t ratetot=nentot/(fDtwin);
- Float_t ratebkg=nenbkg/(fDtwin);
+ Float_t nsigOn=(nentot-nbkgOn);
+ Float_t ratetot=nentot/fDtwin;
+ Float_t ratebkg=nenbkg/fDtwin;
+ Float_t ratesigOn=nsigOn/fDtwin;
+ Float_t ratebkgOn=nbkgOn/fDtwin;
+ Float_t fSolidangleOn=fBurstParameters->GetSignal("SolidangleOn");
+ Float_t fSolidangleOff=fBurstParameters->GetSignal("SolidangleOff");
+ Float_t fEnergyOn=fBurstParameters->GetSignal("EnergyOn");
+ Float_t fEnergyOff=fBurstParameters->GetSignal("EnergyOff");
+ Float_t fEnergySig=fBurstParameters->GetSignal("EnergySig");
+ Float_t fEnergyBkg=fEnergyOn-fEnergySig;
+ Float_t fSensarea=fBurstParameters->GetSignal("Sensarea");
 
  // Statistics of the stacked event samples
- cout << " *** Statistics of the stacked observed event samples ***" << endl;
- cout << " Total stacked solid angle (in sr) : " << solidangle << " in " << fNgrbs << " stacked patches." << endl; 
- cout << " *On source* Number of events : " << nentot << endl;
- cout << " Stacked \"on source\" event rate (Hz) : " << ratetot << " --> Event rate (Hz) per burst : " << ratetot/float(fNgrbs) << endl;
- cout << " *Off source* Number of (bkg) events : " << nenbkg << endl;
- cout << " Stacked \"off source\" event rate (Hz) : " << ratebkg << " --> Bkg event rate (Hz) per burst : " << ratebkg/float(fNgrbs) << endl;
- cout << " --- (Unknown) Number of \"on source\" signal events : " << nmugrb << " Number of \"on source\" bkg events : " << (nentot-nmugrb) << endl;
+ cout << endl;
+ cout << " *" << ClassName() << "::GenBurstSignals* Statistics of the stacked observed event samples." << endl;
+ cout << " Total accumulated \"on source\"  solid angle (in sr) : " << fSolidangleOn << " in " << fNgrbs << " stacked patches." << endl; 
+ cout << " Total accumulated \"off source\" solid angle (in sr) : " << fSolidangleOff << " in " << fNgrbs << " stacked patches." << endl;
+ cout << " Integrated exposure time (sec) of the " << fNgrbs << " stacked time windows : " << fDtwin*float(fNgrbs) << endl;
+ if (fSensarea>0) cout << " Area (in m^2) covered c.q. overlooked by the detector sensors : " << fSensarea << endl;
+ fSensarea*=1e4;
+ cout << " *On source*  Total number of recorded events : " << nentot;
+ if (fSolidangleOn) cout << " --> Events per steradian : " << nentot/fSolidangleOn;
+ cout << endl;
+ cout << "              Stacked event rate (Hz) : " << ratetot;
+ if (fSolidangleOn) cout << " --> Rate per steradian : " << ratetot/fSolidangleOn;
+ cout << endl;
+ cout << "              Average event rate per time window (Hz) : " << ratetot/float(fNgrbs) << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Stacked particle fluence (cm^-2) : " << nentot/fSensarea;
+  if (fSolidangleOn) cout << " --> Fluence per steradian (cm^-2 sr^-1) : " << nentot/(fSensarea*fSolidangleOn);
+  cout << endl;
+  cout << "              Stacked particle flux (cm^-2 s^-1) : " << ratetot/fSensarea;
+  if (fSolidangleOn) cout << " --> Intensity (cm^-2 s^-1 sr^-1) : " << ratetot/(fSensarea*fSolidangleOn);
+  cout << endl;
+ }
+ cout << "              Cumulated observed energy (GeV) : " << fEnergyOn;
+ if (fSolidangleOn) cout << " --> GeV per steradian : " << fEnergyOn/fSolidangleOn;
+ cout << endl;
+ cout << "              Cumulated observed power (GeV/s) : " << fEnergyOn/fDtwin;
+ if (fSolidangleOn) cout << " --> GeV/s per steradian : " << fEnergyOn/(fDtwin*fSolidangleOn);
+ cout << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Cumulated observed energy fluence (GeV cm^-2) : " << fEnergyOn/fSensarea;
+  if (fSolidangleOn) cout << " --> Fluence per steradian (GeV cm^-2 sr^-1) : " << fEnergyOn/(fSensarea*fSolidangleOn);
+  cout  << endl;
+  cout << "              Cumulated observed energy flux (GeV cm^-2 s^-1) : " << fEnergyOn/(fDtwin*fSensarea);
+  if (fSolidangleOn) cout << " --> Intensity (GeV cm^-2 s^-1 sr^-1) : " << fEnergyOn/(fDtwin*fSensarea*fSolidangleOn);
+  cout << endl;
+ }
+ cout << " *Off source* Total number of recorded (bkg) events : " << nenbkg;
+ if (fSolidangleOff) cout << " --> Events per steradian : " << nenbkg/fSolidangleOff;
+ cout << endl;
+ cout << "              Stacked event rate (Hz) : " << ratebkg;
+ if (fSolidangleOff) cout << " --> Rate per steradian : " << ratebkg/fSolidangleOff;
+ cout << endl;
+ cout << "              Average event rate per time window (Hz) : " << ratebkg/float(fNgrbs) << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Stacked particle fluence (cm^-2) : " << nenbkg/fSensarea;
+  if (fSolidangleOff) cout << " --> Fluence per steradian (cm^-2 sr^-1) : " << nenbkg/(fSensarea*fSolidangleOff);
+  cout << endl;
+  cout << "              Stacked particle flux (cm^-2 s^-1) : " << ratebkg/fSensarea;
+  if (fSolidangleOff) cout << " --> Intensity (cm^-2 s^-1 sr^-1) : " << ratebkg/(fSensarea*fSolidangleOff);
+  cout << endl;
+ }
+ cout << "              Cumulated observed energy (GeV) : " << fEnergyOff;
+ if (fSolidangleOff) cout << " --> GeV per steradian : " << fEnergyOff/fSolidangleOff;
+ cout << endl;
+ cout << "              Cumulated observed power (GeV/s) : " << fEnergyOff/fDtwin;
+ if (fSolidangleOff) cout << " --> GeV/s per steradian : " << fEnergyOff/(fDtwin*fSolidangleOff);
+ cout << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Cumulated observed energy fluence (GeV cm^-2) : " << fEnergyOff/fSensarea;
+  if (fSolidangleOff) cout << " --> Fluence per steradian (GeV cm^-2 sr^-1) : " << fEnergyOff/(fSensarea*fSolidangleOff);
+  cout  << endl;
+  cout << "              Cumulated observed energy flux (GeV cm^-2 s^-1) : " << fEnergyOff/(fDtwin*fSensarea);
+  if (fSolidangleOff) cout << " --> Intensity (GeV cm^-2 s^-1 sr^-1) : " << fEnergyOff/(fDtwin*fSensarea*fSolidangleOff);
+  cout << endl;
+ }
+ cout << " -(Unknown)-  Total number of injected \"on source\" signal events : " << nmugrb << endl;
+ cout << "              Total number of recorded \"on source\" signal events : " << nsigOn;
+ if (fSolidangleOn) cout << " --> (Diffuse) Events per steradian : " << nsigOn/fSolidangleOn;
+ cout << endl;
+ cout << "              Total number of recorded \"on source\" bkg events : " << nbkgOn;
+ if (fSolidangleOn) cout << " --> Events per steradian : " << nbkgOn/fSolidangleOn;
+ cout << endl;
+ cout << "              --- \"on source\" signal data ---" << endl;
+ cout << "              Stacked signal event rate (Hz) : " << ratesigOn;
+ if (fSolidangleOn) cout << " --> (Diffuse) Rate per steradian : " << ratesigOn/fSolidangleOn;
+ cout << endl;
+ cout << "              Average signal event rate per time window (Hz) : " << ratesigOn/float(fNgrbs) << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Stacked signal particle fluence (cm^-2) : " << nsigOn/fSensarea;
+  if (fSolidangleOn) cout << " --> (Diffuse) Fluence per steradian (cm^-2 sr^-1) : " << nsigOn/(fSensarea*fSolidangleOn);
+  cout << endl;
+  cout << "              Stacked signal particle flux (cm^-2 s^-1) : " << ratesigOn/fSensarea;
+  if (fSolidangleOn) cout << " --> (Diffuse) Intensity (cm^-2 s^-1 sr^-1) : " << ratesigOn/(fSensarea*fSolidangleOn);
+  cout << endl;
+ }
+ cout << "              Cumulated observed signal energy (GeV) : " << fEnergySig;
+ if (fSolidangleOn) cout << " --> (Diffuse) GeV per steradian : " << fEnergySig/fSolidangleOn;
+ cout << endl;
+ cout << "              Cumulated observed signal power (GeV/s) : " << fEnergySig/fDtwin;
+ if (fSolidangleOn) cout << " --> (Diffuse) GeV/s per steradian : " << fEnergySig/(fDtwin*fSolidangleOn);
+ cout << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Cumulated observed signal energy fluence (GeV cm^-2) : " << fEnergySig/fSensarea;
+  if (fSolidangleOn) cout << " --> (Diffuse) Fluence per steradian (GeV cm^-2 sr^-1) : " << fEnergySig/(fSensarea*fSolidangleOn);
+  cout  << endl;
+  cout << "              Cumulated observed signal energy flux (GeV cm^-2 s^-1) : " << fEnergySig/(fDtwin*fSensarea);
+  if (fSolidangleOn) cout << " --> (Diffuse) Intensity (GeV cm^-2 s^-1 sr^-1) : " << fEnergySig/(fDtwin*fSensarea*fSolidangleOn);
+  cout << endl;
+ }
+ cout << "              --- \"on source\" background data ---" << endl;
+ cout << "              Stacked bkg event rate (Hz) : " << ratebkgOn;
+ if (fSolidangleOn) cout << " --> Rate per steradian : " << ratebkgOn/fSolidangleOn;
+ cout << endl;
+ cout << "              Average bkg event rate per time window (Hz) : " << ratebkgOn/float(fNgrbs) << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Stacked bkg particle fluence (cm^-2) : " << nbkgOn/fSensarea;
+  if (fSolidangleOn) cout << " --> Fluence per steradian (cm^-2 sr^-1) : " << nbkgOn/(fSensarea*fSolidangleOn);
+  cout << endl;
+  cout << "              Stacked bkg particle flux (cm^-2 s^-1) : " << ratebkgOn/fSensarea;
+  if (fSolidangleOn) cout << " --> Intensity (cm^-2 s^-1 sr^-1) : " << ratebkgOn/(fSensarea*fSolidangleOn);
+  cout << endl;
+ }
+ cout << "              Cumulated observed bkg energy (GeV) : " << fEnergyBkg;
+ if (fSolidangleOn) cout << " --> GeV per steradian : " << fEnergyBkg/fSolidangleOn;
+ cout << endl;
+ cout << "              Cumulated observed bkg power (GeV/s) : " << fEnergyBkg/fDtwin;
+ if (fSolidangleOn) cout << " --> GeV/s per steradian : " << fEnergyBkg/(fDtwin*fSolidangleOn);
+ cout << endl;
+ if (fSensarea>0)
+ {
+  cout << "              Cumulated observed bkg energy fluence (GeV cm^-2) : " << fEnergyBkg/fSensarea;
+  if (fSolidangleOn) cout << " --> Fluence per steradian (GeV cm^-2 sr^-1) : " << fEnergyBkg/(fSensarea*fSolidangleOn);
+  cout  << endl;
+  cout << "              Cumulated observed bkg energy flux (GeV cm^-2 s^-1) : " << fEnergyBkg/(fDtwin*fSensarea);
+  if (fSolidangleOn) cout << " --> Intensity (GeV cm^-2 s^-1 sr^-1) : " << fEnergyBkg/(fDtwin*fSensarea*fSolidangleOn);
+  cout << endl;
+ }
  cout << endl; 
 
  // Update internal statistics
  fBurstParameters->SetSignal(fAvgrbz,"Avgrbz");
  fBurstParameters->SetSignal(fAvgrbt90,"Avgrbt90");
+ fBurstParameters->AddNamedSlot("Avgrbsigma");
+ fBurstParameters->SetSignal(fAvgrbsigma,"Avgrbsigma");
  fBurstParameters->AddNamedSlot("solidangle");
  fBurstParameters->SetSignal(solidangle,"solidangle");
  fBurstParameters->AddNamedSlot("nentot");
@@ -10220,29 +11231,58 @@ void NcAstrolab::GenBurstSignals()
  fBurstParameters->SetSignal(ratebkg,"ratebkg");
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::BurstCompensate(Int_t& nmugrb,Float_t fGrbnu,Float_t fNgrbs,Int_t fInburst,Float_t fDtnu,Float_t fDtnus,Float_t fAngres,Float_t fTimres,Float_t fDatype,Float_t fDawin)
+void NcAstrolab::BurstCompensate(Int_t& nmugrb)
 {
 // Compensate statistical underfluctuation in the number of transient burst muons.
 
  // Retreive the needed parameters
- Int_t fKinangle=fBurstParameters->GetSignal("Kinangle");
+ Float_t fGrbnu=fBurstParameters->GetSignal("Grbnu");
+ Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
+ Int_t fInburst=TMath::Nint(fBurstParameters->GetSignal("Inburst"));
+ Float_t fDtnu=fBurstParameters->GetSignal("Dtnu");
+ Float_t fDtnus=fBurstParameters->GetSignal("Dtnus");
+ Float_t fTimres=fBurstParameters->GetSignal("Timres");
+ Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
+ Float_t fDawin=fBurstParameters->GetSignal("Dawin");
+
+ Float_t fEmin=fBurstParameters->GetSignal("Emin");
+ Float_t fEmax=fBurstParameters->GetSignal("Emax");
+ Int_t fKinangle=TMath::Nint(fBurstParameters->GetSignal("Kinangle"));
+ Float_t fAngresmin=fBurstParameters->GetSignal("Angresmin");
+ Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
+ Float_t fAngresfix=fBurstParameters->GetSignal("Angresfix");
+ Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
 
  Int_t nmu=int(fabs(fGrbnu)*float(fNgrbs));
  Int_t jgrb=0;
  NcSignal* sx=0;
  NcTimestamp* tx=0;
  Float_t t90grb=0;
+ Float_t zgrb=0;
  Float_t sigmagrb=0;
- Float_t totsigma=0;
  NcPosition rgrb;
  NcPosition rgrb2;
  Float_t dt=0;
- Double_t zgrb=0;
+ Double_t dgrb=0;
  Double_t thetagrb=0;
  Double_t phigrb=0;
  Float_t dang=0;
+ Float_t dangmax=0;
+ Float_t dangmaxOn=0;
  NcPosition rmu;
+ Double_t E=0;
+ Double_t ang=0;
+ Double_t sigmareco=0;
+ Float_t sigmatot=0;
+ Float_t OmegaOn=0; // The current on-source solid angle probed for a certain GRB
+ Float_t thlow=0;
+ Float_t thup=0;
+ Float_t solidangle=0;
+ Int_t fixedwinset=0; // Flag to indicate whether a fixed angular search window was set (1) or not (0) for this burst 
 
+ TH1* htotsigmaburst=(TH1*)fBurstHistos.FindObject("htotsigmaburst");
+ TH1* htotsigmareco=(TH1*)fBurstHistos.FindObject("htotsigmareco");
+ TH1* htotsigmacomb=(TH1*)fBurstHistos.FindObject("htotsigmacomb");
  TH1* tottfine=(TH1*)fBurstHistos.FindObject("tottfine");
  TH1* tott=(TH1*)fBurstHistos.FindObject("tott");
  TH1* tota=(TH1*)fBurstHistos.FindObject("tota");
@@ -10254,78 +11294,125 @@ void NcAstrolab::BurstCompensate(Int_t& nmugrb,Float_t fGrbnu,Float_t fNgrbs,Int
  while (nmugrb<nmu)
  {
   // Pick randomly one of the stored GRBs
-   jgrb=int(fRan->Uniform(0.,float(fNgrbs)));
-   if (jgrb==0) jgrb=1;
-   sx=GetSignal(jgrb);
+  jgrb=int(fRan->Uniform(0.,float(fNgrbs)));
+  if (jgrb==0) jgrb=1;
+  sx=GetSignal(jgrb);
 
-   if (!sx) continue;
+  if (!sx) continue;
 
-   tx=sx->GetTimestamp();
-   t90grb=sx->GetSignal("t90");
-   GetSignal(zgrb,thetagrb,"deg",phigrb,"deg","loc",tx,jgrb);
-   rgrb.SetPosition(zgrb,thetagrb,phigrb,"sph","deg");
-   sigmagrb=sx->GetSignal("sigmagrb");
-   totsigma=sx->GetSignal("totsigma");
+  tx=sx->GetTimestamp();
+  GetSignal(dgrb,thetagrb,"deg",phigrb,"deg","loc",tx,jgrb);
+  rgrb.SetPosition(1,thetagrb,phigrb,"sph","deg");
+  zgrb=sx->GetSignal("z");
+  t90grb=sx->GetSignal("t90");
+  sigmagrb=sx->GetSignal("sigmagrb");
+  fixedwinset=TMath::Nint(sx->GetSignal("fixedwinset"));
+  dangmaxOn=sx->GetSignal("dangmaxOn");
+  OmegaOn=sx->GetSignal("OmegaOn");
 
-   // Obtain actual GRB position
-   rgrb2.Load(rgrb);
-   SmearPosition(rgrb2,sigmagrb); //@@@
+  dangmax=dangmaxOn;
 
-   nmugrb++;
+  // Obtain actual GRB position
+  rgrb2.Load(rgrb);
+  SmearPosition(rgrb2,sigmagrb); //@@@@@@
 
-   if (!fInburst) // Neutrino and gamma production decoupled
+  nmugrb++;
+
+  if (!fInburst) // Neutrino and gamma production decoupled
+  {
+   if (fDtnus<0) // Sigma in units of T90
    {
-    if (fDtnus<0) // Sigma in units of T90
-    {
-     dt=fRan->Gauss(fDtnu,fabs(fDtnus)*t90grb);
-    }
-    else
-    {
-     dt=fRan->Gauss(fDtnu,fDtnus);
-    }
-    dt=dt*(zgrb+1.);
+    dt=fRan->Gauss(fDtnu,fabs(fDtnus)*t90grb);
    }
-   else // Coupled neutrino and gamma production
+   else
    {
-    if (fDtnus<0) // Sigma in units of T90
-    {
-     dt=fRan->Gauss(fDtnu*t90grb,fabs(fDtnus)*t90grb);
-    }
-    else
-    {
-     dt=fRan->Gauss(fDtnu*t90grb,fDtnus);
-    }
+    dt=fRan->Gauss(fDtnu,fDtnus);
    }
-   if (fTimres>0) dt=fRan->Gauss(dt,fTimres);
-
-   // The direction of the GRB signal muon
-   rmu.Load(rgrb2);
-
-   // Modification to account for the neutrino-lepton kinematic opening angle
-   if (fKinangle>0)
+   dt=dt*(zgrb+1.);
+  }
+  else // Coupled neutrino and gamma production
+  {
+   if (fDtnus<0) // Sigma in units of T90
    {
-    Double_t E=GetBurstSignalEnergy();
-    if (E>0)
-    {
-     Int_t mode=fKinangle-1;
-     Double_t ang=GetNeutrinoAngle(E,"deg",mode);
-     if (ang>0) ShiftPosition(rmu,ang);
-    }
+    dt=fRan->Gauss(fDtnu*t90grb,fabs(fDtnus)*t90grb);
    }
+   else
+   {
+    dt=fRan->Gauss(fDtnu*t90grb,fDtnus);
+   }
+  }
+  if (fTimres>0) dt=fRan->Gauss(dt,fTimres);
 
-   // Smearing according to the detector resolution
-   if (fAngres>0) SmearPosition(rmu,fAngres);
+  // The direction of the GRB signal
+  rmu.Load(rgrb2);
 
-   // Determine angular difference w.r.t. the presumed GRB position
-   dang=rgrb.GetOpeningAngle(rmu,"deg");
+  // The energy of the GRB signal
+  E=GetBurstSignalEnergy();
 
-   if ((!fDatype && dang>fabs(fDawin)) || (fDatype && dang>fabs(fDawin*totsigma))) continue;
+  if (E<0 || E<fEmin || E>fEmax) continue;
 
-   if (tottfine) tottfine->Fill(dt);
-   if (tott) tott->Fill(dt);
-   if (tota) tota->Fill(dang);
-   if (totcosa) totcosa->Fill(cos(dang*pi/180.));
-   if (tot2) tot2->Fill(dang,dt);
+  // Modification to account for the neutrino-lepton kinematic opening angle
+  if (fKinangle>0)
+  {
+   Int_t mode=fKinangle-1;
+   Double_t ang=GetNeutrinoAngle(E,"deg",mode);
+   if (ang>0) ShiftPosition(rmu,ang);
+  }
+
+  // Smearing according to the reconstruction angular resolution
+  sigmareco=GetBurstRecoAngres(E,E);
+  if (sigmareco<0) sigmareco=fAngresfix;
+
+  if (sigmareco<fAngresmin || sigmareco>fAngresmax) continue;
+
+  SmearPosition(rmu,sigmareco);
+
+  // Determine angular difference w.r.t. the presumed GRB position
+  dang=rgrb.GetOpeningAngle(rmu,"deg");
+
+  sigmatot=-1;
+  if (fSumsigmas==-1) sigmatot=sigmareco;
+  if (fSumsigmas==0) sigmatot=sigmagrb;
+  if (fSumsigmas==1) sigmatot=sigmagrb+sigmareco;
+  if (fSumsigmas==2) sigmatot=sqrt(sigmagrb*sigmagrb+sigmareco*sigmareco);
+
+  // Determine the dynamic angular window including the track reco uncertainty
+  if (!fixedwinset)
+  {
+   dangmax=-1;
+   if (sigmatot>=0) dangmax=fabs(fDawin*sigmatot);
+  }
+
+  if (dang>dangmax) continue;
+
+  if (htotsigmaburst) htotsigmaburst->Fill(sigmagrb);
+  if (htotsigmareco) htotsigmareco->Fill(sigmareco);
+  if (htotsigmacomb) htotsigmacomb->Fill(sigmatot);
+  if (tottfine) tottfine->Fill(dt);
+  if (tott) tott->Fill(dt);
+  if (tota) tota->Fill(dang);
+  if (totcosa) totcosa->Fill(cos(dang*pi/180.));
+  if (tot2) tot2->Fill(dang,dt);
+  fBurstParameters->AddSignal(E,"EnergyOn");
+  fBurstParameters->AddSignal(E,"EnergySig");
+
+  if (fixedwinset) continue;
+  
+  // Update the dynamic On-source maximum (solid) angle that is encountered for this burst
+  if (fDawin<0) // Local zenith band
+  {
+   thlow=thetagrb-0.5*dangmax;
+   thup=thetagrb+0.5*dangmax;
+   solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+  }
+  else // Circle around GRB position
+  {
+   thlow=0;
+   thup=dangmax;
+   solidangle=GetSolidAngle(thlow,thup,"deg",0,360,"deg");
+  }
+  if (dangmax>dangmaxOn) sx->SetSignal(dangmax,"dangmaxOn");
+  if (solidangle>OmegaOn) sx->SetSignal(solidangle,"OmegaOn");
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -10379,13 +11466,19 @@ TH1* NcAstrolab::GetBurstBayesianSignalRate(Double_t p,Double_t& rlow,Double_t& 
  Int_t fNgrbs=GetNsignals(0);
  Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
 
+ // The "on source" and "off source" solid angles that were probed
+ Double_t fSolidangleOn=fBurstParameters->GetSignal("SolidangleOn");
+ Double_t fSolidangleOff=fBurstParameters->GetSignal("SolidangleOff");
+ Double_t Ra=-1;
+ if (fSolidangleOff) Ra=fSolidangleOn/fSolidangleOff;
+
  // The Bayesian posterior background and signal rate PDFs
  Double_t Non=nentot;
  Double_t Ton=fDtwin*float(fNgrbs);
  Double_t Noff=nenbkg;
  Double_t Toff=Ton;
  TF1 fbkgrpdf=GetBackgroundRatePDF(Noff,Toff);
- TF1 fsigrpdf=GetSignalRatePDF(Non,Ton,Noff,Toff);
+ TF1 fsigrpdf=GetSignalRatePDF(Non,Ton,Noff,Toff,Ra);
 
  // Determine the "p%" credible interval for the signal rate
  Float_t frac=0;
@@ -10406,11 +11499,64 @@ TH1* NcAstrolab::GetBurstBayesianSignalRate(Double_t p,Double_t& rlow,Double_t& 
  cout << endl;
  cout << " *" << ClassName() << "::GetBurstBayesianSignalRate* Credible interval [rlow,rup] for p=" << p << "%"
       << " with a precision of 1/" << n << endl;
+
+ // Issue a warning in case variable angular cones based on actual track reco sigmas were used.
+ // This can induce large variations in the on-source and off-source event counts
+ Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
+ Int_t fRecoangle=TMath::Nint(fBurstParameters->GetSignal("Recoangle"));
+ Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
+
+ if (fRecoangle && fSumsigmas && fDatype==2)
+ {
+  cout << " === Warning: Variable angular cones based on actual track reconstruction sigmas were used." << endl;
+  cout << "              Large variations between the on-source and off-source background counts may be present." << endl;
+ }
+
  cout << " The " << frac << "% credible interval from the Bayesian signal pdf :"
       << " rlow=" << rlow << " rup=" << rup << endl;
  cout << " The following signal and background rate PDF histograms have been generated :" << endl;
  cout << " ... " << hpdfsigr->GetName() << " : " << hpdfsigr->GetTitle() << endl;      
  cout << " ... " << hpdfbkgr->GetName() << " : " << hpdfbkgr->GetTitle() << endl;      
+
+ // Provide statistics for the lower and upper signal rate boundaries 
+ Float_t fSensarea=fBurstParameters->GetSignal("Sensarea");
+
+ cout << " Integrated exposure time (sec) of the " << fNgrbs << " stacked time windows : " << Ton << endl;
+ cout << " Total accumulated \"on source\" solid angle (in sr) : " << fSolidangleOn << " in " << fNgrbs << " stacked patches." << endl; 
+ if (fSensarea>0) cout << " Area (in m^2) covered c.q. overlooked by the detector sensors : " << fSensarea << endl;
+ fSensarea*=1e4;
+ cout << " *Lower bound* Stacked recorded signal rate (Hz) : " << rlow;
+ if (fSolidangleOn) cout << " --> Rate per steradian : " << rlow/fSolidangleOn;
+ cout << endl;
+ cout << "               Average recorded signal rate per time window (Hz) : " << rlow/float(fNgrbs) << endl;
+ cout << "               Total number of recorded signal events : " << rlow*Ton;
+ if (fSolidangleOff) cout << " --> Events per steradian : " << rlow*Ton/fSolidangleOff;
+ cout << endl;
+ if (fSensarea>0)
+ {
+  cout << "               Stacked signal particle fluence (cm^-2) : " << rlow*Ton/fSensarea;
+  if (fSolidangleOn) cout << " --> Fluence per steradian (cm^-2 sr^-1) : " << rlow*Ton/(fSensarea*fSolidangleOn);
+  cout << endl;
+  cout << "               Stacked signal particle flux (cm^-2 s^-1) : " << rlow/fSensarea;
+  if (fSolidangleOn) cout << " --> Intensity (cm^-2 s^-1 sr^-1) : " << rlow/(fSensarea*fSolidangleOn);
+  cout << endl;
+ }
+ cout << " *Upper bound* Stacked recorded signal rate (Hz) : " << rup;
+ if (fSolidangleOff) cout << " --> Rate per steradian : " << rup/fSolidangleOff;
+ cout << endl;
+ cout << "               Average recorded signal rate per time window (Hz) : " << rup/float(fNgrbs) << endl;
+ cout << "               Total number of recorded signal events : " << rup*Ton;
+ if (fSolidangleOff) cout << " --> Events per steradian : " << rup*Ton/fSolidangleOff;
+ cout << endl;
+ if (fSensarea>0)
+ {
+  cout << "               Stacked signal particle fluence (cm^-2) : " << rup*Ton/fSensarea;
+  if (fSolidangleOff) cout << " --> Fluence per steradian (cm^-2 sr^-1) : " << rup*Ton/(fSensarea*fSolidangleOff);
+  cout << endl;
+  cout << "               Stacked signal particle flux (cm^-2 s^-1) : " << rup/fSensarea;
+  if (fSolidangleOff) cout << " --> Intensity (cm^-2 s^-1 sr^-1) : " << rup/(fSensarea*fSolidangleOff);
+  cout << endl;
+ }
 
  return hpdfsigr;
 }
@@ -10451,6 +11597,12 @@ Double_t NcAstrolab::GetBurstLiMaSignificance() const
  Int_t fNgrbs=GetNsignals(0);
  Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
 
+ // The "on source" and "off source" solid angles that were probed
+ Double_t fSolidangleOn=fBurstParameters->GetSignal("SolidangleOn");
+ Double_t fSolidangleOff=fBurstParameters->GetSignal("SolidangleOff");
+ Double_t Ra=-1;
+ if (fSolidangleOff) Ra=fSolidangleOn/fSolidangleOff;
+
  // The "on source" and "off source" data
  Int_t Non=int(nentot);
  Double_t Ton=fDtwin*float(fNgrbs);
@@ -10458,10 +11610,22 @@ Double_t NcAstrolab::GetBurstLiMaSignificance() const
  Double_t Toff=Ton;
 
  NcMath m;
- sigma=m.LiMaSignificance(Non,Ton,Noff,Toff);
+ sigma=m.LiMaSignificance(Non,Ton,Noff,Toff,Ra);
 
  cout << endl;
  cout << " *" << ClassName() << "::GetBurstLiMaSignificance* The Li-Ma signal significance is : " << sigma << " sigma." << endl;
+
+ // Issue a warning in case variable angular cones based on actual track reco sigmas were used.
+ // This can induce large variations in the on-source and off-source event counts
+ Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
+ Int_t fRecoangle=TMath::Nint(fBurstParameters->GetSignal("Recoangle"));
+ Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
+
+ if (fRecoangle && fSumsigmas && fDatype==2)
+ {
+  cout << " === Warning: Variable angular cones based on actual track reconstruction sigmas were used." << endl;
+  cout << "              Large variations between the on-source and off-source background counts may be present." << endl;
+ }
 
  return sigma;
 }

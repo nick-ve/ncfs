@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcMath.cxx 107 2016-02-07 18:20:26Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcMath
 // Various mathematical tools which may be very convenient while
@@ -45,7 +43,7 @@
 //                             // correct model
 //
 //--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-//- Modified: NvE $Date: 2016-02-07 19:20:26 +0100 (Sun, 07 Feb 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 16, 2021  20:25Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcMath.h"
@@ -2616,6 +2614,8 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
 // of the various outcomes (and the requirement that the sum of all these
 // probabilities equals 1).
 //
+// Note : An outcome k is only taken into account if its probability pk>0.
+//
 // The Psi value provides (in dB scale) the amount of support that the
 // data can maximally give to any Bernoulli class hypothesis different
 // from the currently specified B_m.
@@ -2651,8 +2651,7 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
 //                 where all trials yield the outcome with the lowest probability.
 //            k=-2 implies the best match of the outcomes with integer nk values.
 //
-// In case no probabilities are given (i.e. p=0), a uniform distribution
-// is assumed.
+// In case no probabilities are given (i.e. p=0), a uniform distribution is assumed.
 //
 // The default values are p=0 and k=0.
 //
@@ -2703,18 +2702,21 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
  {
   for (Int_t j=0; j<m; j++)
   {
-   if (p[j]<pmin)
+   if (p[j]>0 && p[j]<pmin)
    {
     pmin=p[j];
     jmin=j;
    }
-   if (p[j]>pmax)
+   if (p[j]>0 && p[j]>pmax)
    {
     pmax=p[j];
     jmax=j;
    }
   }
  }
+
+ // Check for validity of the encountered pmin and pmax
+ if (jmin<0 || jmax<0) return psi;
 
  /////////////////////////////
  // The worst matching case //
@@ -2961,7 +2963,8 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
   TH1* href=(TH1*)his->Clone("href");
   href->Reset();
   Double_t nenhyp=0;
-  Double_t x,y;
+  Double_t x=0;
+  Double_t y=0;
   for (Int_t ihyp=1; ihyp<=hyp->GetNbinsX(); ihyp++)
   {
    x=hyp->GetBinCenter(ihyp);

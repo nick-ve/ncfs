@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jul  3 15:53:33 2020            -->
+<!--   Date: Thu Mar 18 12:07:08 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -97,6 +97,13 @@ return false;}
  These facilities will enable a background c.q. blind analysis in studying
  correlations with external (astrophysical) phenomena.
 
+ This <a href="./NcAstrolab.html">NcAstrolab</a> class also provides a facility to model c.q. perform the
+ analysis of transient phenomena by means of (stacked) time series observations.
+ It reflects the observation of neutrinos based on gamma/GW burst alerts, but the
+ procedure may of course be used for any kind of messenger particles.
+ For a worked out example, please refer to the macro <span class="string">"burst-model.cc"</span>
+ in the folder <span class="string">"/ncfs/physics/macros"</span>.
+
  By default different random sequences are ensured for different <a href="./NcAstrolab.html">NcAstrolab</a> instances,
  even with identical stored measurements and reference signals.
  In case the user wants to control the random sequence (e.g. to obtain reproducible results),
@@ -150,7 +157,7 @@ return false;}
  // Mimic a GRB 5 seconds before the occurrence of Event10372
  ts.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(0,-5,0);
  lab.<a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(1,327.531,<span class="string">"deg"</span>,-35.8903,<span class="string">"deg"</span>,<span class="string">"gal"</span>,&amp;ts,-1,<span class="string">"T"</span>,<span class="string">"GRB890730"</span>);
- ts.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(0,5,0);
+ ts.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(0,5,0); // Restore the time stamp
 
  // List all stored objects
  <a href="./ListOfTypes.html#ostream">cout</a> &lt;&lt; endl;
@@ -183,7 +190,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC July 3, 2020 15:30
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 18, 2021  09:30Z
 
 </pre></div>
 </div></div>
@@ -260,6 +267,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstChi2Statistics">GetBurstChi2Statistics</a>(TString type, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 1)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstLiMaSignificance">GetBurstLiMaSignificance</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstParameters">GetBurstParameters</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstRecoAngres">GetBurstRecoAngres</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amax = 999) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstSignalEnergy">GetBurstSignalEnergy</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetComovingDistance">GetComovingDistance</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z, TString u = <span class="string">"Mpc"</span>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TH1F</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetCountsHistogram">GetCountsHistogram</a>(TF1&amp; spec, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString s = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
@@ -383,9 +391,11 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:LoadBurstGCNdata">LoadBurstGCNdata</a>(TString file, TString tree, <a href="./ListOfTypes.html#Int_t">Int_t</a> date1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> date2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = -1, TString type = <span class="string">"GRB"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles"><span class="baseclass">NcTimestamp::</span>LoadUTCparameterFiles</a>(TString leapfile, TString dutfile)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstBkgEdist">MakeBurstBkgEdist</a>(TString file, TString tree, TString name1, TString name2, TString u, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 1000)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstEdist">MakeBurstEdist</a>(TF1&amp; spec, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstEdist@1">MakeBurstEdist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gamma, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstEnergydist@1">MakeBurstEnergydist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TF1&amp; spec, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstEnergydist@2">MakeBurstEnergydist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Double_t">Double_t</a> alpha, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstEnergydist">MakeBurstEnergydist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString file, TString tree, TString name1, TString name2, TString u, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 1000)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstRecoAngresdist">MakeBurstRecoAngresdist</a>(TString file, TString tree, TString name1, TString name2, TString ua, TString name3, TString ud, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbe = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nba = 1000)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstSigmaPosdist">MakeBurstSigmaPosdist</a>(TString file, TString tree, TString name, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 900, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 90)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstT90dist">MakeBurstT90dist</a>(TString file, TString tree, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 50, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = -5, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 5)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstZdist">MakeBurstZdist</a>(TString file, TString tree, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 200, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmin = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmax = 20)</td></tr>
 <tr class="func"><td class="funcret">TArrayI*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchRefSignal">MatchRefSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
@@ -499,7 +509,7 @@ return false;}
 </table></div>
 <div class="access" id="funcprot"><b>protected:</b>
 <table class="func" id="tabfuncprot" cellspacing="0">
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:BurstCompensate">BurstCompensate</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; nmugrb, <a href="./ListOfTypes.html#Float_t">Float_t</a> Grbnu, <a href="./ListOfTypes.html#Float_t">Float_t</a> Ngrbs, <a href="./ListOfTypes.html#Int_t">Int_t</a> Inburst, <a href="./ListOfTypes.html#Float_t">Float_t</a> Dtnu, <a href="./ListOfTypes.html#Float_t">Float_t</a> Dtnus, <a href="./ListOfTypes.html#Float_t">Float_t</a> Angres, <a href="./ListOfTypes.html#Float_t">Float_t</a> Timres, <a href="./ListOfTypes.html#Float_t">Float_t</a> Datype, <a href="./ListOfTypes.html#Float_t">Float_t</a> Dawin)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:BurstCompensate">BurstCompensate</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; nmugrb)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBackgroundRateProb">GetBackgroundRateProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* vars, <a href="./ListOfTypes.html#Double_t">Double_t</a>* pars)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetDifference@2">GetDifference</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
@@ -3966,27 +3976,36 @@ return false;}
  Nmax;     // Maximal number of bursts to be accepted for analysis (&lt;0 : no limitation)
  Declmin   // Minimal declination (J2000 in degrees) for burst position acceptance
  Declmax   // Maximal declination (J2000 in degrees) for burst position acceptance
- T90min    // Minimal duration (t90 in sec) for burst acceptance (&lt;0 : [|T90min|,T90max] with random T90 when T90 or T100 is unknown)
+ T90min    // Minimal duration (t90 in sec) for burst acceptance (&lt;0 : [|T90min|,T90max] with random T90 when missing in loaded data)
  T90max    // Maximal duration (t90 in sec) for burst acceptance
- Zmin      // Minimal redshift for burst acceptance (&lt;0 : [|fZmin|,fZmax] with random z when redshift is unknown)
+ Zmin      // Minimal redshift for burst acceptance (&lt;0 : [|Zmin|,Zmax] with random z when missing in loaded data)
  Zmax      // Maximal redshift for burst acceptance
- Sigmagrb  // Angular uncertainty (sigma in degrees) on burst position (&lt;0 : determine from observations)
- Maxsigma  // Maximal combined burst position and track angular uncertainty (sigma in degrees) for acceptance
- Grbnu     // Maximum number of detectable neutrinos per burst (&lt;0 : no stat. fluct.)
+ Sigmamin  // Minimal position uncertainty (sigma in degrees) for burst acceptance (&lt;0 : [|Sigmamin|,Sigmamax] with random sigma when missing in loaded data)
+ Sigmamax  // Maximal position uncertainty (sigma in degrees) for burst acceptance
+ Grbnu     // Maximum number of detectable neutrinos per burst (&lt;0 : no statistical fluctuations)
  Avgrbz    // Average burst redshift (&lt;0 : determine from observations)
  Avgrbt90  // Average burst duration (T90) in seconds (&lt;0 : determine from observations)
  Inburst   // Flag to indicate that neutrinos are produced coupled (1) or not (0) to the burst duration
  Dtnu      // Mean time diff. (in sec) between gamma/GW and nu production (decoupled) or in T90 units w.r.t. trigger (coupled)
  Dtnus     // Sigma of time difference (in sec) between gamma/GW and nu production (&lt;0 is in T90 units)
+ Emin      // Minimal event energy (in GeV) for event acceptance
+ Emax      // Maximal event energy (in GeV) for event acceptance
+ Alphasig  // Spectral index for a default dN/dE=E^-Alphasig burst induced signal energy spectrum within [Emin,Emax]. See also <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEnergydist" title="void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000) or overloads">MakeBurstEnergydist</a>()
+ Alphabkg  // Spectral index for a default dN/dE=E^-Alphabkg background energy spectrum within [Emin,Emax]. See also <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEnergydist" title="void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000) or overloads">MakeBurstEnergydist</a>()
  Kinangle  // Neutrino-lepton kinematic opening angle selection for CC interactions (0=none 1=mean 2=median 3=draw from pdf)
- Angres    // Detector angular resolution (degrees)
- Timres    // Detector time resolution (sec)
+ Angresmin // Minimal event reco angular resolution (sigma in degrees) for event acceptance
+ Angresmax // Maximal event reco angular resolution (sigma in degrees) for event acceptance
+ Angresfix // Fixed event reco angular resolution within [Angresmin,Angresmax] (also used when no distribution (value) is available)
+ Recoangle // Reconstruction angular uncertainty selection (0=use Angresfix value  1=mean 2=median 3=draw from distribution)
+ Sumsigmas // Sigma (summation) selection (-1=reco sigma only  0=burst sigma only  1=linear summation  2=quadratic summation)
+ Timres    // Neutrino detector time resolution (sec)
+ Sensarea  // Area (in m^2) covered c.q. overlooked by the neutrino detector sensors (&lt;=0 means not specified)
  Bkgrate   // Mean rate (in Hz) of background events for the specified [Declmin,Declmax] interval (&lt;0 : rate per steradian)
  Tmin      // Lower bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
  Tmax      // Upper bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
  Dtwin     // Total search time window (in sec) centered at the burst trigger
- Dawin     // Angular search circle (&lt;0 is local zenith band) in degrees or sigma around (above/below) the burst position
- Datype    // Type of angular window specification (0=in degrees 1=in units of combined burst/track sigma)
+ Dawin     // Angular search circle (&lt;0 is local zenith band) in degrees or units of sigma around (above/below) the burst position
+ Datype    // Type of angular window specification (0=in degrees 1=in units of combined max. burst/track sigma 2=in units of combined actual burst/track sigma)
  Nbkg      // Mean number of counts per bin for auto-binning
  Tbint90   // Flag to indicate whether Tbin represents seconds (0) or units of average T90 (1)
  Tbin      // Time bin size (&gt;0=seconds or units of average T90  0=variable bins  &lt;0 will result in a mean Nbkg counts/bin)
@@ -4000,23 +4019,29 @@ return false;}
  The size of subsequent time bins is multiplied by the average redshift factor (z+1) at each step.
  This is done in order to acount for the cosmological time dilation, which stretches all time differences.
 
- Default settings :
+ Default settings (tailored for IceCube 86 strings) :
 
  Nmax=-1
  [Declmin,Declmax]=[-90,90]
- [T90min,T90max]=[1e-6,1e6]
- [Zmin,Zmax]=[-1e-6,9999]
- Sigmagrb=-2.5
- Maxsigma=999
+ [T90min,T90max]=[1e-5,1e5]
+ [Zmin,Zmax]=[-1e-6,20]
+ [Sigmamin,Sigmamax]=[0,2]
  Grbnu=-0.03
  Avgrbz=-1
  Avgrbt90=-1
  Inburst=0
- Dtnu=-60
+ Dtnu=0
  Dtnus=-0.5
+ [Emin,Emax]=[200,1e7]
+ Alphasig=2
+ Alphabkg=3.5
  Kinangle=3
- Angres=0.5
+ [Angresmin,Angresmax]=[0,2]
+ Angresfix=1
+ Recoangle=3
+ Sumsigmas=2
  Timres=1e-5
+ Sensarea=1e6
  Bkgrate=-0.003/(2.*pi)
  Tmin=-3600
  Tmax=3600
@@ -4056,15 +4081,15 @@ return false;}
  The input data has to be provided via a ROOT Tree which will be searched
  for data on the variable names specified below.
  In case data for a certain variable is not present, the non-physical value -999
- will be stored, unless the user has selected random generation of T90 and/or z
- as specified via <a href="./NcAstrolab.html#NcAstrolab:SetBurstParameter" title="void NcAstrolab::SetBurstParameter(TString name,Double_t value)">SetBurstParameter</a>().
+ will be stored, unless the user has selected random generation of the variables
+ T90 and/or z and/or sigmapos as specified via <a href="./NcAstrolab.html#NcAstrolab:SetBurstParameter" title="void NcAstrolab::SetBurstParameter(TString name,Double_t value)">SetBurstParameter</a>().
 
   Name             Description
 
  <span class="string">"date"</span>        Observation date as yyyymmdd
  <span class="string">"ra"</span>          Right ascension (J2000) in decimal degrees
  <span class="string">"dec"</span>         Declination (J2000) in decimal degrees
- <span class="string">"sigmapos"</span>    The error on the burst position in decimal degrees
+ <span class="string">"sigmapos"</span>    The 1-sigma angular uncertainty on the burst position in decimal degrees
  <span class="string">"t90"</span>         The T90 burst duration in seconds
  <span class="string">"mjdtrig"</span>     The (fractional) MJD of the burst trigger
  <span class="string">"mjdt90start"</span> The (fractional) MJD of the T90 start time
@@ -4156,12 +4181,150 @@ return false;}
         to accumulate data.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstBkgEdist" href="src/NcAstrolab.cxx.html#X2cRvB">MakeBurstBkgEdist</a>(TString file, TString tree, TString name1, TString name2, TString u, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 1000)</span><br />
-<div class="funccomm"><pre> Create a background energy distribution on the interval [Emin,Emax] GeV
- based on observed archival energy data.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstSigmaPosdist" href="src/NcAstrolab.cxx.html#pZcKo">MakeBurstSigmaPosdist</a>(TString file, TString tree, TString name, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 900, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 90)</span><br />
+<div class="funccomm"><pre> <a href="./#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> observed archival 1-sigma burst position uncertainty data and create the corresponding distribution.
+ If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:LoadBurstGCNdata" title="void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1=0,Int_t date2=0,Int_t nmax=-1,TString type=&quot;GRB&quot;)">LoadBurstGCNdata</a>() or <a href="./NcAstrolab.html#NcAstrolab:GenBurstGCNdata" title="void NcAstrolab::GenBurstGCNdata(Int_t n,TString name=&quot;GRB&quot;)">GenBurstGCNdata</a>(),
+ the resulting distribution will be used to draw random 1-sigma burst position uncertainty values
+ (if requested) for the bursts without localisation uncertainty information.
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ The input data has to be provided via a ROOT Tree which contains at least
+ the specified variable name indicated below.
+
+ Input arguments :
+
+ file   : Name of the input file containing the ROOT Tree (wildcards are allowed)
+ tree   : Name of the Tree containing the data
+ name   : Name of the variable in the Tree containing the 1-sigma angular localisation uncertainty data
+ u      : Units of the angular localisation uncertainty input data (see below)
+ nb     : Number of bins for the resulting distribution
+ xmin   : Minimal value for the 1-sigma position uncertainty in degrees
+ xmax   : Maximal value for the 1-sigma position uncertainty in degrees
+
+ Specification of the angular units :
+
+ <span class="string">"rad"</span> : angular uncertainty provided in radians
+ <span class="string">"deg"</span> : angular uncertainty provided in degrees
+ <span class="string">"dms"</span> : angular uncertainty provided in dddmmss.sss
+ <span class="string">"hms"</span> : angular uncertainty provided in hhmmss.sss
+ <span class="string">"hrs"</span> : angular uncertainty provided in fractional hours
+
+ The default values are nb=900, xmin=0 and xmax=90.
+
+ Note : This memberfunction may be invoked several times to read different files
+        to accumulate data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstEnergydist@1" href="src/NcAstrolab.cxx.html#swYA7">MakeBurstEnergydist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TF1&amp; spec, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</span><br />
+<div class="funccomm"><pre> Create a background (mode=1) or burst induced signal (mode=2) energy distribution
+ on the interval [Emin,Emax] GeV based on the spectral function <span class="string">"spec"</span> describing dN/dE.
  If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the resulting
- log10(E) distribution will be used to draw random Energy values
- for the background events.
+ energy distribution will be used to draw random energy values for either the
+ generated background or burst induced signal events via the memberfunctions
+ <a href="./NcAstrolab.html#NcAstrolab:GetBurstBackgroundEnergy" title="Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin=-1,Double_t Emax=-1)">GetBurstBackgroundEnergy</a>() and <a href="./NcAstrolab.html#NcAstrolab:GetBurstSignalEnergy" title="Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin=-1,Double_t Emax=-1)">GetBurstSignalEnergy</a>(), respectively.
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ Example: To make a dN/dE=E^-2 burst induced signal energy distribution for 100 Gev &lt; E &lt; 10 PeV
+
+ mode=2;
+ TF1 spec(<span class="string">"spec"</span>,<span class="string">"pow(x,-2.)"</span>);
+ xmin=100;
+ xmax=1e7;
+ nbins=1000;
+ <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEnergydist" title="void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000) or overloads">MakeBurstEnergydist</a>(mode,spec,Emin,Emax,nbins);
+
+ The default value is nbins=1000.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstEnergydist@2" href="src/NcAstrolab.cxx.html#FOCHiC">MakeBurstEnergydist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Double_t">Double_t</a> alpha, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</span><br />
+<div class="funccomm"><pre> Create a background (mode=1) or burst induced signal (mode=2) energy distribution
+ on the interval [Emin,Emax] GeV based on a single power law with
+ spectral index <span class="string">"alpha"</span> describing dN/dE=E^-alpha.
+ If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the resulting
+ energy distribution will be used to draw random energy values for either the
+ generated background or burst induced signal events via the memberfunctions
+ <a href="./NcAstrolab.html#NcAstrolab:GetBurstBackgroundEnergy" title="Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin=-1,Double_t Emax=-1)">GetBurstBackgroundEnergy</a>() and <a href="./NcAstrolab.html#NcAstrolab:GetBurstSignalEnergy" title="Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin=-1,Double_t Emax=-1)">GetBurstSignalEnergy</a>(), respectively.
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ Example: To make a dN/dE=E^-2 burst induced signal energy distribution for 100 Gev &lt; E &lt; 10 PeV
+
+ mode=2;
+ alpha=2;
+ Emin=100;
+ Emax=1e7;
+ nbins=1000;
+ <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEnergydist" title="void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000) or overloads">MakeBurstEnergydist</a>(mode,alpha,Emin,Emax,nbins);
+
+ The default value is nbins=1000.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstEnergydist" href="src/NcAstrolab.cxx.html#TCPjNE">MakeBurstEnergydist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString file, TString tree, TString name1, TString name2, TString u, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 1000)</span><br />
+<div class="funccomm"><pre> Create a background (mode=1) or burst induced signal (mode=2) energy distribution
+ on the interval [Emin,Emax] GeV based on archival energy data.
+ If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the resulting
+ log10(E) distribution will be used to draw random energy values for either the
+ generated background or burst induced signal events via the memberfunctions
+ <a href="./NcAstrolab.html#NcAstrolab:GetBurstBackgroundEnergy" title="Double_t NcAstrolab::GetBurstBackgroundEnergy(Double_t Emin=-1,Double_t Emax=-1)">GetBurstBackgroundEnergy</a>() and <a href="./NcAstrolab.html#NcAstrolab:GetBurstSignalEnergy" title="Double_t NcAstrolab::GetBurstSignalEnergy(Double_t Emin=-1,Double_t Emax=-1)">GetBurstSignalEnergy</a>(), respectively.
+
+ Note : Only those data will be used that correspond with the selected
+        declination interval for the burst investigations.
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ The input data has to be provided via a ROOT Tree which contains at least
+ the specified variable names indicated below.
+
+ Notes :
+
+ 1) With mode&lt;0 (see below) this memberfunction may be invoked several times to
+    read different files to accumulate data.
+ 2) In case a corresponding parametrized energy distribution exists,
+    this will always be replaced by a new energy distribution based on data.
+
+ Input arguments :
+
+ mode   :  1 --&gt; Always create a new energy distribution for background events.
+        :  2 --&gt; Always create a new energy distribution for burst induced signal events.
+        : -1 --&gt; Create a new (if needed) or add data to an energy distribution for background events.
+        : -2 --&gt; Create a new (if needed) or add data to an energy distribution for burst induced signal events.
+ file   : Name of the input file containing the ROOT Tree (wildcards are allowed)
+ tree   : Name of the Tree containing the data
+ name1  : Name of the tree variable containing the log10(E) data (in GeV)
+ name2  : Name of the tree variable containing the declination data
+ u      : The units (see below) of the declination data
+ Emin   : Minimal energy value in GeV
+ Emax   : Maximal energy value in GeV
+ nb     : Number of bins for the Energy distribution
+
+ Specification of the angular units :
+
+ <span class="string">"rad"</span> : input angle provided in radians
+ <span class="string">"deg"</span> : input angle provided in degrees
+ <span class="string">"dms"</span> : input angle provided in dddmmss.sss
+ <span class="string">"hms"</span> : input angle provided in hhmmss.sss
+ <span class="string">"hrs"</span> : input angle provided in fractional hours
+
+ The default value is nb=1000.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstRecoAngresdist" href="src/NcAstrolab.cxx.html#yBDWKE">MakeBurstRecoAngresdist</a>(TString file, TString tree, TString name1, TString name2, TString ua, TString name3, TString ud, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbe = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nba = 1000)</span><br />
+<div class="funccomm"><pre> Create a reconstruction angle resolution vs. energy distribution on the interval [Emin,Emax] GeV
+ based on observed or simulated archival data.
+ The angular resolution range is fixed to [0,180] degrees.
+ If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the resulting
+ distribution will be used to determine the reconstruction angular uncertainty
+ for individual events by invokation of <a href="./NcAstrolab.html#NcAstrolab:GetBurstRecoAngres" title="Double_t NcAstrolab::GetBurstRecoAngres(Double_t Emin=-1,Double_t Emax=-1,Double_t Amin=0,Double_t Amax=999)">GetBurstRecoAngres</a>().
 
  Note : Only those data will be used that correspond with the selected
         declination interval for the burst investigations.
@@ -4178,72 +4341,39 @@ return false;}
  file   : Name of the input file containing the ROOT Tree (wildcards are allowed)
  tree   : Name of the Tree containing the data
  name1  : Name of the tree variable containing the log10(E) data (in GeV)
- name2  : Name of the tree variable containing the declination data (in degrees)
- u      : The units (<span class="string">"deg"</span>=degrees or <span class="string">"rad"</span>=radians) of the declination data
+ name2  : Name of the tree variable containing the reconstruction angle uncertainty
+ ua     : The units (see below) of the angular uncertainty data
+ name3  : Name of the tree variable containing the declination data
+ ud     : The units (see below) of the declination data
  Emin   : Minimal energy value in GeV
  Emax   : Maximal energy value in GeV
- nb     : Number of bins for the Energy distribution
+ nbe    : Number of bins for the Energy axis
+ nba    : Number of bins for the Angular axis
 
- The default value is nb=1000.
+ Specification of the angular units :
+
+ <span class="string">"rad"</span> : input angle provided in radians
+ <span class="string">"deg"</span> : input angle provided in degrees
+ <span class="string">"dms"</span> : input angle provided in dddmmss.sss
+ <span class="string">"hms"</span> : input angle provided in hhmmss.sss
+ <span class="string">"hrs"</span> : input angle provided in fractional hours
+
+ The default values are nbe=100 and nba=1000.
 
  Note : This memberfunction may be invoked several times to read different files
         to accumulate data.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstEdist" href="src/NcAstrolab.cxx.html#xoAN2C">MakeBurstEdist</a>(TF1&amp; spec, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</span><br />
-<div class="funccomm"><pre> Create an energy distribution on the interval [Emin,Emax] GeV based on the
- provided spectral function <span class="string">"spec"</span> describing dN/dE.
- If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the resulting
- energy distribution will be used to draw random energy values
- for the burst induced signal events.
-
-
- * This is a beta test version, so currently no backward compatibility guaranteed *
-
-
- Example: To make a dN/dE=E^-2 energy spectrum for 100 Gev &lt; E &lt; 10 PeV
-
- TF1 spec(<span class="string">"spec"</span>,<span class="string">"pow(x,-2.)"</span>);
- xmin=100;
- xmax=1e7;
- nbins=1000;
- <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEdist" title="void NcAstrolab::MakeBurstEdist(TF1&amp; spec,Double_t Emin,Double_t Emax,Int_t nbins=1000) or overloads">MakeBurstEdist</a>(spec,Emin,Emax,nbins);
-
- The default value is nbins=1000.
-</pre></div>
-</div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstEdist@1" href="src/NcAstrolab.cxx.html#B7qI3E">MakeBurstEdist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> gamma, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 1000)</span><br />
-<div class="funccomm"><pre> Create an energy distribution on the interval [Emin,Emax] GeV based on a
- a single power law with spectral index <span class="string">"gamma"</span> describing dN/dE.
- If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the resulting
- energy distribution will be used to draw random energy values
- for the burst induced signal events.
-
-
- * This is a beta test version, so currently no backward compatibility guaranteed *
-
-
- Example: To make a dN/dE=E^-2 energy spectrum for 100 Gev &lt; E &lt; 10 PeV
-
- gamma=2;
- Emin=100;
- Emax=1e7;
- nbins=1000;
- <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEdist" title="void NcAstrolab::MakeBurstEdist(TF1&amp; spec,Double_t Emin,Double_t Emax,Int_t nbins=1000) or overloads">MakeBurstEdist</a>(gamma,Emin,Emax,nbins);
-
- The default value is nbins=1000.
-</pre></div>
-</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetBurstSignalEnergy" href="src/NcAstrolab.cxx.html#Nj_1uD">GetBurstSignalEnergy</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1) const</span><br />
 <div class="funccomm"><pre> Provide the energy in the interval [Emin,Emax] GeV for a Burst signal
- from the user provided energy spectrum as produced by <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEdist" title="void NcAstrolab::MakeBurstEdist(TF1&amp; spec,Double_t Emin,Double_t Emax,Int_t nbins=1000) or overloads">MakeBurstEdist</a>().
+ from the user provided energy spectrum as produced by MakeBurstEdist().
 
 
  * This is a beta test version, so currently no backward compatibility guaranteed *
 
 
- If Emin&lt;0 the lower boundary of the provided spectrum will be used as Emin.
- If Emax&lt;0 the upper boundary of the provided spectrum will be used as Emax.
+ If Emin&lt;=0 the lower boundary of the provided spectrum will be used as Emin.
+ If Emax&lt;=0 the upper boundary of the provided spectrum will be used as Emax.
 
  In case of inconsistent data the value -1 is returned.
 
@@ -4252,18 +4382,40 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetBurstBackgroundEnergy" href="src/NcAstrolab.cxx.html#b2AnyB">GetBurstBackgroundEnergy</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1) const</span><br />
 <div class="funccomm"><pre> Provide the energy in the interval [Emin,Emax] GeV for backgound events
- from the user provided energy spectrum as produced by <a href="./NcAstrolab.html#NcAstrolab:MakeBurstBkgEdist" title="void NcAstrolab::MakeBurstBkgEdist(TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000)">MakeBurstBkgEdist</a>().
+ from the user provided energy spectrum as produced by MakeBurstBkgEdist().
 
 
  * This is a beta test version, so currently no backward compatibility guaranteed *
 
 
- If Emin&lt;0 the lower boundary of the provided spectrum will be used as Emin.
- If Emax&lt;0 the upper boundary of the provided spectrum will be used as Emax.
+ If Emin&lt;=0 the lower boundary of the provided spectrum will be used as Emin.
+ If Emax&lt;=0 the upper boundary of the provided spectrum will be used as Emax.
 
  In case of inconsistent data the value -1 is returned.
 
  The default values are Emin=-1 and Emax=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetBurstRecoAngres" href="src/NcAstrolab.cxx.html#PMJ93B">GetBurstRecoAngres</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amax = 999) const</span><br />
+<div class="funccomm"><pre> Provide the reconstruction angle resolution (in degrees) for the energy interval [Emin,Emax] GeV.
+ Depending on the burst parameter setting <span class="string">"Recoangle"</span>, the returned value is either constant
+ (i.e. the value of the burst parameter <span class="string">"Angresfix"</span>) or determined from the user provided distribution
+ as produced by <a href="./NcAstrolab.html#NcAstrolab:MakeBurstRecoAngresdist" title="void NcAstrolab::MakeBurstRecoAngresdist(TString file,TString tree,TString name1,TString name2,TString ua,TString name3,TString ud,Double_t Emin,Double_t Emax,Int_t nbe=100,Int_t nba=1000)">MakeBurstRecoAngresdist</a>().
+ In case the user has requested the reconstruction angle resolution to be drawn randomly
+ from the distribution, the returned value will be within the interval [Amin,Amax] degrees.
+
+ Note : In case no distribution is available, the constant value of <span class="string">"Angresfix"</span> is returned.
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ If Emin&lt;=0 the lower boundary of the provided spectrum will be used as Emin.
+ If Emax&lt;=0 the upper boundary of the provided spectrum will be used as Emax.
+
+ In case of inconsistent data the value -1 is returned.
+
+ The default values are Emin=-1, Emax=-1, Amin=0 and Amax=999.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GenBurstSignals" href="src/NcAstrolab.cxx.html#Hy31TE">GenBurstSignals</a>()</span><br />
@@ -4274,7 +4426,7 @@ return false;}
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:BurstCompensate" href="src/NcAstrolab.cxx.html#YJNsnE">BurstCompensate</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; nmugrb, <a href="./ListOfTypes.html#Float_t">Float_t</a> Grbnu, <a href="./ListOfTypes.html#Float_t">Float_t</a> Ngrbs, <a href="./ListOfTypes.html#Int_t">Int_t</a> Inburst, <a href="./ListOfTypes.html#Float_t">Float_t</a> Dtnu, <a href="./ListOfTypes.html#Float_t">Float_t</a> Dtnus, <a href="./ListOfTypes.html#Float_t">Float_t</a> Angres, <a href="./ListOfTypes.html#Float_t">Float_t</a> Timres, <a href="./ListOfTypes.html#Float_t">Float_t</a> Datype, <a href="./ListOfTypes.html#Float_t">Float_t</a> Dawin)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:BurstCompensate" href="src/NcAstrolab.cxx.html#HEICpC">BurstCompensate</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; nmugrb)</span><br />
 <div class="funccomm"><pre> Compensate statistical underfluctuation in the number of transient burst muons.
 </pre></div>
 </div>
@@ -4434,7 +4586,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jul  3 15:53:35 2020 </em><em>&raquo; Last generated: 2020-07-03 15:53</em><br />
+<em>&raquo; Last changed: Thu Mar 18 12:07:09 2021 </em><em>&raquo; Last generated: 2021-03-18 12:07</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

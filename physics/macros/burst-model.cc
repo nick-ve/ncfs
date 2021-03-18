@@ -27,6 +27,7 @@
 
  // The virtual lab for a cosmic transient phenomena study
  NcAstrolab lab;
+
  lab.SetExperiment("IceCube");
  lab.SetUT("11-04-2020","12:00:00.0",0); // Fixed fictative analysis date
  lab.SetRandomiser(-1); // Use the UT timestamp to generate a seed
@@ -39,24 +40,20 @@
  lab.SetBurstParameter("Bkgrate",bkgrate);
  lab.SetBurstParameter("Declmin",5);
  lab.SetBurstParameter("Declmax",85);
- lab.SetBurstParameter("Grbnu",-0.03);
- lab.SetBurstParameter("Kinangle",3);
-
- // Parametrization of the energy spectrum of signal events from the burst
- Double_t emin=100;
- Double_t emax=1e7;
- Int_t nbins=10000;
- Double_t gamma=2;
- lab.MakeBurstEdist(gamma,emin,emax,nbins);
+ lab.SetBurstParameter("Dtnu",60);
+ lab.SetBurstParameter("Datype",1);
+ lab.SetBurstParameter("Dawin",2);
 
  // Use experimental distributions instead of parametrizations
 /// lab.MakeBurstZdist("../grbweb/GRB-z-Swift.root","T","z",200,0,20);
 /// lab.MakeBurstT90dist("../grbweb/GRB-t90-Fermi.root","T","t90");
-/// lab.MakeBurstBkgEdist("IC86*data.root","tree","logE","dec","rad",200,1e7,1000);
+/// lab.MakeBurstSigmaPosdist("../grbweb/GRBweb.root","T","sigmapos","deg");
+/// lab.MakeBurstEnergydist(-1,"IC86*data.root","tree","logE","dec","rad",200,1e7,1000);
+/// lab.MakeBurstRecoAngresdist("IC86*data.root","tree","logE","angErr","rad","dec","rad",200,1e7);
 
  // Obtain burst locations, durations etc.
 /// lab.LoadBurstGCNdata("../grbweb/GRBweb.root","T"); // Load from observed GCN data
-  lab.GenBurstGCNdata(100,"GRB"); // Generate fictative burst GCN data
+ lab.GenBurstGCNdata(500,"GRB"); // Generate fictative burst GCN data
 
  // Provide a listing of the first 10 stored burst positions
  cout << endl;
@@ -76,10 +73,15 @@
 
  lab.GetBurstLiMaSignificance();
 
- lab.GetBurstBayesianPsiStatistics("time",2,1e4);
- lab.GetBurstBayesianPsiStatistics("angle",2,1e4);
- lab.GetBurstBayesianPsiStatistics("cosa",2,1e4);
- lab.GetBurstBayesianPsiStatistics("dt",2,1e4);
+ Double_t nr=1e4;
+ Int_t ncut=10;
+ Int_t ndt=2;
+ Int_t mode=1;
+ Int_t fact=1;
+ lab.GetBurstBayesianPsiStatistics("time",nr,ncut);
+ lab.GetBurstBayesianPsiStatistics("angle",nr,ncut);
+ lab.GetBurstBayesianPsiStatistics("cosa",nr,ncut);
+ lab.GetBurstBayesianPsiStatistics("dt",nr,ncut,ndt,mode,fact);
 
  // Produce a ROOT output file with the produced (standard) histograms
  lab.WriteBurstHistograms("burst-model.root");

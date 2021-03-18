@@ -1143,3 +1143,11 @@
 03-jul-2020 NvE Asymmetric time windows implemented in the burst analysis of NcAstrolab.
                 Also the functionality of the burst parameters Tbint90 and Tbin redefined and the default settings
                 of some burst parameters updated.  
+08-jul-2020 NvE Usage of TMath::Nint() introduced in class NcAstrolab for the retrieval of the burst parameters
+                Kinangle, Datype, Nmax, Inburst, Tbint90 and Ngrbs. 
+05-nov-2020 NvE Protection introduced in NcFITSIO::LoadHeaderInfo() for tables with only 1 column. 
+16-mar-2021 NvE Skipping of entries with p[k]<=0 introduced in NcMath::PsiExtreme().
+18-mar-2021 NvE Functionality of the burst analysis in NcAstrolab extended and the macro burst-model.cc
+                in folder /ncfs/physics/macros updated accordingly.
+                The version indicator in NcVersion has been updated to 3.4.
+

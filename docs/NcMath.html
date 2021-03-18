@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:21 2019            -->
+<!--   Date: Thu Mar 18 12:07:10 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcMath.h.html">header file</a>
 <a class="descrheadentry" href="src/NcMath.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcMath_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -74,7 +74,7 @@ return false;}
                              // correct model
 
 --- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-- Modified: NvE $Date: 2016-02-07 19:20:26 +0100 (Sun, 07 Feb 2016) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 16, 2021  20:25Z
 
 </pre></div>
 </div></div>
@@ -268,16 +268,21 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcMath:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcMath_Lib" id="MapNcMath_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcMath_Inh" class="tabsel" href="inh/NcMath_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcMath_Inh.png');">Inheritance</a>
-<a id="imgNcMath_InhMem" class="tab" href="inhmem/NcMath_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcMath_InhMem.png');">Inherited Members</a>
-<a id="imgNcMath_Incl" class="tab" href="incl/NcMath_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcMath_Incl.png');">Includes</a>
-<a id="imgNcMath_Lib" class="tab" href="lib/NcMath_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcMath_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcMath_Inh" src="inh/NcMath_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TObject</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcMath" href="./NcMath.html">NcMath</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
 <div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcMath:NcMath" href="src/NcMath.cxx.html#KRBWPC">NcMath</a>()</span><br />
 <div class="funccomm"><pre> Default constructor
@@ -1442,6 +1447,8 @@ return false;}
  of the various outcomes (and the requirement that the sum of all these
  probabilities equals 1).
 
+ Note : An outcome k is only taken into account if its probability pk&gt;0.
+
  The Psi value provides (in dB scale) the amount of support that the
  data can maximally give to any Bernoulli class hypothesis different
  from the currently specified B_m.
@@ -1477,8 +1484,7 @@ return false;}
                  where all trials yield the outcome with the lowest probability.
             k=-2 implies the best match of the outcomes with integer nk values.
 
- In case no probabilities are given (i.e. p=0), a uniform distribution
- is assumed.
+ In case no probabilities are given (i.e. p=0), a uniform distribution is assumed.
 
  The default values are p=0 and k=0.
 
@@ -1876,7 +1882,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:22 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Thu Mar 18 12:07:10 2021 </em><em>&raquo; Last generated: 2021-03-18 12:07</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

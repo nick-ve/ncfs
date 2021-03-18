@@ -1,5 +1,11 @@
 //////////////////////////////////////////////////////////
 // ROOT macro to model the GRB neutrino analysis method.
+//
+// ********************************************************
+// ***         This code has become obsolete            ***
+// *** Please use the more generic macro burst-model.cc ***
+// ********************************************************
+//
 // To run this macro, it is necessary to have the ROOT
 // framework (http://root.cern.ch) installed.
 // In addition the NCFS-Pack (astro)physics analysis

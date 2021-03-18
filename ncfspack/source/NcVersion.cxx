@@ -51,7 +51,7 @@
 // improvements or extensions that are fully backward compatible.
 //
 //--- Author: Nick van Eijndhoven 24-sep-2009 NCFS
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 7, 2020 11:54
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 18, 2021  11:53Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcVersion.h"
@@ -62,9 +62,9 @@ ClassImp(NcVersion) // Class implementation to enable ROOT I/O
 NcVersion::NcVersion() : TObject()
 {
 // Default constructor to initialise all parameters
- fVersion="3.3";
+ fVersion="3.4";
  fRev="Branch: master";
- fDate="July 3, 2020  15:41 UTC";
+ fDate="March 18, 2021  11:53 UTC";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()

@@ -279,7 +279,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 19, 2020  12:37
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel November 5, 2020  14:46Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -385,7 +385,7 @@ void NcFITSIO::Reset()
 /////////////////////////////////////////////////////////////////////////// 
 Bool_t NcFITSIO::OpenInputFile(TString specs)
 {
-// Open a FITS input file and indicate success (kRUE) or failure (kFALSE)
+// Open a FITS input file and indicate success (kTRUE) or failure (kFALSE)
 // via the boolean return value.
 //
 // The input argument "specs" indicates the FITS input filename
@@ -449,7 +449,7 @@ TString NcFITSIO::StripFilter(TString filename) const
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcFITSIO::LoadHeaderInfo()
 {
-// Load the header records of the current HDU and indicate success (kRUE) or failure (kFALSE)
+// Load the header records of the current HDU and indicate success (kTRUE) or failure (kFALSE)
 // via the boolean return value.
 
  Bool_t good=kTRUE;
@@ -589,15 +589,29 @@ Bool_t NcFITSIO::LoadHeaderInfo()
   fColumnLayers=new Int_t[ncols];
             
   // Read the column names
+  status=0;
   char colname[80];     
   int jcol;
   fits_get_colname(fInput,CASEINSEN,(char*)"*",colname,&jcol,&status);
+
+  if (status==COL_NOT_FOUND)
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::LoadHeaderInfo* Could not find any table column." << endl;
+   fits_close_file(fInput,&status);
+   Reset(); 
+   good=kFALSE;
+   return good;
+  }
+
+  if (jcol>0 && jcol<=ncols) fColumnNames[jcol-1]=colname;
+
   while (status==COL_NOT_UNIQUE)
   {
-   fColumnNames[jcol-1]=colname;
    fits_get_colname(fInput,CASEINSEN,(char*)"*",colname,&jcol,&status);
+   if (jcol>0 && jcol<=ncols) fColumnNames[jcol-1]=colname;
   }
-  if (status!=COL_NOT_FOUND)
+  if (status && status!=COL_NOT_FOUND)
   {
    cout << endl;
    cout << " *" << ClassName() << "::LoadHeaderInfo* Could not retrieve name of table column " << jcol << endl;
@@ -744,7 +758,7 @@ Bool_t NcFITSIO::SelectHDU(TString extname)
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcFITSIO::SelectHDU(Int_t extnumber)
 {
-// Select the HDU with the specified extension number and indicate success (kRUE)
+// Select the HDU with the specified extension number and indicate success (kTRUE)
 // or failure (kFALSE) via the boolean return value.
 //
 // Example : extnumber=3 will select the HDU stored as [3].
