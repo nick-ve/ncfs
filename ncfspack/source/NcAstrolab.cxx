@@ -5377,7 +5377,6 @@ void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TStri
 
  NcSignal* sx=0;
  NcTimestamp* tx=0;
- Int_t nstored=0;
  Int_t jdisp=0;
 
  // Display stored reference signals
@@ -5393,7 +5392,6 @@ void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TStri
   // Use the current lab timestamp if no timestamp selected
   if (!tx) tx=(NcTimestamp*)this;
  
-  nstored=fRefs->GetEntries();
   jdisp=0;
   for (Int_t i=1; i<=fRefs->GetSize(); i++)
   {
@@ -5419,7 +5417,6 @@ void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TStri
  // Display all stored measurements
  if (fSigs && type)
  {
-  nstored=fSigs->GetEntries();
   jdisp=0;
   for (Int_t j=1; j<=fSigs->GetSize(); j++)
   {
@@ -7292,13 +7289,11 @@ TH1F NcAstrolab::GetLogHistogram(TH1* hin,Int_t mode,TString s) const
  hout.GetYaxis()->SetTitle(s.Data());
 
  // Determine the new Y-values and fill the output histogram
- Double_t x=0;
  Double_t y=0;
  Double_t err=0;
  Double_t yplus=0;
  for (Int_t i=1; i<=nbins; i++)
  {
-  x=hin->GetBinCenter(i);
   y=hin->GetBinContent(i);
   err=fabs(hin->GetBinError(i));
   yplus=y+err;
@@ -8817,7 +8812,6 @@ void NcAstrolab::ListBurstParameters() const
  // Derived parameters
  Float_t fMaxsigmatot=fBurstParameters->GetSignal("Maxsigmatot");
  Float_t fMinsigmatot=fBurstParameters->GetSignal("Minsigmatot");
- Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
  Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
  Float_t fRbkgDecl=fBurstParameters->GetSignal("RbkgDecl");
  Float_t fNbkgHour=fBurstParameters->GetSignal("NbkgHour");
@@ -10327,7 +10321,6 @@ void NcAstrolab::GenBurstSignals()
  Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
  Float_t fAvgrbz=fBurstParameters->GetSignal("Avgrbz");
  Float_t fAvgrbt90=fBurstParameters->GetSignal("Avgrbt90");
- Float_t fBkgrate=fBurstParameters->GetSignal("Bkgrate");
  Float_t fTmin=fBurstParameters->GetSignal("Tmin");
  Float_t fTmax=fBurstParameters->GetSignal("Tmax");
  Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
@@ -10346,9 +10339,6 @@ void NcAstrolab::GenBurstSignals()
  // Derived parameters
  Float_t fMaxsigmatot=fBurstParameters->GetSignal("Maxsigmatot");
  Float_t fMinsigmatot=fBurstParameters->GetSignal("Minsigmatot");
- Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
- Float_t fRbkgDecl=fBurstParameters->GetSignal("RbkgDecl");
- Float_t fNbkgHour=fBurstParameters->GetSignal("NbkgHour");
  Float_t fNbkgWin=fBurstParameters->GetSignal("NbkgWin");
 
  // Set default energy spectra if needed
@@ -10688,7 +10678,7 @@ void NcAstrolab::GenBurstSignals()
  NcPosition rgrb;
  Int_t nmu;
  Double_t thetagrb,phigrb;
- Double_t dmu,thetamu,phimu,cost;
+ Double_t dmu,thetamu,phimu;
  Float_t dt=0;
  NcPosition rgrb2; // Unknown actual GRB position from which the neutrinos/muons arrive
  NcPosition rmu;
@@ -11052,8 +11042,6 @@ void NcAstrolab::GenBurstSignals()
 
  // Determination of total and background event rates
  Int_t nbt=tott->GetNbinsX();
- Int_t nba=tota->GetNbinsX();
- Int_t nba2=totcosa->GetNbinsX();
  Float_t underflow, overflow;
  Float_t nentot=tott->GetEntries();
  underflow=tott->GetBinContent(0);
@@ -11242,7 +11230,6 @@ void NcAstrolab::BurstCompensate(Int_t& nmugrb)
  Float_t fDtnu=fBurstParameters->GetSignal("Dtnu");
  Float_t fDtnus=fBurstParameters->GetSignal("Dtnus");
  Float_t fTimres=fBurstParameters->GetSignal("Timres");
- Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
  Float_t fDawin=fBurstParameters->GetSignal("Dawin");
 
  Float_t fEmin=fBurstParameters->GetSignal("Emin");
@@ -11271,7 +11258,6 @@ void NcAstrolab::BurstCompensate(Int_t& nmugrb)
  Float_t dangmaxOn=0;
  NcPosition rmu;
  Double_t E=0;
- Double_t ang=0;
  Double_t sigmareco=0;
  Float_t sigmatot=0;
  Float_t OmegaOn=0; // The current on-source solid angle probed for a certain GRB
@@ -12123,8 +12109,6 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Int_t mode,Double
   cout << " *" << ClassName() << "::GetBurstChi2Statistics* Analysis of " << text << " statistics" << endl;
  }
 
- TH1F* rtot=0;
- TH1F* rbkg=0;
  Int_t ndftot=0;
  Int_t ndfbkg=0;
  Float_t chitot=0;
@@ -12173,9 +12157,9 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Int_t mode,Double
   chibkg=math.Chi2Value(bkg,0,0,&ndfbkg);
  }
 
- ///////////////////////////////////////////////
- // Arrival time interval Bayesian statistics //
- ///////////////////////////////////////////////
+ //////////////////////////////////////////////////
+ // Arrival time interval Chi-squared statistics //
+ //////////////////////////////////////////////////
  if (type=="dt")
  {
   TH1* tot=(TH1*)fBurstHistos.FindObject("tottfine");

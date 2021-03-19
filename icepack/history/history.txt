@@ -226,5 +226,7 @@
                 will be 0 in case their were no requested (D)OMs firing.
 27-mar-2014 NvE Files filt-stat.cxx and run.cc added to /macros
 15-jul-2016 NvE Memberfunction IceEvent::Reset() introduced.
+19-mar-2021 NvE Compiler option -Wall replaced by -Wunused in the amdgcclib.sh compilation script
+                to prevent excessive warnings with the new(er) gcc versions.
 
 

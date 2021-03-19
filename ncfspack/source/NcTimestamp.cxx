@@ -430,9 +430,8 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 // Note : In case the (M/T)JD falls outside the TTimeStamp range,
 //        the yy-mm-dd info will be omitted.
 
- Int_t mjd,mjsec,mjns,mjps;
+ Int_t mjd,mjsec,mjns;
  GetMJD(mjd,mjsec,mjns);
- mjps=GetPs();
 
  TString month[12]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
  TString day[7]={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};

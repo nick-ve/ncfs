@@ -12,12 +12,12 @@ lib=iceconvert.so
 ### The option string for GCC compilation of the .c code ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gcccomp="-fPIC -c -g0 -Wall -Wno-long-long -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source"
+gcccomp="-fPIC -c -g0 -Wunused -Wno-long-long -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source"
 #
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -ansi -pedantic -Wall -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source -o $lib"
+gccroot="-fPIC -shared -g0 -ansi -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS

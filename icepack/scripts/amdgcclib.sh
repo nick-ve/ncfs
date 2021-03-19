@@ -13,7 +13,7 @@ lib=icepack.so
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -ansi -pedantic -Wall -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$NCFS/ncfspack/source -o $lib"
+gccroot="-fPIC -shared -g0 -ansi -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$NCFS/ncfspack/source -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
