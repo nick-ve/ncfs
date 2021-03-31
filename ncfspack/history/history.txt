@@ -1153,4 +1153,7 @@
 19-mar-2021 NvE Unused variables removed in classes NcAstrolab and NcTimestamp to prevent compiler warnings.
                 Also the compiler option -Wall replaced by -Wunused in the amdgcclib.sh compilation script
                 to prevent excessive warnings with the new(er) gcc versions.
+31-mar-2021 NvE Class NcSample derived from TNamed, copy constructor and Clone() memberfunctions introduced
+                and functionality extended.
+                The version indicator in NcVersion has been updated to 3.5.
 

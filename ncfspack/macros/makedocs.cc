@@ -1,4 +1,10 @@
 ////////////////////////////////////////////////////////////////////////
+//
+// ********************************************************************
+// *** This macro is obsolete and kept for historical reasons only. ***
+// *** Please use the one in the top directory of this repository.  ***
+// ********************************************************************
+//
 // ROOT macro to produce the documentation of all the classes that are
 // contained in the NCFS framework.
 //
