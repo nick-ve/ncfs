@@ -3,8 +3,6 @@
 // Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcSignal.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "TObject.h"
 #include "TArrayF.h"
 #include "TH1.h"
@@ -14,6 +12,7 @@
 #include "NcPosition.h"
 #include "NcAttrib.h"
 #include "NcObjMatrix.h"
+#include "NcSample.h"
 
 class NcDevice;
 class NcTrack;
@@ -21,7 +20,7 @@ class NcTrack;
 class NcSignal : public TNamed,public NcPosition,public NcAttrib
 {
  public:
-  NcSignal();                                                   // Default constructor
+  NcSignal(const char* name="",const char* title="");           // Default constructor
   virtual ~NcSignal();                                          // Destructor
   NcSignal(const NcSignal& s);                                  // Copy constructor
   virtual TObject* Clone(const char* name="") const;            // Make a deep copy and provide its pointer
@@ -42,6 +41,7 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   virtual void List(Int_t j=0) const;                           // Print signal info for the j-th (all) slot(s)
   virtual void List(TString name) const;                        // Print signal info for the name-specified slot
   void ListWaveform(Int_t j=0) const;                           // Print info for the j-th (all) waveform(s)
+  void ListSample(Int_t j=0) const;                             // Print info for the j-th (all) sample(s)
   void ListTrack(Int_t j=0) const;                              // Print info for the j-th (all) assoc. track(s)
   Int_t GetNvalues() const;                                     // Provide the number of signal values
   Int_t GetNerrors() const;                                     // Provide the number of specified errors
@@ -55,6 +55,15 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   void ResetWaveform(TString name);                             // Reset the waveform histo with the specified name
   void DeleteWaveform(Int_t j=1);                               // Delete histo of the j-th waveform
   void DeleteWaveform(TString name);                            // Delete waveform histo with the specified name
+  Int_t GetNsamples() const;                                    // Provide the number of specified samples
+  void SetSample(NcSample* sample,Int_t j=1);                   // Set the sample data for the j-th sample
+  NcSample* GetSample(Int_t j=1) const;                         // Pointer to the j-th sample
+  NcSample* GetSample(TString name) const;                      // Pointer to the sample with the specified name
+  Int_t GetSampleIndex(TString name) const;                     // Index of the sample with the specified name
+  void ResetSample(Int_t j=1);                                  // Reset the data of the j-th sample
+  void ResetSample(TString name);                               // Reset the sample with the specified name
+  void DeleteSample(Int_t j=1);                                 // Delete the j-th sample
+  void DeleteSample(TString name);                              // Delete te sample with the specified name
   Int_t GetNlinks(TObject* obj=0,Int_t j=0) const;              // Number of links for the specified object
   Int_t GetNlinks(TObject* obj,TString name) const;             // Number of links for the specified object
   void SetLink(TObject* obj,Int_t j=1,Int_t k=1);               // Link object to the j-th slot at position k
@@ -92,10 +101,11 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   TArrayF* fDsignals;                          // Errors on signal values
   TArrayI* fSigflags;                          // Flags to mark setting of signal and/or error values 
   TObjArray* fWaveforms;                       // The 1D histograms containing the signal waveforms
+  TObjArray* fSamples;                         // The full data samples containing the recorded data series 
   NcObjMatrix* fLinks;                         // Pointers of objects related to the various slots
   TObject* fDevice;                            // Pointer to the device that owns this signal
   TObjArray* fTracks;                          // Pointers to associated tracks
 
- ClassDef(NcSignal,1) // Generic handling of (extrapolated) detector signals.
+ ClassDef(NcSignal,2) // Generic handling of (extrapolated) detector signals.
 };
 #endif

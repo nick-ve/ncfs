@@ -27,11 +27,12 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcSignal.cxx 132 2016-09-01 16:50:25Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcSignal
 // Generic handling of (extrapolated) detector signals.
+//
+// An NcSignal object may have several (named) slots to contain different signal values,
+// as outlined in the example below.
 //
 // The user can decide to store either calibrated or uncalibrated signals.
 // Via the specification of a gain and offset or/and an explicit
@@ -45,6 +46,16 @@
 // (and no de-calibration function) in case uncalibrated data is stored,
 // whereas in case of stored calibrated data the user should only
 // provide a de-calibration function (and no calibration function).
+//
+// Via the memberfunction SetWaveform() various waveforms may (also) be stored
+// in the form of TH1F histograms. These may be for instance the waveforms from which
+// the stored signal values have been extracted.
+// Furthermore, the memberfunction SetSample() allows to (also) store various NcSample objects,
+// which provide an even more flexible storage c.q. retrieval of recorded (multi-dimensional)
+// data from which the stored signal values have been extracted.
+// Note however, that in the case of large (multi-dimensional) recorded data samples,
+// the storage in the form of waveform histograms is less memory demanding than the
+// storage of the full NcSample entries (i.e. NcSample objects with StoreMode activated).  
 //
 // Note :
 // ------
@@ -87,14 +98,14 @@
 // q.SetNameTitle("Hybrid","Test for multiple signal data");
 // q.SetPosition(pos,"car");
 // q.SetPositionErrors(err,"car");
-// signal=82.5; // e.g. signal time in ns
+// signal=82.5; // e.g. Time of Flight (TOF) signal in ns
 // error=2.01;
 // offset=0.003;
 // q.SetSlotName("TOF",1);
 // q.SetSignal(signal,1);
 // q.SetSignalError(error,1);
 // q.SetOffset(offset,1);
-// signal=268.1; // e.g. ADC value of signal
+// signal=268.1; // e.g. some corresponding ADC value
 // error=3.75;
 // gain=120.78;
 // offset=1.5732;
@@ -109,10 +120,13 @@
 // TF1 f=("calib","[0]*pow(x,2)+[1]"); // dE/dx calib. function
 // f.SetParameter(0,3.285);
 // f.SetParameter(1,-18.67);
-// q.SetSlotName("dE/dx",3);
+// q.AddNamedSlot("dE/dx");
 // q.SetCalFunction(&f,"dE/dx");
 // q.SetSignal(signal,"dE/dx");
 // q.SetSignalError(error,"dE/dx");
+//
+// // Show an overview of all the stored data
+// q.Data("sph","deg");
 //
 // // Signal retrieval with various (de)calibration modes
 // Float_t tof=q.GetSignal("TOF");
@@ -120,7 +134,7 @@
 // Float_t dedx=q.GetSignal("dE/dx",3);
 //
 //--- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-//- Modified: NvE $Date: 2016-09-01 18:50:25 +0200 (Thu, 01 Sep 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 5, 2021  21:40Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSignal.h"
@@ -129,7 +143,7 @@
  
 ClassImp(NcSignal) // Class implementation to enable ROOT I/O
  
-NcSignal::NcSignal() : TNamed(),NcPosition(),NcAttrib()
+NcSignal::NcSignal(const char* name,const char* title) : TNamed(name,title),NcPosition(),NcAttrib()
 {
 // Creation of an NcSignal object and initialisation of parameters.
 // Several signal values (with errors) can be stored in different slots.
@@ -139,6 +153,7 @@ NcSignal::NcSignal() : TNamed(),NcPosition(),NcAttrib()
  fDsignals=0;
  fSigflags=0;
  fWaveforms=0;
+ fSamples=0;
  fLinks=0;
  fDevice=0;
  fTracks=0;
@@ -190,6 +205,11 @@ NcSignal::~NcSignal()
   delete fWaveforms;
   fWaveforms=0;
  }
+ if (fSamples)
+ {
+  delete fSamples;
+  fSamples=0;
+ }
  if (fTracks)
  {
   // Remove this signal from all related tracks
@@ -210,6 +230,7 @@ NcSignal::NcSignal(const NcSignal& s) : TNamed(s),NcPosition(s),NcAttrib(s)
  fDsignals=0;
  fSigflags=0;
  fWaveforms=0;
+ fSamples=0;
  fLinks=0;
  fTracks=0;
 
@@ -251,6 +272,13 @@ NcSignal::NcSignal(const NcSignal& s) : TNamed(s),NcPosition(s),NcAttrib(s)
   if (hist) SetWaveform(hist,k); 
  }
 
+ n=s.GetNsamples();
+ for (Int_t m=1; m<=n; m++)
+ {
+  NcSample* sample=s.GetSample(m);
+  if (sample) SetSample(sample,m); 
+ }
+
  TArrayI slotarr;
  TArrayI posarr;
  TObject* dum=0;
@@ -281,10 +309,10 @@ void NcSignal::Reset(Int_t mode)
 // Reset all signal and position values and errors to 0.
 //
 // mode = 0 Reset position and all signal values and their errors to 0.
-//          The waveform histograms are reset, but the calibration
+//          The waveform histograms and samples are reset, but the calibration
 //          constants (i.e. gains and offsets) are kept.
 //        1 Reset position and delete the signal and error storage arrays.
-//          Also the waveform histograms, gains and offset arrays are deleted.
+//          Also the waveform histograms, samples, gains and offset arrays are deleted.
 //
 // The default when invoking Reset() corresponds to mode=0.
 //
@@ -303,7 +331,7 @@ void NcSignal::Reset(Int_t mode)
 //
 // For more specific actions see ResetPosition(), ResetSignals(),
 // DeleteSignals(), ResetGain(), ResetOffset(), ResetLink(), ResetWaveform(),
-// DeleteWaveform() and DeleteCalibrations().
+// DeleteWaveform(), ResetSample(), DeleteSample() and DeleteCalibrations().
 //
 
  if (mode<0 || mode>1)
@@ -338,9 +366,9 @@ void NcSignal::ResetSignals(Int_t mode)
 {
 // Reset various signal data according to user selection.
 //
-// mode = 0 Reset all signal values, their errors and all waveform histos.
-//        1 Reset only signal values and waveform histos.
-//        2 Reset only signal errors and waveform histos.
+// mode = 0 Reset all signal values, their errors and all waveform histos and samples.
+//        1 Reset only signal values, waveform histos and samples.
+//        2 Reset only signal errors, waveform histos and samples.
 //       -1 Reset only signal values.
 //       -2 Reset only signal errors.
 //
@@ -376,16 +404,20 @@ void NcSignal::ResetSignals(Int_t mode)
   }
  }
 
- if (mode>=0) ResetWaveform(0);
+ if (mode>=0)
+ {
+  ResetWaveform(0);
+  ResetSample(0);
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::DeleteSignals(Int_t mode)
 {
 // Delete storage arrays of various signal data according to user selection.
 //
-// mode = 0 Delete arrays of signal values, their errors and all waveform histos.
-//        1 Delete only signal values array and waveform histos.
-//        2 Delete only signal errors array and waveform histos.
+// mode = 0 Delete arrays of signal values, their errors, all waveform histos and samples.
+//        1 Delete only signal values array, waveform histos and samples.
+//        2 Delete only signal errors array, waveform histos and samples.
 //       -1 Delete only signal values array.
 //       -2 Delete only signal errors array.
 //
@@ -435,7 +467,11 @@ void NcSignal::DeleteSignals(Int_t mode)
   }
  }
 
- if (mode>=0) DeleteWaveform(0);
+ if (mode>=0)
+ {
+  DeleteWaveform(0);
+  DeleteSample(0);
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSignal(Double_t sig,Int_t j)
@@ -844,8 +880,13 @@ void NcSignal::Data(TString f,TString u) const
 {
 // Provide all signal information within the coordinate frame f.
 //
-// The string argument "u" allows to choose between different angular units
+// f="car" ==> Cartesian   (x,y,z)
+// f="sph" ==> Spherical   (r,theta,phi)
+// f="cyl" ==> Cylindrical (rho,phi,z)
+//
+// The input argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
+//
 // u = "rad" : angles provided in radians
 //     "deg" : angles provided in degrees
 //
@@ -873,6 +914,9 @@ void NcSignal::Data(TString f,TString u) const
 
  // Provide an overview of the stored waveforms
  ListWaveform(-1);
+
+ // Provide an overview of the stored samples
+ ListSample(-1);
 
  // Provide an overview of the associated tracks
  ListTrack(-1);
@@ -1076,6 +1120,77 @@ void NcSignal::ListWaveform(Int_t j) const
     cout << "    Waveform " << j << " : " << obj->ClassName();
     if (strlen(wfnamej))  cout << " Name : " << wfnamej;
     if (strlen(wftitlej)) cout << " Title : " << wftitlej;
+    cout << endl;
+   }
+  }
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSignal::ListSample(Int_t j) const
+{
+// Provide information for the j-th sample.
+// The first sample is at j=1.
+// In case j=0 (default) the info of all samples will be listed.
+// In case j=-1 the info of all samples will be listed, but the header
+// information will be suppressed.
+
+ if (j<-1) 
+ {
+  cout << " *NcSignal::ListSample* Invalid argument j = " << j << endl;
+  return;
+ }
+
+ if (j != -1)
+ {
+  const char* name=GetName();
+  const char* title=GetTitle();
+
+  cout << " *" << ClassName() << "::Data* Id :" << GetUniqueID();
+  if (strlen(name))  cout << " Name : " << name;
+  if (strlen(title)) cout << " Title : " << title;
+  cout << endl;
+  if (fDevice)
+  {
+   const char* devname=fDevice->GetName();
+   const char* devtitle=fDevice->GetTitle();
+   cout << "   Owned by device : " << fDevice->ClassName();
+   if (strlen(devname))  cout << " Name : " << devname;
+   if (strlen(devtitle)) cout << " Title : " << devtitle;
+   cout << endl;
+  }
+ }
+
+ Int_t n=GetNsamples();
+ TObject* obj=0;
+
+ if (j<=0)
+ {
+  for (Int_t i=1; i<=n; i++)
+  {
+   obj=GetSample(i);
+   if (obj)
+   {
+    const char* sname=obj->GetName();
+    const char* stitle=obj->GetTitle();
+    cout << "    Sample " << i << " : " << obj->ClassName();
+    if (strlen(sname))  cout << " Name : " << sname;
+    if (strlen(stitle)) cout << " Title : " << stitle;
+    cout << endl;
+   }
+  }
+ }
+ else
+ {
+  if (j<=n)
+  {
+   obj=GetSample(j);
+   if (obj)
+   {
+    const char* snamej=obj->GetName();
+    const char* stitlej=obj->GetTitle();
+    cout << "    Sample " << j << " : " << obj->ClassName();
+    if (strlen(snamej))  cout << " Name : " << snamej;
+    if (strlen(stitlej)) cout << " Title : " << stitlej;
     cout << endl;
    }
   }
@@ -1542,6 +1657,221 @@ void NcSignal::DeleteWaveform(TString name)
 // Delete the waveform with the specified name.
  Int_t j=GetWaveformIndex(name);
  if (j>0) DeleteWaveform(j);
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcSignal::GetNsamples() const
+{
+// Provide the number of specified samples for this signal.
+// Actually the return value is the highest index of the stored samples.
+// This allows an index dependent meaning of sample info (e.g. samples
+// with various gain values).
+// So, when all samples are stored in consequetive positions (e.g. 1,2,3),
+// this memberfunction returns 3, being both the highest filled position
+// and the actual number of samples.
+// In case only samples are stored at positions 1,2,5,7 this memberfunction
+// returns a value 7 whereas only 4 actual samples are present.
+// This implies that when looping over the various sample slots, one
+// always has to check whether the returned pointer value is non-zero
+// (which is a good practice anyhow).
+ Int_t n=-1;
+ if (fSamples) n=fSamples->GetLast();
+ return (n+1);
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample* NcSignal::GetSample(Int_t j) const
+{
+// Provide pointer to the j-th sample.
+ NcSample* sample=0;
+ if (j <= GetNsamples()) sample=(NcSample*)fSamples->At(j-1);
+ return sample;
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample* NcSignal::GetSample(TString name) const
+{
+// Provide pointer to the sample with the specified name.
+//
+// Note :
+// ------
+// In case the specified name matches a part of the full name of the sample,
+// the pointer to the corresponding sample is returned.
+// However, the name pattern should match exactly, i.e. it is  case sensitive.
+// As such the name matching can be regarded as using wildcards.
+//
+// In case no match is found, zero is returned.
+
+ Int_t n=GetNsamples();
+ TString str;
+ for (Int_t i=1; i<=n; i++)
+ {
+  NcSample* sample=GetSample(i);
+  if (sample)
+  {
+   str=sample->GetName();
+   if (str.Contains(name)) return sample;
+  }
+ }
+ return 0; // No match found
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcSignal::GetSampleIndex(TString name) const
+{
+// Provide index to the sample with the specified name.
+//
+// Note :
+// ------
+// In case the specified name matches a part of the full name of the sample,
+// the index to the corresponding sample is returned.
+// However, the name pattern should match exactly, i.e. it is  case sensitive.
+// As such the name matching can be regarded as using wildcards.
+//
+// In case no match is found, zero is returned.
+
+ Int_t n=GetNsamples();
+ TString str;
+ for (Int_t i=1; i<=n; i++)
+ {
+  NcSample* sample=GetSample(i);
+  if (sample)
+  {
+   str=sample->GetName();
+   if (str.Contains(name)) return i;
+  }
+ }
+ return 0; // No match found
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSignal::SetSample(NcSample* sample,Int_t j)
+{
+// Set the sample data for the j-th sample.
+//
+// Notes :
+//  The first sample position at j=1.
+//  j=1 is the default value.
+//
+// In case the value of the index j exceeds the maximum number of reserved
+// positions for the samples, the number of reserved positions for the samples
+// is increased automatically.
+//
+// In case the sample pointer argument has the same value as the current sample
+// pointer value, no action is taken since the user has already modified
+// the actual sample.
+//
+// In case the sample pointer argument is zero, the current sample
+// is deleted and the pointer set to zero.
+//
+// In all other cases the current sample is deleted and a new
+// copy of the input sample is created which becomes the current sample.
+
+ if (j<1) return;
+
+ if (!fSamples)
+ {
+  fSamples=new TObjArray(j);
+  fSamples->SetOwner();
+ }
+
+ if (j > fSamples->GetSize()) fSamples->Expand(j);
+
+ NcSample* hcur=(NcSample*)fSamples->At(j-1);
+ if (sample != hcur)
+ {
+  if (hcur)
+  {
+   fSamples->Remove(hcur);
+   delete hcur;
+   hcur=0;
+  }
+  if (sample)
+  {
+   hcur=new NcSample(*sample);
+   fSamples->AddAt(hcur,j-1);
+  }
+ } 
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSignal::ResetSample(Int_t j)
+{
+// Reset the sample data of the j-th (default j=1) sample.
+// This memberfunction invokes NcSample::Reset() for the corresponding sample(s).
+// To actually delete the sample(s) from memory, use DeleteSample().
+// Notes : The first position is at j=1.
+//         j=0 ==> All samples will be reset.
+ 
+ if (!fSamples) return;
+
+ Int_t size=fSamples->GetSize();
+
+ if ((j>=0) && (j<=size))
+ {
+  if (j)
+  {
+   NcSample* sample=(NcSample*)fSamples->At(j-1);
+   if (sample) sample->Reset();
+  }
+  else
+  {
+   for (Int_t i=0; i<size; i++)
+   {
+    NcSample* sample=(NcSample*)fSamples->At(i);
+    if (sample) sample->Reset();
+   }
+  }
+ }
+ else
+ {
+  cout << " *NcSignal::ResetSample* Index j = " << j << " invalid." << endl;
+  return;
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSignal::ResetSample(TString name)
+{
+// Reset the sample with the specified name.
+
+ Int_t j=GetSampleIndex(name);
+ if (j>0) ResetSample(j);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSignal::DeleteSample(Int_t j)
+{
+// Delete the sample data of the j-th (default j=1) sample.
+// Notes : The first position is at j=1.
+//         j=0 ==> All samples will be deleted.
+ 
+ if (!fSamples) return;
+
+ Int_t size=fSamples->GetSize();
+
+ if ((j>=0) && (j<=size))
+ {
+  if (j)
+  {
+   NcSample* sample=(NcSample*)fSamples->At(j-1);
+   if (sample)
+   {
+    fSamples->Remove(sample);
+    delete sample;
+   }
+  }
+  else
+  {
+   delete fSamples;
+   fSamples=0;
+  }
+ }
+ else
+ {
+  cout << " *NcSignal::DeleteSample* Index j = " << j << " invalid." << endl;
+  return;
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSignal::DeleteSample(TString name)
+{
+// Delete the sample with the specified name.
+
+ Int_t j=GetSampleIndex(name);
+ if (j>0) DeleteSample(j);
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNlinks(TObject* obj,Int_t j) const

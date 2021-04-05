@@ -176,3 +176,5 @@
 27-may-2016 NvE In IceF2k.cxx "NcSignal params" changed to "NcDevice params" to comply with new NcEvent::AddDevice() definition.
 19-mar-2021 NvE Compiler option -Wall replaced by -Wunused in the amdgcclib.sh compilation script
                 to prevent excessive warnings with the new(er) gcc versions.
+06-apr-2021 NvE isnan() arguments cast to float in f2k_utl.c to satisfy newer gcc compiler versions.
+

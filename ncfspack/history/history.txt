@@ -1156,4 +1156,8 @@
 31-mar-2021 NvE Class NcSample derived from TNamed, copy constructor and Clone() memberfunctions introduced
                 and functionality extended.
                 The version indicator in NcVersion has been updated to 3.5.
+06-apr-2021 NvE Functionality of NcSignal extended by the possibility to store NcSample objects in the same
+                way as the storage of waveforms.
+
+                
 

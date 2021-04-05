@@ -450,7 +450,8 @@ int rdmc_amanda_ipartid(const char *s)
     idd=0;
     if( 1 != sscanf(name,"z%d",&idd))
       return 0;
-    if (isnan(idd))
+    float rdd=idd;
+    if (isnan(rdd))
       return 0;
     idd += Z_PRIMARY;
     if ( (idd <  Z_PRIMARY) && (idd >=  Z_PRIMARY+200) )
@@ -461,7 +462,8 @@ int rdmc_amanda_ipartid(const char *s)
     idd=0;
     if( 1 != sscanf(name,"a%d",&idd))
       return 0;
-    if (isnan(idd))
+    float rdd=idd;
+    if (isnan(rdd))
       return 0;
     idd += A_PRIMARY;
     if ( (idd <  A_PRIMARY) && (idd >=  A_PRIMARY+500) )
@@ -586,7 +588,8 @@ char * rdmc_amanda_itostr(int i, int default_na)
   static char str[RDMC_MAXTOKENLENGTH];
   /* f2000 writes  not na, but ? for NA */   
 
-  if (isnan(i)) return  "NaN";
+  float ri=i;
+  if (isnan(ri)) return  "NaN";
 
   if (i == default_na)  
     return  "?";
@@ -607,12 +610,14 @@ char * rdmc_amanda_itimetostr(int sec, int nsec){
   static char s1[RDMC_MAXTOKENLENGTH];
   static char s2[RDMC_MAXTOKENLENGTH];
 
-  if (isnan(sec)  || (sec<0)   ) 
+  float rsec=sec;
+  if (isnan(rsec)  || (sec<0)   ) 
     strcpy(s1,"?.");
   else
     sprintf(s1,"%i.",sec);
 
-  if (isnan(nsec) || (nsec<0) || (nsec>= 1e9 )   ) 
+  float rnsec=nsec;
+  if (isnan(rnsec) || (nsec<0) || (nsec>= 1e9 )   ) 
     strcpy(s2,"?");
   else
     sprintf(s2,"%09i",nsec);
