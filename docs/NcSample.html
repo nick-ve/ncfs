@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Mar 31 15:54:27 2021            -->
+<!--   Date: Wed Apr  7 23:33:17 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -75,6 +75,9 @@ return false;}
  argument to the various member functions.
  The index convention for a data point (x,y,z,t) is : x=1  y=2  z=3  t=4.
 
+ Interfaces with various graphics facilities are provided like for instance
+ <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i,Int_t j) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100)">Get1DHistogram</a>() etc...
+
  Example :
 
  For an <a href="./NcSample.html">NcSample</a> s a data point (x,y) can be entered as s.<a href="./NcSample.html#NcSample:Enter" title="void NcSample::Enter(Double_t x) or overloads">Enter</a>(x,y) and
@@ -86,7 +89,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0)">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel March 31, 2021  15:14Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 7, 2021  23:24Z
 
 </pre></div>
 </div></div>
@@ -135,9 +138,10 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetDimension">GetDimension</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = -1)</td></tr>
 <tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
-<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@2">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</td></tr>
+<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMaximum">GetMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMean">GetMean</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
@@ -174,6 +178,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:ListOrdered">ListOrdered</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load">Load</a>(TGraph* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load@1">Load</a>(TGraph2D* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
@@ -189,6 +194,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcSample:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcSample.html">NcSample</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Order">Order</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
@@ -198,6 +204,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@1">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@2">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@3">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> t)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Reset">Reset</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -263,16 +270,19 @@ return false;}
 </table></div>
 <div class="access" id="dataprot"><b>protected:</b>
 <table class="data" id="tabdataprot" cellspacing="0">
-<tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fArr"></a>fArr</td><td class="datadesc">Temp. storage array for ordering</td></tr>
+<tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fArr"></a>fArr</td><td class="datadesc">! Temp. storage array for ordered values</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fCor"></a>fCor[4][4]</td><td class="datadesc">Correlations of pairs of variables</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fCov"></a>fCov[4][4]</td><td class="datadesc">Covariances of pairs of variables</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fDim"></a>fDim</td><td class="datadesc">Dimension of the sample</td></tr>
+<tr class="data"><td class="datatype">TGraphTime*</td><td class="dataname"><a name="NcSample:fGraphT"></a>fGraphT</td><td class="datadesc">! Temp. pointer to return a TGraphTime object</td></tr>
+<tr class="data"><td class="datatype">TArrayI*</td><td class="dataname"><a name="NcSample:fIndices"></a>fIndices</td><td class="datadesc">! Temp. storage array for the indices of the ordered entries</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMax"></a>fMax[4]</td><td class="datadesc">Maximum value for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMean"></a>fMean[4]</td><td class="datadesc">Mean for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMin"></a>fMin[4]</td><td class="datadesc">Minimum value for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fN"></a>fN</td><td class="datadesc">Number of entries of the sample</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
 <tr class="data"><td class="datatype"><span class="keyword">char</span></td><td class="dataname"><a name="NcSample:fNames"></a>fNames[4]</td><td class="datadesc">Variable names i.e. X,Y,Z,T</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fOrdered"></a>fOrdered</td><td class="datadesc">! Indicator of the status of the current ordering</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fRMSdev"></a>fRMSdev[4]</td><td class="datadesc">Root Mean Square deviation for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fRemove"></a>fRemove</td><td class="datadesc">Flag to indicate that some entry has been removed</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fSigma"></a>fSigma[4]</td><td class="datadesc">Standard deviation for each variable</td></tr>
@@ -358,6 +368,31 @@ return false;}
 <div class="funccomm"><pre> Removing a set (x,y,z,t) from a 4-dim. sample
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:RemoveEntry" href="src/NcSample.cxx.html#OuXVuB">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Remove" title="void NcSample::Remove(Double_t x) or overloads">Remove</a> the full data entry at the index <span class="string">"i"</span> (1=first) after ordering
+ w.r.t. the j-th variable (1=first).
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ For this functionality the storage mode has to be activated.
+
+ Note : If mode=0 the value of <span class="string">"j"</span> is irrelevant
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Order" href="src/NcSample.cxx.html#OUqt2B">Order</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> the entries according to the i-th variable (first is i=1).
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ For this functionality the storage mode has to be activated.
+
+ Note : If mode=0 the value of <span class="string">"i"</span> is irrelevant
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Compute" href="src/NcSample.cxx.html#ayZ7rB">Compute</a>()</span><br />
 <div class="funccomm"><pre> Computation of the various statistical values
  after each entering or removing action on a certain sample
@@ -426,6 +461,19 @@ return false;}
  The default values are i=0 and j=0.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:ListOrdered" href="src/NcSample.cxx.html#g0siJD">ListOrdered</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Provide a listing of all stored entries according to the specified ordering
+ mode of the i-th variable (first is i=1).
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ For this functionality the storage mode has to be activated.
+
+ Note : If mode=0 the value of <span class="string">"i"</span> is irrelvant.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:List" href="src/NcSample.cxx.html#MGwxF">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
 <div class="funccomm"><pre> Internal member function to list the statistics of i-th variable
  The index of the first variable is 1.
@@ -465,6 +513,7 @@ return false;}
  quantile with fraction <span class="string">"f"</span> of the sample.
  By definition <span class="string">"f"</span> belongs to the interval [0,1] where f=0.5 indicates
  the median of the specified variable.
+
  For this functionality the storage mode has to be activated.
 
  In the case of incompatible data the value 0 is returned.
@@ -576,11 +625,20 @@ return false;}
  The default values are mode=0, model=0 and vref=0 for backward compatibility.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetEntry" href="src/NcSample.cxx.html#Qi7bPB">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
-<div class="funccomm"><pre> Provide the value of the i-th entry for the j-th variable.
- The first entry is indicated by i=1 and the first variable is j=1.
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetEntry" href="src/NcSample.cxx.html#spN3w">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = -1)</span><br />
+<div class="funccomm"><pre> Access the data entry at index <span class="string">"i"</span> and provide the value of the j-th variable,
+ after ordering w.r.t. the k-th variable.
+ The first entry is indicated by the index i=1 and the first variable is j=1.
 
- Note : This facility is only available if the storage mode has been activated.
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ This facility is only available if the storage mode has been activated.
+
+ Note : If mode=0 the value of <span class="string">"k"</span> is irrelevant.
+
+ The default values are mode=0 and k=-1.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram" href="src/NcSample.cxx.html#ZncBNE">Get1DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</span><br />
@@ -628,7 +686,38 @@ return false;}
  Note : This facility is only available if the storage mode has been activated.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#MG2_7B">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</span><br />
+<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#pWpGXC">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Provide a TGraphTime with : X-axis=variable i and Y-axis=variable j.
+ The first variable has index 1.
+ Every data entry is considered to occur at a step in time, and the TGraphTime allows
+ to display an animated time development of the sampling of the specified 2D data points.
+ This can be achieved by setting the time step delay via TGraphTime::SetSleepTime()
+ followed by TGraphTime::<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>().
+
+ The time development of the various entries can be displayed in cumulative sampling mode
+ (smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>), which reflects an animation of the building up of the total data sample.
+ When smp=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, only every single entry is displayed, which reflects an animation
+ of a single point moving in time in 2 dimensions.
+ The animations can be saved in an animated GIF file via TGraphTime::SaveAnimatedGif()
+ after TGraphTime::<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>() has been invoked.
+
+ The time flow can be controlled by ordering the various entries according to
+ the specified k-th variable and the input argument <span class="string">"mode"</span>.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ Note : If mode=0 the value of <span class="string">"k"</span> is irrelevant.
+
+ This facility is only available if the storage mode has been activated.
+
+ In case of inconsistent data, the value 0 is returned.
+
+ The default value is smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@2" href="src/NcSample.cxx.html#MG2_7B">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
  The first variable has index 1.
 
@@ -713,7 +802,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Mar 31 15:54:28 2021 </em><em>&raquo; Last generated: 2021-03-31 15:54</em><br />
+<em>&raquo; Last changed: Wed Apr  7 23:33:18 2021 </em><em>&raquo; Last generated: 2021-04-07 23:33</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

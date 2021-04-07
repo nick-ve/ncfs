@@ -44,6 +44,9 @@
 // argument to the various member functions.
 // The index convention for a data point (x,y,z,t) is : x=1  y=2  z=3  t=4.
 //
+// Interfaces with various graphics facilities are provided like for instance
+// GetGraph(), Get1DHistogram() etc...
+//
 // Example :
 // ---------
 // For an NcSample s a data point (x,y) can be entered as s.Enter(x,y) and
@@ -55,7 +58,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel March 31, 2021  15:14Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 7, 2021  23:24Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -81,6 +84,9 @@ NcSample::NcSample(const char* name,const char* title) : TNamed(name,title)
  fZ=0;
  fT=0;
  fArr=0;
+ fIndices=0;
+ fOrdered=0;
+ fGraphT=0;
  Reset();
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -113,6 +119,16 @@ NcSample::~NcSample()
   delete fArr;
   fArr=0;
  }
+ if (fIndices)
+ {
+  delete fIndices;
+  fIndices=0;
+ }
+ if (fGraphT)
+ {
+  delete fGraphT;
+  fGraphT=0;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 NcSample::NcSample(const NcSample& s) : TNamed(s)
@@ -134,6 +150,9 @@ NcSample::NcSample(const NcSample& s) : TNamed(s)
  fZ=0;
  fT=0;
  fArr=0;
+ fIndices=0;
+ fOrdered=0;
+ fGraphT=0;
 
  if (s.fX) fX=new TArrayD(fN);
  if (s.fY) fY=new TArrayD(fN);
@@ -191,6 +210,7 @@ void NcSample::Reset()
 
  fN=0;
  fRemove=0;
+ fOrdered=0;
  for (Int_t i=0; i<fDim; i++)
  {
   fSum[i]=0;
@@ -212,6 +232,25 @@ void NcSample::Reset()
  if (fY) fY->Set(10);
  if (fZ) fZ->Set(10);
  if (fT) fT->Set(10);
+
+ // Delete the temp. storage arrays for ordering
+ if (fArr)
+ {
+  delete fArr;
+  fArr=0;
+ }
+ if (fIndices)
+ {
+  delete fIndices;
+  fIndices=0;
+ }
+
+ // Delete the temp. TGraphTime pointer
+ if (fGraphT)
+ {
+  delete fGraphT;
+  fGraphT=0;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Enter(Double_t x)
@@ -684,10 +723,187 @@ void NcSample::Remove(Double_t x,Double_t y,Double_t z,Double_t t)
  Compute();
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcSample::RemoveEntry(Int_t i,Int_t mode,Int_t j)
+{
+// Remove the full data entry at the index "i" (1=first) after ordering
+// w.r.t. the j-th variable (1=first).
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// For this functionality the storage mode has to be activated.
+//
+// Note : If mode=0 the value of "j" is irrelevant
+
+ if (fDim<1 || fN<=0 || i<1 || i>fN) return;
+
+ if (mode && (j<1 || j>fDim))
+ {
+  cout << " *NcSample::RemoveEntry* Error : Invalide argument j=" << j << endl;
+  return;
+ }
+
+ if (!fStore)
+ {
+  cout << " *NcSample::RemoveEntry* Error : Storage of data entries was not activated." << endl;
+  return;
+ }
+
+ Order(mode,j);
+
+ // Get the corresponding original entry index
+ Int_t idx=fIndices->At(i-1);
+
+ Double_t x=0;
+ Double_t y=0;
+ Double_t z=0;
+ Double_t t=0;
+
+ if (fX) x=GetEntry(idx+1,1);
+ if (fY) y=GetEntry(idx+1,2);
+ if (fZ) z=GetEntry(idx+1,3);
+ if (fT) t=GetEntry(idx+1,4);
+
+ if (fDim==1) Remove(x);
+ if (fDim==2) Remove(x,y);
+ if (fDim==3) Remove(x,y,z);
+ if (fDim==4) Remove(x,y,z,t);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSample::Order(Int_t mode,Int_t i)
+{
+// Order the entries according to the i-th variable (first is i=1).
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// For this functionality the storage mode has to be activated.
+//
+// Note : If mode=0 the value of "i" is irrelevant
+
+ if (mode && (i<1 || i>fDim))
+ {
+  cout << " *NcSample::Order* Error : Invalide argument i=" << i << endl;
+  return;
+ }
+
+ if (fDim<1)
+ {
+  cout << " *NcSample::Order* Error : Dimension less than 1." << endl;
+  return;
+ }
+
+ if (!fStore)
+ {
+  cout << " *NcSample::Order* Error : Storage of data entries was not activated." << endl;
+  return;
+ }
+
+ if (fN<=0)
+ {
+  fOrdered=0;
+  return;
+ }
+
+ // Set the corresponding ordering status word
+ Int_t iword=10*abs(mode)+i;
+ if (mode<0) iword*=-1;
+
+ // No new ordering needed if the ordering status word hasn't changed
+ if (iword==fOrdered) return;
+
+ // Store the new ordering status word
+ fOrdered=iword;
+
+ // Prepare temp. array to hold the ordered values
+ if (!fArr)
+ {
+  fArr=new TArrayD(fN);
+ }
+ else
+ {
+  if (fArr->GetSize() < fN) fArr->Set(fN);
+ }
+
+ // Prepare temp. array to hold the ordered indices
+ if (!fIndices)
+ {
+  fIndices=new TArrayI(fN);
+ }
+ else
+ {
+  if (fIndices->GetSize() < fN) fIndices->Set(fN);
+ }
+
+ Double_t val=0;
+
+ // Just the order in which the entries were entered
+ if (!mode)
+ {
+  for (Int_t j=0; j<fN; j++)
+  {
+   if (i==1) val=fX->At(j);
+   if (i==2) val=fY->At(j);
+   if (i==3) val=fZ->At(j);
+   if (i==4) val=fT->At(j);
+   fArr->AddAt(val,j);
+   fIndices->AddAt(j,j);
+  }
+  return;
+ }
+
+ // Order the values of the specified variable
+ Int_t iadd=0;
+ for (Int_t j=0; j<fN; j++)
+ {
+  if (i==1) val=fX->At(j);
+  if (i==2) val=fY->At(j);
+  if (i==3) val=fZ->At(j);
+  if (i==4) val=fT->At(j);
+
+  iadd=0;
+  if (j==0)
+  {
+   fArr->AddAt(val,j);
+   fIndices->AddAt(j,j);
+   iadd=1;
+  }
+  else
+  {
+   for (Int_t k=0; k<j; k++)
+   {
+    if (mode>0 && val>=fArr->At(k)) continue; // Increasing ordering
+    if (mode<0 && val<=fArr->At(k)) continue; // Decreasing ordering
+    // Put value in between the existing ones
+    for (Int_t m=j-1; m>=k; m--)
+    {
+     fArr->AddAt(fArr->At(m),m+1);
+     fIndices->AddAt(fIndices->At(m),m+1);
+    }
+    fArr->AddAt(val,k);
+    fIndices->AddAt(j,k);
+    iadd=1;
+    break;
+   }
+
+   if (!iadd)
+   {
+    fArr->AddAt(val,j);
+    fIndices->AddAt(j,j);
+   }
+  }
+ }
+}
+///////////////////////////////////////////////////////////////////////////
 void NcSample::Compute()
 {
 // Computation of the various statistical values
 // after each entering or removing action on a certain sample
+
+ // Reset the ordering status word
+ fOrdered=0;
 
  if (fN<=0) return;
 
@@ -920,6 +1136,73 @@ void NcSample::Data(Int_t i,Int_t j)
  if (i && j) List(i,j);
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcSample::ListOrdered(Int_t mode,Int_t i)
+{
+// Provide a listing of all stored entries according to the specified ordering
+// mode of the i-th variable (first is i=1). 
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// For this functionality the storage mode has to be activated.
+//
+// Note : If mode=0 the value of "i" is irrelvant. 
+
+ if (!fStore)
+ {
+  cout << " *NcSample::ListOrdered* Error : Storage of data entries was not activated." << endl;
+  return;
+ }
+
+ if (fN<=0)
+ {
+  cout << " *NcSample::ListOrdered* No entries were stored." << endl;
+  return;
+ }
+
+ if (fDim<1)
+ {
+  cout << " *NcSample::ListOrdered* Error : Dimension less than 1." << endl;
+  return;
+ }
+
+ if (mode && (i<1 || i>fDim))
+ {
+  cout << " *NcSample::ListOrdered* Error : Invalid argument i=" << i << endl;
+  return;
+ }
+
+ Order(mode,i);
+
+ TString s="X";
+ if (i==2) s="Y";
+ if (i==3) s="Z";
+ if (i==4) s="T";
+
+ cout << " *NcSample::ListOrdered* Listing of the stored entries in";
+ if (!mode) cout << " order of original entering." << endl;
+ if (mode<0) cout << " decreasing order of variable : " << s << endl;
+ if (mode>0) cout << " increasing order of variable : " << s << endl;
+ if (mode) cout << " The number between brackets indicates the original data entry number." << endl; 
+
+ Int_t index=0;
+ for (Int_t j=0; j<fN; j++)
+ {
+  index=fIndices->At(j);
+  
+  if (index<0 || index>=fN) continue;
+
+  cout << " Index : " << (j+1);
+  if (mode) cout << " (" << (index+1) << ") ";
+  cout << " X=" << fX->At(index);
+  if (fDim>1) cout << " Y=" << fY->At(index);
+  if (fDim>2) cout << " Z=" << fZ->At(index);
+  if (fDim>3) cout << " T=" << fT->At(index);
+  cout << endl;
+ }
+}
+///////////////////////////////////////////////////////////////////////////
 void NcSample::List(Int_t i)
 {
 // Internal member function to list the statistics of i-th variable
@@ -1008,6 +1291,7 @@ Double_t NcSample::GetQuantile(Double_t f,Int_t i)
 // quantile with fraction "f" of the sample.
 // By definition "f" belongs to the interval [0,1] where f=0.5 indicates
 // the median of the specified variable.
+//
 // For this functionality the storage mode has to be activated.
 //
 // In the case of incompatible data the value 0 is returned.
@@ -1046,53 +1330,8 @@ Double_t NcSample::GetQuantile(Double_t f,Int_t i)
  if (f==0) return GetMinimum(i);
  if (f==1) return GetMaximum(i);
 
- // Prepare temp. array to hold the ordered values
- if (!fArr)
- {
-  fArr=new TArrayD(fN);
- }
- else
- {
-  if (fArr->GetSize() < fN) fArr->Set(fN);
- }
-
- // Order the values of the specified variable
- Double_t val=0;
- Int_t iadd=0;
- for (Int_t j=0; j<fN; j++)
- {
-  if (i==1) val=fX->At(j);
-  if (i==2) val=fY->At(j);
-  if (i==3) val=fZ->At(j);
-  if (i==4) val=fT->At(j);
-
-  iadd=0;
-  if (j==0)
-  {
-   fArr->AddAt(val,j);
-   iadd=1;
-  }
-  else
-  {
-   for (Int_t k=0; k<j; k++)
-   {
-    if (val>=fArr->At(k)) continue;
-    // Put value in between the existing ones
-    for (Int_t m=j-1; m>=k; m--)
-    {
-     fArr->AddAt(fArr->At(m),m+1);
-    }
-    fArr->AddAt(val,k);
-    iadd=1;
-    break;
-   }
-
-   if (!iadd)
-   {
-    fArr->AddAt(val,j);
-   }
-  }
- }
+ // Order the values of the i-th variable in increasing order
+ Order(1,i);
 
  quantile=0;
  Double_t rindex=double(fN)*f;
@@ -1418,18 +1657,21 @@ Double_t NcSample::GetSpread(TH1* histo,Int_t mode,Int_t model,Double_t vref) co
  return spread;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcSample::GetEntry(Int_t i,Int_t j) const
+Double_t NcSample::GetEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 {
-// Provide the value of the i-th entry for the j-th variable.
-// The first entry is indicated by i=1 and the first variable is j=1.
+// Access the data entry at index "i" and provide the value of the j-th variable,
+// after ordering w.r.t. the k-th variable.
+// The first entry is indicated by the index i=1 and the first variable is j=1.
 //
-// Note : This facility is only available if the storage mode has been activated.
-
- if (fDim<j)
- {
-  cout << " *NcSample::GetEntry* Error : Dimension less than " << j << endl;
-  return 0;
- }
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// This facility is only available if the storage mode has been activated.
+//
+// Note : If mode=0 the value of "k" is irrelevant.
+//
+// The default values are mode=0 and k=-1.
 
  if (!fStore)
  {
@@ -1439,15 +1681,38 @@ Double_t NcSample::GetEntry(Int_t i,Int_t j) const
 
  if (i<1 || i>fN)
  {
-  cout << " *NcSample::GetEntry* Error : Invalid entry number " << i << endl;
+  cout << " *NcSample::GetEntry* Error : Invalid index number i=" << i << endl;
+  return 0;
+ }
+
+ if (j<1 || j>fDim)
+ {
+  cout << " *NcSample::GetEntry* Error : Invalid variable number j=" << j << endl;
+  return 0;
+ }
+
+ if (mode && (k<1 || k>fDim))
+ {
+  cout << " *NcSample::GetEntry* Error : Invalid argument k=" << k << endl;
   return 0;
  }
 
  Double_t value=0;
- if (j==1) value=fX->At(i-1);
- if (j==2) value=fY->At(i-1);
- if (j==3) value=fZ->At(i-1);
- if (j==4) value=fT->At(i-1);
+
+ // Determine the entry index in the main arrays.
+ Int_t index=i-1;
+
+ if (mode)
+ {
+  Order(mode,k);
+  index=fIndices->At(i-1);
+ }
+
+ if (j==1) value=fX->At(index);
+ if (j==2) value=fY->At(index);
+ if (j==3) value=fZ->At(index);
+ if (j==4) value=fT->At(index);
+
  return value;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1474,20 +1739,22 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
   s+=j;
  }
 
- TH1D hist("",s.Data(),nbx,0,-1);
- hist.SetBuffer(fN);
+ Double_t xlow=GetMinimum(i);
+ Double_t xup=GetMaximum(i)*1.001;
+
+ TH1D hist("",s.Data(),nbx,xlow,xup);
  hist.Sumw2(sumw2);
 
- if (i<1 || i>fDim || j>fDim) return hist;
+ if (!fStore || i<1 || i>fDim || j>fDim) return hist;
 
  Double_t x=0;
  Double_t y=0;
- for (Int_t ip=0; ip<fN; ip++)
+ for (Int_t ip=1; ip<=fN; ip++)
  {
-  x=GetEntry(ip+1,i);
+  x=GetEntry(ip,i);
   if (j>0)
   {
-   y=GetEntry(ip+1,j);
+   y=GetEntry(ip,j);
    hist.Fill(x,y);
   }
   else
@@ -1525,22 +1792,26 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
   s+=k;
  }
 
- TH2D hist("",s.Data(),nbx,0,-1,nby,0,-1);
- hist.SetBuffer(fN);
+ Double_t xlow=GetMinimum(i);
+ Double_t xup=GetMaximum(i)*1.001;
+ Double_t ylow=GetMinimum(j);
+ Double_t yup=GetMaximum(j)*1.001;
+
+ TH2D hist("",s.Data(),nbx,xlow,xup,nby,ylow,yup);
  hist.Sumw2(sumw2);
 
- if (i<1 || i>fDim || j<1 || j>fDim || k>fDim) return hist;
+ if (!fStore || i<1 || i>fDim || j<1 || j>fDim || k>fDim) return hist;
 
  Double_t x=0;
  Double_t y=0;
  Double_t z=0;
- for (Int_t ip=0; ip<fN; ip++)
+ for (Int_t ip=1; ip<=fN; ip++)
  {
-  x=GetEntry(ip+1,i);
-  y=GetEntry(ip+1,j);
+  x=GetEntry(ip,i);
+  y=GetEntry(ip,j);
   if (k>0)
   {
-   z=GetEntry(ip+1,k);
+   z=GetEntry(ip,k);
    hist.Fill(x,y,z);
   }
   else
@@ -1580,24 +1851,30 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
  s+=";Variable ";
  s+=k;
 
- TH3D hist("",s.Data(),nbx,0,-1,nby,0,-1,nbz,0,-1);
- hist.SetBuffer(fN);
+ Double_t xlow=GetMinimum(i);
+ Double_t xup=GetMaximum(i)*1.001;
+ Double_t ylow=GetMinimum(j);
+ Double_t yup=GetMaximum(j)*1.001;
+ Double_t zlow=GetMinimum(k);
+ Double_t zup=GetMaximum(k)*1.001;
+
+ TH3D hist("",s.Data(),nbx,xlow,xup,nby,ylow,yup,nbz,zlow,zup);
  hist.Sumw2(sumw2);
 
- if (i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim || m>fDim) return hist;
+ if (!fStore || i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim || m>fDim) return hist;
 
  Double_t x=0;
  Double_t y=0;
  Double_t z=0;
  Double_t t=0;
- for (Int_t ip=0; ip<fN; ip++)
+ for (Int_t ip=1; ip<=fN; ip++)
  {
-  x=GetEntry(ip+1,i);
-  y=GetEntry(ip+1,j);
-  z=GetEntry(ip+1,k);
+  x=GetEntry(ip,i);
+  y=GetEntry(ip,j);
+  z=GetEntry(ip,k);
   if (m>0)
   {
-   t=GetEntry(ip+1,m);
+   t=GetEntry(ip,m);
    hist.Fill(x,y,z,t);
   }
   else
@@ -1618,7 +1895,7 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j)
 
  TGraph gr;
 
- if (i<1 || i>fDim || j<1 || j>fDim) return gr;
+ if (!fStore || i<1 || i>fDim || j<1 || j>fDim) return gr;
 
  Double_t x=0;
  Double_t y=0;
@@ -1640,6 +1917,82 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j)
  return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
+TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
+{
+// Provide a TGraphTime with : X-axis=variable i and Y-axis=variable j.
+// The first variable has index 1.
+// Every data entry is considered to occur at a step in time, and the TGraphTime allows
+// to display an animated time development of the sampling of the specified 2D data points.
+// This can be achieved by setting the time step delay via TGraphTime::SetSleepTime()
+// followed by TGraphTime::Draw().
+//
+// The time development of the various entries can be displayed in cumulative sampling mode
+// (smp=kTRUE), which reflects an animation of the building up of the total data sample.
+// When smp=kFALSE, only every single entry is displayed, which reflects an animation
+// of a single point moving in time in 2 dimensions.
+// The animations can be saved in an animated GIF file via TGraphTime::SaveAnimatedGif()
+// after TGraphTime::Draw() has been invoked.
+//
+// The time flow can be controlled by ordering the various entries according to
+// the specified k-th variable and the input argument "mode".
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// Note : If mode=0 the value of "k" is irrelevant.
+//
+// This facility is only available if the storage mode has been activated.
+//
+// In case of inconsistent data, the value 0 is returned.
+//
+// The default value is smp=kTRUE.
+
+ if (!fStore || fN<1 || i<1 || i>fDim || j<1 || j>fDim) return 0;
+
+ if (mode && (k<1 || k>fDim)) return 0;
+
+ Double_t xlow=GetMinimum(i);
+ Double_t xup=GetMaximum(i);
+ Double_t ylow=GetMinimum(j);
+ Double_t yup=GetMaximum(j);
+
+ if (fGraphT)
+ {
+  delete fGraphT;
+  fGraphT=0;
+ }
+
+ TGraphTime* fGraphT=new TGraphTime(fN,xlow,ylow,xup,yup);
+
+ Double_t x=0;
+ Double_t y=0;
+ TMarker* m=0;
+ Int_t jpstart=0;
+ for (Int_t istep=0; istep<fN; istep++)
+ {
+  if (!smp) jpstart=istep;
+  for (Int_t jp=jpstart; jp<=istep; jp++)
+  {
+   x=GetEntry(jp+1,i,mode,k);
+   y=GetEntry(jp+1,j,mode,k);
+   m=new TMarker(x,y,20);
+   m->SetMarkerSize(1);
+   fGraphT->Add(m,istep);
+  }  
+ }
+
+ TString s="TGraphTime for NcSample ";
+ s+=GetName();
+ s+=";Variable ";
+ s+=i;
+ s+=";Variable ";
+ s+=j;
+ fGraphT->SetNameTitle("",s.Data());
+
+ return fGraphT;
+}
+///////////////////////////////////////////////////////////////////////////
 TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
 {
 // Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
@@ -1649,7 +2002,7 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
 
  TGraph2D gr;
 
- if (i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim) return gr;
+ if (!fStore || i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim) return gr;
 
  Double_t x=0;
  Double_t y=0;
