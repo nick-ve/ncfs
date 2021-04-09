@@ -1159,6 +1159,5 @@
 06-apr-2021 NvE Functionality of NcSignal extended by the possibility to store NcSample objects in the same
                 way as the storage of waveforms.
 07-apr-2021 NvE Functionality of NcSample extended.
-
-                
-
+09-apr-2021 NvE QQ-plot and animation effects introduced in NcSample.
+                The version indicator in NcVersion has been updated to 3.6.

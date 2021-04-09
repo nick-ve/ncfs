@@ -58,7 +58,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 7, 2021  23:24Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 9, 2021  00:05Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -87,6 +87,8 @@ NcSample::NcSample(const char* name,const char* title) : TNamed(name,title)
  fIndices=0;
  fOrdered=0;
  fGraphT=0;
+ fCanvas=0;
+ fAnimObject=0;
  Reset();
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -129,6 +131,16 @@ NcSample::~NcSample()
   delete fGraphT;
   fGraphT=0;
  }
+ if (fCanvas)
+ {
+  delete fCanvas;
+  fCanvas=0;
+ }
+ if (fAnimObject)
+ {
+  delete fAnimObject;
+  fAnimObject=0;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 NcSample::NcSample(const NcSample& s) : TNamed(s)
@@ -153,6 +165,8 @@ NcSample::NcSample(const NcSample& s) : TNamed(s)
  fIndices=0;
  fOrdered=0;
  fGraphT=0;
+ fCanvas=0;
+ fAnimObject=0;
 
  if (s.fX) fX=new TArrayD(fN);
  if (s.fY) fY=new TArrayD(fN);
@@ -250,6 +264,20 @@ void NcSample::Reset()
  {
   delete fGraphT;
   fGraphT=0;
+ }
+
+ // Delete the multi-purpose canvas
+ if (fCanvas)
+ {
+  delete fCanvas;
+  fCanvas=0;
+ }
+
+ // Delete the multi-purpose animation object
+ if (fAnimObject)
+ {
+  delete fAnimObject;
+  fAnimObject=0;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1740,7 +1768,10 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
  }
 
  Double_t xlow=GetMinimum(i);
- Double_t xup=GetMaximum(i)*1.001;
+ Double_t xup=GetMaximum(i);
+
+ // Extension to include the maximum value
+ xup+=0.001*fabs(xup);
 
  TH1D hist("",s.Data(),nbx,xlow,xup);
  hist.Sumw2(sumw2);
@@ -1793,9 +1824,13 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
  }
 
  Double_t xlow=GetMinimum(i);
- Double_t xup=GetMaximum(i)*1.001;
+ Double_t xup=GetMaximum(i);
  Double_t ylow=GetMinimum(j);
- Double_t yup=GetMaximum(j)*1.001;
+ Double_t yup=GetMaximum(j);
+
+ // Extension to include the maximum values
+ xup+=0.001*fabs(xup);
+ yup+=0.001*fabs(yup);
 
  TH2D hist("",s.Data(),nbx,xlow,xup,nby,ylow,yup);
  hist.Sumw2(sumw2);
@@ -1852,11 +1887,16 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
  s+=k;
 
  Double_t xlow=GetMinimum(i);
- Double_t xup=GetMaximum(i)*1.001;
+ Double_t xup=GetMaximum(i);
  Double_t ylow=GetMinimum(j);
- Double_t yup=GetMaximum(j)*1.001;
+ Double_t yup=GetMaximum(j);
  Double_t zlow=GetMinimum(k);
- Double_t zup=GetMaximum(k)*1.001;
+ Double_t zup=GetMaximum(k);
+
+ // Extension to include the maximum values
+ xup+=0.001*fabs(xup);
+ yup+=0.001*fabs(yup);
+ zup+=0.001*fabs(zup);
 
  TH3D hist("",s.Data(),nbx,xlow,xup,nby,ylow,yup,nbz,zlow,zup);
  hist.Sumw2(sumw2);
@@ -1914,13 +1954,24 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j)
  s+=j;
  gr.SetTitle(s.Data());
 
+ gr.SetMarkerStyle(20);
+ gr.SetMarkerSize(1);
+ gr.SetDrawOption("AP");
+
  return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
 {
-// Provide a TGraphTime with : X-axis=variable i and Y-axis=variable j.
+// Provide a pointer to a TGraphTime with : X-axis=variable i and Y-axis=variable j.
 // The first variable has index 1.
+//
+// Note :
+// ------
+// At every invokation of this member function, the existing TGraphTime will be deleted.
+// In case you want to keep the produced graph(s) fur further analysis, you have to make
+// a local copy (e.g. via the Clone() facility) of the produced TGraphTime object(s).
+//
 // Every data entry is considered to occur at a step in time, and the TGraphTime allows
 // to display an animated time development of the sampling of the specified 2D data points.
 // This can be achieved by setting the time step delay via TGraphTime::SetSleepTime()
@@ -1957,13 +2008,19 @@ TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
  Double_t ylow=GetMinimum(j);
  Double_t yup=GetMaximum(j);
 
+ // Extensions to display the points well within the frame
+ xlow-=0.1*fabs(xlow);
+ xup+=0.1*fabs(xup);
+ ylow-=0.1*fabs(ylow);
+ yup+=0.1*fabs(yup);
+
  if (fGraphT)
  {
   delete fGraphT;
   fGraphT=0;
  }
 
- TGraphTime* fGraphT=new TGraphTime(fN,xlow,ylow,xup,yup);
+ fGraphT=new TGraphTime(fN,xlow,ylow,xup,yup);
 
  Double_t x=0;
  Double_t y=0;
@@ -2002,7 +2059,7 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
 
  TGraph2D gr;
 
- if (!fStore || i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim) return gr;
+ if (!fStore || fN<1 || i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim) return gr;
 
  Double_t x=0;
  Double_t y=0;
@@ -2024,6 +2081,73 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
  s+="  Z-axis=variable ";
  s+=k;
  gr.SetTitle(s.Data());
+
+ gr.SetMarkerStyle(20);
+ gr.SetMarkerSize(1);
+ gr.SetDrawOption("P");
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
+{
+// Provide a QQ-plot (TGraphQQ) for the values of the variables i and j.
+// The first variable has index 1.
+// In case the function "f" is specified, it will replace the role of variable j.
+// When the function "f" is specified, the value of "j" is irrelevant.
+//
+// Note : This facility is only available if the storage mode has been activated.
+//
+// The default is f=0.
+
+ TGraphQQ gr;
+
+ if (!fStore || fN<1 || i<1 || i>fDim) return gr;
+
+ if (!f && (j<1 || j>fDim)) return gr;
+
+ Double_t* arri=0;
+ if (i==1) arri=fX->GetArray();
+ if (i==2) arri=fY->GetArray();
+ if (i==3) arri=fZ->GetArray();
+ if (i==4) arri=fT->GetArray();
+
+ if (!f)
+ {
+  Double_t* arrj=0;
+  if (j==1) arrj=fX->GetArray();
+  if (j==2) arrj=fY->GetArray();
+  if (j==3) arrj=fZ->GetArray();
+  if (j==4) arrj=fT->GetArray();
+
+  if (arri && arrj) gr=TGraphQQ(fN,arri,fN,arrj);
+ }
+ else
+ {
+  if (arri) gr=TGraphQQ(fN,arri,f);
+ }
+
+ TString s="QQ-plot (TGraphQQ) for NcSample ";
+ s+=GetName();
+ if (f)
+ {
+  s+=" of Variable ";
+  s+=i;
+  s+=" versus Function ";
+  s+=f->GetExpFormula("p");
+ }
+ else
+ {
+  s+=";Variable ";
+  s+=i;
+  s+=";Variable ";
+  s+=j;
+ }
+
+ gr.SetTitle(s.Data());
+
+ gr.SetMarkerStyle(20);
+ gr.SetMarkerSize(1);
 
  return gr;
 }
@@ -2173,6 +2297,188 @@ Double_t NcSample::GetCV(Int_t i,Int_t model) const
  if (mean) cv=fabs(sigma/mean);
 
  return cv;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt)
+{
+// Animation of an (ordered) sampling with : X-axis=variable i and Y-axis=variable j.
+// The first variable has index 1.
+//
+// Every data entry is considered to occur at a step in time, and this member function
+// displays an animated time development of the sampling of the specified 2D data points.
+// The input argument "delay" represents the pause time (in ms) between every step.
+//
+// The time flow can be controlled by ordering the various entries according to
+// the specified k-th variable and the input argument "mode".
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// Note : If mode=0 the value of "k" is irrelevant.
+//
+// The input argument "opt" represents the drawing option(s) for a TGraph.
+//
+// The default value is opt="AP".
+//
+// This facility is only available if the storage mode has been activated.
+
+ if (!fStore || fN<1 || i<1 || i>fDim || j<1 || j>fDim || (mode && (k<1 || k>fDim)) || delay<0)
+ {
+  cout << " *NcSample::Animation* Inconsistent input data." << endl;
+  return;
+ }
+
+ if (fCanvas)
+ {
+  delete fCanvas;
+  fCanvas=0;
+ }
+
+ if (fAnimObject)
+ {
+  delete fAnimObject;
+  fAnimObject=0;
+ }
+
+ fCanvas=new TCanvas("fCanvas","Sampling animation");
+
+ TGraph* gr=new TGraph();
+ fAnimObject=gr;
+
+ TString s="Sampling animation for NcSample ";
+ s+=GetName();
+ gr->SetTitle(s.Data());
+ gr->SetMarkerStyle(20);
+ gr->SetMarkerSize(1);
+
+ Double_t x=0;
+ Double_t y=0;
+ for (Int_t ip=0; ip<fN; ip++)
+ {
+  x=GetEntry(ip+1,i,mode,k);
+  y=GetEntry(ip+1,j,mode,k);
+  gr->SetPoint(ip,x,y);
+
+  if (!ip) gr->Draw(opt.Data());
+
+  s="Variable ";
+  s+=i;
+  gr->GetXaxis()->SetTitle(s.Data());
+  s="Variable ";
+  s+=j;
+  gr->GetYaxis()->SetTitle(s.Data());
+  
+  fCanvas->Modified();
+  fCanvas->Update();
+
+  gSystem->Sleep(delay);
+ }
+
+ s="Variable ";
+ s+=i;
+ gr->GetXaxis()->SetTitle(s.Data());
+ s="Variable ";
+ s+=j;
+ gr->GetYaxis()->SetTitle(s.Data());
+  
+ fCanvas->Modified();
+ fCanvas->Update();
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSample::Animation(Int_t i,Int_t j,Int_t k,Int_t mode,Int_t m,Int_t delay,TString opt)
+{
+// Animation of an (ordered) sampling with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
+// The first variable has index 1.
+//
+// Every data entry is considered to occur at a step in time, and this member function
+// displays an animated time development of the sampling of the specified 2D data points.
+// The input argument "delay" represents the pause time (in ms) between every step.
+//
+// The time flow can be controlled by ordering the various entries according to
+// the specified m-th variable and the input argument "mode".
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// Note : If mode=0 the value of "m" is irrelevant.
+//
+// The input argument "opt" represents the drawing option(s) for a TGraph2D.
+//
+// The default value is opt="PFB".
+//
+// This facility is only available if the storage mode has been activated.
+
+ if (!fStore || fN<1 || i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim || (mode && (m<1 || m>fDim)) || delay<0)
+ {
+  cout << " *NcSample::Animation* Inconsistent input data." << endl;
+  return;
+ }
+
+ if (fCanvas)
+ {
+  delete fCanvas;
+  fCanvas=0;
+ }
+
+ if (fAnimObject)
+ {
+  delete fAnimObject;
+  fAnimObject=0;
+ }
+
+ fCanvas=new TCanvas("fCanvas","Sampling animation");
+
+ TGraph2D* gr=new TGraph2D(fN);
+ fAnimObject=gr;
+
+ TString s="Sampling animation for NcSample ";
+ s+=GetName();
+ gr->SetTitle(s.Data());
+ gr->SetMarkerStyle(20);
+ gr->SetMarkerSize(1);
+
+ Double_t x=0;
+ Double_t y=0;
+ Double_t z=0;
+ for (Int_t ip=0; ip<fN; ip++)
+ {
+  x=GetEntry(ip+1,i,mode,m);
+  y=GetEntry(ip+1,j,mode,m);
+  z=GetEntry(ip+1,k,mode,m);
+  gr->SetPoint(ip,x,y,z);
+
+  if (!ip) gr->Draw(opt.Data());
+
+  s="Variable ";
+  s+=i;
+  gr->GetXaxis()->SetTitle(s.Data());
+  s="Variable ";
+  s+=j;
+  gr->GetYaxis()->SetTitle(s.Data());
+  s="Variable ";
+  s+=k;
+  gr->GetZaxis()->SetTitle(s.Data());
+  
+  fCanvas->Modified();
+  fCanvas->Update();
+
+  gSystem->Sleep(delay);
+ }
+
+ s="Variable ";
+ s+=i;
+ gr->GetXaxis()->SetTitle(s.Data());
+ s="Variable ";
+ s+=j;
+ gr->GetYaxis()->SetTitle(s.Data());
+ s="Variable ";
+ s+=k;
+ gr->GetZaxis()->SetTitle(s.Data());
+  
+ fCanvas->Modified();
+ fCanvas->Update();
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSample::Clone(const char* name) const

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Apr  7 23:33:17 2021            -->
+<!--   Date: Fri Apr  9 00:24:11 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -89,7 +89,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0)">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 7, 2021  23:24Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 9, 2021  00:05Z
 
 </pre></div>
 </div></div>
@@ -102,6 +102,8 @@ return false;}
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcSample:NcSample">NcSample</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcSample:_NcSample">~NcSample</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Animation">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"AP"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Animation@1">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcSample:Class">Class</a>()</td></tr>
@@ -153,6 +155,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TGraphQQ</td><td class="funcname"><a class="funcname" href="#NcSample:GetQQplot">GetQQplot</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile@1">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetRMS">GetRMS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
@@ -270,7 +273,9 @@ return false;}
 </table></div>
 <div class="access" id="dataprot"><b>protected:</b>
 <table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a name="NcSample:fAnimObject"></a>fAnimObject</td><td class="datadesc">! Multi-purpose pointer for animation objects</td></tr>
 <tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fArr"></a>fArr</td><td class="datadesc">! Temp. storage array for ordered values</td></tr>
+<tr class="data"><td class="datatype">TCanvas*</td><td class="dataname"><a name="NcSample:fCanvas"></a>fCanvas</td><td class="datadesc">! Multi-purpose canvas for e.g. animation displays</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fCor"></a>fCor[4][4]</td><td class="datadesc">Correlations of pairs of variables</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fCov"></a>fCov[4][4]</td><td class="datadesc">Covariances of pairs of variables</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fDim"></a>fDim</td><td class="datadesc">Dimension of the sample</td></tr>
@@ -687,8 +692,15 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#pWpGXC">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
-<div class="funccomm"><pre> Provide a TGraphTime with : X-axis=variable i and Y-axis=variable j.
+<div class="funccomm"><pre> Provide a pointer to a TGraphTime with : X-axis=variable i and Y-axis=variable j.
  The first variable has index 1.
+
+ Note :
+
+ At every invokation of this member function, the existing TGraphTime will be deleted.
+ In case you want to keep the produced graph(s) fur further analysis, you have to make
+ a local copy (e.g. via the <a href="./NcSample.html#NcSample:Clone" title="TObject* NcSample::Clone(const char* name=&quot;&quot;)">Clone</a>() facility) of the produced TGraphTime object(s).
+
  Every data entry is considered to occur at a step in time, and the TGraphTime allows
  to display an animated time development of the sampling of the specified 2D data points.
  This can be achieved by setting the time step delay via TGraphTime::SetSleepTime()
@@ -722,6 +734,17 @@ return false;}
  The first variable has index 1.
 
  Note : This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraphQQ <a class="funcname" name="NcSample:GetQQplot" href="src/NcSample.cxx.html#tkucrB">GetQQplot</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</span><br />
+<div class="funccomm"><pre> Provide a QQ-plot (TGraphQQ) for the values of the variables i and j.
+ The first variable has index 1.
+ In case the function <span class="string">"f"</span> is specified, it will replace the role of variable j.
+ When the function <span class="string">"f"</span> is specified, the value of <span class="string">"j"</span> is irrelevant.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+ The default is f=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Load" href="src/NcSample.cxx.html#pmaSXE">Load</a>(TGraph* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</span><br />
@@ -789,6 +812,54 @@ return false;}
  In case of inconsistent data, the value -1 is returned.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Animation" href="src/NcSample.cxx.html#DJ_Q1E">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"AP"</span>)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a> of an (ordered) sampling with : X-axis=variable i and Y-axis=variable j.
+ The first variable has index 1.
+
+ Every data entry is considered to occur at a step in time, and this member function
+ displays an animated time development of the sampling of the specified 2D data points.
+ The input argument <span class="string">"delay"</span> represents the pause time (in ms) between every step.
+
+ The time flow can be controlled by ordering the various entries according to
+ the specified k-th variable and the input argument <span class="string">"mode"</span>.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ Note : If mode=0 the value of <span class="string">"k"</span> is irrelevant.
+
+ The input argument <span class="string">"opt"</span> represents the drawing option(s) for a TGraph.
+
+ The default value is opt=<span class="string">"AP"</span>.
+
+ This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Animation@1" href="src/NcSample.cxx.html#m5kBGC">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a> of an (ordered) sampling with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
+ The first variable has index 1.
+
+ Every data entry is considered to occur at a step in time, and this member function
+ displays an animated time development of the sampling of the specified 2D data points.
+ The input argument <span class="string">"delay"</span> represents the pause time (in ms) between every step.
+
+ The time flow can be controlled by ordering the various entries according to
+ the specified m-th variable and the input argument <span class="string">"mode"</span>.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ Note : If mode=0 the value of <span class="string">"m"</span> is irrelevant.
+
+ The input argument <span class="string">"opt"</span> represents the drawing option(s) for a TGraph2D.
+
+ The default value is opt=<span class="string">"PFB"</span>.
+
+ This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSample:Clone" href="src/NcSample.cxx.html#yuYZsC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -802,7 +873,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Apr  7 23:33:18 2021 </em><em>&raquo; Last generated: 2021-04-07 23:33</em><br />
+<em>&raquo; Last changed: Fri Apr  9 00:24:11 2021 </em><em>&raquo; Last generated: 2021-04-09 00:24</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

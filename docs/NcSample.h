@@ -13,7 +13,11 @@
 #include "TGraph.h"
 #include "TGraph2D.h"
 #include "TGraphTime.h"
+#include "TF1.h"
+#include "TGraphQQ.h"
 #include "TMarker.h"
+#include "TCanvas.h"
+#include "TSystem.h"
  
 class NcSample : public TNamed
 {
@@ -61,10 +65,13 @@ class NcSample : public TNamed
   TGraph GetGraph(Int_t i,Int_t j);                   // Provide a TGraph with values of variables i and j
   TGraphTime* GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp=kTRUE); // Provide a TGraphTime with (ordered) values of variables i and j
   TGraph2D GetGraph(Int_t i,Int_t j,Int_t k);         // Provide a TGraph2D with values of variables i, j and k
+  TGraphQQ GetQQplot(Int_t i,Int_t j,TF1* f=0);       // Provide a TGraphQQ for the values of variables i and j or the function f replacing j 
   void Load(TGraph* g,Int_t clr=1);                   // Load the data points of a TGraph object as 2-dimensional (x,y) data.
   void Load(TGraph2D* g,Int_t clr=1);                 // Load the data points of a TGraph2D object as 3-dimensional (x,y,z) data.
   Double_t GetSNR(Int_t i,Int_t mode=2,Bool_t db=kTRUE) const; // Provide the Signal to Noise ratio for the i-th variable
   Double_t GetCV(Int_t i,Int_t model=0) const;        // Provide the Coefficient of Variation for the i-th variable
+  void Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt="AP"); // Animation of an (ordered) sampling of the values of variables i and j
+  void Animation(Int_t i,Int_t j,Int_t k,Int_t mode,Int_t m,Int_t delay,TString opt="PFB"); // Animation of an (ordered) sampling of the values of variables i and j
  
  protected:
   Int_t fDim;                       // Dimension of the sample
@@ -91,10 +98,12 @@ class NcSample : public TNamed
   TArrayI* fIndices;                //! Temp. storage array for the indices of the ordered entries
   Int_t fOrdered;                   //! Indicator of the status of the current ordering
   TGraphTime* fGraphT;              //! Temp. pointer to return a TGraphTime object
+  TCanvas* fCanvas;                 //! Multi-purpose canvas for e.g. animation displays
+  TObject* fAnimObject;             //! Multi-purpose pointer for animation objects
 
   void List(Int_t i);               // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const; // Correlation statistics info for i-th and j-th variable
 
- ClassDef(NcSample,2) // Statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,3) // Statistics tools for various multi-dimensional data samples.
 };
 #endif
