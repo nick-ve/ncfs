@@ -64,7 +64,7 @@ NcVersion::NcVersion() : TObject()
 // Default constructor to initialise all parameters
  fVersion="3.7";
  fRev="Branch: master";
- fDate="April 10, 2021  15:54 UTC";
+ fDate="April 10, 2021  22:43 UTC";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()

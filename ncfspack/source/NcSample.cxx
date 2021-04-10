@@ -60,7 +60,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 10, 2021  15:38Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 10, 2021  22:37Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -2709,9 +2709,10 @@ Double_t NcSample::GetSNR(Int_t i,Int_t mode,Bool_t dB) const
 // the squares of the (rms) values should be used.
 // This can be specified via the input argument "mode" where abs(mode)=2 will
 // invoke a conversion of amplitudes into power, whereas abs(mode)=1 will use
-// the values of the i-th variable "as is".
+// the values of the i-th variable "as is", i.e. reflecting a direct power measurement.
 // Furthermore, the input argument "mode" also provides a selection to use
-// the variance of the sample or the standard deviation, as indicated below.  
+// the variance of the sample or the standard deviation of the underlying parent distribution,
+// as indicated below.  
 //
 // Input arguments :
 // -----------------
@@ -2724,7 +2725,45 @@ Double_t NcSample::GetSNR(Int_t i,Int_t mode,Bool_t dB) const
 //
 // The default values are model=2 and dB=kTRUE.
 //
-// In case of inconsistent data, the value -9999 is returned. 
+// In case of inconsistent data, the value -9999 is returned.
+//
+// Derivation of the applied formulas :
+// ------------------------------------
+// For each recorded sampling k we assume a signal contribution Sk and a noise contribution Nk.
+//
+// This leads to the expression :
+//
+//   SNR=(average signal power)/(average noise power)=<Sk^2>/<Nk^2>  (1)
+//
+// Using variance=<x^2>-<x>^2 we can express the above formula in terms of the
+// signal variance (Svar), signal mean (Smu), noise variance (Nvar) and noise mean (Nmu) as follows :
+//
+//   SNR=(Svar+Smu^2)/(Nvar+Nmu^2)  (2)  
+//
+// Furthermore, the mean of the recorded samplings Mu is given by : Mu=<Sk+Nk>=<Sk>+<Nk>=Smu+Nmu  (3)
+//
+// In most cases we will have <Nk>=Nmu=0, which implies that Mu=Smu  (4)
+//
+// In other words : The mean of the observed samplings is equal to the signal mean,
+// which implies that we can determine Smu directly from our data.
+//
+// Using Eq.(4) and Nmu=0 in Eq.(2) leads us to : SNR=(Svar+Mu^2)/Nvar  (5)
+//
+// In case of a (nearly) stable signal, we have approximately Svar=0,
+// which implies that the total observed sampling variance S=Nvar.
+//
+// This leads to the final expression for SNR in terms of observed sampling amplitudes : 
+//
+//  SNR=Mu^2/S  (6)
+//
+// The above is based on the recorded sampling statistics.
+//
+// In terms of the standard deviation (sigma) of the underlying parent distribution,
+// the above expression becomes :
+//
+//  SNR=Mu^2/(sigma^2)  (7)
+//
+// In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used. 
 
  if (i<1 || i>fDim || !mode || abs(mode)>2) return -9999;
 
@@ -2761,9 +2800,10 @@ Double_t NcSample::GetSNR(TString name,Int_t mode,Bool_t dB) const
 // the squares of the (rms) values should be used.
 // This can be specified via the input argument "mode" where abs(mode)=2 will
 // invoke a conversion of amplitudes into power, whereas abs(mode)=1 will use
-// the values of the specified variable "as is".
+// the values of the specified variable "as is", i.e. reflecting a direct power measurement.
 // Furthermore, the input argument "mode" also provides a selection to use
-// the variance of the sample or the standard deviation, as indicated below.  
+// the variance of the sample or the standard deviation of the underlying parent distribution,
+// as indicated below.  
 //
 // Input arguments :
 // -----------------
@@ -2777,6 +2817,44 @@ Double_t NcSample::GetSNR(TString name,Int_t mode,Bool_t dB) const
 // The default values are model=2 and dB=kTRUE.
 //
 // In case of inconsistent data, the value -9999 is returned.
+//
+// Derivation of the applied formulas :
+// ------------------------------------
+// For each recorded sampling k we assume a signal contribution Sk and a noise contribution Nk.
+//
+// This leads to the expression :
+//
+//   SNR=(average signal power)/(average noise power)=<Sk^2>/<Nk^2>  (1)
+//
+// Using variance=<x^2>-<x>^2 we can express the above formula in terms of the
+// signal variance (Svar), signal mean (Smu), noise variance (Nvar) and noise mean (Nmu) as follows :
+//
+//   SNR=(Svar+Smu^2)/(Nvar+Nmu^2)  (2)  
+//
+// Furthermore, the mean of the recorded samplings Mu is given by : Mu=<Sk+Nk>=<Sk>+<Nk>=Smu+Nmu  (3)
+//
+// In most cases we will have <Nk>=Nmu=0, which implies that Mu=Smu  (4)
+//
+// In other words : The mean of the observed samplings is equal to the signal mean,
+// which implies that we can determine Smu directly from our data.
+//
+// Using Eq.(4) and Nmu=0 in Eq.(2) leads us to : SNR=(Svar+Mu^2)/Nvar  (5)
+//
+// In case of a (nearly) stable signal, we have approximately Svar=0,
+// which implies that the total observed sampling variance S=Nvar.
+//
+// This leads to the final expression for SNR in terms of observed sampling amplitudes : 
+//
+//  SNR=Mu^2/S  (6)
+//
+// The above is based on the recorded sampling statistics.
+//
+// In terms of the standard deviation (sigma) of the underlying parent distribution,
+// the above expression becomes :
+//
+//  SNR=Mu^2/(sigma^2)  (7)
+//
+// In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used. 
 
  Int_t i=GetIndex(name);
  return GetSNR(i,mode,dB);
