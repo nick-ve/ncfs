@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Apr  9 00:24:11 2021            -->
+<!--   Date: Sat Apr 10 15:56:37 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -70,26 +70,28 @@ return false;}
  The <span class="string">"spread"</span> of the sample represents the average deviation w.r.t.
  some reference value
  The <span class="string">"Data"</span> function provides all statistics data for a certain sample.
- The variables for which these stat. parameters have to be calculated
- are indicated by the index of the variable which is passed as an
- argument to the various member functions.
+ The variables for which these statistical parameters have to be calculated
+ are indicated either by the name or the index of the variable which is
+ passed as an argument to the various member functions.
  The index convention for a data point (x,y,z,t) is : x=1  y=2  z=3  t=4.
+ The member function <a href="./NcSample.html#NcSample:SetNames" title="void NcSample::SetNames(TString name1=&quot;X&quot;,TString name2=&quot;Y&quot;,TString name3=&quot;Z&quot;,TString name4=&quot;T&quot;)">SetNames</a>() allows the user to specify different names
+ to replace the default (<span class="string">"X"</span>,<span class="string">"Y"</span>,<span class="string">"Z"</span>,<span class="string">"T"</span>) naming.
 
  Interfaces with various graphics facilities are provided like for instance
- <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i,Int_t j) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100)">Get1DHistogram</a>() etc...
+ <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i,Int_t j) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100) or overloads">Get1DHistogram</a>(), <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a>() etc...
 
  Example :
 
  For an <a href="./NcSample.html">NcSample</a> s a data point (x,y) can be entered as s.<a href="./NcSample.html#NcSample:Enter" title="void NcSample::Enter(Double_t x) or overloads">Enter</a>(x,y) and
- the mean_x can be obtained as s.<a href="./NcSample.html#NcSample:GetMean" title="Double_t NcSample::GetMean(Int_t i)">GetMean</a>(1) whereas the mean_y is obtained
- via s.<a href="./NcSample.html#NcSample:GetMean" title="Double_t NcSample::GetMean(Int_t i)">GetMean</a>(2).
- The correlation between x and y is available via s.<a href="./NcSample.html#NcSample:GetCor" title="Double_t NcSample::GetCor(Int_t i,Int_t j)">GetCor</a>(1,2).
- The x-statistics are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0)">Data</a>(1), y-statistics via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0)">Data</a>(2),
- and the covariance and correlation between x and y via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0)">Data</a>(1,2).
- All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0)">Data</a>().
+ the mean_x can be obtained as s.<a href="./NcSample.html#NcSample:GetMean" title="Double_t NcSample::GetMean(Int_t i) or overloads">GetMean</a>(1) whereas the mean_y is obtained
+ via s.<a href="./NcSample.html#NcSample:GetMean" title="Double_t NcSample::GetMean(Int_t i) or overloads">GetMean</a>(2).
+ The correlation between x and y is available via s.<a href="./NcSample.html#NcSample:GetCor" title="Double_t NcSample::GetCor(Int_t i,Int_t j) or overloads">GetCor</a>(1,2).
+ The x-statistics are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>(1), y-statistics via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>(2),
+ and the covariance and correlation between x and y via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>(1,2).
+ All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 9, 2021  00:05Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 10, 2021  15:38Z
 
 </pre></div>
 </div></div>
@@ -103,7 +105,9 @@ return false;}
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcSample:_NcSample">~NcSample</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Animation">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"AP"</span>)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Animation@1">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Animation@1">Animation</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"AP"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Animation@2">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Animation@3">Animation</a>(TString nameA, TString nameB, TString nameC, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameD, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcSample:Class">Class</a>()</td></tr>
@@ -113,6 +117,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Data">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Data@1">Data</a>(TString nameA, TString nameB = <span class="string">"-"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -132,42 +137,64 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TH1D</td><td class="funcname"><a class="funcname" href="#NcSample:Get1DHistogram">Get1DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</td></tr>
+<tr class="func"><td class="funcret">TH1D</td><td class="funcname"><a class="funcname" href="#NcSample:Get1DHistogram@1">Get1DHistogram</a>(TString nameA, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</td></tr>
 <tr class="func"><td class="funcret">TH2D</td><td class="funcname"><a class="funcname" href="#NcSample:Get2DHistogram">Get2DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</td></tr>
+<tr class="func"><td class="funcret">TH2D</td><td class="funcname"><a class="funcname" href="#NcSample:Get2DHistogram@1">Get2DHistogram</a>(TString nameA, TString nameB, TString nameC = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</td></tr>
 <tr class="func"><td class="funcret">TH3D</td><td class="funcname"><a class="funcname" href="#NcSample:Get3DHistogram">Get3DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> m = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</td></tr>
+<tr class="func"><td class="funcret">TH3D</td><td class="funcname"><a class="funcname" href="#NcSample:Get3DHistogram@1">Get3DHistogram</a>(TString nameA, TString nameB, TString nameC, TString nameD = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCor">GetCor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCor@1">GetCor</a>(TString nameA, TString nameB) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCov">GetCov</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCov@1">GetCov</a>(TString nameA, TString nameB) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCV">GetCV</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCV@1">GetCV</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetDimension">GetDimension</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry@1">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString nameA, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TString nameB = <span class="string">"-"</span>)</td></tr>
 <tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
-<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@2">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</td></tr>
-<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(TString nameA, TString nameB)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@4">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@5">GetGraph</a>(TString nameA, TString nameB, TString nameC)</td></tr>
+<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@2">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@3">GetGraph</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMaximum">GetMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMaximum@1">GetMaximum</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMean">GetMean</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMean@1">GetMean</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMedian">GetMedian</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMedian@1">GetMedian</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMedian@1">GetMedian</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMedian@2">GetMedian</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMinimum">GetMinimum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMinimum@1">GetMinimum</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetN">GetN</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TGraphQQ</td><td class="funcname"><a class="funcname" href="#NcSample:GetQQplot">GetQQplot</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraphQQ</td><td class="funcname"><a class="funcname" href="#NcSample:GetQQplot@1">GetQQplot</a>(TString nameA, TString nameB, TF1* f = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile@1">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile@1">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TString name)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetQuantile@2">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetRMS">GetRMS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetRMS@1">GetRMS</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSigma">GetSigma</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSigma@1">GetSigma</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSNR">GetSNR</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> db = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSNR@1">GetSNR</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> db = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread">GetSpread</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0)</td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread@1">GetSpread</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread@1">GetSpread</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread@2">GetSpread</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetStoreMode">GetStoreMode</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSum">GetSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSum@1">GetSum</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetVar">GetVar</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetVar@1">GetVar</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
@@ -182,6 +209,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:ListOrdered">ListOrdered</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:ListOrdered@1">ListOrdered</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load">Load</a>(TGraph* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load@1">Load</a>(TGraph2D* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
@@ -197,7 +225,6 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcSample:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcSample.html">NcSample</a>&amp;)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Order">Order</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
@@ -208,6 +235,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@2">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@3">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> t)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry@1">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Reset">Reset</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -217,6 +245,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:SetNames">SetNames</a>(TString name1 = <span class="string">"X"</span>, TString name2 = <span class="string">"Y"</span>, TString name3 = <span class="string">"Z"</span>, TString name4 = <span class="string">"T"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:SetStoreMode">SetStoreMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
@@ -239,9 +268,11 @@ return false;}
 <table class="func" id="tabfuncprot" cellspacing="0">
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Compute">Compute</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetIndex">GetIndex</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:List">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:List@1">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Order">Order</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 
 </table></div>
 </div>
@@ -286,7 +317,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMin"></a>fMin[4]</td><td class="datadesc">Minimum value for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fN"></a>fN</td><td class="datadesc">Number of entries of the sample</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
-<tr class="data"><td class="datatype"><span class="keyword">char</span></td><td class="dataname"><a name="NcSample:fNames"></a>fNames[4]</td><td class="datadesc">Variable names i.e. X,Y,Z,T</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcSample:fNames"></a>fNames[4]</td><td class="datadesc">Variable names e.g. X,Y,Z,T</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fOrdered"></a>fOrdered</td><td class="datadesc">! Indicator of the status of the current ordering</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fRMSdev"></a>fRMSdev[4]</td><td class="datadesc">Root Mean Square deviation for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fRemove"></a>fRemove</td><td class="datadesc">Flag to indicate that some entry has been removed</td></tr>
@@ -333,8 +364,22 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Reset" href="src/NcSample.cxx.html#YAPDPE">Reset</a>()</span><br />
-<div class="funccomm"><pre> Resetting the statistics values for a certain Sample object
- Dimension and storage flag are NOT changed
+<div class="funccomm"><pre> Resetting the statistics values for this <a href="./NcSample.html">NcSample</a> object.
+ Also the variable names are reset to their (X,Y,Z,T) defaults.
+ Dimension and storage flag are NOT changed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:SetNames" href="src/NcSample.cxx.html#qSq3QC">SetNames</a>(TString name1 = <span class="string">"X"</span>, TString name2 = <span class="string">"Y"</span>, TString name3 = <span class="string">"Z"</span>, TString name4 = <span class="string">"T"</span>)</span><br />
+<div class="funccomm"><pre> Specification of the names of the various variables.
+
+ The user specified names will only be stored before the first entry has been entered.
+ So, setting (new) names during a sampling process will have no effect.
+ However, after invokation of <a href="./NcSample.html#NcSample:Reset" title="void NcSample::Reset()">Reset</a>() the variables names can again be specified.
+
+
+ Note : Specification of name=<span class="string">""</span> and name=<span class="string">"-"</span> should not be used.
+
+ The default values are : name1=<span class="string">"X"</span>,  name2=<span class="string">"Y"</span>,  name3=<span class="string">"Z"</span> and name4=<span class="string">"T"</span>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Enter" href="src/NcSample.cxx.html#OvemzC">Enter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x)</span><br />
@@ -386,8 +431,21 @@ return false;}
  Note : If mode=0 the value of <span class="string">"j"</span> is irrelevant
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:RemoveEntry@1" href="src/NcSample.cxx.html#I0BnkE">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Remove" title="void NcSample::Remove(Double_t x) or overloads">Remove</a> the full data entry at the index <span class="string">"i"</span> (1=first) after ordering
+ w.r.t. the variable with the specified name.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ For this functionality the storage mode has to be activated.
+
+ Note : If mode=0 the value of name is irrelevant
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Order" href="src/NcSample.cxx.html#OUqt2B">Order</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
-<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> the entries according to the i-th variable (first is i=1).
+<div class="funccomm"><pre> Internal member function to order the entries according to the i-th variable (first is i=1).
 
  mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
          0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
@@ -398,9 +456,14 @@ return false;}
  Note : If mode=0 the value of <span class="string">"i"</span> is irrelevant
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetIndex" href="src/NcSample.cxx.html#QhNVIB">GetIndex</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Internal member function to provide the index (1=first) of the specified variable name.
+ In case of no match, the value 0 is returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Compute" href="src/NcSample.cxx.html#ayZ7rB">Compute</a>()</span><br />
-<div class="funccomm"><pre> Computation of the various statistical values
- after each entering or removing action on a certain sample
+<div class="funccomm"><pre> Internal member function to compute the various statistical values
+ after each entering or removing action on a certain sample.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetDimension" href="src/NcSample.cxx.html#A.UCu">GetDimension</a>() const</span><br />
@@ -415,8 +478,16 @@ return false;}
 <div class="funccomm"><pre> Provide the sum of the i-th variable (first is i=1)
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSum@1" href="src/NcSample.cxx.html#JK_QrD">GetSum</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide the sum of the variable with the specified name.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMean" href="src/NcSample.cxx.html#AV4.bB">GetMean</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
 <div class="funccomm"><pre> Provide the mean of the i-th variable (first is i=1)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMean@1" href="src/NcSample.cxx.html#kSSSSB">GetMean</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide the mean of the variable with the specified name.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetRMS" href="src/NcSample.cxx.html#hhtPiE">GetRMS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
@@ -425,11 +496,27 @@ return false;}
  Note :
 
  This is NOT the RMS deviation defined as sqrt(variance).
- Use the memberfunction <a href="./NcSample.html#NcSample:GetSigma" title="Double_t NcSample::GetSigma(Int_t i,Int_t model=0)">GetSigma</a>() to obtain the RMS deviation.
+ Use the memberfunction <a href="./NcSample.html#NcSample:GetSigma" title="Double_t NcSample::GetSigma(Int_t i,Int_t model=0) or overloads">GetSigma</a>() to obtain the RMS deviation.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetRMS@1" href="src/NcSample.cxx.html#BU0f8D">GetRMS</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide the Root Mean Square of the variable with the specified name.
+
+ Note :
+
+ This is NOT the RMS deviation defined as sqrt(variance).
+ Use the memberfunction <a href="./NcSample.html#NcSample:GetSigma" title="Double_t NcSample::GetSigma(Int_t i,Int_t model=0) or overloads">GetSigma</a>() to obtain the RMS deviation.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetVar" href="src/NcSample.cxx.html#doTmlE">GetVar</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
 <div class="funccomm"><pre> Provide the variance of the i-th variable (first is i=1)
+ as (rms-deviation)^2 when model=0 or as sigma^2 when model=1.
+
+ The default value is model=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetVar@1" href="src/NcSample.cxx.html#HSGw0E">GetVar</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
+<div class="funccomm"><pre> Provide the variance of the variable with the specified name.
  as (rms-deviation)^2 when model=0 or as sigma^2 when model=1.
 
  The default value is model=0.
@@ -442,14 +529,29 @@ return false;}
  The default value is model=0.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSigma@1" href="src/NcSample.cxx.html#tHYenE">GetSigma</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
+<div class="funccomm"><pre> Provide the rms-deviation (model=0) or standard deviation (model=1)
+ of the variable with the specified name.
+
+ The default value is model=0.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCov" href="src/NcSample.cxx.html#RuOq">GetCov</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
 <div class="funccomm"><pre> Provide the covariance between variables i and j.
  The index of the first variable is 1.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCov@1" href="src/NcSample.cxx.html#o4hEiE">GetCov</a>(TString nameA, TString nameB) const</span><br />
+<div class="funccomm"><pre> Provide the covariance between the variables with the specified names.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCor" href="src/NcSample.cxx.html#ZkYgK">GetCor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
 <div class="funccomm"><pre> Provide the correlation coefficient between variables i and j
  The index of the first variable is 1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCor@1" href="src/NcSample.cxx.html#gCYEiE">GetCor</a>(TString nameA, TString nameB) const</span><br />
+<div class="funccomm"><pre> Provide the correlation coefficient the variables with the specified names.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Data" href="src/NcSample.cxx.html#ld68LC">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</span><br />
@@ -466,6 +568,30 @@ return false;}
  The default values are i=0 and j=0.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Data@1" href="src/NcSample.cxx.html#rveq7C">Data</a>(TString nameA, TString nameB = <span class="string">"-"</span>)</span><br />
+<div class="funccomm"><pre> Listing of statistics of all or selected variables.
+
+ Input arguments :
+
+ nameA : Name of a variable to be selected
+ nameB : Name of a variable to be selected
+
+ Meaning of the input arguments (nameA,nameB) :
+
+ (<span class="string">"-"</span>,<span class="string">"-"</span>) : <a href="./NcSample.html#NcSample:List" title="void NcSample::List(Int_t i) or overloads">List</a> all statistics and correlations of all variables
+ (<span class="string">"R"</span>,<span class="string">"-"</span>) : <a href="./NcSample.html#NcSample:List" title="void NcSample::List(Int_t i) or overloads">List</a> statistics of the variable with the name <span class="string">"R"</span>
+ (<span class="string">"Q"</span>,<span class="string">"M"</span>) : <a href="./NcSample.html#NcSample:List" title="void NcSample::List(Int_t i) or overloads">List</a> correlation statistics of the variables with names <span class="string">"Q"</span> and <span class="string">"M"</span>
+
+ Notes :
+
+ 1) The specification of names is case sensitive.
+ 2) The input (<span class="string">"-"</span>,<span class="string">"Time"</span>) provides the same listing as (<span class="string">"Time"</span>,<span class="string">"-"</span>).
+ 3) In case no match is found for a specified name, it is treated as <span class="string">"-"</span>.
+ 4) Invokation of <a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>() corresponds to <a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>(<span class="string">"-"</span>,<span class="string">"-"</span>).
+
+ The default value is nameB=<span class="string">"-"</span>.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:ListOrdered" href="src/NcSample.cxx.html#g0siJD">ListOrdered</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
 <div class="funccomm"><pre> Provide a listing of all stored entries according to the specified ordering
  mode of the i-th variable (first is i=1).
@@ -477,6 +603,19 @@ return false;}
  For this functionality the storage mode has to be activated.
 
  Note : If mode=0 the value of <span class="string">"i"</span> is irrelvant.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:ListOrdered@1" href="src/NcSample.cxx.html#Z9dMGD">ListOrdered</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</span><br />
+<div class="funccomm"><pre> Provide a listing of all stored entries according to the specified ordering
+ mode of the variable with the specified name.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ For this functionality the storage mode has to be activated.
+
+ Note : If mode=0 the provided name is irrelvant.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:List" href="src/NcSample.cxx.html#MGwxF">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
@@ -528,6 +667,21 @@ return false;}
         See the other <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a> memberfunction for details.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetQuantile@1" href="src/NcSample.cxx.html#fNGmxB">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TString name)</span><br />
+<div class="funccomm"><pre> Provide the value of the variable with the specified name that marks the
+ quantile with fraction <span class="string">"f"</span> of the sample.
+ By definition <span class="string">"f"</span> belongs to the interval [0,1] where f=0.5 indicates
+ the median of the specified variable.
+
+ For this functionality the storage mode has to be activated.
+
+ In the case of incompatible data the value 0 is returned.
+
+ Note : For large datasets it is more efficient to determine the quantile
+        via the specification of a histogram.
+        See the other <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a> memberfunction for details.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMedian" href="src/NcSample.cxx.html#mwmT6C">GetMedian</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
 <div class="funccomm"><pre> Provide the median of the i-th variable (first is i=1).
  For this functionality the storage mode has to be activated.
@@ -535,6 +689,21 @@ return false;}
  In the case of incompatible data the value 0 is returned.
 
  The median is determined by invokation of <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>(0.5,i).
+ Please refer to the documentation of the corresponding <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>()
+ memberfunction for further details.
+
+ Note : For large datasets it is more efficient to determine the median
+        via the specification of a histogram.
+        See the other <a href="./NcSample.html#NcSample:GetMedian" title="Double_t NcSample::GetMedian(Int_t i) or overloads">GetMedian</a> memberfunction for details.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMedian@1" href="src/NcSample.cxx.html#dJXnvE">GetMedian</a>(TString name)</span><br />
+<div class="funccomm"><pre> Provide the median of the variable with the specified name.
+ For this functionality the storage mode has to be activated.
+
+ In the case of incompatible data the value 0 is returned.
+
+ The median is determined by invokation of <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>(0.5,name).
  Please refer to the documentation of the corresponding <a href="./NcSample.html#NcSample:GetQuantile" title="Double_t NcSample::GetQuantile(Double_t f,Int_t i) or overloads">GetQuantile</a>()
  memberfunction for further details.
 
@@ -561,19 +730,49 @@ return false;}
  In case of inconsistent data, the value -1 is returned.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSpread@1" href="src/NcSample.cxx.html#M8wlT">GetSpread</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0)</span><br />
+<div class="funccomm"><pre> Provide the spread w.r.t. some reference value of the variable with the specified name.
+ The spread is defined as the average of |median-val(i)| when model=0,
+ the average of |mean-val(i)| when model=1, or the average of |vref-val(i)| when model=2.
+
+ In case model=0 or model=1, the value of <span class="string">"vref"</span> is irrelevant.
+
+ For this functionality the storage mode has to be activated.
+
+ Note : For large datasets it is more efficient to determine the spread
+        via the specification of a histogram.
+        See the other <a href="./NcSample.html#NcSample:GetSpread" title="Double_t NcSample::GetSpread(Int_t i,Int_t model=0,Double_t vref=0) or overloads">GetSpread</a> memberfunction for details.
+
+ The default values are model=0 and vref=0 for backward compatibility.
+
+ In case of inconsistent data, the value -1 is returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMinimum" href="src/NcSample.cxx.html#PGNCn">GetMinimum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
 <div class="funccomm"><pre> Provide the minimum value of the i-th variable (first is i=1).
  In case entries have been removed from the sample, a correct value can
  only be obtained if the storage mode has been activated.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMaximum" href="src/NcSample.cxx.html#X8W4l">GetMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
-<div class="funccomm"><pre> Provide the maxmum value of the i-th variable (first is i=1).
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMinimum@1" href="src/NcSample.cxx.html#eTg2Q">GetMinimum</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide the minimum value of the variable with the specified name.
  In case entries have been removed from the sample, a correct value can
  only be obtained if the storage mode has been activated.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetQuantile@1" href="src/NcSample.cxx.html#NCnEnE">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMaximum" href="src/NcSample.cxx.html#X8W4l">GetMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the maximum value of the i-th variable (first is i=1).
+ In case entries have been removed from the sample, a correct value can
+ only be obtained if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMaximum@1" href="src/NcSample.cxx.html#TnMK9D">GetMaximum</a>(TString name) const</span><br />
+<div class="funccomm"><pre> Provide the maximum value of the variable with the specified name.
+ In case entries have been removed from the sample, a correct value can
+ only be obtained if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetQuantile@2" href="src/NcSample.cxx.html#NCnEnE">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
 <div class="funccomm"><pre> Provide the value of the variable X or Y from the specified 1D histogram
  that marks the quantile with fraction <span class="string">"f"</span> for the selected variable.
  By definition <span class="string">"f"</span> belongs to the interval [0,1] where f=0.5 indicates
@@ -594,7 +793,7 @@ return false;}
  By default mode=0 will be used to agree with standard ROOT processing.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMedian@1" href="src/NcSample.cxx.html#SYseUD">GetMedian</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetMedian@2" href="src/NcSample.cxx.html#SYseUD">GetMedian</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
 <div class="funccomm"><pre> Provide the median of the variable X or Y from the specified 1D histogram.
  For this functionality it is not needed to activate the storage mode.
 
@@ -605,7 +804,7 @@ return false;}
  memberfunction for further details.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSpread@1" href="src/NcSample.cxx.html#fyd4AB">GetSpread</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSpread@2" href="src/NcSample.cxx.html#fyd4AB">GetSpread</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0) const</span><br />
 <div class="funccomm"><pre> Provide the spread w.r.t. some X or Y reference value for the specified 1D histogram.
  The spread is defined as the average of |median-val(i)| when model=0,
  the average of |mean-val(i)| when model=1, or the average of |vref-val(i)| when model=2.
@@ -630,7 +829,7 @@ return false;}
  The default values are mode=0, model=0 and vref=0 for backward compatibility.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetEntry" href="src/NcSample.cxx.html#spN3w">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetEntry" href="src/NcSample.cxx.html#spN3w">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</span><br />
 <div class="funccomm"><pre> Access the data entry at index <span class="string">"i"</span> and provide the value of the j-th variable,
  after ordering w.r.t. the k-th variable.
  The first entry is indicated by the index i=1 and the first variable is j=1.
@@ -643,7 +842,23 @@ return false;}
 
  Note : If mode=0 the value of <span class="string">"k"</span> is irrelevant.
 
- The default values are mode=0 and k=-1.
+ The default values are mode=0 and k=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetEntry@1" href="src/NcSample.cxx.html#meFFFB">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString nameA, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TString nameB = <span class="string">"-"</span>)</span><br />
+<div class="funccomm"><pre> Access the data entry at index <span class="string">"i"</span> and provide the value of the variable
+ specified with nameA, after ordering w.r.t. the variable specified with nameB.
+ The first entry is indicated by the index i=1.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ This facility is only available if the storage mode has been activated.
+
+ Note : If mode=0 the value of nameB is irrelevant.
+
+ The default values are mode=0 and nameB=<span class="string">"-"</span>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram" href="src/NcSample.cxx.html#ZncBNE">Get1DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</span><br />
@@ -656,6 +871,17 @@ return false;}
  Note : This facility is only available if the storage mode has been activated.
 
  The default values are j=0 , sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and nbx=100.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram@1" href="src/NcSample.cxx.html#HYI4wC">Get1DHistogram</a>(TString nameA, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</span><br />
+<div class="funccomm"><pre> Provide a TH1D histogram for the variable specified with nameA.
+ If nameB is valid, the corresponding value of that variable will be used as a weight.
+ The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
+ The input argument <span class="string">"nbx"</span> defines the number of bins on the X-axis.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+ The default values are nameB=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and nbx=100.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TH2D <a class="funcname" name="NcSample:Get2DHistogram" href="src/NcSample.cxx.html#x6QgNE">Get2DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</span><br />
@@ -671,6 +897,18 @@ return false;}
  The default values are k=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100 and nby=100.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TH2D <a class="funcname" name="NcSample:Get2DHistogram@1" href="src/NcSample.cxx.html#Fc2kAD">Get2DHistogram</a>(TString nameA, TString nameB, TString nameC = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</span><br />
+<div class="funccomm"><pre> Provide a TH2D histogram for the variables specified with nameA and nameB.
+ If nameC is valid, the corresponding value of that variable will be used as a weight.
+ The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
+ The input arguments <span class="string">"nbx"</span> and <span class="string">"nby"</span> define the number of bins on the X-axis
+ and Y-axis, respectively.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+ The default values are nameC=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100 and nby=100.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname">TH3D <a class="funcname" name="NcSample:Get3DHistogram" href="src/NcSample.cxx.html#NHDrlB">Get3DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> m = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</span><br />
 <div class="funccomm"><pre> Provide a TH3D histogram for the values of variables i, j and k.
  If m&gt;0 the corresponding value of variable m will be used as a weight.
@@ -684,6 +922,18 @@ return false;}
  The default values are m=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100 and nbz=100.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TH3D <a class="funcname" name="NcSample:Get3DHistogram@1" href="src/NcSample.cxx.html#RShhSB">Get3DHistogram</a>(TString nameA, TString nameB, TString nameC, TString nameD = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</span><br />
+<div class="funccomm"><pre> Provide a TH3D histogram for the variables specified with nameA, nameB and nameC.
+ If nameD is valid, the corresponding value of that variable will be used as a weight.
+ The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
+ The input arguments <span class="string">"nbx"</span>, <span class="string">"nby"</span> and <span class="string">"nbz"</span> define the number of bins on the X-axis,
+ Y-axis and Z-axis, respectively.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+ The default values are nameD=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100 and nbz=100.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph" href="src/NcSample.cxx.html#LHtCx">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i and Y-axis=variable j.
  The first variable has index 1.
@@ -691,7 +941,13 @@ return false;}
  Note : This facility is only available if the storage mode has been activated.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#pWpGXC">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#UNWAT">GetGraph</a>(TString nameA, TString nameB)</span><br />
+<div class="funccomm"><pre> Provide a TGraph with : X-axis=variable with nameA and Y-axis=variable with nameB.
+
+ Note : This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@2" href="src/NcSample.cxx.html#pWpGXC">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
 <div class="funccomm"><pre> Provide a pointer to a TGraphTime with : X-axis=variable i and Y-axis=variable j.
  The first variable has index 1.
 
@@ -729,9 +985,52 @@ return false;}
  The default value is smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@2" href="src/NcSample.cxx.html#MG2_7B">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</span><br />
+<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@3" href="src/NcSample.cxx.html#kAtr8C">GetGraph</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Provide a pointer to a TGraphTime with : X-axis=variable nameA and Y-axis=variable nameB.
+
+ Note :
+
+ At every invokation of this member function, the existing TGraphTime will be deleted.
+ In case you want to keep the produced graph(s) fur further analysis, you have to make
+ a local copy (e.g. via the <a href="./NcSample.html#NcSample:Clone" title="TObject* NcSample::Clone(const char* name=&quot;&quot;)">Clone</a>() facility) of the produced TGraphTime object(s).
+
+ Every data entry is considered to occur at a step in time, and the TGraphTime allows
+ to display an animated time development of the sampling of the specified 2D data points.
+ This can be achieved by setting the time step delay via TGraphTime::SetSleepTime()
+ followed by TGraphTime::<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>().
+
+ The time development of the various entries can be displayed in cumulative sampling mode
+ (smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>), which reflects an animation of the building up of the total data sample.
+ When smp=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, only every single entry is displayed, which reflects an animation
+ of a single point moving in time in 2 dimensions.
+ The animations can be saved in an animated GIF file via TGraphTime::SaveAnimatedGif()
+ after TGraphTime::<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>() has been invoked.
+
+ The time flow can be controlled by ordering the various entries according to
+ the variable specified with nameC and the input argument <span class="string">"mode"</span>.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ Note : If mode=0 the value of nameC is irrelevant.
+
+ This facility is only available if the storage mode has been activated.
+
+ In case of inconsistent data, the value 0 is returned.
+
+ The default value is smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@4" href="src/NcSample.cxx.html#MG2_7B">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
  The first variable has index 1.
+
+ Note : This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@5" href="src/NcSample.cxx.html#wiyviD">GetGraph</a>(TString nameA, TString nameB, TString nameC)</span><br />
+<div class="funccomm"><pre> Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
 
  Note : This facility is only available if the storage mode has been activated.
 </pre></div>
@@ -741,6 +1040,16 @@ return false;}
  The first variable has index 1.
  In case the function <span class="string">"f"</span> is specified, it will replace the role of variable j.
  When the function <span class="string">"f"</span> is specified, the value of <span class="string">"j"</span> is irrelevant.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+ The default is f=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraphQQ <a class="funcname" name="NcSample:GetQQplot@1" href="src/NcSample.cxx.html#zsyGs">GetQQplot</a>(TString nameA, TString nameB, TF1* f = 0)</span><br />
+<div class="funccomm"><pre> Provide a QQ-plot (TGraphQQ) for the the variables specified by nameA and nameB.
+ In case the function <span class="string">"f"</span> is specified, it will replace the role of variable nameB.
+ When the function <span class="string">"f"</span> is specified, the value of nameB is irrelevant.
 
  Note : This facility is only available if the storage mode has been activated.
 
@@ -796,9 +1105,50 @@ return false;}
  In case of inconsistent data, the value -9999 is returned.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSNR@1" href="src/NcSample.cxx.html#Tqj.IB">GetSNR</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> db = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>) const</span><br />
+<div class="funccomm"><pre> Provide the Signal to Noise Ratio (SNR) of the variable with the specified name.
+
+ The definition used here is SNR=(signal power)/(noise power).
+ This implies that when the values of the specified variable represent amplitudes,
+ the squares of the (rms) values should be used.
+ This can be specified via the input argument <span class="string">"mode"</span> where abs(mode)=2 will
+ invoke a conversion of amplitudes into power, whereas abs(mode)=1 will use
+ the values of the specified variable <span class="string">"as is"</span>.
+ Furthermore, the input argument <span class="string">"mode"</span> also provides a selection to use
+ the variance of the sample or the standard deviation, as indicated below.
+
+ Input arguments :
+
+ mode :  2 --&gt; SNR=(mean*mean)/variance
+         1 --&gt; SNR=abs(mean/rms-deviation)
+        -2 --&gt; SNR=(mean*mean)/(sigma*sigma)
+        -1 --&gt; SNR=abs(mean/sigma)
+ dB   : <a href="./ListOfTypes.html#Bool_t">kFALSE</a> Provide the SNR as the above straight ratio
+        <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  Provide the SNR in Decibel
+
+ The default values are model=2 and dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+
+ In case of inconsistent data, the value -9999 is returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCV" href="src/NcSample.cxx.html#EHJXOB">GetCV</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
 <div class="funccomm"><pre> Provide the Coefficient of Variation (CV) of the i-th variable.
  The first variable corresponds to i=1.
+
+ The definition used here is CV=abs(sigma/mean).
+
+ Input arguments :
+
+ model : 0 --&gt; sigma represents the rms-deviation
+         1 --&gt; sigma represents the standard deviation
+
+ The default value is model=0.
+
+ In case of inconsistent data, the value -1 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCV@1" href="src/NcSample.cxx.html#sitfaD">GetCV</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
+<div class="funccomm"><pre> Provide the Coefficient of Variation (CV) of the variable with the specified name.
 
  The definition used here is CV=abs(sigma/mean).
 
@@ -836,7 +1186,30 @@ return false;}
  This facility is only available if the storage mode has been activated.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Animation@1" href="src/NcSample.cxx.html#m5kBGC">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Animation@1" href="src/NcSample.cxx.html#nyQ8iD">Animation</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"AP"</span>)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a> of an (ordered) sampling with : X-axis=variable nameA and Y-axis=variable nameB.
+
+ Every data entry is considered to occur at a step in time, and this member function
+ displays an animated time development of the sampling of the specified 2D data points.
+ The input argument <span class="string">"delay"</span> represents the pause time (in ms) between every step.
+
+ The time flow can be controlled by ordering the various entries according to
+ the variable specified with nameC and the input argument <span class="string">"mode"</span>.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ Note : If mode=0 the value of nameC is irrelevant.
+
+ The input argument <span class="string">"opt"</span> represents the drawing option(s) for a TGraph.
+
+ The default value is opt=<span class="string">"AP"</span>.
+
+ This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Animation@2" href="src/NcSample.cxx.html#m5kBGC">Animation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</span><br />
 <div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a> of an (ordered) sampling with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
  The first variable has index 1.
 
@@ -860,6 +1233,29 @@ return false;}
  This facility is only available if the storage mode has been activated.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Animation@3" href="src/NcSample.cxx.html#Yprb0C">Animation</a>(TString nameA, TString nameB, TString nameC, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameD, <a href="./ListOfTypes.html#Int_t">Int_t</a> delay, TString opt = <span class="string">"PFB"</span>)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a> of an (ordered) sampling with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
+
+ Every data entry is considered to occur at a step in time, and this member function
+ displays an animated time development of the sampling of the specified 2D data points.
+ The input argument <span class="string">"delay"</span> represents the pause time (in ms) between every step.
+
+ The time flow can be controlled by ordering the various entries according to
+ the variable specified by nameD and the input argument <span class="string">"mode"</span>.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ Note : If mode=0 the value of nameD is irrelevant.
+
+ The input argument <span class="string">"opt"</span> represents the drawing option(s) for a TGraph2D.
+
+ The default value is opt=<span class="string">"PFB"</span>.
+
+ This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSample:Clone" href="src/NcSample.cxx.html#yuYZsC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -873,7 +1269,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Apr  9 00:24:11 2021 </em><em>&raquo; Last generated: 2021-04-09 00:24</em><br />
+<em>&raquo; Last changed: Sat Apr 10 15:56:37 2021 </em><em>&raquo; Last generated: 2021-04-10 15:56</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
