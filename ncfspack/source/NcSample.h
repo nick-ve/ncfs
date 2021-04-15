@@ -38,6 +38,8 @@ class NcSample : public TNamed
   void Remove(Double_t x,Double_t y,Double_t z,Double_t t); // Remove values from 4-dim. sample
   void RemoveEntry(Int_t i,Int_t mode,Int_t j);       // Remove the i-th entry after ordering according to the j-th variable
   void RemoveEntry(Int_t i,Int_t mode,TString name);  // Remove the i-th entry after ordering according to the variable with the specified name
+  void RemoveEntry(Int_t i,Int_t j,Int_t mode,Int_t k);      // Remove the entries in the interval [i,j] after ordering according to the k-th variable
+  void RemoveEntry(Int_t i,Int_t j,Int_t mode,TString name); // Remove the entries in the interval [i,j] after ordering according to the variable with the specified name
   Int_t GetDimension() const;                         // Provide dimension of the sample
   Int_t GetN() const;                                 // Provide the number of entries
   Double_t GetSum(Int_t i) const;                     // Provide sum for i-th variable
@@ -133,6 +135,6 @@ class NcSample : public TNamed
   void List(Int_t i);                 // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const;   // Correlation statistics info for i-th and j-th variable
 
- ClassDef(NcSample,4) // Statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,5) // Statistics tools for various multi-dimensional data samples.
 };
 #endif

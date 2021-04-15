@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sat Apr 10 22:45:29 2021            -->
+<!--   Date: Thu Apr 15 22:23:24 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -91,7 +91,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 10, 2021  22:37Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 15, 2021  22:12Z
 
 </pre></div>
 </div></div>
@@ -236,6 +236,8 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Remove@3">Remove</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> y, <a href="./ListOfTypes.html#Double_t">Double_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> t)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry@1">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry@2">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry@3">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Reset">Reset</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -426,6 +428,13 @@ return false;}
          0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
         &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
 
+ <a href="./#TObject:Warning" title="void TObject::Warning(const char* method,const char* msgfmt)">Warning</a> :
+
+ After invokation of this member function, the indexing has changed.
+ Always check the current indexing before removing 1 or more entries.
+ To remove a range of consecutive entries from the index interval [m,n],
+ please refer to the corresponding other <a href="./NcSample.html#NcSample:RemoveEntry" title="void NcSample::RemoveEntry(Int_t i,Int_t mode,Int_t j) or overloads">RemoveEntry</a>() member function.
+
  For this functionality the storage mode has to be activated.
 
  Note : If mode=0 the value of <span class="string">"j"</span> is irrelevant
@@ -433,6 +442,39 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:RemoveEntry@1" href="src/NcSample.cxx.html#I0BnkE">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</span><br />
 <div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Remove" title="void NcSample::Remove(Double_t x) or overloads">Remove</a> the full data entry at the index <span class="string">"i"</span> (1=first) after ordering
+ w.r.t. the variable with the specified name.
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ <a href="./#TObject:Warning" title="void TObject::Warning(const char* method,const char* msgfmt)">Warning</a> :
+
+ After invokation of this member function, the indexing has changed.
+ Always check the current indexing before removing 1 or more entries.
+ To remove a range of consecutive entries from the index interval [m,n],
+ please refer to the corresponding other <a href="./NcSample.html#NcSample:RemoveEntry" title="void NcSample::RemoveEntry(Int_t i,Int_t mode,Int_t j) or overloads">RemoveEntry</a>() member function.
+
+ For this functionality the storage mode has to be activated.
+
+ Note : If mode=0 the value of name is irrelevant
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:RemoveEntry@2" href="src/NcSample.cxx.html#MK_MOD">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Remove" title="void NcSample::Remove(Double_t x) or overloads">Remove</a> the full data entries at the index interval [i,j] (1=first) after ordering
+ w.r.t. the k-th variable (1=first).
+
+ mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
+         0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in the way the entries were entered
+        &gt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in increasing order
+
+ For this functionality the storage mode has to be activated.
+
+ Note : If mode=0 the value of <span class="string">"k"</span> is irrelevant
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:RemoveEntry@3" href="src/NcSample.cxx.html#v_ZLx">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Remove" title="void NcSample::Remove(Double_t x) or overloads">Remove</a> the full data entry at the index interval [i,j] (1=first) after ordering
  w.r.t. the variable with the specified name.
 
  mode : &lt;0 --&gt; <a href="./NcSample.html#NcSample:Order" title="void NcSample::Order(Int_t mode,Int_t i)">Order</a> in decreasing order
@@ -1347,7 +1389,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sat Apr 10 22:45:29 2021 </em><em>&raquo; Last generated: 2021-04-10 22:45</em><br />
+<em>&raquo; Last changed: Thu Apr 15 22:23:24 2021 </em><em>&raquo; Last generated: 2021-04-15 22:23</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

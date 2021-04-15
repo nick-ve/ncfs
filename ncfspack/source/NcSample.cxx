@@ -60,7 +60,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 10, 2021  22:37Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 15, 2021  22:12Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -776,6 +776,13 @@ void NcSample::RemoveEntry(Int_t i,Int_t mode,Int_t j)
 //         0 --> Order in the way the entries were entered
 //        >0 --> Order in increasing order
 //
+// Warning :
+// ---------
+// After invokation of this member function, the indexing has changed.
+// Always check the current indexing before removing 1 or more entries.
+// To remove a range of consecutive entries from the index interval [m,n],
+// please refer to the corresponding other RemoveEntry() member function.
+//
 // For this functionality the storage mode has to be activated.
 //
 // Note : If mode=0 the value of "j" is irrelevant
@@ -824,12 +831,57 @@ void NcSample::RemoveEntry(Int_t i,Int_t mode,TString name)
 //         0 --> Order in the way the entries were entered
 //        >0 --> Order in increasing order
 //
+// Warning :
+// ---------
+// After invokation of this member function, the indexing has changed.
+// Always check the current indexing before removing 1 or more entries.
+// To remove a range of consecutive entries from the index interval [m,n],
+// please refer to the corresponding other RemoveEntry() member function.
+//
 // For this functionality the storage mode has to be activated.
 //
 // Note : If mode=0 the value of name is irrelevant
 
  Int_t j=GetIndex(name);
  RemoveEntry(i,mode,j);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
+{
+// Remove the full data entries at the index interval [i,j] (1=first) after ordering
+// w.r.t. the k-th variable (1=first).
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// For this functionality the storage mode has to be activated.
+//
+// Note : If mode=0 the value of "k" is irrelevant
+
+ for (Int_t m=i; m<=j; m++)
+ {
+  RemoveEntry(i,mode,k);
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,TString name)
+{
+// Remove the full data entry at the index interval [i,j] (1=first) after ordering
+// w.r.t. the variable with the specified name.
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// For this functionality the storage mode has to be activated.
+//
+// Note : If mode=0 the value of name is irrelevant
+
+ for (Int_t m=i; m<=j; m++)
+ {
+  RemoveEntry(i,mode,name);
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Order(Int_t mode,Int_t i)
