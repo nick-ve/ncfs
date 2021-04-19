@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Apr 15 22:23:24 2021            -->
+<!--   Date: Mon Apr 19 13:22:18 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -68,7 +68,7 @@ return false;}
  minimum, maximum, sum, mean, variance, sigma, median, spread, SNR, CV,
  RMS, covariance and correlation.
  The <span class="string">"spread"</span> of the sample represents the average deviation w.r.t.
- some reference value
+ some reference value, i.e. spread=&lt;|v_i-v_ref|&gt;.
  The <span class="string">"Data"</span> function provides all statistics data for a certain sample.
  The variables for which these statistical parameters have to be calculated
  are indicated either by the name or the index of the variable which is
@@ -76,6 +76,10 @@ return false;}
  The index convention for a data point (x,y,z,t) is : x=1  y=2  z=3  t=4.
  The member function <a href="./NcSample.html#NcSample:SetNames" title="void NcSample::SetNames(TString name1=&quot;X&quot;,TString name2=&quot;Y&quot;,TString name3=&quot;Z&quot;,TString name4=&quot;T&quot;)">SetNames</a>() allows the user to specify different names
  to replace the default (<span class="string">"X"</span>,<span class="string">"Y"</span>,<span class="string">"Z"</span>,<span class="string">"T"</span>) naming.
+
+ To develop c.q. improve a data acquisition system (DAQ), the function
+ <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a>() may be used to set the specifications and investigate
+ the performance of an Analog to Digital Converter (ADC).
 
  Interfaces with various graphics facilities are provided like for instance
  <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i,Int_t j) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100) or overloads">Get1DHistogram</a>(), <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a>() etc...
@@ -91,7 +95,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 15, 2021  22:12Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 19, 2021  13:06Z
 
 </pre></div>
 </div></div>
@@ -119,6 +123,8 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Data">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Data@1">Data</a>(TString nameA, TString nameB = <span class="string">"-"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:Digitize">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:Digitize@1">Digitize</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -495,7 +501,8 @@ return false;}
 
  For this functionality the storage mode has to be activated.
 
- Note : If mode=0 the value of <span class="string">"i"</span> is irrelevant
+ Note : If mode=0 the value of <span class="string">"i"</span> is irrelevant, but i=1 will be used to obtain
+        a correct setting of the ordering status word.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetIndex" href="src/NcSample.cxx.html#QhNVIB">GetIndex</a>(TString name) const</span><br />
@@ -1376,6 +1383,118 @@ return false;}
  This facility is only available if the storage mode has been activated.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:Digitize" href="src/NcSample.cxx.html#yOZ.eE">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a> the values of the i-th variable according to an <span class="string">"nbits"</span> ADC.
+
+ Input arguments :
+
+ i        : Digitization of the i-th variable (first is i=1) will be performed.
+            In case the value of <span class="string">"i"</span> is out of range for this sample, just the specs
+            of the specified ADC performance will be printed, but no digitization is performed.
+            This allows to test various scenarios without modifying the data.
+ nbits &gt;0 : Digitization of the values will be performed using nbits.
+            The digitized result (digval) will be stored to replace the original value.
+       &lt;0 : Digitization of the Log10 of the values will be performed using |nbits|.
+            After digitization of the Log10 value, the digitized result (digval) is
+            used to store the corresponding linear value via value=pow(10,digval).
+            So, nbits&lt;0 emulates a Log10 ADC to enhance the dynamic range.
+            Note : When nbits&lt;0 all values to be digitized should be positive.
+ vcal     : Range calibration value of the ADC according to <span class="string">"mode"</span> as indicated below.
+ mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal&lt;0).
+        1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
+        2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal&lt;0).
+        3 : A step size of |vcal| is used providing a digval interval of [-scale,scale].
+
+ Return argument :
+
+ mode=0 or mode=1 --&gt; The value of <span class="string">"step size"</span> is returned.
+ mode=2 or mode=3 --&gt; The value of <span class="string">"scale"</span> is returned.
+
+ Notes :
+
+ 1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
+    digitized result (digval).
+    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+ 2) In case of a Log10 ADC, the value of <span class="string">"vcal"</span> relates to the Log10 values.
+    So, for a Log10 ADC, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
+    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+    for mode=3, which corresponds to a linear value interval of [0.0001,10000].
+    For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
+    to a linear value interval of [1,1.0777e8].
+    A step size of 0.01 between the Log10 values corresponds to a multiplication factor
+    of 10^0.01 (i.e. about 1.023) for the linear values at each step.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ <a href="./#TObject:Warning" title="void TObject::Warning(const char* method,const char* msgfmt)">Warning</a> :
+
+ This member function will change the contents of this sample
+ concerning the values of the i-th variable.
+ In case access to the original values is required, one should
+ make a copy of the original sample before the digitization process.
+
+ This facility is only available if the storage mode has been activated.
+
+ In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:Digitize@1" href="src/NcSample.cxx.html#kksU5">Digitize</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a> the values of the variable with the specified name according to an <span class="string">"nbits"</span> ADC.
+
+ Input arguments :
+
+ name     : Digitization of the variable with this name will be performed.
+            In case the name is non-existent for this sample, just the specs
+            of the specified ADC performance will be printed, but no digitization is performed.
+            This allows to test various scenarios without modifying the data.
+ nbits &gt;0 : Digitization of the values will be performed using nbits.
+            The digitized result (digval) will be stored to replace the original value.
+       &lt;0 : Digitization of the Log10 of the values will be performed using |nbits|.
+            After digitization of the Log10 value, the digitized result (digval) is
+            used to store the corresponding linear value via value=pow(10,digval).
+            So, nbits&lt;0 emulates a Log10 ADC to enhance the dynamic range.
+            Note : When nbits&lt;0 all values to be digitized should be positive.
+ vcal     : Range calibration value of the ADC according to <span class="string">"mode"</span> as indicated below.
+ mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal&lt;0).
+        1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
+        2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal&lt;0).
+        3 : A step size of |vcal| is used providing a digval interval of [-scale,scale].
+
+ Return argument :
+
+ mode=0 or mode=1 --&gt; The value of <span class="string">"step size"</span> is returned.
+ mode=2 or mode=3 --&gt; The value of <span class="string">"scale"</span> is returned.
+
+ Notes :
+
+ 1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
+    digitized result (digval).
+    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+ 2) In case of a Log10 ADC, the value of <span class="string">"vcal"</span> relates to the Log10 values.
+    So, for a Log10 ADC, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
+    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+    for mode=3, which corresponds to a linear value interval of [0.0001,10000].
+    For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
+    to a linear value interval of [1,1.0777e8].
+    A step size of 0.01 between the Log10 values corresponds to a multiplication factor
+    of 10^0.01 (i.e. about 1.023) for the linear values at each step.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ <a href="./#TObject:Warning" title="void TObject::Warning(const char* method,const char* msgfmt)">Warning</a> :
+
+ This member function will change the contents of this sample
+ concerning the values of the variable with the specified name.
+ In case access to the original values is required, one should
+ make a copy of the original sample before the digitization process.
+
+ This facility is only available if the storage mode has been activated.
+
+ In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSample:Clone" href="src/NcSample.cxx.html#yuYZsC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -1389,7 +1508,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Apr 15 22:23:24 2021 </em><em>&raquo; Last generated: 2021-04-15 22:23</em><br />
+<em>&raquo; Last changed: Mon Apr 19 13:22:18 2021 </em><em>&raquo; Last generated: 2021-04-19 13:22</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

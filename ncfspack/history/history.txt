@@ -1168,3 +1168,6 @@
                 and also the creation time in NcVersion updated accordingly.
 15-apr-2021 NvE Facility to remove an interval of consecutive entries introduced in NcSample
                 and also the creation time in NcVersion updated accordingly.
+19-apr-2021 NvE Member function Digitize() introduced in NcSample and protection for i=0 introduced
+                in NcSample::Order() to ensure always a unique ordering status word.
+                The version indicator in NcVersion has been updated to 3.8.

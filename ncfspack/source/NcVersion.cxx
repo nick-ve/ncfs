@@ -62,9 +62,9 @@ ClassImp(NcVersion) // Class implementation to enable ROOT I/O
 NcVersion::NcVersion() : TObject()
 {
 // Default constructor to initialise all parameters
- fVersion="3.7";
+ fVersion="3.8";
  fRev="Branch: master";
- fDate="April 15, 2021  22:20 UTC";
+ fDate="April 19, 2021  13:17 UTC";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()

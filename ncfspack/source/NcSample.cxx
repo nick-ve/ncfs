@@ -37,7 +37,7 @@
 // minimum, maximum, sum, mean, variance, sigma, median, spread, SNR, CV,
 // RMS, covariance and correlation.
 // The "spread" of the sample represents the average deviation w.r.t.
-// some reference value
+// some reference value, i.e. spread=<|v_i-v_ref|>.
 // The "Data" function provides all statistics data for a certain sample.
 // The variables for which these statistical parameters have to be calculated
 // are indicated either by the name or the index of the variable which is
@@ -45,6 +45,10 @@
 // The index convention for a data point (x,y,z,t) is : x=1  y=2  z=3  t=4.
 // The member function SetNames() allows the user to specify different names
 // to replace the default ("X","Y","Z","T") naming.
+//
+// To develop c.q. improve a data acquisition system (DAQ), the function
+// Digitize() may be used to set the specifications and investigate
+// the performance of an Analog to Digital Converter (ADC).  
 //
 // Interfaces with various graphics facilities are provided like for instance
 // GetGraph(), Get1DHistogram(), Animation() etc...
@@ -60,7 +64,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 15, 2021  22:12Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 19, 2021  13:06Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -894,7 +898,8 @@ void NcSample::Order(Int_t mode,Int_t i)
 //
 // For this functionality the storage mode has to be activated.
 //
-// Note : If mode=0 the value of "i" is irrelevant
+// Note : If mode=0 the value of "i" is irrelevant, but i=1 will be used to obtain
+//        a correct setting of the ordering status word.
 
  if (mode && (i<1 || i>fDim))
  {
@@ -919,6 +924,9 @@ void NcSample::Order(Int_t mode,Int_t i)
   fOrdered=0;
   return;
  }
+
+ // Use i=1 for mode=0 to obtain a correct setting of the ordering status word.
+ if (!mode) i=1;
 
  // Set the corresponding ordering status word
  Int_t iword=10*abs(mode)+i;
@@ -1398,12 +1406,10 @@ void NcSample::ListOrdered(Int_t mode,Int_t i)
 
  Order(mode,i);
 
- TString s=fNames[i-1];
-
  cout << " *NcSample::ListOrdered* Listing of the stored entries in";
  if (!mode) cout << " order of original entering." << endl;
- if (mode<0) cout << " decreasing order of variable : " << i << " (" << s << ")" << endl;
- if (mode>0) cout << " increasing order of variable : " << i << " (" << s << ")" << endl;
+ if (mode<0) cout << " decreasing order of variable : " << i << " (" << fNames[i-1] << ")" << endl;
+ if (mode>0) cout << " increasing order of variable : " << i << " (" << fNames[i-1] << ")" << endl;
  if (mode) cout << " The number between brackets indicates the original data entry number." << endl; 
 
  Int_t index=0;
@@ -3174,6 +3180,262 @@ void NcSample::Animation(TString nameA,TString nameB,TString nameC,Int_t mode,TS
  Int_t k=GetIndex(nameC);
  Int_t m=GetIndex(nameD);
  Animation(i,j,k,mode,m,delay,opt);
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode)
+{
+// Digitize the values of the i-th variable according to an "nbits" ADC.
+//
+// Input arguments :
+// -----------------
+// i        : Digitization of the i-th variable (first is i=1) will be performed.
+//            In case the value of "i" is out of range for this sample, just the specs
+//            of the specified ADC performance will be printed, but no digitization is performed.
+//            This allows to test various scenarios without modifying the data.
+// nbits >0 : Digitization of the values will be performed using nbits.
+//            The digitized result (digval) will be stored to replace the original value.
+//       <0 : Digitization of the Log10 of the values will be performed using |nbits|.
+//            After digitization of the Log10 value, the digitized result (digval) is
+//            used to store the corresponding linear value via value=pow(10,digval).
+//            So, nbits<0 emulates a Log10 ADC to enhance the dynamic range.
+//            Note : When nbits<0 all values to be digitized should be positive.
+// vcal     : Range calibration value of the ADC according to "mode" as indicated below.
+// mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal<0).
+//        1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
+//        2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal<0).
+//        3 : A step size of |vcal| is used providing a digval interval of [-scale,scale].
+//
+// Return argument :
+// -----------------
+// mode=0 or mode=1 --> The value of "step size" is returned.
+// mode=2 or mode=3 --> The value of "scale" is returned.
+//
+// Notes :
+// -------
+// 1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
+//    digitized result (digval).
+//    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+// 2) In case of a Log10 ADC, the value of "vcal" relates to the Log10 values.
+//    So, for a Log10 ADC, the "vcal" interval [-2,2] represents linear values [0.01,100].
+//    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+//    for mode=3, which corresponds to a linear value interval of [0.0001,10000].
+//    For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
+//    to a linear value interval of [1,1.0777e8].
+//    A step size of 0.01 between the Log10 values corresponds to a multiplication factor
+//    of 10^0.01 (i.e. about 1.023) for the linear values at each step. 
+//         
+// The maximum number of bits that is supported is 60 to guarantee identical functioning
+// on all machines.
+//
+// Warning :
+// ---------
+// This member function will change the contents of this sample
+// concerning the values of the i-th variable.
+// In case access to the original values is required, one should
+// make a copy of the original sample before the digitization process.
+//
+// This facility is only available if the storage mode has been activated.
+//
+// In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
+
+ if (mode<0 || mode>3)
+ {
+  cout << " *NcSample::Digitize* Inconsistent input mode=" << mode << endl;
+  return 0;
+ }
+
+ if (!nbits || nbits>60 || nbits<-60 || fabs(vcal)<=0)
+ {
+  cout << " *NcSample::Digitize* Inconsistent input nbits=" << nbits << " vcal=" << vcal << endl;
+  return 0;
+ }
+
+ if ((mode==1 || mode==3) && nbits==1)
+ {
+  cout << " *NcSample::Digitize* Inconsistent input nbits=" << nbits << " mode=" << mode << endl;
+  return 0;
+ }
+
+ Bool_t logmode=kFALSE;
+ if (nbits<0) logmode=kTRUE;
+
+ nbits=abs(nbits);
+
+ Long_t nlevels=pow(2,nbits);
+ Double_t range=fabs(vcal);
+ if (mode==1 || mode==3) range*=2.;
+ Double_t step=fabs(vcal);
+ if (mode==0) step=range/double(nlevels-1);
+ if (mode==1) step=range/double(nlevels-2);
+
+ if (step<=0) return 0;
+
+ Long_t nstepsmin=0;
+ Long_t nstepsmax=nlevels-1;
+ if ((mode==0 || mode==2) && vcal<0)
+ {
+  nstepsmin=-nlevels+1;
+  nstepsmax=0;
+ }
+ if (mode==1 || mode==3)
+ {
+  nstepsmin=-nlevels/2;
+  nstepsmax=nlevels/2-1;
+ }
+
+ Double_t digvalmin=double(nstepsmin)*step;
+ Double_t digvalmax=double(nstepsmax)*step;
+
+ cout << " *NcSample::Digitize* Parameters of the " << nbits << "-bits";
+ if (logmode) cout << " Log10";
+ cout << " ADC digitization";
+ if (i>0 && i<=fDim) cout << " of variable : " << i << " (" << fNames[i-1] << ")"; 
+ cout << endl;
+ TString s="linear";
+ if (logmode) s="Log10";
+ if (mode==0 || mode==2)
+ {
+  cout << " Digitized " << s << " full scale range : [" << digvalmin << "," << digvalmax << "]  Step size : " << step << endl;
+ }
+ if (mode==1 || mode==3)
+ {
+  cout << " Digitized " << s << " full scale range : [" << (digvalmin+step) << "," << digvalmax << "]  Step size : " << step;
+  cout << "  Actual range : [" << digvalmin << "," << digvalmax << "]" << endl;
+ }
+
+ if (logmode)
+ {
+  Double_t linvalmin=pow(10,digvalmin);
+  Double_t linvalmax=pow(10,digvalmax);
+  if (mode==0 || mode==2)
+  {
+   cout << " Digitized linear full scale range : [" << linvalmin << "," << linvalmax << "]" << endl;
+  }
+  if (mode==1 || mode==3)
+  {
+   cout << " Digitized linear full scale range : [" << (linvalmin*pow(10,step)) << "," << linvalmax << "]";
+   cout << "  Actual range : [" << linvalmin << "," << linvalmax << "]" << endl;
+  }
+ }
+
+ Double_t retval=step;
+ if (mode==2)
+ {
+  if (vcal<0) retval=digvalmin;
+  if (vcal>0) retval=digvalmax;
+ }
+ if (mode==3) retval=digvalmax;
+
+ if (!fStore)
+ {
+  cout << endl;
+  cout << " *NcSample::Digitize* Error : Storage mode has not been activated." << endl;
+  return retval;
+ }
+
+ Double_t minval=1;
+ if (i>0 && i<=fDim) minval=GetMinimum(i);
+
+ if (logmode && minval<=0)
+ {
+  cout << endl;
+  cout << " *NcSample::Digitize* Non-positive input value(s) for Log10 ADC i=" << i << " minimum=" << minval << endl;
+  return retval;
+ }
+ 
+ if (i<1 || i>fDim)
+ {
+  cout << endl;
+  cout << " *NcSample::Digitize* Value i=" << i << " is outside range. Only listing of ADC specs." << endl;
+  return retval;
+ }
+
+ Double_t val=0;
+ Long_t nsteps=0;
+ Double_t digval=0;
+ for (Int_t j=1; j<=fN; j++)
+ {
+  val=GetEntry(j,i);
+
+  if (logmode) val=log10(val);
+
+  nsteps=val/step;
+
+  if (nsteps<nstepsmin) nsteps=nstepsmin;
+  if (nsteps>nstepsmax) nsteps=nstepsmax;
+
+  digval=double(nsteps)*step;
+
+  if (logmode) digval=pow(10,digval);
+
+  if (i==1) fX->AddAt(digval,j-1);
+  if (i==2) fY->AddAt(digval,j-1);
+  if (i==3) fZ->AddAt(digval,j-1);
+  if (i==4) fT->AddAt(digval,j-1);
+ }
+
+ return retval;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcSample::Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode)
+{
+// Digitize the values of the variable with the specified name according to an "nbits" ADC.
+//
+// Input arguments :
+// -----------------
+// name     : Digitization of the variable with this name will be performed.
+//            In case the name is non-existent for this sample, just the specs
+//            of the specified ADC performance will be printed, but no digitization is performed.
+//            This allows to test various scenarios without modifying the data.
+// nbits >0 : Digitization of the values will be performed using nbits.
+//            The digitized result (digval) will be stored to replace the original value.
+//       <0 : Digitization of the Log10 of the values will be performed using |nbits|.
+//            After digitization of the Log10 value, the digitized result (digval) is
+//            used to store the corresponding linear value via value=pow(10,digval).
+//            So, nbits<0 emulates a Log10 ADC to enhance the dynamic range.
+//            Note : When nbits<0 all values to be digitized should be positive.
+// vcal     : Range calibration value of the ADC according to "mode" as indicated below.
+// mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal<0).
+//        1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
+//        2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal<0).
+//        3 : A step size of |vcal| is used providing a digval interval of [-scale,scale].
+//
+// Return argument :
+// -----------------
+// mode=0 or mode=1 --> The value of "step size" is returned.
+// mode=2 or mode=3 --> The value of "scale" is returned.
+//
+// Notes :
+// -------
+// 1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
+//    digitized result (digval).
+//    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+// 2) In case of a Log10 ADC, the value of "vcal" relates to the Log10 values.
+//    So, for a Log10 ADC, the "vcal" interval [-2,2] represents linear values [0.01,100].
+//    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+//    for mode=3, which corresponds to a linear value interval of [0.0001,10000].
+//    For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
+//    to a linear value interval of [1,1.0777e8].
+//    A step size of 0.01 between the Log10 values corresponds to a multiplication factor
+//    of 10^0.01 (i.e. about 1.023) for the linear values at each step. 
+//         
+// The maximum number of bits that is supported is 60 to guarantee identical functioning
+// on all machines.
+//
+// Warning :
+// ---------
+// This member function will change the contents of this sample
+// concerning the values of the variable with the specified name.
+// In case access to the original values is required, one should
+// make a copy of the original sample before the digitization process.
+//
+// This facility is only available if the storage mode has been activated.
+//
+// In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
+
+ Int_t i=GetIndex(name);
+
+ return Digitize(i,nbits,vcal,mode);
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSample::Clone(const char* name) const
