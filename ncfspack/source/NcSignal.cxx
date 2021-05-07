@@ -134,7 +134,7 @@
 // Float_t dedx=q.GetSignal("dE/dx",3);
 //
 //--- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 5, 2021  21:40Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:56Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSignal.h"
@@ -899,8 +899,11 @@ void NcSignal::Data(TString f,TString u) const
  if (strlen(name))  cout << " Name : " << name;
  if (strlen(title)) cout << " Title : " << title;
  cout << endl;
- cout << "   Position";
- NcPosition::Data(f,u);
+ if (fNv)
+ {
+  cout << "   Position";
+  NcPosition::Data(f,u);
+ }
  if (fDevice)
  {
   const char* devname=fDevice->GetName();

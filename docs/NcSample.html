@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Apr 19 13:22:18 2021            -->
+<!--   Date: Fri May  7 12:18:31 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -77,9 +77,10 @@ return false;}
  The member function <a href="./NcSample.html#NcSample:SetNames" title="void NcSample::SetNames(TString name1=&quot;X&quot;,TString name2=&quot;Y&quot;,TString name3=&quot;Z&quot;,TString name4=&quot;T&quot;)">SetNames</a>() allows the user to specify different names
  to replace the default (<span class="string">"X"</span>,<span class="string">"Y"</span>,<span class="string">"Z"</span>,<span class="string">"T"</span>) naming.
 
- To develop c.q. improve a data acquisition system (DAQ), the function
- <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a>() may be used to set the specifications and investigate
- the performance of an Analog to Digital Converter (ADC).
+ To develop c.q. improve a data acquisition system (DAQ), the functions
+ <a href="./NcSample.html#NcSample:SampleAndHold" title="NcSample NcSample::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,Int_t loc=-1)">SampleAndHold</a>(), <a href="./NcSample.html#NcSample:SampleAndSum" title="NcSample NcSample::SampleAndSum(Int_t i,Double_t step,Int_t loc=0,Int_t j=0,Double_t vmin=0,Double_t vmax=-1) or overloads">SampleAndSum</a>() and <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a>() may be used to
+ investigate the performance of a sampling device, like for instance
+ a Switched Capacitor Array (SCA) and an Analog to Digital Converter (ADC).
 
  Interfaces with various graphics facilities are provided like for instance
  <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i,Int_t j) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100) or overloads">Get1DHistogram</a>(), <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a>() etc...
@@ -95,7 +96,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 19, 2021  13:06Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 7, 2021  11:20Z
 
 </pre></div>
 </div></div>
@@ -246,6 +247,9 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:RemoveEntry@3">RemoveEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Reset">Reset</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a></td><td class="funcname"><a class="funcname" href="#NcSample:SampleAndHold">SampleAndHold</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a></td><td class="funcname"><a class="funcname" href="#NcSample:SampleAndSum">SampleAndSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a></td><td class="funcname"><a class="funcname" href="#NcSample:SampleAndSum@1">SampleAndSum</a>(TString nameA, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = 0, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax = -1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
@@ -919,7 +923,7 @@ return false;}
 
  Note : This facility is only available if the storage mode has been activated.
 
- The default values are j=0 , sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and nbx=100.
+ The default values are j=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and nbx=100.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram@1" href="src/NcSample.cxx.html#HYI4wC">Get1DHistogram</a>(TString nameA, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</span><br />
@@ -1495,6 +1499,62 @@ return false;}
  In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:SampleAndHold" href="src/NcSample.cxx.html#H5ws6C">SampleAndHold</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1) const</span><br />
+<div class="funccomm"><pre> Perform a Sample-And-Hold operation on the specified function <span class="string">"f"</span>
+ in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+ If <span class="string">"f"</span> can be regarded as a pulse generator in time, this mimics a
+ sample and hold device with a lock time of <span class="string">"step"</span> time units,
+ or equivalently a sampling frequency of 1/step.
+ The input argument <span class="string">"loc"</span> determines whether the resulting data
+ will be recorded at the start (loc&lt;0), center (loc=0) or end (loc&gt;0)
+ of the sampling step size.
+ However, in case the recording location of the last sampling step would
+ exceed <span class="string">"vmax"</span>, the data will be recorded at the value of <span class="string">"vmax"</span>.
+
+ The default value is loc=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:SampleAndSum" href="src/NcSample.cxx.html#m1rsXB">SampleAndSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax = -1)</span><br />
+<div class="funccomm"><pre> Perform a Sample-And-Sum operation on the values of the i-th variable
+ in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+ This procedure resembles a Sample-And-Hold operation, but instead of locking
+ the data recording during the stepsize <span class="string">"step"</span>, the data that appear within <span class="string">"step"</span>
+ are summed.
+ If the i-th variable can be regarded as sampling in time, this mimics a
+ Switched Capacitor Array (SCA) with a time gate of <span class="string">"step"</span> time units,
+ or equivalently a sampling frequency of 1/step.
+ The input argument <span class="string">"loc"</span> determines whether the new values of the i-th variable
+ will be recorded at the begin (loc&lt;0), center (loc=0) or end (loc&gt;0)
+ of the sampling step size.
+ If j&gt;0 the corresponding value of variable j will be used as a weight.
+ The first variable has index 1.
+ If vmax&lt;=vmin the minimum and maximum values of the i-th variable will be used.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+ The default values are loc=0, j=0, vmin=0 and vmax=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:SampleAndSum@1" href="src/NcSample.cxx.html#umWobC">SampleAndSum</a>(TString nameA, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = 0, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax = -1)</span><br />
+<div class="funccomm"><pre> Perform a Sample-And-Sum operation on the values of the variable specified with nameA
+ in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+ This procedure resembles a Sample-And-Hold operation, but instead of locking
+ the data recording during the stepsize <span class="string">"step"</span>, the data that appear within <span class="string">"step"</span>
+ are summed.
+ If the variable with nameA can be regarded as sampling in time, this mimics a
+ Switched Capacitor Array (SCA) with a time gate of <span class="string">"step"</span> time units,
+ or equivalently a sampling frequency of 1/step.
+ The input argument <span class="string">"loc"</span> determines whether the new values of the variable with nameA
+ will be recorded at the begin (loc&lt;0), center (loc=0) or end (loc&gt;0)
+ of the sampling step size.
+ If nameB is valid, the corresponding value of that variable will be used as a weight.
+ If vmax&lt;=vmin the minimum and maximum values of the variable with nameA will be used.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+ The default values are loc=0, nameB=<span class="string">"-"</span>, vmin=0 and vmax=-1.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSample:Clone" href="src/NcSample.cxx.html#yuYZsC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -1508,7 +1568,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Apr 19 13:22:18 2021 </em><em>&raquo; Last generated: 2021-04-19 13:22</em><br />
+<em>&raquo; Last changed: Fri May  7 12:18:31 2021 </em><em>&raquo; Last generated: 2021-05-07 12:18</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

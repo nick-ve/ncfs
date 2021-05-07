@@ -1171,3 +1171,8 @@
 19-apr-2021 NvE Member function Digitize() introduced in NcSample and protection for i=0 introduced
                 in NcSample::Order() to ensure always a unique ordering status word.
                 The version indicator in NcVersion has been updated to 3.8.
+04-may-2021 NvE Enabled name and title setting in the default constructor of NcDevice.
+                Also (annoying) listing of position, metric unit and 4-vector info suppressed
+                for NcPosition, NcSignal, NcJet and NcVertex when these have not been set. 
+07-may-2021 NvE Member functions SampleAndHold() and SampleAndSum() introduced in class NcSample.
+                The version indicator in NcVersion has been updated to 3.9.

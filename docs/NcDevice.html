@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:18 2019            -->
+<!--   Date: Fri May  7 12:18:30 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcDevice.h.html">header file</a>
 <a class="descrheadentry" href="src/NcDevice.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcDevice_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -67,10 +67,10 @@ return false;}
  complete functionality of the class <a href="./NcSignal.html">NcSignal</a>.
 
  Example :
-
+ =========
 
  <a href="./NcDevice.html">NcDevice</a> m;
- // Set user defined status word to indicate e.g. readout electronics version
+ // Set user defined status word to indicate e.g. readout electronics version 
  m.<a href="./NcDevice.html#NcDevice:SetStatus" title="void NcDevice::SetStatus(Int_t word)">SetStatus</a>(100201);
  m.<a href="./NcDevice.html#NcDevice:SetHitCopy" title="void NcDevice::SetHitCopy(Int_t j)">SetHitCopy</a>(1);
  m.<a href="./#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<span class="string">"OM123"</span>);
@@ -119,7 +119,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-- Modified: NvE $Date: 2016-09-13 16:27:42 +0200 (Tue, 13 Sep 2016) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:33Z
 
 </pre></div>
 </div></div>
@@ -128,8 +128,8 @@ return false;}
 <h2><a id="NcDevice:Function_Members"></a>Function Members (Methods)</h2>
 <div class="access" id="funcpubl"><b>public:</b>
 <table class="func" id="tabfuncpubl" cellspacing="0">
-<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDevice:NcDevice">NcDevice</a>()</td></tr>
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDevice:NcDevice@1">NcDevice</a>(<span class="keyword">const</span> <a href="./NcDevice.html">NcDevice</a>&amp; dev)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDevice:NcDevice">NcDevice</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcDevice:_NcDevice">~NcDevice</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDevice:AddHit">AddHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</td></tr>
@@ -154,6 +154,8 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:DecreaseEdgeValue@1"><span class="baseclass">NcAttrib::</span>DecreaseEdgeValue</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:DeleteCalibrations"><span class="baseclass">NcAttrib::</span>DeleteCalibrations</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DeleteSample"><span class="baseclass">NcSignal::</span>DeleteSample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DeleteSample@1"><span class="baseclass">NcSignal::</span>DeleteSample</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DeleteSignals"><span class="baseclass">NcSignal::</span>DeleteSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DeleteWaveform"><span class="baseclass">NcSignal::</span>DeleteWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DeleteWaveform@1"><span class="baseclass">NcSignal::</span>DeleteWaveform</a>(TString name)</td></tr>
@@ -227,6 +229,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNnames"><span class="baseclass">NcAttrib::</span>GetNnames</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetNoffsets"><span class="baseclass">NcAttrib::</span>GetNoffsets</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetNorm"><span class="baseclass">Nc3Vector::</span>GetNorm</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNsamples"><span class="baseclass">NcSignal::</span>GetNsamples</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNslots"><span class="baseclass">NcSignal::</span>GetNslots</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNtracks"><span class="baseclass">NcSignal::</span>GetNtracks</a>(<a href="./NcTrack.html">NcTrack</a>* t = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNvalues"><span class="baseclass">NcSignal::</span>GetNvalues</a>() <span class="keyword">const</span></td></tr>
@@ -247,6 +250,9 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetPrimed"><span class="baseclass">Nc3Vector::</span>GetPrimed</a>(TRotMatrix* m) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetPseudoRapidity"><span class="baseclass">Nc3Vector::</span>GetPseudoRapidity</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:GetResultError"><span class="baseclass">Nc3Vector::</span>GetResultError</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSample"><span class="baseclass">NcSignal::</span>GetSample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSample@1"><span class="baseclass">NcSignal::</span>GetSample</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSampleIndex"><span class="baseclass">NcSignal::</span>GetSampleIndex</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSignal"><span class="baseclass">NcSignal::</span>GetSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSignal@1"><span class="baseclass">NcSignal::</span>GetSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSignalError"><span class="baseclass">NcSignal::</span>GetSignalError</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
@@ -290,6 +296,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:List"><span class="baseclass">NcSignal::</span>List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:List@1"><span class="baseclass">NcSignal::</span>List</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ListSample"><span class="baseclass">NcSignal::</span>ListSample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ListTrack"><span class="baseclass">NcSignal::</span>ListTrack</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ListWaveform"><span class="baseclass">NcSignal::</span>ListWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Load"><span class="baseclass">Nc3Vector::</span>Load</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
@@ -338,6 +345,8 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:ResetOffset"><span class="baseclass">NcAttrib::</span>ResetOffset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:ResetOffset@1"><span class="baseclass">NcAttrib::</span>ResetOffset</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:ResetPosition"><span class="baseclass">NcPosition::</span>ResetPosition</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ResetSample"><span class="baseclass">NcSignal::</span>ResetSample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ResetSample@1"><span class="baseclass">NcSignal::</span>ResetSample</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ResetSignals"><span class="baseclass">NcSignal::</span>ResetSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ResetWaveform"><span class="baseclass">NcSignal::</span>ResetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:ResetWaveform@1"><span class="baseclass">NcSignal::</span>ResetWaveform</a>(TString name)</td></tr>
@@ -382,6 +391,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors@2"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPositionErrors@1"><span class="baseclass">NcPosition::</span>SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:SetSample"><span class="baseclass">NcSignal::</span>SetSample</a>(<a href="./NcSample.html">NcSample</a>* sample, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:SetSignal"><span class="baseclass">NcSignal::</span>SetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:SetSignal@1"><span class="baseclass">NcSignal::</span>SetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sig, TString name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:SetSignalError"><span class="baseclass">NcSignal::</span>SetSignalError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dsig, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
@@ -470,6 +480,7 @@ return false;}
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fNv"><span class="baseclass">Nc3Vector::</span>fNv</a></td><td class="datadesc">The number of components of the array fV</td></tr>
 <tr class="datainh"><td class="datatype">TArrayF*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fOffsets"><span class="baseclass">NcAttrib::</span>fOffsets</a></td><td class="datadesc">Offset values</td></tr>
 <tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcDevice:fOrdered"></a>fOrdered</td><td class="datadesc">! Temp. array to hold the ordered hits</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcSignal.html#NcSignal:fSamples"><span class="baseclass">NcSignal::</span>fSamples</a></td><td class="datadesc">The full data samples containing the recorded data series </td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./NcPosition.html#NcPosition:fScale"><span class="baseclass">NcPosition::</span>fScale</a></td><td class="datadesc">The unit scale used for the position coordinates</td></tr>
 <tr class="datainh"><td class="datatype">TArrayI*</td><td class="dataname"><a href="./NcSignal.html#NcSignal:fSigflags"><span class="baseclass">NcSignal::</span>fSigflags</a></td><td class="datadesc">Flags to mark setting of signal and/or error values </td></tr>
 <tr class="datainh"><td class="datatype">TArrayF*</td><td class="dataname"><a href="./NcSignal.html#NcSignal:fSignals"><span class="baseclass">NcSignal::</span>fSignals</a></td><td class="datadesc">Signal values</td></tr>
@@ -483,63 +494,98 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcDevice:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcDevice_Inh" id="MapNcDevice_Inh">
-<area shape="rect" id="node3" href="./NcSignal.html" title="NcSignal" alt="" coords="201,20,267,34"/>
-<area shape="rect" id="node5" href="./NcPosition.html" title="NcPosition" alt="" coords="101,20,167,34"/>
-<area shape="rect" id="node6" href="./NcAttrib.html" title="NcAttrib" alt="" coords="101,34,167,47"/>
-<area shape="rect" id="node8" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="1,20,68,34"/>
-<area shape="rect" id="node10" href="./IceGOM.html" title="IceGOM" alt="" coords="401,7,467,20"/>
-<area shape="rect" id="node11" href="./NcCalorimeter.html" title="NcCalorimeter" alt="" coords="401,20,467,34"/>
-<area shape="rect" id="node12" href="./NcVeto.html" title="NcVeto" alt="" coords="401,34,467,47"/>
-<area shape="rect" id="node13" href="./IceAOM.html" title="IceAOM" alt="" coords="501,1,567,14"/>
-<area shape="rect" id="node14" href="./IceDOM.html" title="IceDOM" alt="" coords="501,14,567,27"/>
-<area shape="rect" id="node15" href="./IceIDOM.html" title="IceIDOM" alt="" coords="601,7,667,20"/>
-<area shape="rect" id="node16" href="./IceTDOM.html" title="IceTDOM" alt="" coords="601,20,667,34"/>
-<area shape="rect" id="node17" href="./IceDCDOM.html" title="IceDCDOM" alt="" coords="700,1,767,14"/>
-<area shape="rect" id="node18" href="./IceICDOM.html" title="IceICDOM" alt="" coords="700,14,767,27"/>
-</map>
-<map name="MapNcDevice_InhMem" id="MapNcDevice_InhMem">
-<area shape="rect" id="graph12" href="./NcSignal.html" alt="" coords="859,63,947,113"/>
-<area shape="rect" id="graph13" href="./NcSignal.html" alt="" coords="760,63,848,128"/>
-<area shape="rect" id="graph14" href="./NcSignal.html" alt="" coords="661,63,749,128"/>
-<area shape="rect" id="graph15" href="./NcSignal.html" alt="" coords="891,124,915,145"/>
-<area shape="rect" id="graph16" href="./NcSignal.html" alt="" coords="859,156,947,455"/>
-<area shape="rect" id="graph17" href="./NcSignal.html" alt="" coords="760,156,848,455"/>
-<area shape="rect" id="graph18" href="./NcSignal.html" alt="" coords="661,156,749,455"/>
-<area shape="rect" id="graph11" href="./NcSignal.html" title="NcSignal" alt="" coords="651,16,957,465"/>
-<area shape="rect" id="graph27" href="./NcPosition.html" alt="" coords="344,699,629,735"/>
-<area shape="rect" id="graph28" href="./NcPosition.html" alt="" coords="541,745,629,897"/>
-<area shape="rect" id="graph29" href="./NcPosition.html" alt="" coords="443,745,531,897"/>
-<area shape="rect" id="graph30" href="./NcPosition.html" alt="" coords="344,745,432,897"/>
-<area shape="rect" id="graph26" href="./NcPosition.html" title="NcPosition" alt="" coords="333,652,640,908"/>
-<area shape="rect" id="graph33" href="./NcAttrib.html" alt="" coords="541,965,629,1001"/>
-<area shape="rect" id="graph34" href="./NcAttrib.html" alt="" coords="443,965,531,1031"/>
-<area shape="rect" id="graph35" href="./NcAttrib.html" alt="" coords="344,965,432,1031"/>
-<area shape="rect" id="graph36" href="./NcAttrib.html" alt="" coords="573,1012,597,1033"/>
-<area shape="rect" id="graph37" href="./NcAttrib.html" alt="" coords="541,1044,629,1313"/>
-<area shape="rect" id="graph38" href="./NcAttrib.html" alt="" coords="443,1041,531,1340"/>
-<area shape="rect" id="graph39" href="./NcAttrib.html" alt="" coords="344,1041,432,1340"/>
-<area shape="rect" id="graph32" href="./NcAttrib.html" title="NcAttrib" alt="" coords="333,919,640,1351"/>
-<area shape="rect" id="graph51" href="./Nc3Vector.html" alt="" coords="224,699,312,749"/>
-<area shape="rect" id="graph52" href="./Nc3Vector.html" alt="" coords="125,699,213,749"/>
-<area shape="rect" id="graph53" href="./Nc3Vector.html" alt="" coords="59,699,83,720"/>
-<area shape="rect" id="graph54" href="./Nc3Vector.html" alt="" coords="224,760,312,971"/>
-<area shape="rect" id="graph55" href="./Nc3Vector.html" alt="" coords="125,760,213,1000"/>
-<area shape="rect" id="graph56" href="./Nc3Vector.html" alt="" coords="27,760,115,1000"/>
-<area shape="rect" id="graph50" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="16,652,323,1011"/>
-</map>
-<map name="MapNcDevice_Lib" id="MapNcDevice_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcDevice_Inh" class="tabsel" href="inh/NcDevice_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcDevice_Inh.png');">Inheritance</a>
-<a id="imgNcDevice_InhMem" class="tab" href="inhmem/NcDevice_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcDevice_InhMem.png');">Inherited Members</a>
-<a id="imgNcDevice_Incl" class="tab" href="incl/NcDevice_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcDevice_Incl.png');">Includes</a>
-<a id="imgNcDevice_Lib" class="tab" href="lib/NcDevice_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcDevice_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcDevice_Inh" src="inh/NcDevice_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#efefef" align="right">
+<tt>TNamed</tt></td>
+</tr><tr>
+<td bgcolor="#efefef" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#e7e7e7" align="right">
+<table><tr><td>
+<center><tt><a name="Nc3Vector" href="./Nc3Vector.html">Nc3Vector</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcPosition" href="./NcPosition.html">NcPosition</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr><tr>
+<td bgcolor="#efefef" align="right">
+<table><tr><td>
+<center><tt><a name="NcAttrib" href="./NcAttrib.html">NcAttrib</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcSignal" href="./NcSignal.html">NcSignal</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcDevice" href="./NcDevice.html">NcDevice</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceGOM" href="./IceGOM.html">IceGOM</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="IceAOM" href="./IceAOM.html">IceAOM</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="IceDOM" href="./IceDOM.html">IceDOM</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#e7e7e7"><table><tr><td>
+<center><tt><a name="IceIDOM" href="./IceIDOM.html">IceIDOM</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#dfdfdf"><table><tr><td>
+<center><tt><a name="IceDCDOM" href="./IceDCDOM.html">IceDCDOM</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#dfdfdf"><table><tr><td>
+<center><tt><a name="IceICDOM" href="./IceICDOM.html">IceICDOM</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#e7e7e7"><table><tr><td>
+<center><tt><a name="IceTDOM" href="./IceTDOM.html">IceTDOM</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="NcCalorimeter" href="./NcCalorimeter.html">NcCalorimeter</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="NcVeto" href="./NcVeto.html">NcVeto</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDevice:NcDevice" href="src/NcDevice.cxx.html#dutwAD">NcDevice</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDevice:NcDevice" href="src/NcDevice.cxx.html#hRMrq">NcDevice</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Default constructor.
  The user definable status word is set to zero.
  By default private copies of the recorded hits will be made.
@@ -547,22 +593,22 @@ return false;}
  See the <a href="./NcDevice.html#NcDevice:SetHitCopy" title="void NcDevice::SetHitCopy(Int_t j)">SetHitCopy</a>() memberfunction for further details.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDevice:_NcDevice" href="src/NcDevice.cxx.html#fA90_D">~NcDevice</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDevice:_NcDevice" href="src/NcDevice.cxx.html#jeShS">~NcDevice</a>()</span><br />
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDevice:NcDevice@1" href="src/NcDevice.cxx.html#RBkVjC">NcDevice</a>(<span class="keyword">const</span> <a href="./NcDevice.html">NcDevice</a>&amp; dev)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDevice:NcDevice@1" href="src/NcDevice.cxx.html#VhV0pC">NcDevice</a>(<span class="keyword">const</span> <a href="./NcDevice.html">NcDevice</a>&amp; dev)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:Reset" href="src/NcDevice.cxx.html#hxP.DE">Reset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:Reset" href="src/NcDevice.cxx.html#LX2n.B">Reset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> <a href="./NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a> registered hits and <a href="./NcSignal.html">NcSignal</a> attributes.
  Note : The status word and HitCopy flag are NOT modified.
-        Use <a href="./NcDevice.html#NcDevice:SetStatus" title="void NcDevice::SetStatus(Int_t word)">SetStatus</a>() and <a href="./NcDevice.html#NcDevice:SetHitCopy" title="void NcDevice::SetHitCopy(Int_t j)">SetHitCopy</a>() to modify these parameters.
+        Use <a href="./NcDevice.html#NcDevice:SetStatus" title="void NcDevice::SetStatus(Int_t word)">SetStatus</a>() and <a href="./NcDevice.html#NcDevice:SetHitCopy" title="void NcDevice::SetHitCopy(Int_t j)">SetHitCopy</a>() to modify these parameters. 
  See <a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a>() for further details.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:SetHitCopy" href="src/NcDevice.cxx.html#z7z0a">SetHitCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:SetHitCopy" href="src/NcDevice.cxx.html#HF7na">SetHitCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
 <div class="funccomm"><pre> (De)activate the creation of private copies of the NcSignals added as hits.
  j=0 ==&gt; No private copies are made; pointers of original hits are stored.
  j=1 ==&gt; Private copies of the hits are made and these pointers are stored.
@@ -573,21 +619,21 @@ return false;}
         hits one first has to invoke either <a href="./NcDevice.html#NcDevice:RemoveHits" title="void NcDevice::RemoveHits()">RemoveHits</a>() or <a href="./NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetHitCopy" href="src/NcDevice.cxx.html#dQxq7">GetHitCopy</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetHitCopy" href="src/NcDevice.cxx.html#EobH7">GetHitCopy</a>() const</span><br />
 <div class="funccomm"><pre> Provide value of the HitCopy mode.
  0 ==&gt; No private copies are made; pointers of original hits are stored.
  1 ==&gt; Private copies of the hits are made and these pointers are stored.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:SetStatus" href="src/NcDevice.cxx.html#aLooiB">SetStatus</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> word)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:SetStatus" href="src/NcDevice.cxx.html#HwFkF">SetStatus</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> word)</span><br />
 <div class="funccomm"><pre> Set a user defined status word for this device.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetStatus" href="src/NcDevice.cxx.html#Vnq2m">GetStatus</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetStatus" href="src/NcDevice.cxx.html#IMs2m">GetStatus</a>() const</span><br />
 <div class="funccomm"><pre> Provide the user defined status word for this device.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:AddHit" href="src/NcDevice.cxx.html#i7hrX">AddHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:AddHit" href="src/NcDevice.cxx.html#aonwX">AddHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
 <div class="funccomm"><pre> Register an <a href="./NcSignal.html">NcSignal</a> object as a hit to this device.
  Note : In case this device owns the <a href="./NcSignal.html">NcSignal</a> object, the pointer to
         this device will be stored in the special owning device
@@ -600,19 +646,19 @@ return false;}
         <a href="./NcSignal.html">NcSignal</a> objects when the corresponding <a href="./NcSignal.html">NcSignal</a> object is deleted.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:RemoveHit" href="src/NcDevice.cxx.html#GIjpEB">RemoveHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:RemoveHit" href="src/NcDevice.cxx.html#mzzqEB">RemoveHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
 <div class="funccomm"><pre> Remove <a href="./NcSignal.html">NcSignal</a> object registered as a hit from this device.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:RemoveHits" href="src/NcDevice.cxx.html#lyN0zC">RemoveHits</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:RemoveHits" href="src/NcDevice.cxx.html#D3IBED">RemoveHits</a>()</span><br />
 <div class="funccomm"><pre> Remove all <a href="./NcSignal.html">NcSignal</a> objects registered as hits from this device.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetNhits" href="src/NcDevice.cxx.html#X_8n_D">GetNhits</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetNhits" href="src/NcDevice.cxx.html#AxcDPE">GetNhits</a>() const</span><br />
 <div class="funccomm"><pre> Provide the number of registered hits for this device.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetNhits@1" href="src/NcDevice.cxx.html#dr7xvD">GetNhits</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDevice:GetNhits@1" href="src/NcDevice.cxx.html#I_DovD">GetNhits</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) const</span><br />
 <div class="funccomm"><pre> Provide the number of hits registered with the specified hit or slot name.
 
  mode = 0 --&gt; Only hits with a matching hit name will be considered
@@ -625,12 +671,12 @@ return false;}
  The defaults are mode=0 and opt=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcDevice:GetHit" href="src/NcDevice.cxx.html#p26wyD">GetHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcDevice:GetHit" href="src/NcDevice.cxx.html#UVZJyD">GetHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
 <div class="funccomm"><pre> Provide the <a href="./NcSignal.html">NcSignal</a> object registered as hit number j.
  Note : j=1 denotes the first hit.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcDevice:GetHit@1" href="src/NcDevice.cxx.html#LZv5mB">GetHit</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcDevice:GetHit@1" href="src/NcDevice.cxx.html#RxWK0B">GetHit</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) const</span><br />
 <div class="funccomm"><pre> Provide the <a href="./NcSignal.html">NcSignal</a> object registered as hit with the specified hit or slot name.
  Note : The first hit encountered with the specified name will be provided.
 
@@ -644,20 +690,20 @@ return false;}
  The defaults are mode=0 and opt=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcDevice:GetIdHit" href="src/NcDevice.cxx.html#TdJYsD">GetIdHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcDevice:GetIdHit" href="src/NcDevice.cxx.html#Ni46V">GetIdHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
 <div class="funccomm"><pre> Return the hit with unique identifier <span class="string">"id"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcDevice:GetHits" href="src/NcDevice.cxx.html#HsvduE">GetHits</a>()</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcDevice:GetHits" href="src/NcDevice.cxx.html#nXDquE">GetHits</a>()</span><br />
 <div class="funccomm"><pre> Provide the references to all the registered hits.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetHits@1" href="src/NcDevice.cxx.html#eyNyuE">GetHits</a>(TObjArray&amp; selected, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0, TObjArray* hits = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetHits@1" href="src/NcDevice.cxx.html#QfhWh">GetHits</a>(TObjArray&amp; selected, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0, TObjArray* hits = 0) const</span><br />
 <div class="funccomm"><pre> Provide the references to selected hits by looping over the input array <span class="string">"hits"</span>
  and checking for the specified hit or signal slot name.
  A <span class="string">"hit"</span> represents an abstract object which is derived from <a href="./NcSignal.html">NcSignal</a>.
  The selected hits are returned via the user provided TObjArray <span class="string">"selected"</span>.
- In case hits=0 (default), all the registered hits of the current device are used in the search.
+ In case hits=0 (default), all the registered hits of the current device are used in the search. 
  Note that the input array <span class="string">"hits"</span> (when provided) is not modified.
 
  selected : The user provided array which will hold all the references to the selected hits.
@@ -674,13 +720,13 @@ return false;}
  opt = 0 --&gt; The specified name has to match exactly the hit or slotname
        1 --&gt; The specified name string has to be contained in the hit or slotname
 
- hits : Optional input array with <a href="./NcSignal.html">NcSignal</a> objects to be used for the search.
+ hits : Optional input array with <a href="./NcSignal.html">NcSignal</a> objects to be used for the search. 
 
  The defaults are mode=0, opt=0 and hits=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:ShowHit" href="src/NcDevice.cxx.html#m6IsE">ShowHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
-<div class="funccomm"><pre> Show data of the registered j-th hit according to the specified
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:ShowHit" href="src/NcDevice.cxx.html#bbCsE">ShowHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funccomm"><pre> Show data of the registered j-th hit according to the specified 
  coordinate frame f.
  If j=0 all associated hits will be shown.
 
@@ -692,7 +738,7 @@ return false;}
  The defaults are j=0, f=<span class="string">"car"</span> and <span class="string">"u=rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:Data" href="src/NcDevice.cxx.html#zqkxAD">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:Data" href="src/NcDevice.cxx.html#y0VUtC">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a> the device and all registered hit info according to the specified
  coordinate frame f.
 
@@ -704,11 +750,11 @@ return false;}
  The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetExtremes" href="src/NcDevice.cxx.html#P0SB5C">GetExtremes</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetExtremes" href="src/NcDevice.cxx.html#OO1y4C">GetExtremes</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1) const</span><br />
 <div class="funccomm"><pre> Provide the min. and max. signal values of an array of hits.
  The input argument <span class="string">"idx"</span> denotes the index of the signal slots to be investigated.
  The default is idx=1;
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  The gain etc... corrected signals will be used in the process as specified
  by the  <span class="string">"mode"</span> argument. The definition of this <span class="string">"mode"</span> parameter corresponds to
  the description provided in the <a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a> memberfunction of class <a href="./NcSignal.html">NcSignal</a>.
@@ -720,10 +766,10 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetExtremes@1" href="src/NcDevice.cxx.html#NnLyiD">GetExtremes</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, TString name, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetExtremes@1" href="src/NcDevice.cxx.html#ou9FjD">GetExtremes</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, TString name, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1) const</span><br />
 <div class="funccomm"><pre> Provide the min. and max. signal values of an array of hits.
  The input argument <span class="string">"name"</span> denotes the name of the signal slots to be investigated.
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  The gain etc... corrected signals will be used in the process as specified
  by the  <span class="string">"mode"</span> argument. The definition of this <span class="string">"mode"</span> parameter corresponds to
  the description provided in the <a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a> memberfunction of class <a href="./NcSignal.html">NcSignal</a>.
@@ -735,12 +781,12 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcDevice:SortHits@1" href="src/NcDevice.cxx.html#iMGia">SortHits</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcDevice:SortHits@1" href="src/NcDevice.cxx.html#SNTga">SortHits</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to an array of hits by looping over the input array <span class="string">"hits"</span>
  and checking the signal value.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
  or as a returned pointer.
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  Note that the original hit array is not modified.
  A <span class="string">"hit"</span> represents an abstract object which is derived from <a href="./NcSignal.html">NcSignal</a>.
  The user can specify the index of the signal slot to perform the sorting on.
@@ -760,7 +806,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered hit pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to hit ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -772,12 +818,12 @@ return false;}
  The default is ordered=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcDevice:SortHits" href="src/NcDevice.cxx.html#CLyuQB">SortHits</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcDevice:SortHits" href="src/NcDevice.cxx.html#hNZF.">SortHits</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to an array of hits by looping over the input array <span class="string">"hits"</span>
  and checking the signal value.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
  or as a returned pointer.
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  Note that the input array is not modified.
  A <span class="string">"hit"</span> represents an abstract object which is derived from <a href="./NcSignal.html">NcSignal</a>.
  The user can specify the name of the signal slot to perform the sorting on.
@@ -797,7 +843,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered hit pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to hit ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -809,14 +855,14 @@ return false;}
  The default is ordered=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:DisplayHits@1" href="src/NcDevice.cxx.html#USAVE">DisplayHits</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:DisplayHits@1" href="src/NcDevice.cxx.html#oMUMs">DisplayHits</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
 <div class="funccomm"><pre> 3D color display of an array hits.
  The user can specify the index (default=1) of the signal slot to perform the display for.
  The marker size will indicate the absolute value of the signal (specified by the slotindex)
  as a percentage of the input argument <span class="string">"scale"</span>.
  In case scale&lt;0 the maximum absolute signal value encountered in the hit array will be used
  to define the 100% scale. The default is scale=-1.
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  Note that the input array is not modified.
  In case dp=1 the device position will be used, otherwise the hit position will
  be used in the display. The default is dp=0.
@@ -830,24 +876,24 @@ return false;}
  The default is mode=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  Before any display activity, a TCanvas and a TView have to be initiated
  first by the user like for instance
-
+ 
  TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
  TView* view=new TView(1);
  view-&gt;SetRange(-1000,-1000,-1000,1000,1000,1000);
  view-&gt;ShowAxis();
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:DisplayHits" href="src/NcDevice.cxx.html#W5jMVD">DisplayHits</a>(TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:DisplayHits" href="src/NcDevice.cxx.html#aCnMVD">DisplayHits</a>(TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
 <div class="funccomm"><pre> 3D color display of an array hits.
  The user can specify the name of the signal slot to perform the display for.
  The marker size will indicate the absolute value of the signal (specified by the slotname)
  as a percentage of the input argument <span class="string">"scale"</span>.
  In case scale&lt;0 the maximum absolute signal value encountered in the hit array will be used
  to define the 100% scale. The default is scale=-1.
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  Note that the input array is not modified.
  In case dp=1 the device position will be used, otherwise the hit position will
  be used in the display. The default is dp=0.
@@ -863,19 +909,19 @@ return false;}
  The default is mode=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  Before any display activity, a TCanvas and a TView have to be initiated
  first by the user like for instance
-
+ 
  TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
  TView* view=new TView(1);
  view-&gt;SetRange(-1000,-1000,-1000,1000,1000,1000);
  view-&gt;ShowAxis();
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcDevice:SumSignals" href="src/NcDevice.cxx.html#RKOTqB">SumSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idx, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TObjArray* hits = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcDevice:SumSignals" href="src/NcDevice.cxx.html#wZ.FxB">SumSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idx, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TObjArray* hits = 0)</span><br />
 <div class="funccomm"><pre> Summation of selected signal values by looping over the input array <span class="string">"hits"</span>.
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  Note that the original hit array is not modified.
  A <span class="string">"hit"</span> represents an abstract object which is derived from <a href="./NcSignal.html">NcSignal</a>.
  The user has to specify the index <span class="string">"idx"</span> of the signal slot to perform the summation on.
@@ -887,9 +933,9 @@ return false;}
  The default in the summation process is mode=1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcDevice:SumSignals@1" href="src/NcDevice.cxx.html#dbSlxE">SumSignals</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TObjArray* hits = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcDevice:SumSignals@1" href="src/NcDevice.cxx.html#RX1b2E">SumSignals</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TObjArray* hits = 0)</span><br />
 <div class="funccomm"><pre> Summation of selected signal values by looping over the input array <span class="string">"hits"</span>.
- In case hits=0 (default), the registered hits of the current device are used.
+ In case hits=0 (default), the registered hits of the current device are used. 
  Note that the original hit array is not modified.
  A <span class="string">"hit"</span> represents an abstract object which is derived from <a href="./NcSignal.html">NcSignal</a>.
  The user has to specify the signal slot to perform the summation on via
@@ -901,7 +947,7 @@ return false;}
  The default in the summation process is mode=1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcDevice:SlideWindow" href="src/NcDevice.cxx.html#aG4bDE">SlideWindow</a>(TObjArray* hits, <a href="./ListOfTypes.html#Double_t">Double_t</a> thres, <a href="./ListOfTypes.html#Double_t">Double_t</a> swin, TString sname, <a href="./ListOfTypes.html#Int_t">Int_t</a> smode = 0, TString wname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> wmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcDevice:SlideWindow" href="src/NcDevice.cxx.html#zspWDE">SlideWindow</a>(TObjArray* hits, <a href="./ListOfTypes.html#Double_t">Double_t</a> thres, <a href="./ListOfTypes.html#Double_t">Double_t</a> swin, TString sname, <a href="./ListOfTypes.html#Int_t">Int_t</a> smode = 0, TString wname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> wmode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0) const</span><br />
 <div class="funccomm"><pre> Perform a sliding window scan of some cumulated signal by looping over the input array <span class="string">"hits"</span>.
  A <span class="string">"hit"</span> represents an abstract object which is (derived from) <a href="./NcSignal.html">NcSignal</a>.
  Note that the input array <span class="string">"hits"</span> is not modified.
@@ -915,16 +961,16 @@ return false;}
  or the absolute size of the scan window |v2-v1| exceeds the maximum size <span class="string">"swin"</span>.
  In the former case the value <span class="string">"v2"</span> is returned, whereas in the latter case the scan
  will be repeated starting from the hit following the previous starting hit in the array <span class="string">"hits"</span>.
- In case none of the search windows could reach (or exceed) the threshold <span class="string">"thres"</span>, the value 0 will be returned.
+ In case none of the search windows could reach (or exceed) the threshold <span class="string">"thres"</span>, the value 0 will be returned. 
 
  Input arguments :
-
- hits  : Input array with <a href="./NcSignal.html">NcSignal</a> (derived) objects to be used for the search.
+ -----------------
+ hits  : Input array with <a href="./NcSignal.html">NcSignal</a> (derived) objects to be used for the search. 
  thres : The threshold for the cumulative signal.
  swin  : The maximum size of the search interval window for the observable <span class="string">"sname"</span>.
- sname : The signal slot name to be used as observable.
+ sname : The signal slot name to be used as observable. 
  smode : The signal retrieval mode as documented in <a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>.
- wname : The signal slot name to be used as weight.
+ wname : The signal slot name to be used as weight. 
  wmode : The weight retrieval mode as documented in <a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>.
  i1    : Optional retrieved index in the <span class="string">"hits"</span> array of the <a href="./NcSignal.html">NcSignal</a> object for which <span class="string">"v1"</span> was obtained.
  i2    : Optional retrieved index in the <span class="string">"hits"</span> array of the <a href="./NcSignal.html">NcSignal</a> object for which <span class="string">"v2"</span> was obtained.
@@ -933,16 +979,16 @@ return false;}
          In case no search window [v1,v2] satisfied the search criteria the values i1=-1 and i2=-1 will be returned.
 
  Return value :
-
+ --------------
  The value <span class="string">"v2"</span> of the observable <span class="string">"sname"</span> for which the search window [v1,v2] satisfies
- the user defined search criteria, or 0 in all other cases.
+ the user defined search criteria, or 0 in all other cases.  
 
  Notes :
-
+ -------
  1) If wname=<span class="string">"none"</span> no weighting will be performed (i.e. all weights are set to 1)
  2) For the scanning procedure the <span class="string">"sname"</span> values should appear in a consecutive order.
     This implies that the user should take care of correctly ordering the input array <span class="string">"hits"</span>,
-    for instance by using the <a href="./NcDevice.html#NcDevice:SortHits" title="TObjArray* NcDevice::SortHits(TString name,Int_t mode=-1,TObjArray* hits=0,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0) or overloads">SortHits</a>() member function.
+    for instance by using the <a href="./NcDevice.html#NcDevice:SortHits" title="TObjArray* NcDevice::SortHits(TString name,Int_t mode=-1,TObjArray* hits=0,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0) or overloads">SortHits</a>() member function. 
  3) Using the return values of <span class="string">"i1"</span> and <span class="string">"i2"</span> the user can investigate the complete resulting search window
     and define any signal value other than the returned <span class="string">"v2"</span> as the observable of interest.
 
@@ -950,7 +996,7 @@ return false;}
  This implies that by default the array indices of the <a href="./NcSignal.html">NcSignal</a> objects corresponding to <span class="string">"v1"</span> and <span class="string">"v2"</span> are not provided.
 
  Example :
-
+ ---------
  Assume that an <a href="./NcEvent.html">NcEvent</a> has a device of (an <a href="./NcDevice.html">NcDevice</a> derived) class <span class="string">"MyTimer"</span> with many hits of which each hit contains
  an individual hit time <span class="string">"T"</span> (in ms) and amplitude <span class="string">"Amp"</span> (in ADC counts).
  We would like to determine an event start time at which at least 5% of the total observed <span class="string">"MyTimer"</span> amplitude is recorded
@@ -973,7 +1019,7 @@ return false;}
  }
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcDevice:Clone" href="src/NcDevice.cxx.html#xBjb3C">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcDevice:Clone" href="src/NcDevice.cxx.html#Fm5YGD">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
  correct type depending on the object type, a feature which may be very useful
@@ -981,19 +1027,19 @@ return false;}
  container owns the objects. This feature allows e.g. <a href="./NcEvent.html">NcEvent</a>
  to store either <a href="./NcDevice.html">NcDevice</a> objects or objects derived from <a href="./NcDevice.html">NcDevice</a>
  via tha AddDevice memberfunction, provided these derived classes also have
- a proper <a href="./NcDevice.html#NcDevice:Clone" title="TObject* NcDevice::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction.
+ a proper <a href="./NcDevice.html#NcDevice:Clone" title="TObject* NcDevice::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:AddHit" href="src/NcDevice.h.html#CH.bAE">AddHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:AddHit" href="src/NcDevice.h.html#Kb3bAE">AddHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:RemoveHit" href="src/NcDevice.h.html#cM0zkC">RemoveHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:RemoveHit" href="src/NcDevice.h.html#xCVroD">RemoveHit</a>(<a href="./NcSignal.html">NcSignal</a>&amp; s)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:18 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Fri May  7 12:18:30 2021 </em><em>&raquo; Last generated: 2021-05-07 12:18</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

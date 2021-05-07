@@ -103,6 +103,9 @@ class NcSample : public TNamed
   void Animation(TString nameA,TString nameB,TString nameC,Int_t mode,TString nameD,Int_t delay,TString opt="PFB"); // Animation of an (ordered) sampling of the values of variables nameA, nameB and nameC
   Double_t Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode); // Digitize the values of the i-th variable with an "nbits" ADC
   Double_t Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode); // Digitize the values of the specified variable with an "nbits" ADC
+  NcSample SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,Int_t loc=-1) const; // Perform a Sample-And-Hold operation on the specified function
+  NcSample SampleAndSum(Int_t i,Double_t step,Int_t loc=0,Int_t j=0,Double_t vmin=0,Double_t vmax=-1); // Perform a Sample-And-Hold operation on the values of the i-th variable
+  NcSample SampleAndSum(TString nameA,Double_t step,Int_t loc=0,TString nameB="-",Double_t vmin=0,Double_t vmax=-1); // Perform a Sample-And-Hold operation on the values of the variable nameA
  
  protected:
   Int_t fDim;                       // Dimension of the sample
@@ -137,6 +140,6 @@ class NcSample : public TNamed
   void List(Int_t i);                 // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const;   // Correlation statistics info for i-th and j-th variable
 
- ClassDef(NcSample,6) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,7) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

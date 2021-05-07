@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcDevice.cxx 135 2016-09-13 14:27:42Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcDevice
 // Signal (Hit) handling of a generic device.
@@ -90,7 +88,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-//- Modified: NvE $Date: 2016-09-13 16:27:42 +0200 (Tue, 13 Sep 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:33Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDevice.h"
@@ -98,7 +96,7 @@
  
 ClassImp(NcDevice) // Class implementation to enable ROOT I/O
  
-NcDevice::NcDevice() : NcSignal()
+NcDevice::NcDevice(const char* name,const char* title) : NcSignal(name,title)
 {
 // Default constructor.
 // The user definable status word is set to zero.

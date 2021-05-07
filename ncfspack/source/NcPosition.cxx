@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcPosition.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcPosition
 // Handling of positions in various reference frames.
@@ -82,7 +80,7 @@
 // q.GetPositionErrors(dloc,"sph","deg");
 //
 //--- Author: Nick van Eijndhoven 06-feb-1999 Utrecht University
-//- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:49Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcPosition.h"
@@ -416,7 +414,7 @@ void NcPosition::Data(TString f,TString u) const
 // The defaults are f="car" and u="rad".
 
  Nc3Vector::Data(f,u);
- cout << "   Metric unit : " << fScale << " meter" << endl;
+ if (fNv) cout << "   Metric unit : " << fScale << " meter" << endl;
  if (fTstamp) fTstamp->Date(1);
 } 
 ///////////////////////////////////////////////////////////////////////////

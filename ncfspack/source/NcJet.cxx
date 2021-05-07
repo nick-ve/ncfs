@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcJet.cxx 122 2016-05-19 18:01:23Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcJet
 // Creation and investigation of a jet of particle tracks.
@@ -105,7 +103,7 @@
 //        GetEscale() memberfunction.
 //
 //--- Author: Nick van Eijndhoven 10-jul-1997 Utrecht University
-//- Modified: NvE $Date: 2016-05-19 20:01:23 +0200 (Thu, 19 May 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  11:29Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcJet.h"
@@ -376,7 +374,7 @@ void NcJet::Data(TString f,TString u)
 
  ShowTracks(0);
 
- Nc4Vector::Data(f,u); 
+ if (fV.HasVector()) Nc4Vector::Data(f,u); 
 } 
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::List(TString f,TString u,TObjArray* tracks)

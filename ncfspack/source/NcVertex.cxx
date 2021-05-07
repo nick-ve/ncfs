@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcVertex.cxx 88 2013-08-18 18:14:09Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcVertex
 // Creation and investigation of an NcVertex.
@@ -159,7 +157,7 @@
 //        obtained via the GetUnitScale() and GetEscale() memberfunctions.
 //
 //--- Author: Nick van Eijndhoven 04-apr-1998 Utrecht University
-//- Modified: NvE $Date: 2013-08-18 20:14:09 +0200 (Sun, 18 Aug 2013) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  11:16Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcVertex.h"
@@ -596,7 +594,7 @@ void NcVertex::Data(TString f,TString u)
  cout << " Nvertices : " << fNvtx << " Njets : " << fNjets
       << " Energy scale : " << fEscale << " GeV" << endl;
  cout << " ";
- Nc4Vector::Data(f,u);
+ if (Nc4Vector::fV.HasVector()) Nc4Vector::Data(f,u);
  cout << "  Position";
  NcPosition::Data(f,u); 
 } 

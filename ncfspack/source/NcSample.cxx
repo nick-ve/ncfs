@@ -46,9 +46,10 @@
 // The member function SetNames() allows the user to specify different names
 // to replace the default ("X","Y","Z","T") naming.
 //
-// To develop c.q. improve a data acquisition system (DAQ), the function
-// Digitize() may be used to set the specifications and investigate
-// the performance of an Analog to Digital Converter (ADC).  
+// To develop c.q. improve a data acquisition system (DAQ), the functions
+// SampleAndHold(), SampleAndSum() and Digitize() may be used to
+// investigate the performance of a sampling device, like for instance
+// a Switched Capacitor Array (SCA) and an Analog to Digital Converter (ADC).  
 //
 // Interfaces with various graphics facilities are provided like for instance
 // GetGraph(), Get1DHistogram(), Animation() etc...
@@ -64,7 +65,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel April 19, 2021  13:06Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 7, 2021  11:20Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -1406,7 +1407,14 @@ void NcSample::ListOrdered(Int_t mode,Int_t i)
 
  Order(mode,i);
 
- cout << " *NcSample::ListOrdered* Listing of the stored entries in";
+ const char* name=GetName();
+ const char* title=GetTitle();
+
+ cout << " *NcSample::ListOrdered* Ordered listing for the sample";
+ if (strlen(name))  cout << " Name : " << name;
+ if (strlen(title)) cout << " Title : " << title;
+ cout << endl;
+ cout << " Listing of the stored entries in";
  if (!mode) cout << " order of original entering." << endl;
  if (mode<0) cout << " decreasing order of variable : " << i << " (" << fNames[i-1] << ")" << endl;
  if (mode>0) cout << " increasing order of variable : " << i << " (" << fNames[i-1] << ")" << endl;
@@ -2068,7 +2076,7 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
-// The default values are j=0 , sumw2=kFALSE and nbx=100.
+// The default values are j=0, sumw2=kFALSE and nbx=100.
 
  TString s="1D Histogram for NcSample ";
  s+=GetName();
@@ -2084,8 +2092,11 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
  Double_t xlow=GetMinimum(i);
  Double_t xup=GetMaximum(i);
 
+ Double_t dx=0;
+ if (nbx) dx=(xup-xlow)/double(nbx);
+
  // Extension to include the maximum value
- xup+=0.001*fabs(xup);
+ xup+=1e-6*fabs(dx);
 
  TH1D hist("",s.Data(),nbx,xlow,xup);
  hist.Sumw2(sumw2);
@@ -2098,7 +2109,7 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
 
  if (i<1 || i>fDim || j>fDim)
  {
-  cout << " *NcSample::Get1DHistogram* Error : Invalid index encountered i=" << " j=" << j << endl;
+  cout << " *NcSample::Get1DHistogram* Error : Invalid index encountered i=" << i << " j=" << j << endl;
   return hist;
  }
 
@@ -2168,9 +2179,14 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
  Double_t ylow=GetMinimum(j);
  Double_t yup=GetMaximum(j);
 
+ Double_t dx=0;
+ if (nbx) dx=(xup-xlow)/double(nbx);
+ Double_t dy=0;
+ if (nby) dy=(yup-ylow)/double(nby);
+
  // Extension to include the maximum values
- xup+=0.001*fabs(xup);
- yup+=0.001*fabs(yup);
+ xup+=1e-6*fabs(dx);
+ yup+=1e-6*fabs(dy);
 
  TH2D hist("",s.Data(),nbx,xlow,xup,nby,ylow,yup);
  hist.Sumw2(sumw2);
@@ -2263,10 +2279,17 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
  Double_t zlow=GetMinimum(k);
  Double_t zup=GetMaximum(k);
 
+ Double_t dx=0;
+ if (nbx) dx=(xup-xlow)/double(nbx);
+ Double_t dy=0;
+ if (nby) dy=(yup-ylow)/double(nby);
+ Double_t dz=0;
+ if (nbz) dz=(zup-zlow)/double(nbz);
+
  // Extension to include the maximum values
- xup+=0.001*fabs(xup);
- yup+=0.001*fabs(yup);
- zup+=0.001*fabs(zup);
+ xup+=1e-6*fabs(dx);
+ yup+=1e-6*fabs(dy);
+ zup+=1e-6*fabs(dz);
 
  TH3D hist("",s.Data(),nbx,xlow,xup,nby,ylow,yup,nbz,zlow,zup);
  hist.Sumw2(sumw2);
@@ -3436,6 +3459,184 @@ Double_t NcSample::Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode)
  Int_t i=GetIndex(name);
 
  return Digitize(i,nbits,vcal,mode);
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample NcSample::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,Int_t loc) const
+{
+// Perform a Sample-And-Hold operation on the specified function "f"
+// in the interval [vmin,vmax], using "step" as the sampling step size.
+// If "f" can be regarded as a pulse generator in time, this mimics a 
+// sample and hold device with a lock time of "step" time units,
+// or equivalently a sampling frequency of 1/step.
+// The input argument "loc" determines whether the resulting data
+// will be recorded at the start (loc<0), center (loc=0) or end (loc>0)
+// of the sampling step size.
+// However, in case the recording location of the last sampling step would
+// exceed "vmax", the data will be recorded at the value of "vmax".
+//
+// The default value is loc=-1.
+
+ NcSample s("SampleAndHold","Error occurred in SampleAndHold");
+ s.SetStoreMode(1);
+
+ if (step<=0 || vmax<=vmin)
+ {
+  cout << " *NcSample::SampleAndHold* Error : Invalid input step=" << step << " vmin=" << vmin << " vmax=" << vmax << endl;
+  return s;
+ }
+ 
+ TString str="For Function ";
+ str+=f.GetExpFormula("p");
+ str+=" with step=%-10.3g";
+ TString str2=str.Format(str.Data(),step);
+ s.SetTitle(str2.Data());
+
+ // Enter the sampled data into the new sample
+ Double_t xlow=vmin;
+ Double_t xval=0;
+ Double_t yval=0;
+ while (xlow<=vmax)
+ {
+  yval=f.Eval(xlow);
+  if (loc<0) xval=xlow;
+  if (!loc) xval=xlow+step/2.;
+  if (loc>0) xval=xlow+step;
+  if (xval>vmax) xval=vmax;
+  s.Enter(xval,yval);
+
+  xlow+=step;
+ }
+
+ return s;
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample NcSample::SampleAndSum(Int_t i,Double_t step,Int_t loc,Int_t j,Double_t vmin,Double_t vmax)
+{
+// Perform a Sample-And-Sum operation on the values of the i-th variable
+// in the interval [vmin,vmax], using "step" as the sampling step size.
+// This procedure resembles a Sample-And-Hold operation, but instead of locking
+// the data recording during the stepsize "step", the data that appear within "step"
+// are summed.
+// If the i-th variable can be regarded as sampling in time, this mimics a 
+// Switched Capacitor Array (SCA) with a time gate of "step" time units,
+// or equivalently a sampling frequency of 1/step.
+// The input argument "loc" determines whether the new values of the i-th variable
+// will be recorded at the begin (loc<0), center (loc=0) or end (loc>0)
+// of the sampling step size.
+// If j>0 the corresponding value of variable j will be used as a weight.
+// The first variable has index 1.
+// If vmax<=vmin the minimum and maximum values of the i-th variable will be used.
+//
+// Note : This facility is only available if the storage mode has been activated.
+//
+// The default values are loc=0, j=0, vmin=0 and vmax=-1.
+
+ NcSample s("SampleAndSum","Error occurred in SampleAndSum");
+ s.SetStoreMode(1);
+
+ if (!fStore)
+ {
+  cout << " *NcSample::SampleAndSum* Error : Storage mode has not been activated." << endl;
+  return s;
+ }
+
+ if (i<1 || i>fDim || j>fDim)
+ {
+  cout << " *NcSample::SampleAndSum* Error : Invalid index encountered i=" << i << " j=" << j << endl;
+  return s;
+ }
+
+ if (step<=0)
+ {
+  cout << " *NcSample::SampleAndSum* Error : Invalid step size step=" << step << endl;
+  return s;
+ }
+
+ TString xname=fNames[i-1];
+ TString yname="Counts";
+ if (j>0) yname=fNames[j-1];
+
+ s.SetNames(xname,yname);
+
+ TString str="For Variable ";
+ str+=xname;
+ str+=" with step=%-10.3g";
+ TString str2=str.Format(str.Data(),step);
+ s.SetTitle(str2.Data());
+
+ // Define a histogram with "step" as binsize
+ Double_t xmin=GetMinimum(i);
+ Double_t xmax=GetMaximum(i);
+
+ if (vmax>vmin)
+ {
+  xmin=vmin;
+  xmax=vmax;
+ }
+
+ Int_t nbx=(xmax-xmin)/step;
+ nbx++;
+
+ Double_t* bins=new Double_t[nbx+1];
+ Double_t xlow=xmin;
+ for (Int_t idx=0; idx<=nbx; idx++)
+ {
+  bins[idx]=xlow;
+  xlow+=step;
+ }
+
+ TH1D hist("","",nbx,bins);
+
+ // Fill the histogram with data of the original sample
+ Double_t xval=0;
+ Double_t yval=1;
+ for (Int_t ient=1; ient<=fN; ient++)
+ {
+  xval=GetEntry(ient,i);
+  if (j>0) yval=GetEntry(ient,j);
+  hist.Fill(xval,yval);
+ }
+
+ // Enter the histgram data into the new sample
+ Int_t nbins=hist.GetNbinsX();
+ Double_t binwidth=hist.GetBinWidth(1);
+ for (Int_t k=1; k<=nbins; k++)
+ {
+  if (loc) xval=hist.GetBinLowEdge(k);
+  if (!loc) xval=hist.GetBinCenter(k);
+  if (loc>0) xval+=binwidth;
+  yval=hist.GetBinContent(k);
+  s.Enter(xval,yval);
+ }
+
+ delete [] bins;
+ return s;
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample NcSample::SampleAndSum(TString nameA,Double_t step,Int_t loc,TString nameB,Double_t vmin,Double_t vmax)
+{
+// Perform a Sample-And-Sum operation on the values of the variable specified with nameA
+// in the interval [vmin,vmax], using "step" as the sampling step size.
+// This procedure resembles a Sample-And-Hold operation, but instead of locking
+// the data recording during the stepsize "step", the data that appear within "step"
+// are summed.
+// If the variable with nameA can be regarded as sampling in time, this mimics a 
+// Switched Capacitor Array (SCA) with a time gate of "step" time units,
+// or equivalently a sampling frequency of 1/step.
+// The input argument "loc" determines whether the new values of the variable with nameA
+// will be recorded at the begin (loc<0), center (loc=0) or end (loc>0)
+// of the sampling step size.
+// If nameB is valid, the corresponding value of that variable will be used as a weight.
+// If vmax<=vmin the minimum and maximum values of the variable with nameA will be used.
+//
+// Note : This facility is only available if the storage mode has been activated.
+//
+// The default values are loc=0, nameB="-", vmin=0 and vmax=-1.
+
+ Int_t i=GetIndex(nameA);
+ Int_t j=GetIndex(nameB);
+
+ return SampleAndSum(i,step,loc,j,vmin,vmax);
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSample::Clone(const char* name) const

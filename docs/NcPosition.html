@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:22 2019            -->
+<!--   Date: Fri May  7 12:18:30 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcPosition.h.html">header file</a>
 <a class="descrheadentry" href="src/NcPosition.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcPosition_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -66,7 +66,7 @@ return false;}
  that have a unique position in 3-dimensional space.
 
  Note :
-
+ ------
  Positions (r), errors (e), reference frames (f) and angular units (u)
  are specified via
 
@@ -85,7 +85,7 @@ return false;}
  The <span class="string">"f"</span> and <span class="string">"u"</span> facilities only serve as a convenient user interface.
  Internally the actual storage of the various components is performed
  in a unique way. This allows setting/retrieval of vector components in a
- user selected frame/unit convention at any time.
+ user selected frame/unit convention at any time. 
 
  The metric unit scale for the coordinates can be defined by the user
  via the <a href="./NcPosition.html#NcPosition:SetUnitScale" title="void NcPosition::SetUnitScale(Float_t s)">SetUnitScale</a>() memberfunction.
@@ -96,10 +96,10 @@ return false;}
  The user can specify a certain required metric unit scale in retreiving
  position components and/or distances.
  Please refer to the corresponding member functions for further details.
-
+   
 
  Example :
-
+ ---------
 
  <a href="./NcPosition.html">NcPosition</a> q;
  <a href="./ListOfTypes.html#Float_t">Float_t</a> pos[3]={-1,25,7};
@@ -111,7 +111,7 @@ return false;}
  q.<a href="./NcPosition.html#NcPosition:GetPositionErrors" title="void NcPosition::GetPositionErrors(Double_t* e,TString f,TString u=&quot;rad&quot;,Float_t s=-1) or overloads">GetPositionErrors</a>(dloc,<span class="string">"sph"</span>,<span class="string">"deg"</span>);
 
 --- Author: Nick van Eijndhoven 06-feb-1999 Utrecht University
-- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:49Z
 
 </pre></div>
 </div></div>
@@ -200,60 +200,90 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcPosition:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcPosition_Inh" id="MapNcPosition_Inh">
-<area shape="rect" id="node3" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="1,57,68,70"/>
-<area shape="rect" id="node5" href="./NcSignal.html" title="NcSignal" alt="" coords="201,37,267,50"/>
-<area shape="rect" id="node6" href="./NcVertex.html" title="NcVertex" alt="" coords="201,57,267,70"/>
-<area shape="rect" id="node7" href="./NcPositionObj.html" title="NcPositionObj" alt="" coords="201,70,267,83"/>
-<area shape="rect" id="node8" href="./NcDevice.html" title="NcDevice" alt="" coords="301,20,367,34"/>
-<area shape="rect" id="node9" href="./NcEvent.html" title="NcEvent" alt="" coords="301,60,367,73"/>
-<area shape="rect" id="node10" href="./NcCalcluster.html" title="NcCalcluster" alt="" coords="301,34,367,47"/>
-<area shape="rect" id="node11" href="./NcCalmodule.html" title="NcCalmodule" alt="" coords="301,47,367,60"/>
-<area shape="rect" id="node12" href="./IceGOM.html" title="IceGOM" alt="" coords="401,7,467,20"/>
-<area shape="rect" id="node13" href="./IceEvent.html" title="IceEvent" alt="" coords="401,60,467,73"/>
-<area shape="rect" id="node14" href="./NcCalorimeter.html" title="NcCalorimeter" alt="" coords="401,20,467,34"/>
-<area shape="rect" id="node15" href="./NcVeto.html" title="NcVeto" alt="" coords="401,34,467,47"/>
-<area shape="rect" id="node16" href="./IceAOM.html" title="IceAOM" alt="" coords="501,1,567,14"/>
-<area shape="rect" id="node17" href="./IceDOM.html" title="IceDOM" alt="" coords="501,14,567,27"/>
-<area shape="rect" id="node18" href="./IceIDOM.html" title="IceIDOM" alt="" coords="601,7,667,20"/>
-<area shape="rect" id="node19" href="./IceTDOM.html" title="IceTDOM" alt="" coords="601,20,667,34"/>
-<area shape="rect" id="node20" href="./IceDCDOM.html" title="IceDCDOM" alt="" coords="700,1,767,14"/>
-<area shape="rect" id="node21" href="./IceICDOM.html" title="IceICDOM" alt="" coords="700,14,767,27"/>
-</map>
-<map name="MapNcPosition_InhMem" id="MapNcPosition_InhMem">
-<area shape="rect" id="graph9" href="./Nc3Vector.html" alt="" coords="224,63,312,113"/>
-<area shape="rect" id="graph10" href="./Nc3Vector.html" alt="" coords="125,63,213,113"/>
-<area shape="rect" id="graph11" href="./Nc3Vector.html" alt="" coords="59,63,83,84"/>
-<area shape="rect" id="graph12" href="./Nc3Vector.html" alt="" coords="224,124,312,335"/>
-<area shape="rect" id="graph13" href="./Nc3Vector.html" alt="" coords="125,124,213,364"/>
-<area shape="rect" id="graph14" href="./Nc3Vector.html" alt="" coords="27,124,115,364"/>
-<area shape="rect" id="graph8" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="16,16,323,375"/>
-</map>
-<map name="MapNcPosition_Lib" id="MapNcPosition_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcPosition_Inh" class="tabsel" href="inh/NcPosition_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcPosition_Inh.png');">Inheritance</a>
-<a id="imgNcPosition_InhMem" class="tab" href="inhmem/NcPosition_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcPosition_InhMem.png');">Inherited Members</a>
-<a id="imgNcPosition_Incl" class="tab" href="incl/NcPosition_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcPosition_Incl.png');">Includes</a>
-<a id="imgNcPosition_Lib" class="tab" href="lib/NcPosition_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcPosition_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcPosition_Inh" src="inh/NcPosition_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<table><tr><td>
+<center><tt><a name="Nc3Vector" href="./Nc3Vector.html">Nc3Vector</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcPosition" href="./NcPosition.html">NcPosition</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="NcPositionObj" href="./NcPositionObj.html">NcPositionObj</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="NcSignal" href="./NcSignal.html">NcSignal</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="NcCalcluster" href="./NcCalcluster.html">NcCalcluster</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="NcCalmodule" href="./NcCalmodule.html">NcCalmodule</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="NcDevice" href="./NcDevice.html">NcDevice</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#e7e7e7"><table><tr><td>
+<center><tt><a name="IceGOM" href="./IceGOM.html">IceGOM</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#dfdfdf"><table><tr><td>
+<center><tt><a name="IceAOM" href="./IceAOM.html">IceAOM</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#dfdfdf"><table><tr><td>
+<center><tt><a name="IceDOM" href="./IceDOM.html">IceDOM</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#d7d7d7"><table><tr><td>
+<center><tt><a name="IceIDOM" href="./IceIDOM.html">IceIDOM</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#cfcfcf"><table><tr><td>
+<center><tt><a name="IceDCDOM" href="./IceDCDOM.html">IceDCDOM</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td><td align="left">&nbsp;<a href="ClassHierarchy.html">[more...]</a></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcPosition:NcPosition" href="src/NcPosition.cxx.html#QZGWXC">NcPosition</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcPosition:NcPosition" href="src/NcPosition.cxx.html#KgW50B">NcPosition</a>()</span><br />
 <div class="funccomm"><pre> Creation of an <a href="./NcPosition.html">NcPosition</a> object and initialisation of parameters.
  The unit scale for position coordinates is initialised to cm.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcPosition:_NcPosition" href="src/NcPosition.cxx.html#LWDI3C">~NcPosition</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcPosition:_NcPosition" href="src/NcPosition.cxx.html#bNAI3C">~NcPosition</a>()</span><br />
 <div class="funccomm"><pre> Destructor to delete dynamically allocated memory
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcPosition:NcPosition@1" href="src/NcPosition.cxx.html#opgrsC">NcPosition</a>(<span class="keyword">const</span> <a href="./NcPosition.html">NcPosition</a>&amp; p)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcPosition:NcPosition@1" href="src/NcPosition.cxx.html#o8hmsC">NcPosition</a>(<span class="keyword">const</span> <a href="./NcPosition.html">NcPosition</a>&amp; p)</span><br />
 <div class="funccomm"><pre> Copy constructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition" href="src/NcPosition.cxx.html#iBii2E">SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition" href="src/NcPosition.cxx.html#GHaj2E">SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Store position according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -264,7 +294,7 @@ return false;}
  The default is u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition@1" href="src/NcPosition.cxx.html#ub0GuE">SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r1, <a href="./ListOfTypes.html#Double_t">Double_t</a> r2, <a href="./ListOfTypes.html#Double_t">Double_t</a> r3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition@1" href="src/NcPosition.cxx.html#mCAHuE">SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r1, <a href="./ListOfTypes.html#Double_t">Double_t</a> r2, <a href="./ListOfTypes.html#Double_t">Double_t</a> r3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Store position according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -275,7 +305,7 @@ return false;}
  The default is u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPosition" href="src/NcPosition.cxx.html#QZUqjC">GetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPosition" href="src/NcPosition.cxx.html#hLdqjC">GetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
 <div class="funccomm"><pre> Provide position according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -293,7 +323,7 @@ return false;}
  of scale=0.01 will provide the position coordinates in cm.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition@2" href="src/NcPosition.cxx.html#bXR0rE">SetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition@2" href="src/NcPosition.cxx.html#fJT1NC">SetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Store position according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -304,7 +334,7 @@ return false;}
  The default is u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPosition@1" href="src/NcPosition.cxx.html#JhOIpE">GetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPosition@1" href="src/NcPosition.cxx.html#TIkz3">GetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
 <div class="funccomm"><pre> Provide position according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -322,15 +352,15 @@ return false;}
  of scale=0.01 will provide the position coordinates in cm.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcPosition.html">NcPosition</a>&amp; <a class="funcname" name="NcPosition:GetPosition@2" href="src/NcPosition.cxx.html#Kcl2UC">GetPosition</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcPosition.html">NcPosition</a>&amp; <a class="funcname" name="NcPosition:GetPosition@2" href="src/NcPosition.cxx.html#G_P6UC">GetPosition</a>()</span><br />
 <div class="funccomm"><pre> Provide position
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition@3" href="src/NcPosition.cxx.html#X6966E">SetPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPosition@3" href="src/NcPosition.cxx.html#LsTE6E">SetPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r)</span><br />
 <div class="funccomm"><pre> Set position
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPositionErrors" href="src/NcPosition.cxx.html#pRAp2B">SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPositionErrors" href="src/NcPosition.cxx.html#gRA1GC">SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Store position errors according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -341,7 +371,7 @@ return false;}
  The default is u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPositionErrors@1" href="src/NcPosition.cxx.html#h6GR5D">SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPositionErrors@1" href="src/NcPosition.cxx.html#gwQz1D">SetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Store position errors according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -352,7 +382,7 @@ return false;}
  The default is u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPositionErrors" href="src/NcPosition.cxx.html#bhQYGB">GetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPositionErrors" href="src/NcPosition.cxx.html#R18QAB">GetPositionErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
 <div class="funccomm"><pre> Provide position errors according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -370,7 +400,7 @@ return false;}
  of scale=0.01 will provide the position coordinate errors in cm.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPositionErrors@2" href="src/NcPosition.cxx.html#AGxX2C">SetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetPositionErrors@2" href="src/NcPosition.cxx.html#ox4u2C">SetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Store position errors according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -381,7 +411,7 @@ return false;}
  The default is u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPositionErrors@1" href="src/NcPosition.cxx.html#TTAW6C">GetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:GetPositionErrors@1" href="src/NcPosition.cxx.html#G0i85C">GetPositionErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>, <a href="./ListOfTypes.html#Float_t">Float_t</a> s = -1) const</span><br />
 <div class="funccomm"><pre> Provide position errors according to reference frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -399,15 +429,15 @@ return false;}
  of scale=0.01 will provide the position coordinate errors in cm.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:ResetPosition" href="src/NcPosition.cxx.html#WoosnE">ResetPosition</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:ResetPosition" href="src/NcPosition.cxx.html#nXqAK">ResetPosition</a>()</span><br />
 <div class="funccomm"><pre> Reset the position and corresponding errors.
  When retrieved values of 0 will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcPosition:GetDistance" href="src/NcPosition.cxx.html#sT2.sB">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcPosition:GetDistance" href="src/NcPosition.cxx.html#YZ__sB">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
 <div class="funccomm"><pre> Provide distance of the current <a href="./NcPosition.html">NcPosition</a> to position p.
  The error on the result can be obtained as usual by invoking
- <a href="./Nc3Vector.html#Nc3Vector:GetResultError" title="Double_t Nc3Vector::GetResultError()">GetResultError</a>() afterwards.
+ <a href="./Nc3Vector.html#Nc3Vector:GetResultError" title="Double_t Nc3Vector::GetResultError()">GetResultError</a>() afterwards. 
 
  By default the distance will be provided in the metric unit scale of
  the current <a href="./NcPosition.html">NcPosition</a>.
@@ -423,7 +453,7 @@ return false;}
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetUnitScale" href="src/NcPosition.cxx.html#Gfo9xB">SetUnitScale</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> s)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetUnitScale" href="src/NcPosition.cxx.html#CVel1C">SetUnitScale</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> s)</span><br />
 <div class="funccomm"><pre> Set the unit scale for the position coordinates.
  The scale is normalised w.r.t. the meter, so setting the unit scale
  to 0.01 means that all position coordinates are in cm.
@@ -434,28 +464,28 @@ return false;}
  Note : This memberfunction does not modify the numerical values of
         the position coordinates.
         It only specifies their numerical meaning.
-
+ 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcPosition:GetUnitScale" href="src/NcPosition.cxx.html#gJ.5v">GetUnitScale</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcPosition:GetUnitScale" href="src/NcPosition.cxx.html#p4fEQE">GetUnitScale</a>() const</span><br />
 <div class="funccomm"><pre> Provide the unit scale for the position coordinates.
  The scale is normalised w.r.t. the meter, so a unit scale of 0.01
  means that all position coordinates are in cm.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetTimestamp" href="src/NcPosition.cxx.html#XU6UaC">SetTimestamp</a>(<a href="./NcTimestamp.html">NcTimestamp</a>&amp; t)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:SetTimestamp" href="src/NcPosition.cxx.html#fd9PfB">SetTimestamp</a>(<a href="./NcTimestamp.html">NcTimestamp</a>&amp; t)</span><br />
 <div class="funccomm"><pre> Store the timestamp for this position.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcTimestamp.html">NcTimestamp</a>* <a class="funcname" name="NcPosition:GetTimestamp" href="src/NcPosition.cxx.html#sURzz">GetTimestamp</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcTimestamp.html">NcTimestamp</a>* <a class="funcname" name="NcPosition:GetTimestamp" href="src/NcPosition.cxx.html#xBljw">GetTimestamp</a>()</span><br />
 <div class="funccomm"><pre> Provide the timestamp of this position.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:RemoveTimestamp" href="src/NcPosition.cxx.html#uQpkaE">RemoveTimestamp</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:RemoveTimestamp" href="src/NcPosition.cxx.html#ye.waE">RemoveTimestamp</a>()</span><br />
 <div class="funccomm"><pre> Remove the timestamp from this postion.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:Data" href="src/NcPosition.cxx.html#Dmt3bC">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcPosition:Data" href="src/NcPosition.cxx.html#A48sFE">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
 <div class="funccomm"><pre> Provide all position/time information within the coordinate frame f.
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -466,14 +496,14 @@ return false;}
  The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcPosition:GetDistance" href="src/NcPosition.h.html#USl.2D">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcPosition:GetDistance" href="src/NcPosition.h.html#CIvUzD">GetDistance</a>(<a href="./NcPosition.html">NcPosition</a>&amp; p, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:22 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Fri May  7 12:18:30 2021 </em><em>&raquo; Last generated: 2021-05-07 12:18</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:26 2019            -->
+<!--   Date: Fri May  7 12:18:32 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcVertex.h.html">header file</a>
 <a class="descrheadentry" href="src/NcVertex.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcVertex_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -73,41 +73,41 @@ return false;}
     Only the pointers of the 'added' vertices are stored.
     This mode is typically used by making vertex studies based on a fixed list
     of vertices which stays under user control or is contained for instance
-    in an <a href="./NcEvent.html">NcEvent</a>.
+    in an <a href="./NcEvent.html">NcEvent</a>.  
     In this way the <a href="./NcVertex.html">NcVertex</a> just represents a 'logical structure' for the
     physics analysis which can be embedded in e.g. an <a href="./NcEvent.html">NcEvent</a> or <a href="./NcVertex.html">NcVertex</a>.
 
     Note :
     Modifications made to the original vertices also affect the <a href="./NcVertex.html">NcVertex</a> objects
     which are stored.
-
+ 
  b) <a href="./NcVertex.html#NcVertex:SetVertexCopy" title="void NcVertex::SetVertexCopy(Int_t j)">SetVertexCopy</a>(1).
     Of every 'added' vertex a private copy will be made of which the pointer
     will be stored.
     In this way the <a href="./NcVertex.html">NcVertex</a> represents an entity on its own and modifications
     made to the original vertices do not affect the <a href="./NcVertex.html">NcVertex</a> objects which are
-    stored.
+    stored. 
     This mode will allow 'adding' many different <a href="./NcVertex.html">NcVertex</a> objects by
     creating only one <a href="./NcVertex.html">NcVertex</a> instance in the main programme and using the
     <a href="./NcVertex.html">NcVertex</a>::<a href="./NcVertex.html#NcVertex:Reset" title="void NcVertex::Reset()">Reset</a>, <a href="./NcVertex.html">NcVertex</a>::<a href="./NcJet.html#NcJet:AddTrack" title="void NcJet::AddTrack(NcTrack&amp; t) or overloads">AddTrack</a> and parameter setting memberfunctions.
 
- See also the documentation provided for the memberfunction <a href="./NcVertex.html#NcVertex:SetOwner" title="void NcVertex::SetOwner(Bool_t own=kTRUE)">SetOwner</a>().
+ See also the documentation provided for the memberfunction <a href="./NcVertex.html#NcVertex:SetOwner" title="void NcVertex::SetOwner(Bool_t own=kTRUE)">SetOwner</a>(). 
 
  Coding example to make 3 vertices v1, v2 and v3.
-
+ ------------------------------------------------
  v1 contains the tracks 1,2,3 and 4
  v2 contains many different tracks
  v3 contains the jets 1 and 2
 
         <a href="./NcTrack.html">NcTrack</a> t1,t2,t3,t4;
-
+         ...
          ... // code to fill the track data
-
+         ...
 
         <a href="./NcJet.html">NcJet</a> j1,j2;
-
+         ...
          ... // code to fill the jet data
-
+         ...
 
         <a href="./NcVertex.html">NcVertex</a> v1;
         v1.<a href="./NcVertex.html#NcVertex:SetVertexCopy" title="void NcVertex::SetVertexCopy(Int_t j)">SetVertexCopy</a>(1);
@@ -126,11 +126,11 @@ return false;}
         <a href="./NcTrack.html">NcTrack</a>* tx=new <a href="./NcTrack.html">NcTrack</a>();
         for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;10; i++)
         {
-
+         ...
          ... // code to fill the track data
-
+         ...
          v2.<a href="./NcJet.html#NcJet:AddTrack" title="void NcJet::AddTrack(NcTrack&amp; t) or overloads">AddTrack</a>(tx);
-         tx-&gt;<a href="./NcVertex.html#NcVertex:Reset" title="void NcVertex::Reset()">Reset</a>();
+         tx-&gt;<a href="./NcVertex.html#NcVertex:Reset" title="void NcVertex::Reset()">Reset</a>(); 
         }
 
         <a href="./ListOfTypes.html#Float_t">Float_t</a> r2[3]={1.6,-3.2,5.7};
@@ -153,7 +153,7 @@ return false;}
         <a href="./ListOfTypes.html#Float_t">Float_t</a> loc[3];
         v1.<a href="./NcPosition.html#NcPosition:GetPosition" title="void NcPosition::GetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;,Float_t s=-1) or overloads">GetPosition</a>(loc,<span class="string">"sph"</span>);
         <a href="./NcPosition.html">NcPosition</a> r=v2.<a href="./NcPosition.html#NcPosition:GetPosition" title="void NcPosition::GetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;,Float_t s=-1) or overloads">GetPosition</a>();
-        r.<a href="./NcVertex.html#NcVertex:Data" title="void NcVertex::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+        r.<a href="./NcVertex.html#NcVertex:Data" title="void NcVertex::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>(); 
         <a href="./ListOfTypes.html#Int_t">Int_t</a> nt=v2.<a href="./NcJet.html#NcJet:GetNtracks" title="Int_t NcJet::GetNtracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0) or overloads">GetNtracks</a>();
         <a href="./NcTrack.html">NcTrack</a>* tv=v2.<a href="./NcJet.html#NcJet:GetTrack" title="NcTrack* NcJet::GetTrack(Int_t i)">GetTrack</a>(1); // Access track number 1 of Vertex v2
 
@@ -168,7 +168,7 @@ return false;}
         <a href="./NcVertex.html">NcVertex</a>* vx=v1.<a href="./NcVertex.html#NcVertex:GetVertex" title="NcVertex* NcVertex::GetVertex(Int_t i)">GetVertex</a>(1); // Access 1st secondary vertex of v1
         <a href="./ListOfTypes.html#Float_t">Float_t</a> e=vx-&gt;<a href="./NcJet.html#NcJet:GetEnergy" title="Double_t NcJet::GetEnergy(Float_t scale=-1)">GetEnergy</a>();
 
-        <a href="./ListOfTypes.html#Float_t">Float_t</a> M=v1.<a href="./NcJet.html#NcJet:GetInvmass" title="Double_t NcJet::GetInvmass(Float_t scale=-1)">GetInvmass</a>();
+        <a href="./ListOfTypes.html#Float_t">Float_t</a> M=v1.<a href="./NcJet.html#NcJet:GetInvmass" title="Double_t NcJet::GetInvmass(Float_t scale=-1)">GetInvmass</a>(); 
 
  Reconstruct Vertex v1 from scratch
 
@@ -188,7 +188,7 @@ return false;}
         obtained via the <a href="./NcPosition.html#NcPosition:GetUnitScale" title="Float_t NcPosition::GetUnitScale()">GetUnitScale</a>() and <a href="./NcJet.html#NcJet:GetEscale" title="Float_t NcJet::GetEscale()">GetEscale</a>() memberfunctions.
 
 --- Author: Nick van Eijndhoven 04-apr-1998 Utrecht University
-- Modified: NvE $Date: 2013-08-18 20:14:09 +0200 (Sun, 18 Aug 2013) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  11:16Z
 
 </pre></div>
 </div></div>
@@ -514,77 +514,84 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcVertex:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcVertex_Inh" id="MapNcVertex_Inh">
-<area shape="rect" id="node3" href="./NcJet.html" title="NcJet" alt="" coords="271,19,361,37"/>
-<area shape="rect" id="node4" href="./NcPosition.html" title="NcPosition" alt="" coords="271,37,361,55"/>
-<area shape="rect" id="node6" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="136,19,226,37"/>
-<area shape="rect" id="node7" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="136,37,226,55"/>
-<area shape="rect" id="node10" href="./NcEvent.html" title="NcEvent" alt="" coords="542,28,632,46"/>
-<area shape="rect" id="node11" href="./IceEvent.html" title="IceEvent" alt="" coords="677,28,767,46"/>
-</map>
-<map name="MapNcVertex_InhMem" id="MapNcVertex_InhMem">
-<area shape="rect" id="graph12" href="./NcJet.html" alt="" coords="859,63,947,128"/>
-<area shape="rect" id="graph13" href="./NcJet.html" alt="" coords="760,63,848,143"/>
-<area shape="rect" id="graph14" href="./NcJet.html" alt="" coords="661,63,749,143"/>
-<area shape="rect" id="graph15" href="./NcJet.html" alt="" coords="891,139,915,160"/>
-<area shape="rect" id="graph16" href="./NcJet.html" alt="" coords="859,171,947,469"/>
-<area shape="rect" id="graph17" href="./NcJet.html" alt="" coords="760,171,848,469"/>
-<area shape="rect" id="graph18" href="./NcJet.html" alt="" coords="661,171,749,469"/>
-<area shape="rect" id="graph11" href="./NcJet.html" title="NcJet" alt="" coords="651,16,957,480"/>
-<area shape="rect" id="graph21" href="./NcPosition.html" alt="" coords="661,789,947,825"/>
-<area shape="rect" id="graph22" href="./NcPosition.html" alt="" coords="859,836,947,988"/>
-<area shape="rect" id="graph23" href="./NcPosition.html" alt="" coords="760,836,848,988"/>
-<area shape="rect" id="graph24" href="./NcPosition.html" alt="" coords="661,836,749,988"/>
-<area shape="rect" id="graph20" href="./NcPosition.html" title="NcPosition" alt="" coords="651,743,957,999"/>
-<area shape="rect" id="graph33" href="./Nc4Vector.html" alt="" coords="541,344,629,409"/>
-<area shape="rect" id="graph34" href="./Nc4Vector.html" alt="" coords="443,344,531,409"/>
-<area shape="rect" id="graph35" href="./Nc4Vector.html" alt="" coords="344,344,432,409"/>
-<area shape="rect" id="graph36" href="./Nc4Vector.html" alt="" coords="573,420,597,441"/>
-<area shape="rect" id="graph37" href="./Nc4Vector.html" alt="" coords="541,452,629,721"/>
-<area shape="rect" id="graph38" href="./Nc4Vector.html" alt="" coords="443,423,531,721"/>
-<area shape="rect" id="graph39" href="./Nc4Vector.html" alt="" coords="344,423,432,721"/>
-<area shape="rect" id="graph32" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="333,297,640,732"/>
-<area shape="rect" id="graph42" href="./Nc3Vector.html" alt="" coords="541,789,629,840"/>
-<area shape="rect" id="graph43" href="./Nc3Vector.html" alt="" coords="443,789,531,840"/>
-<area shape="rect" id="graph44" href="./Nc3Vector.html" alt="" coords="376,789,400,811"/>
-<area shape="rect" id="graph45" href="./Nc3Vector.html" alt="" coords="541,851,629,1061"/>
-<area shape="rect" id="graph46" href="./Nc3Vector.html" alt="" coords="443,851,531,1091"/>
-<area shape="rect" id="graph47" href="./Nc3Vector.html" alt="" coords="344,851,432,1091"/>
-<area shape="rect" id="graph41" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="333,743,640,1101"/>
-</map>
-<map name="MapNcVertex_Lib" id="MapNcVertex_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcVertex_Inh" class="tabsel" href="inh/NcVertex_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcVertex_Inh.png');">Inheritance</a>
-<a id="imgNcVertex_InhMem" class="tab" href="inhmem/NcVertex_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcVertex_InhMem.png');">Inherited Members</a>
-<a id="imgNcVertex_Incl" class="tab" href="incl/NcVertex_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcVertex_Incl.png');">Includes</a>
-<a id="imgNcVertex_Lib" class="tab" href="lib/NcVertex_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcVertex_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcVertex_Inh" src="inh/NcVertex_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#efefef" align="right">
+<tt>TNamed</tt></td>
+</tr><tr>
+<td bgcolor="#efefef" align="right">
+<table><tr><td>
+<center><tt><a name="Nc4Vector" href="./Nc4Vector.html">Nc4Vector</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcJet" href="./NcJet.html">NcJet</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr><tr>
+<td bgcolor="#f7f7f7" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#efefef" align="right">
+<table><tr><td>
+<center><tt><a name="Nc3Vector" href="./Nc3Vector.html">Nc3Vector</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcPosition" href="./NcPosition.html">NcPosition</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcVertex" href="./NcVertex.html">NcVertex</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="NcEvent" href="./NcEvent.html">NcEvent</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="IceEvent" href="./IceEvent.html">IceEvent</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:NcVertex" href="src/NcVertex.cxx.html#Hzf5.">NcVertex</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:NcVertex" href="src/NcVertex.cxx.html#YPCTLB">NcVertex</a>()</span><br />
 <div class="funccomm"><pre> Default constructor.
  All variables initialised to 0.
  Initial maximum number of tracks is set to the default value.
  Initial maximum number of sec. vertices is set to the default value.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Init" href="src/NcVertex.cxx.html#lWeNzC">Init</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Init" href="src/NcVertex.cxx.html#FhRckB">Init</a>()</span><br />
 <div class="funccomm"><pre> Initialisation of pointers etc...
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:NcVertex@1" href="src/NcVertex.cxx.html#VouxBD">NcVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:NcVertex@1" href="src/NcVertex.cxx.html#gzkfxC">NcVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
 <div class="funccomm"><pre> Create a vertex to hold initially a maximum of n tracks
  All variables initialised to 0
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:_NcVertex" href="src/NcVertex.cxx.html#mSXQj">~NcVertex</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:_NcVertex" href="src/NcVertex.cxx.html#ymAkPE">~NcVertex</a>()</span><br />
 <div class="funccomm"><pre> Default destructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetOwner" href="src/NcVertex.cxx.html#kPAi0B">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
-<div class="funccomm"><pre> Set ownership of all added objects.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetOwner" href="src/NcVertex.cxx.html#K9zTnB">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Set ownership of all added objects. 
  The default parameter is own=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 
  Invokation of this memberfunction also sets all the copy modes
@@ -604,26 +611,26 @@ return false;}
  very likely result in inconsistent destructor behaviour.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:NcVertex@2" href="src/NcVertex.cxx.html#tDwC5D">NcVertex</a>(<span class="keyword">const</span> <a href="./NcVertex.html">NcVertex</a>&amp; v)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcVertex:NcVertex@2" href="src/NcVertex.cxx.html#l60w9D">NcVertex</a>(<span class="keyword">const</span> <a href="./NcVertex.html">NcVertex</a>&amp; v)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetNvmax" href="src/NcVertex.cxx.html#V0XWYB">SetNvmax</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetNvmax" href="src/NcVertex.cxx.html#FIfkyE">SetNvmax</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</span><br />
 <div class="funccomm"><pre> Set the initial maximum number of (secondary) vertices
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetNjmax" href="src/NcVertex.cxx.html#xRYWYB">SetNjmax</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetNjmax" href="src/NcVertex.cxx.html#R5tkyE">SetNjmax</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n = 2)</span><br />
 <div class="funccomm"><pre> Set the initial maximum number of jets
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Reset" href="src/NcVertex.cxx.html#SqHlEE">Reset</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Reset" href="src/NcVertex.cxx.html#eIln1C">Reset</a>()</span><br />
 <div class="funccomm"><pre> <a href="./NcVertex.html#NcVertex:Reset" title="void NcVertex::Reset()">Reset</a> all variables to 0 and reset all stored vertex and jet lists.
  The max. number of tracks is set to the initial value again
  The max. number of vertices is set to the default value again
  The max. number of jets is set to the default value again
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:ResetVertices" href="src/NcVertex.cxx.html#oM9fXB">ResetVertices</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:ResetVertices" href="src/NcVertex.cxx.html#o5QsXB">ResetVertices</a>()</span><br />
 <div class="funccomm"><pre> <a href="./NcVertex.html#NcVertex:Reset" title="void NcVertex::Reset()">Reset</a> the stored vertex list and delete all connecting tracks which
  were generated automatically via connect=1 in <a href="./NcVertex.html#NcVertex:AddVertex" title="void NcVertex::AddVertex(NcVertex&amp; v,Int_t connect=1) or overloads">AddVertex</a>().
  The max. number of vertices is set to the default value again.
@@ -631,7 +638,7 @@ return false;}
  connecting tracks.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddJet" href="src/NcVertex.cxx.html#trJLpB">AddJet</a>(<a href="./NcJet.html">NcJet</a>&amp; j, <a href="./ListOfTypes.html#Int_t">Int_t</a> tracks = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddJet" href="src/NcVertex.cxx.html#v26fqD">AddJet</a>(<a href="./NcJet.html">NcJet</a>&amp; j, <a href="./ListOfTypes.html#Int_t">Int_t</a> tracks = 1)</span><br />
 <div class="funccomm"><pre> Add a jet (and its tracks) to the vertex
  In case the maximum number of jets has been reached,
  the array space will be extended automatically
@@ -642,7 +649,7 @@ return false;}
         by specifying tracks=0. In this case only the <a href="./NcJet.html">NcJet</a> object will
         be stored according to the mode specified by <a href="./NcVertex.html#NcVertex:SetJetCopy" title="void NcVertex::SetJetCopy(Int_t j)">SetJetCopy</a>().
         The latter will enable jet studies based on a fixed list of tracks
-        as contained e.g. in an <a href="./NcVertex.html">NcVertex</a> or <a href="./NcEvent.html">NcEvent</a>.
+        as contained e.g. in an <a href="./NcVertex.html">NcVertex</a> or <a href="./NcEvent.html">NcEvent</a>. 
 
  In case a private copy is made, this is performed via the <a href="./NcVertex.html#NcVertex:Clone" title="TObject* NcVertex::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
  All <a href="./NcJet.html">NcJet</a> and derived classes have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcVertex.html#NcVertex:Clone" title="TObject* NcVertex::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
@@ -650,10 +657,10 @@ return false;}
  include pointers to other objects. Therefore it is recommended to provide
  for all derived classes a specific copy constructor and override the default <a href="./NcVertex.html#NcVertex:Clone" title="TObject* NcVertex::Clone(const char* name=&quot;&quot;)">Clone</a>()
  memberfunction using this copy constructor.
- An example for this may be seen from <a href="./NcJet.html">NcJet</a>.
+ An example for this may be seen from <a href="./NcJet.html">NcJet</a>.   
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddVertex" href="src/NcVertex.cxx.html#Eoa8QE">AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>&amp; v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddVertex" href="src/NcVertex.cxx.html#gQzrAE">AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>&amp; v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</span><br />
 <div class="funccomm"><pre> Add a (secondary) vertex to the current vertex.
  In case the maximum number of (secondary) vertices has been reached,
  the array space will be extended automatically
@@ -674,10 +681,10 @@ return false;}
  include pointers to other objects. Therefore it is recommended to provide
  for all derived classes a specific copy constructor and override the default <a href="./NcVertex.html#NcVertex:Clone" title="TObject* NcVertex::Clone(const char* name=&quot;&quot;)">Clone</a>()
  memberfunction using this copy constructor.
- An example for this may be seen from <a href="./NcVertex.html">NcVertex</a>.
+ An example for this may be seen from <a href="./NcVertex.html">NcVertex</a>.   
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Data" href="src/NcVertex.cxx.html#DpXBeC">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Data" href="src/NcVertex.cxx.html#Nsq1O">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Provide vertex information within the coordinate frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -688,7 +695,7 @@ return false;}
  The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:List" href="src/NcVertex.cxx.html#bgwm1C">List</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:List" href="src/NcVertex.cxx.html#PcbJ2C">List</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</span><br />
 <div class="funccomm"><pre> Provide primary track and sec. vertex information within the coordinate frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -705,7 +712,7 @@ return false;}
  The default is tracks=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:ListAll" href="src/NcVertex.cxx.html#KbklVD">ListAll</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:ListAll" href="src/NcVertex.cxx.html#igSlVD">ListAll</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>, TObjArray* tracks = 0)</span><br />
 <div class="funccomm"><pre> Provide complete (sec) vertex and (decay) track info within the coordinate frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -722,23 +729,23 @@ return false;}
  The default is tracks=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Dumps" href="src/NcVertex.cxx.html#q3sMtB">Dumps</a>(<a href="./NcVertex.html">NcVertex</a>* v, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TString f, TString u)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Dumps" href="src/NcVertex.cxx.html#ikDNtB">Dumps</a>(<a href="./NcVertex.html">NcVertex</a>* v, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TString f, TString u)</span><br />
 <div class="funccomm"><pre> Recursively provide the info of all secondary vertices of this vertex
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetNvertices" href="src/NcVertex.cxx.html#gCkpME">GetNvertices</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetNvertices" href="src/NcVertex.cxx.html#WAVuZB">GetNvertices</a>() const</span><br />
 <div class="funccomm"><pre> Return the current number of (secondary) vertices
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcVertex.html">NcVertex</a>* <a class="funcname" name="NcVertex:GetVertex" href="src/NcVertex.cxx.html#fORCEC">GetVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcVertex.html">NcVertex</a>* <a class="funcname" name="NcVertex:GetVertex" href="src/NcVertex.cxx.html#U.60UC">GetVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
 <div class="funccomm"><pre> Return the i-th (secondary) vertex of the current vertex
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcVertex.html">NcVertex</a>* <a class="funcname" name="NcVertex:GetIdVertex" href="src/NcVertex.cxx.html#zCL1DE">GetIdVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcVertex.html">NcVertex</a>* <a class="funcname" name="NcVertex:GetIdVertex" href="src/NcVertex.cxx.html#ouep4">GetIdVertex</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
 <div class="funccomm"><pre> Return the (sec.) vertex with user identifier <span class="string">"id"</span>
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetVertexCopy" href="src/NcVertex.cxx.html#UCBxCB">SetVertexCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetVertexCopy" href="src/NcVertex.cxx.html#MfWtCB">SetVertexCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
 <div class="funccomm"><pre> (De)activate the creation of private copies of the added vertices.
  j=0 ==&gt; No private copies are made; pointers of original vertices are stored.
  j=1 ==&gt; Private copies of the vertices are made and these pointers are stored.
@@ -749,25 +756,25 @@ return false;}
         vertices one first has to invoke <a href="./NcVertex.html#NcVertex:Reset" title="void NcVertex::Reset()">Reset</a>().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetVertexCopy" href="src/NcVertex.cxx.html#P29RlE">GetVertexCopy</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetVertexCopy" href="src/NcVertex.cxx.html#qpoQlE">GetVertexCopy</a>() const</span><br />
 <div class="funccomm"><pre> Provide value of the VertexCopy mode.
  0 ==&gt; No private copies are made; pointers of original vertices are stored.
  1 ==&gt; Private copies of the vertices are made and these pointers are stored.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetNjets" href="src/NcVertex.cxx.html#GSpDIB">GetNjets</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetNjets" href="src/NcVertex.cxx.html#y_NSkB">GetNjets</a>() const</span><br />
 <div class="funccomm"><pre> Return the current number of jets
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcJet.html">NcJet</a>* <a class="funcname" name="NcVertex:GetJet" href="src/NcVertex.cxx.html#PAThwC">GetJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcJet.html">NcJet</a>* <a class="funcname" name="NcVertex:GetJet" href="src/NcVertex.cxx.html#uaXIwC">GetJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
 <div class="funccomm"><pre> Return the i-th jet of the current vertex
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcJet.html">NcJet</a>* <a class="funcname" name="NcVertex:GetIdJet" href="src/NcVertex.cxx.html#CKXAVB">GetIdJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcJet.html">NcJet</a>* <a class="funcname" name="NcVertex:GetIdJet" href="src/NcVertex.cxx.html#P9BZUB">GetIdJet</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id) const</span><br />
 <div class="funccomm"><pre> Return the jet with user identifier <span class="string">"id"</span>
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetJetCopy" href="src/NcVertex.cxx.html#LFlNqD">SetJetCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:SetJetCopy" href="src/NcVertex.cxx.html#jK7BqD">SetJetCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
 <div class="funccomm"><pre> (De)activate the creation of private copies of the added jets.
  j=0 ==&gt; No private copies are made; pointers of original jets are stored.
  j=1 ==&gt; Private copies of the jets are made and these pointers are stored.
@@ -778,32 +785,32 @@ return false;}
         jets one first has to invoke <a href="./NcVertex.html#NcVertex:Reset" title="void NcVertex::Reset()">Reset</a>().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetJetCopy" href="src/NcVertex.cxx.html#nLWcmD">GetJetCopy</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:GetJetCopy" href="src/NcVertex.cxx.html#GZKimD">GetJetCopy</a>() const</span><br />
 <div class="funccomm"><pre> Provide value of the JetCopy mode.
  0 ==&gt; No private copies are made; pointers of original jets are stored.
  1 ==&gt; Private copies of the jets are made and these pointers are stored.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:IsConnectTrack" href="src/NcVertex.cxx.html#wH_s2E">IsConnectTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:IsConnectTrack" href="src/NcVertex.cxx.html#MlcGvC">IsConnectTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t) const</span><br />
 <div class="funccomm"><pre> Indicate whether a track from the tracklist was created via the
  connection of a (secondary) vertex or not.
  In case the track was the result of (secondary) vertex addition the
  return value is 1, otherwise the value 0 will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:IsJetTrack" href="src/NcVertex.cxx.html#XX2PyB">IsJetTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcVertex:IsJetTrack" href="src/NcVertex.cxx.html#qLuYqC">IsJetTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t) const</span><br />
 <div class="funccomm"><pre> Indicate whether a track from the tracklist was created via the
  addition of a jet or not.
  In case the track was the result of jet addition the return value is 1,
  otherwise the value 0 will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Draw@1" href="src/NcVertex.cxx.html#NzKBZD">Draw</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> secs, <a href="./ListOfTypes.html#Int_t">Int_t</a> cons = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> jets = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Draw@1" href="src/NcVertex.cxx.html#BvMBZD">Draw</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> secs, <a href="./ListOfTypes.html#Int_t">Int_t</a> cons = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> jets = 0)</span><br />
 <div class="funccomm"><pre> 3-Dimensional visualisation of an <a href="./NcVertex.html">NcVertex</a> with its attributes.
  The displayed tracklength is proportional to the momentum of the track.
 
  Color conventions :
-
+ -------------------
  positive track : red
  neutral  track : green
  negative track : blue
@@ -812,26 +819,26 @@ return false;}
  secs = 1 --&gt; <a href="./NcVertex.html#NcVertex:Draw" title="void NcVertex::Draw(Option_t* ) or overloads">Draw</a> secondary vertices. (Default)
         0 --&gt; Don't draw secondary vertices.
 
- cons = 1 --&gt; <a href="./NcVertex.html#NcVertex:Draw" title="void NcVertex::Draw(Option_t* ) or overloads">Draw</a> (auto generated) connecting tracks. (Default)
+ cons = 1 --&gt; <a href="./NcVertex.html#NcVertex:Draw" title="void NcVertex::Draw(Option_t* ) or overloads">Draw</a> (auto generated) connecting tracks. (Default) 
         0 --&gt; Don't draw (auto generated) connecting tracks.
-
+                  
  jets = 1 --&gt; Mark tracks belonging to jets.
         0 --&gt; Don't mark jet-tracks. (Default)
 
  Notes :
-
+ -------
  Auto generated connecting tracks will be drawn as thin lines.
  Tracks belonging to jets will be marked as somewhat thinner magenta lines.
  This memberfunction is used recursively.
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcVertex:SortJets" href="src/NcVertex.cxx.html#XvXeXE">SortJets</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* jets = 0, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcVertex:SortJets" href="src/NcVertex.cxx.html#RkBC5B">SortJets</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, TObjArray* jets = 0, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to an array of jets by looping over the input array <span class="string">"jets"</span>
  and checking the value of a certain observable.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
  or as a returned pointer.
- In case jets=0 (default), the registered jets of the current vertex are used.
+ In case jets=0 (default), the registered jets of the current vertex are used. 
  Note that the original jet array is not modified.
  Via the <span class="string">"mode"</span> argument the user can specify the observable to be checked upon
  and specify whether sorting should be performed in decreasing order (mode&lt;0)
@@ -855,7 +862,7 @@ return false;}
  The default values are :  mode=-1, jets=0 and ordered=0.
 
  Note :
-
+ ------
  In case ordered=0 the ordered jet pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to jet ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -865,21 +872,21 @@ return false;}
  return argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcVertex:Clone" href="src/NcVertex.cxx.html#PrxcnC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcVertex:Clone" href="src/NcVertex.cxx.html#GWJFC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
  correct type depending on the object type, a feature which may be very useful
  for containers when adding objects in case the container owns the objects.
  This feature allows e.g. <a href="./NcEvent.html">NcEvent</a> to store either <a href="./NcVertex.html">NcVertex</a> objects or
  objects derived from <a href="./NcVertex.html">NcVertex</a> via the <a href="./NcVertex.html#NcVertex:AddVertex" title="void NcVertex::AddVertex(NcVertex&amp; v,Int_t connect=1) or overloads">AddVertex</a> memberfunction, provided
- these derived classes also have a proper <a href="./NcVertex.html#NcVertex:Clone" title="TObject* NcVertex::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction.
+ these derived classes also have a proper <a href="./NcVertex.html#NcVertex:Clone" title="TObject* NcVertex::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddJet" href="src/NcVertex.h.html#kzU_dD">AddJet</a>(<a href="./NcJet.html">NcJet</a>&amp; j, <a href="./ListOfTypes.html#Int_t">Int_t</a> tracks = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddJet" href="src/NcVertex.h.html#PPBerC">AddJet</a>(<a href="./NcJet.html">NcJet</a>&amp; j, <a href="./ListOfTypes.html#Int_t">Int_t</a> tracks = 1)</span><br />
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddVertex" href="src/NcVertex.h.html#Ez72DB">AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>&amp; v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:AddVertex" href="src/NcVertex.h.html#oy7mHB">AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>&amp; v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</span><br />
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Draw" href="src/NcVertex.h.html#s81bNE">Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* )</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcVertex:Draw" href="src/NcVertex.h.html#cPFDmD">Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* )</span><br />
 
 <div class="code"><code class="inlinecode">{ <a href="./NcVertex.html#NcVertex:Draw" title="void NcVertex::Draw(Option_t* ) or overloads">Draw</a>(1,1,0); }</code></div>
 <div style="clear:both;"></div>
@@ -889,7 +896,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:26 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Fri May  7 12:18:32 2021 </em><em>&raquo; Last generated: 2021-05-07 12:18</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

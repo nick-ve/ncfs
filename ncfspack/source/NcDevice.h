@@ -3,8 +3,6 @@
 // Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcDevice.h 135 2016-09-13 14:27:42Z nickve $
-
 #include "TPolyMarker3D.h"
 
 #include "NcSignal.h"
@@ -12,7 +10,7 @@
 class NcDevice : public NcSignal
 {
  public:
-  NcDevice();                                        // Default constructor
+  NcDevice(const char* name="",const char* title="");// Default constructor
   virtual ~NcDevice();                               // Default destructor
   NcDevice(const NcDevice& dev);                     // Copy constructor
   virtual TObject* Clone(const char* name="") const; // Make a deep copy and provide its pointer
@@ -52,6 +50,6 @@ class NcDevice : public NcSignal
   TObjArray* fOrdered; //! Temp. array to hold the ordered hits
   TObjArray* fMarkers; //! Temp. array to hold the 3D markers for the hit display
 
- ClassDef(NcDevice,10) // Signal (Hit) handling of a generic device.
+ ClassDef(NcDevice,11) // Signal (Hit) handling of a generic device.
 };
 #endif
