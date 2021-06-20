@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:18 2019            -->
+<!--   Date: Sun Jun 20 18:46:04 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcEvent.h.html">header file</a>
 <a class="descrheadentry" href="src/NcEvent.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcEvent_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -61,12 +61,10 @@ return false;}
 <pre>
  <a href="./NcEvent.html#NcEvent:Class" title="TClass* NcEvent::Class()">Class</a> <a href="./NcEvent.html">NcEvent</a>
  Creation and investigation of an NCFS generic event structure.
- An <a href="./NcEvent.html">NcEvent</a> can be constructed by adding NcTracks, NcVertices, NcJets
- and/or devices like NcCalorimeters or <a href="./NcDevice.html">NcDevice</a> (derived) objects.
+ An <a href="./NcEvent.html">NcEvent</a> can be constructed by adding <a href="./NcTrack.html">NcTrack</a>, <a href="./NcVertex.html">NcVertex</a>, <a href="./NcJet.html">NcJet</a>
+ and/or <a href="./NcDevice.html">NcDevice</a> (or derived) objects, like for instance <a href="./NcCalorimeter.html">NcCalorimeter</a>.
 
- All objects which are derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a> can be regarded as a device.
- However, <a href="./NcDevice.html">NcDevice</a> (or derived) objects profit from additional hit
- handling facilities.
+ <a href="./NcDevice.html">NcDevice</a> (or derived) objects provide additional hit handling facilities.
  A <span class="string">"hit"</span> is a generic name indicating an <a href="./NcSignal.html">NcSignal</a> (or derived) object.
  Note that <a href="./NcEvent.html">NcEvent</a> does NOT own hits; it only provides references to hits
  obtained from the various devices.
@@ -78,47 +76,46 @@ return false;}
 
  To provide maximal flexibility to the user, the two modes of track/jet/vertex
  storage as described in <a href="./NcJet.html">NcJet</a> and <a href="./NcVertex.html">NcVertex</a> can be used.
- In addition an identical structure is provided for the storage of devices like
- <a href="./NcCalorimeter.html">NcCalorimeter</a> objects, which can be selected by means of the memberfunction
- <a href="./NcEvent.html#NcEvent:SetDevCopy" title="void NcEvent::SetDevCopy(Int_t j)">SetDevCopy</a>().
+ In addition an identical structure is provided for the storage of devices
+ which can be selected by means of the memberfunction <a href="./NcEvent.html#NcEvent:SetDevCopy" title="void NcEvent::SetDevCopy(Int_t j)">SetDevCopy</a>().
 
  a) <a href="./NcEvent.html#NcEvent:SetDevCopy" title="void NcEvent::SetDevCopy(Int_t j)">SetDevCopy</a>(0) (which is the default).
     Only the pointers of the 'added' devices are stored.
     This mode is typically used by making studies based on a fixed set
     of devices which stays under user control or is kept on an external
-    file/tree.
+    file/tree. 
     In this way the <a href="./NcEvent.html">NcEvent</a> just represents a 'logical structure' for the
     physics analysis.
 
     Note :
     Modifications made to the original devices also affect the device
-    objects which are stored in the <a href="./NcEvent.html">NcEvent</a>.
+    objects which are stored in the <a href="./NcEvent.html">NcEvent</a>. 
 
  b) <a href="./NcEvent.html#NcEvent:SetDevCopy" title="void NcEvent::SetDevCopy(Int_t j)">SetDevCopy</a>(1).
     Of every 'added' device a private copy will be made of which the pointer
     will be stored.
     In this way the <a href="./NcEvent.html">NcEvent</a> represents an entity on its own and modifications
-    made to the original calorimeters do not affect the <a href="./NcCalorimeter.html">NcCalorimeter</a> objects
-    which are stored in the <a href="./NcEvent.html">NcEvent</a>.
+    made to the original devices do not affect the <a href="./NcDevice.html">NcDevice</a> (or derived) objects
+    which are stored in the <a href="./NcEvent.html">NcEvent</a>. 
     This mode will allow 'adding' many different devices into an <a href="./NcEvent.html">NcEvent</a> by
     creating only one device instance in the main programme and using the
     <a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a>() and parameter setting memberfunctions of the object representing the device.
 
     Note :
     The copy is made using the <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
-    All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
+    All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() 
     memberfunction.
     However, devices generally contain an internal (signal) data structure
     which may include pointers to other objects. Therefore it is recommended to provide
     for all devices a specific copy constructor and override the default <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
     memberfunction using this copy constructor.
-    Examples for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>, <a href="./NcSignal.html">NcSignal</a> and <a href="./NcDevice.html">NcDevice</a>.
+    Examples for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>, <a href="./NcSignal.html">NcSignal</a> and <a href="./NcDevice.html">NcDevice</a>.   
 
- See also the documentation provided for the memberfunction <a href="./NcEvent.html#NcEvent:SetOwner" title="void NcEvent::SetOwner(Bool_t own=kTRUE)">SetOwner</a>().
+ See also the documentation provided for the memberfunction <a href="./NcEvent.html#NcEvent:SetOwner" title="void NcEvent::SetOwner(Bool_t own=kTRUE)">SetOwner</a>(). 
 
  Coding example to make an event consisting of a primary vertex,
  2 secondary vertices and a calorimeter.
-
+ --------------------------------------------------------------
  vp contains the tracks 1,2,3 and 4 (primary vertex)
  v1 contains the tracks 5,6 and 7   (sec. vertex)
  v2 contains the jets 1 and 2       (sec. vertex)
@@ -127,17 +124,17 @@ return false;}
 
  Specify the event object as the repository of all objects
  for the event building and physics analysis.
-
+ 
         evt.<a href="./NcEvent.html#NcEvent:SetDevCopy" title="void NcEvent::SetDevCopy(Int_t j)">SetDevCopy</a>(1);
         evt.<a href="./NcJet.html#NcJet:SetTrackCopy" title="void NcJet::SetTrackCopy(Int_t j)">SetTrackCopy</a>(1);
 
  Fill the event structure with the basic objects
-
+ 
         <a href="./NcCalorimeter.html">NcCalorimeter</a> emcal1;
         <a href="./NcCalorimeter.html">NcCalorimeter</a> emcal2;
-
+         ...
          ... // code to fill the emcal1 and emcal2 calorimeter data
-
+         ...
 
         evt.<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(emcal1);
         evt.<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(emcal2);
@@ -145,9 +142,9 @@ return false;}
         // Assume NcTOF has been derived from <a href="./NcDevice.html">NcDevice</a>
         NcTOF tof1;
         NcTOF tof2;
-
+         ...
          ... // code to fill the tof1 and tof2 data
-
+         ...
 
         evt.<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(tof1);
         evt.<a href="./NcEvent.html#NcEvent:AddDevice" title="void NcEvent::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a>(tof2);
@@ -155,11 +152,11 @@ return false;}
         <a href="./NcTrack.html">NcTrack</a>* tx=new <a href="./NcTrack.html">NcTrack</a>();
         for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;10; i++)
         {
-
+         ...
          ... // code to fill the track data
-
+         ...
          evt.<a href="./NcJet.html#NcJet:AddTrack" title="void NcJet::AddTrack(NcTrack&amp; t) or overloads">AddTrack</a>(tx);
-         tx-&gt;<a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a>();
+         tx-&gt;<a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a>(); 
         }
 
         if (tx)
@@ -199,9 +196,9 @@ return false;}
         for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;evt.<a href="./NcJet.html#NcJet:GetNtracks" title="Int_t NcJet::GetNtracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0) or overloads">GetNtracks</a>(); i++)
         {
          tx=evt.<a href="./NcJet.html#NcJet:GetTrack" title="NcTrack* NcJet::GetTrack(Int_t i)">GetTrack</a>(i);
-
+         ...
          ... // code to fill the jet data
-
+         ...
         }
 
         <a href="./NcVertex.html">NcVertex</a> vp;
@@ -251,10 +248,10 @@ return false;}
  but can be made available also from the event itself if desired.
         <a href="./NcJet.html">NcJet</a>* jx;
         jx=v2.<a href="./NcVertex.html#NcVertex:GetJet" title="NcJet* NcVertex::GetJet(Int_t i)">GetJet</a>(1);
-        evt.<a href="./NcVertex.html#NcVertex:AddJet" title="void NcVertex::AddJet(NcJet&amp; j,Int_t tracks=1) or overloads">AddJet</a>(jx,0);
+        evt.<a href="./NcVertex.html#NcVertex:AddJet" title="void NcVertex::AddJet(NcJet&amp; j,Int_t tracks=1) or overloads">AddJet</a>(jx,0); 
         jx=v2.<a href="./NcVertex.html#NcVertex:GetJet" title="NcJet* NcVertex::GetJet(Int_t i)">GetJet</a>(2);
-        evt.<a href="./NcVertex.html#NcVertex:AddJet" title="void NcVertex::AddJet(NcJet&amp; j,Int_t tracks=1) or overloads">AddJet</a>(jx,0);
-
+        evt.<a href="./NcVertex.html#NcVertex:AddJet" title="void NcVertex::AddJet(NcJet&amp; j,Int_t tracks=1) or overloads">AddJet</a>(jx,0); 
+ 
         evt.<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>(<span class="string">"sph"</span>);
         v1.<a href="./NcVertex.html#NcVertex:ListAll" title="void NcVertex::ListAll(TString f=&quot;car&quot;,TString u=&quot;rad&quot;,TObjArray* tracks=0)">ListAll</a>();
         v2.<a href="./NcVertex.html#NcVertex:List" title="void NcVertex::List(TString f=&quot;car&quot;,TString u=&quot;rad&quot;,TObjArray* tracks=0)">List</a>(<span class="string">"cyl"</span>);
@@ -264,7 +261,7 @@ return false;}
         <a href="./ListOfTypes.html#Float_t">Float_t</a> loc[3];
         evt.<a href="./NcPosition.html#NcPosition:GetPosition" title="void NcPosition::GetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;,Float_t s=-1) or overloads">GetPosition</a>(loc,<span class="string">"sph"</span>);
         <a href="./NcPosition.html">NcPosition</a> r=v1.<a href="./NcPosition.html#NcPosition:GetPosition" title="void NcPosition::GetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;,Float_t s=-1) or overloads">GetPosition</a>();
-        r.<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>();
+        r.<a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>(); 
         <a href="./ListOfTypes.html#Int_t">Int_t</a> nt=v2.<a href="./NcJet.html#NcJet:GetNtracks" title="Int_t NcJet::GetNtracks(Int_t idmode=0,Int_t chmode=2,Int_t pcode=0) or overloads">GetNtracks</a>();
         <a href="./NcTrack.html">NcTrack</a>* tv=v2.<a href="./NcJet.html#NcJet:GetTrack" title="NcTrack* NcJet::GetTrack(Int_t i)">GetTrack</a>(1); // Access track number 1 of Vertex v2
 
@@ -274,15 +271,15 @@ return false;}
         <a href="./NcVertex.html">NcVertex</a>* vx=evt.<a href="./NcVertex.html#NcVertex:GetVertex" title="NcVertex* NcVertex::GetVertex(Int_t i)">GetVertex</a>(1); // Access primary vertex
         <a href="./ListOfTypes.html#Float_t">Float_t</a> e=vx-&gt;<a href="./NcJet.html#NcJet:GetEnergy" title="Double_t NcJet::GetEnergy(Float_t scale=-1)">GetEnergy</a>();
 
-        <a href="./ListOfTypes.html#Float_t">Float_t</a> M=evt.<a href="./NcJet.html#NcJet:GetInvmass" title="Double_t NcJet::GetInvmass(Float_t scale=-1)">GetInvmass</a>();
+        <a href="./ListOfTypes.html#Float_t">Float_t</a> M=evt.<a href="./NcJet.html#NcJet:GetInvmass" title="Double_t NcJet::GetInvmass(Float_t scale=-1)">GetInvmass</a>(); 
 
  Reconstruct the event from scratch
 
         evt.<a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a>();
         evt.<a href="./NcVertex.html#NcVertex:SetNvmax" title="void NcVertex::SetNvmax(Int_t n=2)">SetNvmax</a>(25); // Increase initial no. of sec. vertices
-
-        ... // code to create tracks etc...
-
+        ...
+        ... // code to create tracks etc... 
+        ...
 
  Note : By default all quantities are in meter, GeV, GeV/c or GeV/c**2
         but the user can indicate the usage of a different scale for
@@ -292,7 +289,7 @@ return false;}
         obtained via the <a href="./NcPosition.html#NcPosition:GetUnitScale" title="Float_t NcPosition::GetUnitScale()">GetUnitScale</a>() and <a href="./NcJet.html#NcJet:GetEscale" title="Float_t NcJet::GetEscale()">GetEscale</a>() memberfunctions.
 
 --- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-- Modified: NvE $<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>: 2016-09-01 18:50:25 +0200 (Thu, 01 Sep 2016) $
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel June 20, 2021  12:10Z
 
 </pre></div>
 </div></div>
@@ -317,7 +314,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:AddTrack@1"><span class="baseclass">NcJet::</span>AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>* t)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:AddVertex"><span class="baseclass">NcVertex::</span>AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>&amp; v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:AddVertex@1"><span class="baseclass">NcVertex::</span>AddVertex</a>(<a href="./NcVertex.html">NcVertex</a>* v, <a href="./ListOfTypes.html#Int_t">Int_t</a> connect = 1)</td></tr>
-<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Almanac"><span class="baseclass">NcTimestamp::</span>Almanac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* dpsi = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* deps = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* eps = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* dl = 0, TString name = <span class="string">""</span>, <a href="./ListOfTypes.html#Double_t">Double_t</a>* el = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* eb = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* er = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* value = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Almanac"><span class="baseclass">NcTimestamp::</span>Almanac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* dpsi = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* deps = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* eps = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* dl = 0, TString name = <span class="string">""</span>, <a href="./ListOfTypes.html#Double_t">Double_t</a>* el = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* eb = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* dr = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* value = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsDouble"><span class="baseclass">TTimeStamp::</span>AsDouble</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:AsGAST"><span class="baseclass">TTimeStamp::</span>AsGAST</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> UT1Offset = 0) <span class="keyword">const</span></td></tr>
@@ -796,91 +793,95 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcEvent:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcEvent_Inh" id="MapNcEvent_Inh">
-<area shape="rect" id="node3" href="./NcVertex.html" title="NcVertex" alt="" coords="407,37,497,55"/>
-<area shape="rect" id="node4" href="./NcTimestamp.html" title="NcTimestamp" alt="" coords="407,55,497,72"/>
-<area shape="rect" id="node5" href="./NcJet.html" title="NcJet" alt="" coords="271,19,361,37"/>
-<area shape="rect" id="node6" href="./NcPosition.html" title="NcPosition" alt="" coords="271,37,361,55"/>
-<area shape="rect" id="node9" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="136,19,226,37"/>
-<area shape="rect" id="node10" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="136,37,226,55"/>
-<area shape="rect" id="node13" href="./IceEvent.html" title="IceEvent" alt="" coords="677,46,767,64"/>
-</map>
-<map name="MapNcEvent_InhMem" id="MapNcEvent_InhMem">
-<area shape="rect" id="graph12" href="./NcVertex.html" alt="" coords="1176,63,1264,143"/>
-<area shape="rect" id="graph13" href="./NcVertex.html" alt="" coords="1077,63,1165,143"/>
-<area shape="rect" id="graph14" href="./NcVertex.html" alt="" coords="979,63,1067,143"/>
-<area shape="rect" id="graph15" href="./NcVertex.html" alt="" coords="1208,153,1232,175"/>
-<area shape="rect" id="graph16" href="./NcVertex.html" alt="" coords="1176,185,1264,411"/>
-<area shape="rect" id="graph17" href="./NcVertex.html" alt="" coords="1077,185,1165,411"/>
-<area shape="rect" id="graph18" href="./NcVertex.html" alt="" coords="979,185,1067,411"/>
-<area shape="rect" id="graph11" href="./NcVertex.html" title="NcVertex" alt="" coords="968,16,1275,421"/>
-<area shape="rect" id="graph21" href="./NcTimestamp.html" alt="" coords="1176,1056,1264,1151"/>
-<area shape="rect" id="graph22" href="./NcTimestamp.html" alt="" coords="1077,1056,1165,1151"/>
-<area shape="rect" id="graph23" href="./NcTimestamp.html" alt="" coords="979,1056,1067,1151"/>
-<area shape="rect" id="graph24" href="./NcTimestamp.html" alt="" coords="1208,1161,1232,1183"/>
-<area shape="rect" id="graph25" href="./NcTimestamp.html" alt="" coords="1176,1193,1264,1463"/>
-<area shape="rect" id="graph26" href="./NcTimestamp.html" alt="" coords="1077,1164,1165,1463"/>
-<area shape="rect" id="graph27" href="./NcTimestamp.html" alt="" coords="979,1164,1067,1463"/>
-<area shape="rect" id="graph20" href="./NcTimestamp.html" title="NcTimestamp" alt="" coords="968,1009,1275,1473"/>
-<area shape="rect" id="graph30" href="./NcJet.html" alt="" coords="859,63,947,128"/>
-<area shape="rect" id="graph31" href="./NcJet.html" alt="" coords="760,63,848,143"/>
-<area shape="rect" id="graph32" href="./NcJet.html" alt="" coords="661,63,749,143"/>
-<area shape="rect" id="graph33" href="./NcJet.html" alt="" coords="891,139,915,160"/>
-<area shape="rect" id="graph34" href="./NcJet.html" alt="" coords="859,171,947,469"/>
-<area shape="rect" id="graph35" href="./NcJet.html" alt="" coords="760,171,848,469"/>
-<area shape="rect" id="graph36" href="./NcJet.html" alt="" coords="661,171,749,469"/>
-<area shape="rect" id="graph29" href="./NcJet.html" title="NcJet" alt="" coords="651,16,957,480"/>
-<area shape="rect" id="graph39" href="./NcPosition.html" alt="" coords="661,789,947,825"/>
-<area shape="rect" id="graph40" href="./NcPosition.html" alt="" coords="859,836,947,988"/>
-<area shape="rect" id="graph41" href="./NcPosition.html" alt="" coords="760,836,848,988"/>
-<area shape="rect" id="graph42" href="./NcPosition.html" alt="" coords="661,836,749,988"/>
-<area shape="rect" id="graph38" href="./NcPosition.html" title="NcPosition" alt="" coords="651,743,957,999"/>
-<area shape="rect" id="graph57" href="./Nc4Vector.html" alt="" coords="541,344,629,409"/>
-<area shape="rect" id="graph58" href="./Nc4Vector.html" alt="" coords="443,344,531,409"/>
-<area shape="rect" id="graph59" href="./Nc4Vector.html" alt="" coords="344,344,432,409"/>
-<area shape="rect" id="graph60" href="./Nc4Vector.html" alt="" coords="573,420,597,441"/>
-<area shape="rect" id="graph61" href="./Nc4Vector.html" alt="" coords="541,452,629,721"/>
-<area shape="rect" id="graph62" href="./Nc4Vector.html" alt="" coords="443,423,531,721"/>
-<area shape="rect" id="graph63" href="./Nc4Vector.html" alt="" coords="344,423,432,721"/>
-<area shape="rect" id="graph56" href="./Nc4Vector.html" title="Nc4Vector" alt="" coords="333,297,640,732"/>
-<area shape="rect" id="graph66" href="./Nc3Vector.html" alt="" coords="541,789,629,840"/>
-<area shape="rect" id="graph67" href="./Nc3Vector.html" alt="" coords="443,789,531,840"/>
-<area shape="rect" id="graph68" href="./Nc3Vector.html" alt="" coords="376,789,400,811"/>
-<area shape="rect" id="graph69" href="./Nc3Vector.html" alt="" coords="541,851,629,1061"/>
-<area shape="rect" id="graph70" href="./Nc3Vector.html" alt="" coords="443,851,531,1091"/>
-<area shape="rect" id="graph71" href="./Nc3Vector.html" alt="" coords="344,851,432,1091"/>
-<area shape="rect" id="graph65" href="./Nc3Vector.html" title="Nc3Vector" alt="" coords="333,743,640,1101"/>
-</map>
-<map name="MapNcEvent_Lib" id="MapNcEvent_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcEvent_Inh" class="tabsel" href="inh/NcEvent_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcEvent_Inh.png');">Inheritance</a>
-<a id="imgNcEvent_InhMem" class="tab" href="inhmem/NcEvent_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcEvent_InhMem.png');">Inherited Members</a>
-<a id="imgNcEvent_Incl" class="tab" href="incl/NcEvent_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcEvent_Incl.png');">Includes</a>
-<a id="imgNcEvent_Lib" class="tab" href="lib/NcEvent_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcEvent_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcEvent_Inh" src="inh/NcEvent_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#efefef" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#e7e7e7" align="right">
+<tt>TNamed</tt></td>
+</tr><tr>
+<td bgcolor="#e7e7e7" align="right">
+<table><tr><td>
+<center><tt><a name="Nc4Vector" href="./Nc4Vector.html">Nc4Vector</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcJet" href="./NcJet.html">NcJet</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr><tr>
+<td bgcolor="#efefef" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#e7e7e7" align="right">
+<table><tr><td>
+<center><tt><a name="Nc3Vector" href="./Nc3Vector.html">Nc3Vector</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcPosition" href="./NcPosition.html">NcPosition</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcVertex" href="./NcVertex.html">NcVertex</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr><tr>
+<td bgcolor="#f7f7f7" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#efefef" align="right">
+<tt>TTimeStamp</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcTimestamp" href="./NcTimestamp.html">NcTimestamp</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcEvent" href="./NcEvent.html">NcEvent</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceEvent" href="./IceEvent.html">IceEvent</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:NcEvent" href="src/NcEvent.cxx.html#yQ5KcD">NcEvent</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:NcEvent" href="src/NcEvent.cxx.html#aL7FhC">NcEvent</a>()</span><br />
 <div class="funccomm"><pre> Default constructor.
  All variables initialised to default values.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:NcEvent@1" href="src/NcEvent.cxx.html#cG7cbD">NcEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:NcEvent@1" href="src/NcEvent.cxx.html#IS_cbD">NcEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
 <div class="funccomm"><pre> Create an event to hold initially a maximum of n tracks
  All variables initialised to default values
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:_NcEvent" href="src/NcEvent.cxx.html#ZfSMBE">~NcEvent</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:_NcEvent" href="src/NcEvent.cxx.html#M35gEE">~NcEvent</a>()</span><br />
 <div class="funccomm"><pre> Default destructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:NcEvent@2" href="src/NcEvent.cxx.html#dfZ6K">NcEvent</a>(<span class="keyword">const</span> <a href="./NcEvent.html">NcEvent</a>&amp; evt)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcEvent:NcEvent@2" href="src/NcEvent.cxx.html#JVW.F">NcEvent</a>(<span class="keyword">const</span> <a href="./NcEvent.html">NcEvent</a>&amp; evt)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:Reset" href="src/NcEvent.cxx.html#RsweHB">Reset</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:Reset" href="src/NcEvent.cxx.html#t2ZyzE">Reset</a>()</span><br />
 <div class="funccomm"><pre> <a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a> all variables to default values
  The max. number of tracks is set to the initial value again
  The max. number of vertices is set to the default value again
@@ -888,8 +889,8 @@ return false;}
  Note : The DevCopy mode is maintained as it was set by the user before.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetOwner" href="src/NcEvent.cxx.html#ZTg1GB">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
-<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> ownership of all added objects.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetOwner" href="src/NcEvent.cxx.html#dh2PHB">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> ownership of all added objects. 
  The default parameter is own=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 
  Invokation of this memberfunction also sets all the copy modes
@@ -909,7 +910,7 @@ return false;}
  very likely result in inconsistent destructor behaviour.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetDayTime" href="src/NcEvent.cxx.html#RIt32">SetDayTime</a>(<a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>&amp; stamp)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetDayTime" href="src/NcEvent.cxx.html#BxFPq">SetDayTime</a>(<a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>&amp; stamp)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the date and time stamp for this event.
  An exact copy of the entered date/time stamp will be saved with an
  accuracy of 1 nanosecond.
@@ -922,7 +923,7 @@ return false;}
         This memberfunction is only kept for backward compatibility.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetDayTime@1" href="src/NcEvent.cxx.html#jUVk8">SetDayTime</a>(TDatime&amp; stamp)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetDayTime@1" href="src/NcEvent.cxx.html#rQvFv">SetDayTime</a>(TDatime&amp; stamp)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the date and time stamp for this event.
  The entered date/time will be interpreted as being the local date/time
  and the accuracy is 1 second.
@@ -933,20 +934,20 @@ return false;}
  directly for <a href="./NcEvent.html">NcEvent</a> instances.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetRunNumber" href="src/NcEvent.cxx.html#zhutRB">SetRunNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> run)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetRunNumber" href="src/NcEvent.cxx.html#fN.uRB">SetRunNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> run)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the run number for this event
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetEventNumber" href="src/NcEvent.cxx.html#GmLrRC">SetEventNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> evt)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetEventNumber" href="src/NcEvent.cxx.html#lrGsXC">SetEventNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> evt)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the event number for this event
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetWeight" href="src/NcEvent.cxx.html#wHjqGE">SetWeight</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> weight)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetWeight" href="src/NcEvent.cxx.html#Tl84VD">SetWeight</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> weight)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the weight for this event.
  By default the weight is set to 1 in the constructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> <a class="funcname" name="NcEvent:GetDayTime" href="src/NcEvent.cxx.html#v2fp5">GetDayTime</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> <a class="funcname" name="NcEvent:GetDayTime" href="src/NcEvent.cxx.html#CzLZ5">GetDayTime</a>() const</span><br />
 <div class="funccomm"><pre> Provide the date and time stamp for this event
 
  Note : Since the introduction of the more versatile class <a href="./NcTimestamp.html">NcTimestamp</a>
@@ -957,19 +958,19 @@ return false;}
         This memberfunction is only kept for backward compatibility.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetRunNumber" href="src/NcEvent.cxx.html#MMM8f">GetRunNumber</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetRunNumber" href="src/NcEvent.cxx.html#SpOvZ">GetRunNumber</a>() const</span><br />
 <div class="funccomm"><pre> Provide the run number for this event
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetEventNumber" href="src/NcEvent.cxx.html#SXkfNC">GetEventNumber</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetEventNumber" href="src/NcEvent.cxx.html#Pm5gNC">GetEventNumber</a>() const</span><br />
 <div class="funccomm"><pre> Provide the event number for this event
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetWeight" href="src/NcEvent.cxx.html#CWe4m">GetWeight</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetWeight" href="src/NcEvent.cxx.html#w8W1W">GetWeight</a>() const</span><br />
 <div class="funccomm"><pre> Provide the weight for this event
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetProjectile" href="src/NcEvent.cxx.html#JvUfMB">SetProjectile</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> pnuc, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetProjectile" href="src/NcEvent.cxx.html#ZrZa.">SetProjectile</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> pnuc, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the projectile A, Z, momentum per nucleon and user defined particle ID.
  If not explicitly specified by the user, the projectile particle ID is set
  to zero by default and will not be stored in the event structure.
@@ -980,7 +981,7 @@ return false;}
  retrieved via memberfunctions like <a href="./NcEvent.html#NcEvent:GetProjectileA" title="Int_t NcEvent::GetProjectileA()">GetProjectileA</a>() etc...
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetProjectile@1" href="src/NcEvent.cxx.html#fbvNIE">SetProjectile</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetProjectile@1" href="src/NcEvent.cxx.html#DrRgIE">SetProjectile</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the projectile A, Z, 3-momentum per nucleon and user defined particle ID.
  If not explicitly specified by the user, the projectile particle ID is set
  to zero by default and will not be stored in the event structure.
@@ -991,23 +992,23 @@ return false;}
  retrieved via memberfunctions like <a href="./NcEvent.html#NcEvent:GetProjectileA" title="Int_t NcEvent::GetProjectileA()">GetProjectileA</a>() etc...
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetProjectileA" href="src/NcEvent.cxx.html#tbSh7">GetProjectileA</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetProjectileA" href="src/NcEvent.cxx.html#chpd7">GetProjectileA</a>() const</span><br />
 <div class="funccomm"><pre> Provide the projectile A value.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetProjectileZ" href="src/NcEvent.cxx.html#R_Th7">GetProjectileZ</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetProjectileZ" href="src/NcEvent.cxx.html#Qwmd7">GetProjectileZ</a>() const</span><br />
 <div class="funccomm"><pre> Provide the projectile Z value.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetProjectilePnuc" href="src/NcEvent.cxx.html#qk7sPC">GetProjectilePnuc</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetProjectilePnuc" href="src/NcEvent.cxx.html#Qk7kWC">GetProjectilePnuc</a>() const</span><br />
 <div class="funccomm"><pre> Provide the projectile momentum value per nucleon.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetProjectileId" href="src/NcEvent.cxx.html#WO6s3C">GetProjectileId</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetProjectileId" href="src/NcEvent.cxx.html#Xghp3C">GetProjectileId</a>() const</span><br />
 <div class="funccomm"><pre> Provide the user defined particle ID of the projectile.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetTarget" href="src/NcEvent.cxx.html#osHsq">SetTarget</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> pnuc, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetTarget" href="src/NcEvent.cxx.html#YQli6">SetTarget</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> pnuc, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the target A, Z, momentum per nucleon and user defined particle ID.
  If not explicitly specified by the user, the target particle ID is set
  to zero by default and will not be stored in the event structure.
@@ -1018,7 +1019,7 @@ return false;}
  retrieved via memberfunctions like <a href="./NcEvent.html#NcEvent:GetTargetA" title="Int_t NcEvent::GetTargetA()">GetTargetA</a>() etc...
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetTarget@1" href="src/NcEvent.cxx.html#uiip4D">SetTarget</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetTarget@1" href="src/NcEvent.cxx.html#iUoF5D">SetTarget</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the target A, Z, 3-momentum per nucleon and user defined particle ID.
  If not explicitly specified by the user, the target particle ID is set
  to zero by default and will not be stored in the event structure.
@@ -1029,27 +1030,27 @@ return false;}
  retrieved via memberfunctions like <a href="./NcEvent.html#NcEvent:GetTargetA" title="Int_t NcEvent::GetTargetA()">GetTargetA</a>() etc...
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetTargetA" href="src/NcEvent.cxx.html#iJPnVE">GetTargetA</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetTargetA" href="src/NcEvent.cxx.html#nCQnVE">GetTargetA</a>() const</span><br />
 <div class="funccomm"><pre> Provide the target A value.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetTargetZ" href="src/NcEvent.cxx.html#y1WnVE">GetTargetZ</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetTargetZ" href="src/NcEvent.cxx.html#XWYnVE">GetTargetZ</a>() const</span><br />
 <div class="funccomm"><pre> Provide the target Z value.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetTargetPnuc" href="src/NcEvent.cxx.html#WcFet">GetTargetPnuc</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetTargetPnuc" href="src/NcEvent.cxx.html#km7fz">GetTargetPnuc</a>() const</span><br />
 <div class="funccomm"><pre> Provide the target momentum value per nucleon.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetTargetId" href="src/NcEvent.cxx.html#Z_.cUB">GetTargetId</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetTargetId" href="src/NcEvent.cxx.html#MrQ1UB">GetTargetId</a>() const</span><br />
 <div class="funccomm"><pre> Provide the user defined particle ID of the target.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:HeaderData" href="src/NcEvent.cxx.html#Hm5ay">HeaderData</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:HeaderData" href="src/NcEvent.cxx.html#rChTy">HeaderData</a>()</span><br />
 <div class="funccomm"><pre> Provide event header information
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:Data" href="src/NcEvent.cxx.html#Eca_cB">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:Data" href="src/NcEvent.cxx.html#l_3EXB">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Provide event information within the coordinate frame f
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
@@ -1060,11 +1061,11 @@ return false;}
  The defaults are f=<span class="string">"car"</span> and u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetNdevices" href="src/NcEvent.cxx.html#PqB5dB">GetNdevices</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetNdevices" href="src/NcEvent.cxx.html#Gic0dB">GetNdevices</a>() const</span><br />
 <div class="funccomm"><pre> Provide the number of stored devices
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetNdevices@1" href="src/NcEvent.cxx.html#j4j4YE">GetNdevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetNdevices@1" href="src/NcEvent.cxx.html#Zg8XGE">GetNdevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0) const</span><br />
 <div class="funccomm"><pre> Provide the number of devices of the specified class.
  In case an array <span class="string">"hits"</span> is provided, the contents of the provided
  hit array are used to determine the number of different devices of the
@@ -1072,30 +1073,30 @@ return false;}
  Note that identification of the different hit parent devices only works
  for devices that have been given a unique identifier.
  In case no hit array is provided, just the number of stored devices of the
- specified class is returned.
+ specified class is returned. 
 
  By default hits=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:AddDevice" href="src/NcEvent.cxx.html#KffL3D">AddDevice</a>(<a href="./NcDevice.html">NcDevice</a>&amp; d)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:AddDevice" href="src/NcEvent.cxx.html#kc51g">AddDevice</a>(<a href="./NcDevice.html">NcDevice</a>&amp; d)</span><br />
 <div class="funccomm"><pre> <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a> a device to the event.
 
  Note :
  In case a private copy is made, this is performed via the <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
- All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
+ All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() 
  memberfunction.
  However, devices generally contain an internal (signal) data structure
  which may include pointers to other objects. Therefore it is recommended to provide
  for all devices a specific copy constructor and override the default <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
  memberfunction using this copy constructor.
- An example for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>.
+ An example for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>.   
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:RemoveDevice" href="src/NcEvent.cxx.html#Avo0V">RemoveDevice</a>(<a href="./NcDevice.html">NcDevice</a>* d)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:RemoveDevice" href="src/NcEvent.cxx.html#ZHQJj">RemoveDevice</a>(<a href="./NcDevice.html">NcDevice</a>* d)</span><br />
 <div class="funccomm"><pre> Remove the specified device from the event.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetDevCopy" href="src/NcEvent.cxx.html#GcvSv">SetDevCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetDevCopy" href="src/NcEvent.cxx.html#u9pSv">SetDevCopy</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
 <div class="funccomm"><pre> (De)activate the creation of private copies of the added devices.
  j=0 ==&gt; No private copies are made; pointers of original devices are stored.
  j=1 ==&gt; Private copies of the devices are made and these pointers are stored.
@@ -1103,13 +1104,13 @@ return false;}
 
  Notes :
   In case a private copy is made, this is performed via the <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
-  All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
+  All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() 
   memberfunction.
   However, devices generally contain an internal (signal) data structure
   which may include pointers to other objects. Therefore it is recommended to provide
   for all devices a specific copy constructor and override the default <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
   memberfunction using this copy constructor.
-  An example for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>.
+  An example for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>.   
 
   Once the storage contains pointer(s) to device(s) one cannot
   change the DevCopy mode anymore.
@@ -1117,32 +1118,32 @@ return false;}
   devices one first has to invoke <a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a>().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetDevCopy" href="src/NcEvent.cxx.html#zwWwrE">GetDevCopy</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetDevCopy" href="src/NcEvent.cxx.html#CqXwrE">GetDevCopy</a>() const</span><br />
 <div class="funccomm"><pre> Provide value of the DevCopy mode.
  0 ==&gt; No private copies are made; pointers of original devices are stored.
  1 ==&gt; Private copies of the devices are made and these pointers are stored.
 
  Note :
  In case a private copy is made, this is performed via the <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
- All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
+ All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>() 
  memberfunction.
  However, devices generally contain an internal (signal) data structure
  which may include pointers to other objects. Therefore it is recommended to provide
  for all devices a specific copy constructor and override the default <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a>()
  memberfunction using this copy constructor.
- An example for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>.
+ An example for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>.   
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetDevice" href="src/NcEvent.cxx.html#MMWK9D">GetDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetDevice" href="src/NcEvent.cxx.html#uGbNwD">GetDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
 <div class="funccomm"><pre> Return the i-th device of this event.
  The first device corresponds to i=1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetDevice@1" href="src/NcEvent.cxx.html#BtiP7D">GetDevice</a>(TString name) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetDevice@1" href="src/NcEvent.cxx.html#ylR2iC">GetDevice</a>(TString name) const</span><br />
 <div class="funccomm"><pre> Return the device with name tag <span class="string">"name"</span>
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetIdDevice" href="src/NcEvent.cxx.html#u9E9FE">GetIdDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, TObjArray* devs = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetIdDevice" href="src/NcEvent.cxx.html#j6stFE">GetIdDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, TObjArray* devs = 0) const</span><br />
 <div class="funccomm"><pre> Return the <a href="./NcDevice.html">NcDevice</a> with identifier <span class="string">"id"</span> from the specified array <span class="string">"devs"</span>.
  In case devs=0 (which is the default) all devices stored in the event
  structure will be evaluated.
@@ -1150,13 +1151,13 @@ return false;}
         encountered matching device will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetIdDevice@1" href="src/NcEvent.cxx.html#U7NSBD">GetIdDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <span class="keyword">const</span> <span class="keyword">char</span>* classname) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcEvent:GetIdDevice@1" href="src/NcEvent.cxx.html#WKgkLD">GetIdDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <span class="keyword">const</span> <span class="keyword">char</span>* classname) const</span><br />
 <div class="funccomm"><pre> Return the device with identifier <span class="string">"id"</span> of the specified class.
  Note : In case of multiple occurrences of identifier <span class="string">"id"</span>, the first
         encountered matching device will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:ShowDevices" href="src/NcEvent.cxx.html#z0o7Q">ShowDevices</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:ShowDevices" href="src/NcEvent.cxx.html#R6jIE">ShowDevices</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
 <div class="funccomm"><pre> Provide an overview of the available devices.
  The argument mode determines the amount of information as follows :
  mode = 0 ==&gt; Only printout of the number of devices
@@ -1166,7 +1167,7 @@ return false;}
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:ShowDevices@1" href="src/NcEvent.cxx.html#Wv70rE">ShowDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:ShowDevices@1" href="src/NcEvent.cxx.html#HJnSsE">ShowDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
 <div class="funccomm"><pre> Provide an overview of the available devices of the specified class.
  The argument mode determines the amount of information as follows :
  mode = 0 ==&gt; Only printout of the number of devices
@@ -1176,14 +1177,14 @@ return false;}
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:GetDevices" href="src/NcEvent.cxx.html#PG5MO">GetDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* devices = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:GetDevices" href="src/NcEvent.cxx.html#AnF6oE">GetDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* devices = 0)</span><br />
 <div class="funccomm"><pre> Provide the references to the various devices derived from the specified class.
 
  Note :
-
+ ------
  In case devices=0 the selected device pointers are returned via a multi-purpose array,
  which will be overwritten by subsequent selections.
- It is recommended to provide a user defined array via the argument <span class="string">"devices"</span>
+ It is recommended to provide a user defined array via the argument <span class="string">"devices"</span> 
  to omit the danger of overwriting the selection and to allow to use the selected device list
  amongst other selections.
  In case a user defined array <span class="string">"devices"</span> is provided, this memberfunction returns 0 for the
@@ -1192,7 +1193,7 @@ return false;}
  The default is devices=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetNhits" href="src/NcEvent.cxx.html#z51.K">GetNhits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetNhits" href="src/NcEvent.cxx.html#f1_Me">GetNhits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
 <div class="funccomm"><pre> Provide the number of hits registered to the specified device class.
  The specified device class has to be derived from <a href="./NcDevice.html">NcDevice</a>.
  It is possible to indicate with the argument <span class="string">"classname"</span> a specific
@@ -1200,7 +1201,7 @@ return false;}
  it is more efficient to use the <a href="./NcEvent.html#NcEvent:GetDevice" title="NcDevice* NcEvent::GetDevice(Int_t i) or overloads">GetDevice</a>() memberfunction directly.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:GetHits" href="src/NcEvent.cxx.html#cosrkC">GetHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0, TString name = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:GetHits" href="src/NcEvent.cxx.html#xCjnkD">GetHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0, TString name = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0)</span><br />
 <div class="funccomm"><pre> Provide the references to all the hits registered to device class as specified
  by the input argument <span class="string">"classname"</span>.
  The specified device class has to be derived from <a href="./NcDevice.html">NcDevice</a>.
@@ -1211,7 +1212,7 @@ return false;}
  The argument <span class="string">"hits"</span> may be used to retreive the required hit pointers.
  In case hits=0 the selected hit pointers are returned via a multi-purpose array,
  which will be overwritten by subsequent selections.
- It is recommended to provide a user defined array via the argument <span class="string">"hits"</span>
+ It is recommended to provide a user defined array via the argument <span class="string">"hits"</span> 
  to omit the danger of overwriting the selection and to allow to use the selected hit list
  amongst other selections.
 
@@ -1219,7 +1220,7 @@ return false;}
  as indicated below.
 
  name : The user provided hit or signal slot name to be used for the hit selection.
-        If name=<span class="string">"none"</span>, no selections will be made on the name matching.
+        If name=<span class="string">"none"</span>, no selections will be made on the name matching. 
 
  mode = 0 --&gt; Hits with a matching hit name will be selected
         1 --&gt; Hits with a matching signal slot name will be selected
@@ -1234,26 +1235,26 @@ return false;}
  The defaults are : hits=0, name=<span class="string">"none"</span>, mode=0 and opt=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcEvent:GetIdHit" href="src/NcEvent.cxx.html#jS.egE">GetIdHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcEvent:GetIdHit" href="src/NcEvent.cxx.html#TbtdcE">GetIdHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
 <div class="funccomm"><pre> Return the hit with unique identifier <span class="string">"id"</span> for the specified device class.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:LoadHits" href="src/NcEvent.cxx.html#cVhqLE">LoadHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:LoadHits" href="src/NcEvent.cxx.html#gtLqLE">LoadHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TObjArray* hits = 0)</span><br />
 <div class="funccomm"><pre> <a href="./Nc4Vector.html#Nc4Vector:Load" title="void Nc4Vector::Load(Nc4Vector&amp; q)">Load</a> the references to the various hits registered to the specified device class.
  The specified device class has to be derived from <a href="./NcDevice.html">NcDevice</a>.
 
  Note :
-
+ ------
  In case hits=0 the selected hit pointers are returned via a multi-purpose array,
  which will be overwritten by subsequent selections.
- It is recommended to provide a user defined array via the argument <span class="string">"hits"</span>
+ It is recommended to provide a user defined array via the argument <span class="string">"hits"</span> 
  to omit the danger of overwriting the selection and to allow to use the selected hit list
  amongst other selections.
 
  The default is hits=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortHits@1" href="src/NcEvent.cxx.html#jaBLKE">SortHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortHits@1" href="src/NcEvent.cxx.html#HaCWKE">SortHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to the various hits registered to the specified device class.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
  or as a returned pointer.
@@ -1275,7 +1276,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered hit pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to hit ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -1289,7 +1290,7 @@ return false;}
  For more extended functionality see class <a href="./NcDevice.html">NcDevice</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortHits" href="src/NcEvent.cxx.html#VIspiB">SortHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortHits" href="src/NcEvent.cxx.html#lHfzYB">SortHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to the various hits registered to the specified device class.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
  or as a returned pointer.
@@ -1311,7 +1312,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered hit pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to hit ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -1325,7 +1326,7 @@ return false;}
  For more extended functionality see class <a href="./NcDevice.html">NcDevice</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="NcEvent:GetHitPath" href="src/NcEvent.cxx.html#yfaprE">GetHitPath</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="NcEvent:GetHitPath" href="src/NcEvent.cxx.html#DFWGrE">GetHitPath</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0) const</span><br />
 <div class="funccomm"><pre> Provide the average direction of the hit pattern contained in the array <span class="string">"hits"</span>.
  The direction is obtained by starting at the first hit in the array
  and then a summation of all the relative hit locations while jumping
@@ -1341,7 +1342,7 @@ return false;}
  Note : In case of inconsistent input a <span class="string">"zero vector"</span> will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcPosition.html">NcPosition</a> <a class="funcname" name="NcEvent:GetCOG" href="src/NcEvent.cxx.html#R6WZ.">GetCOG</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0, TString slotname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcPosition.html">NcPosition</a> <a class="funcname" name="NcEvent:GetCOG" href="src/NcEvent.cxx.html#HrlDNB">GetCOG</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0, TString slotname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
 <div class="funccomm"><pre> Provide the Center Of Gravity of the hits contained in the array <span class="string">"hits"</span>.
  Each hit can be given a weight according to the absolute value of the signal
  contained in the slot with the name <span class="string">"slotname"</span>.
@@ -1357,7 +1358,7 @@ return false;}
  Note : In case of inconsistent input a <span class="string">"zero vector"</span> will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetCVAL" href="src/NcEvent.cxx.html#vObgyB">GetCVAL</a>(TObjArray* hits, TString obsname, TString weightname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetCVAL" href="src/NcEvent.cxx.html#WiVgyB">GetCVAL</a>(TObjArray* hits, TString obsname, TString weightname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 1) const</span><br />
 <div class="funccomm"><pre> Provide the Central Value of the observed signals contained in the slot with name <span class="string">"obsname"</span>
  in the array <span class="string">"hits"</span>. Depending on the input argument <span class="string">"type"</span> the central value represents
  either the median (type=1) or the mean (type=2).
@@ -1372,7 +1373,7 @@ return false;}
  Note : In case of inconsistent input 0 will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:GetExtremes" href="src/NcEvent.cxx.html#zBbCeE">GetExtremes</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:GetExtremes" href="src/NcEvent.cxx.html#jomAeE">GetExtremes</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1)</span><br />
 <div class="funccomm"><pre> Provide the min. and max. signal values of the various hits registered
  to the specified device class.
  The input argument <span class="string">"idx"</span> denotes the index of the signal slots to be investigated.
@@ -1390,7 +1391,7 @@ return false;}
  For more extended functionality see class <a href="./NcDevice.html">NcDevice</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:GetExtremes@1" href="src/NcEvent.cxx.html#PsVatB">GetExtremes</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:GetExtremes@1" href="src/NcEvent.cxx.html#umYoj">GetExtremes</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1)</span><br />
 <div class="funccomm"><pre> Provide the min. and max. signal values of the various hits registered
  to the specified device class.
  The input argument <span class="string">"name"</span> denotes the name of the signal slots to be investigated.
@@ -1407,7 +1408,7 @@ return false;}
  For more extended functionality see class <a href="./NcDevice.html">NcDevice</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:DisplayHits@1" href="src/NcEvent.cxx.html#RYJ8RB">DisplayHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:DisplayHits@1" href="src/NcEvent.cxx.html#jCdQiB">DisplayHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
 <div class="funccomm"><pre> 3D color display of the various hits registered to the specified device class.
  The user can specify the index (default=1) of the signal slot to perform the display for.
  The marker size will indicate the absolute value of the signal (specified by the slotindex)
@@ -1428,17 +1429,17 @@ return false;}
  For more extended functionality see class <a href="./NcDevice.html">NcDevice</a>.
 
  Note :
-
+ ------
  Before any display activity, a TCanvas and a TView have to be initiated
  first by the user like for instance
-
+ 
  TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
  TView* view=new TView(1);
  view-&gt;SetRange(-1000,-1000,-1000,1000,1000,1000);
  view-&gt;ShowAxis();
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:DisplayHits" href="src/NcEvent.cxx.html#vjL_cE">DisplayHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:DisplayHits" href="src/NcEvent.cxx.html#j.jadE">DisplayHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
 <div class="funccomm"><pre> 3D color display of the various hits registered to the specified device class.
  The user can specify the name of the signal slot to perform the display for.
  The marker size will indicate the absolute value of the signal (specified by the slotname)
@@ -1461,32 +1462,32 @@ return false;}
  For more extended functionality see class <a href="./NcDevice.html">NcDevice</a>.
 
  Note :
-
+ ------
  Before any display activity, a TCanvas and a TView have to be initiated
  first by the user like for instance
-
+ 
  TCanvas* c1=new TCanvas(<span class="string">"c1"</span>,<span class="string">"c1"</span>);
  TView* view=new TView(1);
  view-&gt;SetRange(-1000,-1000,-1000,1000,1000,1000);
  view-&gt;ShowAxis();
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:ShowHits" href="src/NcEvent.cxx.html#dwCS0">ShowHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:ShowHits" href="src/NcEvent.cxx.html#k5wohB">ShowHits</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>)</span><br />
 <div class="funccomm"><pre> Show all the hits registered to the specified device class.
 
  mode = 0 ==&gt; Only the number of hits will be provided.
         1 ==&gt; Full listing of all the hits will be provided.
         2 ==&gt; Same as mode=1 but with additional location info of the owning device.
-
+ 
  Default value is mode=1.
 
- The arguments <span class="string">"f"</span> and <span class="string">"u"</span> have the same meaning as in the memberfunction <a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>().
+ The arguments <span class="string">"f"</span> and <span class="string">"u"</span> have the same meaning as in the memberfunction <a href="./NcEvent.html#NcEvent:Data" title="void NcEvent::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>(). 
 
  Note : This memberfunction will show hits in printable format.
-        To obtain a graphic hit display please refer to <a href="./NcEvent.html#NcEvent:DisplayHits" title="void NcEvent::DisplayHits(const char* classname,TString name,Float_t scale=-1,Int_t dp=0,Int_t mode=1,Int_t mcol=4) or overloads">DisplayHits</a>().
+        To obtain a graphic hit display please refer to <a href="./NcEvent.html#NcEvent:DisplayHits" title="void NcEvent::DisplayHits(const char* classname,TString name,Float_t scale=-1,Int_t dp=0,Int_t mode=1,Int_t mcol=4) or overloads">DisplayHits</a>(). 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices" href="src/NcEvent.cxx.html#X0CxCC">SortDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices" href="src/NcEvent.cxx.html#JOahYB">SortDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to the various devices based on hit signals registered
  to the specified device class.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
@@ -1509,7 +1510,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered device pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to device ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -1521,7 +1522,7 @@ return false;}
  The default is ordered=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices@1" href="src/NcEvent.cxx.html#BQ6JVC">SortDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices@1" href="src/NcEvent.cxx.html#Jzan3B">SortDevices</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to the various devices based on hit signals registered
  to the specified device class.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
@@ -1544,7 +1545,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered device pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to device ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -1556,7 +1557,7 @@ return false;}
  The default is ordered=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices@2" href="src/NcEvent.cxx.html#EeSztE">SortDevices</a>(TObjArray* hits, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices@2" href="src/NcEvent.cxx.html#geTotE">SortDevices</a>(TObjArray* hits, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to the various devices based on hit signals contained
  in the input array.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
@@ -1582,7 +1583,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered device pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to device ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -1594,7 +1595,7 @@ return false;}
  The default is ordered=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices@3" href="src/NcEvent.cxx.html#CKWI2E">SortDevices</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcEvent:SortDevices@3" href="src/NcEvent.cxx.html#CVMqvE">SortDevices</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcal = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1, TObjArray* ordered = 0)</span><br />
 <div class="funccomm"><pre> Order the references to the various devices based on hit signals contained
  in the input array.
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
@@ -1620,7 +1621,7 @@ return false;}
  The default is deadcheck=1 (for backward compatibility reasons).
 
  Note :
-
+ ------
  In case ordered=0 the ordered device pointers are returned via a multi-purpose array,
  which may be overwritten by other memberfunctions (not restricted to device ordering).
  It is recommended to provide a user defined array via the argument <span class="string">"ordered"</span> to omit
@@ -1632,24 +1633,24 @@ return false;}
  The default is ordered=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcEvent:Clone" href="src/NcEvent.cxx.html#xolOLE">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcEvent:Clone" href="src/NcEvent.cxx.html#e3WVs">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
  correct type depending on the object type, a feature which may be very useful
  for containers when adding objects in case the container owns the objects.
  This feature allows to store either <a href="./NcEvent.html">NcEvent</a> objects or objects derived from
  <a href="./NcEvent.html">NcEvent</a> via some generic AddEvent memberfunction, provided these derived
- classes also have a proper <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction.
+ classes also have a proper <a href="./NcEvent.html#NcEvent:Clone" title="TObject* NcEvent::Clone(const char* name=&quot;&quot;)">Clone</a> memberfunction. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:AddDevice" href="src/NcEvent.h.html#Ue1dK">AddDevice</a>(<a href="./NcDevice.html">NcDevice</a>&amp; d)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:AddDevice" href="src/NcEvent.h.html#kC5wY">AddDevice</a>(<a href="./NcDevice.html">NcDevice</a>&amp; d)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:19 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Sun Jun 20 18:46:04 2021 </em><em>&raquo; Last generated: 2021-06-20 18:46</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

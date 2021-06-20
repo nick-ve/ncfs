@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Mar 21 09:35:23 2019            -->
+<!--   Date: Sun Jun 20 18:46:03 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/IceXtalk.h.html">header file</a>
 <a class="descrheadentry" href="src/IceXtalk.cxx.html">source file</a>
-
+<a class="descrheadentry" href="IceXtalk_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -97,7 +97,7 @@ return false;}
         applications of this Xtalk processor to investigate (systematic)
         effects of various criteria.
         Example : In case an amount of 1 pe was subtracted from the ADC
-                  value, the ADC offset will be set to 1.
+                  value, the ADC offset will be set to 1. 
 
  The values of <span class="string">"pmin"</span> and <span class="string">"pe"</span> can be set by the user via the
  <a href="./IceXtalk.html#IceXtalk:SetMinProb" title="void IceXtalk::SetMinProb(Float_t pmin)">SetMinProb</a>() and <a href="./IceXtalk.html#IceXtalk:SetXtalkPE" title="void IceXtalk::SetXtalkPE(Float_t pe)">SetXtalkPE</a>() memberfunctions.
@@ -112,14 +112,14 @@ return false;}
  In case one would like to always remove a hit which containes induced
  cross talk, one could set the <span class="string">"pe"</span> parameter to some very large value.
  This will result in cross talk induced hits to get large negative ADC
- signals and can as such easily be skipped/removed afterwards.
+ signals and can as such easily be skipped/removed afterwards. 
 
  Note : This processor only works properly on Time and ADC calibrated data.
         In case no OM database has been specified for this processor,
         no cross talk hit correction will be performed.
 
 --- Author: Nick van Eijndhoven 11-aug-2005 Utrecht University
-- Modified: NvE $Date: 2012-01-03 14:30:57 +0100 (Tue, 03 Jan 2012) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel June 20, 2021  18:43Z
 
 </pre></div>
 </div></div>
@@ -288,55 +288,60 @@ return false;}
 </table></div>
 </div>
 <h2><a id="IceXtalk:Class_Charts"></a>Class Charts</h2>
-<map name="MapIceXtalk_Lib" id="MapIceXtalk_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgIceXtalk_Inh" class="tabsel" href="inh/IceXtalk_Inh.png" onclick="javascript:return SetImg('Charts','inh/IceXtalk_Inh.png');">Inheritance</a>
-<a id="imgIceXtalk_InhMem" class="tab" href="inhmem/IceXtalk_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/IceXtalk_InhMem.png');">Inherited Members</a>
-<a id="imgIceXtalk_Incl" class="tab" href="incl/IceXtalk_Incl.png" onclick="javascript:return SetImg('Charts','incl/IceXtalk_Incl.png');">Includes</a>
-<a id="imgIceXtalk_Lib" class="tab" href="lib/IceXtalk_Lib.png" onclick="javascript:return SetImg('Charts','lib/IceXtalk_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapIceXtalk_Inh" src="inh/IceXtalk_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TTask</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="IceXtalk" href="./IceXtalk.html">IceXtalk</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceXtalk:IceXtalk" href="src/IceXtalk.cxx.html#VQXwy">IceXtalk</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceXtalk:IceXtalk" href="src/IceXtalk.cxx.html#lfMbQD">IceXtalk</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Default constructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceXtalk:_IceXtalk" href="src/IceXtalk.cxx.html#XkaodD">~IceXtalk</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceXtalk:_IceXtalk" href="src/IceXtalk.cxx.html#njN3OC">~IceXtalk</a>()</span><br />
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetOMdbase" href="src/IceXtalk.cxx.html#sV1WW">SetOMdbase</a>(<a href="./NcObjMatrix.html">NcObjMatrix</a>* omdb)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetOMdbase" href="src/IceXtalk.cxx.html#rdI9oB">SetOMdbase</a>(<a href="./NcObjMatrix.html">NcObjMatrix</a>* omdb)</span><br />
 <div class="funccomm"><pre> Set the pointer to the OM database.
- Note : this will overrule a previously attached database.
+ Note : this will overrule a previously attached database. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetCalibFile" href="src/IceXtalk.cxx.html#Qn69_B">SetCalibFile</a>(TString name)</span><br />
-<div class="funccomm"><pre> Set the calibration ROOT file as created with IceCal2Root.
- Note : this will overrule a previously attached database.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetCalibFile" href="src/IceXtalk.cxx.html#U1eW_B">SetCalibFile</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the calibration ROOT file as created with <a href="./IceCal2Root.html">IceCal2Root</a>.
+ Note : this will overrule a previously attached database. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetMinProb" href="src/IceXtalk.cxx.html#SRPyzB">SetMinProb</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pmin)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetMinProb" href="src/IceXtalk.cxx.html#WcFsmB">SetMinProb</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pmin)</span><br />
 <div class="funccomm"><pre> Set the minimal probability for cross talk induction.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetXtalkPE" href="src/IceXtalk.cxx.html#onXRDD">SetXtalkPE</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pe)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:SetXtalkPE" href="src/IceXtalk.cxx.html#A8GQDD">SetXtalkPE</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pe)</span><br />
 <div class="funccomm"><pre> Set the nominal Xtalk signal in photo-electron equivalent.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:Exec" href="src/IceXtalk.cxx.html#T3RXxC">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceXtalk:Exec" href="src/IceXtalk.cxx.html#DeLxxC">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
 <div class="funccomm"><pre> Implementation of cross talk hit correction.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceXtalk:IceXtalk" href="src/IceXtalk.h.html#AKt2TD">IceXtalk</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceXtalk:IceXtalk" href="src/IceXtalk.h.html#zVaOUD">IceXtalk</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Mar 21 09:35:25 2019 </em><em>&raquo; Last generated: 2019-03-21 09:35</em><br />
+<em>&raquo; Last changed: Sun Jun 20 18:46:03 2021 </em><em>&raquo; Last generated: 2021-06-20 18:46</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

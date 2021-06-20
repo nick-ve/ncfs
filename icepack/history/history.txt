@@ -228,5 +228,6 @@
 15-jul-2016 NvE Memberfunction IceEvent::Reset() introduced.
 19-mar-2021 NvE Compiler option -Wall replaced by -Wunused in the amdgcclib.sh compilation script
                 to prevent excessive warnings with the new(er) gcc versions.
+20-jun-2021 NvE Unused variable "twrdaq" removed from IceXtalk::Exec() to prevent compiler warning.
 
 

@@ -27,17 +27,13 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcEvent.cxx 132 2016-09-01 16:50:25Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcEvent
 // Creation and investigation of an NCFS generic event structure.
-// An NcEvent can be constructed by adding NcTracks, NcVertices, NcJets
-// and/or devices like NcCalorimeters or NcDevice (derived) objects.
+// An NcEvent can be constructed by adding NcTrack, NcVertex, NcJet
+// and/or NcDevice (or derived) objects, like for instance NcCalorimeter.
 //
-// All objects which are derived from TObject can be regarded as a device.
-// However, NcDevice (or derived) objects profit from additional hit
-// handling facilities.
+// NcDevice (or derived) objects provide additional hit handling facilities.
 // A "hit" is a generic name indicating an NcSignal (or derived) object.
 // Note that NcEvent does NOT own hits; it only provides references to hits
 // obtained from the various devices.
@@ -49,9 +45,8 @@
 //
 // To provide maximal flexibility to the user, the two modes of track/jet/vertex
 // storage as described in NcJet and NcVertex can be used.
-// In addition an identical structure is provided for the storage of devices like
-// NcCalorimeter objects, which can be selected by means of the memberfunction
-// SetDevCopy().
+// In addition an identical structure is provided for the storage of devices
+// which can be selected by means of the memberfunction SetDevCopy().
 //
 // a) SetDevCopy(0) (which is the default).
 //    Only the pointers of the 'added' devices are stored.
@@ -69,7 +64,7 @@
 //    Of every 'added' device a private copy will be made of which the pointer
 //    will be stored.
 //    In this way the NcEvent represents an entity on its own and modifications
-//    made to the original calorimeters do not affect the NcCalorimeter objects
+//    made to the original devices do not affect the NcDevice (or derived) objects
 //    which are stored in the NcEvent. 
 //    This mode will allow 'adding' many different devices into an NcEvent by
 //    creating only one device instance in the main programme and using the
@@ -263,7 +258,7 @@
 //        obtained via the GetUnitScale() and GetEscale() memberfunctions.
 //
 //--- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-//- Modified: NvE $Date: 2016-09-01 18:50:25 +0200 (Thu, 01 Sep 2016) $
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel June 20, 2021  12:10Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcEvent.h"

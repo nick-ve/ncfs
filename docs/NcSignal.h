@@ -82,7 +82,7 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   void ResetLinks(TObject* obj,TString name,Int_t k=0);         // Reset link(s) to object obj for name-specified slot
   void SetSwapMode(Int_t swap=1);                               // Set swapmode flag for the link storage
   Int_t GetSwapMode() const;                                    // Provide swapmode flag for the link storage
-  void SetDevice(TObject* dev);                                 // Store pointer to the device that owns this signal
+  void SetDevice(NcDevice* dev);                                // Store pointer to a related device or the device that owns this signal
   NcDevice* GetDevice() const;                                  // Provide pointer to the owning device 
   void AddTrack(NcTrack& t,Int_t mode=1);                       // Relate an NcTrack to this signal
   void RemoveTrack(NcTrack& t,Int_t mode=1);                    // Remove related NcTrack from this signal
@@ -94,6 +94,9 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   Int_t GetSignalFlag(TString name) const;                      // Provide signal value flag of the name specified slot
   Int_t GetErrorFlag(Int_t j=1) const;                          // Provide error value flag of the j-th slot
   Int_t GetErrorFlag(TString name) const;                       // Provide error value flag of the name specified slot
+  Bool_t IsOwned() const;                                       // Provide the owned status
+
+  Bool_t fOwned;                               // Flag to indicate whether this NcSignal is owned by an NcDevice or not
 
  protected:
   void SetSigFlags(Int_t is,Int_t ie,Int_t j); // Set flags for signal and/or error value settings
@@ -103,9 +106,9 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   TObjArray* fWaveforms;                       // The 1D histograms containing the signal waveforms
   TObjArray* fSamples;                         // The full data samples containing the recorded data series 
   NcObjMatrix* fLinks;                         // Pointers of objects related to the various slots
-  TObject* fDevice;                            // Pointer to the device that owns this signal
+  TObject* fDevice;                            // Pointer to a related device or the device that owns this signal
   TObjArray* fTracks;                          // Pointers to associated tracks
 
- ClassDef(NcSignal,2) // Generic handling of (extrapolated) detector signals.
+ ClassDef(NcSignal,3) // Generic handling of (extrapolated) detector signals.
 };
 #endif

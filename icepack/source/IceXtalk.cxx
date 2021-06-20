@@ -13,8 +13,6 @@
  * any purpose. It is provided "as is" without express or implied warranty.
  *******************************************************************************/
 
-// $Id: IceXtalk.cxx 55 2012-01-03 13:30:57Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class IceXtalk
 // TTask derived class to perform cross talk hit correction.
@@ -76,7 +74,7 @@
 //        no cross talk hit correction will be performed.
 //
 //--- Author: Nick van Eijndhoven 11-aug-2005 Utrecht University
-//- Modified: NvE $Date: 2012-01-03 14:30:57 +0100 (Tue, 03 Jan 2012) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel June 20, 2021  18:43Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceXtalk.h"
@@ -154,11 +152,9 @@ void IceXtalk::Exec(Option_t* opt)
   if (seldev->GetSignal("Select") < 0.1) return;
  }
 
- Int_t mudaq=0;
- Int_t twrdaq=0;
  NcSignal* daq=(NcSignal*)evt->GetDevice("Daq");
- mudaq=int(daq->GetSignal("Muon"));
- twrdaq=int(daq->GetSignal("TWR"));
+ Int_t mudaq=0;
+ if (daq) mudaq=int(daq->GetSignal("Muon"));
 
  // This cross talk correction processor is only for MuDaq data 
  if (!mudaq) return;

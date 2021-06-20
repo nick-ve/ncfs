@@ -1176,3 +1176,12 @@
                 for NcPosition, NcSignal, NcJet and NcVertex when these have not been set. 
 07-may-2021 NvE Member functions SampleAndHold() and SampleAndSum() introduced in class NcSample.
                 The version indicator in NcVersion has been updated to 3.9.
+20-jun-2021 NvE Documentation of NcEvent updated.
+                New flag fOwned introduced in NcSignal to indicate whether the NcSignal object
+                is owned as a "hit" by an NcDevice (or derived) object. Setting of the fOwned flag has
+                been introduced in NcDevice accordingly.
+                The NcSignal::SetDevice() memberfunction has now been protected against pointer modification
+                for owned objects, and also the input argument has been changed from TObject* to NcDevice*.
+                However, the type of the datamember fDevice in NcSignal has been kept as TObject* in order to be
+                backward compatible with old data files. 
+                The version indicator in NcVersion has been updated to 3.10.

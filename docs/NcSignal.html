@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri May  7 12:18:31 2021            -->
+<!--   Date: Sun Jun 20 18:46:05 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -165,7 +165,7 @@ return false;}
  <a href="./ListOfTypes.html#Float_t">Float_t</a> dedx=q.<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>(<span class="string">"dE/dx"</span>,3);
 
 --- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:56Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 20, 2021  15:52Z
 
 </pre></div>
 </div></div>
@@ -323,6 +323,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#NcSignal:IsOwned">IsOwned</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:List">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0) <span class="keyword">const</span></td></tr>
@@ -390,7 +391,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetDead@1"><span class="baseclass">NcAttrib::</span>SetDead</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetDecalFunction"><span class="baseclass">NcAttrib::</span>SetDecalFunction</a>(TF1* f, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetDecalFunction@1"><span class="baseclass">NcAttrib::</span>SetDecalFunction</a>(TF1* f, TString name)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetDevice">SetDevice</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* dev)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:SetDevice">SetDevice</a>(<a href="./NcDevice.html">NcDevice</a>* dev)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetEdgeOff"><span class="baseclass">NcAttrib::</span>SetEdgeOff</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
@@ -482,12 +483,17 @@ return false;}
 <tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
 
 </table></div>
+<div class="access" id="datapubl"><b>public:</b>
+<table class="data" id="tabdatapubl" cellspacing="0">
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a name="NcSignal:fOwned"></a>fOwned</td><td class="datadesc">Flag to indicate whether this NcSignal is owned by an NcDevice or not</td></tr>
+
+</table></div>
 <div class="access" id="dataprot"><b>protected:</b>
 <table class="data" id="tabdataprot" cellspacing="0">
 <tr class="datainh"><td class="datatype">TArrayI*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fCalflags"><span class="baseclass">NcAttrib::</span>fCalflags</a></td><td class="datadesc">Flags to mark dead, edge, and gain/offset calibrated signals</td></tr>
 <tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fCalfuncs"><span class="baseclass">NcAttrib::</span>fCalfuncs</a></td><td class="datadesc">Explicit signal calibration functions</td></tr>
 <tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fDecalfuncs"><span class="baseclass">NcAttrib::</span>fDecalfuncs</a></td><td class="datadesc">Explicit signal de-calibration functions</td></tr>
-<tr class="data"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a name="NcSignal:fDevice"></a>fDevice</td><td class="datadesc">Pointer to the device that owns this signal</td></tr>
+<tr class="data"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a name="NcSignal:fDevice"></a>fDevice</td><td class="datadesc">Pointer to a related device or the device that owns this signal</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double32_t">Double32_t</a></td><td class="dataname"><a href="./Nc3Vector.html#Nc3Vector:fDresult"><span class="baseclass">Nc3Vector::</span>fDresult</a></td><td class="datadesc">! Error on scalar result (e.g. norm or dotproduct)</td></tr>
 <tr class="data"><td class="datatype">TArrayF*</td><td class="dataname"><a name="NcSignal:fDsignals"></a>fDsignals</td><td class="datadesc">Errors on signal values</td></tr>
 <tr class="datainh"><td class="datatype">TArrayF*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fGains"><span class="baseclass">NcAttrib::</span>fGains</a></td><td class="datadesc">Gain values</td></tr>
@@ -625,6 +631,8 @@ return false;}
 
  Note : In all cases the storage of the various links will be reset.
         The UniqueID, name and title will NOT be reset.
+        Also the pointer to the owning device will not be reset if this
+        <a href="./NcSignal.html">NcSignal</a> is owned by an <a href="./NcDevice.html">NcDevice</a> (or derived) object.
         In case the user wants to reset these attributes, this has to
         be done explicitly via the SET facilities.
 
@@ -1579,13 +1587,16 @@ return false;}
 <div class="funccomm"><pre> Provide swapmode flag of the link storage.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetDevice" href="src/NcSignal.cxx.html#T8gXmC">SetDevice</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* dev)</span><br />
-<div class="funccomm"><pre> Store the pointer to the device which owns this <a href="./NcSignal.html">NcSignal</a> object.
- This memberfunction is meant for internal use in <a href="./NcDevice.html">NcDevice</a>.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:SetDevice" href="src/NcSignal.cxx.html#NTjdqC">SetDevice</a>(<a href="./NcDevice.html">NcDevice</a>* dev)</span><br />
+<div class="funccomm"><pre> Store the pointer to a device related to this <a href="./NcSignal.html">NcSignal</a> (or derived) object.
+ The user can only perform this action to relate a device to an <a href="./NcSignal.html">NcSignal</a>
+ (or derived object like an <a href="./NcDevice.html">NcDevice</a>) that is not owned by an <a href="./NcDevice.html">NcDevice</a> (or derived) object.
+ For <a href="./NcSignal.html">NcSignal</a> objects owned by an <a href="./NcDevice.html">NcDevice</a> (aka <span class="string">"hits"</span>), this pointer is handled internally
+ by <a href="./NcDevice.html">NcDevice</a> and automatically refers to the <a href="./NcDevice.html">NcDevice</a> (or derived) object owning the <a href="./NcSignal.html">NcSignal</a>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./NcDevice.html">NcDevice</a>* <a class="funcname" name="NcSignal:GetDevice" href="src/NcSignal.cxx.html#OHCy4D">GetDevice</a>() const</span><br />
-<div class="funccomm"><pre> Provide the pointer to the device which owns this <a href="./NcSignal.html">NcSignal</a> object.
+<div class="funccomm"><pre> Provide the pointer to a device related to or owning this <a href="./NcSignal.html">NcSignal</a> (or derived) object.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSignal:AddTrack" href="src/NcSignal.cxx.html#Nc3a3">AddTrack</a>(<a href="./NcTrack.html">NcTrack</a>&amp; t, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
@@ -1651,6 +1662,11 @@ return false;}
 <div class="funccomm"><pre> Return the track with user identifier <span class="string">"id"</span> of this signal
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcSignal:IsOwned" href="src/NcSignal.cxx.html#z7OrQB">IsOwned</a>() const</span><br />
+<div class="funccomm"><pre> Indicate whether this <a href="./NcSignal.html">NcSignal</a> (or derived) object is owned by an <a href="./NcDevice.html">NcDevice</a>
+ (or derived) object (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSignal:Clone" href="src/NcSignal.cxx.html#H62zzC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -1666,7 +1682,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri May  7 12:18:31 2021 </em><em>&raquo; Last generated: 2021-05-07 12:18</em><br />
+<em>&raquo; Last changed: Sun Jun 20 18:46:05 2021 </em><em>&raquo; Last generated: 2021-06-20 18:46</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
