@@ -134,7 +134,7 @@
 // Float_t dedx=q.GetSignal("dE/dx",3);
 //
 //--- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 20, 2021  15:52Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 21, 2021  15:26Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSignal.h"
@@ -157,7 +157,7 @@ NcSignal::NcSignal(const char* name,const char* title) : TNamed(name,title),NcPo
  fLinks=0;
  fDevice=0;
  fTracks=0;
- fOwned=kFALSE;
+ fDevset=kFALSE;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcSignal::~NcSignal()
@@ -235,11 +235,10 @@ NcSignal::NcSignal(const NcSignal& s) : TNamed(s),NcPosition(s),NcAttrib(s)
  fLinks=0;
  fTracks=0;
 
- fOwned=s.fOwned;
+ fDevset=kFALSE;
 
  // Don't copy the owning device pointer for the copy
  fDevice=0;
- if (!fOwned) fDevice=s.fDevice;
 
  Int_t n=s.GetNvalues();
  Double_t val;
@@ -359,7 +358,6 @@ void NcSignal::Reset(Int_t mode)
  }
 
  if (fLinks) fLinks->Reset();
- if (!fOwned) fDevice=0;
 
  if (fTracks)
  {
@@ -914,15 +912,7 @@ void NcSignal::Data(TString f,TString u) const
  {
   const char* devname=fDevice->GetName();
   const char* devtitle=fDevice->GetTitle();
-  if (!fOwned)
-  {
-   cout << "   Linked to device : ";
-  }
-  else
-  {
-   cout << "   Owned by device : ";
-  }
-  cout << fDevice->ClassName() << " Id : " << fDevice->GetUniqueID();
+  cout << "   Owned by device : " << fDevice->ClassName() << " Id : " << fDevice->GetUniqueID();
   if (strlen(devname))  cout << " Name : " << devname;
   if (strlen(devtitle)) cout << " Title : " << devtitle;
   cout << endl;
@@ -968,15 +958,7 @@ void NcSignal::List(Int_t j) const
   {
    const char* devname=fDevice->GetName();
    const char* devtitle=fDevice->GetTitle();
-   if (!fOwned)
-   {
-    cout << "   Linked to device : ";
-   }
-   else
-   {
-    cout << "   Owned by device : ";
-   }
-   cout << fDevice->ClassName();
+   cout << "   Owned by device : " << fDevice->ClassName();
    if (strlen(devname))  cout << " Name : " << devname;
    if (strlen(devtitle)) cout << " Title : " << devtitle;
    cout << endl;
@@ -1106,15 +1088,7 @@ void NcSignal::ListWaveform(Int_t j) const
   {
    const char* devname=fDevice->GetName();
    const char* devtitle=fDevice->GetTitle();
-   if (!fOwned)
-   {
-    cout << "   Linked to device : ";
-   }
-   else
-   {
-    cout << "   Owned by device : ";
-   }
-   cout << fDevice->ClassName();
+   cout << "   Owned by device : " << fDevice->ClassName();
    if (strlen(devname))  cout << " Name : " << devname;
    if (strlen(devtitle)) cout << " Title : " << devtitle;
    cout << endl;
@@ -1185,15 +1159,7 @@ void NcSignal::ListSample(Int_t j) const
   {
    const char* devname=fDevice->GetName();
    const char* devtitle=fDevice->GetTitle();
-   if (!fOwned)
-   {
-    cout << "   Linked to device : ";
-   }
-   else
-   {
-    cout << "   Owned by device : ";
-   }
-   cout << fDevice->ClassName();
+   cout << "   Owned by device : " << fDevice->ClassName();
    if (strlen(devname))  cout << " Name : " << devname;
    if (strlen(devtitle)) cout << " Title : " << devtitle;
    cout << endl;
@@ -1264,15 +1230,7 @@ void NcSignal::ListTrack(Int_t j) const
   {
    const char* devname=fDevice->GetName();
    const char* devtitle=fDevice->GetTitle();
-   if (!fOwned)
-   {
-    cout << "   Linked to device : ";
-   }
-   else
-   {
-    cout << "   Owned by device : ";
-   }
-   cout << fDevice->ClassName();
+   cout << "   Owned by device : " << fDevice->ClassName();
    if (strlen(devname))  cout << " Name : " << devname;
    if (strlen(devtitle)) cout << " Title : " << devtitle;
    cout << endl;
@@ -2486,25 +2444,22 @@ Int_t NcSignal::GetSwapMode() const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetDevice(NcDevice* dev)
 {
-// Store the pointer to a device related to this NcSignal (or derived) object.
-// The user can only perform this action to relate a device to an NcSignal
-// (or derived object like an NcDevice) that is not owned by an NcDevice (or derived) object.
-// For NcSignal objects owned by an NcDevice (aka "hits"), this pointer is handled internally
-// by NcDevice and automatically refers to the NcDevice (or derived) object owning the NcSignal.
+// Store the pointer to the device that owns this NcSignal (or derived) object.
+// This facility may only be used internally by NcDevice (or derived) objects.
 
- if (!fOwned)
+ if (fDevset)
  {
   fDevice=dev;
  }
  else
  {
-  cout << " *" << ClassName() << "::SetDevice* Modification for owned objects is not allowed." << endl;
+  cout << " *" << ClassName() << "::SetDevice* Invokation by public users is not allowed." << endl;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcSignal::GetDevice() const
 {
-// Provide the pointer to a device related to or owning this NcSignal (or derived) object.
+// Provide the pointer to the device that owns this NcSignal (or derived) object.
  return (NcDevice*)fDevice;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2649,14 +2604,6 @@ NcTrack* NcSignal::GetIdTrack(Int_t id) const
   if (id == tx->GetId()) return tx;
  }
  return 0; // No matching id found
-}
-///////////////////////////////////////////////////////////////////////////
-Bool_t NcSignal::IsOwned() const
-{
-// Indicate whether this NcSignal (or derived) object is owned by an NcDevice
-// (or derived) object (kTRUE) or not (kFALSE).
-
- return fOwned;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSignal::Clone(const char* name) const

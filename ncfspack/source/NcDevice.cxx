@@ -88,7 +88,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 20, 2021  15:54Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 21, 2021  15:25Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDevice.h"
@@ -288,9 +288,9 @@ void NcDevice::AddHit(NcSignal& s)
   // and set the owning link to this device
   NcSignal* sx=(NcSignal*)fHits->Last();
   if (nlinks) sx->ResetLinks(this);
-  sx->fOwned=kFALSE;
+  sx->fDevset=kTRUE;
   sx->SetDevice(this);
-  sx->fOwned=kTRUE;
+  sx->fDevset=kFALSE;
  }
  else
  {

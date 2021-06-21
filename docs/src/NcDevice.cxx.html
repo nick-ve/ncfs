@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jun 20 18:46:04 2021            -->
+<!--   Date: Mon Jun 21 15:31:26 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -109,7 +109,7 @@
 <span class="comment">// }</span>
 <span class="comment">//</span>
 <span class="comment">//--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University</span>
-<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 20, 2021  15:54Z</span>
+<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 21, 2021  15:25Z</span>
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
 
 <span class="cpp">#include "<a href="../NcDevice.h">NcDevice.h</a>"</span>
@@ -309,9 +309,9 @@ ClassImp(<a href="../NcDevice.html">NcDevice</a>) <span class="comment">// <a hr
   <span class="comment">// and set the owning link to this device</span>
   <a href="../NcSignal.html">NcSignal</a>* sx=(<a href="../NcSignal.html">NcSignal</a>*)<a href="../NcDevice.html#NcDevice:fHits" title="TObjArray* NcDevice::fHits">fHits</a>-&gt;Last();
   <span class="keyword">if</span> (nlinks) sx-&gt;<a href="../NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>(<span class="keyword">this</span>);
-  sx-&gt;fOwned=<a href="../ListOfTypes.html#Bool_t">kFALSE</a>;
+  sx-&gt;fDevset=<a href="../ListOfTypes.html#Bool_t">kTRUE</a>;
   sx-&gt;<a href="../NcSignal.html#NcSignal:SetDevice" title="void NcSignal::SetDevice(NcDevice* dev)">SetDevice</a>(<span class="keyword">this</span>);
-  sx-&gt;fOwned=<a href="../ListOfTypes.html#Bool_t">kTRUE</a>;
+  sx-&gt;fDevset=<a href="../ListOfTypes.html#Bool_t">kFALSE</a>;
  }
  <span class="keyword">else</span>
  {
@@ -1434,7 +1434,7 @@ ClassImp(<a href="../NcDevice.html">NcDevice</a>) <span class="comment">// <a hr
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-06-20 18:46 </em><em>&raquo; Last generated: 2021-06-20 18:46</em><br />
+<em>&raquo; Last changed: 2021-06-21 15:31 </em><em>&raquo; Last generated: 2021-06-21 15:31</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

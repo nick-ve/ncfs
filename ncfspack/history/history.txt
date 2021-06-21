@@ -1185,3 +1185,17 @@
                 However, the type of the datamember fDevice in NcSignal has been kept as TObject* in order to be
                 backward compatible with old data files. 
                 The version indicator in NcVersion has been updated to 3.10.
+                ***************************************************************************************************
+                *** For full backward compatibility with (very) old data, this version 3.10 should not be used. ***
+                *** Due to the missing new data member "fOwned" in old data, some printouts give the impression ***
+                *** that some NcSignal objects are only linked to instead of owned by the corresponding device. ***
+                *** The user is advised to use earlier or later versions of the software package instead.       ***
+                ***************************************************************************************************
+21-jun-2021 NvE Flag "fOwned" in NcSignal changed into "fDevset" to toggle allowance to set the owning device,
+                and this has been updated in NcDevice::AddHit() accordingly.
+                By default "fDevset" is set to kFALSE and the NcSignal::SetDevice() memberfunction can only be invoked
+                internally by NcDevice (or derived) objects to specify the device that owns the particular NcSignal (or derived) object.
+                This is now fully backward compatible with the absence of this new data member in old data files.
+                Also an irrelevant comment removed from NcJet.
+                The version indicator in NcVersion has been updated to 3.11.
+                

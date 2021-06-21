@@ -986,7 +986,6 @@ void NcJet::ReplaceTrack(NcTrack* told,NcTrack* tnew)
  Float_t tscale=tnew->GetEscale();
  if ((tscale/fEscale > 1.1) || (fEscale/tscale > 1.1)) p4=p4*(tscale/fEscale);
  (*this)+=p4;
-// @@@@@
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::RemoveTrack(NcTrack* t,Int_t compress)

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jun 20 18:46:05 2021            -->
+<!--   Date: Mon Jun 21 15:31:28 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -103,7 +103,6 @@
   <span class="keyword">void</span> <a href="../NcSignal.html#NcSignal:ResetLinks" title="void NcSignal::ResetLinks(TObject* obj,Int_t j=0,Int_t k=0) or overloads">ResetLinks</a>(<a href="../#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj,TString name,<a href="../ListOfTypes.html#Int_t">Int_t</a> k=0);         <span class="comment">// <a href="../NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a> link(s) to object obj for name-specified slot</span>
   <span class="keyword">void</span> <a href="../NcSignal.html#NcSignal:SetSwapMode" title="void NcSignal::SetSwapMode(Int_t swap=1)">SetSwapMode</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> swap=1);                               <span class="comment">// Set swapmode flag for the link storage</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcSignal.html#NcSignal:GetSwapMode" title="Int_t NcSignal::GetSwapMode()">GetSwapMode</a>() <span class="keyword">const</span>;                                    <span class="comment">// Provide swapmode flag for the link storage</span>
-  <span class="keyword">void</span> <a href="../NcSignal.html#NcSignal:SetDevice" title="void NcSignal::SetDevice(NcDevice* dev)">SetDevice</a>(<a href="../NcDevice.html">NcDevice</a>* dev);                                <span class="comment">// Store pointer to a related device or the device that owns this signal</span>
   <a href="../NcDevice.html">NcDevice</a>* <a href="../NcSignal.html#NcSignal:GetDevice" title="NcDevice* NcSignal::GetDevice()">GetDevice</a>() <span class="keyword">const</span>;                                  <span class="comment">// Provide pointer to the owning device </span>
   <span class="keyword">void</span> <a href="../NcSignal.html#NcSignal:AddTrack" title="void NcSignal::AddTrack(NcTrack&amp; t,Int_t mode=1)">AddTrack</a>(<a href="../NcTrack.html">NcTrack</a>&amp; t,<a href="../ListOfTypes.html#Int_t">Int_t</a> mode=1);                       <span class="comment">// Relate an <a href="../NcTrack.html">NcTrack</a> to this signal</span>
   <span class="keyword">void</span> <a href="../NcSignal.html#NcSignal:RemoveTrack" title="void NcSignal::RemoveTrack(NcTrack&amp; t,Int_t mode=1)">RemoveTrack</a>(<a href="../NcTrack.html">NcTrack</a>&amp; t,<a href="../ListOfTypes.html#Int_t">Int_t</a> mode=1);                    <span class="comment">// Remove related <a href="../NcTrack.html">NcTrack</a> from this signal</span>
@@ -115,9 +114,10 @@
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcSignal.html#NcSignal:GetSignalFlag" title="Int_t NcSignal::GetSignalFlag(Int_t j=1) or overloads">GetSignalFlag</a>(TString name) <span class="keyword">const</span>;                      <span class="comment">// Provide signal value flag of the name specified slot</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcSignal.html#NcSignal:GetErrorFlag" title="Int_t NcSignal::GetErrorFlag(Int_t j=1) or overloads">GetErrorFlag</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> j=1) <span class="keyword">const</span>;                          <span class="comment">// Provide error value flag of the j-th slot</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcSignal.html#NcSignal:GetErrorFlag" title="Int_t NcSignal::GetErrorFlag(Int_t j=1) or overloads">GetErrorFlag</a>(TString name) <span class="keyword">const</span>;                       <span class="comment">// Provide error value flag of the name specified slot</span>
-  <a href="../ListOfTypes.html#Bool_t">Bool_t</a> <a href="../NcSignal.html#NcSignal:IsOwned" title="Bool_t NcSignal::IsOwned()">IsOwned</a>() <span class="keyword">const</span>;                                       <span class="comment">// Provide the owned status</span>
 
-  <a href="../ListOfTypes.html#Bool_t">Bool_t</a> <a href="../NcSignal.html#NcSignal:fOwned" title="Bool_t NcSignal::fOwned">fOwned</a>;                               <span class="comment">// Flag to indicate whether this <a href="../NcSignal.html">NcSignal</a> is owned by an <a href="../NcDevice.html">NcDevice</a> or not</span>
+  <span class="comment">// Facilities that may only be used internally by <a href="../NcDevice.html">NcDevice</a> (or derived) objects</span>
+  <span class="keyword">void</span> <a href="../NcSignal.html#NcSignal:SetDevice" title="void NcSignal::SetDevice(NcDevice* dev)">SetDevice</a>(<a href="../NcDevice.html">NcDevice</a>* dev); <span class="comment">// Store pointer to the device that owns this signal</span>
+  <a href="../ListOfTypes.html#Bool_t">Bool_t</a> <a href="../NcSignal.html#NcSignal:fDevset" title="Bool_t NcSignal::fDevset">fDevset</a>;                <span class="comment">// Flag to allow the setting of a device as owner (<a href="../ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="../ListOfTypes.html#Bool_t">kFALSE</a>)</span>
 
  <span class="keyword">protected</span>:
   <span class="keyword">void</span> <a href="../NcSignal.html#NcSignal:SetSigFlags" title="void NcSignal::SetSigFlags(Int_t is,Int_t ie,Int_t j)">SetSigFlags</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> is,<a href="../ListOfTypes.html#Int_t">Int_t</a> ie,<a href="../ListOfTypes.html#Int_t">Int_t</a> j); <span class="comment">// Set flags for signal and/or error value settings</span>
@@ -130,7 +130,7 @@
   <a href="../#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a href="../NcSignal.html#NcSignal:fDevice" title="TObject* NcSignal::fDevice">fDevice</a>;                            <span class="comment">// Pointer to a related device or the device that owns this signal</span>
   TObjArray* <a href="../NcSignal.html#NcSignal:fTracks" title="TObjArray* NcSignal::fTracks">fTracks</a>;                          <span class="comment">// Pointers to associated tracks</span>
 
- ClassDef(<a href="../NcSignal.html">NcSignal</a>,3) <span class="comment">// Generic handling of (extrapolated) detector signals.</span>
+ ClassDef(<a href="../NcSignal.html">NcSignal</a>,4) <span class="comment">// Generic handling of (extrapolated) detector signals.</span>
 };
 <span class="cpp">#endif</span>
 </pre>
@@ -141,7 +141,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-06-20 18:46 </em><em>&raquo; Last generated: 2021-06-20 18:46</em><br />
+<em>&raquo; Last changed: 2021-06-21 15:31 </em><em>&raquo; Last generated: 2021-06-21 15:31</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
