@@ -88,7 +88,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 21, 2021  15:25Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 23, 2021  16:19Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDevice.h"
@@ -173,7 +173,9 @@ NcDevice::NcDevice(const NcDevice& dev) : NcSignal(dev)
     fHits->Add(sx->Clone());
     NcSignal* s=(NcSignal*)fHits->Last();
     s->ResetLinks((NcDevice*)&dev);
+    s->fDevset=kTRUE;
     s->SetDevice(this);
+    s->fDevset=kFALSE;
    }
    else
    {
@@ -238,6 +240,33 @@ Int_t NcDevice::GetHitCopy() const
 // 0 ==> No private copies are made; pointers of original hits are stored.
 // 1 ==> Private copies of the hits are made and these pointers are stored.
  return fHitCopy;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcDevice::SetOwner(Bool_t own)
+{
+// Set ownership of all added objects. 
+// The default parameter is own=kTRUE.
+//
+// Invokation of this memberfunction also sets all the copy modes
+// (i.e. HitCopy) according to the value of own.
+//
+// This function (with own=kTRUE) is particularly useful when reading data
+// from a tree/file, since Reset() will then actually remove all the
+// added objects from memory irrespective of the copy mode settings
+// during the tree/file creation process. In this way it provides a nice way
+// of preventing possible memory leaks in the reading/analysis process.
+//
+// In addition this memberfunction can also be used as a shortcut to set all
+// copy modes in one go during a tree/file creation process.
+// However, in this case the user has to take care to only set/change the
+// ownership (and copy mode) for empty objects (e.g. newly created objects
+// or after invokation of the Reset() memberfunction) otherwise it will
+// very likely result in inconsistent destructor behaviour.
+
+ Int_t mode=1;
+ if (!own) mode=0;
+ if (fHits) fHits->SetOwner(own);
+ fHitCopy=mode;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::SetStatus(Int_t word)

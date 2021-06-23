@@ -1198,4 +1198,11 @@
                 This is now fully backward compatible with the absence of this new data member in old data files.
                 Also an irrelevant comment removed from NcJet.
                 The version indicator in NcVersion has been updated to 3.11.
-                
+                ***************************************************************************************************
+                *** Because of a bug in the NcDevice copy constructor, this version 3.11 should not be used.    ***
+                *** The user is advised to use earlier or later versions of the software package instead.       ***
+                ***************************************************************************************************
+22-jun-2021 NvE Bug fix : Toggle of "fDevset" now also implemented in NcDevice copy constructor.
+                Also the number of NcSample objects is now listed in NcEvent::ShowDevices().
+23-jun-2021 NvE Introduced the memberfunction SetOwner() into class NcDevice.
+                The version indicator in NcVersion has been updated to 3.12.

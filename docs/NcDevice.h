@@ -14,6 +14,7 @@ class NcDevice : public NcSignal
   virtual ~NcDevice();                               // Default destructor
   NcDevice(const NcDevice& dev);                     // Copy constructor
   virtual TObject* Clone(const char* name="") const; // Make a deep copy and provide its pointer
+  virtual void SetOwner(Bool_t own=kTRUE);           // Set ownership of all added objects
   void SetStatus(Int_t word);                        // Set the status word (user definable)
   Int_t GetStatus() const;                           // Provide the status word
   void SetHitCopy(Int_t j);                          // (De)activate creation of private copies of hits
@@ -50,6 +51,6 @@ class NcDevice : public NcSignal
   TObjArray* fOrdered; //! Temp. array to hold the ordered hits
   TObjArray* fMarkers; //! Temp. array to hold the 3D markers for the hit display
 
- ClassDef(NcDevice,11) // Signal (Hit) handling of a generic device.
+ ClassDef(NcDevice,12) // Signal (Hit) handling of a generic device.
 };
 #endif

@@ -1120,7 +1120,9 @@ void NcEvent::ShowDevices(Int_t mode) const
   else
   {
    cout << " The following " << ndevs << " devices are available :" << endl; 
-   Int_t nh=0,nw=0;
+   Int_t nh=0;
+   Int_t nw=0;
+   Int_t ns=0;
    for (Int_t i=1; i<=ndevs; i++)
    {
     NcDevice* dev=GetDevice(i);
@@ -1134,6 +1136,8 @@ void NcEvent::ShowDevices(Int_t mode) const
      if (nh) cout << " Nhits : " << nh;
      nw=dev->GetNwaveforms();
      if (nw) cout << " Nwaveforms : " << nw;
+     ns=dev->GetNsamples();
+     if (ns) cout << " Nsamples : " << ns;
      cout << endl;
     }
    }

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Jun 21 15:31:26 2021            -->
+<!--   Date: Wed Jun 23 18:14:08 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -119,7 +119,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 21, 2021  15:25Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 23, 2021  16:19Z
 
 </pre></div>
 </div></div>
@@ -384,6 +384,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetOffset"><span class="baseclass">NcAttrib::</span>SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:SetOffset@1"><span class="baseclass">NcAttrib::</span>SetOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> off, TString name)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDevice:SetOwner">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@3"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcPosition.html#NcPosition:SetPosition@2"><span class="baseclass">NcPosition::</span>SetPosition</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* r, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
@@ -628,6 +629,27 @@ return false;}
 <div class="funccomm"><pre> Provide value of the HitCopy mode.
  0 ==&gt; No private copies are made; pointers of original hits are stored.
  1 ==&gt; Private copies of the hits are made and these pointers are stored.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:SetOwner" href="src/NcDevice.cxx.html#uQbzxE">SetOwner</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> own = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Set ownership of all added objects. 
+ The default parameter is own=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+
+ Invokation of this memberfunction also sets all the copy modes
+ (i.e. HitCopy) according to the value of own.
+
+ This function (with own=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) is particularly useful when reading data
+ from a tree/file, since <a href="./NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>() will then actually remove all the
+ added objects from memory irrespective of the copy mode settings
+ during the tree/file creation process. In this way it provides a nice way
+ of preventing possible memory leaks in the reading/analysis process.
+
+ In addition this memberfunction can also be used as a shortcut to set all
+ copy modes in one go during a tree/file creation process.
+ However, in this case the user has to take care to only set/change the
+ ownership (and copy mode) for empty objects (e.g. newly created objects
+ or after invokation of the <a href="./NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>() memberfunction) otherwise it will
+ very likely result in inconsistent destructor behaviour.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:SetStatus" href="src/NcDevice.cxx.html#HwFkF">SetStatus</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> word)</span><br />
@@ -1044,7 +1066,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Jun 21 15:31:27 2021 </em><em>&raquo; Last generated: 2021-06-21 15:31</em><br />
+<em>&raquo; Last changed: Wed Jun 23 18:14:09 2021 </em><em>&raquo; Last generated: 2021-06-23 18:14</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
