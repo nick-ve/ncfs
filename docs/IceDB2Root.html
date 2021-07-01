@@ -1,0 +1,504 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Mon Apr  5 23:39:07 2021            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>IceDB2Root</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class IceDB2Root','','IceDB2Root.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/IceDB2Root.h.html">header file</a>
+<a class="descrheadentry" href="src/IceDB2Root.cxx.html">source file</a>
+<a class="descrheadentry" href="IceDB2Root_Tree.pdf">inheritance tree (.pdf)</a> 
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#IceDB2Root:description">class description</a> 
+<a class="descrheadentry" href="#IceDB2Root:Function_Members">function members</a>
+<a class="descrheadentry" href="#IceDB2Root:Data_Members">data members</a>
+<a class="descrheadentry" href="#IceDB2Root:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">IceDB2Root</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="IceDB2Root:description"></a>class IceDB2Root: public <a href="./NcJob.html">NcJob</a></h1>
+<div class="classdescr">
+<pre>
+ <a href="./IceDB2Root.html#IceDB2Root:Class" title="TClass* IceDB2Root::Class()">Class</a> <a href="./IceDB2Root.html">IceDB2Root</a>
+ Extraction of Amanda and IceCube calibration data from the IceCube database.
+ Calibration data are stored into an <a href="./NcObjMatrix.html">NcObjMatrix</a> containing the complete OM 
+ position, calibration, Xtalk etc... database.
+ Various <a href="./NcObjMatrix.html">NcObjMatrix</a> objects are created and (optionally) stored in a single 
+ output file.
+ The names of the <a href="./NcObjMatrix.html">NcObjMatrix</a> objects indicate the type of database they
+ contain.
+ For example :
+ The name <span class="string">"MuDaq-OMDBASE"</span> indicates the database info for MuDaq data,
+ whereas TWRDaq calibration data is in the object named <span class="string">"TWRDaq-OMDBASE"</span>.
+ In addition a PDG particle database, extended with some specific Amanda
+ entries, is provided as well.
+ This class is derived from <a href="./NcJob.html">NcJob</a> providing task-based processing.
+ Note that the data structures are only written out if an outputfile has
+ been specified via the <a href="./IceDB2Root.html#IceDB2Root:SetOutputFile" title="void IceDB2Root::SetOutputFile(TString name)">SetOutputFile</a> memberfunction.
+ In case no outputfile has been specified, this class provides a facility
+ to investigate/use the dbase data directly in subsequent (sub)tasks.
+
+ The OM database information in the <a href="./NcObjMatrix.html">NcObjMatrix</a> has the following structure :
+
+ (j,1)    : Pointer to OM with identifier <span class="string">"j"</span>
+ (j,k+1)  : Pointer to a TF1* being the probability function for Xtalk
+            with OM <span class="string">"j"</span> as transmitter and OM <span class="string">"k"</span> as receiver.
+
+ The latter is only available for MuDaq and TWRDaq databases.
+
+ The geometry information is directly available from the OM pointer
+ in the form of its position and data words like <span class="string">"ORIENT"</span> for orientation etc...
+ Just use the OM memberfunction Data() to obtain a full overview. 
+
+ Note : Position coordinates are indicated in meters and times are in nanoseconds,
+        in accordance with the convention used previously for Amanda.
+
+ From the OM pointer also the various (de)calibration functions for
+ ADC, LE and TOT can be obtained as TF1* pointers.
+ The actual values of the calibration constants are stored as parameters
+ of these (de)calibration functions and can be investigated via the
+ usual TF1::<a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a>() or TF1::GetParameter() facilities.
+ The last two parameters of the Xtalk probability function have no effect
+ on the evaluated probability value. However, these two parameters provide
+ the minimum and maximum allowed LE differences between the transmitter
+ and receiver hits, respectively (as can be seen from the parameter names).
+
+ The (de)calibration of signals and/or determination of the Xtalk probability
+ can be performed via the standard TF1::Eval(x) functionality, where <span class="string">"x"</span>
+ represents the input argument of the function (e.g. an uncalibrated ADC value).
+
+ In general the database is not directly accessed by the user in performing
+ physics analysis, since all the necessary information is contained in the
+ event data itself and available via the GetSignal() memberfunction of the hits.
+ However, specific tasks like e.g. calibration, Xtalk correction,
+ bad module removal, noise hit removal etc... might need explicit database access.
+ So, at the end of the example below some functionality is indicated for clarity.
+ The user may use exactly the same procedures to obtain explicit access to the calibration
+ functions etc... from the various OMs and/or hits within the actual event data which he/she
+ is analysing.
+
+ The PDG particle database is a standard ROOT TDatabasePDG object
+ with the following extensions :
+
+ Name        PDG code
+ ----        --------
+ brems       10001001
+ deltae      10001002
+ pairprod    10001003
+ nucl_int    10001004
+ mu_pair     10001005
+ hadrons     10001006
+ fiberlaser  10002100
+ n2laser     10002101
+ yaglaser    10002201
+ z_primary   10003000
+ a_primary   10003500
+ 
+ Usage example :
+ ---------------
+
+ gSystem-&gt;Load(<span class="string">"ncfspack"</span>);
+ gSystem-&gt;Load(<span class="string">"icepack"</span>);
+ gSystem-&gt;Load(<span class="string">"iceconvert"</span>);
+
+ <a href="./IceDB2Root.html">IceDB2Root</a> q(<span class="string">"IceDB2Root"</span>,<span class="string">"DB to IcePack data structure conversion"</span>);
+
+ // Output file for the event structures
+ q.<a href="./IceDB2Root.html#IceDB2Root:SetOutputFile" title="void IceDB2Root::SetOutputFile(TString name)">SetOutputFile</a>(<span class="string">"cal2005.root"</span>);
+ q.<a href="./IceDB2Root.html#IceDB2Root:SetUT" title="void IceDB2Root::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh=0,Int_t mm=0,Int_t ss=0)">SetUT</a>(2005,7,1);
+
+ ///////////////////////////////////////////////////////////////////
+ // Here the user can specify his/her sub-tasks to be executed
+ // after the database structures have been filled and before the
+ // data is written out.
+ // Sub-tasks (i.e. a user classes derived from <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>) are entered
+ // as follows :
+ //
+ //    MyTask1 task1(<span class="string">"task1"</span>,<span class="string">"Some modifications to specific OMs"</span>);
+ //    MyTask2 task2(<span class="string">"task2"</span>,<span class="string">"Removal of specific OMs"</span>);
+ //    MyTask3 task3(<span class="string">"task3"</span>,<span class="string">"Add private objects to the output file"</span>);
+ //    q.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task1);
+ //    q.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task2);
+ //    q.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task3);
+ //
+ // The sub-tasks will be executed in the order as they are entered.
+ ///////////////////////////////////////////////////////////////////
+
+ // Perform the conversion and execute subtasks (if any)
+ q.<a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>();
+
+ // Outline of dbase usage for (de)calibration and Xtalk
+
+ <a href="./NcObjMatrix.html">NcObjMatrix</a>* omdb=q.<a href="./IceDB2Root.html#IceDB2Root:GetOMdbase" title="NcObjMatrix* IceDB2Root::GetOMdbase(TString name=&quot;MuDaq&quot;)">GetOMdbase</a>(<span class="string">"MuDaq"</span>);
+ <a href="./IceAOM.html">IceAOM</a>* om=(<a href="./IceAOM.html">IceAOM</a>*)omdb-&gt;<a href="./NcJob.html#NcJob:GetObject" title="TObject* NcJob::GetObject(const char* classname) or overloads">GetObject</a>(9,1); // Pointer to OM 9
+ om-&gt;Data(); // Overview of generic module parameters
+ TF1* fcal=0;   // Calibration function
+ TF1* fdecal=0; // De-calibration function
+ fcal=om-&gt;GetCalFunction(<span class="string">"ADC"</span>);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> adc=248; // Uncalibrated ADC
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> cadc=0;  // Calibrated ADC
+ if (fcal) cadc=fcal-&gt;Eval(adc);
+ fcal=om-&gt;GetCalFunction(<span class="string">"TOT"</span>);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> tot=1538; // Uncalibrated TOT
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> ctot=0;   // Calibrated TOT
+ if (fcal) ctot=fcal-&gt;Eval(tot);
+ fdecal=om-&gt;GetDecalFunction(<span class="string">"LE"</span>);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> le=21697; // Uncalibrated LE
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> cle=0;    // Calibrated LE
+ if (fcal) cle=fcal-&gt;Eval(le);
+
+ // Xtalk probability between (trans) OM 90 and (rec) OM 113
+ // for a transmitter signal of uncalibrated amplitude <span class="string">"adc"</span>.
+ TF1* fxtalkp=(TF1*)omdb-&gt;<a href="./NcJob.html#NcJob:GetObject" title="TObject* NcJob::GetObject(const char* classname) or overloads">GetObject</a>(90,113+1);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> prob=0;
+ adc=378;
+ if (fxtalkp) prob=fxtalkp-&gt;Eval(adc);
+
+--- Author: Garmt de Vries-Uiterweerd 06-jun-2007 Utrecht University
+- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="IceDB2Root:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceDB2Root:IceDB2Root@1">IceDB2Root</a>(<span class="keyword">const</span> <a href="./IceDB2Root.html">IceDB2Root</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceDB2Root:IceDB2Root">IceDB2Root</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceDB2Root"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#IceDB2Root:_IceDB2Root">~IceDB2Root</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Add"><span class="baseclass">TTask::</span>Add</a>(<a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>* task)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:AddObject"><span class="baseclass">NcJob::</span>AddObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:AddObjects"><span class="baseclass">NcJob::</span>AddObjects</a>(TObjArray* arr)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Browse"><span class="baseclass">TTask::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#IceDB2Root:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:CleanTasks"><span class="baseclass">TTask::</span>CleanTasks</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Clear"><span class="baseclass">TTask::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TNamed:Clone"><span class="baseclass">TNamed::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Continue"><span class="baseclass">TTask::</span>Continue</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:ExecuteJob"><span class="baseclass">NcJob::</span>ExecuteJob</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTask"><span class="baseclass">TTask::</span>ExecuteTask</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"0"</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTasks"><span class="baseclass">TTask::</span>ExecuteTasks</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakin"><span class="baseclass">TTask::</span>GetBreakin</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakout"><span class="baseclass">TTask::</span>GetBreakout</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">TFolder*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetFolder"><span class="baseclass">NcJob::</span>GetFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TList*</td><td class="funcname"><a class="funcname" href="#TTask:GetListOfTasks"><span class="baseclass">TTask::</span>GetListOfTasks</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetMainObject"><span class="baseclass">NcJob::</span>GetMainObject</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetObject"><span class="baseclass">NcJob::</span>GetObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetObject@1"><span class="baseclass">NcJob::</span>GetObject</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetObjects"><span class="baseclass">NcJob::</span>GetObjects</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetObjects@1"><span class="baseclass">NcJob::</span>GetObjects</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcObjMatrix.html">NcObjMatrix</a>*</td><td class="funcname"><a class="funcname" href="#IceDB2Root:GetOMdbase">GetOMdbase</a>(TString name = <span class="string">"MuDaq"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TDatabasePDG*</td><td class="funcname"><a class="funcname" href="#IceDB2Root:GetPDG">GetPDG</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTimestamp.html">NcTimestamp</a></td><td class="funcname"><a class="funcname" href="#IceDB2Root:GetTime">GetTime</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#IceDB2Root:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsActive"><span class="baseclass">TTask::</span>IsActive</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsFolder"><span class="baseclass">TTask::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:ListEnvironment"><span class="baseclass">NcJob::</span>ListEnvironment</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:MakeFolder"><span class="baseclass">NcJob::</span>MakeFolder</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./IceDB2Root.html">IceDB2Root</a>&amp;</td><td class="funcname"><a class="funcname" href="#IceDB2Root:operator_">operator=</a>(<span class="keyword">const</span> <a href="./IceDB2Root.html">IceDB2Root</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:ProcessObject"><span class="baseclass">NcJob::</span>ProcessObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:RemoveObject"><span class="baseclass">NcJob::</span>RemoveObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:RemoveObjects"><span class="baseclass">NcJob::</span>RemoveObjects</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetActive"><span class="baseclass">TTask::</span>SetActive</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> active = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakin"><span class="baseclass">TTask::</span>SetBreakin</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakin = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakout"><span class="baseclass">TTask::</span>SetBreakout</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakout = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:SetDatabase">SetDatabase</a>(TString name, TString user, TString password = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:SetOutputFile">SetOutputFile</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:SetUT">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss = 0)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:GetJEBADaqData">GetJEBADaqData</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:GetJEBTDaqData">GetJEBTDaqData</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:GetMuDaqData">GetMuDaqData</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceDB2Root:GetTWRDaqData">GetTWRDaqData</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:SetMainObject"><span class="baseclass">NcJob::</span>SetMainObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="IceDB2Root:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fActive"><span class="baseclass">TTask::</span>fActive</a></td><td class="datadesc">true if task is active</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceDB2Root:fDBName"></a>fDBName</td><td class="datadesc">Name of the database</td></tr>
+<tr class="datainh"><td class="datatype">TFolder*</td><td class="dataname"><a href="./NcJob.html#NcJob:fFolder"><span class="baseclass">NcJob::</span>fFolder</a></td><td class="datadesc">Pointer to the folder which serves as the job's whiteboard</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcObjMatrix.html">NcObjMatrix</a>*</td><td class="dataname"><a name="IceDB2Root:fJEBADaqdb"></a>fJEBADaqdb</td><td class="datadesc">Database of all OM devices with their JEB ATWDDaq geometry, calib. etc... data</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcObjMatrix.html">NcObjMatrix</a>*</td><td class="dataname"><a name="IceDB2Root:fJEBTDaqdb"></a>fJEBTDaqdb</td><td class="datadesc">Database of all OM devices with their JEB TWRDaq geometry, calib. etc... data</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a href="./NcJob.html#NcJob:fMainObject"><span class="baseclass">NcJob::</span>fMainObject</a></td><td class="datadesc">Pointer to the main processing object structure within the job</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJob.html#NcJob:fMakefolder"><span class="baseclass">NcJob::</span>fMakefolder</a></td><td class="datadesc">Flag to indicate creation of the folder structure</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcObjMatrix.html">NcObjMatrix</a>*</td><td class="dataname"><a name="IceDB2Root:fMuDaqdb"></a>fMuDaqdb</td><td class="datadesc">Database of all OM devices with their MuDaq geometry, calib. etc... data</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fObjects"><span class="baseclass">NcJob::</span>fObjects</a></td><td class="datadesc">Pointers to the various user-added objects </td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
+<tr class="data"><td class="datatype">TFile*</td><td class="dataname"><a name="IceDB2Root:fOutfile"></a>fOutfile</td><td class="datadesc">The ROOT output file</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceDB2Root:fPassword"></a>fPassword</td><td class="datadesc">Password for access to the DB</td></tr>
+<tr class="data"><td class="datatype">TDatabasePDG*</td><td class="dataname"><a name="IceDB2Root:fPdg"></a>fPdg</td><td class="datadesc">Database with PDG information</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceDB2Root:fRootFileName"></a>fRootFileName</td><td class="datadesc">Name of the ROOT output file</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fSelect"><span class="baseclass">NcJob::</span>fSelect</a></td><td class="datadesc">! Temp. array of pointers to user-selected stored objects </td></tr>
+<tr class="data"><td class="datatype"><a href="./NcObjMatrix.html">NcObjMatrix</a>*</td><td class="dataname"><a name="IceDB2Root:fTWRDaqdb"></a>fTWRDaqdb</td><td class="datadesc">Database of all OM devices with their TWRDaq geometry, calib. etc... data</td></tr>
+<tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcTimestamp.html">NcTimestamp</a></td><td class="dataname"><a name="IceDB2Root:fTime"></a>fTime</td><td class="datadesc">Time for which calibration is done</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="IceDB2Root:fUser"></a>fUser</td><td class="datadesc">User name for access to the DB</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBeginTask"><span class="baseclass">TTask::</span>fgBeginTask</a></td><td class="datadesc">pointer to task initiator</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBreakPoint"><span class="baseclass">TTask::</span>fgBreakPoint</a></td><td class="datadesc">pointer to current break point</td></tr>
+
+</table></div>
+</div>
+<h2><a id="IceDB2Root:Class_Charts"></a>Class Charts</h2>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#efefef" align="right">
+<tt>TTask</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcJob" href="./NcJob.html">NcJob</a></tt></center>
+</td>
+</tr></table>
+</td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="IceDB2Root" href="./IceDB2Root.html">IceDB2Root</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceDB2Root:IceDB2Root" href="src/IceDB2Root.cxx.html#efeL5D">IceDB2Root</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceDB2Root"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre> Default constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceDB2Root:_IceDB2Root" href="src/IceDB2Root.cxx.html#E.cdnE">~IceDB2Root</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:SetDatabase" href="src/IceDB2Root.cxx.html#u8bVmB">SetDatabase</a>(TString name, TString user, TString password = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre> Set the name of the database, and username/password needed to access it.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:SetOutputFile" href="src/IceDB2Root.cxx.html#PRc1w">SetOutputFile</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the name of the ROOT output file.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcTimestamp.html">NcTimestamp</a> <a class="funcname" name="IceDB2Root:GetTime" href="src/IceDB2Root.cxx.html#vXFPlE">GetTime</a>()</span><br />
+<div class="funccomm"><pre> Return time for which the calibration is done.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:SetUT" href="src/IceDB2Root.cxx.html#CNVZTD">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss = 0)</span><br />
+<div class="funccomm"><pre> Set time for which calibration is done. Input parameters are the same as 
+ for <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>. Default value for hh, mm and ss is 0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TDatabasePDG* <a class="funcname" name="IceDB2Root:GetPDG" href="src/IceDB2Root.cxx.html#xxD10E">GetPDG</a>()</span><br />
+<div class="funccomm"><pre> Provide pointer to the PDG database
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcObjMatrix.html">NcObjMatrix</a>* <a class="funcname" name="IceDB2Root:GetOMdbase" href="src/IceDB2Root.cxx.html#NTzZlB">GetOMdbase</a>(TString name = <span class="string">"MuDaq"</span>)</span><br />
+<div class="funccomm"><pre> Provide pointer to the requested OM geometry, calib. etc... database.
+ Options for the <span class="string">"name"</span> specification are : MuDaq, TWRDaq, JEBTDaq, JEBADaq.
+ For backward compatibility the default is name=<span class="string">"MuDaq"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:Exec" href="src/IceDB2Root.cxx.html#WoLLAE">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funccomm"><pre> Job to extract calibration data from database into the IcePack structure.
+
+ Notes :
+ -------
+ 1) This class is derived from <a href="./NcJob.html">NcJob</a>, allowing a task based processing.
+    After conversion of the (ascii) dbase data into the IcePack structure,
+    the processing of all available sub-tasks (if any) is invoked.
+    This provides a facility to investigate/use the dbase data in
+    subsequent (sub)tasks processing before the final data structures
+    are written out.
+
+ 2) Creation of a TFolder via the argument of the <a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a> statement
+    makes all created database objects accessible to subsequent tasks
+    via the TFolder::<a href="./#TObject:FindObject" title="TObject* TObject::FindObject(const char* name) or overloads">FindObject</a> facility.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:GetMuDaqData" href="src/IceDB2Root.cxx.html#p_zhSC">GetMuDaqData</a>()</span><br />
+<div class="funccomm"><pre> Obtain all the MuDaq geometry, calibration and Xtalk data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:GetTWRDaqData" href="src/IceDB2Root.cxx.html#s3R.YE">GetTWRDaqData</a>()</span><br />
+<div class="funccomm"><pre> Obtain all the TWRDaq geometry, calibration and Xtalk data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:GetJEBTDaqData" href="src/IceDB2Root.cxx.html#wBb2T">GetJEBTDaqData</a>()</span><br />
+<div class="funccomm"><pre> Obtain all the JEB TWRDaq geometry, calibration and Xtalk data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceDB2Root:GetJEBADaqData" href="src/IceDB2Root.cxx.html#ITa2T">GetJEBADaqData</a>()</span><br />
+<div class="funccomm"><pre> Obtain all the JEB ATWDDaq geometry, calibration.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceDB2Root:IceDB2Root" href="src/IceDB2Root.h.html#eOSyrC">IceDB2Root</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceDB2Root"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Mon Apr  5 23:39:08 2021 </em><em>&raquo; Last generated: 2021-04-05 23:39</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>
