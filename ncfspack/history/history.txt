@@ -1219,4 +1219,4 @@
                 Implementation of the memberfunctions GetHitPath(), GetCOG() and GetCVAL() moved from NcEvent to NcDevice
                 to make them also directly available to the new classes NcDetectorUnit and NcDetector.
                 However, their functionality is still available to NcEvent as well.
-                The version indicator in NcVersion has been updated to 4.0.
+                The version indicator in NcVersion has been updated to 4.00.
