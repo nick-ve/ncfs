@@ -4,6 +4,7 @@
 // See cxx source for full Copyright notice.
 
 #include "TPolyMarker3D.h"
+#include "TMath.h"
 
 #include "NcSignal.h"
 
@@ -43,6 +44,9 @@ class NcDevice : public NcSignal
   Double_t SumSignals(Int_t idx,Int_t mode=1,TObjArray* hits=0);    // Summation of selected signal values
   Double_t SumSignals(TString name,Int_t mode=1,TObjArray* hits=0); // Summation of selected signal values
   Double_t SlideWindow(TObjArray* hits,Double_t thres,Double_t swin,TString sname,Int_t smode=0,TString wname="none",Int_t wmode=0,Int_t* i1=0,Int_t* i2=0) const; // Sliding window scan of signals
+  Nc3Vector GetHitPath(TObjArray* hits,Int_t pos=0) const; // Provide the average direction of specified hit pattern
+  NcPosition GetCOG(TObjArray* hits,Int_t pos=0,TString slotname="none",Int_t mode=0) const; // Provide the Center Of Gravity of the specified hits
+  Double_t GetCVAL(TObjArray* hits,TString obsname,TString weightname="none",Int_t mode=0,Int_t type=1) const; // Provide the Central Value of "obsname" of the specified hits
 
  protected:
   Int_t fStatus;       // User definable status word
@@ -51,6 +55,6 @@ class NcDevice : public NcSignal
   TObjArray* fOrdered; //! Temp. array to hold the ordered hits
   TObjArray* fMarkers; //! Temp. array to hold the 3D markers for the hit display
 
- ClassDef(NcDevice,12) // Signal (Hit) handling of a generic device.
+ ClassDef(NcDevice,13) // Signal (Hit) handling of a generic device.
 };
 #endif

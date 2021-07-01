@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -32,6 +32,9 @@
 // Creation and investigation of an NCFS generic event structure.
 // An NcEvent can be constructed by adding NcTrack, NcVertex, NcJet
 // and/or NcDevice (or derived) objects, like for instance NcCalorimeter.
+//
+// Addition of devices is best done via a (hierarchical) detector structure.
+// Please refer to the documentation of NcDetector for further details.
 //
 // NcDevice (or derived) objects provide additional hit handling facilities.
 // A "hit" is a generic name indicating an NcSignal (or derived) object.
@@ -258,7 +261,7 @@
 //        obtained via the GetUnitScale() and GetEscale() memberfunctions.
 //
 //--- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel June 20, 2021  12:10Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel July 1, 2021  21:18Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcEvent.h"
@@ -273,6 +276,7 @@ NcEvent::NcEvent() : NcVertex(),NcTimestamp()
  fRun=0;
  fEvent=0;
  fWeight=1;
+ fDetector=0;
  fDevices=0;
  fDevCopy=0;
  fHits=0;
@@ -292,6 +296,7 @@ NcEvent::NcEvent(Int_t n) : NcVertex(n),NcTimestamp()
  fRun=0;
  fEvent=0;
  fWeight=1;
+ fDetector=0;
  fDevices=0;
  fDevCopy=0;
  fHits=0;
@@ -303,6 +308,13 @@ NcEvent::NcEvent(Int_t n) : NcVertex(n),NcTimestamp()
 NcEvent::~NcEvent()
 {
 // Default destructor
+
+ if (fDetector)
+ {
+  if (fDevCopy) delete fDetector;
+  fDetector=0;
+ }
+
  if (fDevices)
  {
   delete fDevices;
@@ -343,8 +355,13 @@ NcEvent::NcEvent(const NcEvent& evt) : NcVertex(evt),NcTimestamp(evt)
  fDisplay=0;
  fDevs=0;
 
+ fDetector=0;
+ NcDetector* dx=evt.fDetector;
+ if (dx) SetDetector(dx);
+
  fDevices=0;
- Int_t ndevs=evt.GetNdevices();
+ Int_t ndevs=0;
+ if (evt.fDevices) ndevs=(evt.fDevices)->GetEntries();
  if (ndevs)
  {
   fDevices=new TObjArray(ndevs);
@@ -381,6 +398,12 @@ void NcEvent::Reset()
  fRun=0;
  fEvent=0;
  fWeight=1;
+
+ if (fDetector)
+ {
+  if (fDevCopy) delete fDetector;
+  fDetector=0;
+ }
 
  if (fDevices)
  {
@@ -432,6 +455,7 @@ void NcEvent::SetOwner(Bool_t own)
 
  Int_t mode=1;
  if (!own) mode=0;
+ if (fDetector) fDetector->SetDevCopy(mode);
  if (fDevices) fDevices->SetOwner(own);
  fDevCopy=mode;
 
@@ -801,7 +825,7 @@ void NcEvent::HeaderData()
  Date(1);
  cout << "  Run : " << fRun << " Event : " << fEvent
       << " Weight : " << fWeight << endl;
- ShowDevices(0);
+ ShowDevices(0,kFALSE);
  ShowTracks(0);
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -820,15 +844,81 @@ void NcEvent::Data(TString f,TString u)
  NcVertex::Data(f,u);
 } 
 ///////////////////////////////////////////////////////////////////////////
+void NcEvent::SetDetector(NcDetector d)
+{
+// Store a detector structure.
+//
+// The detector structure replaces the old internal storage array,
+// which is still kept for backward compatibility with (very) old data files.
+// In case there are already devices stored in the internal storage array,
+// the detector structure will not be put in place and the internal storage array
+// will be used instead for backward compatibility.
+//
+// Note : Once a detector structure is in place, no new one can be set anymore.
+
+ if (fDetector)
+ {
+  cout << " *" << ClassName() << "::SetDetector* A detector structure is already present --> No action taken." << endl;
+  return;
+ }
+
+ if (fDevices)
+ {
+  cout << " *" << ClassName() << "::SetDetector* Internal storage already contains devices --> No action taken." << endl;
+  return;
+ }
+
+ // Store this detector structure
+ if (fDevCopy)
+ {
+  fDetector=(NcDetector*)d.Clone();
+ }
+ else
+ {
+  fDetector=&d;
+ }
+} 
+///////////////////////////////////////////////////////////////////////////
+NcDetector* NcEvent::GetDetector() const
+{
+// Provide the pointer to the (top level) detector structure
+
+ return fDetector;
+} 
+///////////////////////////////////////////////////////////////////////////
+void NcEvent::CreateDetector()
+{
+// Internal memberfunction to create a default detector structure.
+//
+// The detector structure replaces the old internal storage array,
+// which is still kept for backward compatibility with (very) old data files.
+
+ NcDetector* d=new NcDetector("Detector","Default detector structure");
+ if (fDevCopy) d->SetDevCopy(1);
+ fDevCopy=1;
+ fDetector=d;
+}
+///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetNdevices() const
 {
 // Provide the number of stored devices
+
  Int_t ndevs=0;
+
+ // Investigate the detector structure (if present)
+ if (fDetector)
+ {
+  ndevs=fDetector->GetNdevices(kTRUE);
+  return ndevs;
+ }
+
+ // Investigate the internal storage array (if present)
+ // for backward compatibility with old data files
  if (fDevices) ndevs=fDevices->GetEntries();
  return ndevs;
 } 
 ///////////////////////////////////////////////////////////////////////////
-Int_t NcEvent::GetNdevices(const char* classname,TObjArray* hits) const
+Int_t NcEvent::GetNdevices(TString classname,TObjArray* hits) const
 {
 // Provide the number of devices of the specified class.
 // In case an array "hits" is provided, the contents of the provided
@@ -842,6 +932,16 @@ Int_t NcEvent::GetNdevices(const char* classname,TObjArray* hits) const
 // By default hits=0.
 
  Int_t ndevs=0;
+
+ // Investigate the detector structure (if present)
+ if (fDetector)
+ {
+  ndevs=fDetector->GetNdevices(classname,kTRUE,hits);
+  return ndevs;
+ }
+
+ // Investigate the internal storage array (if present)
+ // for backward compatibility with old data files
 
  if (!hits) // Investigate the stored devices
  {
@@ -902,7 +1002,16 @@ void NcEvent::AddDevice(NcDevice& d)
 {
 // Add a device to the event.
 //
+// Devices will in principle be stored in the detector structure (see SetDetector),
+// and when no detector structure is yet available, a default one will be created.
+// However, in case there are already devices stored in the internal storage area,
+// the use of the internal storage area will be continued instead, in order to provide
+// backward compatibility with old data files.
+// When the internal storage area is used, NcDetector or NcDetectorUnit (or derived) objects
+// can not be stored in view of backward compatibility.
+//
 // Note :
+//-------
 // In case a private copy is made, this is performed via the Clone() memberfunction.
 // All devices (i.e. classes derived from TObject) have the default TObject::Clone() 
 // memberfunction.
@@ -910,15 +1019,51 @@ void NcEvent::AddDevice(NcDevice& d)
 // which may include pointers to other objects. Therefore it is recommended to provide
 // for all devices a specific copy constructor and override the default Clone()
 // memberfunction using this copy constructor.
-// An example for this may be seen from NcCalorimeter.   
+// An example for this may be seen from NcCalorimeter.
+ 
+ if (d.InheritsFrom("NcDetector"))
+ {
+  if (fDetector)
+  {
+   cout << " *" << ClassName() << "::AddDevice* A detector structure is already present --> No action taken." << endl;
+  }
+  else
+  {
+   NcDetector* dx=(NcDetector*)&d;
+   SetDetector(*dx);
+  }
+  return;
+ }
 
+ // Create a default detector structure if needed
+ if (!fDetector && !fDevices)
+ {
+  cout << " *" << ClassName() << "::AddDevice* A default detector structure will be created." << endl;
+  CreateDetector();
+ }
+ 
+ if (fDevices && d.InheritsFrom("NcDetectorUnit"))
+ {
+  cout << " *" << ClassName() << "::AddDevice* Storage of NcDetectorUnit not supported in backward compatibility mode." << endl;
+  return;
+ }
+
+ // Use the NcDetector structure to store all devices
+ if (fDetector)
+ {
+  fDetector->AddDevice(d);
+  return;
+ }
+
+ // Use the old internal device storage for backward compatiblity
  if (!fDevices)
  {
+  cout << " *" << ClassName() << "::AddDevice* Internal storage array created for backward compatibility." << endl;
   fDevices=new TObjArray();
   if (fDevCopy) fDevices->SetOwner();
  }
  
- // Add the device to this event
+ // Add the device to the internal storage of this event
  if (fDevCopy)
  {
   fDevices->Add(d.Clone());
@@ -933,13 +1078,22 @@ void NcEvent::RemoveDevice(NcDevice* d)
 {
 // Remove the specified device from the event.
 
- if (!fDevices || !d) return;
+ if (!d) return;
 
- TObject* obj=fDevices->Remove(d);
- if (obj)
+ if (fDetector)
  {
-  if (fDevCopy) delete obj;
-  fDevices->Compress();
+  fDetector->RemoveDevice(d);
+  return;
+ }
+
+ if (fDevices)
+ {
+  TObject* obj=fDevices->Remove(d);
+  if (obj)
+  {
+   if (fDevCopy) delete obj;
+   fDevices->Compress();
+  }
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1007,13 +1161,18 @@ NcDevice* NcEvent::GetDevice(Int_t i) const
 // Return the i-th device of this event.
 // The first device corresponds to i=1.
 
+ if (fDetector)
+ {
+  return fDetector->GetDevice(i);
+ }
+
  if (!fDevices)
  {
   return 0;
  }
  else
  {
-  Int_t ndevs=GetNdevices();
+  Int_t ndevs=fDevices->GetEntries();
   if (i<=0 || i>ndevs)
   {
    cout << " *" << ClassName() << "::GetDevice* Invalid argument i : " << i
@@ -1030,6 +1189,14 @@ NcDevice* NcEvent::GetDevice(Int_t i) const
 NcDevice* NcEvent::GetDevice(TString name) const
 {
 // Return the device with name tag "name"
+
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  return fDetector->GetDevice(name,kTRUE);
+ }
+
+ // Investigate the internal storage array
  if (!fDevices)
  {
   return 0;
@@ -1037,7 +1204,7 @@ NcDevice* NcEvent::GetDevice(TString name) const
  else
  {
   TString s;
-  Int_t ndevs=GetNdevices();
+  Int_t ndevs=fDevices->GetEntries();
   for (Int_t i=0; i<ndevs; i++)
   {
    NcDevice* dev=(NcDevice*)fDevices->At(i);
@@ -1060,6 +1227,13 @@ NcDevice* NcEvent::GetIdDevice(Int_t id,TObjArray* devs) const
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching device will be returned.
 
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  return fDetector->GetIdDevice(id,kTRUE,devs);
+ }
+
+ // Investigate the internal storage aray
  TObjArray* arr=devs;
  if (!arr) arr=fDevices;
 
@@ -1080,16 +1254,27 @@ NcDevice* NcEvent::GetIdDevice(Int_t id,TObjArray* devs) const
  return 0; // No matching id found
 }
 ///////////////////////////////////////////////////////////////////////////
-NcDevice* NcEvent::GetIdDevice(Int_t id,const char* classname) const
+NcDevice* NcEvent::GetIdDevice(Int_t id,TString classname) const
 {
 // Return the device with identifier "id" of the specified class.
+// For classname="*", no selection on the device class will be performed.
+//
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching device will be returned.
 
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  return fDetector->GetIdDevice(id,classname,kTRUE);
+ }
+
+ // Investigate the internal storage array
  if (!fDevices || id<0) return 0;
 
+ if (classname=="*") classname="NcDevice";
+
  Int_t idx=0;
- for (Int_t i=0; i<GetNdevices(); i++)
+ for (Int_t i=0; i<fDevices->GetEntries(); i++)
  {
   NcDevice* dev=(NcDevice*)fDevices->At(i);
   if (dev)
@@ -1101,15 +1286,27 @@ NcDevice* NcEvent::GetIdDevice(Int_t id,const char* classname) const
  return 0; // No matching id found for the specified class
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::ShowDevices(Int_t mode) const
+void NcEvent::ShowDevices(Int_t mode,Bool_t header) const
 {
-// Provide an overview of the available devices.
+// Provide an overview of the available devices from the detector structure.
+// The input argument "header" determines whether header info is printed (kTRUE) or not (kFALSE).
+//
 // The argument mode determines the amount of information as follows :
-// mode = 0 ==> Only printout of the number of devices
-//        1 ==> Provide a listing with 1 line of info for each device
+// mode = 0 ==> Only printout of the number of directly linked devices
+//        1 ==> Provide a listing with 1 line of info for each directly linked device
+//        2 ==> Provide a listing with 1 line of info for each linked device at any level
 //
-// The default is mode=1.
-//
+// The default values are mode=1 and header=kTRUE.
+
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  fDetector->ShowDevices(mode,header);
+  return;
+ }
+
+ // Investigate the internal device storage for backward compatiblity
+ // with old data files
  Int_t ndevs=GetNdevices();
  if (ndevs)
  {
@@ -1149,15 +1346,29 @@ void NcEvent::ShowDevices(Int_t mode) const
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::ShowDevices(const char* classname,Int_t mode) const
+void NcEvent::ShowDevices(TString classname,Int_t mode,Bool_t header) const
 {
-// Provide an overview of the available devices of the specified class.
+// Provide an overview of the available devices of the specified (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+// The input argument "header" determines whether header info is printed (kTRUE) or not (kFALSE).
+//
 // The argument mode determines the amount of information as follows :
-// mode = 0 ==> Only printout of the number of devices
-//        1 ==> Provide a listing with 1 line of info for each device
+// mode = 0 ==> Only printout of the number of directly linked devices
+//        1 ==> Provide a listing with 1 line of info for each directly linked device
+//        2 ==> Provide a listing with 1 line of info for each linked device at any level
 //
-// The default is mode=1.
-//
+// The default values are mode=1 and header=kTRUE.
+
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  fDetector->ShowDevices(classname,mode,header);
+  return;
+ }
+
+ // Investigate the internal device storage for backward compatibility
+ // with old data files
+ if (classname=="*") classname="NcDevice";
  Int_t ndevs=GetNdevices();
  if (ndevs)
  {
@@ -1197,9 +1408,10 @@ void NcEvent::ShowDevices(const char* classname,Int_t mode) const
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-TObjArray* NcEvent::GetDevices(const char* classname,TObjArray* devices)
+TObjArray* NcEvent::GetDevices(TString classname,TObjArray* devices)
 {
 // Provide the references to the various devices derived from the specified class.
+// For classname="*", no selection on the device class will be performed.
 //
 // Note :
 // ------
@@ -1213,6 +1425,15 @@ TObjArray* NcEvent::GetDevices(const char* classname,TObjArray* devices)
 //
 // The default is devices=0.
 
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  TObjArray* devs=fDetector->GetDevices(classname,1,devices);
+  return devs;
+ }
+
+ // Investigate the internal device storage for backward compatibility
+ // with old data files
  if (devices)
  {
   devices->Clear();
@@ -1229,7 +1450,7 @@ TObjArray* NcEvent::GetDevices(const char* classname,TObjArray* devices)
   }
  }
 
- Int_t ndev=GetNdevices();
+ Int_t ndev=fDevices->GetEntries();
  for (Int_t idev=1; idev<=ndev; idev++)
  {
   NcDevice* dev=GetDevice(idev);
@@ -1258,25 +1479,41 @@ TObjArray* NcEvent::GetDevices(const char* classname,TObjArray* devices)
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-Int_t NcEvent::GetNhits(const char* classname)
+Int_t NcEvent::GetNhits(TString classname)
 {
-// Provide the number of hits registered to the specified device class.
+// Provide the number of hits registered to the specified device (or derived) class.
 // The specified device class has to be derived from NcDevice.
+// For classname="*", no selection on the device class will be performed.
+//
 // It is possible to indicate with the argument "classname" a specific
 // device instead of a whole class of devices. However, in such a case
 // it is more efficient to use the GetDevice() memberfunction directly.
 
+ Int_t nhits=0;
+
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  nhits=fDetector->GetNhitsDevices(classname,kTRUE,kTRUE);
+  return nhits;
+ }
+
+ // Investigate the internal storage for backward compatibility
+ // with old data files
+ if (classname=="*") classname="NcDevice";
  TObjArray hits;
  GetHits(classname,&hits);
- Int_t nhits=hits.GetEntries();
+ nhits=hits.GetEntries();
  return nhits;
 }
 ///////////////////////////////////////////////////////////////////////////
-TObjArray* NcEvent::GetHits(const char* classname,TObjArray* hits,TString name,Int_t mode,Int_t opt)
+TObjArray* NcEvent::GetHits(TString classname,TObjArray* hits,TString name,Int_t mode,Int_t opt)
 {
-// Provide the references to all the hits registered to device class as specified
+// Provide the references to all the hits registered to device (or derived) class as specified
 // by the input argument "classname".
 // The specified device class has to be derived from NcDevice.
+// For classname="*", no selection on the device class will be performed.
+//
 // It is possible to indicate with the argument "classname" a specific
 // device instead of a whole class of devices. However, in such a case
 // it is more efficient to use the GetDevice() memberfunction directly.
@@ -1306,6 +1543,18 @@ TObjArray* NcEvent::GetHits(const char* classname,TObjArray* hits,TString name,I
 //
 // The defaults are : hits=0, name="none", mode=0 and opt=0.
 
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  TObjArray* arr;
+  arr=fDetector->GetHitsDevices(classname,kTRUE,kTRUE,hits,name,mode,opt);
+  return arr;
+ }
+
+ // Investigate the internal storage for backward compatibility
+ // with old data files
+ if (classname=="*") classname="NcDevice";
+
  LoadHits(classname,hits);
 
  // Check for further hit selection criteria
@@ -1328,19 +1577,37 @@ TObjArray* NcEvent::GetHits(const char* classname,TObjArray* hits,TString name,I
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-NcSignal* NcEvent::GetIdHit(Int_t id,const char* classname)
+NcSignal* NcEvent::GetIdHit(Int_t id,TString classname)
 {
-// Return the hit with unique identifier "id" for the specified device class.
+// Return the hit with unique identifier "id" for the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+
  if (id<0) return 0;
 
- Int_t nhits=GetNhits(classname);
+ NcSignal* sx=0;
+
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  sx=fDetector->GetIdHit(id,classname,kTRUE,kTRUE);
+  return sx;
+ }
+
+ // Investigate the internal storage array for backward compatibility
+ // with old data files 
+ if (classname=="*") classname="NcDevice";
+
+ TObjArray hits;
+ LoadHits(classname,&hits);
+
+ Int_t nhits=hits.GetEntries();
+
  if (!nhits) return 0;
 
- NcSignal* sx=0;
  Int_t sid=0;
  for (Int_t i=0; i<nhits; i++)
  {
-  sx=(NcSignal*)fHits->At(i);
+  sx=(NcSignal*)hits.At(i);
   if (sx)
   {
    sid=sx->GetUniqueID();
@@ -1350,10 +1617,11 @@ NcSignal* NcEvent::GetIdHit(Int_t id,const char* classname)
  return 0; // No matching id found
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::LoadHits(const char* classname,TObjArray* hits)
+void NcEvent::LoadHits(TString classname,TObjArray* hits)
 {
-// Load the references to the various hits registered to the specified device class.
+// Load the references to the various hits registered to the specified device (or derived) class.
 // The specified device class has to be derived from NcDevice.
+// For classname="*", no selection on the device class will be performed.
 //
 // Note :
 // ------
@@ -1364,6 +1632,8 @@ void NcEvent::LoadHits(const char* classname,TObjArray* hits)
 // amongst other selections.
 //
 // The default is hits=0.
+
+ if (classname=="*") classname="NcDevice";
 
  if (hits)
  {
@@ -1381,7 +1651,7 @@ void NcEvent::LoadHits(const char* classname,TObjArray* hits)
   }
  }
 
- for (Int_t idev=1; idev<=GetNdevices(); idev++)
+ for (Int_t idev=1; idev<=fDevices->GetEntries(); idev++)
  {
   NcDevice* dev=GetDevice(idev);
   if (!dev) continue;
@@ -1404,9 +1674,11 @@ void NcEvent::LoadHits(const char* classname,TObjArray* hits)
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-TObjArray* NcEvent::SortHits(const char* classname,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
+TObjArray* NcEvent::SortHits(TString classname,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
-// Order the references to the various hits registered to the specified device class.
+// Order the references to the various hits registered to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
 // or as a returned pointer.
 // A "hit" represents an abstract object which is derived from NcSignal.
@@ -1440,6 +1712,17 @@ TObjArray* NcEvent::SortHits(const char* classname,Int_t idx,Int_t mode,Int_t mc
 //
 // For more extended functionality see class NcDevice.
 
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  TObjArray* arr=fDetector->SortHits(classname,kTRUE,kTRUE,idx,mode,mcal,deadcheck,ordered);
+  return arr;
+ }
+
+ // Investigate the internal storage array for backward compatibility
+ // with old data files
+ if (classname=="*") classname="NcDevice";
+
  if (ordered) ordered->Clear();
 
  if (idx<=0 || abs(mode)!=1) return 0;
@@ -1461,9 +1744,11 @@ TObjArray* NcEvent::SortHits(const char* classname,Int_t idx,Int_t mode,Int_t mc
  return fHits;
 }
 ///////////////////////////////////////////////////////////////////////////
-TObjArray* NcEvent::SortHits(const char* classname,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
+TObjArray* NcEvent::SortHits(TString classname,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
-// Order the references to the various hits registered to the specified device class.
+// Order the references to the various hits registered to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
 // or as a returned pointer.
 // A "hit" represents an abstract object which is derived from NcSignal.
@@ -1496,6 +1781,17 @@ TObjArray* NcEvent::SortHits(const char* classname,TString name,Int_t mode,Int_t
 // The default is ordered=0.
 //
 // For more extended functionality see class NcDevice.
+
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  TObjArray* arr=fDetector->SortHits(classname,kTRUE,kTRUE,name,mode,mcal,deadcheck,ordered);
+  return arr;
+ }
+
+ // Investigate the internal storage array for backward compatibility
+ // with old data files
+ if (classname=="*") classname="NcDevice";
 
  if (ordered) ordered->Clear();
  
@@ -1534,46 +1830,8 @@ Nc3Vector NcEvent::GetHitPath(TObjArray* hits,Int_t pos) const
 //
 // Note : In case of inconsistent input a "zero vector" will be returned.
 
- Nc3Vector v;
-
- if (!hits) return v;
-
- Int_t nh=hits->GetEntries();
- if (!nh) return v;
-
- NcSignal* s1=(NcSignal*)hits->At(0);
- if (!s1) return v;
-
- NcDevice* dev1=s1->GetDevice();
- if (pos && !dev1) return v;
-
- // Define the starting hit to be the origin
- Nc3Vector r1;
- r1.SetZero();
-
- Nc3Vector r2;
- Nc3Vector r12;
- for (Int_t ih=1; ih<nh; ih++)
- {
-  NcSignal* s2=(NcSignal*)hits->At(ih);
-  if (!s2) continue;
-
-  NcDevice* dev2=s2->GetDevice();
-  if (pos && !dev2) continue;
-
-  if (!pos)
-  {
-   r2=(Nc3Vector)s2->GetPosition();
-  }
-  else
-  {
-   r2=(Nc3Vector)dev2->GetPosition();
-  }
-  r12=r2-r1;
-  v+=r12;
-
-  r1=r2;
- }
+ NcDevice d;
+ Nc3Vector v=d.GetHitPath(hits,pos);
 
  return v;
 }
@@ -1594,45 +1852,9 @@ NcPosition NcEvent::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mode
 //
 // Note : In case of inconsistent input a "zero vector" will be returned.
 
- NcPosition cog;
+ NcDevice d;
+ NcPosition cog=d.GetCOG(hits,pos,slotname,mode);
 
- if (!hits) return cog;
-
- Int_t nh=hits->GetEntries();
- if (!nh) return cog;
-
- Nc3Vector rx;
- Nc3Vector rsum;
- Float_t w=1;
- Double_t wsum=0;
- for (Int_t ih=0; ih<nh; ih++)
- {
-  NcSignal* sx=(NcSignal*)hits->At(ih);
-  if (!sx) continue;
-
-  NcDevice* devx=sx->GetDevice();
-  if (pos && !devx) continue;
-
-  if (!pos)
-  {
-   rx=(Nc3Vector)sx->GetPosition();
-  }
-  else
-  {
-   rx=(Nc3Vector)devx->GetPosition();
-  }
-
-  if (slotname != "none")
-  {
-   w=fabs(sx->GetSignal(slotname,mode));
-   rx*=w;
-  }
-  rsum+=rx;
-  wsum+=double(w);
- }
-
- if (wsum>0) rsum/=wsum;
- cog.SetPosition(rsum);
  return cog;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1651,66 +1873,20 @@ Double_t NcEvent::GetCVAL(TObjArray* hits,TString obsname,TString weightname,Int
 //
 // Note : In case of inconsistent input 0 will be returned.
 
- if (type!=1 && type!=2)
- {
-  cout << " *NcEvent::GetCVAL* Unknown type : " << type << endl;
-  return 0;
- }
-
- if (!hits) return 0;
-
- Int_t nh=hits->GetEntries();
- if (!nh) return 0;
-
  Double_t cval=0;
 
- Double_t val=0;
- Double_t w=1;
- Double_t wsum=0;
- NcSample stat;
- if (type==1) stat.SetStoreMode();
- Int_t iw=0;
- for (Int_t ih=0; ih<nh; ih++)
- {
-  NcSignal* sx=(NcSignal*)hits->At(ih);
-  if (!sx) continue;
-
-  val=sx->GetSignal(obsname,mode);
-
-  if (weightname != "none") w=fabs(sx->GetSignal(weightname,mode));
-
-  if (type==1) // Weighted median
-  {
-   iw=TMath::Nint(w);
-   if (iw<1) iw=1;
-   for (Int_t i=0; i<iw; i++)
-   {
-    stat.Enter(val);
-   }
-  }
-
-  if (type==2) // Weighted mean
-  {
-   val*=w;
-   stat.Enter(val);
-  }
-  wsum+=w;
- }
-
- if (type==1) cval=stat.GetMedian(1);
-
- if (type==2)
- {
-  if (wsum>0) cval=stat.GetSum(1)/wsum;
- }
+ NcDevice d;
+ cval=d.GetCVAL(hits,obsname,weightname,mode,type);
 
  return cval;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::GetExtremes(const char* classname,Float_t& vmin,Float_t& vmax,Int_t idx,Int_t mode,Int_t deadcheck)
+void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,Int_t idx,Int_t mode,Int_t deadcheck)
 {
 // Provide the min. and max. signal values of the various hits registered
-// to the specified device class.
+// to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The input argument "idx" denotes the index of the signal slots to be investigated.
 // The default is idx=1;
 // The gain etc... corrected signals will be used in the process as specified
@@ -1725,19 +1901,23 @@ void NcEvent::GetExtremes(const char* classname,Float_t& vmin,Float_t& vmax,Int_
 //
 // For more extended functionality see class NcDevice.
 
+ if (classname=="*") classname="NcDevice";
+
  if (idx<=0) return;
 
  TObjArray hits;
- LoadHits(classname,&hits);
+ GetHits(classname,&hits);
 
  NcDevice dev;
  dev.GetExtremes(vmin,vmax,idx,&hits,mode,deadcheck);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::GetExtremes(const char* classname,Float_t& vmin,Float_t& vmax,TString name,Int_t mode,Int_t deadcheck)
+void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,TString name,Int_t mode,Int_t deadcheck)
 {
 // Provide the min. and max. signal values of the various hits registered
-// to the specified device class.
+// to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The input argument "name" denotes the name of the signal slots to be investigated.
 // The gain etc... corrected signals will be used in the process as specified
 // by the  "mode" argument. The definition of this "mode" parameter corresponds to
@@ -1751,16 +1931,20 @@ void NcEvent::GetExtremes(const char* classname,Float_t& vmin,Float_t& vmax,TStr
 //
 // For more extended functionality see class NcDevice.
 
+ if (classname=="*") classname="NcDevice";
+
  TObjArray hits;
- LoadHits(classname,&hits);
+ GetHits(classname,&hits);
 
  NcDevice dev;
  dev.GetExtremes(vmin,vmax,name,&hits,mode,deadcheck);
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::DisplayHits(const char* classname,Int_t idx,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
+void NcEvent::DisplayHits(TString classname,Int_t idx,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
 {
-// 3D color display of the various hits registered to the specified device class.
+// 3D color display of the various hits registered to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The user can specify the index (default=1) of the signal slot to perform the display for.
 // The marker size will indicate the absolute value of the signal (specified by the slotindex)
 // as a percentage of the input argument "scale".
@@ -1791,8 +1975,10 @@ void NcEvent::DisplayHits(const char* classname,Int_t idx,Float_t scale,Int_t dp
 
  if (idx<=0) return;
 
+ if (classname=="*") classname="NcDevice";
+
  TObjArray hits;
- LoadHits(classname,&hits);
+ GetHits(classname,&hits);
 
  NcDevice* dev=new NcDevice();
  dev->DisplayHits(idx,scale,&hits,dp,mode,mcol);
@@ -1805,9 +1991,11 @@ void NcEvent::DisplayHits(const char* classname,Int_t idx,Float_t scale,Int_t dp
  fDisplay=dev;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::DisplayHits(const char* classname,TString name,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
+void NcEvent::DisplayHits(TString classname,TString name,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
 {
-// 3D color display of the various hits registered to the specified device class.
+// 3D color display of the various hits registered to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The user can specify the name of the signal slot to perform the display for.
 // The marker size will indicate the absolute value of the signal (specified by the slotname)
 // as a percentage of the input argument "scale".
@@ -1838,8 +2026,10 @@ void NcEvent::DisplayHits(const char* classname,TString name,Float_t scale,Int_t
 // view->SetRange(-1000,-1000,-1000,1000,1000,1000);
 // view->ShowAxis();
 
+ if (classname=="*") classname="NcDevice";
+
  TObjArray hits;
- LoadHits(classname,&hits);
+ GetHits(classname,&hits);
 
  NcDevice* dev=new NcDevice();
  dev->DisplayHits(name,scale,&hits,dp,mode,mcol);
@@ -1852,9 +2042,10 @@ void NcEvent::DisplayHits(const char* classname,TString name,Float_t scale,Int_t
  fDisplay=dev;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcEvent::ShowHits(const char* classname,Int_t mode,TString f,TString u)
+void NcEvent::ShowHits(TString classname,Int_t mode,TString f,TString u)
 {
-// Show all the hits registered to the specified device class.
+// Show all the hits registered to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
 //
 // mode = 0 ==> Only the number of hits will be provided.
 //        1 ==> Full listing of all the hits will be provided.
@@ -1867,12 +2058,23 @@ void NcEvent::ShowHits(const char* classname,Int_t mode,TString f,TString u)
 // Note : This memberfunction will show hits in printable format.
 //        To obtain a graphic hit display please refer to DisplayHits(). 
 
+ if (classname=="*") classname="NcDevice";
+
+ // Investigate the detector structure
+ if (fDetector)
+ {
+  fDetector->ShowHits(classname,kTRUE,kTRUE,mode,f,u);
+  return;
+ }
+
+ // Investigate the internal storage array for backward compatibility
+ // with old data files
  TObjArray hits;
- LoadHits(classname,&hits);
+ GetHits(classname,&hits);
 
  Int_t nhits=hits.GetEntries();
 
- cout << " *NcEvent::ShowHits* There are " << nhits
+ cout << " *" << ClassName() << "::ShowHits* There are " << nhits
       << " hits recorded for device class " << classname << endl;
 
  if (!nhits || !mode) return;
@@ -1893,10 +2095,12 @@ void NcEvent::ShowHits(const char* classname,Int_t mode,TString f,TString u)
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-TObjArray* NcEvent::SortDevices(const char* classname,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
+TObjArray* NcEvent::SortDevices(TString classname,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
 // Order the references to the various devices based on hit signals registered
-// to the specified device class.
+// to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
 // or as a returned pointer.
 // A "hit" represents an abstract object which is derived from NcSignal.
@@ -1928,6 +2132,8 @@ TObjArray* NcEvent::SortDevices(const char* classname,TString name,Int_t mode,In
 //
 // The default is ordered=0.
 
+ if (classname=="*") classname="NcDevice";
+
  if (ordered) ordered->Clear();
 
  TObjArray hits;
@@ -1945,10 +2151,12 @@ TObjArray* NcEvent::SortDevices(const char* classname,TString name,Int_t mode,In
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-TObjArray* NcEvent::SortDevices(const char* classname,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
+TObjArray* NcEvent::SortDevices(TString classname,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
 // Order the references to the various devices based on hit signals registered
-// to the specified device class.
+// to the specified device (or derived) class.
+// For classname="*", no selection on the device class will be performed.
+//
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
 // or as a returned pointer.
 // A "hit" represents an abstract object which is derived from NcSignal.
@@ -1981,6 +2189,8 @@ TObjArray* NcEvent::SortDevices(const char* classname,Int_t idx,Int_t mode,Int_t
 // The default is ordered=0.
 
  if (ordered) ordered->Clear();
+
+ if (classname=="*") classname="NcDevice";
 
  TObjArray hits;
  SortHits(classname,idx,mode,mcal,deadcheck,&hits);

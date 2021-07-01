@@ -1206,3 +1206,17 @@
                 Also the number of NcSample objects is now listed in NcEvent::ShowDevices().
 23-jun-2021 NvE Introduced the memberfunction SetOwner() into class NcDevice.
                 The version indicator in NcVersion has been updated to 3.12.
+01-jul-2021 NvE **************************************************************************************************
+                *** Preparations started for a new major release (version 4.0) with new detector functionality ***
+                **************************************************************************************************
+                New classes NcDetectorUnit and NcDetector introduced to provide a generic facility to define and investigate
+                a detector structure and the contained signals.
+                Treatment of the new detector structure (and its signals) has been implemented in NcEvent.
+                However, for backward compatibility with old data files, the original internal storage array of NcEvent
+                is maintained next to the new detector structure.
+                The functionality of the various NcEvent memberfunctions is fully backward compatible, so all this is
+                completely transparant to the user.
+                Implementation of the memberfunctions GetHitPath(), GetCOG() and GetCVAL() moved from NcEvent to NcDevice
+                to make them also directly available to the new classes NcDetectorUnit and NcDetector.
+                However, their functionality is still available to NcEvent as well.
+                The version indicator in NcVersion has been updated to 4.0.

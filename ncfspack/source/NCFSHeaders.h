@@ -44,3 +44,5 @@
 #include "NcVeto.h"
 #include "NcDataStreamStats.h"
 #include "NcFITSIO.h"
+#include "NcDetectorUnit.h"
+#include "NcDetector.h"

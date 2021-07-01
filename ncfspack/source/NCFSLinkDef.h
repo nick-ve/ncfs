@@ -49,5 +49,7 @@
  #pragma link C++ class NcVeto+;
  #pragma link C++ class NcDataStreamStats+;
  #pragma link C++ class NcFITSIO+;
+ #pragma link C++ class NcDetectorUnit+;
+ #pragma link C++ class NcDetector+;
 #endif
  

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -88,7 +88,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 23, 2021  16:19Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 1, 2021  09:27Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDevice.h"
@@ -539,15 +539,18 @@ void NcDevice::GetHits(TObjArray& selected,TString name,Int_t mode,Int_t opt,TOb
 
   if ((!opt && hitname==name) || (opt && hitname.Contains(name.Data()))) flag=1;
 
-  if (sx->GetSignalFlag(idx))
+  if (idx)
   {
-   if (!flag)
+   if (sx->GetSignalFlag(idx))
    {
-    flag=2;
-   }
-   else
-   {
-    flag=3;
+    if (!flag)
+    {
+     flag=2;
+    }
+    else
+    {
+     flag=3;
+    }
    }
   }
   if ((mode==0 && (flag==1 || flag==3)) || (mode==1 && flag>1) || (mode==2 && flag)) selected.Add(sx);
@@ -612,6 +615,10 @@ void NcDevice::Data(TString f,TString u) const
 void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,Int_t idx,TObjArray* hits,Int_t mode,Int_t deadcheck) const
 {
 // Provide the min. and max. signal values of an array of hits.
+//
+// Note : The arguments "vmin" and "max" MUST be both of type Float_t, otherwise the
+//        returned values may be incorrect.
+//
 // The input argument "idx" denotes the index of the signal slots to be investigated.
 // The default is idx=1;
 // In case hits=0 (default), the registered hits of the current device are used. 
@@ -668,6 +675,10 @@ void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,Int_t idx,TObjArray* hits
 void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,TString name,TObjArray* hits,Int_t mode,Int_t deadcheck) const
 {
 // Provide the min. and max. signal values of an array of hits.
+//
+// Note : The arguments "vmin" and "max" MUST be both of type Float_t, otherwise the
+//        returned values may be incorrect.
+//
 // The input argument "name" denotes the name of the signal slots to be investigated.
 // In case hits=0 (default), the registered hits of the current device are used. 
 // The gain etc... corrected signals will be used in the process as specified
@@ -698,6 +709,7 @@ void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,TString name,TObjArray* h
  Float_t sig=0;
  TObject* obj=0;
  NcSignal* sx=0;
+ Bool_t first=kTRUE;
  for (Int_t i=0; i<nhits; i++)
  {
   obj=ahits->At(i);
@@ -712,10 +724,11 @@ void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,TString name,TObjArray* h
   if (deadcheck && sx->GetDeadValue(idx)) continue; // Only take alive signals
 
   sig=sx->GetSignal(idx,mode);
-  if (i==0)
+  if (first)
   {
    vmin=sig;
    vmax=sig;
+   first=kFALSE;
   }
   else
   {
@@ -1413,6 +1426,195 @@ Double_t NcDevice::SlideWindow(TObjArray* hits,Double_t thres,Double_t swin,TStr
  if (i1) *i1=-1;
  if (i2) *i2=-1;
  return 0;
+}
+///////////////////////////////////////////////////////////////////////////
+Nc3Vector NcDevice::GetHitPath(TObjArray* hits,Int_t pos) const
+{
+// Provide the average direction of the hit pattern contained in the array "hits".
+// The direction is obtained by starting at the first hit in the array
+// and then a summation of all the relative hit locations while jumping
+// from one hit location to the other.
+// Since the obtained direction is obviously depending on the order in which the
+// hits appear, the user should take care of providing a correctly ordered hit array.
+//
+// pos = 0 ==> The position of the hit signal itself is used.
+//       1 ==> The position of the parent device of the hit signal is used.
+//
+// The default is pos=0.
+//
+// Note : In case of inconsistent input a "zero vector" will be returned.
+
+ Nc3Vector v;
+
+ if (!hits) return v;
+
+ Int_t nh=hits->GetEntries();
+ if (!nh) return v;
+
+ NcSignal* s1=(NcSignal*)hits->At(0);
+ if (!s1) return v;
+
+ NcDevice* dev1=s1->GetDevice();
+ if (pos && !dev1) return v;
+
+ // Define the starting hit to be the origin
+ Nc3Vector r1;
+ r1.SetZero();
+
+ Nc3Vector r2;
+ Nc3Vector r12;
+ for (Int_t ih=1; ih<nh; ih++)
+ {
+  NcSignal* s2=(NcSignal*)hits->At(ih);
+  if (!s2) continue;
+
+  NcDevice* dev2=s2->GetDevice();
+  if (pos && !dev2) continue;
+
+  if (!pos)
+  {
+   r2=(Nc3Vector)s2->GetPosition();
+  }
+  else
+  {
+   r2=(Nc3Vector)dev2->GetPosition();
+  }
+  r12=r2-r1;
+  v+=r12;
+
+  r1=r2;
+ }
+
+ return v;
+}
+///////////////////////////////////////////////////////////////////////////
+NcPosition NcDevice::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mode) const
+{
+// Provide the Center Of Gravity of the hits contained in the array "hits".
+// Each hit can be given a weight according to the absolute value of the signal
+// contained in the slot with the name "slotname".
+// In case slotname="none" each hit will obtain a weight equal to 1.
+// The input argument "mode" has the same meaning as in the GetSignal() member function
+// of the class NcSignal.
+//
+// pos = 0 ==> The position of the hit signal itself is used.
+//       1 ==> The position of the parent device of the hit signal is used.
+//
+// The defaults are pos=0, slotname="none" and mode=0.
+//
+// Note : In case of inconsistent input a "zero vector" will be returned.
+
+ NcPosition cog;
+
+ if (!hits) return cog;
+
+ Int_t nh=hits->GetEntries();
+ if (!nh) return cog;
+
+ Nc3Vector rx;
+ Nc3Vector rsum;
+ Float_t w=1;
+ Double_t wsum=0;
+ for (Int_t ih=0; ih<nh; ih++)
+ {
+  NcSignal* sx=(NcSignal*)hits->At(ih);
+  if (!sx) continue;
+
+  NcDevice* devx=sx->GetDevice();
+  if (pos && !devx) continue;
+
+  if (!pos)
+  {
+   rx=(Nc3Vector)sx->GetPosition();
+  }
+  else
+  {
+   rx=(Nc3Vector)devx->GetPosition();
+  }
+
+  if (slotname != "none")
+  {
+   w=fabs(sx->GetSignal(slotname,mode));
+   rx*=w;
+  }
+  rsum+=rx;
+  wsum+=double(w);
+ }
+
+ if (wsum>0) rsum/=wsum;
+ cog.SetPosition(rsum);
+ return cog;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcDevice::GetCVAL(TObjArray* hits,TString obsname,TString weightname,Int_t mode,Int_t type) const
+{
+// Provide the Central Value of the observed signals contained in the slot with name "obsname"
+// in the array "hits". Depending on the input argument "type" the central value represents
+// either the median (type=1) or the mean (type=2).
+// Each hit can be given a weight according to the absolute value of the signal
+// contained in the slot with the name "weightname".
+// In case weightname="none" each hit will obtain a weight equal to 1.
+// The input argument "mode" has the same meaning as in the GetSignal() member function
+// of the class NcSignal.
+//
+// The defaults are weightname="none", mode=0 and type=1.
+//
+// Note : In case of inconsistent input 0 will be returned.
+
+ if (type!=1 && type!=2)
+ {
+  cout << " *" << ClassName() << "::GetCVAL* Unknown type : " << type << endl;
+  return 0;
+ }
+
+ if (!hits) return 0;
+
+ Int_t nh=hits->GetEntries();
+ if (!nh) return 0;
+
+ Double_t cval=0;
+
+ Double_t val=0;
+ Double_t w=1;
+ Double_t wsum=0;
+ NcSample stat;
+ if (type==1) stat.SetStoreMode();
+ Int_t iw=0;
+ for (Int_t ih=0; ih<nh; ih++)
+ {
+  NcSignal* sx=(NcSignal*)hits->At(ih);
+  if (!sx) continue;
+
+  val=sx->GetSignal(obsname,mode);
+
+  if (weightname != "none") w=fabs(sx->GetSignal(weightname,mode));
+
+  if (type==1) // Weighted median
+  {
+   iw=TMath::Nint(w);
+   if (iw<1) iw=1;
+   for (Int_t i=0; i<iw; i++)
+   {
+    stat.Enter(val);
+   }
+  }
+
+  if (type==2) // Weighted mean
+  {
+   val*=w;
+   stat.Enter(val);
+  }
+  wsum+=w;
+ }
+
+ if (type==1) cval=stat.GetMedian(1);
+
+ if (type==2)
+ {
+  if (wsum>0) cval=stat.GetSum(1)/wsum;
+ }
+
+ return cval;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDevice::Clone(const char* name) const

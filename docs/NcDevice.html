@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Jun 23 18:14:08 2021            -->
+<!--   Date: Thu Jul  1 21:59:28 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -119,7 +119,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 23, 2021  16:19Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 1, 2021  09:27Z
 
 </pre></div>
 </div></div>
@@ -179,6 +179,8 @@ return false;}
 <tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalFunction@1"><span class="baseclass">NcAttrib::</span>GetCalFunction</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalWord"><span class="baseclass">NcAttrib::</span>GetCalWord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalWord@1"><span class="baseclass">NcAttrib::</span>GetCalWord</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcPosition.html">NcPosition</a></td><td class="funcname"><a class="funcname" href="#NcDevice:GetCOG">GetCOG</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0, TString slotname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcDevice:GetCVAL">GetCVAL</a>(TObjArray* hits, TString obsname, TString weightname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetDeadValue"><span class="baseclass">NcAttrib::</span>GetDeadValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetDeadValue@1"><span class="baseclass">NcAttrib::</span>GetDeadValue</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetDecalFunction"><span class="baseclass">NcAttrib::</span>GetDecalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
@@ -203,6 +205,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcDevice:GetHit">GetHit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcDevice:GetHit@1">GetHit</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcDevice:GetHitCopy">GetHitCopy</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#NcDevice:GetHitPath">GetHitPath</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="#NcDevice:GetHits">GetHits</a>()</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDevice:GetHits@1">GetHits</a>(TObjArray&amp; selected, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> opt = 0, TObjArray* hits = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
@@ -583,11 +586,16 @@ return false;}
 </tr></table></td>
 </tr><tr>
 <td bgcolor="#f7f7f7"><table><tr><td>
-<center><tt><a name="NcVeto" href="./NcVeto.html">NcVeto</a></tt></center></td>
+<center><tt><a name="NcDetectorUnit" href="./NcDetectorUnit.html">NcDetectorUnit</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="NcDetector" href="./NcDetector.html">NcDetector</a></tt></center></td>
 <td></td>
 </tr></table></td>
 </tr></table></td>
 </tr></table></td>
+</tr></table></td>
+</tr></table></td><td align="left">&nbsp;<a href="ClassHierarchy.html">[more...]</a></td>
 </tr></table>
 </td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
@@ -779,6 +787,10 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetExtremes" href="src/NcDevice.cxx.html#OO1y4C">GetExtremes</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1) const</span><br />
 <div class="funccomm"><pre> Provide the min. and max. signal values of an array of hits.
+
+ Note : The arguments <span class="string">"vmin"</span> and <span class="string">"max"</span> MUST be both of type <a href="./ListOfTypes.html#Float_t">Float_t</a>, otherwise the
+        returned values may be incorrect.
+
  The input argument <span class="string">"idx"</span> denotes the index of the signal slots to be investigated.
  The default is idx=1;
  In case hits=0 (default), the registered hits of the current device are used. 
@@ -795,6 +807,10 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDevice:GetExtremes@1" href="src/NcDevice.cxx.html#ou9FjD">GetExtremes</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmin, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; vmax, TString name, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> deadcheck = 1) const</span><br />
 <div class="funccomm"><pre> Provide the min. and max. signal values of an array of hits.
+
+ Note : The arguments <span class="string">"vmin"</span> and <span class="string">"max"</span> MUST be both of type <a href="./ListOfTypes.html#Float_t">Float_t</a>, otherwise the
+        returned values may be incorrect.
+
  The input argument <span class="string">"name"</span> denotes the name of the signal slots to be investigated.
  In case hits=0 (default), the registered hits of the current device are used. 
  The gain etc... corrected signals will be used in the process as specified
@@ -1046,6 +1062,53 @@ return false;}
  }
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./Nc3Vector.html">Nc3Vector</a> <a class="funcname" name="NcDevice:GetHitPath" href="src/NcDevice.cxx.html#filVFE">GetHitPath</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0) const</span><br />
+<div class="funccomm"><pre> Provide the average direction of the hit pattern contained in the array <span class="string">"hits"</span>.
+ The direction is obtained by starting at the first hit in the array
+ and then a summation of all the relative hit locations while jumping
+ from one hit location to the other.
+ Since the obtained direction is obviously depending on the order in which the
+ hits appear, the user should take care of providing a correctly ordered hit array.
+
+ pos = 0 ==&gt; The position of the hit signal itself is used.
+       1 ==&gt; The position of the parent device of the hit signal is used.
+
+ The default is pos=0.
+
+ Note : In case of inconsistent input a <span class="string">"zero vector"</span> will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcPosition.html">NcPosition</a> <a class="funcname" name="NcDevice:GetCOG" href="src/NcDevice.cxx.html#wW08ZC">GetCOG</a>(TObjArray* hits, <a href="./ListOfTypes.html#Int_t">Int_t</a> pos = 0, TString slotname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Provide the Center Of Gravity of the hits contained in the array <span class="string">"hits"</span>.
+ Each hit can be given a weight according to the absolute value of the signal
+ contained in the slot with the name <span class="string">"slotname"</span>.
+ In case slotname=<span class="string">"none"</span> each hit will obtain a weight equal to 1.
+ The input argument <span class="string">"mode"</span> has the same meaning as in the <a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>() member function
+ of the class <a href="./NcSignal.html">NcSignal</a>.
+
+ pos = 0 ==&gt; The position of the hit signal itself is used.
+       1 ==&gt; The position of the parent device of the hit signal is used.
+
+ The defaults are pos=0, slotname=<span class="string">"none"</span> and mode=0.
+
+ Note : In case of inconsistent input a <span class="string">"zero vector"</span> will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcDevice:GetCVAL" href="src/NcDevice.cxx.html#BC_.aE">GetCVAL</a>(TObjArray* hits, TString obsname, TString weightname = <span class="string">"none"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 1) const</span><br />
+<div class="funccomm"><pre> Provide the Central Value of the observed signals contained in the slot with name <span class="string">"obsname"</span>
+ in the array <span class="string">"hits"</span>. Depending on the input argument <span class="string">"type"</span> the central value represents
+ either the median (type=1) or the mean (type=2).
+ Each hit can be given a weight according to the absolute value of the signal
+ contained in the slot with the name <span class="string">"weightname"</span>.
+ In case weightname=<span class="string">"none"</span> each hit will obtain a weight equal to 1.
+ The input argument <span class="string">"mode"</span> has the same meaning as in the <a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>() member function
+ of the class <a href="./NcSignal.html">NcSignal</a>.
+
+ The defaults are weightname=<span class="string">"none"</span>, mode=0 and type=1.
+
+ Note : In case of inconsistent input 0 will be returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcDevice:Clone" href="src/NcDevice.cxx.html#Fm5YGD">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -1066,7 +1129,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Jun 23 18:14:09 2021 </em><em>&raquo; Last generated: 2021-06-23 18:14</em><br />
+<em>&raquo; Last changed: Thu Jul  1 21:59:28 2021 </em><em>&raquo; Last generated: 2021-07-01 21:59</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
