@@ -1225,3 +1225,8 @@
                 Also some more docs updated for NcDevice, NcDetectorUnit and NcDetector.
 09-jul-2021 NvE Introduction of the folder rnopack holding RNO-G related software.
                 The version indicator in NcVersion has been updated to 4.1.
+                NcSample extended with a 1 argument TGraph facility that displays the value of a certain
+                variable versus the sampling entry number.
+                This allows to store only 1 variable for constructing waveforms, which reduces the data volume.
+                The class RnoConvert has been updated accordingly.
+                The version indicator in NcVersion has been updated to 4.1/1.

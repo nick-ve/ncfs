@@ -2,4 +2,6 @@
 //                                History of updates                                //
 //////////////////////////////////////////////////////////////////////////////////////
 03-may-2021 NvE First implementation of the RnoPack package as a subdirectory of NCFS.
-09-jul-2021 NvE Introduction of class RnoConvert to convert RNO-G data into RnoEvent structures. 
+09-jul-2021 NvE Introduction of class RnoConvert to convert RNO-G data into RnoEvent structures.
+                RnoConvert updated to make use of the newly introduced NcSample facility
+                that allows to reduce the data volume.  

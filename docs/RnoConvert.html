@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jul  9 17:59:19 2021            -->
+<!--   Date: Fri Jul  9 20:59:17 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -72,49 +72,10 @@ return false;}
  In case no outputfile has been specified, this class provides a facility
  to investigate/analyse RNO-G data using the NCFS/RnoPack analysis tools.
 
- Usage example :
-
-
- gSystem-&gt;Load(<span class="string">"ncfspack"</span>);
- gSystem-&gt;Load(<span class="string">"rnopack"</span>);
-
- <a href="./RnoConvert.html">RnoConvert</a> q(<span class="string">"RnoConvert"</span>,<span class="string">"RNO-G data to RnoEvent data structure conversion"</span>);
-
- // Limit the number of entries for testing
- q.<a href="./RnoConvert.html#RnoConvert:SetMaxEvents" title="void RnoConvert::SetMaxEvents(Int_t n)">SetMaxEvents</a>(10);
-
- // <a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a> frequency to produce a <a href="./ListOfTypes.html#short">short</a> summary print every printfreq events
- q.<a href="./RnoConvert.html#RnoConvert:SetPrintFreq" title="void RnoConvert::SetPrintFreq(Int_t f)">SetPrintFreq</a>(1);
-
- // The RNO-G Root data input filename(s)
- q.<a href="./RnoConvert.html#RnoConvert:AddInputFile" title="void RnoConvert::AddInputFile(TString file,TString tree)">AddInputFile</a>(<span class="string">"pulse-waveforms.root"</span>,<span class="string">"wf"</span>);
-
- // Output file for the event structures
- q.<a href="./RnoConvert.html#RnoConvert:SetOutputFile" title="void RnoConvert::SetOutputFile(TFile* ofile) or overloads">SetOutputFile</a>(<span class="string">"myevents.rnopack"</span>);
-
-
- // Here the user can specify his/her sub-tasks to be executed
- // on an event-by-event basis after the <a href="./IceEvent.html">IceEvent</a> structure
- // has been filled and before the data is written out.
- // Sub-tasks (i.e. a user classes derived from <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>) are entered
- // as follows :
- 
- //    MyClean  task1(<span class="string">"task1"</span>,<span class="string">"Data cleaning"</span>);
- //    MyReco   task2(<span class="string">"task2"</span>,<span class="string">"Track reconstruction"</span>);
- //    MyFilter task3(<span class="string">"task3"</span>,<span class="string">"Event filtering"</span>);
- //    q.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task1);
- //    q.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task2);
- //    q.<a href="./#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task3);
- 
- // The sub-tasks will be executed in the order as they are entered.
-
-
- // Perform the conversion and execute subtasks (if any)
- // on an event-by-event basis
- q.<a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>();
+ Please refer to /macros/convert.cc for a usage example.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  16:32Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  20:19Z
 
 </pre></div>
 </div></div>
@@ -410,7 +371,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jul  9 17:59:20 2021 </em><em>&raquo; Last generated: 2021-07-09 17:59</em><br />
+<em>&raquo; Last changed: Fri Jul  9 20:59:17 2021 </em><em>&raquo; Last generated: 2021-07-09 20:59</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

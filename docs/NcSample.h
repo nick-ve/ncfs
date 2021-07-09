@@ -83,6 +83,8 @@ class NcSample : public TNamed
   TH2D Get2DHistogram(TString nameA,TString nameB,TString nameC="-",Bool_t sumw2=kFALSE,Int_t nbx=100,Int_t nby=100); // Provide a TH2D for variables nameA and nameB (weighted with variable nameC)
   TH3D Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m=0,Bool_t sumw2=kFALSE,Int_t nbx=100,Int_t nby=100,Int_t nbz=100); // Provide a TH3D with values of variables i, j and k (weighted with variable m)
   TH3D Get3DHistogram(TString nameA,TString nameB,TString nameC,TString nameD="-",Bool_t sumw2=kFALSE,Int_t nbx=100,Int_t nby=100,Int_t nbz=100); // Provide a TH3D for variables nameA, nameB and nameC (weighted with variable nameD)
+  TGraph GetGraph(Int_t i);                           // Provide a TGraph with values of variable i vs. the sampling entry number
+  TGraph GetGraph(TString nameA);                     // Provide a TGraph with for variable nameA vs. the sampling entry number
   TGraph GetGraph(Int_t i,Int_t j);                   // Provide a TGraph with values of variables i and j
   TGraph GetGraph(TString nameA,TString nameB);       // Provide a TGraph with for variables nameA and nameB
   TGraphTime* GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp=kTRUE); // Provide a TGraphTime with (ordered) values of variables i and j

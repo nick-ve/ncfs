@@ -27,49 +27,10 @@
 // In case no outputfile has been specified, this class provides a facility
 // to investigate/analyse RNO-G data using the NCFS/RnoPack analysis tools.
 //
-// Usage example :
-// ---------------
-//
-// gSystem->Load("ncfspack");
-// gSystem->Load("rnopack");
-//
-// RnoConvert q("RnoConvert","RNO-G data to RnoEvent data structure conversion");
-//
-// // Limit the number of entries for testing
-// q.SetMaxEvents(10);
-//
-// // Print frequency to produce a short summary print every printfreq events
-// q.SetPrintFreq(1);
-//
-// // The RNO-G Root data input filename(s)
-// q.AddInputFile("pulse-waveforms.root","wf");
-//
-// // Output file for the event structures
-// q.SetOutputFile("myevents.rnopack");
-//
-// ///////////////////////////////////////////////////////////////////
-// // Here the user can specify his/her sub-tasks to be executed
-// // on an event-by-event basis after the IceEvent structure
-// // has been filled and before the data is written out.
-// // Sub-tasks (i.e. a user classes derived from TTask) are entered
-// // as follows :
-// //
-// //    MyClean  task1("task1","Data cleaning");
-// //    MyReco   task2("task2","Track reconstruction");
-// //    MyFilter task3("task3","Event filtering");
-// //    q.Add(&task1);
-// //    q.Add(&task2);
-// //    q.Add(&task3);
-// //
-// // The sub-tasks will be executed in the order as they are entered.
-// ///////////////////////////////////////////////////////////////////
-//
-// // Perform the conversion and execute subtasks (if any)
-// // on an event-by-event basis
-// q.ExecuteJob();
+// Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  16:32Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  20:19Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -257,7 +218,9 @@ void RnoConvert::Exec(Option_t* opt)
  Int_t run=-1;
  Int_t event=-1;
  Int_t station=-1;
- Int_t radiant[24][2048];
+
+ // The waveforms of all channels are stored as Int_t radiant[24][2048]
+ // but will be readout linearly, as indicated below. 
 
  // Loop over the entries in the input data chain
  TLeaf* lx=0;
@@ -283,6 +246,7 @@ void RnoConvert::Exec(Option_t* opt)
   // Create this station in the detector structure
   RnoStation* stax=det.GetStation(station,kTRUE);
 
+  // Readout the waveforms of all Radiant channels
   lx=fData->GetLeaf("radiant_data");
   idx=0;
   for (Int_t i=0; i<24; i++)
@@ -295,14 +259,14 @@ void RnoConvert::Exec(Option_t* opt)
    if (!devx) continue;
 
    sample.Reset();
-   sample.SetNames("Sample","ADC");
+   sample.SetNames("ADC");
    for (Int_t j=0; j<2048; j++)
    {
     if (lx)
     {
+     // Retrieve the value of radiant[i][j]
      value=lx->GetValue(idx);
-     radiant[i][j]=value;
-     sample.Enter(float(j),value);
+     sample.Enter(value);
     }
     idx++;
    }

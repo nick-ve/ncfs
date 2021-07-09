@@ -65,7 +65,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 7, 2021  11:20Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  20:12Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -2201,7 +2201,7 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
 
  if (i<1 || i>fDim || j<1 || j>fDim || k>fDim)
  {
-  cout << " *NcSample::Get2DHistogram* Error : Invalid index encountered i=" << " j=" << j << " k=" << k << endl;
+  cout << " *NcSample::Get2DHistogram* Error : Invalid index encountered i=" << i << " j=" << j << " k=" << k << endl;
   return hist;
  }
 
@@ -2304,7 +2304,7 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
 
  if (i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim || m>fDim)
  {
-  cout << " *NcSample::Get2DHistogram* Error : Invalid index encountered i=" << " j=" << j << " k=" << k << " m=" << m << endl;
+  cout << " *NcSample::Get2DHistogram* Error : Invalid index encountered i=" << i << " j=" << j << " k=" << k << " m=" << m << endl;
   return hist;
  }
 
@@ -2350,6 +2350,60 @@ TH3D NcSample::Get3DHistogram(TString nameA,TString nameB,TString nameC,TString 
  return Get3DHistogram(i,j,k,m,sumw2,nbx,nby,nbz);
 }
 ///////////////////////////////////////////////////////////////////////////
+TGraph NcSample::GetGraph(Int_t i)
+{
+// Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable i.
+// The first variable has index 1.
+//
+// Note : This facility is only available if the storage mode has been activated.
+
+ TGraph gr;
+
+ if (!fStore)
+ {
+  cout << " *NcSample::GetGraph* Error : Storage mode has not been activated." << endl;
+  return gr;
+ }
+
+ if (i<1 || i>fDim)
+ {
+  cout << " *NcSample::GetGraph* Error : Invalid index encountered i=" << i << endl;
+  return gr;
+ }
+
+ Double_t x=0;
+ Double_t y=0;
+ for (Int_t ip=0; ip<fN; ip++)
+ {
+  x=ip+1;
+  y=GetEntry(ip+1,i);
+  gr.SetPoint(ip,x,y);
+ }
+
+ TString s="TGraph for NcSample ";
+ s+=GetName();
+ s+=" : X-axis=Sampling number ";
+ s+="  Y-axis=variable ";
+ s+=fNames[i-1];
+ gr.SetTitle(s.Data());
+
+ gr.SetMarkerStyle(20);
+ gr.SetMarkerSize(1);
+ gr.SetDrawOption("AP");
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcSample::GetGraph(TString nameA)
+{
+// Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable with nameA.
+//
+// Note : This facility is only available if the storage mode has been activated.
+
+ Int_t i=GetIndex(nameA);
+ return GetGraph(i);
+}
+///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(Int_t i,Int_t j)
 {
 // Provide a TGraph with : X-axis=variable i and Y-axis=variable j.
@@ -2367,7 +2421,7 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j)
 
  if (i<1 || i>fDim || j<1 || j>fDim)
  {
-  cout << " *NcSample::GetGraph* Error : Invalid index encountered i=" << " j=" << j << endl;
+  cout << " *NcSample::GetGraph* Error : Invalid index encountered i=" << i << " j=" << j << endl;
   return gr;
  }
 
@@ -2458,7 +2512,7 @@ TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
 
  if (i<1 || i>fDim || j<1 || j>fDim || (mode && (k<1 || k>fDim)))
  {
-  cout << " *NcSample::GetGraph* Error : Invalid index encountered i=" << " j=" << j << " k=" << k << endl;
+  cout << " *NcSample::GetGraph* Error : Invalid index encountered i=" << i << " j=" << j << " k=" << k << endl;
   return 0;
  }
 
@@ -2575,7 +2629,7 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
 
  if (i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim)
  {
-  cout << " *NcSample::GetGraph* Error : Invalid index encountered i=" << " j=" << j << " k=" << k << endl;
+  cout << " *NcSample::GetGraph* Error : Invalid index encountered i=" << i << " j=" << j << " k=" << k << endl;
   return gr;
  }
 
@@ -2648,7 +2702,7 @@ TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
 
  if (i<1 || i>fDim || (!f && (j<1 || j>fDim)))
  {
-  cout << " *NcSample::GetQQplot* Error : Invalid index encountered i=" << " j=" << j << endl;
+  cout << " *NcSample::GetQQplot* Error : Invalid index encountered i=" << i << " j=" << j << endl;
   return gr;
  }
 
