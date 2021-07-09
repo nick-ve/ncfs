@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul  1 21:59:27 2021            -->
+<!--   Date: Fri Jul  9 17:59:17 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -80,16 +80,63 @@ return false;}
  observation of signals in the detector is called an event.
  To store the event data in an organized way, the class <a href="./NcEvent.html">NcEvent</a> is provided,
  in which the various detector structures and their recorded signals
- can be stored via the generic <a href="./NcDetectorUnit.html#NcDetectorUnit:AddDevice" title="void NcDetectorUnit::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a> memberfunction.
+ can be stored as indicated below.
 
  It is good practice to combine the complete detector structure in
  a single <a href="./NcDetector.html">NcDetector</a> object and then store the whole detector structure
- in an <a href="./NcEvent.html">NcEvent</a> sructure by a single <a href="./NcDetectorUnit.html#NcDetectorUnit:AddDevice" title="void NcDetectorUnit::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a> invokation.
- This will in general provide the most efficient way to retrieve
- and analyze the recorded data.
- However, it is also possible to use multiple <a href="./NcDetectorUnit.html#NcDetectorUnit:AddDevice" title="void NcDetectorUnit::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a> invokations
- of <a href="./NcEvent.html">NcEvent</a> to store every <a href="./NcDevice.html">NcDevice</a> individually if the user wants
- to do so.
+ in an <a href="./NcEvent.html">NcEvent</a> structure by a single SetDetector invokation.
+ The recorded signals may already be included in the detector structure
+ at invokation of SetDetector, but depending on the format c.q. organisation
+ of the (raw) detector data, it may sometimes also be practical to
+ first store the detector structure without signals, then retrieve
+ a pointer to the stored detector structure via invokation of GetDetector
+ and finally use this pointer to navigate through the detector structure
+ and store the various recorded signals.
+ The use of such a single <a href="./NcDetector.html">NcDetector</a> object will in general provide the
+ most efficient way to retrieve and analyze the recorded data.
+ However, it is also possible to use multiple <a href="./NcDetectorUnit.html#NcDetectorUnit:AddDevice" title="void NcDetectorUnit::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a> invokations of <a href="./NcEvent.html">NcEvent</a>
+ to store every <a href="./NcDevice.html">NcDevice</a> individually if the user wants to do so.
+ In this case, a default <a href="./NcDetector.html">NcDetector</a> object will be created automatically
+ inside the <a href="./NcEvent.html">NcEvent</a> to hold all the added devices.
+ This automatically created <a href="./NcDetector.html">NcDetector</a> object may be accessed in the usual way
+ via the GetDetector invokation of <a href="./NcEvent.html">NcEvent</a>.
+
+ To provide maximal flexibility to the user, two modes can be used for the storage
+ of devices which can be selected by means of the memberfunction <a href="./NcDetectorUnit.html#NcDetectorUnit:SetDevCopy" title="void NcDetectorUnit::SetDevCopy(Int_t j)">SetDevCopy</a>().
+
+ a) <a href="./NcDetectorUnit.html#NcDetectorUnit:SetDevCopy" title="void NcDetectorUnit::SetDevCopy(Int_t j)">SetDevCopy</a>(0).
+    Only the pointers of the 'added' devices are stored.
+    This mode is typically used by making studies based on a fixed set
+    of devices which stays under user control or is kept on an external
+    file/tree.
+    In this way the <a href="./NcDetector.html">NcDetector</a> just represents a 'logical structure' for the
+    analysis of the various detector components and the recorded signals.
+
+    Note :
+    Modifications made to the original devices also affect the device
+    objects which are stored in the <a href="./NcDetector.html">NcDetector</a> structure.
+
+ b) <a href="./NcDetectorUnit.html#NcDetectorUnit:SetDevCopy" title="void NcDetectorUnit::SetDevCopy(Int_t j)">SetDevCopy</a>(1) (which is the default).
+    Of every 'added' device a private copy will be made of which the pointer
+    will be stored.
+    In this way the <a href="./NcDetector.html">NcDetector</a> represents an entity on its own and modifications
+    made to the original devices do not affect the <a href="./NcDevice.html">NcDevice</a> (or derived) objects
+    which are stored in the <a href="./NcDetector.html">NcDetector</a>.
+    This mode will allow 'adding' many different devices into an <a href="./NcDetector.html">NcDetector</a> by
+    creating only one device instance in the main programme and using the
+    <a href="./NcDetectorUnit.html#NcDetectorUnit:Reset" title="void NcDetectorUnit::Reset(Int_t mode=0)">Reset</a>() and parameter setting memberfunctions of the object representing the device.
+
+    Note :
+    The copy is made using the <a href="./NcDetector.html#NcDetector:Clone" title="TObject* NcDetector::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
+    All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcDetector.html#NcDetector:Clone" title="TObject* NcDetector::Clone(const char* name=&quot;&quot;)">Clone</a>()
+    memberfunction.
+    However, devices generally contain an internal (signal) data structure
+    which may include pointers to other objects. Therefore it is recommended to provide
+    for all devices a specific copy constructor and override the default <a href="./NcDetector.html#NcDetector:Clone" title="TObject* NcDetector::Clone(const char* name=&quot;&quot;)">Clone</a>()
+    memberfunction using this copy constructor.
+    Examples for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>, <a href="./NcSignal.html">NcSignal</a> and <a href="./NcDevice.html">NcDevice</a>.
+
+ See also the documentation provided for the memberfunction <a href="./NcDetectorUnit.html#NcDetectorUnit:SetOwner" title="void NcDetectorUnit::SetOwner(Bool_t own=kTRUE)">SetOwner</a>().
 
  In order to tailor the performance of the various detector elements
  with specific (sub)detector characteristics, the user may extend the
@@ -104,7 +151,7 @@ return false;}
 
  Navigation through the detector structures to obtain the contained data
  may be performed via the various memberfunctions of the classes
- <a href="./NcDetector.html">NcDetector</a>, <a href="./NcDetectorUnit.html">NcDetectorUnit</a>, <a href="./NcDevice.html">NcDevice</a>, <a href="./NcSignal.html">NcSignal</a> and also NcEevent.
+ <a href="./NcDetector.html">NcDetector</a>, <a href="./NcDetectorUnit.html">NcDetectorUnit</a>, <a href="./NcDevice.html">NcDevice</a>, <a href="./NcSignal.html">NcSignal</a> and also <a href="./NcEvent.html">NcEvent</a>.
 
  Examples :
 
@@ -147,23 +194,23 @@ return false;}
  detector structure could be envisaged :
  * Every antenna is represented via an <a href="./NcDevice.html">NcDevice</a>.
    To distinguish the different antenna types, new classes (derived from <a href="./NcDevice.html">NcDevice</a>)
-   are introduced, namely RnoHPOL, RnoVPOL and RnoLPDA.
- * To represent the various strings, a new class RnoString (derived from <a href="./NcDetectorUnit.html">NcDetectorUnit</a>)
+   are introduced, namely <a href="./RnoHPOL.html">RnoHPOL</a>, <a href="./RnoVPOL.html">RnoVPOL</a> and <a href="./RnoLPDA.html">RnoLPDA</a>.
+ * To represent the various strings, a new class <a href="./RnoString.html">RnoString</a> (derived from <a href="./NcDetectorUnit.html">NcDetectorUnit</a>)
    is introduced.
  * To represent the various trenches, a new class RnoTrench (derived from <a href="./NcDetectorUnit.html">NcDetectorUnit</a>)
    could be introduced.
    Although a trench is not an electronically connected entity like a string, and the LPDAs
    are foreseen to perform as individual devices, this structure may have some benefits
    in the data analysis phase.
- * All RnoHPOL and RnoVPOL objects are grouped in the corresponding RnoString objects.
- * The RnoLPDA objects are grouped in the corresponding RnoTrench objects.
- * The 3 RnoString objects and the 3 RnoTrench objects are grouped in a RnoStation object
+ * All <a href="./RnoHPOL.html">RnoHPOL</a> and <a href="./RnoVPOL.html">RnoVPOL</a> objects are grouped in the corresponding <a href="./RnoString.html">RnoString</a> objects.
+ * The <a href="./RnoLPDA.html">RnoLPDA</a> objects are grouped in the corresponding RnoTrench objects.
+ * The 3 <a href="./RnoString.html">RnoString</a> objects and the 3 RnoTrench objects are grouped in a <a href="./RnoStation.html">RnoStation</a> object
    that is derived from <a href="./NcDetectorUnit.html">NcDetectorUnit</a>.
- * Finally all 35 RnoStation objects are grouped into the overall <a href="./NcDetector.html">NcDetector</a> named <span class="string">"RNO"</span>.
+ * Finally all 35 <a href="./RnoStation.html">RnoStation</a> objects are grouped into the overall <a href="./NcDetector.html">NcDetector</a> named <span class="string">"RNO"</span>.
 
  The RNO-G data analysis framework is available in the directory <span class="string">"rnopack"</span>.
- Note that in this framework also a new class RnoEvent (derived from <a href="./NcEvent.html">NcEvent</a>)
- has been introduced to provide specific RNO-G related functionality.
+ Note that in this framework also new classes <a href="./RnoDetector.html">RnoDetector</a> (derived from <a href="./NcDetector.html">NcDetector</a>) and
+ <a href="./RnoEvent.html">RnoEvent</a> (derived from <a href="./NcEvent.html">NcEvent</a>) have been introduced to provide specific RNO-G related functionality.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 25, 2021  07:39Z
 - Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 27, 2021  09:59Z
@@ -639,7 +686,12 @@ return false;}
 <center><big><b><tt><a name="NcDetector" href="./NcDetector.html">NcDetector</a></tt></b></big></center>
 </td>
 <td><table><tr>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="RnoDetector" href="./RnoDetector.html">RnoDetector</a></tt></center></td>
 <td></td>
+</tr></table></td>
+</tr></table></td>
 </tr></table></td>
 </tr></table>
 </td></tr></table></td></tr></table>
@@ -669,7 +721,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul  1 21:59:27 2021 </em><em>&raquo; Last generated: 2021-07-01 21:59</em><br />
+<em>&raquo; Last changed: Fri Jul  9 17:59:17 2021 </em><em>&raquo; Last generated: 2021-07-09 17:59</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

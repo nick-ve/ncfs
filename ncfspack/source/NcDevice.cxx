@@ -32,6 +32,9 @@
 // Signal (Hit) handling of a generic device.
 // Basically this class provides a user interface to group and handle
 // various instances of NcSignal objects, called generically "hits".
+// By default private copies of the recorded hits will be made.
+// This implies that by default the device will own the registered hits.
+// See the SetHitCopy() memberfunction for further details.
 // An NcDevice object itself has (in addition to hit storage) also the
 // complete functionality of the class NcSignal.
 //

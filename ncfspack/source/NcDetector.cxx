@@ -49,16 +49,63 @@
 // observation of signals in the detector is called an event.
 // To store the event data in an organized way, the class NcEvent is provided,
 // in which the various detector structures and their recorded signals
-// can be stored via the generic AddDevice memberfunction.
+// can be stored as indicated below.
 //
 // It is good practice to combine the complete detector structure in
 // a single NcDetector object and then store the whole detector structure
-// in an NcEvent sructure by a single AddDevice invokation.
-// This will in general provide the most efficient way to retrieve
-// and analyze the recorded data. 
-// However, it is also possible to use multiple AddDevice invokations
-// of NcEvent to store every NcDevice individually if the user wants
-// to do so.
+// in an NcEvent structure by a single SetDetector invokation.
+// The recorded signals may already be included in the detector structure
+// at invokation of SetDetector, but depending on the format c.q. organisation
+// of the (raw) detector data, it may sometimes also be practical to
+// first store the detector structure without signals, then retrieve
+// a pointer to the stored detector structure via invokation of GetDetector
+// and finally use this pointer to navigate through the detector structure
+// and store the various recorded signals. 
+// The use of such a single NcDetector object will in general provide the
+// most efficient way to retrieve and analyze the recorded data. 
+// However, it is also possible to use multiple AddDevice invokations of NcEvent
+// to store every NcDevice individually if the user wants to do so.
+// In this case, a default NcDetector object will be created automatically
+// inside the NcEvent to hold all the added devices.
+// This automatically created NcDetector object may be accessed in the usual way
+// via the GetDetector invokation of NcEvent.
+//
+// To provide maximal flexibility to the user, two modes can be used for the storage
+// of devices which can be selected by means of the memberfunction SetDevCopy().
+//
+// a) SetDevCopy(0).
+//    Only the pointers of the 'added' devices are stored.
+//    This mode is typically used by making studies based on a fixed set
+//    of devices which stays under user control or is kept on an external
+//    file/tree. 
+//    In this way the NcDetector just represents a 'logical structure' for the
+//    analysis of the various detector components and the recorded signals.
+//
+//    Note :
+//    Modifications made to the original devices also affect the device
+//    objects which are stored in the NcDetector structure. 
+//
+// b) SetDevCopy(1) (which is the default).
+//    Of every 'added' device a private copy will be made of which the pointer
+//    will be stored.
+//    In this way the NcDetector represents an entity on its own and modifications
+//    made to the original devices do not affect the NcDevice (or derived) objects
+//    which are stored in the NcDetector. 
+//    This mode will allow 'adding' many different devices into an NcDetector by
+//    creating only one device instance in the main programme and using the
+//    Reset() and parameter setting memberfunctions of the object representing the device.
+//
+//    Note :
+//    The copy is made using the Clone() memberfunction.
+//    All devices (i.e. classes derived from TObject) have the default TObject::Clone() 
+//    memberfunction.
+//    However, devices generally contain an internal (signal) data structure
+//    which may include pointers to other objects. Therefore it is recommended to provide
+//    for all devices a specific copy constructor and override the default Clone()
+//    memberfunction using this copy constructor.
+//    Examples for this may be seen from NcCalorimeter, NcSignal and NcDevice.   
+//
+// See also the documentation provided for the memberfunction SetOwner(). 
 //
 // In order to tailor the performance of the various detector elements
 // with specific (sub)detector characteristics, the user may extend the
@@ -73,7 +120,7 @@
 //
 // Navigation through the detector structures to obtain the contained data
 // may be performed via the various memberfunctions of the classes
-// NcDetector, NcDetectorUnit, NcDevice, NcSignal and also NcEevent.
+// NcDetector, NcDetectorUnit, NcDevice, NcSignal and also NcEvent.
 //
 // Examples :
 // ==========
@@ -131,8 +178,8 @@
 // * Finally all 35 RnoStation objects are grouped into the overall NcDetector named "RNO".
 //
 // The RNO-G data analysis framework is available in the directory "rnopack".
-// Note that in this framework also a new class RnoEvent (derived from NcEvent)
-// has been introduced to provide specific RNO-G related functionality.
+// Note that in this framework also new classes RnoDetector (derived from NcDetector) and
+// RnoEvent (derived from NcEvent) have been introduced to provide specific RNO-G related functionality.
 // 
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 25, 2021  07:39Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 27, 2021  09:59Z

@@ -16,12 +16,14 @@
 //        for which the documentation is requested before running
 //        this macro.
 //
-//--- Author : Nick van Eijndhoven 20-oct-2005 NCFS
+//--- Author: Nick van Eijndhoven 20-oct-2005 NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  17:56Z
 ////////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
  gSystem->Load("icepack");
  gSystem->Load("iceconvert");
+ gSystem->Load("rnopack");
 
  gEnv->SetValue("Root.Html.Description","///////////");
  gEnv->SetValue("Root.Html.Author","//--- Author:");
@@ -30,7 +32,7 @@
 
  THtml q;
  q.SetProductName("NCFS");
- q.SetInputDir("$(NCFS)/ncfspack/source:$(NCFS)/icepack/source:$(NCFS)/iceconvert/source");
+ q.SetInputDir("$(NCFS)/ncfspack/source:$(NCFS)/icepack/source:$(NCFS)/iceconvert/source:$(NCFS)/rnopack/source");
 
  q.MakeAll();
 }

@@ -1220,3 +1220,8 @@
                 to make them also directly available to the new classes NcDetectorUnit and NcDetector.
                 However, their functionality is still available to NcEvent as well.
                 The version indicator in NcVersion has been updated to 4.00.
+05-jul-2021 NvE Updated some docs of NcDetectorUnit and also some cosmetics added in the printout of NcDetectorUnit::ShowDevicesTree().
+06-jul-2021 NvE The default DevCopy flag set to 1 for NcDetectorUnit and NcDetector.
+                Also some more docs updated for NcDevice, NcDetectorUnit and NcDetector.
+09-jul-2021 NvE Introduction of the folder rnopack holding RNO-G related software.
+                The version indicator in NcVersion has been updated to 4.1.

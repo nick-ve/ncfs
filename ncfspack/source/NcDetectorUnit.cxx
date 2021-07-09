@@ -31,10 +31,60 @@
 // Class NcDetectorUnit
 // Handling of a collection of generic devices.
 //
+// This class provides a facility to build up a hierarchical structure
+// to store detector signals.
+// Detector signals are represented by NcSignal objects that belong to
+// NcDevice objects. An Ncsignal object that is related to an NcDevice
+// is called a "hit" and can be stored in the NcDevice via the
+// generic AddHit memberfunction. 
+// A group of NcDevice objects may be combined in an NcDetectorUnit object
+// to represent a certain sub-detector system, and several NcDetectorUnit
+// objects may finally be combined into an NcDetector object to represent
+// the complete experimental setup.
+// Combination of these various detector elements is performed by the
+// generic AddDevice memberfunction.
+//
+// To provide maximal flexibility to the user, two modes can be used for the storage
+// of devices which can be selected by means of the memberfunction SetDevCopy().
+//
+// a) SetDevCopy(0).
+//    Only the pointers of the 'added' devices are stored.
+//    This mode is typically used by making studies based on a fixed set
+//    of devices which stays under user control or is kept on an external
+//    file/tree. 
+//    In this way the NcDetectorUnit just represents a 'logical structure' for the
+//    analysis of the various detector components and the recorded signals.
+//
+//    Note :
+//    Modifications made to the original devices also affect the device
+//    objects which are stored in the NcDetectorUnit structure. 
+//
+// b) SetDevCopy(1) (which is the default).
+//    Of every 'added' device a private copy will be made of which the pointer
+//    will be stored.
+//    In this way the NcDetectorUnit represents an entity on its own and modifications
+//    made to the original devices do not affect the NcDevice (or derived) objects
+//    which are stored in the NcDetectorUnit. 
+//    This mode will allow 'adding' many different devices into an NcDetectorUnit by
+//    creating only one device instance in the main programme and using the
+//    Reset() and parameter setting memberfunctions of the object representing the device.
+//
+//    Note :
+//    The copy is made using the Clone() memberfunction.
+//    All devices (i.e. classes derived from TObject) have the default TObject::Clone() 
+//    memberfunction.
+//    However, devices generally contain an internal (signal) data structure
+//    which may include pointers to other objects. Therefore it is recommended to provide
+//    for all devices a specific copy constructor and override the default Clone()
+//    memberfunction using this copy constructor.
+//    Examples for this may be seen from NcCalorimeter, NcSignal and NcDevice.   
+//
+// See also the documentation provided for the memberfunction SetOwner(). 
+//
 // Please refer to the documentation of NcDetector for further details.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:40Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 1, 2021  21:20Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 5, 2021  08:27Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDetectorUnit.h"
@@ -50,7 +100,7 @@ NcDetectorUnit::NcDetectorUnit(const char* name,const char* title) : NcDevice(na
 // See the memberfunction SetDevCopy() to change this.
 
  fDevices=0;
- fDevCopy=0;
+ fDevCopy=1;
  fDevs=0;
  fThits=0;
  fOrdered=0;
@@ -129,7 +179,7 @@ void NcDetectorUnit::SetDevCopy(Int_t j)
 // j=0 ==> No private copies are made; pointers of original devices are stored.
 // j=1 ==> Private copies of the devices are made and these pointers are stored.
 //
-// By default NO private copies will be made of the added devices.
+// By default private copies will be made of the added devices.
 //
 // Notes :
 //  In case a private copy is made, this is performed via the Clone() memberfunction.
@@ -215,8 +265,8 @@ void NcDetectorUnit::SetOwner(Bool_t own)
 void NcDetectorUnit::Reset(Int_t mode)
 {
 // Reset registered devices, hits and NcSignal attributes.
-// Note : The status word and HitCopy flag are NOT modified.
-//        Use SetStatus() and SetHitCopy() to modify these parameters. 
+// Note : The status word, DevCopy and HitCopy flag are NOT modified.
+//        Use SetStatus(), SetDevCopy() and SetHitCopy() to modify these parameters. 
 // See NcSignal::Reset() for further details.
 
  NcDevice::Reset(mode);
@@ -861,7 +911,7 @@ void NcDetectorUnit::ShowDevicesTree(TString classname,Int_t mode,NcDetectorUnit
 
  if (ndevs2)
  {
-  cout << " The following " << ndevs2;
+  cout << " === The following " << ndevs2;
   if (classname!="NcDevice") cout << " " << classname << " (derived)";
   cout << " devices are available for the " << type << " : " << name << endl;
  }
@@ -1236,6 +1286,13 @@ void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,Int_
 // 3D color display of the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
+// follow = kTRUE  ==> Search all hits related this NcDetectorUnit at any level
+//          kFALSE ==> Only search the hits directly linked to this NcDetectorUnit
+//
+// inc = kFALSE --> Do NOT include the hits stored in the NcDetectorUnit itself
+//       kTRUE  --> Include the hits stored in the NcDetectorUnit itself
+//                  if it satisfies the specified device class. 
+//
 // The user can specify the index (default=1) of the signal slot to perform the display for.
 // The marker size will indicate the absolute value of the signal (specified by the slotindex)
 // as a percentage of the input argument "scale".
@@ -1286,6 +1343,13 @@ void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,TStr
 {
 // 3D color display of the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
+//
+// follow = kTRUE  ==> Search all hits related this NcDetectorUnit at any level
+//          kFALSE ==> Only search the hits directly linked to this NcDetectorUnit
+//
+// inc = kFALSE --> Do NOT include the hits stored in the NcDetectorUnit itself
+//       kTRUE  --> Include the hits stored in the NcDetectorUnit itself
+//                  if it satisfies the specified device class. 
 //
 // The user can specify the name of the signal slot to perform the display for.
 // The marker size will indicate the absolute value of the signal (specified by the slotname)
@@ -1338,6 +1402,13 @@ TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t in
 // Order the references to the various devices based on hit signals registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
+//
+// follow = kTRUE  ==> Search all hits related this NcDetectorUnit at any level
+//          kFALSE ==> Only search the hits directly linked to this NcDetectorUnit
+//
+// inc = kFALSE --> Do NOT include the hits stored in the NcDetectorUnit itself
+//       kTRUE  --> Include the hits stored in the NcDetectorUnit itself
+//                  if it satisfies the specified device class. 
 //
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
 // or as a returned pointer.
@@ -1394,6 +1465,13 @@ TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t in
 // Order the references to the various devices based on hit signals registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
+//
+// follow = kTRUE  ==> Search all hits related this NcDetectorUnit at any level
+//          kFALSE ==> Only search the hits directly linked to this NcDetectorUnit
+//
+// inc = kFALSE --> Do NOT include the hits stored in the NcDetectorUnit itself
+//       kTRUE  --> Include the hits stored in the NcDetectorUnit itself
+//                  if it satisfies the specified device class. 
 //
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
 // or as a returned pointer.

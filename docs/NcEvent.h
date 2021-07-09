@@ -71,7 +71,6 @@ class NcEvent : public NcVertex,public NcTimestamp
   void DisplayHits(TString classname,TString name,Float_t scale=-1,Int_t dp=0,Int_t mode=1,Int_t mcol=4);
   void DisplayHits(TString classname,Int_t idx=1,Float_t scale=-1,Int_t dp=0,Int_t mode=1,Int_t mcol=4);
   void ShowHits(TString classname,Int_t mode=1,TString f="car",TString u="rad"); // Overview of all hits of selected devices
-//@@@@@@@@@@@@@@
   TObjArray* SortDevices(TString classname,TString name,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0); // Sort devices by signal
   TObjArray* SortDevices(TString classname,Int_t idx=1,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0);  // Sort devices by signal
   TObjArray* SortDevices(TObjArray* hits,TString name,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0);       // Sort devices by signal

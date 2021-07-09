@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul  1 21:59:27 2021            -->
+<!--   Date: Fri Jul  9 17:59:17 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -62,10 +62,60 @@ return false;}
  <a href="./NcDetectorUnit.html#NcDetectorUnit:Class" title="TClass* NcDetectorUnit::Class()">Class</a> <a href="./NcDetectorUnit.html">NcDetectorUnit</a>
  Handling of a collection of generic devices.
 
+ This class provides a facility to build up a hierarchical structure
+ to store detector signals.
+ Detector signals are represented by <a href="./NcSignal.html">NcSignal</a> objects that belong to
+ <a href="./NcDevice.html">NcDevice</a> objects. An Ncsignal object that is related to an <a href="./NcDevice.html">NcDevice</a>
+ is called a <span class="string">"hit"</span> and can be stored in the <a href="./NcDevice.html">NcDevice</a> via the
+ generic <a href="./NcDevice.html#NcDevice:AddHit" title="void NcDevice::AddHit(NcSignal&amp; s) or overloads">AddHit</a> memberfunction.
+ A group of <a href="./NcDevice.html">NcDevice</a> objects may be combined in an <a href="./NcDetectorUnit.html">NcDetectorUnit</a> object
+ to represent a certain sub-detector system, and several <a href="./NcDetectorUnit.html">NcDetectorUnit</a>
+ objects may finally be combined into an <a href="./NcDetector.html">NcDetector</a> object to represent
+ the complete experimental setup.
+ Combination of these various detector elements is performed by the
+ generic <a href="./NcDetectorUnit.html#NcDetectorUnit:AddDevice" title="void NcDetectorUnit::AddDevice(NcDevice&amp; d) or overloads">AddDevice</a> memberfunction.
+
+ To provide maximal flexibility to the user, two modes can be used for the storage
+ of devices which can be selected by means of the memberfunction <a href="./NcDetectorUnit.html#NcDetectorUnit:SetDevCopy" title="void NcDetectorUnit::SetDevCopy(Int_t j)">SetDevCopy</a>().
+
+ a) <a href="./NcDetectorUnit.html#NcDetectorUnit:SetDevCopy" title="void NcDetectorUnit::SetDevCopy(Int_t j)">SetDevCopy</a>(0).
+    Only the pointers of the 'added' devices are stored.
+    This mode is typically used by making studies based on a fixed set
+    of devices which stays under user control or is kept on an external
+    file/tree.
+    In this way the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> just represents a 'logical structure' for the
+    analysis of the various detector components and the recorded signals.
+
+    Note :
+    Modifications made to the original devices also affect the device
+    objects which are stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> structure.
+
+ b) <a href="./NcDetectorUnit.html#NcDetectorUnit:SetDevCopy" title="void NcDetectorUnit::SetDevCopy(Int_t j)">SetDevCopy</a>(1) (which is the default).
+    Of every 'added' device a private copy will be made of which the pointer
+    will be stored.
+    In this way the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> represents an entity on its own and modifications
+    made to the original devices do not affect the <a href="./NcDevice.html">NcDevice</a> (or derived) objects
+    which are stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a>.
+    This mode will allow 'adding' many different devices into an <a href="./NcDetectorUnit.html">NcDetectorUnit</a> by
+    creating only one device instance in the main programme and using the
+    <a href="./NcDetectorUnit.html#NcDetectorUnit:Reset" title="void NcDetectorUnit::Reset(Int_t mode=0)">Reset</a>() and parameter setting memberfunctions of the object representing the device.
+
+    Note :
+    The copy is made using the <a href="./NcDetectorUnit.html#NcDetectorUnit:Clone" title="TObject* NcDetectorUnit::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
+    All devices (i.e. classes derived from <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>) have the default <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::<a href="./NcDetectorUnit.html#NcDetectorUnit:Clone" title="TObject* NcDetectorUnit::Clone(const char* name=&quot;&quot;)">Clone</a>()
+    memberfunction.
+    However, devices generally contain an internal (signal) data structure
+    which may include pointers to other objects. Therefore it is recommended to provide
+    for all devices a specific copy constructor and override the default <a href="./NcDetectorUnit.html#NcDetectorUnit:Clone" title="TObject* NcDetectorUnit::Clone(const char* name=&quot;&quot;)">Clone</a>()
+    memberfunction using this copy constructor.
+    Examples for this may be seen from <a href="./NcCalorimeter.html">NcCalorimeter</a>, <a href="./NcSignal.html">NcSignal</a> and <a href="./NcDevice.html">NcDevice</a>.
+
+ See also the documentation provided for the memberfunction <a href="./NcDetectorUnit.html#NcDetectorUnit:SetOwner" title="void NcDetectorUnit::SetOwner(Bool_t own=kTRUE)">SetOwner</a>().
+
  Please refer to the documentation of <a href="./NcDetector.html">NcDetector</a> for further details.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:40Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 1, 2021  21:20Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 5, 2021  08:27Z
 
 </pre></div>
 </div></div>
@@ -533,6 +583,21 @@ return false;}
 <td>&larr;</td><td><table><tr>
 <td bgcolor="#f7f7f7"><table><tr><td>
 <center><tt><a name="NcDetector" href="./NcDetector.html">NcDetector</a></tt></center></td>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="RnoDetector" href="./RnoDetector.html">RnoDetector</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="RnoStation" href="./RnoStation.html">RnoStation</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="RnoString" href="./RnoString.html">RnoString</a></tt></center></td>
 <td></td>
 </tr></table></td>
 </tr></table></td>
@@ -560,7 +625,7 @@ return false;}
  j=0 ==&gt; No private copies are made; pointers of original devices are stored.
  j=1 ==&gt; Private copies of the devices are made and these pointers are stored.
 
- By default NO private copies will be made of the added devices.
+ By default private copies will be made of the added devices.
 
  Notes :
   In case a private copy is made, this is performed via the <a href="./NcDetectorUnit.html#NcDetectorUnit:Clone" title="TObject* NcDetectorUnit::Clone(const char* name=&quot;&quot;)">Clone</a>() memberfunction.
@@ -617,8 +682,8 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDetectorUnit:Reset" href="src/NcDetectorUnit.cxx.html#gmLtQC">Reset</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> <a href="./NcDetectorUnit.html#NcDetectorUnit:Reset" title="void NcDetectorUnit::Reset(Int_t mode=0)">Reset</a> registered devices, hits and <a href="./NcSignal.html">NcSignal</a> attributes.
- Note : The status word and HitCopy flag are NOT modified.
-        Use <a href="./NcDevice.html#NcDevice:SetStatus" title="void NcDevice::SetStatus(Int_t word)">SetStatus</a>() and <a href="./NcDevice.html#NcDevice:SetHitCopy" title="void NcDevice::SetHitCopy(Int_t j)">SetHitCopy</a>() to modify these parameters.
+ Note : The status word, DevCopy and HitCopy flag are NOT modified.
+        Use <a href="./NcDevice.html#NcDevice:SetStatus" title="void NcDevice::SetStatus(Int_t word)">SetStatus</a>(), <a href="./NcDetectorUnit.html#NcDetectorUnit:SetDevCopy" title="void NcDetectorUnit::SetDevCopy(Int_t j)">SetDevCopy</a>() and <a href="./NcDevice.html#NcDevice:SetHitCopy" title="void NcDevice::SetHitCopy(Int_t j)">SetHitCopy</a>() to modify these parameters.
  See <a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Reset" title="void NcSignal::Reset(Int_t mode=0)">Reset</a>() for further details.
 </pre></div>
 </div>
@@ -991,6 +1056,13 @@ return false;}
 <div class="funccomm"><pre> 3D color display of the various hits registered to the specified device (or derived) class.
  For classname=<span class="string">"*"</span>, no selection on the device class will be performed.
 
+ follow = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  ==&gt; Search all hits related this <a href="./NcDetectorUnit.html">NcDetectorUnit</a> at any level
+          <a href="./ListOfTypes.html#Bool_t">kFALSE</a> ==&gt; Only search the hits directly linked to this <a href="./NcDetectorUnit.html">NcDetectorUnit</a>
+
+ inc = <a href="./ListOfTypes.html#Bool_t">kFALSE</a> --&gt; Do NOT include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+       <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  --&gt; Include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+                  if it satisfies the specified device class.
+
  The user can specify the index (default=1) of the signal slot to perform the display for.
  The marker size will indicate the absolute value of the signal (specified by the slotindex)
  as a percentage of the input argument <span class="string">"scale"</span>.
@@ -1023,6 +1095,13 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDetectorUnit:DisplayHits" href="src/NcDetectorUnit.cxx.html#beE9tE">DisplayHits</a>(TString classname, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> follow, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> inc, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</span><br />
 <div class="funccomm"><pre> 3D color display of the various hits registered to the specified device (or derived) class.
  For classname=<span class="string">"*"</span>, no selection on the device class will be performed.
+
+ follow = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  ==&gt; Search all hits related this <a href="./NcDetectorUnit.html">NcDetectorUnit</a> at any level
+          <a href="./ListOfTypes.html#Bool_t">kFALSE</a> ==&gt; Only search the hits directly linked to this <a href="./NcDetectorUnit.html">NcDetectorUnit</a>
+
+ inc = <a href="./ListOfTypes.html#Bool_t">kFALSE</a> --&gt; Do NOT include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+       <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  --&gt; Include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+                  if it satisfies the specified device class.
 
  The user can specify the name of the signal slot to perform the display for.
  The marker size will indicate the absolute value of the signal (specified by the slotname)
@@ -1060,6 +1139,13 @@ return false;}
  to the specified device (or derived) class.
  For classname=<span class="string">"*"</span>, no selection on the device class will be performed.
 
+ follow = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  ==&gt; Search all hits related this <a href="./NcDetectorUnit.html">NcDetectorUnit</a> at any level
+          <a href="./ListOfTypes.html#Bool_t">kFALSE</a> ==&gt; Only search the hits directly linked to this <a href="./NcDetectorUnit.html">NcDetectorUnit</a>
+
+ inc = <a href="./ListOfTypes.html#Bool_t">kFALSE</a> --&gt; Do NOT include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+       <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  --&gt; Include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+                  if it satisfies the specified device class.
+
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
  or as a returned pointer.
  A <span class="string">"hit"</span> represents an abstract object which is derived from <a href="./NcSignal.html">NcSignal</a>.
@@ -1096,6 +1182,13 @@ return false;}
 <div class="funccomm"><pre> Order the references to the various devices based on hit signals registered
  to the specified device (or derived) class.
  For classname=<span class="string">"*"</span>, no selection on the device class will be performed.
+
+ follow = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  ==&gt; Search all hits related this <a href="./NcDetectorUnit.html">NcDetectorUnit</a> at any level
+          <a href="./ListOfTypes.html#Bool_t">kFALSE</a> ==&gt; Only search the hits directly linked to this <a href="./NcDetectorUnit.html">NcDetectorUnit</a>
+
+ inc = <a href="./ListOfTypes.html#Bool_t">kFALSE</a> --&gt; Do NOT include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+       <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  --&gt; Include the hits stored in the <a href="./NcDetectorUnit.html">NcDetectorUnit</a> itself
+                  if it satisfies the specified device class.
 
  The ordered array is returned as a TObjArray either via a user provided array <span class="string">"ordered"</span>
  or as a returned pointer.
@@ -1269,7 +1362,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul  1 21:59:27 2021 </em><em>&raquo; Last generated: 2021-07-01 21:59</em><br />
+<em>&raquo; Last changed: Fri Jul  9 17:59:18 2021 </em><em>&raquo; Last generated: 2021-07-09 17:59</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

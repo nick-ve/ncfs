@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul  1 21:59:28 2021            -->
+<!--   Date: Fri Jul  9 17:59:18 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -63,6 +63,9 @@ return false;}
  Signal (Hit) handling of a generic device.
  Basically this class provides a user interface to group and handle
  various instances of <a href="./NcSignal.html">NcSignal</a> objects, called generically <span class="string">"hits"</span>.
+ By default private copies of the recorded hits will be made.
+ This implies that by default the device will own the registered hits.
+ See the <a href="./NcDevice.html#NcDevice:SetHitCopy" title="void NcDevice::SetHitCopy(Int_t j)">SetHitCopy</a>() memberfunction for further details.
  An <a href="./NcDevice.html">NcDevice</a> object itself has (in addition to hit storage) also the
  complete functionality of the class <a href="./NcSignal.html">NcSignal</a>.
 
@@ -1129,7 +1132,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul  1 21:59:28 2021 </em><em>&raquo; Last generated: 2021-07-01 21:59</em><br />
+<em>&raquo; Last changed: Fri Jul  9 17:59:18 2021 </em><em>&raquo; Last generated: 2021-07-09 17:59</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
