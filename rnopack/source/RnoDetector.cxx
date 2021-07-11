@@ -298,13 +298,34 @@ void RnoDetector::CreateStation(Int_t id)
  AddDevice(station);
 }
 ///////////////////////////////////////////////////////////////////////////
-TCanvas* RnoDetector::DisplayWaveform(Int_t ista,Int_t ich,Int_t j)
+TGraph* RnoDetector::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 {
-// Display the waveform of the j-th sampled observable (1=first) for the selected channel number "ich"
+// Display the sampling of the j-th sampled observable (1=first) for the selected channel number "ich"
 // of the station with ID=ista.
 // The graph will display the values of the j-th observable versus the sample entry number.
 //
-// If ich<0 the corresponding waveforms of all channels from this station are displayed.
+// The returned argument is the pointer to the created graph.
+// For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
+//
+// The default value is j=1.
+
+ RnoStation* sta=GetStation(ista,kFALSE);
+
+ if (!sta)
+ {
+  cout << " *" << ClassName() << "::DisplayWaveform* Could not find Station" << ista << endl;
+  return 0;
+ }
+
+ TGraph* gr=sta->DisplaySampling(ich,j);
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TCanvas* RnoDetector::DisplaySamplings(Int_t ista,Int_t j)
+{
+// Display the samplings of the j-th sampled observable (1=first) for all channels
+// of the station with ID=ista.
+// The graph will display the values of the j-th observable versus the sample entry number.
 //
 // The returned argument is the pointer to the created canvas.
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
@@ -319,7 +340,7 @@ TCanvas* RnoDetector::DisplayWaveform(Int_t ista,Int_t ich,Int_t j)
   return 0;
  }
 
- TCanvas* c=sta->DisplayWaveform(ich,j);
+ TCanvas* c=sta->DisplaySamplings(j);
  return c;
 }
 ///////////////////////////////////////////////////////////////////////////

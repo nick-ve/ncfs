@@ -65,7 +65,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  20:12Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  14:35Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -1084,6 +1084,24 @@ Int_t NcSample::GetN() const
 {
 // Provide the number of entries of a certain sample
  return fN;
+}
+///////////////////////////////////////////////////////////////////////////
+TString NcSample::GetVariableName(Int_t i) const
+{
+// Provide the name of the i-th variable (first is i=1)
+
+ TString name="";
+
+ if (i<1 || i>fDim)
+ {
+  cout << " *NcSample::GetVariableName* Error : Invalid index " << i << endl;
+ }
+ else
+ {
+  name=fNames[i-1];
+ }
+
+ return name;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSum(Int_t i) const

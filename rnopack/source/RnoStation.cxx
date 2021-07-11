@@ -61,14 +61,12 @@ RnoStation::RnoStation(const RnoStation& q) : NcDetectorUnit(q)
 // Copy constructor.
 }
 ///////////////////////////////////////////////////////////////////////////
-TCanvas* RnoStation::DisplayWaveform(Int_t ich,Int_t j)
+TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)
 {
-// Display the waveform of the j-th sampled observable (1=first) for the selected channel number "ich".
+// Display the sampling of the j-th sampled observable (1=first) for the selected channel number "ich".
 // The graph will display the values of the j-th observable versus the sample entry number.
 //
-// If ich<0 the corresponding waveforms of all channels from this station are displayed.
-//
-// The returned argument is the pointer to the created canvas.
+// The returned argument is the pointer to the created graph.
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
@@ -78,6 +76,8 @@ TCanvas* RnoStation::DisplayWaveform(Int_t ich,Int_t j)
   delete fCanvas;
   fCanvas=0;
  }
+
+ if (ich<0 || j<1) return 0;
 
  fCanvas=new TCanvas();
 
@@ -90,48 +90,103 @@ TCanvas* RnoStation::DisplayWaveform(Int_t ich,Int_t j)
 
  TString title="";
 
- // Display the waveform of a single channel
- if (ich>=0)
+ title=staname;
+ title+=" ";
+ title+=devname;
+ fCanvas->SetName(ClassName());
+ fCanvas->SetTitle(title);
+ RnoGANT* ant=(RnoGANT*)GetDevice(devname,kTRUE);
+ NcSample* sx=0;
+ if (ant) sx=ant->DisplaySample(j);
+
+ if (!sx) return 0;
+
+ Int_t ndim=sx->GetDimension();
+ if (j>ndim) return 0;
+
+ TString xname="Sample";
+ TString yname=sx->GetVariableName(j);
+
+ // Change the title and axes labels of the graph
+ TGraph* gr=(TGraph*)fCanvas->FindObject("NcSample");
+ if (gr)
  {
-  title=staname;
-  title+=" ";
-  title+=devname;
-  fCanvas->SetName(ClassName());
-  fCanvas->SetTitle(title);
-  RnoGANT* ant=(RnoGANT*)GetDevice(devname,kTRUE);
-  if (ant) ant->DisplaySample(j);
-
-  // Change the title of the graph
-  TNamed* obj=(TNamed*)fCanvas->FindObject("NcSample");
-  if (obj) obj->SetTitle(title);
-
-  return fCanvas;
+  gr->SetTitle(title);
+  gr->GetXaxis()->SetTitle(xname);
+  gr->GetYaxis()->SetTitle(yname);
  }
 
- // Display the waveforms of all channels
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TCanvas* RnoStation::DisplaySamplings(Int_t j)
+{
+// Display the sampling of the j-th sampled observable (1=first) for all channels.
+// The graph will display the values of the j-th observable versus the sample entry number.
+//
+// The returned argument is the pointer to the created canvas.
+// For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
+//
+// The default value is j=1.
+
+ if (fCanvas)
+ {
+  delete fCanvas;
+  fCanvas=0;
+ }
+
+ if (j<1) return 0;
+
+ fCanvas=new TCanvas();
+
+ Int_t id=GetUniqueID(); // The station ID
+ TString staname="Station";
+ staname+=id;
+
+ TString title="";
+ TString devname="";
+
  title=staname;
  fCanvas->SetName(ClassName());
  fCanvas->SetTitle(title);
  fCanvas->Divide(4,6);
+
+ NcSample* sx=0;
+ Int_t ndim=0;
+ TString xname="Sample";
+ TString yname="Value";
+ TVirtualPad* pad=0;
  for (Int_t jch=0; jch<24; jch++)
  {
-  fCanvas->cd(jch+1);
+  pad=fCanvas->cd(jch+1);
+
+  if (!pad) continue;
+
   devname="Ch";
   devname+=jch;
   RnoGANT* ant=(RnoGANT*)GetDevice(devname,kTRUE);
-  if (ant) ant->DisplaySample(j);
+  if (ant) sx=ant->DisplaySample(j);
 
-  // Change the title of the graph
+  if (!sx) continue;
+
+  ndim=sx->GetDimension();
+  if (j>ndim) continue;
+
+  yname=sx->GetVariableName(j);
+
+  // Change the title and axes labels of the graph
   title=staname;
   title+=" ";
   title+=devname;
-  TVirtualPad* pad=fCanvas->GetPad(jch+1);
-  if (pad)
-  {
-   TNamed* obj=(TNamed*)pad->FindObject("NcSample");
-   if (obj) obj->SetTitle(title);
-  }
- }
+
+  TGraph* gr=(TGraph*)pad->FindObject("NcSample");
+
+  if (!gr) continue;
+
+  gr->SetTitle(title);
+  gr->GetXaxis()->SetTitle(xname);
+  gr->GetYaxis()->SetTitle(yname);
+ } // End of loop over the channels
  
  return fCanvas;
 }

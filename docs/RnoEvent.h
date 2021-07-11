@@ -16,10 +16,11 @@ class RnoEvent : public NcEvent
   RnoEvent(const RnoEvent& evt);                     // Copy constructor
   virtual TObject* Clone(const char* name="") const; // Make a deep copy and provide its pointer
   virtual void Reset();                              // Reset all values
-  TCanvas* DisplayWaveform(Int_t ista,Int_t ich,Int_t j=1); // Display the waveform of a station channel for the j-th sampled observable
+  TGraph* DisplaySampling(Int_t ista,Int_t ich,Int_t j=1); // Display the sampling of a station channel for the j-th sampled observable
+  TCanvas* DisplaySamplings(Int_t ista,Int_t j=1);         // Display the sampling of all station channels for the j-th sampled observable
 
  protected:
 
- ClassDef(RnoEvent,2) // Handling of RNO-G event data.
+ ClassDef(RnoEvent,3) // Handling of RNO-G event data.
 };
 #endif

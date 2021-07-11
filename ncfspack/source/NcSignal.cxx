@@ -47,13 +47,15 @@
 // whereas in case of stored calibrated data the user should only
 // provide a de-calibration function (and no calibration function).
 //
+// The memberfunction SetSample() allows to store various NcSample objects.
+// Basically this is intended to store the (raw) data directly obtained from a
+// Data Acquisition System (DAQ), and offers very flexible storage c.q. retrieval
+// of recorded (multi-dimensional) data.
 // Via the memberfunction SetWaveform() various waveforms may (also) be stored
-// in the form of TH1F histograms. These may be for instance the waveforms from which
-// the stored signal values have been extracted.
-// Furthermore, the memberfunction SetSample() allows to (also) store various NcSample objects,
-// which provide an even more flexible storage c.q. retrieval of recorded (multi-dimensional)
-// data from which the stored signal values have been extracted.
-// Note however, that in the case of large (multi-dimensional) recorded data samples,
+// in the form of TH1F histograms. These are intended to contain calibrated NcSample data
+// from which the final hit information can be extracted by using for instance the
+// TSpectrum facility.
+// It should be noted, that in the case of large (multi-dimensional) recorded data samples,
 // the storage in the form of waveform histograms is less memory demanding than the
 // storage of the full NcSample entries (i.e. NcSample objects with StoreMode activated).  
 //
@@ -134,7 +136,7 @@
 // Float_t dedx=q.GetSignal("dE/dx",3);
 //
 //--- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:06Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  14:06Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSignal.h"
@@ -1476,7 +1478,7 @@ TH1F* NcSignal::GetWaveform(Int_t j) const
 {
 // Provide pointer to the j-th waveform histogram.
  TH1F* waveform=0;
- if (j <= GetNwaveforms()) waveform=(TH1F*)fWaveforms->At(j-1);
+ if (j>0 && j<=GetNwaveforms()) waveform=(TH1F*)fWaveforms->At(j-1);
  return waveform;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1688,7 +1690,7 @@ NcSample* NcSignal::GetSample(Int_t j) const
 {
 // Provide pointer to the j-th sample.
  NcSample* sample=0;
- if (j <= GetNsamples()) sample=(NcSample*)fSamples->At(j-1);
+ if (j>0 && j<=GetNsamples()) sample=(NcSample*)fSamples->At(j-1);
  return sample;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2622,12 +2624,19 @@ NcSample* NcSignal::DisplaySample(Int_t j,Int_t i) const
 //
 // The default value is i=1.
 
+ if (j<1) return 0;
+
  TGraph gr;
  NcSample* sx=GetSample(i);
+ Int_t ndim=0;
  if (sx)
  {
-  gr=sx->GetGraph(j);
-  gr.DrawClone("AL");
+  ndim=sx->GetDimension();
+  if (j<=ndim)
+  {
+   gr=sx->GetGraph(j);
+   gr.DrawClone("AL");
+  }
  }
 
  return sx;

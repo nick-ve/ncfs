@@ -1236,3 +1236,6 @@
                 The auto-generated histograms still have no name, in order to prevent a ROOT warning message
                 when creating multiple histograms with the same name.
                 The version indicator in NcVersion has been updated to 4.2.
+10-jul-2021 NvE Docs of NcSignal updated to clearly outline the intention of the storage of samples and waveforms.
+                Also new memberfunction GetVariableName() introduced in class NcSample.
+                The version indicator in NcVersion has been updated to 4.3.

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jul 11 02:04:40 2021            -->
+<!--   Date: Sun Jul 11 22:17:18 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -178,7 +178,8 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcDetectorUnit.html#NcDetectorUnit:DisplayHits@1"><span class="baseclass">NcDetectorUnit::</span>DisplayHits</a>(TString classname, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> follow, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> inc, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DisplaySample"><span class="baseclass">NcSignal::</span>DisplaySample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DisplaySample@1"><span class="baseclass">NcSignal::</span>DisplaySample</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">TCanvas*</td><td class="funcname"><a class="funcname" href="#RnoDetector:DisplayWaveform">DisplayWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret">TGraph*</td><td class="funcname"><a class="funcname" href="#RnoDetector:DisplaySampling">DisplaySampling</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret">TCanvas*</td><td class="funcname"><a class="funcname" href="#RnoDetector:DisplaySamplings">DisplaySamplings</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Dot"><span class="baseclass">Nc3Vector::</span>Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -645,12 +646,21 @@ return false;}
 <div class="funccomm"><pre> Internal memberfunction to create a station with the specified id.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TCanvas* <a class="funcname" name="RnoDetector:DisplayWaveform" href="src/RnoDetector.cxx.html#SAqooB">DisplayWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
-<div class="funccomm"><pre> Display the waveform of the j-th sampled observable (1=first) for the selected channel number <span class="string">"ich"</span>
+<div class="funcdoc"><span class="funcname">TGraph* <a class="funcname" name="RnoDetector:DisplaySampling" href="src/RnoDetector.cxx.html#kNCO4">DisplaySampling</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Display the sampling of the j-th sampled observable (1=first) for the selected channel number <span class="string">"ich"</span>
  of the station with ID=ista.
  The graph will display the values of the j-th observable versus the sample entry number.
 
- If ich&lt;0 the corresponding waveforms of all channels from this station are displayed.
+ The returned argument is the pointer to the created graph.
+ For extended functionality, please refer to the (inherited) memberfunction <a href="./NcSignal.html#NcSignal:DisplaySample" title="NcSample* NcSignal::DisplaySample(Int_t j=1,Int_t i=1) or overloads">DisplaySample</a>().
+
+ The default value is j=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TCanvas* <a class="funcname" name="RnoDetector:DisplaySamplings" href="src/RnoDetector.cxx.html#ExYpAB">DisplaySamplings</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Display the samplings of the j-th sampled observable (1=first) for all channels
+ of the station with ID=ista.
+ The graph will display the values of the j-th observable versus the sample entry number.
 
  The returned argument is the pointer to the created canvas.
  For extended functionality, please refer to the (inherited) memberfunction <a href="./NcSignal.html#NcSignal:DisplaySample" title="NcSample* NcSignal::DisplaySample(Int_t j=1,Int_t i=1) or overloads">DisplaySample</a>().
@@ -671,7 +681,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Jul 11 02:04:41 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
+<em>&raquo; Last changed: Sun Jul 11 22:17:18 2021 </em><em>&raquo; Last generated: 2021-07-11 22:17</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

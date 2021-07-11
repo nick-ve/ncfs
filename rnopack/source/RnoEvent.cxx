@@ -60,28 +60,87 @@ void RnoEvent::Reset()
  NcEvent::Reset();
 }
 ///////////////////////////////////////////////////////////////////////////
-TCanvas* RnoEvent::DisplayWaveform(Int_t ista,Int_t ich,Int_t j)
+TGraph* RnoEvent::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 {
-// Display the waveform of the j-th sampled observable (1=first) for the selected channel number "ich"
+// Display the sampling of the j-th sampled observable (1=first) for the selected channel number "ich"
 // of the station with ID=ista.
 // The graph will display the values of the j-th observable versus the sample entry number.
 //
-// If ich<0 the corresponding waveforms of all channels from this station are displayed.
+// The returned argument is the pointer to the created graph.
+// For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
+//
+// The default value is j=1.
+
+ TString name="Station";
+ name+=ista;
+ RnoStation* sta=(RnoStation*)GetDevice(name);
+
+ if (!sta)
+ {
+  cout << " *" << ClassName() << "::DisplaySampling* Could not find Station" << ista << endl;
+  return 0;
+ }
+
+ TGraph* gr=sta->DisplaySampling(ich,j);
+
+ if (!gr) return 0;
+
+ // Add run and event numbers to the graph title
+ TString title=gr->GetTitle();
+ title+=" Run:";
+ title+=GetRunNumber();
+ title+=" Event:";
+ title+=GetEventNumber();
+ gr->SetTitle(title);
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TCanvas* RnoEvent::DisplaySamplings(Int_t ista,Int_t j)
+{
+// Display the samplings of the j-th sampled observable (1=first) for all channels
+// of the station with ID=ista.
+// The graph will display the values of the j-th observable versus the sample entry number.
 //
 // The returned argument is the pointer to the created canvas.
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
 
- RnoDetector* det=(RnoDetector*)GetDetector();
+ TString name="Station";
+ name+=ista;
+ RnoStation* sta=(RnoStation*)GetDevice(name);
 
- if (!det)
+ if (!sta)
  {
-  cout << " *" << ClassName() << "::DisplayWaveform* Could not find a detector structure." << endl;
+  cout << " *" << ClassName() << "::DisplaySamplings* Could not find Station" << ista << endl;
   return 0;
  }
 
- TCanvas* c=det->DisplayWaveform(ista,ich,j);
+ TCanvas* c=sta->DisplaySamplings(j);
+
+ if (!c) return 0;
+
+ // Indicate the Run and Event number at each sampling display
+ TVirtualPad* pad=0;
+ TGraph* gr=0;
+ TString title="";
+ for (Int_t i=1; i<=24; i++)
+ {
+  pad=c->cd(i);
+  if (!pad) continue;
+
+  gr=(TGraph*)pad->FindObject("NcSample");
+  if (!gr) continue;
+
+  title=gr->GetTitle();
+  title+=" Run:";
+  title+=GetRunNumber();
+  title+=" Event:";
+  title+=GetEventNumber();
+  gr->SetTitle(title);
+ } // End of loop over the channels
+
  return c;
 }
 ///////////////////////////////////////////////////////////////////////////

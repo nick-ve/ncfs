@@ -42,6 +42,7 @@ class NcSample : public TNamed
   void RemoveEntry(Int_t i,Int_t j,Int_t mode,TString name); // Remove the entries in the interval [i,j] after ordering according to the variable with the specified name
   Int_t GetDimension() const;                         // Provide dimension of the sample
   Int_t GetN() const;                                 // Provide the number of entries
+  TString GetVariableName(Int_t i) const;             // Provide the name of the i-th variable
   Double_t GetSum(Int_t i) const;                     // Provide sum for i-th variable
   Double_t GetSum(TString name) const;                // Provide sum for the variable with the specified name
   Double_t GetMean(Int_t i) const;                    // Provide mean for i-th variable
@@ -142,6 +143,6 @@ class NcSample : public TNamed
   void List(Int_t i);                 // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const;   // Correlation statistics info for i-th and j-th variable
 
- ClassDef(NcSample,7) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,8) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

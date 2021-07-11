@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jul 11 02:04:39 2021            -->
+<!--   Date: Sun Jul 11 22:17:17 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -96,7 +96,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  20:12Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  14:35Z
 
 </pre></div>
 </div></div>
@@ -204,6 +204,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetVar">GetVar</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetVar@1">GetVar</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="#NcSample:GetVariableName">GetVariableName</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
@@ -527,6 +528,10 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetN" href="src/NcSample.cxx.html#P57HuB">GetN</a>() const</span><br />
 <div class="funccomm"><pre> Provide the number of entries of a certain sample
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcSample:GetVariableName" href="src/NcSample.cxx.html#uubZUB">GetVariableName</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
+<div class="funccomm"><pre> Provide the name of the i-th variable (first is i=1)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSum" href="src/NcSample.cxx.html#NmoOiE">GetSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) const</span><br />
@@ -1583,7 +1588,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Jul 11 02:04:39 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
+<em>&raquo; Last changed: Sun Jul 11 22:17:17 2021 </em><em>&raquo; Last generated: 2021-07-11 22:17</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

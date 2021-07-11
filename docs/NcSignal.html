@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jul 11 02:04:40 2021            -->
+<!--   Date: Sun Jul 11 22:17:17 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -78,13 +78,15 @@ return false;}
  whereas in case of stored calibrated data the user should only
  provide a de-calibration function (and no calibration function).
 
+ The memberfunction <a href="./NcSignal.html#NcSignal:SetSample" title="void NcSignal::SetSample(NcSample* sample,Int_t j=1)">SetSample</a>() allows to store various <a href="./NcSample.html">NcSample</a> objects.
+ Basically this is intended to store the (raw) data directly obtained from a
+ <a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a> Acquisition System (DAQ), and offers very flexible storage c.q. retrieval
+ of recorded (multi-dimensional) data.
  Via the memberfunction <a href="./NcSignal.html#NcSignal:SetWaveform" title="void NcSignal::SetWaveform(TH1F* waveform,Int_t j=1)">SetWaveform</a>() various waveforms may (also) be stored
- in the form of TH1F histograms. These may be for instance the waveforms from which
- the stored signal values have been extracted.
- Furthermore, the memberfunction <a href="./NcSignal.html#NcSignal:SetSample" title="void NcSignal::SetSample(NcSample* sample,Int_t j=1)">SetSample</a>() allows to (also) store various <a href="./NcSample.html">NcSample</a> objects,
- which provide an even more flexible storage c.q. retrieval of recorded (multi-dimensional)
- data from which the stored signal values have been extracted.
- Note however, that in the case of large (multi-dimensional) recorded data samples,
+ in the form of TH1F histograms. These are intended to contain calibrated <a href="./NcSample.html">NcSample</a> data
+ from which the final hit information can be extracted by using for instance the
+ TSpectrum facility.
+ It should be noted, that in the case of large (multi-dimensional) recorded data samples,
  the storage in the form of waveform histograms is less memory demanding than the
  storage of the full <a href="./NcSample.html">NcSample</a> entries (i.e. <a href="./NcSample.html">NcSample</a> objects with StoreMode activated).
 
@@ -165,7 +167,7 @@ return false;}
  <a href="./ListOfTypes.html#Float_t">Float_t</a> dedx=q.<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>(<span class="string">"dE/dx"</span>,3);
 
 --- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:06Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  14:06Z
 
 </pre></div>
 </div></div>
@@ -1707,7 +1709,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Jul 11 02:04:40 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
+<em>&raquo; Last changed: Sun Jul 11 22:17:18 2021 </em><em>&raquo; Last generated: 2021-07-11 22:17</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

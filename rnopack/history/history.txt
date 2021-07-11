@@ -7,3 +7,8 @@
                 that allows to reduce the data volume.  
 10-jul-2021 NvE Cleanup of code and docs in RnoGANT and also the docs of RnoDetector updated.
                 Also the memberfunction DisplayWaveform() introduced in RnoStation, RnoDetector and RnoEvent.
+11-jul-2021 NvE Memberfunction DisplayWaveform() replaced by DisplaySampling() and DisplaySamplings()
+                to provide more flexibility and to comply with the intended distinction between
+                Samples and Waveforms as outlined in the docs of NcSignal.
+                Also the Run and Event number are indicated at each sampling display when the
+                display is produced via invokation of the RnoEvent memberfunctions.

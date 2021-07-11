@@ -17,11 +17,12 @@ class RnoStation : public NcDetectorUnit
   virtual ~RnoStation();                                // Default destructor
   RnoStation(const RnoStation& q);                      // Copy constructor
   virtual TObject* Clone(const char* name="") const;    // Make a deep copy and provide its pointer
-  TCanvas* DisplayWaveform(Int_t ich,Int_t j=1);        // Display the waveform of a channel for the j-th sampled observable
+  TGraph* DisplaySampling(Int_t ich,Int_t j=1);         // Display the sampling of a channel for the j-th sampled observable
+  TCanvas* DisplaySamplings(Int_t j=1);                 // Display the samplings of all channels for the j-th sampled observable
 
  protected:
   TCanvas* fCanvas; //! Pointer to the temp. canvas for displays
 
- ClassDef(RnoStation,2) // Handling of RNO-G event data.
+ ClassDef(RnoStation,3) // Handling of RNO-G event data.
 };
 #endif
