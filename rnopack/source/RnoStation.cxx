@@ -30,7 +30,7 @@
 //   may be extended in the usual way.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  00:34Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  22:58Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoStation.h"
@@ -80,6 +80,8 @@ TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)
  if (ich<0 || j<1) return 0;
 
  fCanvas=new TCanvas();
+
+ fCanvas->SetGrid();
 
  TString devname="Ch";
  devname+=ich;
@@ -161,6 +163,8 @@ TCanvas* RnoStation::DisplaySamplings(Int_t j)
   pad=fCanvas->cd(jch+1);
 
   if (!pad) continue;
+
+  pad->SetGrid();
 
   devname="Ch";
   devname+=jch;

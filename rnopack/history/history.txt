@@ -12,3 +12,4 @@
                 Samples and Waveforms as outlined in the docs of NcSignal.
                 Also the Run and Event number are indicated at each sampling display when the
                 display is produced via invokation of the RnoEvent memberfunctions.
+                For all sampling displays a grid is now also shown.
