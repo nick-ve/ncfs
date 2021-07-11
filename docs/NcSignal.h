@@ -93,6 +93,8 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   Int_t GetSignalFlag(TString name) const;                      // Provide signal value flag of the name specified slot
   Int_t GetErrorFlag(Int_t j=1) const;                          // Provide error value flag of the j-th slot
   Int_t GetErrorFlag(TString name) const;                       // Provide error value flag of the name specified slot
+  NcSample* DisplaySample(Int_t j=1,Int_t i=1) const;           // Display a graph of the selected variable of a sample
+  NcSample* DisplaySample(TString name,Int_t i=1) const;        // Display a graph of the selected variable of a sample
 
   // Facilities that may only be used internally by NcDevice (or derived) objects
   void SetDevice(NcDevice* dev); // Store pointer to the device that owns this signal
@@ -109,6 +111,6 @@ class NcSignal : public TNamed,public NcPosition,public NcAttrib
   TObject* fDevice;                            // Pointer to a related device or the device that owns this signal
   TObjArray* fTracks;                          // Pointers to associated tracks
 
- ClassDef(NcSignal,4) // Generic handling of (extrapolated) detector signals.
+ ClassDef(NcSignal,5) // Generic handling of (extrapolated) detector signals.
 };
 #endif

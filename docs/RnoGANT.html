@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jul  9 17:59:21 2021            -->
+<!--   Date: Sun Jul 11 02:04:41 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -150,7 +150,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, May 3, 2021  10:52Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 23, 2021  14:39Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:35Z
 
 </pre></div>
 </div></div>
@@ -192,6 +192,8 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DeleteWaveform@1"><span class="baseclass">NcSignal::</span>DeleteWaveform</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcDevice.html#NcDevice:DisplayHits"><span class="baseclass">NcDevice::</span>DisplayHits</a>(TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcDevice.html#NcDevice:DisplayHits@1"><span class="baseclass">NcDevice::</span>DisplayHits</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, TObjArray* hits = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DisplaySample"><span class="baseclass">NcSignal::</span>DisplaySample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DisplaySample@1"><span class="baseclass">NcSignal::</span>DisplaySample</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Dot"><span class="baseclass">Nc3Vector::</span>Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -247,7 +249,6 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetIndices@1"><span class="baseclass">NcSignal::</span>GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TArrayI&amp; ks) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetIndices@2"><span class="baseclass">NcSignal::</span>GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TString name, TArrayI&amp; ks) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetIndices@3"><span class="baseclass">NcSignal::</span>GetIndices</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj, TArrayI&amp; js, <a href="./ListOfTypes.html#Int_t">Int_t</a> k) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#RnoGANT:GetLevel">GetLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetLink"><span class="baseclass">NcSignal::</span>GetLink</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetLink@1"><span class="baseclass">NcSignal::</span>GetLink</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetLockValue"><span class="baseclass">NcAttrib::</span>GetLockValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
@@ -268,6 +269,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNsamples"><span class="baseclass">NcSignal::</span>GetNsamples</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNslots"><span class="baseclass">NcSignal::</span>GetNslots</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNtracks"><span class="baseclass">NcSignal::</span>GetNtracks</a>(<a href="./NcTrack.html">NcTrack</a>* t = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#RnoGANT:GetNumber">GetNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNvalues"><span class="baseclass">NcSignal::</span>GetNvalues</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetNwaveforms"><span class="baseclass">NcSignal::</span>GetNwaveforms</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
@@ -644,9 +646,9 @@ return false;}
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetStation" href="src/RnoGANT.cxx.html#sKszJC">GetStation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0) const</span><br />
 <div class="funccomm"><pre> Provide the corresponding station number for this antenna.
 
- In case the user has specified the input argument id&gt;0, the string number
+ In case the user has specified the input argument id&gt;0, the station number
  corresponding to the specified id for the current antenna class will be returned.
- Otherwise the string number corresponding with the current antenna will be returned.
+ Otherwise the station number corresponding with the current antenna will be returned.
 
  In case of inconsistent data, the value -1 is returned.
 
@@ -665,25 +667,29 @@ return false;}
  The default value is id=0;
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetLevel" href="src/RnoGANT.cxx.html#vFnk0B">GetLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0) const</span><br />
-<div class="funccomm"><pre> Provide the corresponding level on the string for this module.
- Level=j indicates the j-th module on the string, where j=1
- corresponds to the module at the top of the string.
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetNumber" href="src/RnoGANT.cxx.html#BIkeaE">GetNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0) const</span><br />
+<div class="funccomm"><pre> Provide the corresponding antenna number according to the specified unique <span class="string">"id"</span>.
+ Number=j indicates the j-th antenna on the string, where j=1
+ corresponds to the antenna at the top of the power string.
+
+ The top level antennas on the helper strings correspond to number=7.
+
+ The surface antennas are not connected to a string, but they are
+ numbered 1-9 to reflect the Channels 12-20 consecutively.
 
  In case the user has specified the input argument id&gt;0,
- the level corresponding to this id for the current module class
- will be returned.
- Otherwise the level corresponding with the current module will be returned.
+ the number corresponding to this id for the current antenna class will be returned.
+ Otherwise the number corresponding with the current antenna will be returned.
 
  The default value is id=0;
 
- Note : level 61,62,63,64 indicates IceTop DOM's.
+ In case of inconsistent input the value -1 is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetANTId" href="src/RnoGANT.cxx.html#uq3ke">GetANTId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> station, <a href="./ListOfTypes.html#Int_t">Int_t</a> string, <a href="./ListOfTypes.html#Int_t">Int_t</a> level) const</span><br />
-<div class="funccomm"><pre> Provide OM identifier based on the string and level indicators.
- This memberfunction makes use of the inheritance info, which means
- that for Amanda OM's one may either use negative or positive string numbers.
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetANTId" href="src/RnoGANT.cxx.html#Y4mFME">GetANTId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> station, <a href="./ListOfTypes.html#Int_t">Int_t</a> string, <a href="./ListOfTypes.html#Int_t">Int_t</a> level) const</span><br />
+<div class="funccomm"><pre> Provide the antenna unique ID based on the station, string and number indicators.
+
+ In case of inconsistent input the value -1 is returned.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="RnoGANT:GetTimeResidual" href="src/RnoGANT.cxx.html#dSobRD">GetTimeResidual</a>(<a href="./NcEvent.html">NcEvent</a>* evt, <a href="./NcTrack.html">NcTrack</a>* t, <a href="./NcSignal.html">NcSignal</a>* s, TString name = <span class="string">"LE"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 7, <a href="./ListOfTypes.html#Int_t">Int_t</a> vgroup = 1) const</span><br />
@@ -703,10 +709,7 @@ return false;}
 
  The default values are : name=<span class="string">"LE"</span>, mode=7 and vgroup=1.
 
- Notes :
-
- 1) In case of inconsistent input a value of -99999 will be returned.
- 2) No implementation (yet) for IceTOP signals.
+ Note : In case of inconsistent input a value of -99999 will be returned.
 
  For further details concerning the definition and calculation of the
  time residual please refer to Astroparticle Physics 28 (2007) 456.
@@ -729,10 +732,7 @@ return false;}
 
  The default values are : name=<span class="string">"LE"</span>, mode=7 and vgroup=1.
 
- Notes :
-
- 1) In case of inconsistent input a value of -99999 will be returned.
- 2) No implementation (yet) for IceTOP signals.
+ Note : In case of inconsistent input a value of -99999 will be returned.
 
  For further details concerning the definition and calculation of the
  time residual please refer to Astroparticle Physics 28 (2007) 456.
@@ -754,7 +754,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jul  9 17:59:21 2021 </em><em>&raquo; Last generated: 2021-07-09 17:59</em><br />
+<em>&raquo; Last changed: Sun Jul 11 02:04:41 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

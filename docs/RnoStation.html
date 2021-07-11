@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jul  9 17:59:22 2021            -->
+<!--   Date: Sun Jul 11 02:04:42 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -75,7 +75,7 @@ return false;}
    may be extended in the usual way.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:24Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  00:34Z
 
 </pre></div>
 </div></div>
@@ -119,6 +119,9 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DeleteWaveform@1"><span class="baseclass">NcSignal::</span>DeleteWaveform</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcDetectorUnit.html#NcDetectorUnit:DisplayHits"><span class="baseclass">NcDetectorUnit::</span>DisplayHits</a>(TString classname, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> follow, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> inc, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcDetectorUnit.html#NcDetectorUnit:DisplayHits@1"><span class="baseclass">NcDetectorUnit::</span>DisplayHits</a>(TString classname, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> follow, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> inc, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DisplaySample"><span class="baseclass">NcSignal::</span>DisplaySample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:DisplaySample@1"><span class="baseclass">NcSignal::</span>DisplaySample</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TCanvas*</td><td class="funcname"><a class="funcname" href="#RnoStation:DisplayWaveform">DisplayWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Dot"><span class="baseclass">Nc3Vector::</span>Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -457,6 +460,7 @@ return false;}
 <table class="data" id="tabdataprot" cellspacing="0">
 <tr class="datainh"><td class="datatype">TArrayI*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fCalflags"><span class="baseclass">NcAttrib::</span>fCalflags</a></td><td class="datadesc">Flags to mark dead, edge, and gain/offset calibrated signals</td></tr>
 <tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fCalfuncs"><span class="baseclass">NcAttrib::</span>fCalfuncs</a></td><td class="datadesc">Explicit signal calibration functions</td></tr>
+<tr class="data"><td class="datatype">TCanvas*</td><td class="dataname"><a name="RnoStation:fCanvas"></a>fCanvas</td><td class="datadesc">! Pointer to the temp. canvas for displays</td></tr>
 <tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcAttrib.html#NcAttrib:fDecalfuncs"><span class="baseclass">NcAttrib::</span>fDecalfuncs</a></td><td class="datadesc">Explicit signal de-calibration functions</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcDetectorUnit.html#NcDetectorUnit:fDevCopy"><span class="baseclass">NcDetectorUnit::</span>fDevCopy</a></td><td class="datadesc">Flag to denote creation of private copies of the devices</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a href="./NcSignal.html#NcSignal:fDevice"><span class="baseclass">NcSignal::</span>fDevice</a></td><td class="datadesc">Pointer to a related device or the device that owns this signal</td></tr>
@@ -565,6 +569,18 @@ return false;}
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TCanvas* <a class="funcname" name="RnoStation:DisplayWaveform" href="src/RnoStation.cxx.html#eBFE7C">DisplayWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Display the waveform of the j-th sampled observable (1=first) for the selected channel number <span class="string">"ich"</span>.
+ The graph will display the values of the j-th observable versus the sample entry number.
+
+ If ich&lt;0 the corresponding waveforms of all channels from this station are displayed.
+
+ The returned argument is the pointer to the created canvas.
+ For extended functionality, please refer to the (inherited) memberfunction <a href="./NcSignal.html#NcSignal:DisplaySample" title="NcSample* NcSignal::DisplaySample(Int_t j=1,Int_t i=1) or overloads">DisplaySample</a>().
+
+ The default value is j=1.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="RnoStation:Clone" href="src/RnoStation.cxx.html#tlNZqD">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -578,7 +594,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jul  9 17:59:23 2021 </em><em>&raquo; Last generated: 2021-07-09 17:59</em><br />
+<em>&raquo; Last changed: Sun Jul 11 02:04:42 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

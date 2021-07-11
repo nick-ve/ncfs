@@ -60,6 +60,31 @@ void RnoEvent::Reset()
  NcEvent::Reset();
 }
 ///////////////////////////////////////////////////////////////////////////
+TCanvas* RnoEvent::DisplayWaveform(Int_t ista,Int_t ich,Int_t j)
+{
+// Display the waveform of the j-th sampled observable (1=first) for the selected channel number "ich"
+// of the station with ID=ista.
+// The graph will display the values of the j-th observable versus the sample entry number.
+//
+// If ich<0 the corresponding waveforms of all channels from this station are displayed.
+//
+// The returned argument is the pointer to the created canvas.
+// For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
+//
+// The default value is j=1.
+
+ RnoDetector* det=(RnoDetector*)GetDetector();
+
+ if (!det)
+ {
+  cout << " *" << ClassName() << "::DisplayWaveform* Could not find a detector structure." << endl;
+  return 0;
+ }
+
+ TCanvas* c=det->DisplayWaveform(ista,ich,j);
+ return c;
+}
+///////////////////////////////////////////////////////////////////////////
 TObject* RnoEvent::Clone(const char* name) const
 {
 // Make a deep copy of the current object and provide the pointer to the copy.

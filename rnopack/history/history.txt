@@ -5,3 +5,5 @@
 09-jul-2021 NvE Introduction of class RnoConvert to convert RNO-G data into RnoEvent structures.
                 RnoConvert updated to make use of the newly introduced NcSample facility
                 that allows to reduce the data volume.  
+10-jul-2021 NvE Cleanup of code and docs in RnoGANT and also the docs of RnoDetector updated.
+                Also the memberfunction DisplayWaveform() introduced in RnoStation, RnoDetector and RnoEvent.

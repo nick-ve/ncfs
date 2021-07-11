@@ -1230,3 +1230,9 @@
                 This allows to store only 1 variable for constructing waveforms, which reduces the data volume.
                 The class RnoConvert has been updated accordingly.
                 The version indicator in NcVersion has been updated to 4.1/1.
+10-jul-2021 NvE Memberfunction DisplaySample() introduced in class NcSignal.
+                Also all auto-generated graphs given the name "NcSample" in class NcSample.
+                This will allow to access these graphs via a search on their name after they are displayed.
+                The auto-generated histograms still have no name, in order to prevent a ROOT warning message
+                when creating multiple histograms with the same name.
+                The version indicator in NcVersion has been updated to 4.2.

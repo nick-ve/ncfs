@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Jun 23 18:14:10 2021            -->
+<!--   Date: Sun Jul 11 02:04:40 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -165,7 +165,7 @@ return false;}
  <a href="./ListOfTypes.html#Float_t">Float_t</a> dedx=q.<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>(<span class="string">"dE/dx"</span>,3);
 
 --- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 21, 2021  15:26Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:06Z
 
 </pre></div>
 </div></div>
@@ -203,6 +203,8 @@ return false;}
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:DeleteSignals">DeleteSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:DeleteWaveform">DeleteWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSignal:DeleteWaveform@1">DeleteWaveform</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:DisplaySample">DisplaySample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="#NcSignal:DisplaySample@1">DisplaySample</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc3Vector.html#Nc3Vector:Dot"><span class="baseclass">Nc3Vector::</span>Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -1658,6 +1660,38 @@ return false;}
 <div class="funccomm"><pre> Return the track with user identifier <span class="string">"id"</span> of this signal
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a>* <a class="funcname" name="NcSignal:DisplaySample" href="src/NcSignal.cxx.html#NTQO7">DisplaySample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) const</span><br />
+<div class="funccomm"><pre> Display a TGraph of the j-th variable (1=first) of the i-th (1=first) stored <a href="./NcSample.html">NcSample</a>.
+ The graph will display the values of the j-th variable versus the sample entry number.
+
+ Note :
+
+ In case the user wants to display different graphs using the same graphics pad,
+ he/she should first clear the corresponding graphics pad in order to have
+ the correct graph title indicated. The graph itself is automatically updated.
+
+ The returned argument is the pointer to the corresponding <a href="./NcSample.html">NcSample</a> object.
+ For more elaborate functionality, please refer to the docs of <a href="./NcSample.html">NcSample</a>.
+
+ The default value is i=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a>* <a class="funcname" name="NcSignal:DisplaySample@1" href="src/NcSignal.cxx.html#eEm60C">DisplaySample</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 1) const</span><br />
+<div class="funccomm"><pre> Display a TGraph of the variable with the specified name of the i-th (1=first) stored <a href="./NcSample.html">NcSample</a>.
+ The graph will display the values of the specified variable versus the sample entry number.
+
+ Note :
+
+ In case the user wants to display different graphs using the same graphics pad,
+ he/she should first clear the corresponding graphics pad in order to have
+ the correct graph title indicated. The graph itself is automatically updated.
+
+ The returned argument is the pointer to the corresponding <a href="./NcSample.html">NcSample</a> object.
+ For more elaborate functionality, please refer to the docs of <a href="./NcSample.html">NcSample</a>.
+
+ The default value is i=1.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcSignal:Clone" href="src/NcSignal.cxx.html#H62zzC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -1673,7 +1707,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Jun 23 18:14:10 2021 </em><em>&raquo; Last generated: 2021-06-23 18:14</em><br />
+<em>&raquo; Last changed: Sun Jul 11 02:04:40 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

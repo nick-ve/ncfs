@@ -134,7 +134,7 @@
 // Float_t dedx=q.GetSignal("dE/dx",3);
 //
 //--- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 21, 2021  15:26Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:06Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSignal.h"
@@ -2604,6 +2604,61 @@ NcTrack* NcSignal::GetIdTrack(Int_t id) const
   if (id == tx->GetId()) return tx;
  }
  return 0; // No matching id found
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample* NcSignal::DisplaySample(Int_t j,Int_t i) const
+{
+// Display a TGraph of the j-th variable (1=first) of the i-th (1=first) stored NcSample.
+// The graph will display the values of the j-th variable versus the sample entry number.
+//
+// Note :
+// ------
+// In case the user wants to display different graphs using the same graphics pad,
+// he/she should first clear the corresponding graphics pad in order to have
+// the correct graph title indicated. The graph itself is automatically updated.
+//
+// The returned argument is the pointer to the corresponding NcSample object.
+// For more elaborate functionality, please refer to the docs of NcSample.
+//
+// The default value is i=1.
+
+ TGraph gr;
+ NcSample* sx=GetSample(i);
+ if (sx)
+ {
+  gr=sx->GetGraph(j);
+  gr.DrawClone("AL");
+ }
+
+ return sx;
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample* NcSignal::DisplaySample(TString name,Int_t i) const
+{
+// Display a TGraph of the variable with the specified name of the i-th (1=first) stored NcSample.
+// The graph will display the values of the specified variable versus the sample entry number.
+//
+// Note :
+// ------
+// In case the user wants to display different graphs using the same graphics pad,
+// he/she should first clear the corresponding graphics pad in order to have
+// the correct graph title indicated. The graph itself is automatically updated.
+//
+// The returned argument is the pointer to the corresponding NcSample object.
+// For more elaborate functionality, please refer to the docs of NcSample.
+//
+// The default value is i=1.
+
+ TGraph gr;
+ NcSample* sx=GetSample(i);
+ if (sx)
+ {
+  gr=sx->GetGraph(name);
+  gr.SetTitle("aap");
+  gr.DrawClone("AL");
+ }
+
+ return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSignal::Clone(const char* name) const

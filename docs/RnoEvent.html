@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jul  9 17:59:21 2021            -->
+<!--   Date: Sun Jul 11 02:04:41 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -127,6 +127,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:DisplayHits"><span class="baseclass">NcEvent::</span>DisplayHits</a>(TString classname, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcEvent.html#NcEvent:DisplayHits@1"><span class="baseclass">NcEvent::</span>DisplayHits</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> idx = 1, <a href="./ListOfTypes.html#Float_t">Float_t</a> scale = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> dp = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mcol = 4)</td></tr>
+<tr class="func"><td class="funcret">TCanvas*</td><td class="funcname"><a class="funcname" href="#RnoEvent:DisplayWaveform">DisplayWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:Dot"><span class="baseclass">Nc4Vector::</span>Dot</a>(<a href="./Nc4Vector.html">Nc4Vector</a>&amp; q)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcVertex.html#NcVertex:Draw"><span class="baseclass">NcVertex::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>*)</td></tr>
@@ -672,6 +673,19 @@ return false;}
 <div class="funccomm"><pre> <a href="./RnoEvent.html#RnoEvent:Reset" title="void RnoEvent::Reset()">Reset</a> all values.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TCanvas* <a class="funcname" name="RnoEvent:DisplayWaveform" href="src/RnoEvent.cxx.html#hGVcXC">DisplayWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ista, <a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Display the waveform of the j-th sampled observable (1=first) for the selected channel number <span class="string">"ich"</span>
+ of the station with ID=ista.
+ The graph will display the values of the j-th observable versus the sample entry number.
+
+ If ich&lt;0 the corresponding waveforms of all channels from this station are displayed.
+
+ The returned argument is the pointer to the created canvas.
+ For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
+
+ The default value is j=1.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="RnoEvent:Clone" href="src/RnoEvent.cxx.html#pu9CIB">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -685,7 +699,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jul  9 17:59:21 2021 </em><em>&raquo; Last generated: 2021-07-09 17:59</em><br />
+<em>&raquo; Last changed: Sun Jul 11 02:04:41 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

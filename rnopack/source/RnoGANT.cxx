@@ -105,7 +105,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, May 3, 2021  10:52Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 23, 2021  14:39Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:35Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoGANT.h"
@@ -132,22 +132,22 @@ Int_t RnoGANT::GetStation(Int_t id) const
 {
 // Provide the corresponding station number for this antenna.
 //
-// In case the user has specified the input argument id>0, the string number
+// In case the user has specified the input argument id>0, the station number
 // corresponding to the specified id for the current antenna class will be returned.
-// Otherwise the string number corresponding with the current antenna will be returned.
+// Otherwise the station number corresponding with the current antenna will be returned.
 //
 // In case of inconsistent data, the value -1 is returned.
 //
 // The default value is id=0;
 
- Int_t omid=GetUniqueID();
- if (id>0) omid=id;
+ Int_t antid=GetUniqueID();
+ if (id>0) antid=id;
 
- if (omid<=0) return -1;
+ if (antid<=0) return -1;
 
  Int_t station=-1;
 
- station=omid/1000;
+ station=antid/1000;
 
  return station;
 }
@@ -164,10 +164,10 @@ Int_t RnoGANT::GetString(Int_t id) const
 //
 // The default value is id=0;
 
- Int_t omid=GetUniqueID();
- if (id>0) omid=id;
+ Int_t antid=GetUniqueID();
+ if (id>0) antid=id;
 
- if (omid<=0) return -1;
+ if (antid<=0) return -1;
 
  Int_t string=-1;
 
@@ -177,92 +177,64 @@ Int_t RnoGANT::GetString(Int_t id) const
  }
  else
  {
-  omid=omid%10000;
-  string=omid/100;
+  antid=antid%1000;
+  string=antid/100;
  }
 
  return string;
 }
 ///////////////////////////////////////////////////////////////////////////
-Int_t RnoGANT::GetLevel(Int_t id) const
+Int_t RnoGANT::GetNumber(Int_t id) const
 {
-// Provide the corresponding level on the string for this module.
-// Level=j indicates the j-th module on the string, where j=1
-// corresponds to the module at the top of the string.
+// Provide the corresponding antenna number according to the specified unique "id".
+// Number=j indicates the j-th antenna on the string, where j=1
+// corresponds to the antenna at the top of the power string.
+//
+// The top level antennas on the helper strings correspond to number=7.
+//
+// The surface antennas are not connected to a string, but they are
+// numbered 1-9 to reflect the Channels 12-20 consecutively.
 //
 // In case the user has specified the input argument id>0,
-// the level corresponding to this id for the current module class
-// will be returned.
-// Otherwise the level corresponding with the current module will be returned.
+// the number corresponding to this id for the current antenna class will be returned.
+// Otherwise the number corresponding with the current antenna will be returned.
 //
 // The default value is id=0;
-//              
-// Note : level 61,62,63,64 indicates IceTop DOM's.
+//
+// In case of inconsistent input the value -1 is returned.
 
- Int_t omid=GetUniqueID();
- if (id>0) omid=id;
+ Int_t number=-1;
 
- if (omid<=0) return 0;
+ Int_t antid=GetUniqueID();
+ if (id>0) antid=id;
 
- Int_t level=0;
- if (InheritsFrom("IceAOM"))
- {
-  if (omid<=20) return omid;
-  if (omid>=21 && omid<=40) return (omid-20);
-  if (omid>=41 && omid<=60) return (omid-40);
-  if (omid>=61 && omid<=86) return (omid-60);
-  if (omid>=87 && omid<=122) return (omid-86);
-  if (omid>=123 && omid<=158) return (omid-122);
-  if (omid>=159 && omid<=194) return (omid-158);
-  if (omid>=195 && omid<=230) return (omid-194);
-  if (omid>=231 && omid<=266) return (omid-230);
-  if (omid>=267 && omid<=302) return (omid-266);
-  if (omid>=303 && omid<=344) return (omid-302);
-  if (omid>=345 && omid<=386) return (omid-344);
-  if (omid>=387 && omid<=428) return (omid-386);
-  if (omid>=429 && omid<=470) return (omid-428);
-  if (omid>=471 && omid<=512) return (omid-470);
-  if (omid>=513 && omid<=554) return (omid-512);
-  if (omid>=555 && omid<=596) return (omid-554);
-  if (omid>=597 && omid<=638) return (omid-596);
-  if (omid>=639 && omid<=680) return (omid-638);
+ Int_t station=GetStation(antid);
+ Int_t string=GetString(antid);
 
-  // OM681 is physically the 4th module on string 18
-  // but the database convention is to regard it as
-  // a module at the bottom of string 18
-  if (omid==681) return 43;
- }
- else
- {
-  level=omid%100;
- }
+ if (station<0 || string<0) return -1;
 
- return level;
+ number=antid%100;
+
+ return number;
 }
 ///////////////////////////////////////////////////////////////////////////
-Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t level) const
+Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t number) const
 {
-// Provide OM identifier based on the string and level indicators.
-// This memberfunction makes use of the inheritance info, which means
-// that for Amanda OM's one may either use negative or positive string numbers.
+// Provide the antenna unique ID based on the station, string and number indicators.
+//
+// In case of inconsistent input the value -1 is returned.
 
- Int_t omid=0;
- Int_t s=0,l=0;
- if (InheritsFrom("IceAOM"))
- {
-  for (Int_t i=1; i<=681; i++)
-  {
-   s=GetString(i);
-   l=GetLevel(i);
-   if (abs(s)==abs(string) && l==level) return i;
-  }
- }
- else
- {
-  omid=1000*station+100*string+level;
- }
+ Int_t antid=-1;
 
- return omid;
+ if (station<11 || station>77 || string<1 || string>3 || number<=0 || number>9) return -1;
+
+ if (!(station%10)) return -1; // Station IDs must represent the matrix (col,row) indexing
+
+ if ((string==2 || string==3) && number<7) return -1; // Helper string antenna numbers start at 7
+
+ antid=1000*station+100*string+number;
+
+ return antid;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString name,Int_t mode,Int_t vgroup) const
@@ -283,10 +255,7 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString na
 //
 // The default values are : name="LE", mode=7 and vgroup=1.
 //
-// Notes :
-// -------
-// 1) In case of inconsistent input a value of -99999 will be returned. 
-// 2) No implementation (yet) for IceTOP signals.
+// Note : In case of inconsistent input a value of -99999 will be returned. 
 //
 // For further details concerning the definition and calculation of the
 // time residual please refer to Astroparticle Physics 28 (2007) 456.
@@ -295,11 +264,8 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString na
 
  if (!evt || !t || !s) return tres;
 
- RnoGANT* om=(RnoGANT*)s->GetDevice();
- if (!om) return tres;
-
- // No implementation (yet) for IceTOP signals
- if (om->InheritsFrom("IceTDOM")) return tres;
+ RnoGANT* ant=(RnoGANT*)s->GetDevice();
+ if (!ant) return tres;
 
  Nc3Vector p=t->Get3Momentum();
  if (!p.HasVector() || !p.GetNorm()) return tres;
@@ -325,14 +291,14 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString na
  // Time stamp of the track relative to the event time stamp 
  Float_t t0=evt->GetDifference(tt0,"ns");
 
- NcPosition rhit=om->GetPosition();
+ NcPosition rhit=ant->GetPosition();
  Float_t d=t->GetDistance(rhit);
  Nc3Vector r12=rhit-(*r0);
  Float_t hproj=p.Dot(r12)/p.GetNorm();
  Float_t dist=fabs(hproj)+d/tan(pi/2.-thetac-alphac);
  if (hproj<0) dist=-dist;
- Float_t tgeo=t0+dist/c;            // The predicted geometrical hit time
- Float_t thit=s->GetSignal("LE",7); // Hit time relative to the event time stamp
+ Float_t tgeo=t0+dist/c;               // The predicted geometrical hit time
+ Float_t thit=s->GetSignal(name,mode); // Hit time relative to the event time stamp
 
  tres=thit-tgeo;
  return tres;
@@ -356,10 +322,7 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,Int_t j,TString name,I
 //
 // The default values are : name="LE", mode=7 and vgroup=1.
 //
-// Notes :
-// -------
-// 1) In case of inconsistent input a value of -99999 will be returned. 
-// 2) No implementation (yet) for IceTOP signals.
+// Note : In case of inconsistent input a value of -99999 will be returned. 
 //
 // For further details concerning the definition and calculation of the
 // time residual please refer to Astroparticle Physics 28 (2007) 456.

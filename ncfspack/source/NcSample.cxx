@@ -2358,6 +2358,7 @@ TGraph NcSample::GetGraph(Int_t i)
 // Note : This facility is only available if the storage mode has been activated.
 
  TGraph gr;
+ gr.SetName("NcSample");
 
  if (!fStore)
  {
@@ -2412,6 +2413,7 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j)
 // Note : This facility is only available if the storage mode has been activated.
 
  TGraph gr;
+ gr.SetName("NcSample");
 
  if (!fStore)
  {
@@ -2534,6 +2536,7 @@ TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
  }
 
  fGraphT=new TGraphTime(fN,xlow,ylow,xup,yup);
+ fGraphT->SetName("NcSample");
 
  Double_t x=0;
  Double_t y=0;
@@ -2614,6 +2617,7 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
 // Note : This facility is only available if the storage mode has been activated.
 
  TGraph2D gr;
+ gr.SetName("NcSample");
 
  if (!fStore)
  {
@@ -2685,6 +2689,7 @@ TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
 // The default is f=0.
 
  TGraphQQ gr;
+ gr.SetName("NcSample");
 
  if (!f && (j<1 || j>fDim)) return gr;
 

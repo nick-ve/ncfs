@@ -44,8 +44,8 @@
 // representing the station position in the rectangular grid.
 // The column and row indexing reflect a matrix (col,row) numbering scheme, starting at the
 // left lower corner of the matrix. 
-// This implies that the row index increases in the direction of True North and the
-// column index increases Eastwards. 
+// This implies that the row index increases in the direction of True South->North and the
+// column index increases in the direction True West->East. 
 // For instance, id=13 represents the station at grid location (col,row)=(1,3).
 //
 // The name of a station is composed of the word "Station" and the corresponding id.
@@ -67,7 +67,7 @@
 // Since the surface LPDAs are not connected to a string, their string number will be 0,
 // and the LPDAs CH12-20 are given the antenna numbers 1-9 in consecutive order. 
 // This unique ID allows for each device to immediately retrieve the corresponding station,
-// string and antenna number.
+// string and antenna number via their GetStation(), GetString() and GetNumber() memberfuntions.
 //
 // The (data of the) various detector units and devices can be accessed using the standard
 // NcDetector, NcDetectorUnit, NcDevice and NcSignal memberfunctions.
@@ -87,7 +87,7 @@
 //         -1 --> Unit is switched off.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2021  15:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 8, 2021  12:26Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  00:53Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoDetector.h"
@@ -266,14 +266,6 @@ void RnoDetector::CreateStation(Int_t id)
  Int_t iadd=0;
  for (Int_t itre=1; itre<=ntre; itre++)
  {
-/*****************
-  trench.Reset();
-  trench.SetUniqueID(3+itre);
-
-  name="Trench";
-  name+=itre;
-  trench.SetName(name);
-****************/
   for (Int_t ia=1; ia<=3; ia++)
   {
    ulpda.Reset();
@@ -289,7 +281,6 @@ void RnoDetector::CreateStation(Int_t id)
     name="Ch";
     name+=icha;
     dlpda.SetName(name);
-/////    trench.AddDevice(dlpda);
     station.AddDevice(dlpda);
    }
    else
@@ -297,16 +288,39 @@ void RnoDetector::CreateStation(Int_t id)
     name="Ch";
     name+=icha;
     ulpda.SetName(name);
-//////    trench.AddDevice(ulpda);
     station.AddDevice(ulpda);
    }
    icha++;
   }
-/////  station.AddDevice(trench);
   iadd+=3;
  } // End of trench loop
 
  AddDevice(station);
+}
+///////////////////////////////////////////////////////////////////////////
+TCanvas* RnoDetector::DisplayWaveform(Int_t ista,Int_t ich,Int_t j)
+{
+// Display the waveform of the j-th sampled observable (1=first) for the selected channel number "ich"
+// of the station with ID=ista.
+// The graph will display the values of the j-th observable versus the sample entry number.
+//
+// If ich<0 the corresponding waveforms of all channels from this station are displayed.
+//
+// The returned argument is the pointer to the created canvas.
+// For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
+//
+// The default value is j=1.
+
+ RnoStation* sta=GetStation(ista,kFALSE);
+
+ if (!sta)
+ {
+  cout << " *" << ClassName() << "::DisplayWaveform* Could not find Station" << ista << endl;
+  return 0;
+ }
+
+ TCanvas* c=sta->DisplayWaveform(ich,j);
+ return c;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* RnoDetector::Clone(const char* name) const
