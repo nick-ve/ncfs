@@ -261,7 +261,7 @@
 //        obtained via the GetUnitScale() and GetEscale() memberfunctions.
 //
 //--- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel July 1, 2021  21:18Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 14, 2021  14:58Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcEvent.h"
@@ -357,7 +357,17 @@ NcEvent::NcEvent(const NcEvent& evt) : NcVertex(evt),NcTimestamp(evt)
 
  fDetector=0;
  NcDetector* dx=evt.fDetector;
- if (dx) SetDetector(dx);
+ if (dx)
+ {
+  if (fDevCopy)
+  {
+   fDetector=(NcDetector*)dx->Clone();
+  }
+  else
+  {
+   fDetector=dx;
+  }
+ }
 
  fDevices=0;
  Int_t ndevs=0;
@@ -1036,11 +1046,7 @@ void NcEvent::AddDevice(NcDevice& d)
  }
 
  // Create a default detector structure if needed
- if (!fDetector && !fDevices)
- {
-  cout << " *" << ClassName() << "::AddDevice* A default detector structure will be created." << endl;
-  CreateDetector();
- }
+ if (!fDetector && !fDevices) CreateDetector();
  
  if (fDevices && d.InheritsFrom("NcDetectorUnit"))
  {

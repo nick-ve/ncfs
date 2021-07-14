@@ -84,7 +84,7 @@
 // Please refer to the documentation of NcDetector for further details.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:40Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 5, 2021  08:27Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 14, 2021  12:56Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDetectorUnit.h"
@@ -150,7 +150,8 @@ NcDetectorUnit::NcDetectorUnit(const NcDetectorUnit& q) : NcDevice(q)
  fDisplay=0;
 
  fDevices=0;
- Int_t ndevs=q.fDevices->GetEntries();
+ Int_t ndevs=0;
+ if (q.fDevices) ndevs=q.fDevices->GetEntries();
  if (ndevs)
  {
   fDevices=new TObjArray(ndevs);
