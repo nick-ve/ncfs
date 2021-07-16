@@ -13,3 +13,5 @@
                 Also the Run and Event number are indicated at each sampling display when the
                 display is produced via invokation of the RnoEvent memberfunctions.
                 For all sampling displays a grid is now also shown.
+16-jul-2021 NvE New facility GetDayTimeString() used in RnoEvent to include also the event date/time info
+                in the display of the memberfunctions DisplaySampling() and DisplaySamplings().

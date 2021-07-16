@@ -36,42 +36,58 @@
 // were fulfilled. This also allows to provide different data streams. 
 //
 // It is common that a certain tag has the following two indicators
-// pass  : This means that the tag criteria have been fulfilled
-// write : This means that the event is actually labeled to be written
+// pass  : Indicates whether the tag criteria have been fulfilled (1) or not (0)
+// write : Indicates whether the event is actually labeled to be written (1) or not (0)
 //
 // In case of high-frequency tag streams it is common that not every event
 // will be written to storage in order to limit the data volume.
-// In the DAQ system this is implemented by a downscaling of the corresponding
-// data stream via so-called prescaler settings.
+// In the Data Acquisition (DAQ) system this is implemented by a downscaling
+// of the corresponding data stream via so-called prescaler settings.
 // The effect is that although for a certain tag the passing criteria have
-// been fulfilled (i.e. the "pass" flag is set), the "write" flag is not always set,
-// but for instance only after every 1000 instances of an activated "pass" flag.
+// been fulfilled (i.e. the "pass" indicator is set), the "write" indicator is not always set,
+// but for instance only after every 1000 instances of an activated "pass" indicator.
 // This results in a downscale factor of 1000 for that tag stream.
 //
 // This class provides a processor to analyse data samples and provide an overview
 // of the various event tags that were encountered and the corresponding event rates.
+//
+// In addition to this, it offers also the possibility to tailor a re-tagging procedure,
+// of which the results are provided next to the regular tag statistics.
 // Via the memberfunctions ActivateTag() and DeactivateTag() the user can (de)activate
-// certain tags in order to investigate the effect in view of defining event samples
-// or background reduction.
+// certain tags in order to perform a re-tagging to investigate the effect in view of
+// defining specific event samples or background reduction.
 // In case none of these memberfunctions ActivateTag() or DeactivateTag() are invoked,
-// all tags are regarded to be active. 
-// The user selected re-tagging results are provided in addition to the regular tag statistics.
-// It should be noted that tags that are explicitly de-activated via DeactivateTag()
+// all tags are regarded to be active in the re-tagging procedure. 
+// In case DeactivateTag() is invoked, all tags that are not explicitly activated by the user
+// will be considered de-activated in the re-tagging procedure.
+// It should be noted that the tags which are explicitly de-activated via DeactivateTag()
 // can not be activated anymore via invokation of ActivateTag().
 // Please refer to the docs of these memberfunctions for further details.
 //
 // The input data is specified via the memberfunction AddInputFile().
 // All data files that contain NcEvent (or derived) data structures are allowed.
+//
 // In order to obtain the required data, the NcEvent (or derived) structure should
-// contain a NcDevice with the corresponding name (e.g. DAQ, Trigger, Filter,...) and
-// in which each tag is stored as a Hit (=NcSignal) with the corresponding tag name (e.g. "LowPt").
-// Each Hit has to have at least 2 signal slots, each with the appropriate name to indicate
-// the "pass flag" value and the "write flag" value.
-// Instead of the names "pass" and "write", various other naming conventions
-// (e.g. "condition" and "prescale") are often used.
-// The name of the required device (e.g. "Filter") and the naming conventions of the
-// "pass flag" and "write flag" (e.g. "condition" and "prescale", respectively) are
-// specified via the memberfunction SetDeviceNames().
+// contain an NcDevice with the corresponding name (e.g. Trigger, Filter,...).
+//
+// The following two varieties of such an NcDevice may be present :
+//
+// 1) NcTagger (derived) devices. (The recommended option)
+//    These devices have pre-defined memberfunctions and an internal data structure
+//    which is tailored for the handling of event tags.
+//    Specification of the device to be investigated is performed via invokation of
+//    the memberfunction SetDevice().
+//
+// 2) A generic NcDevice. (Not recommended; Only for backward compatibility with old data files)
+//    For a generic NcDevice object to serve as a tagging device, the user has to create a device 
+//    in which each tag is stored as a Hit (=NcSignal) with the corresponding tag name (e.g. "LowPt").
+//    Each Hit has to have at least 2 signal slots, each with the appropriate name to indicate
+//    the "pass" indicator value and the "write" indicator value.
+//    Instead of the names "pass" and "write", various other naming conventions
+//    (e.g. "condition" and "prescale") are often used.
+//    The name of the required device (e.g. "Filter") and the naming conventions of the
+//    "pass" indicator and "write" indicator (e.g. "condition" and "prescale", respectively)
+//    are specified via the memberfunction SetDeviceNames().
 //
 // Once the user has provided all necessary information, the analysis is performed
 // by invoking the statement "ExecuteTask()" as indicated in the example below.   
@@ -79,12 +95,14 @@
 // This class is a generalisation of the original trigger-stats.cc and filter-stats.cc
 // ROOT macros of Nick van Eijndhoven (IIHE-VUB, Brussel, 09-dec-2009). 
 //
-// Example :
-// =========
+// Example 1:
+// ==========
 //
-// // This example performs an analysis of IceCube data
-// // contained as IceEvent structures in *.icepack files
-// // within a Branch "IceEvent" of a Tree "T".
+// // This example performs an analysis of IceCube data contained as IceEvent structures
+// // in *.icepack files within a Branch "IceEvent" of a Tree "T".
+// // Since these are rather old files, they contain generic NcDevice objects to handle
+// // the tags, since the class NcTagger was not yet available at the time of data recording.
+// // The "pass" and "write" tags were named "condition" and "prescale", respectively.
 //
 // // Load the necessary libraries
 // gSystem->Load("ncfspack");
@@ -97,21 +115,21 @@
 //
 // fstat.ListInputFiles();
 //
-// // Activate some tags to investigate a certan event sample
-// fstat.ActivateTag("GFU");
-// fstat.ActivateTag("HESE");
-// fstat.ActivateTag("EstresAlert");
-// fstat.ActivateTag("EHEAlert");
+// // Activate some tags to investigate re-tagging for a selected event sample
+// fstat.ActivateTag("GFU");         // Gamma ray Follow Up stream
+// fstat.ActivateTag("HESE");        // High-Energy Starting Event stream
+// fstat.ActivateTag("EstresAlert"); // Enhanced Starting track alert stream
+// fstat.ActivateTag("EHEAlert");    // Extreme High Energy event alert stream
 //
-// // De-activate some tags to investigate background reduction
-// fstat.DeactivateTag("EHEAlertFilterHB");
+// // De-activate some tags to investigate re-tagging for background reduction
+// fstat.DeactivateTag("EHEAlertFilterHB"); // Extreme High Energy alert Heart Beat stream
 //
 // // Provide a progress output line every 1000 events 
 // fstat.SetPrintFrequency(1000);
 //
 // // Specify that we will access the NcDevice named "Filter"
-// // and that the "pass flag" is called "condition"
-// // and the "write flag" is called "prescale"
+// // and that the "pass" indicator is called "condition"
+// // and the "write" indicator is called "prescale"
 // fstat.SetDeviceNames("Filter","condition","prescale");
 //
 // // The statement below shows the alternative for a "Trigger" analysis
@@ -121,9 +139,42 @@
 // // Perform the analysis.
 // fstat.ExecuteTask();
 //
+// Example 2:
+// ==========
+//
+// // This example performs an analysis of RNO-G data contained as RnoEvent structures
+// // in *.rnopack files within a Branch "Events" of a Tree "T".
+// // At data recording, an NcTagger (derived) object was used and given the name "Trigger".
+//
+// // Load the necessary libraries
+// gSystem->Load("ncfspack");
+// gSystem->Load("rnopack");
+//
+// // Initialisation to perform an analysis of RNO-G event filter statistics
+// NcDataStreamStats fstat;
+//
+// fstat.AddInputFile("*.rnopack","T","Events");
+//
+// fstat.ListInputFiles();
+//
+// // Activate some tags to investigate re-tagging for a selected event sample
+// fstat.ActivateTag("LPDA"); // Surface LPDA trigger 
+// fstat.ActivateTag("PA");   // Deep ice Phased Array trigger
+//
+// // De-activate some tags to investigate re-tagging for background reduction
+// fstat.DeactivateTag("CR"); // Cosmic Ray trigger
+//
+// // Provide a progress output line every 1000 events 
+// fstat.SetPrintFrequency(1000);
+//
+// // Specify that we will access the NcTagger (derived) device named "Trigger"
+// fstat.SetDevice("Trigger");
+//
+// // Perform the analysis.
+// fstat.ExecuteTask();
 //
 //--- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
-//
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 15, 2021  07:24Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDataStreamStats.h"
@@ -239,7 +290,7 @@ void NcDataStreamStats::Exec(Option_t* opt)
   if (!i)
   {
    cout << endl;
-   cout << " === Tag names (*=wildcard) that are activated by the user for event sample studies ===" << endl;
+   cout << " === Tag names (*=wildcard) that are activated by the user for re-tagged event sample studies ===" << endl;
    cout << " The non-activated tags are flagged as \"dead\" in the combined \"Passing*Writing\" listing." << endl;
    cout << " However, they are still shown in the corresponding tag matrix to identify the missed tags." << endl; 
    cout << endl;
@@ -254,7 +305,7 @@ void NcDataStreamStats::Exec(Option_t* opt)
   if (!i)
   {
    cout << endl;
-   cout << " === Tag names (*=wildcard) that are de-activated by the user for background reduction studies ===" << endl;
+   cout << " === Tag names (*=wildcard) that are de-activated by the user for re-tagged background reduction studies ===" << endl;
    cout << " The de-activated tags are flagged as \"dead\" in the combined \"Passing*Writing\" listing." << endl;
    cout << " However, they are still shown in the corresponding tag matrix to identify the missed tags." << endl; 
    cout << endl;
@@ -672,30 +723,53 @@ void NcDataStreamStats::SetPrintFrequency(Int_t m)
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::SetDeviceNames(TString devname,TString passname,TString writename)
 {
-// Set the name of the NcDevice and the names of the tag passing criteria.
+// Set the name of a generic NcDevice to be investigated and the corresponding names
+// of the tag passing and writing indicators. 
+// Note that the device must have the specific data structure as outlined in
+// the general documentation of this class.
+// 
 // It is common that a certain tag has the following two indicators
-// pass  : This means that the tag criteria have been fulfilled
-// write : This means that the event is actually labeled to be written
-//
-// In case of high-frequency tag streams it is common that not every event
-// will be written to storage in order to limit the data volume.
-// In the DAQ system this is implemented by a downscaling of the corresponding
-// data stream via so-called prescaler settings.
-// The effect is that although for a certain tag the passing criteria have
-// been fulfilled (i.e. the "pass" flag is set), the "write" flag is not always set,
-// but for instance only after every 1000 instances of an activated "pass" flag.
-// This results in a downscale factor of 1000 for that tag stream.
+// pass  : Indicates whether the tag criteria have been fulfilled (1) or not (0)
+// write : Indicates whether the event is actually labeled to be written (1) or not (0)
 //
 // Instead of the names "pass" and "write", various other naming conventions
 // (e.g. "condition" and "prescale") are often used.
-// Via this memberfunction one can specify the names used by the current experiment.
+// Via the input arguments "passname" and "writename" one can specify the names
+// used by the current experiment.
 //
-// Note : In case passname="*" and/or writename="*", no check will be made for the
-//        corresponding flag setting and a value of 1 will be assumed for both.
+// Notes :
+// -------
+// 1) This memberfunction allows the investigation of user defined tagging devices,
+//    to be backward compatible with old data files.
+//    For new(er) data, the use of NcTagger (derived) devices is recommended.
+// 2) In case passname="*" and/or writename="*", no check will be made for the
+//    corresponding indicator setting and a value of 1 will be assumed.
 
  fDevname=devname;
  fPassname=passname; 
  fWritename=writename; 
+}
+///////////////////////////////////////////////////////////////////////////
+void NcDataStreamStats::SetDevice(TString devname,Bool_t passcheck,Bool_t writecheck)
+{
+// Set the name of an NcTagger (derived) device and the check modes of the tag
+// passing and writing indicators.
+// 
+// The pre-defined tag passing and writing indicators are :
+// Pass  : Indicates whether the tag criteria have been fulfilled (1) or not (0)
+// Write : Indicates whether the event is actually labeled to be written (1) or not (0)
+//
+// In case passcheck=kFALSE and/or writecheck=kFALSE, no check will be made for the
+// corresponding indicator setting and a value of 1 will be assumed.
+//
+// The default values are passcheck=kTRUE and writecheck=kTRUE.
+
+ fDevname=devname;
+ fPassname="Pass"; 
+ fWritename="Write";
+
+ if (!passcheck) fPassname="*"; 
+ if (!writecheck) fWritename="*"; 
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::ListInputFiles(Option_t* opt) const

@@ -333,7 +333,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 7, 2020 13:46
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 16, 2021  07:22Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -4806,5 +4806,180 @@ Double_t NcTimestamp::GetEpoch(TString mode)
  if (mode=="B" || mode=="b") e=GetBE();
  if (mode=="J" || mode=="j") e=GetJE();
  return e;
+}
+///////////////////////////////////////////////////////////////////////////
+TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
+{
+// Get a string with date and time info.
+//
+// Via the input argument "mode" one can select which date/time system will be provided.
+// The argument "mode" my have the values :
+// "UT", "UTC", "GAT", "GMST", "GAST", "GPS", "TAI", "TT", "LMT", "LAT", "LMST" or "LAST"
+//
+// The argument "ndig" specifies the number of digits for the fractional
+// seconds (e.g. ndig=6 corresponds to microsecond precision).
+// No rounding will be performed, so a second count of 3.473 with ndig=1
+// will appear as 03.4 on the output.
+// Due to computer accuracy, precision on the picosecond level may get lost.
+//
+// offset : Local time offset from UT (and also GMST) in fractional hours.
+//
+// When an offset value is specified, the corresponding local times
+// LMT and LMST (or LAT and LAST) are available as well.
+//
+// The default values are ndig=0 and offset=0.
+//
+// Notes :
+// -------
+// 1) TAI related date/time info (i.e. TAI, UTC, GPS and TT) is only available if
+//    UTC parameters were provided.
+//    Please refer to the memberfunctions LoadUTCparameterFiles() and SetUTCparameters() for details.
+// 2) In case the MJD falls outside the TTimeStamp range, the date info will be omitted.
+
+ TString daytime="";
+
+ TString month[12]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+ TString day[7]={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+
+ UInt_t y=0;
+ UInt_t m=0;
+ UInt_t d=0;
+ UInt_t wd=0;
+ Int_t hh,mm,ss,ns,ps;
+ Double_t s=0;
+ ULong64_t sfrac=0;
+ Double_t gat=0;
+ Double_t gast=0;
+ Bool_t date=kFALSE;
+
+ // Equation of Time and Equation of Equinoxes
+ Double_t eot; // LAT-LMT
+ Double_t eox; // LAST-LMST
+ eox=Almanac(0,0,0,0,"Sun",0,0,0,&eot,10);
+ // Convert to fractional hours
+ eox/=3600.;
+ eot/=3600.;
+
+ Int_t mjd,mjsec,mjns;
+ GetMJD(mjd,mjsec,mjns);
+
+ // UT related information :  UT, GAT, GMST and GAST date and time
+ if (mode=="UT" || mode=="GAT" || mode=="GMST" || mode=="GAST")
+ {
+  if (mjd>=40587 && (mjd<65442 || (mjd==65442 && mjsec<8047)))
+  {
+   GetDate(kTRUE,0,&y,&m,&d);
+   wd=GetDayOfWeek(kTRUE,0);
+   date=kTRUE;
+  }
+  if (mode=="UT") GetUT(hh,mm,ss,ns,ps);
+  if (mode=="GMST") GetGMST(hh,mm,ss,ns,ps);
+  if (mode=="GAT")
+  {
+   // Obtain GAT via the Equation of Time as offset
+   gat=GetLT(eot);
+   Convert(gat,hh,mm,ss,ns,ps);
+  }
+  if (mode=="GAST")
+  {
+   gast=GetGAST();
+   Convert(gast,hh,mm,ss,ns,ps);
+  }
+ }
+
+ // TAI related information : TAI, UTC, GPS and TT date and time
+ if (mode=="TAI" || mode=="UTC" || mode=="GPS" || mode=="TT")
+ {
+  if (fUtc)
+  {
+   // A dummy timestamp is used to obtain the TAI corresponding date indicator
+   NcTimestamp tx;
+   tx.SetMJD(fTmjd,fTsec,fTns,fTps);
+   if (fTmjd>=40587 && (fTmjd<65442 || (fTmjd==65442 && fTsec<8047)))
+   {
+    tx.GetDate(kTRUE,0,&y,&m,&d);
+    wd=tx.GetDayOfWeek(kTRUE,0);
+    date=kTRUE;
+   }
+   if (mode=="TAI") GetTAI(hh,mm,ss,ns,ps,"TAI");
+   if (mode=="UTC") GetTAI(hh,mm,ss,ns,ps,"UTC");
+   if (mode=="GPS") GetTAI(hh,mm,ss,ns,ps,"GPS");
+   if (mode=="TT") GetTAI(hh,mm,ss,ns,ps,"TT");
+  }
+  else
+  {
+   daytime=mode;
+   daytime+=" information unavailable";
+   return daytime;
+  }
+ }
+
+ // Local time information
+ if (mode=="LMT" || mode=="LAT" || mode=="LMST" || mode=="LAST")
+ {
+  // Determine the new date by including the offset
+  NcTimestamp t2(*this);
+  t2.Add(offset);
+  Int_t mjd2,mjsec2,mjns2;
+  t2.GetMJD(mjd2,mjsec2,mjns2);
+  if (mjd2>=40587 && (mjd2<65442 || (mjd2==65442 && mjsec2<8047)))
+  {
+   t2.GetDate(kTRUE,0,&y,&m,&d);
+   wd=t2.GetDayOfWeek(kTRUE,0);
+   date=kTRUE;
+  }
+  // Determine the local time by including the offset w.r.t. the original timestamp
+  Double_t hlt=0;
+  if (mode=="LMT") hlt=GetLT(offset);
+  if (mode=="LAT") hlt=GetLT(offset+eot); // Obtain LAT via the Equation of Time as extra offset
+  if (mode=="LMST") hlt=GetLMST(offset);
+  if (mode=="LAST") hlt=GetLAST(offset);
+  Convert(hlt,hh,mm,ss,ns,ps);
+ }
+
+ daytime="";
+
+ // The date string
+ if (date)
+ {
+  daytime=day[wd-1];
+  daytime+=" ";
+  if (d<10) daytime+="0";
+  daytime+=d;
+  daytime+="-";
+  daytime+=month[m-1];
+  daytime+="-";
+  daytime+=y;
+  daytime+=" ";
+ }
+
+ // The time string
+ if (hh<10) daytime+="0";
+ daytime+=hh;
+ daytime+=":";
+ if (mm<10) daytime+="0";
+ daytime+=mm;
+ daytime+=":";
+ if (ss<10) daytime+="0";
+ daytime+=ss;
+ if (ndig>0)
+ {
+  daytime+=".";
+  s=double(ns)*1e-9+double(ps)*1e-12;
+  s*=pow(10.,ndig);
+  sfrac=ULong64_t(s);
+  ULong64_t isfrac=pow(10,ndig-1);
+  while (sfrac<isfrac)
+  {
+   daytime+="0";
+   isfrac/=10;
+  }
+  daytime+=sfrac;
+ }
+ // Add the time system indicator
+ daytime+=" ";
+ daytime+=mode;
+
+ return daytime;
 }
 ///////////////////////////////////////////////////////////////////////////

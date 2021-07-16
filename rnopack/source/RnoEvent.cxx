@@ -30,7 +30,7 @@
 //   may be extended in the usual way.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  22:55Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 16, 2021  07:21Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoEvent.h"
@@ -91,6 +91,8 @@ TGraph* RnoEvent::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
  title+=GetRunNumber();
  title+=" Event:";
  title+=GetEventNumber();
+ title+=" ";
+ title+=GetDayTimeString("UT",3);
  gr->SetTitle(title);
 
  return gr;
@@ -138,6 +140,8 @@ TCanvas* RnoEvent::DisplaySamplings(Int_t ista,Int_t j)
   title+=GetRunNumber();
   title+=" Event:";
   title+=GetEventNumber();
+  title+=" ";
+  title+=GetDayTimeString("UT",3);
   gr->SetTitle(title);
  } // End of loop over the channels
 

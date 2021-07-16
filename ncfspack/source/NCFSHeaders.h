@@ -46,3 +46,4 @@
 #include "NcFITSIO.h"
 #include "NcDetectorUnit.h"
 #include "NcDetector.h"
+#include "NcTagger.h"

@@ -98,6 +98,7 @@ class NcTimestamp : public TTimeStamp
   Double_t Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name="",Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0); // Provide astronomical observables
   void SetEpoch(Double_t e,TString mode,TString utc="A",Int_t leap=0,Double_t dut=0); // Set time parameters according to the specified epoch
   Double_t GetEpoch(TString mode); // Provide the requested epoch
+  TString GetDayTimeString(TString mode,Int_t ndig=0,Double_t offset=0); // Provide the date and time in TString format
 
  protected:
   Int_t fMJD;      // Modified Julian Date
@@ -119,6 +120,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,9) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,10) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

@@ -1242,4 +1242,8 @@
 14-jul-2021 NvE Bug fixed in the copy constructor of NcDetectorUnit.
                 Also modifications in the copy constructor and AddDevice() memberfunction of NcEvent to prevent
                 a flood of information messages when processing (large) event samples.
+15-jul-2021 NvE New class NcTagger introduced and class NcDataStreamStats adapted accordingly.
+16-jul-2021 NvE New memberfunction GetDayTimeString() introduced and class NcTimestamp.
+                The version indicator in NcVersion has been updated to 4.4.
+
                  

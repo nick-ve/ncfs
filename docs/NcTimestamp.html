@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Mar 31 15:54:28 2021            -->
+<!--   Date: Fri Jul 16 07:46:20 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -364,7 +364,7 @@ return false;}
  <a href="./ListOfTypes.html#Double_t">Double_t</a> epoch=t.<a href="./NcTimestamp.html#NcTimestamp:GetJE" title="Double_t NcTimestamp::GetJE(Double_t date,TString mode=&quot;jd&quot;) or overloads">GetJE</a>(mjdate,<span class="string">"mjd"</span>);
 
 --- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 7, 2020 13:46
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 16, 2021  07:22Z
 
 </pre></div>
 </div></div>
@@ -405,6 +405,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfWeek@1"><span class="baseclass">TTimeStamp::</span>GetDayOfWeek</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear@1"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
+<tr class="func"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="#NcTimestamp:GetDayTimeString">GetDayTimeString</a>(TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:GetDifference@2">GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* t, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString type = <span class="string">"UT"</span>)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:GetDifference@3">GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>&amp; t, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString type = <span class="string">"UT"</span>)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:GetDifference">GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; days, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, TString type = <span class="string">"UT"</span>)</td></tr>
@@ -556,6 +557,11 @@ return false;}
 <td>&larr;</td><td><table><tr>
 <td bgcolor="#efefef"><table><tr><td>
 <center><tt><a name="IceEvent" href="./IceEvent.html">IceEvent</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#efefef"><table><tr><td>
+<center><tt><a name="RnoEvent" href="./RnoEvent.html">RnoEvent</a></tt></center></td>
 <td></td>
 </tr></table></td>
 </tr></table></td>
@@ -3009,12 +3015,40 @@ return false;}
         <span class="string">"J"</span> ==&gt; Julian epoch
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcTimestamp:GetDayTimeString" href="src/NcTimestamp.cxx.html#LZG9HD">GetDayTimeString</a>(TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0)</span><br />
+<div class="funccomm"><pre> Get a string with date and time info.
+
+ Via the input argument <span class="string">"mode"</span> one can select which date/time system will be provided.
+ The argument <span class="string">"mode"</span> my have the values :
+ <span class="string">"UT"</span>, <span class="string">"UTC"</span>, <span class="string">"GAT"</span>, <span class="string">"GMST"</span>, <span class="string">"GAST"</span>, <span class="string">"GPS"</span>, <span class="string">"TAI"</span>, <span class="string">"TT"</span>, <span class="string">"LMT"</span>, <span class="string">"LAT"</span>, <span class="string">"LMST"</span> or <span class="string">"LAST"</span>
+
+ The argument <span class="string">"ndig"</span> specifies the number of digits for the fractional
+ seconds (e.g. ndig=6 corresponds to microsecond precision).
+ No rounding will be performed, so a second count of 3.473 with ndig=1
+ will appear as 03.4 on the output.
+ Due to computer accuracy, precision on the picosecond level may get lost.
+
+ offset : Local time offset from UT (and also GMST) in fractional hours.
+
+ When an offset value is specified, the corresponding local times
+ LMT and LMST (or LAT and LAST) are available as well.
+
+ The default values are ndig=0 and offset=0.
+
+ Notes :
+
+ 1) TAI related date/time info (i.e. TAI, UTC, GPS and TT) is only available if
+    UTC parameters were provided.
+    Please refer to the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() for details.
+ 2) In case the MJD falls outside the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> range, the date info will be omitted.
+</pre></div>
+</div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Mar 31 15:54:28 2021 </em><em>&raquo; Last generated: 2021-03-31 15:54</em><br />
+<em>&raquo; Last changed: Fri Jul 16 07:46:20 2021 </em><em>&raquo; Last generated: 2021-07-16 07:46</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
