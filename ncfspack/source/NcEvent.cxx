@@ -261,7 +261,7 @@
 //        obtained via the GetUnitScale() and GetEscale() memberfunctions.
 //
 //--- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 14, 2021  14:58Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 17, 2021  10:30Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcEvent.h"
@@ -396,15 +396,16 @@ NcEvent::NcEvent(const NcEvent& evt) : NcVertex(evt),NcTimestamp(evt)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::Reset()
 {
-// Reset all variables to default values
-// The max. number of tracks is set to the initial value again
-// The max. number of vertices is set to the default value again
-// The event weight is set to 1 again
+// Reset all variables to default values.
+// The max. number of tracks is set to the initial value again.
+// The max. number of vertices is set to the default value again.
+// The event weight is set to 1 again.
+// The timestamp is set to the current time of the system clock.
 // Note : The DevCopy mode is maintained as it was set by the user before.
 
  NcVertex::Reset();
 
- Set();
+ SetSystemTime();
  fRun=0;
  fEvent=0;
  fWeight=1;

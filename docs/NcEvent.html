@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 15 07:08:08 2021            -->
+<!--   Date: Sat Jul 17 10:47:24 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -292,7 +292,7 @@ return false;}
         obtained via the <a href="./NcPosition.html#NcPosition:GetUnitScale" title="Float_t NcPosition::GetUnitScale()">GetUnitScale</a>() and <a href="./NcJet.html#NcJet:GetEscale" title="Float_t NcJet::GetEscale()">GetEscale</a>() memberfunctions.
 
 --- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 14, 2021  14:58Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 17, 2021  10:30Z
 
 </pre></div>
 </div></div>
@@ -376,6 +376,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear@1"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
 <tr class="func"><td class="funcret"><a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a></td><td class="funcname"><a class="funcname" href="#NcEvent:GetDayTime">GetDayTime</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetDayTimeString"><span class="baseclass">NcTimestamp::</span>GetDayTimeString</a>(TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./NcDetector.html">NcDetector</a>*</td><td class="funcname"><a class="funcname" href="#NcEvent:GetDetector">GetDetector</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcEvent:GetDevCopy">GetDevCopy</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="#NcEvent:GetDevice">GetDevice</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
@@ -643,6 +644,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalar"><span class="baseclass">Nc4Vector::</span>SetScalar</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv0 = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalarError"><span class="baseclass">Nc4Vector::</span>SetScalarError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:SetSec"><span class="baseclass">TTimeStamp::</span>SetSec</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> sec)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetSystemTime"><span class="baseclass">NcTimestamp::</span>SetSystemTime</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI@2"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tai, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(TString type, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI@1"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
@@ -895,10 +897,11 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:Reset" href="src/NcEvent.cxx.html#RsweHB">Reset</a>()</span><br />
-<div class="funccomm"><pre> <a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a> all variables to default values
- The max. number of tracks is set to the initial value again
- The max. number of vertices is set to the default value again
- The event weight is set to 1 again
+<div class="funccomm"><pre> <a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a> all variables to default values.
+ The max. number of tracks is set to the initial value again.
+ The max. number of vertices is set to the default value again.
+ The event weight is set to 1 again.
+ The timestamp is set to the current time of the system clock.
  Note : The DevCopy mode is maintained as it was set by the user before.
 </pre></div>
 </div>
@@ -1728,7 +1731,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul 15 07:08:09 2021 </em><em>&raquo; Last generated: 2021-07-15 07:08</em><br />
+<em>&raquo; Last changed: Sat Jul 17 10:47:25 2021 </em><em>&raquo; Last generated: 2021-07-17 10:47</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

@@ -333,7 +333,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 16, 2021  07:22Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 17, 2021  10:27Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -2584,6 +2584,10 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 {
 // Load the IERS data for automatic setting of Leap Seconds and dUT=UT-UTC.
 //
+// For the current timestamp the corresponding Leap seconds and dUT are set.
+// If different settings are required, please invoke SetUTCparameters() after
+// the invokation of this memberfunction. 
+//
 // Input arguments :
 // -----------------
 // leapfile : The name of a copy of the (most recent) IERS ascii file
@@ -2735,6 +2739,9 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 
  delete[] lmjd;
  delete[] leap; 
+
+ // Retrieve the UTC parameters for the current timestamp
+ SetUTCparameters("A",0,0);
 
  return fUTCdata;
 }
@@ -4981,5 +4988,18 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
  daytime+=mode;
 
  return daytime;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcTimestamp::SetSystemTime()
+{
+// Set UTC to the current time of the system clock.
+// In case no database value of dUT=UT-UTC is available,
+// the clock system time is entered as UT.
+
+ Set(); // Set the current clock time as UT
+ FillJulian();
+ SetUTCparameters("A",0,0);
+ AddSec(fDut); // Correct UT for dUT to obtain UTC
+ FillTAI();
 }
 ///////////////////////////////////////////////////////////////////////////

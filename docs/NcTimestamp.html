@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jul 16 07:46:20 2021            -->
+<!--   Date: Sat Jul 17 10:47:25 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -364,7 +364,7 @@ return false;}
  <a href="./ListOfTypes.html#Double_t">Double_t</a> epoch=t.<a href="./NcTimestamp.html#NcTimestamp:GetJE" title="Double_t NcTimestamp::GetJE(Double_t date,TString mode=&quot;jd&quot;) or overloads">GetJE</a>(mjdate,<span class="string">"mjd"</span>);
 
 --- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 16, 2021  07:22Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 17, 2021  10:27Z
 
 </pre></div>
 </div></div>
@@ -479,6 +479,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetNs">SetNs</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ns)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetPs">SetPs</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ps)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:SetSec"><span class="baseclass">TTimeStamp::</span>SetSec</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> sec)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetSystemTime">SetSystemTime</a>()</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTAI@2">SetTAI</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tai, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTAI">SetTAI</a>(TString type, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTAI@1">SetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
@@ -1880,6 +1881,10 @@ return false;}
 <div class="funcdoc"><span class="funcname">TTree* <a class="funcname" name="NcTimestamp:LoadUTCparameterFiles" href="src/NcTimestamp.cxx.html#vBG1gE">LoadUTCparameterFiles</a>(TString leapfile, TString dutfile)</span><br />
 <div class="funccomm"><pre> Load the IERS data for automatic setting of Leap Seconds and dUT=UT-UTC.
 
+ For the current timestamp the corresponding Leap seconds and dUT are set.
+ If different settings are required, please invoke <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() after
+ the invokation of this memberfunction.
+
  Input arguments :
 
  leapfile : The name of a copy of the (most recent) IERS ascii file
@@ -3043,12 +3048,18 @@ return false;}
  2) In case the MJD falls outside the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> range, the date info will be omitted.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetSystemTime" href="src/NcTimestamp.cxx.html#oFJ18D">SetSystemTime</a>()</span><br />
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> UTC to the current time of the system clock.
+ In case no database value of dUT=UT-UTC is available,
+ the clock system time is entered as UT.
+</pre></div>
+</div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jul 16 07:46:20 2021 </em><em>&raquo; Last generated: 2021-07-16 07:46</em><br />
+<em>&raquo; Last changed: Sat Jul 17 10:47:26 2021 </em><em>&raquo; Last generated: 2021-07-17 10:47</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
