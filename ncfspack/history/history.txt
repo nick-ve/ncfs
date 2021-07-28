@@ -1250,5 +1250,7 @@
                 In NcTimestamp::LoadUTCparameterFiles() the UTC parameters are now also automatically set
                 for that NcTimestamp instance. 
                 The version indicator in NcVersion has been updated to 4.5.
+28-jul-2021 NvE Functionality of NcTimestamp extended to allow for explicit specification of UTC or UT1.
+                The version indicator in NcVersion has been updated to 4.6.
 
                  

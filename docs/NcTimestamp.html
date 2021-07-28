@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sat Jul 17 10:47:25 2021            -->
+<!--   Date: Wed Jul 28 14:18:14 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -76,6 +76,14 @@ return false;}
  The absolute duration of a day is defined by the time scale that is used.
  The two main time scales for time recording are Universal Time (UT)
  and International Atomic Time (TAI), as outlined below.
+ Here it should be noted that UT may represent Coordinated Universal Time (UTC)
+ as well as UT1, which is a more exact time keeping for astronomical observations.
+ The UT1 timing is obtained by daily observations of the slight variations in the
+ meridian transitions of (extra galactic) cosmic objects, due to irregularities
+ in the Earth rotation. This results in daily updates w.r.t. UTC expressed as dUT=UT1-UTC.
+ In case the value of dUT=UT1-UTC is known (see below), the timing of UT1 will be used
+ as the main reference time instead of UTC, in order to provide the best accuracy
+ for linking observations with astrophysical phenomena.
  The UT time scale is always provided and the TAI (and its derived) time scale(s)
  may be activated by the various <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a>() functions, as outlined in the corresponding docs.
  For precise time keeping it is important to work within 1 single time scale and indicate
@@ -94,23 +102,23 @@ return false;}
     This implies that when two timestamps are compared (e.g. via the <a href="./NcTimestamp.html#NcTimestamp:GetDifference" title="Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t&amp; days,Int_t&amp; sec,Int_t&amp; ns,Int_t&amp; ps,TString type=&quot;UT&quot;) or overloads">GetDifference</a>()
     member function) both timestamps should be using the same time scale.
  3) For most of the time broadcasting the Coordinated Universal Time (UTC) is used.
-    This UTC time runs at the pace of TAI, but is kept close (within 0.9 sec) to UT
-    by the introduction of Leap Seconds when abs(UT-UTC) exceeds 0.9 sec.
+    This UTC time runs at the pace of TAI, but is kept close (within 0.9 sec) to UT1
+    by the introduction of Leap Seconds when abs(UT1-UTC) exceeds 0.9 sec.
     This time synchronisation is coordinated by the International Earth Rotation and
     Reference Systems Service (IERS) via a daily monitoring of the Earth Orientation
     Parameters (EOP).
-    Depending on dUT=UT-UTC, these Leap Seconds can be positive or negative.
+    Depending on dUT=UT1-UTC, these Leap Seconds can be positive or negative.
     The introduction of Leap Seconds into UTC started at 01-jan-1972 00:00:00 UT.
 
     An overview of the history of introduced Leap seconds (TAI-UTC) is online available at :
                  https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
-    The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+    The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
-    The accuracy of dUT=UT-UTC is about 10 microseconds, so in case of accurate astronomical
+    The accuracy of dUT=UT1-UTC is about 10 microseconds, so in case of accurate astronomical
     timing the user is advised to specify dUT in the various <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a>() facilities or use <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>().
     An automatic setting of dUT is provided based on the IERS data files.
     Please refer to the member function <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() for further details.
@@ -154,7 +162,7 @@ return false;}
        The standard atomic (SI) second is derived from a set of Cs atomic clocks.
        This implies that TAI is not related to the actual rotation of the Earth and as such
        will not run at the same pace as UT.
-       The start epoch of TAI is 01-jan-1958 00:00:00 UT, at which time UT-UTC was about 0.
+       The start epoch of TAI is 01-jan-1958 00:00:00 UT, at which time UT1-UTC was about 0.
  GPS : Global Positioning System time.
        This satellite based timing system is based on TAI and broadcast via a satellite network.
        The start epoch of GPS is 06-jan-1980 00:00:00 UTC, at which the number of Leap Seconds was 19.
@@ -271,25 +279,29 @@ return false;}
 
  t.<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
 
- // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UT)
- // without recording the corresponding International Atomic Time (TAI)
- t.<a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>(<span class="string">"22-08-2016"</span>,<span class="string">"14:03:29.7358"</span>,0);
+ // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UT1)
+ // without recording UTC nor the corresponding International Atomic Time (TAI)
+ t.<a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>(<span class="string">"22-08-2016"</span>,<span class="string">"14:03:29.7358"</span>,0,<span class="string">"U"</span>);
 
- // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UT)
- // and also record the corresponding International Atomic Time (TAI)
+ // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UTC)
+ // without recording UT1 nor the corresponding International Atomic Time (TAI)
+ t.<a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>(<span class="string">"22-08-2016"</span>,<span class="string">"14:03:29.7358"</span>,0,<span class="string">"N"</span>);
+
+ // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UTC)
+ // and also record UT1 and the corresponding International Atomic Time (TAI)
  // using manual <span class="string">"leap"</span> and <span class="string">"dut"</span> settings
  <a href="./ListOfTypes.html#Int_t">Int_t</a> leap=34;
  <a href="./ListOfTypes.html#Double_t">Double_t</a> dut=-0.14;
  t.<a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>(<span class="string">"17-05-2011"</span>,<span class="string">"05:43:18.31468"</span>,0,<span class="string">"M"</span>,leap,dut);
 
- // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UT)
- // and also record the corresponding International Atomic Time (TAI)
+ // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UTC)
+ // and also record UT1 and the corresponding International Atomic Time (TAI)
  // using automatic <span class="string">"leap"</span> and <span class="string">"dut"</span> settings from the IERS data files
  t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
  t.<a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>(<span class="string">"17-05-2011"</span>,<span class="string">"05:43:18.31468"</span>,0,<span class="string">"A"</span>);
 
  // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Global Positioning System time (GPS)
- // and also record the corresponding Universal Time (UT)
+ // and also record the corresponding Universal Times (UTC and UT1) and TAI
  // using automatic <span class="string">"leap"</span> and <span class="string">"dut"</span> settings from the IERS data files
  t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
  t.<a href="./NcTimestamp.html#NcTimestamp:SetTAI" title="Int_t NcTimestamp::SetTAI(TString type,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut=0) or overloads">SetTAI</a>(<span class="string">"GPS"</span>,<span class="string">"17-05-2011"</span>,<span class="string">"05:43:18.31468"</span>,0,<span class="string">"A"</span>,0,0);
@@ -306,15 +318,17 @@ return false;}
  // Retrieve fractional Julian Epoch
  <a href="./ListOfTypes.html#Double_t">Double_t</a> je=t.<a href="./NcTimestamp.html#NcTimestamp:GetJE" title="Double_t NcTimestamp::GetJE(Double_t date,TString mode=&quot;jd&quot;) or overloads">GetJE</a>();
 
- // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> to a specific Modified Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>
+ // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> to a specific Modified Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> representing UTC
  // without recording the corresponding International Atomic Time (TAI)
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjd=50537;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjsec=1528;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjns=185643;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjps=35;
- t.<a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjd,mjsec,mjns,mjps,<span class="string">"N"</span>);
+ t.<a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjd,mjsec,mjns,mjps,<span class="string">"N"</span>);
 
- // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> to a specific Modified Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>
+ t.<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
+
+ // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> to a specific Modified Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> representing UTC
  // and also record the corresponding International Atomic Time (TAI)
  // using automatic <span class="string">"leap"</span> and <span class="string">"dut"</span> settings from the IERS data files
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjd=58457;
@@ -322,7 +336,19 @@ return false;}
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjns=185643;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjps=35;
  t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
- t.<a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjd,mjsec,mjns,mjps,<span class="string">"A"</span>);
+ t.<a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjd,mjsec,mjns,mjps,<span class="string">"A"</span>);
+
+ t.<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
+
+ // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> to a specific Modified Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> representing UT1
+ // and also record the corresponding International Atomic Time (TAI)
+ // using automatic <span class="string">"leap"</span> and <span class="string">"dut"</span> settings from the IERS data files
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> mjd=58457;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> mjsec=1528;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> mjns=185643;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> mjps=35;
+ t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
+ t.<a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjd,mjsec,mjns,mjps,<span class="string">"U"</span>);
 
  t.<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
 
@@ -364,7 +390,7 @@ return false;}
  <a href="./ListOfTypes.html#Double_t">Double_t</a> epoch=t.<a href="./NcTimestamp.html#NcTimestamp:GetJE" title="Double_t NcTimestamp::GetJE(Double_t date,TString mode=&quot;jd&quot;) or overloads">GetJE</a>(mjdate,<span class="string">"mjd"</span>);
 
 --- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 17, 2021  10:27Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 28, 2021  13:48Z
 
 </pre></div>
 </div></div>
@@ -453,6 +479,7 @@ return false;}
 <tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcTimestamp:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:IsLeapYear@1"><span class="baseclass">TTimeStamp::</span>IsLeapYear</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:IsLeapYear"><span class="baseclass">TTimeStamp::</span>IsLeapYear</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:IsUT1">IsUT1</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="#NcTimestamp:LoadUTCparameterFiles">LoadUTCparameterFiles</a>(TString leapfile, TString dutfile)</td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#time_t">time_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:MktimeFromUTC"><span class="baseclass">TTimeStamp::</span>MktimeFromUTC</a>(<a href="./ListOfTypes.html#tm_t">tm_t</a>* tmstruct)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:operator_double"><span class="baseclass">TTimeStamp::</span>operator double</a>() <span class="keyword">const</span></td></tr>
@@ -463,18 +490,18 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:Set@3"><span class="baseclass">TTimeStamp::</span>Set</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> tloc, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> isUTC, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> dosDate)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:Set@2"><span class="baseclass">TTimeStamp::</span>Set</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> date, <a href="./ListOfTypes.html#Int_t">Int_t</a> time, <a href="./ListOfTypes.html#Int_t">Int_t</a> nsec, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> isUTC, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:Set@1"><span class="baseclass">TTimeStamp::</span>Set</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> year, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> hour, <a href="./ListOfTypes.html#Int_t">Int_t</a> min, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> nsec, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> isUTC, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetEpoch">SetEpoch</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetEpoch">SetEpoch</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetGPS">SetGPS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> w, <a href="./ListOfTypes.html#Int_t">Int_t</a> sow, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> icycle = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetGPS@1">SetGPS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> w, <a href="./ListOfTypes.html#Int_t">Int_t</a> dow, <a href="./ListOfTypes.html#Int_t">Int_t</a> sod, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> icycle = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetJD@1">SetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> jd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetJD">SetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetJD@1">SetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> jd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetJD">SetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetLT@3">SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetLT@2">SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, TString time, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetLT@4">SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetLT@1">SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> s, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetLT">SetLT</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt, <a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetMJD@1">SetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mjd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetMJD">SetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetMJD@1">SetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mjd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetMJD">SetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:SetNanoSec"><span class="baseclass">TTimeStamp::</span>SetNanoSec</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nsec)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetNs">SetNs</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ns)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetPs">SetPs</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ps)</td></tr>
@@ -483,22 +510,29 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTAI@2">SetTAI</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tai, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTAI">SetTAI</a>(TString type, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTAI@1">SetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTJD@1">SetTJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tjd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTJD">SetTJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> tjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTJD@1">SetTJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tjd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetTJD">SetTJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> tjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUnixTime">SetUnixTime</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sec, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUT@3">SetUT</a>(TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUT@2">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, TString time, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUT@4">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUT@1">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> s, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUT">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUTCparameters">SetUTCparameters</a>(TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
 
 </table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:SetUTCparameters">SetUTCparameters</a>(TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut)</td></tr>
+
+</table></div>
 <div class="access" id="funcpriv"><b>private:</b>
 <table class="func" id="tabfuncpriv" cellspacing="0">
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:AddCalc@1">AddCalc</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> hours, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utcpar = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:AddCalc">AddCalc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utcpar = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:AddSecCalc">AddSecCalc</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> seconds, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utcpar = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:FillJulian">FillJulian</a>()</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTimestamp:FillTAI">FillTAI</a>()</td></tr>
 
@@ -575,7 +609,7 @@ return false;}
 <div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTimestamp:NcTimestamp" href="src/NcTimestamp.cxx.html#O.tnBC">NcTimestamp</a>()</span><br />
 <div class="funccomm"><pre> Default constructor
  Creation of an <a href="./NcTimestamp.html">NcTimestamp</a> object and initialisation of parameters.
- All attributes are initialised to the current date/time as specified
+ All attributes are initialised to the current UTC date/time as specified
  in the docs of <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>.
 </pre></div>
 </div>
@@ -880,8 +914,8 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:FillJulian" href="src/NcTimestamp.cxx.html#BdJGO">FillJulian</a>()</span><br />
-<div class="funccomm"><pre> Calculation and setting of the Julian date/time parameters corresponding
- to the current <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> date/time parameters.
+<div class="funccomm"><pre> Internal memberfunction for calculation and setting of the Julian date/time parameters
+ corresponding to the current <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> UTC date/time parameters.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:GetMJD@1" href="src/NcTimestamp.cxx.html#OBDq_D">GetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns)</span><br />
@@ -1043,13 +1077,10 @@ return false;}
  <a href="./NcTimestamp.html">NcTimestamp</a> date/time parameters.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetMJD" href="src/NcTimestamp.cxx.html#MSIiQE">SetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetMJD" href="src/NcTimestamp.cxx.html#MSIiQE">SetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the Modified Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> (MJD) and time and update the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>
  parameters accordingly (if possible).
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the MJD setting.
+ The provided UTC parameters (see below) will not affect the MJD setting.
 
  Note :
 
@@ -1076,44 +1107,51 @@ return false;}
  ps   : The remaining fractional number of nanoseconds (in ps) elapsed within the MJD.
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
  1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 2) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
- The defaults are ps=0, utc=<span class="string">"A"</span>, leap=0 and dut=0.
+ The defaults are ps=0, utc=<span class="string">"U"</span>, leap=0 and dut=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetMJD@1" href="src/NcTimestamp.cxx.html#EwygQB">SetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mjd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetMJD@1" href="src/NcTimestamp.cxx.html#EwygQB">SetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mjd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the Modified Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> (MJD) and time and update the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>
  parameters accordingly (if possible).
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the MJD setting.
+ The provided UTC parameters (see below) will not affect the MJD setting.
 
  Note :
 
@@ -1140,44 +1178,51 @@ return false;}
  mjd  : The modified Julian date as fractional day count.
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
  1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 2) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
- The default values are utc=<span class="string">"A"</span>, leap=0 and dut=0.
+ The default values are utc=<span class="string">"U"</span>, leap=0 and dut=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetJD" href="src/NcTimestamp.cxx.html#mNR5FC">SetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetJD" href="src/NcTimestamp.cxx.html#mNR5FC">SetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> (JD) and time and update the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>
  parameters accordingly (if possible).
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the JD setting.
+ The provided UTC parameters (see below) will not affect the JD setting.
 
  Note :
 
@@ -1204,44 +1249,51 @@ return false;}
  ps   : The remaining fractional number of nanoseconds (in ps) elapsed within the JD.
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
  1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 2) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
- The default values are ps=0, utc=<span class="string">"A"</span>, leap=0 and dut=0.
+ The default values are ps=0, utc=<span class="string">"U"</span>, leap=0 and dut=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetJD@1" href="src/NcTimestamp.cxx.html#qOQcpD">SetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> jd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetJD@1" href="src/NcTimestamp.cxx.html#qOQcpD">SetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> jd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> (JD) and time and update the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>
  parameters accordingly (if possible).
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the JD setting.
+ The provided UTC parameters (see below) will not affect the JD setting.
 
  Note :
 
@@ -1268,44 +1320,51 @@ return false;}
  jd   : The Julian date as fractional day count.
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
  1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 2) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
- The default values are utc=<span class="string">"A"</span>, leap=0 and dut=0.
+ The default values are utc=<span class="string">"U"</span>, leap=0 and dut=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetTJD" href="src/NcTimestamp.cxx.html#MyxhQE">SetTJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> tjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetTJD" href="src/NcTimestamp.cxx.html#MyxhQE">SetTJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> tjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the Truncated Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> (TJD) and time and update the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>
  parameters accordingly (if possible).
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the TJD setting.
+ The provided UTC parameters (see below) will not affect the TJD setting.
 
  Note :
 
@@ -1332,44 +1391,51 @@ return false;}
  ps   : The remaining fractional number of nanoseconds (in ps) elapsed within the JD.
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
  1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 2) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
- The default values are ps=0, utc=<span class="string">"A"</span>, leap=0 and dut=0.
+ The default values are ps=0, utc=<span class="string">"U"</span>, leap=0 and dut=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetTJD@1" href="src/NcTimestamp.cxx.html#Q0zgQB">SetTJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tjd, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetTJD@1" href="src/NcTimestamp.cxx.html#Q0zgQB">SetTJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tjd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the Truncated Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> (TJD) and time and update the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a>
  parameters accordingly (if possible).
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the TJD setting.
+ The provided UTC parameters (see below) will not affect the TJD setting.
 
  Note :
 
@@ -1396,35 +1462,45 @@ return false;}
  tjd  : The Truncated Julian date as fractional day count.
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The date/time that was specified represents UTC, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
  1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 2) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
- The default values are utc=<span class="string">"A"</span>, leap=0, dut=0.
+ The default values are utc=<span class="string">"U"</span>, leap=0, dut=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:FillTAI" href="src/NcTimestamp.cxx.html#NszZuC">FillTAI</a>()</span><br />
@@ -1436,7 +1512,7 @@ return false;}
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcTimestamp:SetTAI" href="src/NcTimestamp.cxx.html#gI3bnD">SetTAI</a>(TString type, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the specified TAI based date and time
  in the Gregorian calendar as specified by the input arguments.
- Based on the specified accumulated number of Leap Seconds (<span class="string">"leap"</span>) and the UT-UTC value (<span class="string">"dut"</span>)
+ Based on the specified accumulated number of Leap Seconds (<span class="string">"leap"</span>) and the UT1-UTC value (<span class="string">"dut"</span>)
  also the UT will be set.
  The return value indicates whether the date/time and UTC parameters are actually
  set Manually (1), Automatically (-1) or Failed (0).
@@ -1460,18 +1536,18 @@ return false;}
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
                 For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  The default value is dut=0, but if &lt;1 sec precision is required, the actual dut value should be provided.
 
@@ -1504,20 +1580,20 @@ return false;}
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
                 For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
  tmjd : <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  ==&gt; The MJD equivalent TAI day count.
         <a href="./ListOfTypes.html#Bool_t">kFALSE</a> ==&gt; The TAI day count since the TAI start epoch 01-jan-1958 00:00:00 UT (MJD=36204).
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  The default values are dut=0 and tmjd=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>.
  However, if &lt;1 sec precision is required, the actual dut value should be provided.
@@ -1571,16 +1647,16 @@ return false;}
  tmjd : <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  ==&gt; The MJD equivalent TAI day count.
         <a href="./ListOfTypes.html#Bool_t">kFALSE</a> ==&gt; The TAI day count since the TAI start epoch 01-jan-1958 00:00:00 UT (MJD=36204).
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  The default values are dut=0 and tmjd=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>.
  However, if &lt;1 sec precision is required, the actual dut value should be provided.
@@ -1635,16 +1711,16 @@ return false;}
  dut    : The monitored time difference UT-UTC in seconds.
  icycle : The GPS cycle count (to support previous GPS broadcasts).
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  In older GPS clock implementations the week count was reset after 1024 weeks,
  which was called a <span class="string">"cycle"</span>, and the cycle count was increased by 1.
@@ -1688,16 +1764,16 @@ return false;}
  dut    : The monitored time difference UT-UTC in seconds.
  icycle : The GPS cycle count (to support previous GPS broadcasts).
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  In older GPS clock implementations the week count was reset after 1024 weeks,
  which was called a <span class="string">"cycle"</span>, and the cycle count was increased by 1.
@@ -1765,18 +1841,18 @@ return false;}
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
  dut  : The monitored time difference UT-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
- The default values are dt=0, utc=<span class="string">"A"</span>, leap=0, dut=0.
+ The default values are utc=<span class="string">"A"</span>, leap=0, dut=0.
  However, if &lt;1 sec precision is required, the actual dut value should be provided.
 
  Notes :
@@ -1793,7 +1869,7 @@ return false;}
 
  1) The allowed range for the argument <span class="string">"ns"</span> is [0,999999999].
     Outside that range no action is performed.
- 2) The ns fraction can also be entered directly via <a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>() etc...
+ 2) The ns fraction can also be entered directly via <a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>() etc...
  3) For additional accuracy see <a href="./NcTimestamp.html#NcTimestamp:SetPs" title="void NcTimestamp::SetPs(Int_t ps)">SetPs</a>().
 </pre></div>
 </div>
@@ -1810,7 +1886,7 @@ return false;}
 
  1) The allowed range for the argument <span class="string">"ps"</span> is [0,999].
     Outside that range no action is performed.
- 2) The ps fraction can also be entered directly via <a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>() etc...
+ 2) The ps fraction can also be entered directly via <a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>() etc...
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcTimestamp:GetPs" href="src/NcTimestamp.cxx.html#tRI3OB">GetPs</a>() const</span><br />
@@ -1820,14 +1896,27 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcTimestamp:GetUTCparameters" href="src/NcTimestamp.cxx.html#LnG.mB">GetUTCparameters</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; leap, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dut) const</span><br />
-<div class="funccomm"><pre> Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC).
- The return value indicates whether the UTC parameters were actually
- set manually (1), automatically (-1) or not (0).
- In the latter case only UT time recording is available.
+<div class="funccomm"><pre> Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT1-UTC).
+
+ The return value indicates whether the UTC parameters are actually set or not,
+ and has the following conventions :
+
+  1 --&gt; The UTC parameters were set manually and used to determine UT1 from UTC.
+  0 --&gt; No UTC parameters were provided and the stored reference time is UTC.
+ -1 --&gt; The UTC parameters were retrieved from the IERS data files and used to determine UT1 from UTC.
+ -2 --&gt; The UTC parameters were retrieved from the IERS data files and used to determine all TAI times from UT1.
+ -3 --&gt; No UTC parameters were provided and the stored reference time is UT1.
+
+ Notes :
+
+ 1) For the return values 0 and -3 only the UTC (0) or UT1 (-3) time recording is available,
+    depending on the input argument <span class="string">"utc"</span>, as outlined above.
+ 2) A return value of -2 or -3 indicates that the time which was entered via <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>()
+    or via one of the Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> facilities was actually UT1.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcTimestamp:GetUTCparameters@1" href="src/NcTimestamp.cxx.html#Sx4ZmD">GetUTCparameters</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; leap, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dut) const</span><br />
-<div class="funccomm"><pre> Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
+<div class="funccomm"><pre> Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT1-UTC)
  from the daily IERS data for the specified MJD.
  The return value indicates the entry (0=first) in the IERS data TTree at which
  the corresponding data was stored.
@@ -1836,50 +1925,66 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcTimestamp:SetUTCparameters" href="src/NcTimestamp.cxx.html#YEz07D">SetUTCparameters</a>(TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut)</span><br />
-<div class="funccomm"><pre> Setting of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC).
- The TAI time recording will also be updated accordingly, but the UT
- time recording will remain unaffected.
- The return value indicates whether the UTC parameters are actually
- set Manually (1), Automatically (-1) or Not (0).
- In the latter case only UT time recording is available.
+<div class="funccomm"><pre> Internal memberfunction to set the UTC parameters (i.e. Leap Seconds and dut=UT1-UTC).
+ The TAI time recording is updated accordingly, depending on the input argument <span class="string">"utc"</span>, as outlined below.
+
+ The return value indicates whether the UTC parameters are actually set or not,
+ and has the following conventions :
+
+  1 --&gt; The UTC parameters were set manually and used to determine UT1 from UTC.
+  0 --&gt; No UTC parameters were provided and the stored reference time is UTC.
+ -1 --&gt; The UTC parameters were retrieved from the IERS data files and used to determine UT1 from UTC.
+ -2 --&gt; The UTC parameters were retrieved from the IERS data files and used to determine all TAI times from UT1.
+ -3 --&gt; No UTC parameters were provided and the stored reference time is UT1.
 
  The input arguments represent the following :
 
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The time that was specified c.q. stored represents UTC, which serves as reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The time that was specified c.q. stored represents UTC, and the provided UTC parameters
+                may be used by the calling function to determine UT1, which may then become the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The time that was specified c.q. stored represents UTC, and the retrieved UTC parameters
+                may be used by the calling function to determine UT1, which may then become the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
                 For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+        <span class="string">"U"</span> ==&gt; The time that was specified c.q. stored represents UT1, which will remain the reference time.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
- 1) Most of the date/time setting memberfunctions support direct setting
-    of the UTC parameters already.
- 2) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 3) The case utc=<span class="string">"A"</span> with no loaded data files, or no available data for the current MJD,
-    will be treated as utc=<span class="string">"N"</span>.
+ 1) In case of invalid input arguments the TAI related time recording is disabled
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 2) For the return values 0 and -3 only the UTC (0) or UT1 (-3) time recording is available,
+    depending on the input argument <span class="string">"utc"</span>, as outlined above.
+ 3) A return value of -2 or -3 indicates that the time which was entered via <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>()
+    or via one of the Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> facilities was actually UT1.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TTree* <a class="funcname" name="NcTimestamp:LoadUTCparameterFiles" href="src/NcTimestamp.cxx.html#vBG1gE">LoadUTCparameterFiles</a>(TString leapfile, TString dutfile)</span><br />
-<div class="funccomm"><pre> Load the IERS data for automatic setting of Leap Seconds and dUT=UT-UTC.
+<div class="funccomm"><pre> Load the IERS data for automatic setting of Leap Seconds and dUT=UT1-UTC.
 
  For the current timestamp the corresponding Leap seconds and dUT are set.
  If different settings are required, please invoke <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() after
@@ -1894,7 +1999,7 @@ return false;}
             https://hpiers.obspm.fr/iers/series/opa/eopc04
             This file contains the archival list of the daily dUT=UT-UTC monitoring.
 
- The corresponding daily values of the accumulated Leap Seconds and dUT=UT-UTC
+ The corresponding daily values of the accumulated Leap Seconds and dUT=UT1-UTC
  are stored in an internal ROOT TTree.
  The return argument provides a pointer to the corresponding TTree to enable
  the user to investigate or store the corresponding data.
@@ -1902,9 +2007,9 @@ return false;}
  The data stored in each TTree entry are the following :
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjd    : The corresponding MJD of the entry.
  <a href="./ListOfTypes.html#Int_t">Int_t</a> lsec   : The accumulated leap seconds of the corresponding mjd.
- <a href="./ListOfTypes.html#Double_t">Double_t</a> dut : The dUT=UT-UTC value (in seconds) of the corresponding mjd.
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> dut : The dUT=UT1-UTC value (in seconds) of the corresponding mjd.
 
- Accurate daily monitoring dUT=UT-UTC data, with about 10 microsecond precision,
+ Accurate daily monitoring dUT=UT1-UTC data, with about 10 microsecond precision,
  is available since MJD=37665 (01-jan-1962 00:00:00).
  Leap Seconds were introduced into UTC on MJD=41317 (01-jan-1972 00:00:00).
  For the period MJD=37665 until MJD=41317 the accumulated Leap Second count is set to 0.
@@ -1923,12 +2028,7 @@ return false;}
 <div class="funccomm"><pre> <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a> (or subtract) a certain time difference to the current timestamp.
  Subtraction can be achieved by entering negative values as input arguments.
 
- The current settings of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
- are maintained after the addition (or subtraction) of the time difference.
- In case the new date/time is so far from the original timestamp that the
- UTC parameters (if they were set) have to be updated, the user should invoke
- the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() directly after the invokation of this
- <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a>() memberfunction.
+ The UTC parameters (i.e. Leap Seconds and dut=UT1-UTC) will be updated accordingly.
 
  The time difference is entered via the following input arguments :
 
@@ -1956,12 +2056,7 @@ return false;}
  Note : For small time differences a better accuracy may be obtained by using
         the memberfunction <a href="./NcTimestamp.html#NcTimestamp:AddSec" title="void NcTimestamp::AddSec(Double_t seconds)">AddSec</a>() or <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a>(d,s,ns,ps).
 
- The current settings of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
- are maintained after the addition (or subtraction) of the time difference.
- In case the new date/time is so far from the original timestamp that the
- UTC parameters (if they were set) have to be updated, the user should invoke
- the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() directly after the invokation of this
- <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a>() memberfunction.
+ The UTC parameters (i.e. Leap Seconds and dut=UT1-UTC) will be updated accordingly.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:AddSec" href="src/NcTimestamp.cxx.html#fyARwD">AddSec</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> seconds)</span><br />
@@ -1972,12 +2067,69 @@ return false;}
  Note : For very small time differences a better accuracy may be obtained by
         using the memberfunction <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a>(d,s,ns,ps).
 
- The current settings of the UTC parameters (i.e. Leap Seconds and dut=UT-UTC)
- are maintained after the addition (or subtraction) of the time difference.
- In case the new date/time is so far from the original timestamp that the
- UTC parameters (if they were set) have to be updated, the user should invoke
- the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() directly after the invokation of this
- <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a>() memberfunction.
+ The UTC parameters (i.e. Leap Seconds and dut=UT1-UTC) will be updated accordingly.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:AddCalc" href="src/NcTimestamp.cxx.html#IQHOYC">AddCalc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utcpar = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to actually add (or subtract) a certain time difference
+ to the current timestamp and (optionally) update also the UTC parameters.
+ Subtraction can be achieved by entering negative values as input arguments.
+
+ The time difference is entered via the following input arguments :
+
+ d  : elapsed number of days
+ s  : (remaining) elapsed number of seconds
+ ns : (remaining) elapsed number of nanoseconds
+ ps : (remaining) elapsed number of picoseconds
+
+ The specified d, s, ns and ps values will be used in an additive
+ way to determine the time difference.
+ So, specification of d=1, s=100, ns=0, ps=0 will result in the
+ same time difference addition as d=0, s=24*3600+100, ns=0, ps=0.
+ However, by making use of the latter the user should take care
+ of possible integer overflow problems in the input arguments,
+ which obviously will provide incorrect results.
+
+ The argument <span class="string">"utcpar"</span> controls whether the UTC parameters are updated (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
+ via invokation of <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() after the addition (or subtraction) of the time difference.
+ In general utcpar=<a href="./ListOfTypes.html#Bool_t">kTRUE</a> should obviously be used, but utcpar=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> allows to
+ add (or subtract) time differences in <a href="./NcTimestamp.html#NcTimestamp:FillTAI" title="void NcTimestamp::FillTAI()">FillTAI</a>() without creating an infinite loop.
+
+ The default values are ps=0 and utcpar=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:AddCalc@1" href="src/NcTimestamp.cxx.html#Rwq7Q">AddCalc</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> hours, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utcpar = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to actually add (or subtract) a certain time difference
+ to the current timestamp and (optionally) update also the UTC parameters.
+ The time difference is specified as a (fractional) number of hours.
+ Subtraction can be achieved by entering a negative value as input argument.
+
+ Note : For small time differences a better accuracy may be obtained by using
+        the memberfunction <a href="./NcTimestamp.html#NcTimestamp:AddSec" title="void NcTimestamp::AddSec(Double_t seconds)">AddSec</a>() or <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a>(d,s,ns,ps).
+
+ The argument <span class="string">"utcpar"</span> controls whether the UTC parameters are updated (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
+ via invokation of <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() after the addition (or subtraction) of the time difference.
+ In general utcpar=<a href="./ListOfTypes.html#Bool_t">kTRUE</a> should obviously be used, but utcpar=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> allows to
+ add (or subtract) time differences in <a href="./NcTimestamp.html#NcTimestamp:FillTAI" title="void NcTimestamp::FillTAI()">FillTAI</a>() without creating an infinite loop.
+
+ The default value is utcpar=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:AddSecCalc" href="src/NcTimestamp.cxx.html#NGthrD">AddSecCalc</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> seconds, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utcpar = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to actually add (or subtract) a certain time difference
+ to the current timestamp and (optionally) update also the UTC parameters.
+ The time difference is specified as a (fractional) number of seconds.
+ Subtraction can be achieved by entering a negative value as input argument.
+
+ Note : For very small time differences a better accuracy may be obtained by
+        using the memberfunction <a href="./NcTimestamp.html#NcTimestamp:Add" title="void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps=0) or overloads">Add</a>(d,s,ns,ps).
+
+ The argument <span class="string">"utcpar"</span> controls whether the UTC parameters are updated (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
+ via invokation of <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() after the addition (or subtraction) of the time difference.
+ In general utcpar=<a href="./ListOfTypes.html#Bool_t">kTRUE</a> should obviously be used, but utcpar=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> allows to
+ add (or subtract) time differences in <a href="./NcTimestamp.html#NcTimestamp:FillTAI" title="void NcTimestamp::FillTAI()">FillTAI</a>() without creating an infinite loop.
+
+ The default value is utcpar=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcTimestamp:GetDifference" href="src/NcTimestamp.cxx.html#qrEHvB">GetDifference</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* t, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; days, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, TString type = <span class="string">"UT"</span>)</span><br />
@@ -1994,7 +2146,10 @@ return false;}
 
  In case type=<span class="string">"TAI"</span> and the TAI recording was not activated for one (or both) of the timestamps,
  the time difference will be set to 0.
- The UT recording is always available.
+ The UT recording is always available, and in case of a mix of UT1 and UTC as reference times
+ for the two timestamps, the time difference will be determined on basis of UTC.
+ Obviously, the time difference based on UTC will be less accurate than the time difference
+ determined on basis of UT1 for both timestamps.
 
  The default value is type=<span class="string">"UT"</span>, which is to be used for accurate astrophysical observations.
 
@@ -2036,7 +2191,10 @@ return false;}
 
  In case type=<span class="string">"TAI"</span> and the TAI recording was not activated for one (or both) of the timestamps,
  the time difference will be set to 0.
- The UT recording is always available.
+ The UT recording is always available, and in case of a mix of UT1 and UTC as reference times
+ for the two timestamps, the time difference will be determined on basis of UTC.
+ Obviously, the time difference based on UTC will be less accurate than the time difference
+ determined on basis of UT1 for both timestamps.
 
  The default value is type=<span class="string">"UT"</span>, which is to be used for accurate astrophysical observations.
 
@@ -2079,7 +2237,10 @@ return false;}
 
  In case type=<span class="string">"TAI"</span> and the TAI recording was not activated for one (or both) of the timestamps,
  the time difference will be set to 0.
- The UT recording is always available.
+ The UT recording is always available, and in case of a mix of UT1 and UTC as reference times
+ for the two timestamps, the time difference will be determined on basis of UTC.
+ Obviously, the time difference based on UTC will be less accurate than the time difference
+ determined on basis of UT1 for both timestamps.
 
  The default value is type=<span class="string">"UT"</span>, which is to be used for accurate astrophysical observations.
 
@@ -2141,7 +2302,10 @@ return false;}
 
  In case type=<span class="string">"TAI"</span> and the TAI recording was not activated for one (or both) of the timestamps,
  the time difference will be set to 0.
- The UT recording is always available.
+ The UT recording is always available, and in case of a mix of UT1 and UTC as reference times
+ for the two timestamps, the time difference will be determined on basis of UTC.
+ Obviously, the time difference based on UTC will be less accurate than the time difference
+ determined on basis of UT1 for both timestamps.
 
  The default value is type=<span class="string">"UT"</span>, which is to be used for accurate astrophysical observations.
 
@@ -2191,16 +2355,15 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetUT" href="src/NcTimestamp.cxx.html#l2zPh">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the UT date and time
  in the Gregorian calendar as specified by the input arguments.
+ Note that UT may represent either UT1 or UTC as specified by the
+ arguments <span class="string">"utc"</span>, <span class="string">"leap"</span> and <span class="string">"dut"</span>, as outlined below.
+
  This facility is exact upto picosecond precision and as such is
  for scientific observations preferable above the corresponding
  <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> function(s) of TTimestamp.
  The latter has a random spread in the sub-second part, which
  might be of use in generating distinguishable timestamps while
  still keeping second precision.
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the UT setting.
 
  The input arguments represent the following :
  y    : year in UT (e.g. 1952, 2003 etc...)
@@ -2213,33 +2376,46 @@ return false;}
  ps   : remaining fractional elapsed nanosecond of UT in picosecond
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The time that was specified represents UTC, which will serve as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The time that was specified represents UTC, and the provided UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The time that was specified represents UTC, and the retrieved UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
- 1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+ 1) In case of invalid date and/or time arguments, JD=0 is set to indicate that something went wrong.
+ 2) In case of invalid <span class="string">"utc"</span> input arguments the TAI related time recording is disabled
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 3) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
  The default values are ns=0, ps=0, utc=<span class="string">"A"</span>, leap=0 and dut=0.
 
@@ -2254,12 +2430,11 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetUT@1" href="src/NcTimestamp.cxx.html#JFyFEC">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> s, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the UT date and time
  in the Gregorian calendar as specified by the input arguments.
+ Note that UT may represent either UT1 or UTC as specified by the
+ arguments <span class="string">"utc"</span>, <span class="string">"leap"</span> and <span class="string">"dut"</span>, as outlined below.
+
  Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
  For a guaranteed picosecond precision please refer to the other <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>() memberfunctions.
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the UT setting.
 
  The input arguments represent the following :
  y    : year in UT (e.g. 1952, 2003 etc...)
@@ -2270,33 +2445,46 @@ return false;}
  s    : elapsed (fractional) seconds in UT (0-59.999...)
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The time that was specified represents UTC, which will serve as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The time that was specified represents UTC, and the provided UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The time that was specified represents UTC, and the retrieved UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
- 1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+ 1) In case of invalid date and/or time arguments, JD=0 is set to indicate that something went wrong.
+ 2) In case of invalid <span class="string">"utc"</span> input arguments the TAI related time recording is disabled
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 3) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
  The default values are utc=<span class="string">"A"</span>, leap=0 and dut=0.
 </pre></div>
@@ -2304,12 +2492,11 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetUT@2" href="src/NcTimestamp.cxx.html#FJlBSC">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, TString time, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the UT date and time
  in the Gregorian calendar as specified by the input arguments.
+ Note that UT may represent either UT1 or UTC as specified by the
+ arguments <span class="string">"utc"</span>, <span class="string">"leap"</span> and <span class="string">"dut"</span>, as outlined below.
+
  Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
  For a guaranteed picosecond precision please refer to the other <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>() memberfunctions.
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the UT setting.
 
  The input arguments represent the following :
  y    : year in UT (e.g. 1952, 2003 etc...)
@@ -2318,33 +2505,46 @@ return false;}
  time : The UT time in the format hh:mm:ss.sss
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The time that was specified represents UTC, which will serve as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The time that was specified represents UTC, and the provided UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The time that was specified represents UTC, and the retrieved UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
- 1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+ 1) In case of invalid date and/or time arguments, JD=0 is set to indicate that something went wrong.
+ 2) In case of invalid <span class="string">"utc"</span> input arguments the TAI related time recording is disabled
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 3) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
  The default values are utc=<span class="string">"A"</span>, leap=0 and dut=0.
 </pre></div>
@@ -2352,12 +2552,11 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetUT@3" href="src/NcTimestamp.cxx.html#wTR8MB">SetUT</a>(TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the UT date and time
  in the Gregorian calendar as specified by the input arguments.
+ Note that UT may represent either UT1 or UTC as specified by the
+ arguments <span class="string">"utc"</span>, <span class="string">"leap"</span> and <span class="string">"dut"</span>, as outlined below.
+
  Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
  For a guaranteed picosecond precision please refer to the other <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>() memberfunctions.
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the UT setting.
 
  The input arguments represent the following :
  date : The UT date in the format dd-mm-yyyy or dd/mm/yyyy or ddmmyyyy (mode=0)
@@ -2368,33 +2567,46 @@ return false;}
  mode : <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> format specifier (see above)
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The time that was specified represents UTC, which will serve as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The time that was specified represents UTC, and the provided UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The time that was specified represents UTC, and the retrieved UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
- 1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+ 1) In case of invalid date and/or time arguments, JD=0 is set to indicate that something went wrong.
+ 2) In case of invalid <span class="string">"utc"</span> input arguments the TAI related time recording is disabled
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 3) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
  The default values are utc=<span class="string">"A"</span>, leap=0 and dut=0.
 
@@ -2404,16 +2616,15 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetUT@4" href="src/NcTimestamp.cxx.html#i.tbNE">SetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the specified elapsed
  timespan since the beginning of the new UT year.
+ Note that UT may represent either UT1 or UTC as specified by the
+ arguments <span class="string">"utc"</span>, <span class="string">"leap"</span> and <span class="string">"dut"</span>, as outlined below.
+
  This facility is exact upto picosecond precision and as such is
  for scientific observations preferable above the corresponding
  <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> function(s) of TTimestamp.
  The latter has a random spread in the sub-second part, which
  might be of use in generating distinguishable timestamps while
  still keeping second precision.
- Optionally the user can also provide the corresponding UTC parameters
- (i.e. cumulated number of Leap Seconds and dut=UT-UTC) to enable to report next
- to UT also UTC and TAI derived time information.
- These UTC parameters will not affect the UT setting.
 
  The UT year and elapsed time span is entered via the following input arguments :
 
@@ -2424,33 +2635,46 @@ return false;}
  ps   : (remaining) elapsed number of picoseconds
  utc  : Flag to denote whether the UTC parameters <span class="string">"leap"</span> and <span class="string">"dut"</span> (see below) are provided or not.
         <span class="string">"N"</span> ==&gt; No UTC parameters will be stored.
-                The TAI related time recording is disabled and the values of
-                the Leap Seconds and dut=UT-UTC will be set to zero.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
+                The time that was specified represents UTC, which will serve as the reference time.
+                Since no Leap Second info is available, the TAI related time recording is disabled
+                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
         <span class="string">"M"</span> ==&gt; Manual setting of the UTC parameters as specified by <span class="string">"leap"</span> and <span class="string">"dut"</span>.
+                The time that was specified represents UTC, and the provided UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The provided UTC parameters will serve to determine the TAI related time recording.
         <span class="string">"A"</span> ==&gt; Automatic setting of the UTC parameters from the loaded IERS data files.
                 In this case the specified values of <span class="string">"leap"</span> and <span class="string">"dut"</span> are irrelevant.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>().
+                The time that was specified represents UTC, and the retrieved UTC parameters
+                will be used to determine UT1, which will from now on be the reference time.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
+                In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+        <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
+                This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
+                The retrieved UTC parameters will serve to determine the TAI related time recording.
  leap : The accumulated number of Leap Seconds corresponding to this date/time.
- dut  : The monitored time difference UT-UTC in seconds.
+ dut  : The monitored time difference UT1-UTC in seconds.
 
- The value of UT-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
+ The value of UT1-UTC is kept within 0.9 sec. by the introduction of Leap Seconds into UTC.
  An overview of the accumulated leap seconds is available at :
                 https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
                      or  http://maia.usno.navy.mil/ser7/tai-utc.dat
 
- The time difference dUT=UT-UTC is monitored on a daily basis and the data are available at :
+ The time difference dUT=UT1-UTC is monitored on a daily basis and the data are available at :
                  https://hpiers.obspm.fr/iers/series/opa/eopc04
                      or  http://maia.usno.navy.mil/ser7/ser7.dat
 
- The accuracy of the dUT=UT-UTC monitoring is about 10 microseconds.
+ The accuracy of the dUT=UT1-UTC monitoring is about 10 microseconds.
 
  Notes :
 
- 1) In case of invalid input arguments the TAI related time recording is disabled
-    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
- 2) In case utc=<span class="string">"A"</span> and no data files have been loaded, or no information is available,
-    the utc=<span class="string">"N"</span> mode will be invoked.
+ 1) In case of invalid date and/or time arguments, JD=0 is set to indicate that something went wrong.
+ 2) In case of invalid <span class="string">"utc"</span> input arguments the TAI related time recording is disabled
+    and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+ 3) In case utc=<span class="string">"A"</span> or utc=<span class="string">"U"</span> and no data files have been loaded, or no information is available,
+    the TAI related time recording is disabled and the values of the Leap Seconds and dut=UT1-UTC
+    will be set to zero.
 
  The specified d, s, ns and ps values will be used in an additive
  way to determine the elapsed timespan.
@@ -2470,13 +2694,13 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:GetUT" href="src/NcTimestamp.cxx.html#SHpaRC">GetUT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ss, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps)</span><br />
-<div class="funccomm"><pre> Provide the corrresponding UT as hh:mm:ss:ns:ps.
+<div class="funccomm"><pre> Provide the corresponding UT reference time as hh:mm:ss:ns:ps.
  This facility is based on the MJD, so the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> limitations
  do not apply here.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcTimestamp:GetUT@1" href="src/NcTimestamp.cxx.html#dIwvMB">GetUT</a>()</span><br />
-<div class="funccomm"><pre> Provide the corrresponding UT in fractional hours.
+<div class="funccomm"><pre> Provide the corresponding UT reference time in fractional hours.
  This facility is based on the MJD, so the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> limitations
  do not apply here.
 </pre></div>
@@ -2967,7 +3191,7 @@ return false;}
  do not apply here.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetEpoch" href="src/NcTimestamp.cxx.html#KZmWOC">SetEpoch</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode, TString utc = <span class="string">"A"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetEpoch" href="src/NcTimestamp.cxx.html#KZmWOC">SetEpoch</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the timestamp parameters according to the specified epoch.
 
  Optionally the user can also provide the corresponding UTC parameters
@@ -3021,11 +3245,14 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcTimestamp:GetDayTimeString" href="src/NcTimestamp.cxx.html#LZG9HD">GetDayTimeString</a>(TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0)</span><br />
-<div class="funccomm"><pre> Get a string with date and time info.
+<div class="funccomm"><pre> Get a string with date and time info for the date/time system specified via <span class="string">"mode"</span>.
 
- Via the input argument <span class="string">"mode"</span> one can select which date/time system will be provided.
  The argument <span class="string">"mode"</span> my have the values :
- <span class="string">"UT"</span>, <span class="string">"UTC"</span>, <span class="string">"GAT"</span>, <span class="string">"GMST"</span>, <span class="string">"GAST"</span>, <span class="string">"GPS"</span>, <span class="string">"TAI"</span>, <span class="string">"TT"</span>, <span class="string">"LMT"</span>, <span class="string">"LAT"</span>, <span class="string">"LMST"</span> or <span class="string">"LAST"</span>
+ <span class="string">"UT"</span>, <span class="string">"UT1"</span>, <span class="string">"UTC"</span>, <span class="string">"GAT"</span>, <span class="string">"GMST"</span>, <span class="string">"GAST"</span>, <span class="string">"GPS"</span>, <span class="string">"TAI"</span>, <span class="string">"TT"</span>, <span class="string">"LMT"</span>, <span class="string">"LAT"</span>, <span class="string">"LMST"</span> or <span class="string">"LAST"</span>
+
+ Note that mode=<span class="string">"UT"</span> will refer to the main reference time currently in use,
+ which is either <span class="string">"UT1"</span> or <span class="string">"UTC"</span>.
+ For further details see the documentation of <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>().
 
  The argument <span class="string">"ndig"</span> specifies the number of digits for the fractional
  seconds (e.g. ndig=6 corresponds to microsecond precision).
@@ -3044,14 +3271,19 @@ return false;}
 
  1) TAI related date/time info (i.e. TAI, UTC, GPS and TT) is only available if
     UTC parameters were provided.
-    Please refer to the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:SetUTCparameters" title="Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)">SetUTCparameters</a>() for details.
+    Please refer to the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>() for details.
  2) In case the MJD falls outside the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> range, the date info will be omitted.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:SetSystemTime" href="src/NcTimestamp.cxx.html#oFJ18D">SetSystemTime</a>()</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> UTC to the current time of the system clock.
- In case no database value of dUT=UT-UTC is available,
- the clock system time is entered as UT.
+
+ In case no database value of dUT=UT1-UTC is available,
+ the system clock time is used as the main (UTC) reference.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcTimestamp:IsUT1" href="src/NcTimestamp.cxx.html#XCMDWC">IsUT1</a>() const</span><br />
+<div class="funccomm"><pre> Indicate whether the reference time is UT1 (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or UTC (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
 </pre></div>
 </div>
 
@@ -3059,7 +3291,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sat Jul 17 10:47:26 2021 </em><em>&raquo; Last generated: 2021-07-17 10:47</em><br />
+<em>&raquo; Last changed: Wed Jul 28 14:18:14 2021 </em><em>&raquo; Last generated: 2021-07-28 14:18</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

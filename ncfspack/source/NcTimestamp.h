@@ -44,12 +44,12 @@ class NcTimestamp : public TTimeStamp
   Double_t GetJD(Double_t e,TString mode="J") const;  // Provide fractional Julian Date from Epoch
   Double_t GetMJD(Double_t e,TString mode="J") const; // Provide fractional Modified Julian Date from Epoch
   Double_t GetTJD(Double_t e,TString mode="J") const; // Provide fractional Truncated Julian Date from Epoch
-  void SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set Modified Julian Date and time
-  void SetMJD(Double_t mjd,TString utc="A",Int_t leap=0,Double_t dut=0);                            // Set Modified Julian Date and time
-  void SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0);   // Set Julian Date and time
-  void SetJD(Double_t jd,TString utc="A",Int_t leap=0,Double_t dut=0);                              // Set Julian Date and time
-  void SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set Truncated Julian Date and time
-  void SetTJD(Double_t tjd,TString utc="A",Int_t leap=0,Double_t dut=0);                            // Set Truncated Julian Date and time
+  void SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="U",Int_t leap=0,Double_t dut=0); // Set Modified Julian Date and time
+  void SetMJD(Double_t mjd,TString utc="U",Int_t leap=0,Double_t dut=0);                            // Set Modified Julian Date and time
+  void SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="U",Int_t leap=0,Double_t dut=0);   // Set Julian Date and time
+  void SetJD(Double_t jd,TString utc="U",Int_t leap=0,Double_t dut=0);                              // Set Julian Date and time
+  void SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc="U",Int_t leap=0,Double_t dut=0); // Set Truncated Julian Date and time
+  void SetTJD(Double_t tjd,TString utc="U",Int_t leap=0,Double_t dut=0);                            // Set Truncated Julian Date and time
   Int_t SetTAI(TString type,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut=0); // Set specified TAI based date and time
   Int_t SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut=0,Bool_t tmjd=kFALSE);  // Set International Atomic Time (TAI) date and time
   Int_t SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut=0,Bool_t tmjd=kFALSE); // Set International Atomic Time (TAI) date and time
@@ -62,7 +62,6 @@ class NcTimestamp : public TTimeStamp
   Double_t GetUnixTime(); // Provide the corresponding Unix time (fractional) second count
   Int_t GetUTCparameters(Int_t& leap,Double_t& dut) const;           // Provide the UTC parameters
   Int_t GetUTCparameters(Int_t mjd,Int_t& leap,Double_t& dut) const; // Provide the UTC parameters for MJD from the IERS data
-  Int_t SetUTCparameters(TString utc,Int_t leap,Double_t dut);       // Setting of the UTC parameters
   TTree* LoadUTCparameterFiles(TString leapfile,TString dutfile); // Load IERS data for automatic setting of Leap Seconds and dUT=UT-UTC
   TTree* GetIERSdatabase() const; // Provide the pointer to the internal IERS database TTree
   void SetNs(Int_t ns);                                 // Set the remaining fractional number of sec in nanoseconds
@@ -96,10 +95,11 @@ class NcTimestamp : public TTimeStamp
   void SetLT(Double_t dt,TString date,TString time,Int_t mode,TString utc="A",Int_t leap=0,Double_t dut=0);                 // Set data according to LT
   void SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns=0,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set data according to LT based on elapsed days, secs etc...
   Double_t Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name="",Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0); // Provide astronomical observables
-  void SetEpoch(Double_t e,TString mode,TString utc="A",Int_t leap=0,Double_t dut=0); // Set time parameters according to the specified epoch
+  void SetEpoch(Double_t e,TString mode,TString utc="U",Int_t leap=0,Double_t dut=0); // Set time parameters according to the specified epoch
   Double_t GetEpoch(TString mode); // Provide the requested epoch
   TString GetDayTimeString(TString mode,Int_t ndig=0,Double_t offset=0); // Provide the date and time in TString format
-  void SetSystemTime(); // Set UTC (or UT) to the current time of the system clock
+  void SetSystemTime(); // Set UTC (or UT1) to the current time of the system clock
+  Bool_t IsUT1() const; // Indicate whether the reference time is UT1 (kTRUE) or UTC (kFALSE)
 
  protected:
   Int_t fMJD;      // Modified Julian Date
@@ -115,12 +115,18 @@ class NcTimestamp : public TTimeStamp
   Int_t fTps;      // Remaining fractional number of nanoseconds (in picoseconds) elapsed within the TAI day
   TTree* fUTCdata; // Internal tree to contain the daily leap second and UT-UTC values
 
+ protected:
+  Int_t SetUTCparameters(TString utc,Int_t leap,Double_t dut); // Setting of the UTC parameters
+
  private:
+  void AddCalc(Int_t d,Int_t s,Int_t ns,Int_t ps=0,Bool_t utcpar=kTRUE); // Add (or subtract) a certain time difference
+  void AddCalc(Double_t hours,Bool_t utcpar=kTRUE);                      // Add (or subtract) a certain time difference
+  void AddSecCalc(Double_t seconds,Bool_t utcpar=kTRUE);                 // Add (or subtract) a certain time difference
   void FillJulian(); // Calculation and setting of the corresponding Julian parameters  
   void FillTAI();    // Calculation and setting of the corresponding TAI day etc. count
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,11) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,12) // Handling of timestamps for (astro)particle physics research.
 };
 #endif
