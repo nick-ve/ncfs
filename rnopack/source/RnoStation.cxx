@@ -30,7 +30,7 @@
 //   may be extended in the usual way.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  22:58Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  16:32Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoStation.h"
@@ -59,6 +59,8 @@ RnoStation::~RnoStation()
 RnoStation::RnoStation(const RnoStation& q) : NcDetectorUnit(q)
 {
 // Copy constructor.
+
+ fCanvas=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)

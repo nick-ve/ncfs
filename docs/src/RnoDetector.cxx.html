@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jul 11 22:17:18 2021            -->
+<!--   Date: Thu Jul 29 20:47:33 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -108,7 +108,7 @@
 <span class="comment">//         -1 --&gt; Unit is switched off.</span>
 <span class="comment">//</span>
 <span class="comment">//--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2021  15:42Z</span>
-<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  00:53Z</span>
+<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  11:43Z</span>
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
 
 <span class="cpp">#include "<a href="../RnoDetector.h">RnoDetector.h</a>"</span>
@@ -146,9 +146,9 @@ ClassImp(<a href="../RnoDetector.html">RnoDetector</a>) <span class="comment">//
 <span class="comment">// If a station with the specified id can not be found, the value 0 is returned.</span>
 
  <span class="comment">// Only allow the <span class="string">"matrix element"</span> labeled station IDs</span>
- <span class="keyword">if</span> (!id%10)
+ <span class="keyword">if</span> (id&lt;0 || !id%10)
  {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *"</span> &lt;&lt; <a href="../#TObject:ClassName" title="const char* TObject::ClassName()">ClassName</a>() &lt;&lt; <span class="string">"::GetStation* Invalid station ID."</span> &lt;&lt; endl;
+  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *"</span> &lt;&lt; <a href="../#TObject:ClassName" title="const char* TObject::ClassName()">ClassName</a>() &lt;&lt; <span class="string">"::GetStation* Invalid station ID : "</span> &lt;&lt; id &lt;&lt; endl;
   <span class="keyword">return</span> 0;
  }
 
@@ -389,7 +389,7 @@ ClassImp(<a href="../RnoDetector.html">RnoDetector</a>) <span class="comment">//
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-07-11 22:17 </em><em>&raquo; Last generated: 2021-07-11 22:17</em><br />
+<em>&raquo; Last changed: 2021-07-29 20:47 </em><em>&raquo; Last generated: 2021-07-29 20:47</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

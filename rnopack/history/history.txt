@@ -15,3 +15,6 @@
                 For all sampling displays a grid is now also shown.
 16-jul-2021 NvE New facility GetDayTimeString() used in RnoEvent to include also the event date/time info
                 in the display of the memberfunctions DisplaySampling() and DisplaySamplings().
+29-jul-2021 NvE Bug fix : Variable fCanvas set to 0 in the copy constructor of class RnoStation to prevent
+                the possible occurence of a segmenation violation.
+                Also class RnoConvert modified to handle data files in which waveforms, header and daqstatus are combined.

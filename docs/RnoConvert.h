@@ -5,7 +5,6 @@
 // See cxx source for full Copyright notice.
 
 #include "TFile.h"
-//@@@@@#include "TTree.h"
 #include "TChain.h"
 #include "TLeaf.h"
 
@@ -37,6 +36,6 @@ class RnoConvert : public NcJob
   TFile* fOutfile;        // The RnoEvent data output file
   TChain* fData;          // TChain with RNO-G input data
 
- ClassDef(RnoConvert,1) // Job for conversion of RNO-G Root data into RnoEvent data structures.
+ ClassDef(RnoConvert,2) // Job for conversion of RNO-G Root data into RnoEvent data structures.
 };
 #endif

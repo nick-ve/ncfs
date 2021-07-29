@@ -87,7 +87,7 @@
 //         -1 --> Unit is switched off.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2021  15:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  00:53Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  11:43Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoDetector.h"
@@ -125,9 +125,9 @@ RnoStation* RnoDetector::GetStation(Int_t id,Bool_t create)
 // If a station with the specified id can not be found, the value 0 is returned.
 
  // Only allow the "matrix element" labeled station IDs
- if (!id%10)
+ if (id<0 || !id%10)
  {
-  cout << " *" << ClassName() << "::GetStation* Invalid station ID." << endl;
+  cout << " *" << ClassName() << "::GetStation* Invalid station ID : " << id << endl;
   return 0;
  }
 

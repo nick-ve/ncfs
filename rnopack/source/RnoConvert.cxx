@@ -30,7 +30,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  20:19Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  16:17Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -206,7 +206,7 @@ void RnoConvert::Exec(Option_t* opt)
 
  cout << endl;
  cout << " === Overview of the input data chain ===" << endl;
- fData->Print();
+ fData->Print("toponly");
 
  // The number of entries in the input chain
  Int_t nen=fData->GetEntries();
@@ -215,9 +215,10 @@ void RnoConvert::Exec(Option_t* opt)
  if (fMaxevt>-1 && nen>fMaxevt) nen=fMaxevt;
 
  // Variables in the RNO-G data tree
- Int_t run=-1;
+ Int_t run=0;
  Int_t event=-1;
  Int_t station=-1;
+ Double_t trigtime=0;
 
  // The waveforms of all channels are stored as Int_t radiant[24][2048]
  // but will be readout linearly, as indicated below. 
@@ -236,15 +237,19 @@ void RnoConvert::Exec(Option_t* opt)
   det.Reset();
 
   fData->GetEntry(ient);
-  lx=fData->GetLeaf("run_number");
-  if (lx) run=lx->GetValue();
-  lx=fData->GetLeaf("event_number");
-  if (lx) event=lx->GetValue();
-  lx=fData->GetLeaf("station_number");
-  if (lx) station=lx->GetValue();
 
+  lx=fData->GetLeaf("header.run_number","run_number");
+  if (lx) run=lx->GetValue();
+  lx=fData->GetLeaf("header.event_number","event_number");
+  if (lx) event=lx->GetValue();
+  lx=fData->GetLeaf("header.station_number","station_number");
+  if (lx) station=lx->GetValue();
+  lx=fData->GetLeaf("header.trigger_time","trigger_time");
+  if (lx) trigtime=lx->GetValue();
   // Create this station in the detector structure
   RnoStation* stax=det.GetStation(station,kTRUE);
+
+  if (!stax) break;
 
   // Readout the waveforms of all Radiant channels
   lx=fData->GetLeaf("radiant_data");
@@ -275,6 +280,7 @@ void RnoConvert::Exec(Option_t* opt)
 
   // Transfer the RNO-G data into the RnoEvent structure
   evt->Reset();
+  evt->SetUnixTime(trigtime,"A");
   evt->SetRunNumber(run);
   evt->SetEventNumber(event);
   evt->SetDetector(det);
@@ -284,7 +290,7 @@ void RnoConvert::Exec(Option_t* opt)
   ExecuteTasks(opt);
 
   // Write the event to the output file (if needed)
-  if(otree) otree->Fill();
+  if (otree) otree->Fill();
 
   if (fPrintfreq)
   {
