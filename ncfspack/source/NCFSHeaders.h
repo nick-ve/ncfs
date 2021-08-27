@@ -47,3 +47,4 @@
 #include "NcDetectorUnit.h"
 #include "NcDetector.h"
 #include "NcTagger.h"
+#include "NcStokes.h"

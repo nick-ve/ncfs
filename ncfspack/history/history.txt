@@ -1254,5 +1254,7 @@
                 The version indicator in NcVersion has been updated to 4.6.
 29-jul-2021 NvE Essential bug fixed in the copy constructor of class RnoStation. See the rnopack history for details.
                 The version indicator in NcVersion has been updated to 4.6.1.
+27-aug-2021 NvE New class NcStokes introduced.
+                The version indicator in NcVersion has been updated to 4.6.2.
 
                  
