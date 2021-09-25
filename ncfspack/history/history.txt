@@ -1256,5 +1256,7 @@
                 The version indicator in NcVersion has been updated to 4.6.1.
 27-aug-2021 NvE New class NcStokes introduced.
                 The version indicator in NcVersion has been updated to 4.6.2.
+25-sep-2021 NvE New class NcBlocks introduced for the Bayesian Block treatment of sequential data.
+                The version indicator in NcVersion has been updated to 4.6.3.
 
                  

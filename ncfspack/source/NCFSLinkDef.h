@@ -53,5 +53,6 @@
  #pragma link C++ class NcDetector+;
  #pragma link C++ class NcTagger+;
  #pragma link C++ class NcStokes+;
+ #pragma link C++ class NcBlocks+;
 #endif
  

@@ -48,3 +48,4 @@
 #include "NcDetector.h"
 #include "NcTagger.h"
 #include "NcStokes.h"
+#include "NcBlocks.h"
