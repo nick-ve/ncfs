@@ -1258,5 +1258,7 @@
                 The version indicator in NcVersion has been updated to 4.6.2.
 25-sep-2021 NvE New class NcBlocks introduced for the Bayesian Block treatment of sequential data.
                 The version indicator in NcVersion has been updated to 4.6.3.
+28-sep-2021 NvE Functionality of class NcSample extended to enable FIFO performance.
+                The version indicator in NcVersion has been updated to 4.6.4.
 
                  

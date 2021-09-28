@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jul 11 22:17:17 2021            -->
+<!--   Date: Tue Sep 28 18:54:02 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -61,9 +61,17 @@ return false;}
 <pre>
  <a href="./NcSample.html#NcSample:Class" title="TClass* NcSample::Class()">Class</a> <a href="./NcSample.html">NcSample</a>
  Perform statistics on various multi-dimensional data samples.
+
  A data sample can be filled using the <span class="string">"Enter"</span> and/or <span class="string">"Remove"</span> functions,
  or by importing the data from a TGraph or TGraph2D via the <span class="string">"Load"</span> function.
  The <span class="string">"Reset"</span> function resets the complete sample to 'empty'.
+
+ The member function <a href="./NcSample.html#NcSample:SetStoreMode" title="void NcSample::SetStoreMode(Int_t mode=1,Int_t nmax=0,Int_t i=0)">SetStoreMode</a>() allows to store the data of each entry,
+ or limit the number of stored entries via a so-called dynamic buffer,
+ which removes (after a selected ordering) the first entry after reaching
+ a specified maximum number of entries.
+ Please refer to the documentation of <a href="./NcSample.html#NcSample:SetStoreMode" title="void NcSample::SetStoreMode(Int_t mode=1,Int_t nmax=0,Int_t i=0)">SetStoreMode</a>() for further details.
+
  The info which can be extracted from a certain data sample are the
  minimum, maximum, sum, mean, variance, sigma, median, spread, SNR, CV,
  RMS, covariance and correlation.
@@ -96,7 +104,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  14:35Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, September 28, 2021  18:35Z
 
 </pre></div>
 </div></div>
@@ -198,6 +206,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread@1">GetSpread</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSpread@2">GetSpread</a>(TH1* histo, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetStoreMode">GetStoreMode</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetStoreNmax">GetStoreNmax</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSum">GetSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetSum@1">GetSum</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
@@ -263,7 +272,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:SetNames">SetNames</a>(TString name1 = <span class="string">"X"</span>, TString name2 = <span class="string">"Y"</span>, TString name3 = <span class="string">"Z"</span>, TString name4 = <span class="string">"T"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:SetStoreMode">SetStoreMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:SetStoreMode">SetStoreMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
@@ -330,14 +339,16 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMax"></a>fMax[4]</td><td class="datadesc">Maximum value for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMean"></a>fMean[4]</td><td class="datadesc">Mean for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fMin"></a>fMin[4]</td><td class="datadesc">Minimum value for each variable</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fMoveVariable"></a>fMoveVariable</td><td class="datadesc">Variable to order before moving out entries  </td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fN"></a>fN</td><td class="datadesc">Number of entries of the sample</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
 <tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcSample:fNames"></a>fNames[4]</td><td class="datadesc">Variable names e.g. X,Y,Z,T</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fNmax"></a>fNmax</td><td class="datadesc">Maximum number of entries to be stored before moving some out</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fOrdered"></a>fOrdered</td><td class="datadesc">! Indicator of the status of the current ordering</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fRMSdev"></a>fRMSdev[4]</td><td class="datadesc">Root Mean Square deviation for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fRemove"></a>fRemove</td><td class="datadesc">Flag to indicate that some entry has been removed</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fSigma"></a>fSigma[4]</td><td class="datadesc">Standard deviation for each variable</td></tr>
-<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fStore"></a>fStore</td><td class="datadesc">Flag to denote storage of all entered data </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcSample:fStore"></a>fStore</td><td class="datadesc">Flag to denote storage of entered data </td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fSum"></a>fSum[4]</td><td class="datadesc">Total sum for each variable</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcSample:fSum2"></a>fSum2[4][4]</td><td class="datadesc">Total sum**2 for each variable</td></tr>
 <tr class="data"><td class="datatype">TArrayD*</td><td class="dataname"><a name="NcSample:fT"></a>fT</td><td class="datadesc">Storage array for the 4th variable (e.g. T)</td></tr>
@@ -381,7 +392,7 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Reset" href="src/NcSample.cxx.html#YAPDPE">Reset</a>()</span><br />
 <div class="funccomm"><pre> Resetting the statistics values for this <a href="./NcSample.html">NcSample</a> object.
  Also the variable names are reset to their (X,Y,Z,T) defaults.
- Dimension and storage flag are NOT changed.
+ Dimension and storage parameters are NOT changed.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:SetNames" href="src/NcSample.cxx.html#qSq3QC">SetNames</a>(TString name1 = <span class="string">"X"</span>, TString name2 = <span class="string">"Y"</span>, TString name3 = <span class="string">"Z"</span>, TString name4 = <span class="string">"T"</span>)</span><br />
@@ -688,14 +699,30 @@ return false;}
  The index of the first variable is 1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:SetStoreMode" href="src/NcSample.cxx.html#YAvZh">SetStoreMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
-<div class="funccomm"><pre> Set storage mode for all entered data.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:SetStoreMode" href="src/NcSample.cxx.html#LKSlLC">SetStoreMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> i = 0)</span><br />
+<div class="funccomm"><pre> Set storage mode for entered data.
+ The input parameter <span class="string">"nmax"</span> allows to limit the number of stored entries,
+ by removing every first entry after ordering w.r.t. the i-th variable (1=first)
+ once a new entry is entered that would exceed <span class="string">"nmax"</span>.
 
- mode = 0 : Entered data will not be stored
-        1 : All data will be stored as entered
+ mode = 0 : Entered data will not be stored, but at each entry the statistics will be updated.
+        1 : <a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a> will be stored as entered.
+ nmax = 0 : No maximum is set for the number of stored entries.
+      &gt; 0 : Entries will be stored up to a maximum of <span class="string">"nmax"</span> entries.
+ i    &gt; 0 : Re-order the entries w.r.t. the i-th variable in increasing order before removing the first (=lowest value).
+      = 0 : Re-order the entries in the order they were entered before removing the first one.
+      &lt; 0 : Re-order the entries w.r.t. the i-th variable in decreasing order before removing the first (=highest value).
+            When nmax=0 the value of <span class="string">"i"</span> is irrelevant.
 
- By default the storage mode is set to 0 in the constructor of this class.
- The default at invokation of this memberfunction is mode=1.
+ Notes :
+
+ 1) For mode=0 or inconsistent input the values of <span class="string">"nmax"</span> and <span class="string">"i"</span> are both set to 0.
+ 2) Specification of i=0 results in a regular First In First Out (FIFO) buffer performance,
+    whereas for other <span class="string">"i"</span> values it reflects a FIFO behaviour of removing the first entry
+    after the requested ordering.
+
+ By default the values of mode, nmax and i are set to 0 in the constructor of this class.
+ The default at invokation of this memberfunction is mode=1, nmax=0 and i=0.
 
  For normal statistics evaluation (e.g. mean, sigma, covariance etc...)
  storage of entered data is not needed. This is the default mode
@@ -704,12 +731,16 @@ return false;}
  then the data storage mode has be activated, unless the statistics
  are obtained from a specified input histogram.
 
- Note : Activation of storage mode can only be performed before the
-        first data item is entered.
+ Note : Specification of storage mode can only be performed before the
+        first data item is entered or after invokation of <a href="./NcSample.html#NcSample:Reset" title="void NcSample::Reset()">Reset</a>().
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetStoreMode" href="src/NcSample.cxx.html#DCR7nC">GetStoreMode</a>() const</span><br />
 <div class="funccomm"><pre> Provide the storage mode
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcSample:GetStoreNmax" href="src/NcSample.cxx.html#TPGlAD">GetStoreNmax</a>() const</span><br />
+<div class="funccomm"><pre> Provide the maximum number of entries for storage
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetQuantile" href="src/NcSample.cxx.html#yduqiC">GetQuantile</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f, <a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
@@ -1588,7 +1619,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Jul 11 22:17:17 2021 </em><em>&raquo; Last generated: 2021-07-11 22:17</em><br />
+<em>&raquo; Last changed: Tue Sep 28 18:54:03 2021 </em><em>&raquo; Last generated: 2021-09-28 18:54</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

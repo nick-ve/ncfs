@@ -30,9 +30,17 @@
 ///////////////////////////////////////////////////////////////////////////
 // Class NcSample
 // Perform statistics on various multi-dimensional data samples.
+//
 // A data sample can be filled using the "Enter" and/or "Remove" functions,
 // or by importing the data from a TGraph or TGraph2D via the "Load" function.
 // The "Reset" function resets the complete sample to 'empty'.
+//
+// The member function SetStoreMode() allows to store the data of each entry,
+// or limit the number of stored entries via a so-called dynamic buffer,
+// which removes (after a selected ordering) the first entry after reaching
+// a specified maximum number of entries.
+// Please refer to the documentation of SetStoreMode() for further details. 
+//
 // The info which can be extracted from a certain data sample are the
 // minimum, maximum, sum, mean, variance, sigma, median, spread, SNR, CV,
 // RMS, covariance and correlation.
@@ -65,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  14:35Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, September 28, 2021  18:35Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -82,6 +90,8 @@ NcSample::NcSample(const char* name,const char* title) : TNamed(name,title)
  fN=0;
  fRemove=0;
  fStore=0;
+ fNmax=0;
+ fMoveVariable=0;
  fX=0;
  fY=0;
  fZ=0;
@@ -158,6 +168,8 @@ NcSample::NcSample(const NcSample& s) : TNamed(s)
 
  fDim=s.fDim;
  fStore=s.fStore;
+ fNmax=s.fNmax;
+ fMoveVariable=s.fMoveVariable;
  fN=s.fN;
  fRemove=s.fRemove;
 
@@ -225,7 +237,7 @@ void NcSample::Reset()
 {
 // Resetting the statistics values for this NcSample object.
 // Also the variable names are reset to their (X,Y,Z,T) defaults.
-// Dimension and storage flag are NOT changed.
+// Dimension and storage parameters are NOT changed.
 
  fN=0;
  fRemove=0;
@@ -334,6 +346,9 @@ void NcSample::Enter(Double_t x)
   return;
  }
 
+ // Remove (after re-ordering) the first entry if needed
+ if (fNmax && fN==fNmax) RemoveEntry(1,fMoveVariable,abs(fMoveVariable));
+
  fN+=1;
  fSum[0]+=x;
  fSum2[0][0]+=x*x;
@@ -416,6 +431,9 @@ void NcSample::Enter(Double_t x,Double_t y)
   cout << " *NcSample::Enter* Error : Not a 2-dim sample." << endl;
   return;
  }
+
+ // Remove (after re-ordering) the first entry if needed
+ if (fNmax && fN==fNmax) RemoveEntry(1,fMoveVariable,abs(fMoveVariable));
 
  fN+=1;
  fSum[0]+=x;
@@ -517,6 +535,9 @@ void NcSample::Enter(Double_t x,Double_t y,Double_t z)
   cout << " *NcSample::Enter* Error : Not a 3-dim sample." << endl;
   return;
  }
+
+ // Remove (after re-ordering) the first entry if needed
+ if (fNmax && fN==fNmax) RemoveEntry(1,fMoveVariable,abs(fMoveVariable));
 
  fN+=1;
  fSum[0]+=x;
@@ -637,6 +658,9 @@ void NcSample::Enter(Double_t x,Double_t y,Double_t z,Double_t t)
   cout << " *NcSample::Enter* Error : Not a 4-dim sample." << endl;
   return;
  }
+
+ // Remove (after re-ordering) the first entry if needed
+ if (fNmax && fN==fNmax) RemoveEntry(1,fMoveVariable,abs(fMoveVariable));
 
  fN+=1;
  fSum[0]+=x;
@@ -1326,6 +1350,16 @@ void NcSample::Data(Int_t i,Int_t j)
   return;
  }
 
+ if (fNmax==fN && fRemove)
+ {
+  cout << " At entering new data the dynamic FIFO storage was limited to " << fNmax << " entries";
+  if (!fMoveVariable) cout << " using the order of original entering.";
+  if (fMoveVariable>0) cout << " after increasing";
+  if (fMoveVariable<0) cout << " after decreasing";
+  if (fMoveVariable) cout << " ordering w.r.t. variable " << abs(fMoveVariable);
+  cout << endl;
+ }
+
  // Statistics and correlations of all variables
  if (!i && !j)
  {
@@ -1432,6 +1466,15 @@ void NcSample::ListOrdered(Int_t mode,Int_t i)
  if (strlen(name))  cout << " Name : " << name;
  if (strlen(title)) cout << " Title : " << title;
  cout << endl;
+ if (fNmax==fN && fRemove)
+ {
+  cout << " At entering new data the dynamic FIFO storage was limited to " << fNmax << " entries";
+  if (!fMoveVariable) cout << " using the order of original entering.";
+  if (fMoveVariable>0) cout << " after increasing";
+  if (fMoveVariable<0) cout << " after decreasing";
+  if (fMoveVariable) cout << " ordering w.r.t. variable " << abs(fMoveVariable);
+  cout << endl;
+ }
  cout << " Listing of the stored entries in";
  if (!mode) cout << " order of original entering." << endl;
  if (mode<0) cout << " decreasing order of variable : " << i << " (" << fNames[i-1] << ")" << endl;
@@ -1516,15 +1559,31 @@ void NcSample::List(Int_t i,Int_t j) const
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcSample::SetStoreMode(Int_t mode)
+void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 {
-// Set storage mode for all entered data.
+// Set storage mode for entered data.
+// The input parameter "nmax" allows to limit the number of stored entries,
+// by removing every first entry after ordering w.r.t. the i-th variable (1=first)
+// once a new entry is entered that would exceed "nmax". 
 //
-// mode = 0 : Entered data will not be stored
-//        1 : All data will be stored as entered
+// mode = 0 : Entered data will not be stored, but at each entry the statistics will be updated.
+//        1 : Data will be stored as entered.
+// nmax = 0 : No maximum is set for the number of stored entries.
+//      > 0 : Entries will be stored up to a maximum of "nmax" entries.
+// i    > 0 : Re-order the entries w.r.t. the i-th variable in increasing order before removing the first (=lowest value).
+//      = 0 : Re-order the entries in the order they were entered before removing the first one.
+//      < 0 : Re-order the entries w.r.t. the i-th variable in decreasing order before removing the first (=highest value).
+//            When nmax=0 the value of "i" is irrelevant.
 //
-// By default the storage mode is set to 0 in the constructor of this class.
-// The default at invokation of this memberfunction is mode=1.
+// Notes :
+// -------
+// 1) For mode=0 or inconsistent input the values of "nmax" and "i" are both set to 0.
+// 2) Specification of i=0 results in a regular First In First Out (FIFO) buffer performance,
+//    whereas for other "i" values it reflects a FIFO behaviour of removing the first entry
+//    after the requested ordering.
+//
+// By default the values of mode, nmax and i are set to 0 in the constructor of this class.
+// The default at invokation of this memberfunction is mode=1, nmax=0 and i=0.
 //
 // For normal statistics evaluation (e.g. mean, sigma, covariance etc...)
 // storage of entered data is not needed. This is the default mode
@@ -1533,23 +1592,38 @@ void NcSample::SetStoreMode(Int_t mode)
 // then the data storage mode has be activated, unless the statistics
 // are obtained from a specified input histogram.
 //
-// Note : Activation of storage mode can only be performed before the
-//        first data item is entered. 
+// Note : Specification of storage mode can only be performed before the
+//        first data item is entered or after invokation of Reset(). 
 
  if (fN)
  {
-  cout << " *NcSample::SetStoreMore* Storage mode can only be set before first data." << endl;
+  cout << " *NcSample::SetStoreMode* Storage mode can only be set before first data." << endl;
+ }
+ else if ((!mode && nmax) || mode<0 || mode>1 || nmax<0 || abs(i)>fDim)
+ {
+  cout << " *NcSample::SetStoreMode* Inconsistent input : mode=" << mode << " nmax=" << nmax << " i=" << i << endl;
+  fNmax=0;
+  fMoveVariable=0;
  }
  else
  {
-  if (mode==0 || mode==1) fStore=mode;
+  fStore=mode;
+  fNmax=nmax;
+  fMoveVariable=i;
  }
+ cout << " *NcSample::SetStoreMode* Effective values : mode=" << fStore << " nmax=" << fNmax << " i=" << fMoveVariable << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetStoreMode() const
 {
 // Provide the storage mode
  return fStore;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcSample::GetStoreNmax() const
+{
+// Provide the maximum number of entries for storage
+ return fNmax;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetQuantile(Double_t f,Int_t i)

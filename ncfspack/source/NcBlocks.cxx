@@ -89,11 +89,11 @@
 //  {
 //   add=1;
 //  }
-//  elseif (i<mid)
+//  else if (i<mid)
 //  {
 //   add=0.1;
 //  }
-//  elseif (i<up)
+//  else if (i<up)
 //  {
 //   add=1;
 //  }
@@ -315,11 +315,11 @@
 //  {
 //   add=1;
 //  }
-//  elseif (i<mid)
+//  else if (i<mid)
 //  {
 //   add=0.1;
 //  }
-//  elseif (i<up)
+//  else if (i<up)
 //  {
 //   add=1;
 //  }
