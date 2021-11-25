@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 29 20:47:33 2021            -->
+<!--   Date: Thu Nov 25 15:07:43 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -108,7 +108,7 @@
 <span class="comment">//         -1 --&gt; Unit is switched off.</span>
 <span class="comment">//</span>
 <span class="comment">//--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2021  15:42Z</span>
-<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  11:43Z</span>
+<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 25, 2021  14:10Z</span>
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
 
 <span class="cpp">#include "<a href="../RnoDetector.h">RnoDetector.h</a>"</span>
@@ -261,7 +261,7 @@ ClassImp(<a href="../RnoDetector.html">RnoDetector</a>) <span class="comment">//
     hpol.<a href="../NcPosition.html#NcPosition:SetPosition" title="void NcPosition::SetPosition(Double_t* r,TString f,TString u=&quot;rad&quot;) or overloads">SetPosition</a>(45-istr*15,10,depths[ia-1],<span class="string">"car"</span>);
 
     icha=18-ia; <span class="comment">// Helper string 1</span>
-    <span class="keyword">if</span> (istr==3) icha=30-ia; <span class="comment">// Helper string 2</span>
+    <span class="keyword">if</span> (istr==3) icha=14+ia; <span class="comment">// Helper string 2</span>
 
     <span class="keyword">if</span> (ia==7)
     {
@@ -389,7 +389,7 @@ ClassImp(<a href="../RnoDetector.html">RnoDetector</a>) <span class="comment">//
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-07-29 20:47 </em><em>&raquo; Last generated: 2021-07-29 20:47</em><br />
+<em>&raquo; Last changed: 2021-11-25 15:07 </em><em>&raquo; Last generated: 2021-11-25 15:07</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

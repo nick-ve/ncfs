@@ -87,7 +87,7 @@
 //         -1 --> Unit is switched off.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2021  15:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  11:43Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 25, 2021  14:10Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoDetector.h"
@@ -240,7 +240,7 @@ void RnoDetector::CreateStation(Int_t id)
     hpol.SetPosition(45-istr*15,10,depths[ia-1],"car");
 
     icha=18-ia; // Helper string 1
-    if (istr==3) icha=30-ia; // Helper string 2
+    if (istr==3) icha=14+ia; // Helper string 2
 
     if (ia==7)
     {

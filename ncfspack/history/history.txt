@@ -1260,5 +1260,7 @@
                 The version indicator in NcVersion has been updated to 4.6.3.
 28-sep-2021 NvE Functionality of class NcSample extended to enable FIFO performance.
                 The version indicator in NcVersion has been updated to 4.6.4.
+25-nov-2021 NvE Channel numbering 21 and 23 swapped in class RnoDetector. See the rnopack history for details.
+                The version indicator in NcVersion has been updated to 4.6.5.
 
                  

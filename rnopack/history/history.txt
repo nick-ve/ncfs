@@ -18,3 +18,5 @@
 29-jul-2021 NvE Bug fix : Variable fCanvas set to 0 in the copy constructor of class RnoStation to prevent
                 the possible occurence of a segmenation violation.
                 Also class RnoConvert modified to handle data files in which waveforms, header and daqstatus are combined.
+25-nov-2021 NvE Channel numbering 21 and 23 swapped in RnoDetector::CreateStation to comply with the actual
+                deployed hardware in which Ch21 is an Hpol and Ch23 is a Vpol antenna on Helper string 2.
