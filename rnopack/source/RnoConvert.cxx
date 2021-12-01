@@ -30,7 +30,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  16:17Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 1, 2021  14:45Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -49,6 +49,9 @@ RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
  fPrintfreq=1;
  fOutfile=0;
  fData=0;
+
+ NcVersion version;
+ version.Data();
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoConvert::~RnoConvert()
@@ -135,6 +138,27 @@ void RnoConvert::SetOutputFile(TString name)
  fOutfile=new TFile(name.Data(),"RECREATE","RNO-G data in RnoEvent structure");
 }
 ///////////////////////////////////////////////////////////////////////////
+void RnoConvert::ListInput(Option_t* opt)
+{
+// Provide an overview listing of the input data chain.
+// The input argument "opt" has the same meaning as for the ROOT TTree::Print().
+// The default is opt="".
+
+ TString s=opt;
+ if (s=="") s="Default";
+ if (fData)
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::ListInput* Overview of the input data with option : " << s << endl;
+  fData->Print(opt);
+ }
+ else
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::ListInput* No input file has been attached." << endl;
+ }
+}
+///////////////////////////////////////////////////////////////////////////
 TFile* RnoConvert::GetOutputFile()
 {
 // Provide pointer to the RnoEvent output file.
@@ -204,78 +228,158 @@ void RnoConvert::Exec(Option_t* opt)
 
  ListEnvironment();
 
- cout << endl;
- cout << " === Overview of the input data chain ===" << endl;
- fData->Print("toponly");
-
  // The number of entries in the input chain
  Int_t nen=fData->GetEntries();
 
  // Check for the maximum number of events to be processed
  if (fMaxevt>-1 && nen>fMaxevt) nen=fMaxevt;
 
- // Variables in the RNO-G data tree
+ //////////////////////////////////////
+ // Variables in the RNO-G data tree //
+ //////////////////////////////////////
+
+ // Header info
  Int_t run=0;
  Int_t event=-1;
  Int_t station=-1;
  Double_t trigtime=0;
 
- // The waveforms of all channels are stored as Int_t radiant[24][2048]
+ // Trigger info
+ NcTagger trigger("Trigger","Trigger tags");
+ const Int_t ntrig=7;
+ TString trignames[ntrig]={"rf","force","pps","ext","radiant","lt","surface"};
+
+ // The waveforms of all channels are stored as Short_t radiant_data[24][2048]
+ // but will be readout linearly, as indicated below. 
+
+ // The pedestals of all channels are stored as UShort_t pedestals[24][4096]
  // but will be readout linearly, as indicated below. 
 
  // Loop over the entries in the input data chain
  TLeaf* lx=0;
  Int_t idx=0;
+ Int_t nsamples=0; // The sampling buffer length
  NcDevice* devx=0;
- NcSample sample;
- sample.SetStoreMode(1);
+ NcSample signal("Signals","Radiant signals");
+ signal.SetStoreMode(1);
+ NcSample pedestal("Pedestals","Pedestal values");
+ pedestal.SetStoreMode(1);
+ Int_t idsample=0; // Index for the NcSample in the NcDevice storage
  TString name="";
  Float_t value=0;
+ Bool_t flag=kFALSE;
  for (Int_t ient=0; ient<nen; ient++)
  {
   // Reset the detector structure
   det.Reset();
+  idsample=0;
 
   fData->GetEntry(ient);
 
-  lx=fData->GetLeaf("header.run_number","run_number");
-  if (lx) run=lx->GetValue();
-  lx=fData->GetLeaf("header.event_number","event_number");
-  if (lx) event=lx->GetValue();
-  lx=fData->GetLeaf("header.station_number","station_number");
-  if (lx) station=lx->GetValue();
-  lx=fData->GetLeaf("header.trigger_time","trigger_time");
-  if (lx) trigtime=lx->GetValue();
+  // Header data
+  if (fData->GetBranch("header"))
+  {
+   lx=fData->GetLeaf("header.run_number","run_number");
+   if (lx) run=lx->GetValue();
+   lx=fData->GetLeaf("header.event_number","event_number");
+   if (lx) event=lx->GetValue();
+   lx=fData->GetLeaf("header.station_number","station_number");
+   if (lx) station=lx->GetValue();
+   lx=fData->GetLeaf("header.trigger_time","trigger_time");
+   if (lx) trigtime=lx->GetValue();
+  }
+  else // The corresponding data from a pedestal file
+  {
+   lx=fData->GetLeaf("station_number");
+   if (lx) station=lx->GetValue();
+   lx=fData->GetLeaf("when");
+   if (lx) trigtime=lx->GetValue();
+  }
+
   // Create this station in the detector structure
   RnoStation* stax=det.GetStation(station,kTRUE);
 
   if (!stax) break;
 
-  // Readout the waveforms of all Radiant channels
-  lx=fData->GetLeaf("radiant_data");
-  idx=0;
-  for (Int_t i=0; i<24; i++)
+  // Trigger data
+  trigger.Reset();
+
+  for (Int_t jtrig=0; jtrig<ntrig; jtrig++)
   {
-   // Access the corresponding channel of this station
-   name="Ch";
-   name+=i;
-   devx=stax->GetDevice(name,kTRUE);
-
-   if (!devx) continue;
-
-   sample.Reset();
-   sample.SetNames("ADC");
-   for (Int_t j=0; j<2048; j++)
+   name="trigger_info.";
+   name+=trignames[jtrig];
+   name+="_trigger";
+   lx=fData->GetLeaf(name);
+   if (lx)
    {
-    if (lx)
+    flag=kFALSE;
+    if (TMath::Nint(lx->GetValue())) flag=kTRUE;
+    trigger.SetPass(trignames[jtrig],flag);
+    trigger.SetWrite(trignames[jtrig],flag);
+   }
+  }
+
+  det.AddDevice(trigger);
+
+  // Readout the signal waveforms of all Radiant channels
+  nsamples=0;
+  lx=fData->GetLeaf("waveforms.buffer_length","buffer_length");
+  if (lx) nsamples=TMath::Nint(lx->GetValue());
+  if (!nsamples) nsamples=2048;
+  lx=fData->GetLeaf("radiant_data");
+  if (lx)
+  {
+   idsample++;
+   idx=0;
+   for (Int_t i=0; i<24; i++)
+   {
+    // Access the corresponding channel of this station
+    name="Ch";
+    name+=i;
+    devx=stax->GetDevice(name,kTRUE);
+
+    if (!devx) continue;
+
+    signal.Reset();
+    signal.SetNames("ADC");
+    for (Int_t j=0; j<nsamples; j++)
     {
      // Retrieve the value of radiant[i][j]
      value=lx->GetValue(idx);
-     sample.Enter(value);
+     signal.Enter(value);
+     idx++;
     }
-    idx++;
+    devx->SetSample(&signal,idsample);
    }
-   devx->SetSample(&sample);
+  }
+
+  // Readout the pedestals of all Radiant channels
+  nsamples=4096;
+  lx=fData->GetLeaf("pedestals");
+  if (lx)
+  {
+   idsample++;
+   idx=0;
+   for (Int_t i=0; i<24; i++)
+   {
+    // Access the corresponding channel of this station
+    name="Ch";
+    name+=i;
+    devx=stax->GetDevice(name,kTRUE);
+
+    if (!devx) continue;
+
+    pedestal.Reset();
+    pedestal.SetNames("ADC");
+    for (Int_t j=0; j<nsamples; j++)
+    {
+     // Retrieve the value of pedestals[i][j]
+     value=lx->GetValue(idx);
+     pedestal.Enter(value);
+     idx++;
+    }
+    devx->SetSample(&pedestal,idsample);
+   }
   }
 
   // Transfer the RNO-G data into the RnoEvent structure

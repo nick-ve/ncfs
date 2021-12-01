@@ -20,3 +20,5 @@
                 Also class RnoConvert modified to handle data files in which waveforms, header and daqstatus are combined.
 25-nov-2021 NvE Channel numbering 21 and 23 swapped in RnoDetector::CreateStation to comply with the actual
                 deployed hardware in which Ch21 is an Hpol and Ch23 is a Vpol antenna on Helper string 2.
+01-dec-2021 NvE Class RnoConvert extended to handle also pedestal data files and a separate
+                member function RnoConvert::ListInput() introduced.

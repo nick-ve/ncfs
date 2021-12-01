@@ -1262,5 +1262,7 @@
                 The version indicator in NcVersion has been updated to 4.6.4.
 25-nov-2021 NvE Channel numbering 21 and 23 swapped in class RnoDetector. See the rnopack history for details.
                 The version indicator in NcVersion has been updated to 4.6.5.
-
-                 
+01-dec-2021 NvE Printout in NcSample::SetStoreMode() extended.
+                Also class RnoConvert extended to handle also pedestal data files and a separate
+                member function RnoConvert::ListInput() introduced. See the rnopack history for details.
+                The version indicator in NcVersion has been updated to 4.6.6.

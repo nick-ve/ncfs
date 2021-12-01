@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 29 20:47:33 2021            -->
+<!--   Date: Wed Dec  1 15:21:26 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -75,7 +75,7 @@ return false;}
  Please refer to /macros/convert.cc for a usage example.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  16:17Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 1, 2021  14:45Z
 
 </pre></div>
 </div></div>
@@ -155,6 +155,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:ListEnvironment"><span class="baseclass">NcJob::</span>ListEnvironment</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:ListInput">ListInput</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:MakeFolder"><span class="baseclass">NcJob::</span>MakeFolder</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
@@ -341,6 +342,12 @@ return false;}
 <div class="funccomm"><pre> Create the output file for the <a href="./RnoEvent.html">RnoEvent</a> data.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:ListInput" href="src/RnoConvert.cxx.html#OyQCL">ListInput</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre> Provide an overview listing of the input data chain.
+ The input argument <span class="string">"opt"</span> has the same meaning as for the ROOT TTree::<a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a>().
+ The default is opt=<span class="string">""</span>.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname">TFile* <a class="funcname" name="RnoConvert:GetOutputFile" href="src/RnoConvert.cxx.html#hoerME">GetOutputFile</a>()</span><br />
 <div class="funccomm"><pre> Provide pointer to the <a href="./RnoEvent.html">RnoEvent</a> output file.
 </pre></div>
@@ -364,14 +371,14 @@ return false;}
  2) The main object in this job environment is an <a href="./RnoEvent.html">RnoEvent</a>* pointer.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="RnoConvert:RnoConvert" href="src/RnoConvert.h.html#qncsk">RnoConvert</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"RnoConvert"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="RnoConvert:RnoConvert" href="src/RnoConvert.h.html#RCNnk">RnoConvert</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"RnoConvert"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul 29 20:47:33 2021 </em><em>&raquo; Last generated: 2021-07-29 20:47</em><br />
+<em>&raquo; Last changed: Wed Dec  1 15:21:27 2021 </em><em>&raquo; Last generated: 2021-12-01 15:21</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

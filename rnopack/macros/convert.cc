@@ -13,10 +13,13 @@
  q.SetPrintFreq(5);
 
  // The RNO-G Root data input filename(s)
- q.AddInputFile("pulse-waveforms.root","wf");
+ q.AddInputFile("./data/station11/run101/combined.root","combined");
 
  // Output file for the event structures
  q.SetOutputFile("myevents.rnopack");
+
+ // Provide an overview listing of the input data chain
+ q.ListInput();
 
  ///////////////////////////////////////////////////////////////////
  // Here the user can specify his/her sub-tasks to be executed

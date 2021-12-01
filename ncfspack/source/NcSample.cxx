@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, September 28, 2021  18:35Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 1, 2021  11:42Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -1595,13 +1595,22 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 // Note : Specification of storage mode can only be performed before the
 //        first data item is entered or after invokation of Reset(). 
 
+ TString name=GetName();
+ TString title=GetTitle();
+
+ cout << " *NcSample::SetStoreMode*";
+ if (name!="" || title!="") cout << " for sample";
+ if (name!="") cout << " Name:" << name;
+ if (title!="") cout << " Title:" << title;
+ cout << endl;
+
  if (fN)
  {
-  cout << " *NcSample::SetStoreMode* Storage mode can only be set before first data." << endl;
+  cout << "  Storage mode can only be set before first data." << endl;
  }
  else if ((!mode && nmax) || mode<0 || mode>1 || nmax<0 || abs(i)>fDim)
  {
-  cout << " *NcSample::SetStoreMode* Inconsistent input : mode=" << mode << " nmax=" << nmax << " i=" << i << endl;
+  cout << "  Inconsistent input : mode=" << mode << " nmax=" << nmax << " i=" << i << endl;
   fNmax=0;
   fMoveVariable=0;
  }
@@ -1611,7 +1620,7 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
   fNmax=nmax;
   fMoveVariable=i;
  }
- cout << " *NcSample::SetStoreMode* Effective values : mode=" << fStore << " nmax=" << fNmax << " i=" << fMoveVariable << endl;
+ cout << "  Effective values : mode=" << fStore << " nmax=" << fNmax << " i=" << fMoveVariable << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetStoreMode() const
