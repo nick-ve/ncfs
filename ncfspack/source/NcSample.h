@@ -43,6 +43,7 @@ class NcSample : public TNamed
   Int_t GetDimension() const;                         // Provide dimension of the sample
   Int_t GetN() const;                                 // Provide the number of entries
   TString GetVariableName(Int_t i) const;             // Provide the name of the i-th variable
+  Int_t GetIndex(TString name) const;                 // Provide the index of the specified variable name
   Double_t GetSum(Int_t i) const;                     // Provide sum for i-th variable
   Double_t GetSum(TString name) const;                // Provide sum for the variable with the specified name
   Double_t GetMean(Int_t i) const;                    // Provide mean for i-th variable
@@ -79,6 +80,7 @@ class NcSample : public TNamed
   Double_t GetSpread(TH1* histo,Int_t mode=0,Int_t model=0,Double_t vref=0) const; // Provide spread w.r.t. some reference value from the 1D histo
   Double_t GetEntry(Int_t i,Int_t j,Int_t mode=0,Int_t k=0); // Access the i-th (ordered) entry and provide the value of the j-th variable
   Double_t GetEntry(Int_t i,TString nameA,Int_t mode=0,TString nameB="-"); // Access the i-th (ordered) entry and provide the value of the variable with nameA
+  void GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode=0,Int_t k=0); // Provide the [ifirst,ilast] (ordered) entries via NcSample "s"
   TH1D Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100); // Provide a TH1D for variable i (weighted with variable j)
   TH1D Get1DHistogram(TString nameA,TString nameB="-",Bool_t sumw2=kFALSE,Int_t nbx=100); // Provide a TH1D for variable nameA (weighted with variable nameB)
   TH2D Get2DHistogram(Int_t i,Int_t j,Int_t k=0,Bool_t sumw2=kFALSE,Int_t nbx=100,Int_t nby=100); // Provide a TH2D for variables i and j (weighted with variable k)
@@ -140,12 +142,11 @@ class NcSample : public TNamed
   TCanvas* fCanvas;                 //! Multi-purpose canvas for e.g. animation displays
   TObject* fAnimObject;             //! Multi-purpose pointer for animation objects
 
-  Int_t GetIndex(TString name) const; // Provide the index of the specified variable name
   void  Compute();                    // Compute the various quantities
   void Order(Int_t mode,Int_t i);     // Order the entries according to the i-th variable
   void List(Int_t i);                 // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const;   // Correlation statistics info for i-th and j-th variable
 
- ClassDef(NcSample,9) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,11) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

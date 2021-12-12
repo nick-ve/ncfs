@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 1, 2021  11:42Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 12, 2021  13:42Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -1045,7 +1045,7 @@ void NcSample::Order(Int_t mode,Int_t i)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetIndex(TString name) const
 {
-// Internal member function to provide the index (1=first) of the specified variable name.
+// Provide the index (1=first) of the specified variable name.
 // In case of no match, the value 0 is returned.
 
  Int_t idx=0;
@@ -2165,6 +2165,68 @@ Double_t NcSample::GetEntry(Int_t i,TString nameA,Int_t mode,TString nameB)
  Int_t j=GetIndex(nameA);
  Int_t k=GetIndex(nameB);
  return GetEntry(i,j,mode,k);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSample::GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode,Int_t k)
+{
+// Provide the [ifirst,ilast] entries, after ordering w.r.t. the k-th variable, via the output NcSample "s".
+// The first entry is indicated by the index ifirst=1 and the first variable is k=1.
+//
+// Note : All previously stored data in the output NcSample "s" will be lost.
+//
+// mode : <0 --> Order in decreasing order
+//         0 --> Order in the way the entries were entered
+//        >0 --> Order in increasing order
+//
+// This facility is only available if the storage mode has been activated.
+//
+// Note : If mode=0 the value of "k" is irrelevant.
+//
+// The default values are mode=0 and k=0.
+
+ if (!s)
+ {
+  cout << " *NcSample::GetSubset* Error : Pointer for output NcSample object is zero." << endl;
+  return;
+ }
+
+ s->Reset();
+
+ if (!fStore)
+ {
+  cout << " *NcSample::GetSubset* Error : Storage mode not activated." << endl;
+  return;
+ }
+
+ if (ifirst<1 || ifirst>fN || ilast>fN || ilast<ifirst)
+ {
+  cout << " *NcSample::GetSubset* Error : Invalid input ifirst=" << ifirst << " ilast=" << ilast << endl;
+  return;
+ }
+
+ if (mode && (k<1 || k>fDim))
+ {
+  cout << " *NcSample::GetSubset* Error : Invalid argument k=" << k << endl;
+  return;
+ }
+
+ s->SetStoreMode();
+ s->SetNames(fNames[0],fNames[1],fNames[2],fNames[3]);
+
+ Double_t* values=new Double_t[fDim];
+ for (Int_t i=ifirst; i<=ilast; i++)
+ {
+  for (Int_t j=1; j<=fDim; j++)
+  {
+   values[j-1]=GetEntry(i,j,mode,k);
+  }
+  if (fDim==1) s->Enter(values[0]);
+  if (fDim==2) s->Enter(values[0],values[1]);
+  if (fDim==3) s->Enter(values[0],values[1],values[2]);
+  if (fDim==4) s->Enter(values[0],values[1],values[2],values[3]);
+ }
+
+ delete [] values;
 }
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)

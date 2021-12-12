@@ -1266,3 +1266,8 @@
                 Also class RnoConvert extended to handle also pedestal data files and a separate
                 member function RnoConvert::ListInput() introduced. See the rnopack history for details.
                 The version indicator in NcVersion has been updated to 4.6.6.
+08-dec-2021 NvE Member function NcSample::GetIndex() made public to enable external checking of the
+                existence of a certain variable name.
+12-dec-2021 NvE New class NcTransform introduced to provide a facility for various (e.g. Fourier) transformations.
+                Also new member function NcSample::GetSubset() introduced.
+                The version indicator in NcVersion has been updated to 4.7.

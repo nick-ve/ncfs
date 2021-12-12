@@ -1,0 +1,675 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Sun Dec 12 13:52:02 2021            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcTransform</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcTransform','','NcTransform.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcTransform.h.html">header file</a>
+<a class="descrheadentry" href="src/NcTransform.cxx.html">source file</a>
+<a class="descrheadentry" href="NcTransform_Tree.pdf">inheritance tree (.pdf)</a> 
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcTransform:description">class description</a> 
+<a class="descrheadentry" href="#NcTransform:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcTransform:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcTransform:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcTransform</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcTransform:description"></a>class NcTransform: public TNamed</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcTransform.html#NcTransform:Class" title="TClass* NcTransform::Class()">Class</a> <a href="./NcTransform.html">NcTransform</a>
+ <a href="./NcTransform.html#NcTransform:Class" title="TClass* NcTransform::Class()">Class</a> to perform various discrete transformations of (sequential) data samples.
+
+ The following discrete transformations (using the FFTW algorithms) are supported :
+ <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> (DFT), <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> (DHT), <a href="./NcTransform.html#NcTransform:Sine" title="void NcTransform::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> (DST) and <a href="./NcTransform.html#NcTransform:Cosine" title="void NcTransform::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> (DCT).
+
+ All transformation results have been normalized, such that
+ the inverse transformation provides the original input spectrum.
+
+ For details about the transformations and their options, please refer
+ to the documentation in the corresponding member functions.
+
+ Usage example for a discrete <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform (DFT) :
+
+
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> N=2048;          // Number of samples
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> fsample=3.2e9; // Sampling rate in Hz
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> nu=3e8;        // Signal frequency in Hz
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> pi=acos(-1.);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> omega=2.*pi*nu;  // Signal frequency in rad/sec
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> step=1./fsample; // The time step of each sample
+
+ // Fill the time domain sampled data
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> tdata[N];
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> t=0;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> y=0;
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;N; i++)
+ {
+  y=cos(omega*t)+5.*sin(3.*omega*t);
+  tdata[i]=y;
+  t+=step;
+ }
+
+ <a href="./NcTransform.html">NcTransform</a> q;
+ q.<a href="./NcTransform.html#NcTransform:SetSamplingFrequency" title="void NcTransform::SetSamplingFrequency(Float_t f)">SetSamplingFrequency</a>(fsample);
+ q.<a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>(N,tdata);
+
+ // Obtain the amplitudes in an array
+ q.<a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>);
+ TArrayD arr=q.<a href="./NcTransform.html#NcTransform:GetData" title="TArrayD NcTransform::GetData(TString mode)">GetData</a>(<span class="string">"AMP out"</span>);
+
+ // Obtain the amplitudes in a histogram
+ TH1F hist;
+ q.<a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>,&amp;hist,<span class="string">"AMP Hz"</span>);
+
+ // Illustration of forward followed by inverse transformation
+
+ // The original time domain input spectrum
+ TH1F hist1;
+ q.<a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>,&amp;hist1,<span class="string">"t"</span>);
+
+ // The forward transformation
+ TH1F hist2;
+ q.<a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>,&amp;hist2,<span class="string">"AMP Hz"</span>);
+
+ // <a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the obtained frequency domain data as new input to obtain
+ // the original time domain spectrum via the inverse transformation
+ q.<a href="./NcTransform.html#NcTransform:LoadResult" title="void NcTransform::LoadResult()">LoadResult</a>();
+
+ // The frequency domain input spectrum
+ TH1F hist3;
+ q.<a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"C2R"</span>,&amp;hist3,<span class="string">"AMP Hz"</span>);
+
+ // Obtain the original time domain spectrum via the inverse transformation
+ TH1F hist4;
+ q.<a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"C2R"</span>,&amp;hist4,<span class="string">"t"</span>);
+
+ TCanvas c1(<span class="string">"c1"</span>,<span class="string">"Forward"</span>);
+ c1.Divide(1,2);
+ c1.cd(1);
+ hist1.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+ c1.cd(2);
+ hist2.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+
+ TCanvas c2(<span class="string">"c2"</span>,<span class="string">"Inverse"</span>);
+ c2.Divide(1,2);
+ c2.cd(1);
+ hist3.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+ c2.cd(2);
+ hist4.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+
+--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 11, 2021  01:51Z
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcTransform:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTransform:NcTransform@1">NcTransform</a>(<span class="keyword">const</span> <a href="./NcTransform.html">NcTransform</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTransform:NcTransform">NcTransform</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcTransform:_NcTransform">~NcTransform</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcTransform:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcTransform:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Cosine">Cosine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Fourier">Fourier</a>(TString mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcTransform:GetData">GetData</a>(TString mode) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcTransform:GetN">GetN</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcTransform:GetSamplingFrequency">GetSamplingFrequency</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Hartley">Hartley</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcTransform:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Load@4">Load</a>(TH1* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Load@5">Load</a>(TGraph* gr, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Load@1">Load</a>(TArray* re, TArray* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Load@2">Load</a>(<a href="./NcSample.html">NcSample</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Load@3">Load</a>(<a href="./NcSample.html">NcSample</a>* s, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Load">Load</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* re, <a href="./ListOfTypes.html#Double_t">Double_t</a>* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:LoadResult">LoadResult</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTransform.html">NcTransform</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcTransform:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcTransform.html">NcTransform</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:SetSamplingFrequency">SetSamplingFrequency</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Sine">Sine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTransform:Reset">Reset</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcTransform:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcTransform:fImIn"></a>fImIn</td><td class="datadesc">Input array for imaginary components</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcTransform:fImOut"></a>fImOut</td><td class="datadesc">Output array for imaginary components</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcTransform:fN"></a>fN</td><td class="datadesc">The number of data elements to be transformed</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="data"><td class="datatype">TVirtualFFT*</td><td class="dataname"><a name="NcTransform:fProc"></a>fProc</td><td class="datadesc">The FFTW processor</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcTransform:fReIn"></a>fReIn</td><td class="datadesc">Input array for real components</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcTransform:fReOut"></a>fReOut</td><td class="datadesc">Output array for real components</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcTransform:fSample"></a>fSample</td><td class="datadesc">The actual data acquisition sampling frequency in Hz</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcTransform:Class_Charts"></a>Class Charts</h2>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TNamed</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcTransform" href="./NcTransform.html">NcTransform</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTransform:NcTransform" href="src/NcTransform.cxx.html#stN81C">NcTransform</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre> Default constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTransform:_NcTransform" href="src/NcTransform.cxx.html#FpuOxC">~NcTransform</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTransform:NcTransform@1" href="src/NcTransform.cxx.html#BrlF2C">NcTransform</a>(<span class="keyword">const</span> <a href="./NcTransform.html">NcTransform</a>&amp; q)</span><br />
+<div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Reset" href="src/NcTransform.cxx.html#nifZrD">Reset</a>()</span><br />
+<div class="funccomm"><pre> Internal member function to reset all data and the processor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:SetSamplingFrequency" href="src/NcTransform.cxx.html#QZFOVC">SetSamplingFrequency</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> f)</span><br />
+<div class="funccomm"><pre> Set the actual DAQ sampling frequency in Hz.
+ This sampling frequency may be overwritten by invokation of
+ one of the various <a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
+ The sampling frequency is set to 0 in the constructor of this class.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcTransform:GetSamplingFrequency" href="src/NcTransform.cxx.html#rOVdz">GetSamplingFrequency</a>() const</span><br />
+<div class="funccomm"><pre> Provide the current value of the DAQ sampling frequency in Hz.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Load" href="src/NcTransform.cxx.html#EZHgxE">Load</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* re, <a href="./ListOfTypes.html#Double_t">Double_t</a>* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data to be transformed and reset the processor.
+
+ Input arguments :
+
+ n  : The number of data elements
+ re : Array with real data elements
+ im : Array with imaginary data elements
+ f  : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ If provided, the array size must be at least of dimension <span class="string">"n"</span>.
+
+ The defaults are im=0 and f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Load@1" href="src/NcTransform.cxx.html#CzYvRC">Load</a>(TArray* re, TArray* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data to be transformed and reset the processor.
+
+ Input arguments :
+
+ re : Array with real data elements
+ im : Array with imaginary data elements
+ f  : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ If both arrays are provided, the size of the smallest non-empty array
+ will be used to compose the input data.
+
+ The defaults are im=0 and f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Load@2" href="src/NcTransform.cxx.html#wJ3xPC">Load</a>(<a href="./NcSample.html">NcSample</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from the <a href="./NcSample.html">NcSample</a> <span class="string">"s"</span> to be transformed and reset the processor.
+
+ Input arguments :
+
+ i : The data of the i-th variable (1=first) of the <a href="./NcSample.html">NcSample</a> are used
+ f : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ Note : The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Load@3" href="src/NcTransform.cxx.html#kmAV7">Load</a>(<a href="./NcSample.html">NcSample</a>* s, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from the <a href="./NcSample.html">NcSample</a> <span class="string">"s"</span> to be transformed and reset the processor.
+
+ Input arguments :
+
+ name : Name of the <a href="./NcSample.html">NcSample</a> variable of which the data are used
+ f    : (optional) Actual data acquisition sampling frequency in Hz
+        In case f&lt;0 the current sampling frequency is not modified.
+
+ Note : The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Load@4" href="src/NcTransform.cxx.html#u3LSmD">Load</a>(TH1* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from a 1-Dimensional histogram to be transformed and reset the processor.
+
+ Input arguments :
+
+ h : Pointer to the 1-D histogram of which the bin contents are used
+ f : (optional) Actual data acquisition sampling frequency in Hz
+     In case f&lt;0 the current sampling frequency is not modified.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Load@5" href="src/NcTransform.cxx.html#GgThKC">Load</a>(TGraph* gr, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from a TGraph object to be transformed and reset the processor.
+
+ Input arguments :
+
+ gr : Pointer to the TGraph object of which the bin contents are used
+ f  : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:LoadResult" href="src/NcTransform.cxx.html#jqFZ4E">LoadResult</a>()</span><br />
+<div class="funccomm"><pre> <a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the transformation result as new input data in order to enable
+ inverse transformations acting on previous transformation results.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcTransform:GetN" href="src/NcTransform.cxx.html#UPxLZE">GetN</a>() const</span><br />
+<div class="funccomm"><pre> Provide the number of data elements (to be) processed.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcTransform:GetData" href="src/NcTransform.cxx.html#UnEypC">GetData</a>(TString mode) const</span><br />
+<div class="funccomm"><pre> Provide a selected set of data.
+
+ Input argument :
+
+ sel  : String to specify the contents of the provided data array
+        <span class="string">"RE"</span>   --&gt; The values of the real (re) components
+        <span class="string">"IM"</span>   --&gt; The values of the imaginary (im) components
+        <span class="string">"AMP"</span>  --&gt; The amplitudes, i.e. sqrt(re*re+im*im)
+        <span class="string">"PHIR"</span> --&gt; The phases, i.e. arctan(im/re), in radians
+        <span class="string">"PHID"</span> --&gt; The phases, i.e. arctan(im/re), in degrees
+        <span class="string">"in"</span>   --&gt; The values of the input data are provided
+        <span class="string">"out"</span>  --&gt; The values of the output data are provided
+
+ Examples :
+
+ sel=<span class="string">"AMP out"</span> will provide all the N amplitudes of the resulting data after transformation.
+ sel=<span class="string">"RE in"</span> will provide all the N real components of the input data.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Fourier" href="src/NcTransform.cxx.html#mePWj">Fourier</a>(TString mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT).
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform : Q[k]=(1/sqrt(N))*sum(n=0,n=N-1){X[n]*exp(-i*2pi*(k/N)*n)}
+
+ Inverse <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform : X[n]=(1/sqrt(N))*sum(k=0,k=N-1){Q[k]*exp(i*2pi*(n/N)*k)}
+
+ Input arguments :
+
+ mode : <span class="string">"R2C"</span>  --&gt; Perform a real-input to complex-output discrete <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transformation
+        <span class="string">"C2R"</span>  --&gt; Perform the inverse transformation of <span class="string">"R2C"</span>
+        <span class="string">"C2C"</span>  --&gt; Perform a complex-input to complex-output discrete <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transformation
+        <span class="string">"C2CI"</span> --&gt; Perform the inverse of <span class="string">"C2C"</span>
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the contents and representation of the result histogram
+        <span class="string">"RE"</span>   --&gt; Y-axis shows the values of the real (re) components
+        <span class="string">"IM"</span>   --&gt; Y-axis shows the values of the imaginary (im) components
+        <span class="string">"AMP"</span>  --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+        <span class="string">"PHIR"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+        <span class="string">"PHID"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"AMP f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"RE k 2"</span> will show all N real components as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Hartley" href="src/NcTransform.cxx.html#m2X.CD">Hartley</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> Transformation (DHT).
+ Actually, a DHT is closely related to a Discrete <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT)
+ with only real input values.
+ Consequently, the resulting transformed array is also only real.
+
+ Indicating in the frequency domain the DHT data elements by H[k] and the
+ DFT data elements by F[k], we have the following relations :
+
+ 1) Re(F[k])=(H[k]+H[N-k])/2 and Im(F[k])=(H[N-k]-H[k])/2
+ 2) H[k]=Re((1+i)*F[k])
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transform : Q[k]=(1/sqrt(N))*sum(n=0,n=N-1){X[n]*[cos(2pi*(k/N)*n)+sin(2pi*(k/N)*n)]}
+
+ Inverse <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transform : X[n]=(1/sqrt(N))*sum(n=0,k=N-1){Q[k]*[cos(2pi*(n/N)*k)+sin(2pi*(n/N)*k)]}
+
+ So, it is seen that the <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transform is its own inverse.
+
+ Input arguments :
+
+ mode : &gt;0     --&gt; Perform the forward X[n]-&gt;Q[k] <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transformation
+        &lt;0     --&gt; Perform the backward Q[k]-&gt;X[n] <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transformation
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Cosine" href="src/NcTransform.cxx.html#NPKmZD">Cosine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcTransform.html#NcTransform:Cosine" title="void NcTransform::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> Transformation (DCT).
+ Actually, this is just a regular Discrete <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT)
+ with only real input values which contain an even symmetry.
+ Consequently, the resulting transformed array is also only real with even symmetry.
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcTransform.html#NcTransform:Cosine" title="void NcTransform::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 1 : Q[k]=(1/sqrt(2*(N-1)))*[X[0]+pow(-1,k)*X[N-1]+2*sum(n=1,n=N-2){X[n]*cos(pi*n*k/(N-1))}]
+
+ <a href="./NcTransform.html#NcTransform:Cosine" title="void NcTransform::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+1)*k/N)}]
+
+ <a href="./NcTransform.html#NcTransform:Cosine" title="void NcTransform::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 3 : Q[k]=(1/sqrt(2N))[X[0]+2*sum(n=0,n=N-1){X[n]*cos(pi*n*(k+0.5)/N)}]
+
+ <a href="./NcTransform.html#NcTransform:Cosine" title="void NcTransform::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 4 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+0.5)*(k+0.5)/N)}
+
+ Notes :
+
+ 1) The type 1 transformation is only defined for N&gt;1 and is its own inverse.
+ 2) The type 4 transformation is its own inverse.
+ 3) The type 3 transformation is the inverse of type 2 (and vice versa).
+ 4) The type 2 transformation is often called <span class="string">"the"</span> DCT.
+ 5) The type 3 transformation id often called <span class="string">"the"</span> inverse DCT (IDCT).
+
+ Input arguments :
+
+ type : The type of transformation (i.e. 1,2,3 or 4) to be performed
+        The inverse transformations are specified with the corresponding negative type value
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTransform:Sine" href="src/NcTransform.cxx.html#hsJEAD">Sine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcTransform.html#NcTransform:Sine" title="void NcTransform::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> Transformation (DST).
+ Actually, this is just a regular Discrete <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT)
+ with only real input values which contain an odd symmetry.
+ Consequently, the resulting transformed array is also only real with odd symmetry.
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcTransform.html#NcTransform:Sine" title="void NcTransform::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 1 : Q[k]=(1/sqrt(2N+1))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+1)*(k+1)/(N+1))}]
+
+ <a href="./NcTransform.html#NcTransform:Sine" title="void NcTransform::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+0.5)*(k+1)/N)}
+
+ <a href="./NcTransform.html#NcTransform:Sine" title="void NcTransform::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 3 : Q[k]=(1/sqrt(2N))*[pow(-1,k)*X[N-1]+2*sum(n=0,n=N-2){X[n]*sin(pi*(n+1)*(k+0.5)/N)}]
+
+ <a href="./NcTransform.html#NcTransform:Sine" title="void NcTransform::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 4 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+0.5)*(k+0.5)/N)}
+
+ Notes :
+
+ 1) The type 1 transformation is its own inverse.
+ 2) The type 4 transformation is its own inverse.
+ 3) The type 3 transformation is the inverse of type 2 (and vice versa).
+
+ Input arguments :
+
+ type : The type of transformation (i.e. 1,2,3 or 4) to be performed
+        The inverse transformations are specified with the corresponding negative type value
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcTransform.html#NcTransform:Load" title="void NcTransform::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcTransform:Clone" href="src/NcTransform.cxx.html#yoghYC">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
+ This memberfunction enables automatic creation of new objects of the
+ correct type depending on the object type, a feature which may be very useful
+ for containers like <a href="./NcEvent.html">NcEvent</a> when adding objects in case the
+ container owns the objects.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Sun Dec 12 13:52:02 2021 </em><em>&raquo; Last generated: 2021-12-12 13:52</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>
