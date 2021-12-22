@@ -159,7 +159,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 18, 2021  09:30Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 22, 2021  10:06Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -292,7 +292,7 @@ NcAstrolab::~NcAstrolab()
  }
  if (fCanvas)
  {
-  delete fCanvas;
+  if (gROOT->GetListOfCanvases()->FindObject("NcAstrolab")) delete fCanvas;
   fCanvas=0;
  }
  if (fTscfunc)

@@ -22,3 +22,10 @@
                 deployed hardware in which Ch21 is an Hpol and Ch23 is a Vpol antenna on Helper string 2.
 01-dec-2021 NvE Class RnoConvert extended to handle also pedestal data files and a separate
                 member function RnoConvert::ListInput() introduced.
+17-dec-2021 NvE Creation of a device "DAQ" introduced in class RnoConvert to indicate the RADIANT and FLOWER
+                firmware updates.
+22-dec-2021 NvE In RnoConvert the devices "DAQ" and "Trigger" are now added to an RnoStation instead of
+                the top detector structure, since they relate to the individual station settings.
+                Also the DAQ sampling rate is now indicated in the DAQ device. 
+                Display functionality of RnoStation and RnoEvent extended and new member functions
+                GetSampleGraph() and GetSampleDFT() introduced.

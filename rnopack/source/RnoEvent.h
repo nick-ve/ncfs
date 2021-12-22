@@ -18,9 +18,11 @@ class RnoEvent : public NcEvent
   virtual void Reset();                              // Reset all values
   TGraph* DisplaySampling(Int_t ista,Int_t ich,Int_t j=1); // Display the sampling of a station channel for the j-th sampled observable
   TCanvas* DisplaySamplings(Int_t ista,Int_t j=1);         // Display the sampling of all station channels for the j-th sampled observable
+  TGraph GetSamplingGraph(Int_t ista,Int_t ich,Int_t j=1); // Provide the sampling graph of a station channel for the j-th sampled observable
+  TH1F GetSamplingDFT(Int_t ista,Int_t ich,TString sel="AMP Hz",Int_t j=1); // Provide the sampling DFT of a station channel for the j-th sampled observable
 
  protected:
 
- ClassDef(RnoEvent,3) // Handling of RNO-G event data.
+ ClassDef(RnoEvent,4) // Handling of RNO-G event data.
 };
 #endif

@@ -30,7 +30,7 @@
 //   may be extended in the usual way.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  16:32Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  09:54Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoStation.h"
@@ -51,7 +51,7 @@ RnoStation::~RnoStation()
 
  if (fCanvas)
  {
-  delete fCanvas;
+  if (gROOT->GetListOfCanvases()->FindObject(ClassName())) delete fCanvas;
   fCanvas=0;
  }
 }
@@ -75,15 +75,15 @@ TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)
 
  if (fCanvas)
  {
-  delete fCanvas;
+  if (gROOT->GetListOfCanvases()->FindObject(ClassName())) delete fCanvas;
   fCanvas=0;
  }
 
  if (ich<0 || j<1) return 0;
 
  fCanvas=new TCanvas();
-
- fCanvas->SetGrid();
+ TVirtualPad* pad=fCanvas->cd();
+ gROOT->SetSelectedPad(pad);
 
  TString devname="Ch";
  devname+=ich;
@@ -99,26 +99,12 @@ TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)
  title+=devname;
  fCanvas->SetName(ClassName());
  fCanvas->SetTitle(title);
- RnoGANT* ant=(RnoGANT*)GetDevice(devname,kTRUE);
- NcSample* sx=0;
- if (ant) sx=ant->DisplaySample(j);
+ fCanvas->SetGrid();
 
- if (!sx) return 0;
+ GetSamplingGraph(ich,j).DrawClone("AL");
 
- Int_t ndim=sx->GetDimension();
- if (j>ndim) return 0;
-
- TString xname="Sample";
- TString yname=sx->GetVariableName(j);
-
- // Change the title and axes labels of the graph
+ // Obtain the pointer to the displayed graph
  TGraph* gr=(TGraph*)fCanvas->FindObject("NcSample");
- if (gr)
- {
-  gr->SetTitle(title);
-  gr->GetXaxis()->SetTitle(xname);
-  gr->GetYaxis()->SetTitle(yname);
- }
 
  return gr;
 }
@@ -135,7 +121,7 @@ TCanvas* RnoStation::DisplaySamplings(Int_t j)
 
  if (fCanvas)
  {
-  delete fCanvas;
+  if (gROOT->GetListOfCanvases()->FindObject(ClassName())) delete fCanvas;
   fCanvas=0;
  }
 
@@ -155,10 +141,6 @@ TCanvas* RnoStation::DisplaySamplings(Int_t j)
  fCanvas->SetTitle(title);
  fCanvas->Divide(4,6);
 
- NcSample* sx=0;
- Int_t ndim=0;
- TString xname="Sample";
- TString yname="Value";
  TVirtualPad* pad=0;
  for (Int_t jch=0; jch<24; jch++)
  {
@@ -166,35 +148,108 @@ TCanvas* RnoStation::DisplaySamplings(Int_t j)
 
   if (!pad) continue;
 
+  gROOT->SetSelectedPad(pad);
   pad->SetGrid();
 
-  devname="Ch";
-  devname+=jch;
-  RnoGANT* ant=(RnoGANT*)GetDevice(devname,kTRUE);
-  if (ant) sx=ant->DisplaySample(j);
-
-  if (!sx) continue;
-
-  ndim=sx->GetDimension();
-  if (j>ndim) continue;
-
-  yname=sx->GetVariableName(j);
-
-  // Change the title and axes labels of the graph
-  title=staname;
-  title+=" ";
-  title+=devname;
-
-  TGraph* gr=(TGraph*)pad->FindObject("NcSample");
-
-  if (!gr) continue;
-
-  gr->SetTitle(title);
-  gr->GetXaxis()->SetTitle(xname);
-  gr->GetYaxis()->SetTitle(yname);
+  GetSamplingGraph(jch,j).DrawClone("AL");
  } // End of loop over the channels
  
  return fCanvas;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph RnoStation::GetSamplingGraph(Int_t ich,Int_t j)
+{
+// Provide the sampling graph of the j-th sampled observable (1=first) for the selected channel number "ich".
+// The graph contains the values of the j-th observable versus the sample entry number.
+//
+// The default value is j=1.
+
+ TGraph gr;
+
+ if (ich<0 || j<1) return gr;
+
+ TString devname="Ch";
+ devname+=ich;
+
+ Int_t id=GetUniqueID(); // The station ID
+ TString staname="Station";
+ staname+=id;
+
+ NcDevice* daq=GetDevice("DAQ",kFALSE);
+ Double_t fsample=0;
+ if (daq) fsample=daq->GetSignal("Sampling-rate");
+
+ TString rate="";
+ rate.Form(" (DAQ: %-.3g Samples/sec)",fsample);
+
+ TString title=staname;
+ title+=" ";
+ title+=devname;
+ title+=rate;
+
+ RnoGANT* ant=(RnoGANT*)GetDevice(devname,kTRUE);
+ NcSample* sx=ant->GetSample(1);
+
+ if (!sx) return gr;
+
+ Int_t ndim=sx->GetDimension();
+ if (j>ndim) return gr;
+
+ gr=sx->GetGraph(j);
+
+ TString xname="Sample";
+ TString yname=sx->GetVariableName(j);
+
+ gr.SetTitle(title);
+ gr.GetXaxis()->SetTitle(xname);
+ gr.GetYaxis()->SetTitle(yname);
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1F RnoStation::GetSamplingDFT(Int_t ich,TString sel,Int_t j)
+{
+// Provide the Discrete Fourier Transform (DFT) of the j-th sampled observable (1=first)
+// for the selected channel number "ich".
+//
+// sel     : String to specify the contents and representation of the result histogram
+//           "RE"   --> Y-axis shows the values of the real (re) components
+//           "IM"   --> Y-axis shows the values of the imaginary (im) components
+//           "AMP"  --> Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+//           "PHIR" --> Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+//           "PHID" --> Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+//           "k"    --> X-axis represents the index k in the frequency domain  
+//           "f"    --> X-axis represents the fraction f of the sampling rate in the frequency domain
+//           "Hz"   --> X-axis represents the actual frequency in Hz in the frequency domain
+//           "n"    --> X-axis represents the index n in the time domain  
+//           "t"    --> X-axis represents the actual time in seconds in the time domain
+//           "2"    --> X-axis spans the full number of data points, instead of the usual (N/2)+1
+//
+// Examples :
+// ----------
+// sel="AMP f" will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+// sel="RE k 2" will show all N real components as a function of the index k in the frequency domain.
+//
+// The default values are sel="AMP Hz" and j=1.
+
+ TH1F his;
+
+ TGraph gr=GetSamplingGraph(ich,j);
+
+ NcDevice* daq=GetDevice("DAQ",kFALSE);
+ Double_t fsample=0;
+ if (daq) fsample=daq->GetSignal("Sampling-rate");
+
+ NcTransform q;
+ q.Load(&gr,fsample);
+ q.Fourier("R2C",&his,sel);
+
+ TString title=gr.GetTitle();
+
+ his.SetTitle(title);
+ his.SetStats(0);
+
+ return his;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* RnoStation::Clone(const char* name) const

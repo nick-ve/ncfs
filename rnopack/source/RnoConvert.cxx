@@ -30,7 +30,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 1, 2021  14:45Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  08:39Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -244,6 +244,12 @@ void RnoConvert::Exec(Option_t* opt)
  Int_t station=-1;
  Double_t trigtime=0;
 
+ // DAQ info
+ NcDevice daq("DAQ","DAQ status");
+ daq.AddNamedSlot("RADIANT-update");
+ daq.AddNamedSlot("FLOWER-update");
+ daq.AddNamedSlot("Sampling-rate");
+
  // Trigger info
  NcTagger trigger("Trigger","Trigger tags");
  const Int_t ntrig=7;
@@ -268,6 +274,9 @@ void RnoConvert::Exec(Option_t* opt)
  TString name="";
  Float_t value=0;
  Bool_t flag=kFALSE;
+ Int_t iradiant=0; // RADIANT firmware update sequence number
+ Int_t iflower=0;  // FLOWER firmware update sequence number
+ Float_t fsample;  // The DAQ sampling rate in Hz
  for (Int_t ient=0; ient<nen; ient++)
  {
   // Reset the detector structure
@@ -301,6 +310,33 @@ void RnoConvert::Exec(Option_t* opt)
 
   if (!stax) break;
 
+  // DAQ info
+  iradiant=2;
+  iflower=0;
+  fsample=3.2e9;
+  if (station==11)
+  {
+   if (run<571) iradiant=1;
+   if (run<474) iradiant=0;
+   if (run>=571) iradiant=2;
+  }
+  if (station==21)
+  {
+   if (run<753) iradiant=1;
+   if (run<646) iradiant=0;
+  }
+  if (station==22)
+  {
+   if (run<656) iradiant=1;
+   if (run<574) iradiant=0;
+  }
+
+  daq.SetSignal(iradiant,"RADIANT-update");
+  daq.SetSignal(iflower,"FLOWER-update");
+  daq.SetSignal(fsample,"Sampling-rate");
+
+  stax->AddDevice(daq);
+
   // Trigger data
   trigger.Reset();
 
@@ -319,7 +355,7 @@ void RnoConvert::Exec(Option_t* opt)
    }
   }
 
-  det.AddDevice(trigger);
+  stax->AddDevice(trigger);
 
   // Readout the signal waveforms of all Radiant channels
   nsamples=0;

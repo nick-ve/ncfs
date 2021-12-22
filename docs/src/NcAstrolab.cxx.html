@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Mar 31 15:54:26 2021            -->
+<!--   Date: Wed Dec 22 10:16:36 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -180,7 +180,7 @@
 <span class="comment">// lab.<a href="../NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);</span>
 <span class="comment">//</span>
 <span class="comment">//--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University</span>
-<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 18, 2021  09:30Z</span>
+<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 22, 2021  10:06Z</span>
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
 
 <span class="cpp">#include "<a href="../NcAstrolab.h">NcAstrolab.h</a>"</span>
@@ -313,7 +313,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
  }
  <span class="keyword">if</span> (<a href="../NcAstrolab.html#NcAstrolab:fCanvas" title="TCanvas* NcAstrolab::fCanvas">fCanvas</a>)
  {
-  <span class="keyword">delete</span> <a href="../NcAstrolab.html#NcAstrolab:fCanvas" title="TCanvas* NcAstrolab::fCanvas">fCanvas</a>;
+  <span class="keyword">if</span> (gROOT-&gt;GetListOfCanvases()-&gt;<a href="../#TObject:FindObject" title="TObject* TObject::FindObject(const char* name) or overloads">FindObject</a>(<span class="string">"NcAstrolab"</span>)) <span class="keyword">delete</span> <a href="../NcAstrolab.html#NcAstrolab:fCanvas" title="TCanvas* NcAstrolab::fCanvas">fCanvas</a>;
   <a href="../NcAstrolab.html#NcAstrolab:fCanvas" title="TCanvas* NcAstrolab::fCanvas">fCanvas</a>=0;
  }
  <span class="keyword">if</span> (<a href="../NcAstrolab.html#NcAstrolab:fTscfunc" title="TF1* NcAstrolab::fTscfunc">fTscfunc</a>)
@@ -1163,8 +1163,8 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
   <span class="keyword">else</span>
   {
    <a href="../NcTimestamp.html">NcTimestamp</a> te;
-   <span class="keyword">if</span> (mode==<span class="string">"B"</span> || mode==<span class="string">"b"</span>) te.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(1950,<span class="string">"B"</span>);
-   <span class="keyword">if</span> (mode==<span class="string">"J"</span> || mode==<span class="string">"j"</span>) te.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
+   <span class="keyword">if</span> (mode==<span class="string">"B"</span> || mode==<span class="string">"b"</span>) te.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(1950,<span class="string">"B"</span>);
+   <span class="keyword">if</span> (mode==<span class="string">"J"</span> || mode==<span class="string">"j"</span>) te.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
    <a href="../NcAstrolab.html#NcAstrolab:SetPmatrix" title="void NcAstrolab::SetPmatrix(NcTimestamp* ts)">SetPmatrix</a>(&amp;te);
   }
   q=q.GetUnprimed(&amp;<a href="../NcAstrolab.html#NcAstrolab:fP" title="TRotMatrix NcAstrolab::fP">fP</a>);
@@ -1652,7 +1652,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
 <span class="comment">// Note : In case scrambling has been activated, the data will be scrambled accordingly.</span>
 
  <a href="../NcTimestamp.html">NcTimestamp</a> tx;
- tx.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(e,s);
+ tx.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(e,s);
  
  <a href="../NcSignal.html">NcSignal</a>* sx=<a href="../NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(d,a,au,b,bu,frame,&amp;tx,jref,mode,name,type);
  <span class="keyword">return</span> sx;
@@ -1828,7 +1828,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
  {
   <span class="comment">// <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a> to specified timestamp</span>
   <a href="../NcTimestamp.html">NcTimestamp</a> ts1;
-  ts1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
+  ts1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
   <span class="keyword">if</span> (mode!=<span class="string">"B"</span> &amp;&amp; mode!=<span class="string">"b"</span>)
   {
    <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a>(q,&amp;ts1,ts);
@@ -1836,7 +1836,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
   <span class="keyword">else</span>
   {
    <a href="../NcTimestamp.html">NcTimestamp</a> ts2;
-   ts2.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(1950,<span class="string">"B"</span>);
+   ts2.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(1950,<span class="string">"B"</span>);
    <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a>(q,&amp;ts1,&amp;ts2);
   }
 
@@ -1855,7 +1855,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
  {
   <span class="comment">// <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a> to specified timestamp</span>
   <a href="../NcTimestamp.html">NcTimestamp</a> ts1;
-  ts1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
+  ts1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
   <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a>(q,&amp;ts1,ts);
 
   <span class="comment">// <a href="../NcTimestamp.html#NcTimestamp:Convert" title="void NcTimestamp::Convert(Double_t date,Int_t&amp; days,Int_t&amp; secs,Int_t&amp; ns) or overloads">Convert</a> from equatorial to ecliptic coordinates</span>
@@ -1867,7 +1867,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
  {
   <span class="comment">// <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a> to specified timestamp</span>
   <a href="../NcTimestamp.html">NcTimestamp</a> ts1;
-  ts1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
+  ts1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
   <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a>(q,&amp;ts1,ts);
 
   <span class="comment">// Nutation correction</span>
@@ -2179,7 +2179,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
  <span class="keyword">if</span> (s!=<span class="string">"B"</span> &amp;&amp; s!=<span class="string">"b"</span> &amp;&amp; s!=<span class="string">"J"</span> &amp;&amp; s!=<span class="string">"j"</span>) <span class="keyword">return</span> 0;
 
  <a href="../NcTimestamp.html">NcTimestamp</a> tx;
- tx.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(e,s);
+ tx.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(e,s);
 
  <a href="../NcSignal.html">NcSignal</a>* sx=<a href="../NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(d,a,au,b,bu,frame,&amp;tx,jref,mode,type);
  <span class="keyword">return</span> sx;
@@ -2261,7 +2261,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
 
  <span class="comment">// <a href="../#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> c.q. update coordinates for Solar system objects</span>
  <a href="../NcTimestamp.html">NcTimestamp</a> tx;
- tx.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(e,s);
+ tx.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(e,s);
  <a href="../NcAstrolab.html#NcAstrolab:SetSolarSystem" title="void NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0)">SetSolarSystem</a>(name,&amp;tx,type);
 
  <a href="../NcSignal.html">NcSignal</a>* sx=0;
@@ -3227,9 +3227,9 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
  {
   <a href="../NcAstrolab.html#NcAstrolab:fGal" title="Int_t NcAstrolab::fGal">fGal</a>=2; <span class="comment">// <a href="../#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> flag to indicate J2000 matrix values</span>
   <a href="../NcTimestamp.html">NcTimestamp</a> t1;
-  t1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(1950,<span class="string">"B"</span>);
+  t1.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(1950,<span class="string">"B"</span>);
   <a href="../NcTimestamp.html">NcTimestamp</a> t2;
-  t2.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
+  t2.<a href="../NcTimestamp.html#NcTimestamp:SetEpoch" title="void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0)">SetEpoch</a>(2000,<span class="string">"J"</span>);
   <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a>(z,&amp;t1,&amp;t2);
   <a href="../NcAstrolab.html#NcAstrolab:Precess" title="void NcAstrolab::Precess(Nc3Vector&amp; r,NcTimestamp* ts1,NcTimestamp* ts2)">Precess</a>(x,&amp;t1,&amp;t2);
  }
@@ -9172,7 +9172,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
   idate=date%1000000;
   grbname=type;
   grbname+=idate;
-  ts.<a href="../NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjdtrig);
+  ts.<a href="../NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjdtrig);
   sx=<a href="../NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(1,ra,<span class="string">"deg"</span>,dec,<span class="string">"deg"</span>,<span class="string">"equ"</span>,&amp;ts,-1,<span class="string">"J"</span>,grbname);
 
   <span class="keyword">if</span> (!sx) <span class="keyword">continue</span>;
@@ -12369,7 +12369,7 @@ ClassImp(<a href="../NcAstrolab.html">NcAstrolab</a>) <span class="comment">// <
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-03-31 15:54 </em><em>&raquo; Last generated: 2021-03-31 15:54</em><br />
+<em>&raquo; Last changed: 2021-12-22 10:16 </em><em>&raquo; Last generated: 2021-12-22 10:16</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

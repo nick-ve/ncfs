@@ -1271,3 +1271,6 @@
 12-dec-2021 NvE New class NcTransform introduced to provide a facility for various (e.g. Fourier) transformations.
                 Also new member function NcSample::GetSubset() introduced.
                 The version indicator in NcVersion has been updated to 4.7.
+22-dec-2021 NvE Protection against deletion of already user deleted canvas introduced in NcAstrolab.
+                Also functionality of rnopack extended; see the rnopack history for details.
+                The version indicator in NcVersion has been updated to 4.7.1.

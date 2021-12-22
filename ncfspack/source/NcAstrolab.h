@@ -5,6 +5,7 @@
 
 #include <math.h>
 
+#include "TROOT.h"
 #include "TTask.h"
 #include "TString.h"
 #include "TRotMatrix.h"
@@ -265,6 +266,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   // Internal function for transient burst investigations
   void BurstCompensate(Int_t& nmugrb);
  
- ClassDef(NcAstrolab,33) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,34) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

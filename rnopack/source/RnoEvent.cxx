@@ -30,7 +30,7 @@
 //   may be extended in the usual way.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 16, 2021  07:21Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  09:53Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoEvent.h"
@@ -85,7 +85,7 @@ TGraph* RnoEvent::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 
  if (!gr) return 0;
 
- // Add run and event numbers to the graph title
+ // Add run and event numbers and timestamp to the graph title
  TString title=gr->GetTitle();
  title+=" Run:";
  title+=GetRunNumber();
@@ -94,6 +94,8 @@ TGraph* RnoEvent::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
  title+=" ";
  title+=GetDayTimeString("UT",3);
  gr->SetTitle(title);
+
+ gPad->Modified();
 
  return gr;
 }
@@ -123,7 +125,7 @@ TCanvas* RnoEvent::DisplaySamplings(Int_t ista,Int_t j)
 
  if (!c) return 0;
 
- // Indicate the Run and Event number at each sampling display
+ // Indicate the Run and Event number and timestamp at each sampling display
  TVirtualPad* pad=0;
  TGraph* gr=0;
  TString title="";
@@ -143,9 +145,96 @@ TCanvas* RnoEvent::DisplaySamplings(Int_t ista,Int_t j)
   title+=" ";
   title+=GetDayTimeString("UT",3);
   gr->SetTitle(title);
+
+  pad->Modified();
  } // End of loop over the channels
 
  return c;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph RnoEvent::GetSamplingGraph(Int_t ista,Int_t ich,Int_t j)
+{
+// Provide the sampling graph of the j-th sampled observable (1=first) for the selected channel number "ich"
+// of the station with ID=ista.
+// The graph contains the values of the j-th observable versus the sample entry number.
+//
+// The default value is j=1.
+
+ TString name="Station";
+ name+=ista;
+ RnoStation* sta=(RnoStation*)GetDevice(name);
+
+ if (!sta)
+ {
+  cout << " *" << ClassName() << "::GetSamplingGraph* Could not find Station" << ista << endl;
+  return 0;
+ }
+
+ TGraph gr=sta->GetSamplingGraph(ich,j);
+
+ // Add run and event numbers and timestamp to the graph title
+ TString title=gr.GetTitle();
+ title+=" Run:";
+ title+=GetRunNumber();
+ title+=" Event:";
+ title+=GetEventNumber();
+ title+=" ";
+ title+=GetDayTimeString("UT",3);
+ gr.SetTitle(title);
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1F RnoEvent::GetSamplingDFT(Int_t ista,Int_t ich,TString sel,Int_t j)
+{
+// Provide the Discrete Fourier Transform (DFT) of the j-th sampled observable (1=first)
+// for the selected channel number "ich" of the station with ID=ista.
+//
+// sel     : String to specify the contents and representation of the result histogram
+//           "RE"   --> Y-axis shows the values of the real (re) components
+//           "IM"   --> Y-axis shows the values of the imaginary (im) components
+//           "AMP"  --> Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+//           "PHIR" --> Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+//           "PHID" --> Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+//           "k"    --> X-axis represents the index k in the frequency domain  
+//           "f"    --> X-axis represents the fraction f of the sampling rate in the frequency domain
+//           "Hz"   --> X-axis represents the actual frequency in Hz in the frequency domain
+//           "n"    --> X-axis represents the index n in the time domain  
+//           "t"    --> X-axis represents the actual time in seconds in the time domain
+//           "2"    --> X-axis spans the full number of data points, instead of the usual (N/2)+1
+//
+// Examples :
+// ----------
+// sel="AMP f" will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+// sel="RE k 2" will show all N real components as a function of the index k in the frequency domain.
+//
+// The default values are sel="AMP Hz" and j=1.
+
+ TH1F his;
+
+ TString name="Station";
+ name+=ista;
+ RnoStation* sta=(RnoStation*)GetDevice(name);
+
+ if (!sta)
+ {
+  cout << " *" << ClassName() << "::GetSamplingDFT* Could not find Station" << ista << endl;
+  return his;
+ }
+
+ his=sta->GetSamplingDFT(ich,sel,j);
+
+ // Add run and event numbers and timestamp to the histogram title
+ TString title=his.GetTitle();
+ title+=" Run:";
+ title+=GetRunNumber();
+ title+=" Event:";
+ title+=GetEventNumber();
+ title+=" ";
+ title+=GetDayTimeString("UT",3);
+ his.SetTitle(title);
+
+ return his;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* RnoEvent::Clone(const char* name) const

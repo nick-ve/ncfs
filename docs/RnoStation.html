@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 29 20:47:33 2021            -->
+<!--   Date: Wed Dec 22 10:16:40 2021            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -75,7 +75,7 @@ return false;}
    may be extended in the usual way.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 29, 2021  16:32Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  09:54Z
 
 </pre></div>
 </div></div>
@@ -230,6 +230,8 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSample"><span class="baseclass">NcSignal::</span>GetSample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./NcSample.html">NcSample</a>*</td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSample@1"><span class="baseclass">NcSignal::</span>GetSample</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSampleIndex"><span class="baseclass">NcSignal::</span>GetSampleIndex</a>(TString name) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TH1F</td><td class="funcname"><a class="funcname" href="#RnoStation:GetSamplingDFT">GetSamplingDFT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ich, TString sel = <span class="string">"AMP Hz"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#RnoStation:GetSamplingGraph">GetSamplingGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSignal"><span class="baseclass">NcSignal::</span>GetSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSignal@1"><span class="baseclass">NcSignal::</span>GetSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="./NcSignal.html#NcSignal:GetSignalError"><span class="baseclass">NcSignal::</span>GetSignalError</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
@@ -590,6 +592,38 @@ return false;}
  The default value is j=1.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="RnoStation:GetSamplingGraph" href="src/RnoStation.cxx.html#RbQM5E">GetSamplingGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ich, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Provide the sampling graph of the j-th sampled observable (1=first) for the selected channel number <span class="string">"ich"</span>.
+ The graph contains the values of the j-th observable versus the sample entry number.
+
+ The default value is j=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TH1F <a class="funcname" name="RnoStation:GetSamplingDFT" href="src/RnoStation.cxx.html#kWIKG">GetSamplingDFT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ich, TString sel = <span class="string">"AMP Hz"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1)</span><br />
+<div class="funccomm"><pre> Provide the Discrete Fourier Transform (DFT) of the j-th sampled observable (1=first)
+ for the selected channel number <span class="string">"ich"</span>.
+
+ sel     : String to specify the contents and representation of the result histogram
+           <span class="string">"RE"</span>   --&gt; Y-axis shows the values of the real (re) components
+           <span class="string">"IM"</span>   --&gt; Y-axis shows the values of the imaginary (im) components
+           <span class="string">"AMP"</span>  --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+           <span class="string">"PHIR"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+           <span class="string">"PHID"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+           <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+           <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+           <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+           <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+           <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+           <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Examples :
+
+ sel=<span class="string">"AMP f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"RE k 2"</span> will show all N real components as a function of the index k in the frequency domain.
+
+ The default values are sel=<span class="string">"AMP Hz"</span> and j=1.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="RnoStation:Clone" href="src/RnoStation.cxx.html#tlNZqD">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -603,7 +637,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul 29 20:47:34 2021 </em><em>&raquo; Last generated: 2021-07-29 20:47</em><br />
+<em>&raquo; Last changed: Wed Dec 22 10:16:40 2021 </em><em>&raquo; Last generated: 2021-12-22 10:16</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
