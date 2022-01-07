@@ -29,3 +29,5 @@
                 Also the DAQ sampling rate is now indicated in the DAQ device. 
                 Display functionality of RnoStation and RnoEvent extended and new member functions
                 GetSampleGraph() and GetSampleDFT() introduced.
+06-jan-2022 NvE RnoConvert adapted to only write out events that have a proper event selection level
+                based on event selections that were processed via sub-tasks.

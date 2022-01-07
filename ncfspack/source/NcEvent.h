@@ -75,13 +75,16 @@ class NcEvent : public NcVertex,public NcTimestamp
   TObjArray* SortDevices(TString classname,Int_t idx=1,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0);  // Sort devices by signal
   TObjArray* SortDevices(TObjArray* hits,TString name,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0);       // Sort devices by signal
   TObjArray* SortDevices(TObjArray* hits,Int_t idx=1,Int_t mode=-1,Int_t mcal=1,Int_t deadcheck=1,TObjArray* ordered=0);        // Sort devices by signal
-  void SetWeight(Double_t weight); // Set the event weight      
-  Double_t GetWeight() const;      // Provide the event weight      
+  void SetWeight(Double_t weight);  // Set the event weight      
+  Double_t GetWeight() const;       // Provide the event weight      
+  void SetSelectLevel(Int_t level); // Set the event selection level
+  Int_t GetSelectLevel() const;     // Provide the event selection level
 
  protected:
   Int_t fRun;                           // The run number
   Int_t fEvent;                         // The event number
   Double_t fWeight;                     // The event weight
+  Int_t fSelectLevel;                   // The event selection level (<0:reject 0:undecided >0:accept)
   NcDetector* fDetector;                // Pointer to the (top level) detector structure
   TObjArray* fDevices;                  // Array to hold the pointers to the various devices
   Int_t fDevCopy;                       // Flag to denote creation of private copies of the devices
@@ -93,6 +96,6 @@ class NcEvent : public NcVertex,public NcTimestamp
   void LoadHits(TString classname,TObjArray* hits=0); // Load references to the hits registered to the specified device class
   void CreateDetector(); // Create a default detector structure
 
- ClassDef(NcEvent,11) // Creation and investigation of an NCFS generic event structure.
+ ClassDef(NcEvent,12) // Creation and investigation of an NCFS generic event structure.
 };
 #endif

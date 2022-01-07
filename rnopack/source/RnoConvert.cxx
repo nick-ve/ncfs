@@ -22,6 +22,9 @@
 // In case the user has provided sub-tasks, these will be executed
 // on an event-by-event basis after the RnoEvent structure has been filled
 // with the RNO-G data and before the final structures are written out.
+// In case the sub-tasks contained event selection procedures, like for
+// instance NcEventSelector, only the events that have a proper
+// event selection level, see SetSelectLevels(), will be written out.
 // Note that the data structures are only written out if an outputfile has
 // been specified via the SetOutputFile memberfunction.
 // In case no outputfile has been specified, this class provides a facility
@@ -30,7 +33,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  08:39Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  23:09Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -49,6 +52,8 @@ RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
  fPrintfreq=1;
  fOutfile=0;
  fData=0;
+ fMinSelectLevel=0;
+ fMaxSelectLevel=0;
 
  NcVersion version;
  version.Data();
@@ -138,6 +143,30 @@ void RnoConvert::SetOutputFile(TString name)
  fOutfile=new TFile(name.Data(),"RECREATE","RNO-G data in RnoEvent structure");
 }
 ///////////////////////////////////////////////////////////////////////////
+void RnoConvert::SetSelectLevels(Int_t min,Int_t max)
+{
+// Set the required event selection level interval [min,max] for events to be written out.
+// The generic (NcEvent) convention is <0:reject 0:undecided >0:accept.
+// min=0 and max=0 are the default initialisations in the constructor.
+
+ fMinSelectLevel=min;
+ fMaxSelectLevel=max;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t RnoConvert::GetMinSelectLevel() const
+{
+// Provide the minimum required event selection level for events to be written out.
+
+ return fMinSelectLevel;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t RnoConvert::GetMaxSelectLevel() const
+{
+// Provide the maximum required event selection level for events to be written out.
+
+ return fMaxSelectLevel;
+}
+///////////////////////////////////////////////////////////////////////////
 void RnoConvert::ListInput(Option_t* opt)
 {
 // Provide an overview listing of the input data chain.
@@ -224,6 +253,7 @@ void RnoConvert::Exec(Option_t* opt)
  {
   cout << " RnoEvent output file : " << fOutfile->GetName() << endl;
   cout << " Output characteristics : splitlevel = " << fSplit << " buffersize = " << fBsize << endl;
+  cout << " Required event selection level interval for output : [" << fMinSelectLevel << "," << fMaxSelectLevel << "]" << endl;
  }
 
  ListEnvironment();
@@ -277,6 +307,7 @@ void RnoConvert::Exec(Option_t* opt)
  Int_t iradiant=0; // RADIANT firmware update sequence number
  Int_t iflower=0;  // FLOWER firmware update sequence number
  Float_t fsample;  // The DAQ sampling rate in Hz
+ Int_t nwritten=0; // The number of events written to output
  for (Int_t ient=0; ient<nen; ient++)
  {
   // Reset the detector structure
@@ -425,13 +456,11 @@ void RnoConvert::Exec(Option_t* opt)
   evt->SetEventNumber(event);
   evt->SetDetector(det);
 
-  // Invoke all available sub-tasks (if any) and write event to tree
+  // Invoke all available sub-tasks (if any)
   CleanTasks();
-  ExecuteTasks(opt);
+  ExecuteTasks(GetName());
 
-  // Write the event to the output file (if needed)
-  if (otree) otree->Fill();
-
+  // Provide a printout every "Printfreq" events
   if (fPrintfreq)
   {
    if (!((ient+1)%fPrintfreq))
@@ -440,10 +469,22 @@ void RnoConvert::Exec(Option_t* opt)
     evt->HeaderData();
    }
   }
+
+  // Write the event to the output file (if the event select level is o.k.)
+  Int_t select=evt->GetSelectLevel();
+  if (select<fMinSelectLevel || select>fMaxSelectLevel) continue;
+
+  if (otree) otree->Fill();
+  nwritten++;
  } // End of loop over the entries
 
  // Flush possible memory resident data to the output file
- if (fOutfile) fOutfile->Write();
+ if (fOutfile)
+ {
+  fOutfile->Write();
+  cout << endl;
+  cout << " *" << ClassName() << "::Exec* Number of (selected) events written to output : " << nwritten << endl;
+ }
 
  // Remove the RnoEvent object from the environment
  // and delete it as well

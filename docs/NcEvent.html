@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 29 20:47:32 2021            -->
+<!--   Date: Fri Jan  7 00:57:49 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -67,6 +67,11 @@ return false;}
  Addition of devices is best done via a (hierarchical) detector structure.
  Please refer to the documentation of <a href="./NcDetector.html">NcDetector</a> for further details.
 
+ However, some devices intrinsically belong to the event instead of the detector
+ to reflect e.g. reconstruction, filtering or selection results.
+ For the latter see for instance the <a href="./NcEventSelector.html">NcEventSelector</a> processor.
+ In general these devices are best added to the <a href="./NcEvent.html">NcEvent</a> structure itself.
+
  <a href="./NcDevice.html">NcDevice</a> (or derived) objects provide additional hit handling facilities.
  A <span class="string">"hit"</span> is a generic name indicating an <a href="./NcSignal.html">NcSignal</a> (or derived) object.
  Note that <a href="./NcEvent.html">NcEvent</a> does NOT own hits; it only provides references to hits
@@ -76,6 +81,11 @@ return false;}
  The basic functionality of <a href="./NcEvent.html">NcEvent</a> is identical to the one of <a href="./NcVertex.html">NcVertex</a>.
  So, an <a href="./NcEvent.html">NcEvent</a> may be used as the primary vertex with some additional
  functionality compared to <a href="./NcVertex.html">NcVertex</a>.
+
+ An <a href="./NcEvent.html">NcEvent</a> contains a weight and an event selection level to facilitate
+ correct (statistical) treatment in the final scientific analysis.
+ See the <a href="./NcEvent.html#NcEvent:SetWeight" title="void NcEvent::SetWeight(Double_t weight)">SetWeight</a>(), <a href="./NcEvent.html#NcEvent:GetWeight" title="Double_t NcEvent::GetWeight()">GetWeight</a>(), <a href="./NcEvent.html#NcEvent:SetSelectLevel" title="void NcEvent::SetSelectLevel(Int_t level)">SetSelectLevel</a>() and <a href="./NcEvent.html#NcEvent:GetSelectLevel" title="Int_t NcEvent::GetSelectLevel()">GetSelectLevel</a>()
+ memberfunctions for further details.
 
  To provide maximal flexibility to the user, the two modes of track/jet/vertex
  storage as described in <a href="./NcJet.html">NcJet</a> and <a href="./NcVertex.html">NcVertex</a> can be used.
@@ -292,7 +302,7 @@ return false;}
         obtained via the <a href="./NcPosition.html#NcPosition:GetUnitScale" title="Float_t NcPosition::GetUnitScale()">GetUnitScale</a>() and <a href="./NcJet.html#NcJet:GetEscale" title="Float_t NcJet::GetEscale()">GetEscale</a>() memberfunctions.
 
 --- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 17, 2021  10:30Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  21:18Z
 
 </pre></div>
 </div></div>
@@ -477,6 +487,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScalar"><span class="baseclass">Nc4Vector::</span>GetScalar</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:GetScalarFlag"><span class="baseclass">Nc4Vector::</span>GetScalarFlag</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#time_t">time_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetSec"><span class="baseclass">TTimeStamp::</span>GetSec</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcEvent:GetSelectLevel">GetSelectLevel</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">TObjArray*</td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetSignals"><span class="baseclass">NcJet::</span>GetSignals</a>(TString classname, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 0, TObjArray* signals = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcJet.html#NcJet:GetSignalValue"><span class="baseclass">NcJet::</span>GetSignalValue</a>(TString classname, TString varname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> par = 2)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTAI@1"><span class="baseclass">NcTimestamp::</span>GetTAI</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
@@ -645,6 +656,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalar"><span class="baseclass">Nc4Vector::</span>SetScalar</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> v0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dv0 = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./Nc4Vector.html#Nc4Vector:SetScalarError"><span class="baseclass">Nc4Vector::</span>SetScalarError</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dv0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:SetSec"><span class="baseclass">TTimeStamp::</span>SetSec</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> sec)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcEvent:SetSelectLevel">SetSelectLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> level)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetSystemTime"><span class="baseclass">NcTimestamp::</span>SetSystemTime</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI@2"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> tai, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetTAI"><span class="baseclass">NcTimestamp::</span>SetTAI</a>(TString type, TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
@@ -780,6 +792,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcEvent:fRun"></a>fRun</td><td class="datadesc">The run number</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./Nc4Vector.html#Nc4Vector:fScalar"><span class="baseclass">Nc4Vector::</span>fScalar</a></td><td class="datadesc">Flag denoting scalar mode</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="./NcPosition.html#NcPosition:fScale"><span class="baseclass">NcPosition::</span>fScale</a></td><td class="datadesc">The unit scale used for the position coordinates</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcEvent:fSelectLevel"></a>fSelectLevel</td><td class="datadesc">The event selection level (&lt;0:reject 0:undecided &gt;0:accept)</td></tr>
 <tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJet.html#NcJet:fSelected"><span class="baseclass">NcJet::</span>fSelected</a></td><td class="datadesc">! Temp. array to hold user selected or ordered objects</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fTmjd"><span class="baseclass">NcTimestamp::</span>fTmjd</a></td><td class="datadesc">Number of elapsed TAI days equivalent to MJD counting</td></tr>
@@ -901,7 +914,7 @@ return false;}
 <div class="funccomm"><pre> <a href="./NcEvent.html#NcEvent:Reset" title="void NcEvent::Reset()">Reset</a> all variables to default values.
  The max. number of tracks is set to the initial value again.
  The max. number of vertices is set to the default value again.
- The event weight is set to 1 again.
+ The event weight is set to 1 and the event select level is set to 0 again.
  The timestamp is set to the current time of the system clock.
  Note : The DevCopy mode is maintained as it was set by the user before.
 </pre></div>
@@ -964,6 +977,11 @@ return false;}
  By default the weight is set to 1 in the constructor.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetSelectLevel" href="src/NcEvent.cxx.html#BY3cg">SetSelectLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> level)</span><br />
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the selection level (&lt;0:reject 0:undecided &gt;0:accept) for this event.
+ By default the selection level is set to 0 in the constructor.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> <a class="funcname" name="NcEvent:GetDayTime" href="src/NcEvent.cxx.html#v2fp5">GetDayTime</a>() const</span><br />
 <div class="funccomm"><pre> Provide the date and time stamp for this event
 
@@ -985,6 +1003,10 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcEvent:GetWeight" href="src/NcEvent.cxx.html#CWe4m">GetWeight</a>() const</span><br />
 <div class="funccomm"><pre> Provide the weight for this event
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcEvent:GetSelectLevel" href="src/NcEvent.cxx.html#Ew0J0D">GetSelectLevel</a>() const</span><br />
+<div class="funccomm"><pre> Provide the selection level (&lt;0:reject 0:undecided &gt;0:accept) for this event.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcEvent:SetProjectile" href="src/NcEvent.cxx.html#JvUfMB">SetProjectile</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> a, <a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Double_t">Double_t</a> pnuc, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
@@ -1732,7 +1754,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul 29 20:47:32 2021 </em><em>&raquo; Last generated: 2021-07-29 20:47</em><br />
+<em>&raquo; Last changed: Fri Jan  7 00:57:50 2022 </em><em>&raquo; Last generated: 2022-01-07 00:57</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

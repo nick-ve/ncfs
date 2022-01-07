@@ -1274,3 +1274,13 @@
 22-dec-2021 NvE Protection against deletion of already user deleted canvas introduced in NcAstrolab.
                 Also functionality of rnopack extended; see the rnopack history for details.
                 The version indicator in NcVersion has been updated to 4.7.1.
+06-jan-2022 NvE Memberfunctions SetSelectLevel() and GetSelectLevel() introduced in NcEvent in order to
+                enable investigation of event selections independent of the device name(s) introduced by
+                the corresponding sub-task event selection processor(s).
+                NcEvent::Data() has been adapted to list the event selection level.
+                Also NcEventSelector has been adapted to set the event selection level in the corresponding
+                NcEvent structure.
+                RnoConvert has been adapted to only write out events with a proper event selection level.
+                See the rnopack history for details.
+                The version indicator in NcVersion has been updated to 4.8.
+                

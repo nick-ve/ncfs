@@ -47,6 +47,9 @@
 //          0 ==> Decision unknown (incomplete selection parameters)
 //          1 ==> Event selected
 //
+// This selection value is also recorded as the event selection level
+// in the corresponding NcEvent (or derived) structure.
+//
 // Event selection may be performed based on various selection types,
 // e.g. individual track observables, total event observables or
 // space and time matching with external objects.
@@ -796,6 +799,8 @@ void NcEventSelector::Exec(Option_t* opt)
  NcDevice* dx=(NcDevice*)fEvt->GetDevice("NcEventSelector");
  if (dx) fEvt->RemoveDevice(dx);
  fEvt->AddDevice(fParams);
+
+ fEvt->SetSelectLevel(fSelect);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::Track(Int_t mode)

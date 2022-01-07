@@ -36,6 +36,11 @@
 // Addition of devices is best done via a (hierarchical) detector structure.
 // Please refer to the documentation of NcDetector for further details.
 //
+// However, some devices intrinsically belong to the event instead of the detector
+// to reflect e.g. reconstruction, filtering or selection results.
+// For the latter see for instance the NcEventSelector processor.
+// In general these devices are best added to the NcEvent structure itself.
+//
 // NcDevice (or derived) objects provide additional hit handling facilities.
 // A "hit" is a generic name indicating an NcSignal (or derived) object.
 // Note that NcEvent does NOT own hits; it only provides references to hits
@@ -45,6 +50,11 @@
 // The basic functionality of NcEvent is identical to the one of NcVertex.
 // So, an NcEvent may be used as the primary vertex with some additional
 // functionality compared to NcVertex.
+//
+// An NcEvent contains a weight and an event selection level to facilitate
+// correct (statistical) treatment in the final scientific analysis. 
+// See the SetWeight(), GetWeight(), SetSelectLevel() and GetSelectLevel()
+// memberfunctions for further details.  
 //
 // To provide maximal flexibility to the user, the two modes of track/jet/vertex
 // storage as described in NcJet and NcVertex can be used.
@@ -261,7 +271,7 @@
 //        obtained via the GetUnitScale() and GetEscale() memberfunctions.
 //
 //--- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 17, 2021  10:30Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  21:18Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcEvent.h"
@@ -276,6 +286,7 @@ NcEvent::NcEvent() : NcVertex(),NcTimestamp()
  fRun=0;
  fEvent=0;
  fWeight=1;
+ fSelectLevel=0;
  fDetector=0;
  fDevices=0;
  fDevCopy=0;
@@ -296,6 +307,7 @@ NcEvent::NcEvent(Int_t n) : NcVertex(n),NcTimestamp()
  fRun=0;
  fEvent=0;
  fWeight=1;
+ fSelectLevel=0;
  fDetector=0;
  fDevices=0;
  fDevCopy=0;
@@ -348,6 +360,7 @@ NcEvent::NcEvent(const NcEvent& evt) : NcVertex(evt),NcTimestamp(evt)
  fRun=evt.fRun;
  fEvent=evt.fEvent;
  fWeight=evt.fWeight;
+ fSelectLevel=evt.fSelectLevel;
  fDevCopy=evt.fDevCopy;
 
  fHits=0;
@@ -399,7 +412,7 @@ void NcEvent::Reset()
 // Reset all variables to default values.
 // The max. number of tracks is set to the initial value again.
 // The max. number of vertices is set to the default value again.
-// The event weight is set to 1 again.
+// The event weight is set to 1 and the event select level is set to 0 again.
 // The timestamp is set to the current time of the system clock.
 // Note : The DevCopy mode is maintained as it was set by the user before.
 
@@ -409,6 +422,7 @@ void NcEvent::Reset()
  fRun=0;
  fEvent=0;
  fWeight=1;
+ fSelectLevel=0;
 
  if (fDetector)
  {
@@ -522,6 +536,13 @@ void NcEvent::SetWeight(Double_t weight)
  fWeight=weight;
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcEvent::SetSelectLevel(Int_t level)
+{
+// Set the selection level (<0:reject 0:undecided >0:accept) for this event.
+// By default the selection level is set to 0 in the constructor.
+ fSelectLevel=level;
+}
+///////////////////////////////////////////////////////////////////////////
 TTimeStamp NcEvent::GetDayTime() const
 {
 // Provide the date and time stamp for this event
@@ -552,6 +573,12 @@ Double_t NcEvent::GetWeight() const
 {
 // Provide the weight for this event
  return fWeight;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcEvent::GetSelectLevel() const
+{
+// Provide the selection level (<0:reject 0:undecided >0:accept) for this event.
+ return fSelectLevel;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetProjectile(Int_t a,Int_t z,Double_t pnuc,Int_t id)
@@ -835,7 +862,7 @@ void NcEvent::HeaderData()
  cout << endl;
  Date(1);
  cout << "  Run : " << fRun << " Event : " << fEvent
-      << " Weight : " << fWeight << endl;
+      << " Weight : " << fWeight << " SelectLevel : " << fSelectLevel << endl;
  ShowDevices(0,kFALSE);
  ShowTracks(0);
 }

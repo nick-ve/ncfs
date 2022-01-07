@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Dec 22 10:16:39 2021            -->
+<!--   Date: Fri Jan  7 00:57:51 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -67,6 +67,9 @@ return false;}
  In case the user has provided sub-tasks, these will be executed
  on an event-by-event basis after the <a href="./RnoEvent.html">RnoEvent</a> structure has been filled
  with the RNO-G data and before the final structures are written out.
+ In case the sub-tasks contained event selection procedures, like for
+ instance <a href="./NcEventSelector.html">NcEventSelector</a>, only the events that have a proper
+ event selection level, see <a href="./RnoConvert.html#RnoConvert:SetSelectLevels" title="void RnoConvert::SetSelectLevels(Int_t min,Int_t max)">SetSelectLevels</a>(), will be written out.
  Note that the data structures are only written out if an outputfile has
  been specified via the <a href="./RnoConvert.html#RnoConvert:SetOutputFile" title="void RnoConvert::SetOutputFile(TFile* ofile) or overloads">SetOutputFile</a> memberfunction.
  In case no outputfile has been specified, this class provides a facility
@@ -75,7 +78,7 @@ return false;}
  Please refer to /macros/convert.cc for a usage example.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  08:39Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  23:09Z
 
 </pre></div>
 </div></div>
@@ -129,6 +132,8 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">TList*</td><td class="funcname"><a class="funcname" href="#TTask:GetListOfTasks"><span class="baseclass">TTask::</span>GetListOfTasks</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetMainObject"><span class="baseclass">NcJob::</span>GetMainObject</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#RnoConvert:GetMaxSelectLevel">GetMaxSelectLevel</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#RnoConvert:GetMinSelectLevel">GetMinSelectLevel</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetObject"><span class="baseclass">NcJob::</span>GetObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:GetObject@1"><span class="baseclass">NcJob::</span>GetObject</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
@@ -196,6 +201,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetOutputFile">SetOutputFile</a>(TFile* ofile)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetOutputFile@1">SetOutputFile</a>(TString name)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetPrintFreq">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> f)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetSelectLevels">SetSelectLevels</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> min, <a href="./ListOfTypes.html#Int_t">Int_t</a> max)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetSplitLevel">SetSplitLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> split)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
@@ -255,7 +261,9 @@ return false;}
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a href="./NcJob.html#NcJob:fMainObject"><span class="baseclass">NcJob::</span>fMainObject</a></td><td class="datadesc">Pointer to the main processing object structure within the job</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJob.html#NcJob:fMakefolder"><span class="baseclass">NcJob::</span>fMakefolder</a></td><td class="datadesc">Flag to indicate creation of the folder structure</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoConvert:fMaxSelectLevel"></a>fMaxSelectLevel</td><td class="datadesc">Maximum event select level for events to be written out</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoConvert:fMaxevt"></a>fMaxevt</td><td class="datadesc">The maximum number of events to be processed</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoConvert:fMinSelectLevel"></a>fMinSelectLevel</td><td class="datadesc">Minimum event select level for events to be written out</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
 <tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fObjects"><span class="baseclass">NcJob::</span>fObjects</a></td><td class="datadesc">Pointers to the various user-added objects </td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
@@ -342,6 +350,20 @@ return false;}
 <div class="funccomm"><pre> Create the output file for the <a href="./RnoEvent.html">RnoEvent</a> data.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:SetSelectLevels" href="src/RnoConvert.cxx.html#vFTMkC">SetSelectLevels</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> min, <a href="./ListOfTypes.html#Int_t">Int_t</a> max)</span><br />
+<div class="funccomm"><pre> Set the required event selection level interval [min,max] for events to be written out.
+ The generic (<a href="./NcEvent.html">NcEvent</a>) convention is &lt;0:reject 0:undecided &gt;0:accept.
+ min=0 and max=0 are the default initialisations in the constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoConvert:GetMinSelectLevel" href="src/RnoConvert.cxx.html#GVWT.B">GetMinSelectLevel</a>() const</span><br />
+<div class="funccomm"><pre> Provide the minimum required event selection level for events to be written out.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoConvert:GetMaxSelectLevel" href="src/RnoConvert.cxx.html#SG1F.B">GetMaxSelectLevel</a>() const</span><br />
+<div class="funccomm"><pre> Provide the maximum required event selection level for events to be written out.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:ListInput" href="src/RnoConvert.cxx.html#OyQCL">ListInput</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Provide an overview listing of the input data chain.
  The input argument <span class="string">"opt"</span> has the same meaning as for the ROOT TTree::<a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a>().
@@ -378,7 +400,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Dec 22 10:16:39 2021 </em><em>&raquo; Last generated: 2021-12-22 10:16</em><br />
+<em>&raquo; Last changed: Fri Jan  7 00:57:51 2022 </em><em>&raquo; Last generated: 2022-01-07 00:57</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
