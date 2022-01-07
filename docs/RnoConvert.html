@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jan  7 00:57:51 2022            -->
+<!--   Date: Fri Jan  7 12:07:09 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -78,7 +78,7 @@ return false;}
  Please refer to /macros/convert.cc for a usage example.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  23:09Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022  11:54Z
 
 </pre></div>
 </div></div>
@@ -305,7 +305,7 @@ return false;}
 <h2>Function documentation</h2>
 <div class="funcdoc"><span class="funcname"> <a class="funcname" name="RnoConvert:RnoConvert" href="src/RnoConvert.cxx.html#o0JWCE">RnoConvert</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"RnoConvert"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Default constructor.
- By default maxevent=-1, split=0, bsize=32000, printfreq=1.
+ By default maxevent=-1, split=0, bsize=32000, printfreq=1 and select=[0,-1].
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"> <a class="funcname" name="RnoConvert:_RnoConvert" href="src/RnoConvert.cxx.html#hNgJ6C">~RnoConvert</a>()</span><br />
@@ -353,7 +353,10 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:SetSelectLevels" href="src/RnoConvert.cxx.html#vFTMkC">SetSelectLevels</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> min, <a href="./ListOfTypes.html#Int_t">Int_t</a> max)</span><br />
 <div class="funccomm"><pre> Set the required event selection level interval [min,max] for events to be written out.
  The generic (<a href="./NcEvent.html">NcEvent</a>) convention is &lt;0:reject 0:undecided &gt;0:accept.
- min=0 and max=0 are the default initialisations in the constructor.
+
+ Note : If max&lt;min there will be no check on the maximum value.
+
+ min=0 and max=-1 are the default initialisations in the constructor.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoConvert:GetMinSelectLevel" href="src/RnoConvert.cxx.html#GVWT.B">GetMinSelectLevel</a>() const</span><br />
@@ -400,7 +403,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jan  7 00:57:51 2022 </em><em>&raquo; Last generated: 2022-01-07 00:57</em><br />
+<em>&raquo; Last changed: Fri Jan  7 12:07:09 2022 </em><em>&raquo; Last generated: 2022-01-07 12:07</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

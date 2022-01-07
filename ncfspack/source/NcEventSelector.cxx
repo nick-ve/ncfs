@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcEventSelector.cxx 128 2016-06-13 10:52:31Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcEventSelector
 // TTask based processor to perform generic event selection.
@@ -143,7 +141,7 @@
 // if (evtsel) evtsel->Data();
 //
 //--- Author: Nick van Eijndhoven 17-sep-2007 Utrecht University
-//- Modified: NvE $Date: 2016-06-13 12:52:31 +0200 (Mon, 13 Jun 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  21:56Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcEventSelector.h"

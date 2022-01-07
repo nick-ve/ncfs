@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:21 2019            -->
+<!--   Date: Fri Jan  7 12:07:08 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcJob.h.html">header file</a>
 <a class="descrheadentry" href="src/NcJob.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcJob_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -72,7 +72,7 @@ return false;}
  processor, this class can also be used as a <span class="string">"hook"</span> to specify
  various sub-tasks in an (interactive) user environment.
  Usage of the memberfunction <a href="./NcJob.html#NcJob:ProcessObject" title="void NcJob::ProcessObject(TObject* obj)">ProcessObject</a>() allows an (interactive)
- event-by-event processing of the various specified subtasks.
+ event-by-event processing of the various specified subtasks.  
 
  This base class provides a working environment for the derived
  (user defined) processor class and all of its subtasks.
@@ -104,7 +104,7 @@ return false;}
    <a href="./#TObject:FindObject" title="TObject* TObject::FindObject(const char* name) or overloads">FindObject</a> and/or iterator facilities.
 
  Notes :
-
+ -------
  1) This <a href="./NcJob.html">NcJob</a> class is derived from <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>, which implies that every
     (user defined) top level processor class is itself also a <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>.
     This allows sub-tasks to be introduced to the top level processor
@@ -119,7 +119,7 @@ return false;}
     ListOfTasks under the name which was provided by the user in the
     constructor of the top level processor.
     The name of the top level processor is passed automatically as the
-    opt argument to the <a href="./#TTask:Exec" title="void TTask::Exec(Option_t* option)">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt) memberfunctions of the
+    opt argument to the <a href="./#TTask:Exec" title="void TTask::Exec(Option_t* option)">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt) memberfunctions of the 
     various sub-tasks by the <a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>() memberfunction (see below).
     This allows all sub-tasks to obtain the pointer to the top level
     processor instance from its name via the statement :
@@ -152,7 +152,7 @@ return false;}
  <span class="string">"mode"</span> argument of the <a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>() memberfunction.
 
 --- Author: Nick van Eijndhoven 07-may-2005 Utrecht University
-- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022  11:39Z
 
 </pre></div>
 </div></div>
@@ -333,24 +333,64 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcJob:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcJob_Lib" id="MapNcJob_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcJob_Inh" class="tabsel" href="inh/NcJob_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcJob_Inh.png');">Inheritance</a>
-<a id="imgNcJob_InhMem" class="tab" href="inhmem/NcJob_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcJob_InhMem.png');">Inherited Members</a>
-<a id="imgNcJob_Incl" class="tab" href="incl/NcJob_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcJob_Incl.png');">Includes</a>
-<a id="imgNcJob_Lib" class="tab" href="lib/NcJob_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcJob_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcJob_Inh" src="inh/NcJob_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TTask</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcJob" href="./NcJob.html">NcJob</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceCal2Root" href="./IceCal2Root.html">IceCal2Root</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceDB2Root" href="./IceDB2Root.html">IceDB2Root</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceF2k" href="./IceF2k.html">IceF2k</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceRawTWR" href="./IceRawTWR.html">IceRawTWR</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceRoot" href="./IceRoot.html">IceRoot</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="IceRootx" href="./IceRootx.html">IceRootx</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="RnoConvert" href="./RnoConvert.html">RnoConvert</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJob:NcJob" href="src/NcJob.cxx.html#u9QcOD">NcJob</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcJob"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJob:NcJob" href="src/NcJob.cxx.html#Nf8qrE">NcJob</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcJob"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Default constructor.
  Initialise the working environment for general data access
  by the derived task and its subtasks.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJob:_NcJob" href="src/NcJob.cxx.html#Jcix7">~NcJob</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJob:_NcJob" href="src/NcJob.cxx.html#WTsDKB">~NcJob</a>()</span><br />
 <div class="funccomm"><pre> Default destructor.
  The internal array and job specific folder (if any) holding the various
  references are deleted.
@@ -358,11 +398,11 @@ return false;}
         and the main processing object are NOT deleted by this base class.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:ListEnvironment" href="src/NcJob.cxx.html#TGOe1E">ListEnvironment</a>()</span><br />
-<div class="funccomm"><pre> Provide listing of the job environment.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:ListEnvironment" href="src/NcJob.cxx.html#DHMe1E">ListEnvironment</a>()</span><br />
+<div class="funccomm"><pre> Provide listing of the job environment. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:ExecuteJob" href="src/NcJob.cxx.html#mZSuxE">ExecuteJob</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:ExecuteJob" href="src/NcJob.cxx.html#CjsPxE">ExecuteJob</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Invokation of the top level processor via its <a href="./#TTask:Exec" title="void TTask::Exec(Option_t* option)">Exec</a>() memberfunction.
  The input argument <span class="string">"mode"</span> can be used to explicitly specify the
  (de)selection of the folder environment creation and automatic
@@ -372,7 +412,7 @@ return false;}
  by the user (e.g. in a ROOT macro) in order to provide a hook
  for event-by-event processing of various subtasks.
  An even more convenient alternative to achieve this is invokation of the
- memberfunction <a href="./NcJob.html#NcJob:ProcessObject" title="void NcJob::ProcessObject(TObject* obj)">ProcessObject</a>().
+ memberfunction <a href="./NcJob.html#NcJob:ProcessObject" title="void NcJob::ProcessObject(TObject* obj)">ProcessObject</a>().  
 
  mode = -1 : Explicitly prohibit folder creation for the complete job
          0 : Folder creation selection steered by <a href="./NcJob.html#NcJob:MakeFolder" title="void NcJob::MakeFolder()">MakeFolder</a>()
@@ -387,7 +427,7 @@ return false;}
  Note : Before execution gROOT is set as the global working directory.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:MakeFolder" href="src/NcJob.cxx.html#ZhAhDB">MakeFolder</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:MakeFolder" href="src/NcJob.cxx.html#vRuCOE">MakeFolder</a>()</span><br />
 <div class="funccomm"><pre> Select creation of the folder structure in addition to the internal
  array storage of objects.
  Creation of the folder structure is only activated if it was not
@@ -395,62 +435,62 @@ return false;}
  <a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>() memberfunction.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TFolder* <a class="funcname" name="NcJob:GetFolder" href="src/NcJob.cxx.html#zLjFwB">GetFolder</a>() const</span><br />
+<div class="funcdoc"><span class="funcname">TFolder* <a class="funcname" name="NcJob:GetFolder" href="src/NcJob.cxx.html#mskFwB">GetFolder</a>() const</span><br />
 <div class="funccomm"><pre> Provide pointer to the whiteboard folder.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcJob:GetMainObject" href="src/NcJob.cxx.html#v.eqxD">GetMainObject</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcJob:GetMainObject" href="src/NcJob.cxx.html#upWpxD">GetMainObject</a>() const</span><br />
 <div class="funccomm"><pre> Provide pointer to the main object structure.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:SetMainObject" href="src/NcJob.cxx.html#h.i.fB">SetMainObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:SetMainObject" href="src/NcJob.cxx.html#O_ibPB">SetMainObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
 <div class="funccomm"><pre> Store pointer to the main object structure.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:AddObject" href="src/NcJob.cxx.html#wceofD">AddObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:AddObject" href="src/NcJob.cxx.html#vb_pjD">AddObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
 <div class="funccomm"><pre> Store pointer of specified object in the working environment.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:AddObjects" href="src/NcJob.cxx.html#KwDh1D">AddObjects</a>(TObjArray* arr)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:AddObjects" href="src/NcJob.cxx.html#STI.0D">AddObjects</a>(TObjArray* arr)</span><br />
 <div class="funccomm"><pre> Store pointers of all the array objects individually in the working environment.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:RemoveObject" href="src/NcJob.cxx.html#l42LFE">RemoveObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:RemoveObject" href="src/NcJob.cxx.html#lbZWFE">RemoveObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
 <div class="funccomm"><pre> Remove pointer of specified object from the working environment.
  In case the specified object is also the main object, the main object
  pointer will be set to 0 as well.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:RemoveObjects" href="src/NcJob.cxx.html#ysFdq">RemoveObjects</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:RemoveObjects" href="src/NcJob.cxx.html#PLKPiB">RemoveObjects</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
 <div class="funccomm"><pre> Remove all stored objects inheriting from classname.
  In case one of the removed objects is also the main object, the main object
  pointer will be set to 0 as well.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcJob:GetObject@1" href="src/NcJob.cxx.html#xhJQQE">GetObject</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcJob:GetObject@1" href="src/NcJob.cxx.html#OSdYMD">GetObject</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j) const</span><br />
 <div class="funccomm"><pre> Provide pointer to j-th stored object.
  Note : j=1 indicates the first object.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcJob:GetObject" href="src/NcJob.cxx.html#GDYHo">GetObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcJob:GetObject" href="src/NcJob.cxx.html#H5Efo">GetObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) const</span><br />
 <div class="funccomm"><pre> Provide pointer to the first stored object which inherits from classname.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJob:GetObjects" href="src/NcJob.cxx.html#rzvPkD">GetObjects</a>() const</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJob:GetObjects" href="src/NcJob.cxx.html#aYcF5">GetObjects</a>() const</span><br />
 <div class="funccomm"><pre> Provide pointers of all the stored objects.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJob:GetObjects@1" href="src/NcJob.cxx.html#oeRcGE">GetObjects</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
+<div class="funcdoc"><span class="funcname">TObjArray* <a class="funcname" name="NcJob:GetObjects@1" href="src/NcJob.cxx.html#yOgdKE">GetObjects</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname)</span><br />
 <div class="funccomm"><pre> Provide pointers to all stored objects inheriting from classname.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:ProcessObject" href="src/NcJob.cxx.html#RKTWvC">ProcessObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcJob:ProcessObject" href="src/NcJob.cxx.html#i8hThC">ProcessObject</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</span><br />
 <div class="funccomm"><pre> Invokation of all user defined sub-tasks for the specified object.
  This facility is very convenient when performing a task based
  event-by-event analysis in an (interactive) user application.
 
  Note :
-
+ ------
  Before processing gROOT is set as the global working directory.
  The specified object will be added to the job's object list
  as main object before the processing starts.
@@ -461,14 +501,14 @@ return false;}
  be set to zero.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJob:NcJob" href="src/NcJob.h.html#LtKXvC">NcJob</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcJob"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcJob:NcJob" href="src/NcJob.h.html#MVa8pC">NcJob</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcJob"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:21 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Fri Jan  7 12:07:08 2022 </em><em>&raquo; Last generated: 2022-01-07 12:07</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

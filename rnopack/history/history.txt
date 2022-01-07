@@ -31,3 +31,6 @@
                 GetSampleGraph() and GetSampleDFT() introduced.
 06-jan-2022 NvE RnoConvert adapted to only write out events that have a proper event selection level
                 based on event selections that were processed via sub-tasks.
+07-jan-2022 NvE Functionality of event selection level extended in RnoConvert and version indication
+                removed from the constructor, since this is now done in the NcJob constructor.
+                ROOT macro convert.cc in folder /macros updated to reflect extended RnoConvert functionality.

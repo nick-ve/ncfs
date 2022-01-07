@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcJob.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcJob
 // Base class for the top level processor class in a task based procedure.
@@ -123,7 +121,7 @@
 // "mode" argument of the ExecuteJob() memberfunction.
 //
 //--- Author: Nick van Eijndhoven 07-may-2005 Utrecht University
-//- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022  11:39Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcJob.h"
@@ -146,6 +144,9 @@ NcJob::NcJob(const char* name,const char* title) : TTask(name,title)
  // Introduce this NcJob based instance into the ROOT task list
  TSeqCollection* tasks=gROOT->GetListOfTasks();
  if (tasks) tasks->Add(this);
+
+ NcVersion version;
+ version.Data();
 }
 ///////////////////////////////////////////////////////////////////////////
 NcJob::~NcJob()

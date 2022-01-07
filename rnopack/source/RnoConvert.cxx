@@ -33,7 +33,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  23:09Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022  11:54Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -44,7 +44,7 @@ ClassImp(RnoConvert) // Class implementation to enable ROOT I/O
 RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
 {
 // Default constructor.
-// By default maxevent=-1, split=0, bsize=32000, printfreq=1.
+// By default maxevent=-1, split=0, bsize=32000, printfreq=1 and select=[0,-1].
 
  fSplit=0;
  fBsize=32000;
@@ -53,10 +53,7 @@ RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
  fOutfile=0;
  fData=0;
  fMinSelectLevel=0;
- fMaxSelectLevel=0;
-
- NcVersion version;
- version.Data();
+ fMaxSelectLevel=-1;
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoConvert::~RnoConvert()
@@ -147,7 +144,10 @@ void RnoConvert::SetSelectLevels(Int_t min,Int_t max)
 {
 // Set the required event selection level interval [min,max] for events to be written out.
 // The generic (NcEvent) convention is <0:reject 0:undecided >0:accept.
-// min=0 and max=0 are the default initialisations in the constructor.
+//
+// Note : If max<min there will be no check on the maximum value.
+//
+// min=0 and max=-1 are the default initialisations in the constructor.
 
  fMinSelectLevel=min;
  fMaxSelectLevel=max;
@@ -472,7 +472,8 @@ void RnoConvert::Exec(Option_t* opt)
 
   // Write the event to the output file (if the event select level is o.k.)
   Int_t select=evt->GetSelectLevel();
-  if (select<fMinSelectLevel || select>fMaxSelectLevel) continue;
+  if (select<fMinSelectLevel) continue;
+  if (fMaxSelectLevel>=fMinSelectLevel && select>fMaxSelectLevel) continue;
 
   if (otree) otree->Fill();
   nwritten++;

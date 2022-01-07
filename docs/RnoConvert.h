@@ -10,7 +10,6 @@
 #include "TMath.h"
 
 #include "NcJob.h"
-#include "NcVersion.h"
 #include "NcTagger.h"
 
 #include "RnoDetector.h"
@@ -45,6 +44,6 @@ class RnoConvert : public NcJob
   Int_t fMinSelectLevel;  // Minimum event select level for events to be written out
   Int_t fMaxSelectLevel;  // Maximum event select level for events to be written out
 
- ClassDef(RnoConvert,4) // Job for conversion of RNO-G Root data into RnoEvent data structures.
+ ClassDef(RnoConvert,5) // Job for conversion of RNO-G Root data into RnoEvent data structures.
 };
 #endif

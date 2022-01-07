@@ -12,6 +12,8 @@
 #include "TFolder.h"
 #include "TObjArray.h"
 
+#include "NcVersion.h"
+
 class NcJob : public TTask
 {
  public :
@@ -41,6 +43,6 @@ class NcJob : public TTask
 
   void SetMainObject(TObject* obj); // Store pointer to the main object structure
 
- ClassDef(NcJob,1) // Base class for top level job in a task based procedure 
+ ClassDef(NcJob,2) // Base class for top level job in a task based procedure 
 };
 #endif
