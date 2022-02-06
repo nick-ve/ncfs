@@ -28,7 +28,7 @@ class NcFITSIO : public TNamed
   enum eHDUTypes{kImageHDU,kTableHDU};
    
   // Markers of the various column data types
-  enum eColumnTypes{kString,kStringArray,kRealNumber,kRealArray,kComplexNumber,kComplexArray};
+  enum eColumnTypes{kString,kStringArray,kRealNumber,kRealArray,kComplexNumber,kComplexArray,kLogical,kLogicalArray};
 
   NcFITSIO(const char* name="NcFITSIO",const char* title="FITS data I/O interface"); // Default constructor
   virtual ~NcFITSIO();                                       // Default destructor

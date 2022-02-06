@@ -1287,3 +1287,5 @@
                 Also modification date/time corrected in NcEventSelector.
                 Flexibility for event selection level extended in RnoConvert; see the rnopack history for details.
                 The version indicator in NcVersion has been updated to 4.8.1.
+06-feb-2022 NvE Support for data type LOGICAL introduced for FITS tables in class NcFITSIO.
+                The version indicator in NcVersion has been updated to 4.8.2.

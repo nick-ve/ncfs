@@ -279,7 +279,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel November 5, 2020  14:46Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 6, 2022  00:42Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -652,6 +652,11 @@ Bool_t NcFITSIO::LoadHeaderInfo()
     fColumnTypes[jcol-1]=kString;
     if (dim>1) fColumnTypes[jcol-1]=kStringArray;
    }
+   else if (typecode==TLOGICAL)
+   {
+    fColumnTypes[jcol-1]=kLogical;
+    if (dim>1) fColumnTypes[jcol-1]=kLogicalArray;
+   }
    else if (typecode==TCOMPLEX || typecode==TDBLCOMPLEX)
    {
     fColumnTypes[jcol-1]=kComplexNumber;
@@ -963,7 +968,21 @@ Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,Int_t col)
  int anynul=0;
  double* array=new double[dim];
  status=0;
- fits_read_col(fInput,TDOUBLE,col,row,1,dim,&nulval,array,&anynul,&status);
+ if (fColumnTypes[col-1]==kLogical || fColumnTypes[col-1]==kLogicalArray)
+ {
+  bool* barray=new bool[dim];
+  bool bnulval=0;
+  fits_read_col(fInput,TLOGICAL,col,row,1,dim,&bnulval,barray,&anynul,&status);
+  for (Int_t i=0; i<dim; i++)
+  {
+   array[i]=double(barray[i]);
+  }
+  delete [] barray;
+ }
+ else
+ {
+  fits_read_col(fInput,TDOUBLE,col,row,1,dim,&nulval,array,&anynul,&status);
+ }
 
  if (status)
  {
@@ -2012,6 +2031,8 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
    if (fColumnTypes[i-1]==kRealArray) type="REAL ARRAY";
    if (fColumnTypes[i-1]==kComplexNumber) type="COMPLEX NUMBER";
    if (fColumnTypes[i-1]==kComplexArray) type="COMPLEX ARRAY";
+   if (fColumnTypes[i-1]==kLogical) type="LOGICAL";
+   if (fColumnTypes[i-1]==kLogicalArray) type="LOGICAL ARRAY";
 
    name=fColumnNames[i-1];
    name=name.Strip(name.kBoth,' ');
@@ -2063,7 +2084,7 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
    for (Int_t col=cstart; col<=cend; col++)
    {
     if (col==cstart) cout << " ";
-    if (fColumnTypes[col-1]==kString || fColumnTypes[col-1]==kStringArray)
+    if (fColumnTypes[col-1]==kString || fColumnTypes[col-1]==kStringArray || fColumnTypes[col-1]==kLogical || fColumnTypes[col-1]==kLogicalArray)
     {
      ndim=GetTableCell(str,row,col);
      if (!ndim) str="---";
