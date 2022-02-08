@@ -1299,3 +1299,5 @@
                 have also been added to the .gitattributes file to ensure that these files will always have
                 only LF line endings at checkout.
                 The version indicator in NcVersion has been updated to 4.8.3.
+                *** Bug fixed : Double deletion in NcFITSIO::LoadHeaderInfo() when file or HDU was not existing.
+                *** After the fix the version indicator in NcVersion has been updated to 4.8.4.

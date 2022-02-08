@@ -279,7 +279,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  17:02Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  21:35Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -456,9 +456,21 @@ Bool_t NcFITSIO::LoadHeaderInfo()
  fInput=0;
  int status=0;
 
- if (fKeyNames) delete[] fKeyNames;
- if (fKeyValues) delete[] fKeyValues;
- if (fComments) delete[] fComments;
+ if (fKeyNames)
+ {
+  delete[] fKeyNames;
+  fKeyNames=0;
+ }
+ if (fKeyValues)
+ {
+  delete[] fKeyValues;
+  fKeyValues=0;
+ }
+ if (fComments)
+ {
+  delete[] fComments;
+  fComments=0;
+ }
 
  // Open the FITS file as specified via OpenInputFile() or SelectHDU()
  fits_open_file(&fInput,fFilenameFilter.Data(),READONLY,&status);

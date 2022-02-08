@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Feb  8 18:10:07 2022            -->
+<!--   Date: Tue Feb  8 21:52:55 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -68,14 +68,14 @@ return false;}
        https://heasarc.gsfc.nasa.gov/docs/software/fitsio
 
  Note that on some operating systems (e.g. Ubuntu) facilities exist
- to automatically import the compiled library from server machines.
+ to automatically import the compiled library from server machines. 
 
  The FITS reference manual is available via the link :
 
   https://heasarc.gsfc.nasa.gov/docs/software/fitsio/c/c_user/cfitsio.html
 
- Note :
-
+ Note : 
+ ------
  This class has been inspired by the code released on 19-jul-2010
  by Claudi Martinez via the files TFITS.h and TFITS.cxx.
 
@@ -86,11 +86,11 @@ return false;}
  for instance spectra, data tables, histograms and multi-layered images.
  Furthermore, FITS data files are self explanatory since they contain
  human-readable information to allow the interpretation of the data within
- the FITS file. For example, a FITS file could contain a 3D data cube,
- but an additional description could indicate that it represents, for
+ the FITS file. For example, a FITS file could contain a 3D data cube, 
+ but an additional description could indicate that it represents, for 
  example, a 3-layer image.
  As such, it is very well suited to make experimental data available
- to the general community.
+ to the general community. 
 
  The basic data entity is a so called Header-Data Unit (HDU) and the
  <a href="./NcFITSIO.html">NcFITSIO</a> facility provides several methods to access the data of
@@ -117,10 +117,10 @@ return false;}
  - No interfaces have yet been implemented for writing FITS files
 
  Examples :
-
+ ==========
 
  Example 1 :
-
+ -----------
  The file contains only the primary HDU which consists of
  an image of NGC7662.
  We retrieve the first layer of the image array as a TASImage object
@@ -136,7 +136,7 @@ return false;}
  if (!q.<a href="./NcFITSIO.html#NcFITSIO:OpenInputFile" title="Bool_t NcFITSIO::OpenInputFile(TString specs)">OpenInputFile</a>(filename)) return;
 
  q.<a href="./NcFITSIO.html#NcFITSIO:ListFileHeader" title="void NcFITSIO::ListFileHeader(Int_t mode=1)">ListFileHeader</a>();
-
+  
  <a href="./ListOfTypes.html#Double_t">Double_t</a> thres=1000; // Threshold for pixel value
  <a href="./ListOfTypes.html#Double_t">Double_t</a> max=1;      // Rescale pixel values to [0,max]
 
@@ -144,7 +144,7 @@ return false;}
  q.<a href="./NcFITSIO.html#NcFITSIO:GetImageLayer" title="Int_t NcFITSIO::GetImageLayer(TASImage&amp; im,Int_t layer=1,Double_t* thres=0,Double_t max=-1) or overloads">GetImageLayer</a>(im,1,&amp;thres,max); // Image with threshold and rescaling
 
  TH2D hist;
- q.<a href="./NcFITSIO.html#NcFITSIO:GetImageLayer" title="Int_t NcFITSIO::GetImageLayer(TASImage&amp; im,Int_t layer=1,Double_t* thres=0,Double_t max=-1) or overloads">GetImageLayer</a>(hist,1,0,max); // Histogram with only rescaling
+ q.<a href="./NcFITSIO.html#NcFITSIO:GetImageLayer" title="Int_t NcFITSIO::GetImageLayer(TASImage&amp; im,Int_t layer=1,Double_t* thres=0,Double_t max=-1) or overloads">GetImageLayer</a>(hist,1,0,max); // Histogram with only rescaling 
 
  <a href="./ListOfTypes.html#TMatrixD">TMatrixD</a> m;
  q.<a href="./NcFITSIO.html#NcFITSIO:GetImageLayer" title="Int_t NcFITSIO::GetImageLayer(TASImage&amp; im,Int_t layer=1,Double_t* thres=0,Double_t max=-1) or overloads">GetImageLayer</a>(m,1); // Matrix without threshold and rescaling
@@ -156,7 +156,7 @@ return false;}
  hist.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"COLZ"</span>);
 
  Example 2 :
-
+ -----------
  The primary HDU is an array of 2 rows by 2040 columns,
  which represent a radiation spectrum.
  The first row contains the flux data, whereas the second row the wavelengths.
@@ -195,7 +195,7 @@ return false;}
  gr-&gt;<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"AP"</span>);
 
  Example 3 :
-
+ -----------
  The primary HDU contains an array representing a flux vs. wavelength spectrum.
  The extension #1 contains a data table with 2 rows.
  We will read from the table row(s) the column named DATAMAX.
@@ -210,7 +210,7 @@ return false;}
  if (!q.<a href="./NcFITSIO.html#NcFITSIO:OpenInputFile" title="Bool_t NcFITSIO::OpenInputFile(TString specs)">OpenInputFile</a>(filename)) return;
 
  q.<a href="./NcFITSIO.html#NcFITSIO:ListFileHeader" title="void NcFITSIO::ListFileHeader(Int_t mode=1)">ListFileHeader</a>(0);
-
+  
  // Open the extension #1 which contains the data table
  if (!q.<a href="./NcFITSIO.html#NcFITSIO:SelectHDU" title="Bool_t NcFITSIO::SelectHDU(TString extname=&quot;[0]&quot;) or overloads">SelectHDU</a>(1)) return;
 
@@ -231,7 +231,7 @@ return false;}
  }
 
  Example 4 :
-
+ -----------
  The primary HDU contains an array representing a flux vs. wavelength spectrum.
  The extension #1 contains a data table with 2 rows.
  We will read only the row(s) that have a column named DATAMAX with a
@@ -247,7 +247,7 @@ return false;}
  if (!q.<a href="./NcFITSIO.html#NcFITSIO:OpenInputFile" title="Bool_t NcFITSIO::OpenInputFile(TString specs)">OpenInputFile</a>(filename)) return;
 
  q.<a href="./NcFITSIO.html#NcFITSIO:ListFileHeader" title="void NcFITSIO::ListFileHeader(Int_t mode=1)">ListFileHeader</a>(0);
-
+  
  // Open the extension #1 which contains the data table with a selection filter
  if (!q.<a href="./NcFITSIO.html#NcFITSIO:SelectHDU" title="Bool_t NcFITSIO::SelectHDU(TString extname=&quot;[0]&quot;) or overloads">SelectHDU</a>(<span class="string">"[1][DATAMAX&gt;2e-15]"</span>)) return;
 
@@ -268,7 +268,7 @@ return false;}
  }
 
  Example 5 :
-
+ -----------
  The primary HDU contains an array representing a flux vs. wavelength spectrum.
  The extension #1 contains a data table with 9 rows and 8 columns.
  Column 4 has the name <span class="string">"mag"</span> and contains a vector of 6 numeric components.
@@ -286,7 +286,7 @@ return false;}
  if (!q.<a href="./NcFITSIO.html#NcFITSIO:OpenInputFile" title="Bool_t NcFITSIO::OpenInputFile(TString specs)">OpenInputFile</a>(filename)) return;
 
  q.<a href="./NcFITSIO.html#NcFITSIO:ListFileHeader" title="void NcFITSIO::ListFileHeader(Int_t mode=1)">ListFileHeader</a>();
-
+  
  // Open the extension #1 which contains the data table
  if(!q.<a href="./NcFITSIO.html#NcFITSIO:SelectHDU" title="Bool_t NcFITSIO::SelectHDU(TString extname=&quot;[0]&quot;) or overloads">SelectHDU</a>(1)) return;
 
@@ -296,7 +296,7 @@ return false;}
  // <a href="./#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> the <span class="string">"mag"</span> values of rows 1 to 5 (incl.)
  TArrayD arr;
  for (<a href="./ListOfTypes.html#Int_t">Int_t</a> jrow=1; jrow&lt;=5; jrow++)
- {
+ { 
   q.<a href="./NcFITSIO.html#NcFITSIO:GetTableCell" title="Int_t NcFITSIO::GetTableCell(Double_t&amp; val,Int_t row,Int_t col,Int_t layer=1) or overloads">GetTableCell</a>(arr,jrow,<span class="string">"mag"</span>);
 
   // List the contents of the data array
@@ -310,7 +310,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  17:02Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  21:35Z
 
 </pre></div>
 </div></div>
@@ -535,27 +535,27 @@ return false;}
 </tr></table>
 </td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcFITSIO:NcFITSIO" href="src/NcFITSIO.cxx.html#UMAOGE">NcFITSIO</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcFITSIO"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"FITS data I/O interface"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcFITSIO:NcFITSIO" href="src/NcFITSIO.cxx.html#eNAqsB">NcFITSIO</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcFITSIO"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"FITS data I/O interface"</span>)</span><br />
 <div class="funccomm"><pre> Default constructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcFITSIO:_NcFITSIO" href="src/NcFITSIO.cxx.html#YzmIKE">~NcFITSIO</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcFITSIO:_NcFITSIO" href="src/NcFITSIO.cxx.html#Ef30d">~NcFITSIO</a>()</span><br />
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcFITSIO:NcFITSIO@1" href="src/NcFITSIO.cxx.html#cDpqrE">NcFITSIO</a>(<span class="keyword">const</span> <a href="./NcFITSIO.html">NcFITSIO</a>&amp; q)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcFITSIO:NcFITSIO@1" href="src/NcFITSIO.cxx.html#yCsqrE">NcFITSIO</a>(<span class="keyword">const</span> <a href="./NcFITSIO.html">NcFITSIO</a>&amp; q)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:Initialize" href="src/NcFITSIO.cxx.html#OlSbj">Initialize</a>()</span><br />
-<div class="funccomm"><pre> Initialization of all parameters
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:Initialize" href="src/NcFITSIO.cxx.html#a.5jV">Initialize</a>()</span><br />
+<div class="funccomm"><pre> Initialization of all parameters 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:Reset" href="src/NcFITSIO.cxx.html#hCNnPB">Reset</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:Reset" href="src/NcFITSIO.cxx.html#tgqp">Reset</a>()</span><br />
 <div class="funccomm"><pre> <a href="./NcFITSIO.html#NcFITSIO:Reset" title="void NcFITSIO::Reset()">Reset</a> all allocated memory and parameters
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:OpenInputFile" href="src/NcFITSIO.cxx.html#zAw9h">OpenInputFile</a>(TString specs)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:OpenInputFile" href="src/NcFITSIO.cxx.html#b7Bq1">OpenInputFile</a>(TString specs)</span><br />
 <div class="funccomm"><pre> Open a FITS input file and indicate success (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or failure (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
  via the boolean return value.
 
@@ -563,7 +563,7 @@ return false;}
  with an optional Header Data Unit (HDU) selection filter.
 
  Examples of <span class="string">"specs"</span> format:
-
+ ---------------------------
  <span class="string">"myfile.fits"</span>                  // Open the PRIMARY HDU of file <span class="string">"myfile.fits"</span>
  <span class="string">"myfile.fits[1]"</span>               // Open the HDU of extension #1 in file <span class="string">"myfile.fits"</span>
  <span class="string">"myfile.fits[SPECTRUM]"</span>        // Open the HDU called <span class="string">"SPECTRUM"</span> in file <span class="string">"myfile.fits"</span>
@@ -576,28 +576,28 @@ return false;}
     https://heasarc.gsfc.nasa.gov/docs/software/fitsio/c/c_user/cfitsio.html
 
  Notes :
-
+ -------
  1) Environment variables may be used as $(...) in the filenname for convenience.
     For example <span class="string">"$(ROOTSYS)/tutorials/fitsio/sample1.fits"</span>.
  2) A specifiec HDU can also be selected by invoking the memberfunction <a href="./NcFITSIO.html#NcFITSIO:SelectHDU" title="Bool_t NcFITSIO::SelectHDU(TString extname=&quot;[0]&quot;) or overloads">SelectHDU</a>()
     after a FITS input file has been opened.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcFITSIO:StripFilter" href="src/NcFITSIO.cxx.html#aUOCo">StripFilter</a>(TString filename) const</span><br />
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcFITSIO:StripFilter" href="src/NcFITSIO.cxx.html#z4PCo">StripFilter</a>(TString filename) const</span><br />
 <div class="funccomm"><pre> Strip the (optional) HDU filter selection string from the filename.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:LoadHeaderInfo" href="src/NcFITSIO.cxx.html#jsco_D">LoadHeaderInfo</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:LoadHeaderInfo" href="src/NcFITSIO.cxx.html#nUYo_D">LoadHeaderInfo</a>()</span><br />
 <div class="funccomm"><pre> Load the header records of the current HDU and indicate success (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or failure (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
  via the boolean return value.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:SelectHDU" href="src/NcFITSIO.cxx.html#NtbQXD">SelectHDU</a>(TString extname = <span class="string">"[0]"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:SelectHDU" href="src/NcFITSIO.cxx.html#ZzWFFD">SelectHDU</a>(TString extname = <span class="string">"[0]"</span>)</span><br />
 <div class="funccomm"><pre> Select the HDU with the specified extension name and indicate success (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>)
  or failure (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>) via the boolean return value.
 
  Examples for extension name specifications :
-
+ --------------------------------------------
  <span class="string">"[HUBBLE]"</span> will select the HDU stored as [HUBBLE].
  <span class="string">"[HUBBLE][#row&lt;10]"</span> will select the HDU stored as [HUBBLE] and select only row numbers &lt;10
  <span class="string">"[HUBBLE][RA&gt;0.5]"</span> will select the HDU stored as [HUBBLE] and select only
@@ -610,7 +610,7 @@ return false;}
  The default value is extname=<span class="string">"[0]"</span>, which is the primary HDU.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:SelectHDU@1" href="src/NcFITSIO.cxx.html#KeJX5">SelectHDU</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> extnumber)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:SelectHDU@1" href="src/NcFITSIO.cxx.html#yLdzn">SelectHDU</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> extnumber)</span><br />
 <div class="funccomm"><pre> Select the HDU with the specified extension number and indicate success (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>)
  or failure (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>) via the boolean return value.
 
@@ -622,9 +622,9 @@ return false;}
  memberfunction that selects the HDU via a name specification.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcFITSIO:GetKeywordValue" href="src/NcFITSIO.cxx.html#ctihOB">GetKeywordValue</a>(TString keyname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcFITSIO:GetKeywordValue" href="src/NcFITSIO.cxx.html#ca5hOB">GetKeywordValue</a>(TString keyname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide a TString with the value of the HDU keyword with the specified name.
-
+ 
  If no match is found, an empty string is returned.
 
  mode = 0 --&gt; The HDU keyword name should match exactly the provided <span class="string">"keyname"</span>
@@ -633,29 +633,29 @@ return false;}
  The default value is mode=0.
 
  Notes :
-
+ -------
  1) Leading and trailing blanks and single quotes will be removed from the value string.
     For example, the HDU keyword value 'Zenith  ' will be provided as TString=<span class="string">"Zenith"</span>.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:IsTable" href="src/NcFITSIO.cxx.html#zgLIbE">IsTable</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:IsTable" href="src/NcFITSIO.cxx.html#R437tD">IsTable</a>() const</span><br />
 <div class="funccomm"><pre> Indicate whether the current HDU is a Table (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableNrows" href="src/NcFITSIO.cxx.html#YBvj.D">GetTableNrows</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableNrows" href="src/NcFITSIO.cxx.html#NyBl.D">GetTableNrows</a>() const</span><br />
 <div class="funccomm"><pre> Provide the number of rows in the table
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableNcolumns" href="src/NcFITSIO.cxx.html#w6ZdOD">GetTableNcolumns</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableNcolumns" href="src/NcFITSIO.cxx.html#JUHjwE">GetTableNcolumns</a>() const</span><br />
 <div class="funccomm"><pre> Provide the number of columns in the table
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetColumnNumber" href="src/NcFITSIO.cxx.html#Wnh3lB">GetColumnNumber</a>(TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetColumnNumber" href="src/NcFITSIO.cxx.html#rkitlB">GetColumnNumber</a>(TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
 <div class="funccomm"><pre> Provide the number of the first table column that matches the provided name pattern.
  Column numbers start at 1.
-
+ 
  If no match is found, the value 0 is returned.
 
  mode = 0 --&gt; The column name should match exactly the provided <span class="string">"colname"</span>
@@ -664,14 +664,14 @@ return false;}
  The default value is mode=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcFITSIO:GetColumnName" href="src/NcFITSIO.cxx.html#WGct2">GetColumnName</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> colnum) const</span><br />
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcFITSIO:GetColumnName" href="src/NcFITSIO.cxx.html#Gp5Hp">GetColumnName</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> colnum) const</span><br />
 <div class="funccomm"><pre> Provide the name of the table column with number <span class="string">"colnum"</span>.
  Column numbers start at 1.
 
  In case of inconsistent data an empty string is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell" href="src/NcFITSIO.cxx.html#jKcNuB">GetTableCell</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; val, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell" href="src/NcFITSIO.cxx.html#sGh4FE">GetTableCell</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; val, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
 <div class="funccomm"><pre> Provide the real number value of the cell (row,col,layer) in a table.
  A table element is identified via the usual (row,column) indication.
  If the table element contains an array of data, the array components are
@@ -686,7 +686,7 @@ return false;}
  In case of inconsistent data the value 0 is provided with 0 as return argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@1" href="src/NcFITSIO.cxx.html#z6c4HE">GetTableCell</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; val, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@1" href="src/NcFITSIO.cxx.html#fuOd9D">GetTableCell</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; val, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide the real number value of the cell matching the row number <span class="string">"row"</span>,
  column name (pattern) <span class="string">"colname"</span> and layer number <span class="string">"layer"</span> in a table.
  A table element is identified via the usual (row,column) indication.
@@ -705,7 +705,7 @@ return false;}
  In case of inconsistent data the value 0 is provided with 0 as return argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@2" href="src/NcFITSIO.cxx.html#qOyyF">GetTableCell</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@2" href="src/NcFITSIO.cxx.html#mAo9F">GetTableCell</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col)</span><br />
 <div class="funccomm"><pre> Provide via array <span class="string">"arr"</span> the real number value(s) of the cell (row,col) in a table.
  The row and column counting starts at 1.
 
@@ -714,7 +714,7 @@ return false;}
  In case of inconsistent data an empty array <span class="string">"arr"</span> is provided with 0 as return argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@3" href="src/NcFITSIO.cxx.html#slm2m">GetTableCell</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@3" href="src/NcFITSIO.cxx.html#tYrNX">GetTableCell</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide via array <span class="string">"arr"</span> the real number value(s) of the cell matching the row number <span class="string">"row"</span>
  and column name (pattern) <span class="string">"colname"</span> in a table.
  The row and column counting starts at 1.
@@ -730,7 +730,7 @@ return false;}
  In case of inconsistent data an empty array <span class="string">"arr"</span> is provided with 0 as return argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@4" href="src/NcFITSIO.cxx.html#WidFGB">GetTableCell</a>(TString&amp; str, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@4" href="src/NcFITSIO.cxx.html#awHGjD">GetTableCell</a>(TString&amp; str, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
 <div class="funccomm"><pre> Provide the data item from the cell (row,col,layer) in a table as a TString.
  A table element is identified via the usual (row,column) indication.
  If the table element contains an array of data, the array components are
@@ -745,13 +745,13 @@ return false;}
  In case of inconsistent data an empty string is provided with 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@5" href="src/NcFITSIO.cxx.html#G3cdTE">GetTableCell</a>(TString&amp; str, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@5" href="src/NcFITSIO.cxx.html#HW.WDE">GetTableCell</a>(TString&amp; str, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide the data item of the cell matching the row number <span class="string">"row"</span>,
  column name (pattern) <span class="string">"colname"</span> and layer number <span class="string">"layer"</span> in a table as a TString.
  A table element is identified via the usual (row,column) indication.
@@ -770,13 +770,13 @@ return false;}
  In case of inconsistent data an empty string is provided with 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@6" href="src/NcFITSIO.cxx.html#cXEMGE">GetTableCell</a>(TString*&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@6" href="src/NcFITSIO.cxx.html#iHTJKE">GetTableCell</a>(TString*&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col)</span><br />
 <div class="funccomm"><pre> Provide via the TString array <span class="string">"arr"</span> the content(s) of the cell (row,col) in a table.
  The row and column counting starts at 1.
 
@@ -785,7 +785,7 @@ return false;}
  In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
@@ -795,7 +795,7 @@ return false;}
     referred to the corresponding <a href="./NcFITSIO.html#NcFITSIO:GetTableCell" title="Int_t NcFITSIO::GetTableCell(Double_t&amp; val,Int_t row,Int_t col,Int_t layer=1) or overloads">GetTableCell</a>(TObjArray,...) memberfunction.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@7" href="src/NcFITSIO.cxx.html#oxzeID">GetTableCell</a>(TString*&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@7" href="src/NcFITSIO.cxx.html#pMb3xB">GetTableCell</a>(TString*&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide via the TString array <span class="string">"arr"</span> the content(s) of the cell matching the row number <span class="string">"row"</span>
  and column name (pattern) <span class="string">"colname"</span> in a table.
  The row and column counting starts at 1.
@@ -810,7 +810,7 @@ return false;}
  In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
@@ -820,7 +820,7 @@ return false;}
     referred to the corresponding <a href="./NcFITSIO.html#NcFITSIO:GetTableCell" title="Int_t NcFITSIO::GetTableCell(Double_t&amp; val,Int_t row,Int_t col,Int_t layer=1) or overloads">GetTableCell</a>(TObjArray,...) memberfunction.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@8" href="src/NcFITSIO.cxx.html#JclgTB">GetTableCell</a>(TObjArray&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@8" href="src/NcFITSIO.cxx.html#VUfhXC">GetTableCell</a>(TObjArray&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, <a href="./ListOfTypes.html#Int_t">Int_t</a> col)</span><br />
 <div class="funccomm"><pre> Provide via an array of TObjString objects the content(s) of the cell (row,col) in a table.
  The row and column counting starts at 1.
 
@@ -829,13 +829,13 @@ return false;}
  In case of inconsistent data an empty array is provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@9" href="src/NcFITSIO.cxx.html#MeaxsC">GetTableCell</a>(TObjArray&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableCell@9" href="src/NcFITSIO.cxx.html#I2cxsC">GetTableCell</a>(TObjArray&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> row, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide via an array of TObjString objects the content(s) of the cell matching the row number <span class="string">"row"</span>
  and column name (pattern) <span class="string">"colname"</span> in a table.
  The row and column counting starts at 1.
@@ -850,13 +850,13 @@ return false;}
  In case of inconsistent data an empty array provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn" href="src/NcFITSIO.cxx.html#omFaz">GetTableColumn</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn" href="src/NcFITSIO.cxx.html#YXLYz">GetTableColumn</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
 <div class="funccomm"><pre> Provide via array <span class="string">"arr"</span> the real number values for row=[rstart,rend], column=col
  and layer number <span class="string">"layer"</span>.
  A table element is identified via the usual (row,column) indication.
@@ -864,7 +864,7 @@ return false;}
  considered as layers, where layer=n represents the n-th component of the array.
 
  Input arguments :
-
+ -----------------
  arr    : The array to contain the retrieved real numbers
  col    : The requested column number (first column is col=1)
  rstart : Row number to start with (first row is rstart=1)
@@ -878,7 +878,7 @@ return false;}
  In case of inconsistent data an empty array <span class="string">"arr"</span> is provided with 0 as return argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@1" href="src/NcFITSIO.cxx.html#vOAfmD">GetTableColumn</a>(TArrayD&amp; arr, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@1" href="src/NcFITSIO.cxx.html#uDADgD">GetTableColumn</a>(TArrayD&amp; arr, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide via array <span class="string">"arr"</span> the real number values for row=[rstart,rend], the column
  for which the name matches the name (pattern) <span class="string">"colname"</span> and the layer number <span class="string">"layer"</span>.
  A table element is identified via the usual (row,column) indication.
@@ -886,7 +886,7 @@ return false;}
  considered as layers, where layer=n represents the n-th component of the array.
 
  Input arguments :
-
+ -----------------
  arr     : The array to contain the retrieved real numbers
  colname : The requested column name (pattern)
  rstart  : Row number to start with (first row is rstart=1)
@@ -902,7 +902,7 @@ return false;}
  In case of inconsistent data an empty array <span class="string">"arr"</span> is provided with 0 as return argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@2" href="src/NcFITSIO.cxx.html#OT.rFD">GetTableColumn</a>(TString*&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@2" href="src/NcFITSIO.cxx.html#S5XDWD">GetTableColumn</a>(TString*&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
 <div class="funccomm"><pre> Provide via the TString array <span class="string">"arr"</span> the contents for row=[rstart,rend], column=col
  and layer number <span class="string">"layer"</span>.
  A table element is identified via the usual (row,column) indication.
@@ -910,7 +910,7 @@ return false;}
  considered as layers, where layer=n represents the n-th component of the array.
 
  Input arguments :
-
+ -----------------
  arr    : The array to contain the retrieved strings
  col    : The requested column number (first column is col=1)
  rstart : Row number to start with (first row is rstart=1)
@@ -924,7 +924,7 @@ return false;}
  In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
@@ -934,7 +934,7 @@ return false;}
     referred to the corresponding <a href="./NcFITSIO.html#NcFITSIO:GetTableCell" title="Int_t NcFITSIO::GetTableCell(Double_t&amp; val,Int_t row,Int_t col,Int_t layer=1) or overloads">GetTableCell</a>(TObjArray,...) memberfunction.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@3" href="src/NcFITSIO.cxx.html#mV1N4B">GetTableColumn</a>(TString*&amp; arr, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@3" href="src/NcFITSIO.cxx.html#FLn.BB">GetTableColumn</a>(TString*&amp; arr, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide via the TString array <span class="string">"arr"</span> the contents for row=[rstart,rend], the column
  for which the name matches the name (pattern) <span class="string">"colname"</span> and layer number <span class="string">"layer"</span>.
  A table element is identified via the usual (row,column) indication.
@@ -942,7 +942,7 @@ return false;}
  considered as layers, where layer=n represents the n-th component of the array.
 
  Input arguments :
-
+ -----------------
  arr     : The array to contain the retrieved strings
  colname : The requested column name (pattern)
  rstart  : Row number to start with (first row is rstart=1)
@@ -958,7 +958,7 @@ return false;}
  In case of inconsistent data an array with 1 empty string is provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
@@ -968,7 +968,7 @@ return false;}
     referred to the corresponding <a href="./NcFITSIO.html#NcFITSIO:GetTableCell" title="Int_t NcFITSIO::GetTableCell(Double_t&amp; val,Int_t row,Int_t col,Int_t layer=1) or overloads">GetTableCell</a>(TObjArray,...) memberfunction.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@4" href="src/NcFITSIO.cxx.html#IZdnJB">GetTableColumn</a>(TObjArray&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@4" href="src/NcFITSIO.cxx.html#WRAbXC">GetTableColumn</a>(TObjArray&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> col, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1)</span><br />
 <div class="funccomm"><pre> Provide via an array of TObjString objects the contents for row=[rstart,rend], column=col
  and layer number <span class="string">"layer"</span>.
  A table element is identified via the usual (row,column) indication.
@@ -976,7 +976,7 @@ return false;}
  considered as layers, where layer=n represents the n-th component of the array.
 
  Input arguments :
-
+ -----------------
  arr    : The array to contain the retrieved TObjString objects
  col    : The requested column number (first column is col=1)
  rstart : Row number to start with (first row is rstart=1)
@@ -990,13 +990,13 @@ return false;}
  In case of inconsistent data an empty array is provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@5" href="src/NcFITSIO.cxx.html#HVwutB">GetTableColumn</a>(TObjArray&amp; arr, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableColumn@5" href="src/NcFITSIO.cxx.html#TzvutB">GetTableColumn</a>(TObjArray&amp; arr, TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Provide via an array of TObjString objects the contents for row=[rstart,rend], the column
  for which the name matches the name (pattern) <span class="string">"colname"</span> and layer number <span class="string">"layer"</span>.
  A table element is identified via the usual (row,column) indication.
@@ -1004,7 +1004,7 @@ return false;}
  considered as layers, where layer=n represents the n-th component of the array.
 
  Input arguments :
-
+ -----------------
  arr     : The array to contain the retrieved TObjString objects
  colname : The requested column name (pattern)
  rstart  : Row number to start with (first row is rstart=1)
@@ -1020,17 +1020,17 @@ return false;}
  In case of inconsistent data an empty array is provided and 0 as return argument.
 
  Notes :
-
+ -------
  1) Any table data item can be obtained as a TString.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageDimension" href="src/NcFITSIO.cxx.html#qR3UnE">GetImageDimension</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageDimension" href="src/NcFITSIO.cxx.html#Wr3M5E">GetImageDimension</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i = 0) const</span><br />
 <div class="funccomm"><pre> Provide the dimension of an N-dimensional Image data unit.
 
  Input argument :
-
+ ----------------
  i : The axis (1,...N) for which the dimension is provided.
    : 0 --&gt; Provide the total Image dimension <span class="string">"N"</span>.
 
@@ -1039,12 +1039,12 @@ return false;}
  The default value is i=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageLayer" href="src/NcFITSIO.cxx.html#nb6RlE">GetImageLayer</a>(TASImage&amp; im, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thres = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> max = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageLayer" href="src/NcFITSIO.cxx.html#YuXu3D">GetImageLayer</a>(TASImage&amp; im, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thres = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> max = -1)</span><br />
 <div class="funccomm"><pre> Provide the specified layer as a displayable image.
  The return value indicates the number of pixels in the image.
-
+ 
  Input arguments :
-
+ -----------------
  im    : The TASImage object to contain the image.
  layer : The layer number (1=first layer) of the data cube.
  thres : (Pointer to) Threshold for pixel value. Pixel values below the threshold will be set to 0.
@@ -1054,7 +1054,7 @@ return false;}
          No rescaling will be performed when max&lt;=0.
 
  Notes :
-
+ -------
  1) The (optional) rescaling is performed after the threshold correction.
  2) By default a standard colour palette is used, but by setting a specific colour palette
     (e.g. via the canvas Palette Editor) one may tailor the color scheme.
@@ -1064,12 +1064,12 @@ return false;}
  The default values are layer=1, thres=0 and max=-1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageLayer@1" href="src/NcFITSIO.cxx.html#Z4b_OE">GetImageLayer</a>(<a href="./ListOfTypes.html#TMatrixD">TMatrixD</a>&amp; m, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thres = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> max = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageLayer@1" href="src/NcFITSIO.cxx.html#RoMtBE">GetImageLayer</a>(<a href="./ListOfTypes.html#TMatrixD">TMatrixD</a>&amp; m, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thres = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> max = -1)</span><br />
 <div class="funccomm"><pre> Provide the specified layer as a 2-dimensional matrix.
  The return value indicates the number of matrix elements.
-
+ 
  Input arguments :
-
+ -----------------
  m     : The <a href="./ListOfTypes.html#TMatrixD">TMatrixD</a> object to contain the layer data.
  layer : The layer number (1=first layer) of the data cube.
  thres : (Pointer to) Threshold for pixel value. Pixel values below the threshold will be set to 0.
@@ -1078,7 +1078,7 @@ return false;}
          No rescaling will be performed when max&lt;=0.
 
  Notes :
-
+ -------
  1) The size (nrow,ncol) of the matrix is automatically set according to the layer dimensions.
     The correspondence with the FITS parameters is ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height).
  2) The FITS image data start at the lower left corner and end at the right upper corner.
@@ -1088,7 +1088,7 @@ return false;}
     This implies that for the matrix contents the row numbering should be interpreted as inverted,
     such that (row,col)=(0,0) indicates the lower left corner instead of the (usual) upper left corner.
     With this convention, the upper left corner is (nrow-1,0), the lower left corner is (0,ncol-1)
-    and the upper right corner is (nrow-1,ncol-1).
+    and the upper right corner is (nrow-1,ncol-1).     
  3) The (optional) rescaling is performed after the threshold correction.
 
  In case of inconsistent data, an empty matrix and a return value 0 is provided.
@@ -1096,12 +1096,12 @@ return false;}
  The default values are layer=1, thres=0 and max=-1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageLayer@2" href="src/NcFITSIO.cxx.html#tu.9dD">GetImageLayer</a>(TH2D&amp; his, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thres = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> max = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetImageLayer@2" href="src/NcFITSIO.cxx.html#dl89dD">GetImageLayer</a>(TH2D&amp; his, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thres = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> max = -1)</span><br />
 <div class="funccomm"><pre> Provide the specified layer as a 2-dimensional histogram.
  The return value indicates the number of histogram entries.
-
+ 
  Input arguments :
-
+ -----------------
  his   : The 2-D histogram to contain the layer data.
  layer : The layer number (1=first layer) of the data cube.
  thres : (Pointer to) Threshold for pixel value. Pixel values below the threshold will be set to 0.
@@ -1110,34 +1110,34 @@ return false;}
          No rescaling will be performed when max&lt;=0.
 
  Note :
-
+ ------
  The binning and range of the histogram axes is automatically set according to the layer dimensions.
- The correspondence with the FITS parameters is nbinsx=NAXIS1 (=width) and nbinsy=NAXIS2 (=height).
+ The correspondence with the FITS parameters is nbinsx=NAXIS1 (=width) and nbinsy=NAXIS2 (=height). 
 
  In case of inconsistent data, an empty histogram and a return value 0 is provided.
 
  The default values are layer=1, thres=0 and max=-1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#UInt_t">UInt_t</a> <a class="funcname" name="NcFITSIO:GetImageArray" href="src/NcFITSIO.cxx.html#LrqiHE">GetImageArray</a>(TArrayD&amp; arr, TArrayI ifirst, TArrayI ilast, TArrayI incr)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#UInt_t">UInt_t</a> <a class="funcname" name="NcFITSIO:GetImageArray" href="src/NcFITSIO.cxx.html#f1DyHE">GetImageArray</a>(TArrayD&amp; arr, TArrayI ifirst, TArrayI ilast, TArrayI incr)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> (a subset of) the pixel contents of an N-dimensional Image data unit into a linear data array.
  The return argument is the number of stored pixels.
 
  Input arguments :
-
+ -----------------
  arr    : The array to hold the pixel values
  ifirst : Array with the starting pixel numbers (1=first) for each dimension
  ilast  : Array with the (inclusive) ending pixel numbers for each dimension
  incr   : Array with the pixel sampling increment for each dimension
 
- For a (nrow,ncol) matrix, the FITS parameters correspond to ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height).
+ For a (nrow,ncol) matrix, the FITS parameters correspond to ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height). 
  The FITS image data start at the lower left corner and end at the right upper corner and follow a
  pixel array storage with the following sequence convention for pixel coordinates (ix,iy) :
  (1,1),(2,1),(3,1),...(NAXIS1,1),(1,2),(2,2),(3,2),...(NAXIS1,2),...(1,NAXIS2),(2,NAXIS2),...(NAXIS1,NAXIS2).
  This implies that for a matrix interpretation the row numbering should be considered as inverted,
  such that (row,col)=(1,1) indicates the lower left corner instead of the (usual) upper left corner.
  With this convention, the upper left corner is (nrow,1), the lower left corner is (1,ncol)
- and the upper right corner is (nrow,ncol).
+ and the upper right corner is (nrow,ncol).     
 
  Example : The full 2nd row of the 3rd layer of a 3-dimensional data cube is obtained via :
            ifirst[0]=1, ilast[0]=NAXIS1, ifirst[1]=2, ilast[1]=2, ifirst[2]=3, ilast[2]=3
@@ -1148,24 +1148,24 @@ return false;}
  In case of inconsistent data, an empty array and a return value 0 is provided.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#UInt_t">UInt_t</a> <a class="funcname" name="NcFITSIO:GetImageArray@1" href="src/NcFITSIO.cxx.html#hmgbVE">GetImageArray</a>(TArrayD&amp; arr, TArrayI ifirst, <a href="./ListOfTypes.html#UInt_t">UInt_t</a> npix)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#UInt_t">UInt_t</a> <a class="funcname" name="NcFITSIO:GetImageArray@1" href="src/NcFITSIO.cxx.html#hWvMAE">GetImageArray</a>(TArrayD&amp; arr, TArrayI ifirst, <a href="./ListOfTypes.html#UInt_t">UInt_t</a> npix)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> (a subset of) the pixel contents of an N-dimensional Image data unit into a linear data array.
  The return argument is the number of stored pixels.
 
  Input arguments :
-
+ -----------------
  arr    : The array to hold the pixel values
  ifirst : Array with the starting pixel numbers (1=first) for each dimension
  npix   : The number of pixels to be read
 
- For a (nrow,ncol) matrix, the FITS parameters correspond to ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height).
+ For a (nrow,ncol) matrix, the FITS parameters correspond to ncol=NAXIS1 (=width) and nrow=NAXIS2 (=height). 
  The FITS image data start at the lower left corner and end at the right upper corner and follow a
  pixel array storage with the following sequence convention for pixel coordinates (ix,iy) :
  (1,1),(2,1),(3,1),...(NAXIS1,1),(1,2),(2,2),(3,2),...(NAXIS1,2),...(1,NAXIS2),(2,NAXIS2),...(NAXIS1,NAXIS2).
  This implies that for a matrix interpretation the row numbering should be considered as inverted,
  such that (row,col)=(1,1) indicates the lower left corner instead of the (usual) upper left corner.
  With this convention, the upper left corner is (nrow,1), the lower left corner is (1,ncol)
- and the upper right corner is (nrow,ncol).
+ and the upper right corner is (nrow,ncol).     
 
  Example : The full 2nd row of the 3rd layer of a 3-dimensional data cube is obtained via :
            ifirst[0]=1, ifirst[1]=2, ifirst[2]=3 and npix=NAXIS1.
@@ -1173,7 +1173,7 @@ return false;}
  In case of inconsistent data, an empty array and a return value 0 is provided.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ListTable" href="src/NcFITSIO.cxx.html#QLN23">ListTable</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> width = -10, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> cstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cend = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ListTable" href="src/NcFITSIO.cxx.html#MzY23">ListTable</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> width = -10, <a href="./ListOfTypes.html#Int_t">Int_t</a> rstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> rend = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> cstart = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cend = 0)</span><br />
 <div class="funccomm"><pre> List table information for row=[rstart,rend], column=[cstart,cend] and layer=1.
 
  A table element is identified via the usual (row,column) indication.
@@ -1183,7 +1183,7 @@ return false;}
  only the data of the first layer (which is always present) can be displayed.
 
  Input arguments :
-
+ -----------------
  width  : column width (in character count) for the listing output
           &lt;0 --&gt; List only the description (width=|width|) of the table columns [cstart,cend]
  rstart  : Row number to start with (first row is rstart=1)
@@ -1196,37 +1196,37 @@ return false;}
  The default values are width=-10, rstart=1, rend=0, cstart=1 and cend=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ListHDUHeader" href="src/NcFITSIO.cxx.html#Ba4_S">ListHDUHeader</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ListHDUHeader" href="src/NcFITSIO.cxx.html#ItgYkE">ListHDUHeader</a>() const</span><br />
 <div class="funccomm"><pre> List the header information (also called Metadata) of the current HDU record.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ListFileHeader" href="src/NcFITSIO.cxx.html#sbr5yB">ListFileHeader</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ListFileHeader" href="src/NcFITSIO.cxx.html#f5NPFD">ListFileHeader</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
 <div class="funccomm"><pre> List the header information (also called Metadata) of the FITS file.
 
  Input argument :
-
+ ----------------
  mode : 0 --&gt; Only the extension number, type and name of the available HDUs is provided
         1 --&gt; For each HDU also the header information is provided
 
  The default value is mode=1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:LoadLayer" href="src/NcFITSIO.cxx.html#MHnezC">LoadLayer</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:LoadLayer" href="src/NcFITSIO.cxx.html#aoExAD">LoadLayer</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Int_t">Int_t</a> layer)</span><br />
 <div class="funccomm"><pre> Internal memberfunction to load the pixels of an image layer.
  The layer counting starts at 1.
  The return argument is the number of stored pixels.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ApplyPixelThreshold" href="src/NcFITSIO.cxx.html#K9XmUE">ApplyPixelThreshold</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Double_t">Double_t</a> thres)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:ApplyPixelThreshold" href="src/NcFITSIO.cxx.html#uxhYkE">ApplyPixelThreshold</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Double_t">Double_t</a> thres)</span><br />
 <div class="funccomm"><pre> Internal memberfunction to apply a threshold to the Image pixel values.
  All pixels with a value below <span class="string">"thres"</span> will get the value 0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:RescalePixels" href="src/NcFITSIO.cxx.html#bKnuLB">RescalePixels</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Double_t">Double_t</a> max)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcFITSIO:RescalePixels" href="src/NcFITSIO.cxx.html#LIxE8">RescalePixels</a>(TArrayD&amp; arr, <a href="./ListOfTypes.html#Double_t">Double_t</a> max)</span><br />
 <div class="funccomm"><pre> Internal memberfunction to rescale the Image pixel values to [0,max].
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcFITSIO:Clone" href="src/NcFITSIO.cxx.html#fQDmXD">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcFITSIO:Clone" href="src/NcFITSIO.cxx.html#KsPaaE">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
  correct type depending on the object type, a feature which may be very useful
@@ -1238,7 +1238,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Tue Feb  8 18:10:08 2022 </em><em>&raquo; Last generated: 2022-02-08 18:10</em><br />
+<em>&raquo; Last changed: Tue Feb  8 21:52:56 2022 </em><em>&raquo; Last generated: 2022-02-08 21:52</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
