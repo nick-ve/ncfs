@@ -1,0 +1,71 @@
+##############################################################
+# HTCondor submit description file to process the
+# conversion of numpy data files into ROOT files.
+#
+# This template is tailored for IceCube data stored
+# at the IIHE computing cluster, for which the
+# file sequence at the "queue" command below
+# represents the input data files to be processed
+# as individual jobs.
+#
+# From each input file the filename base is constructed
+# in the actual processing shell script (see below) and
+# the extension .root will be added for the output file.
+#
+# For each individual job also a jobname is constructed
+# to identify individual jobs on the batch system.
+# This jobname is also used in the naming of the log files,
+# together with the Cluster and Process name. 
+#
+# The actual shell script for processing is contained
+# in the file npy2root.sh, which in turn invokes both
+# the Python scrip npy2fits.py and the ROOT macro
+# fits2root.cc containing the C++ code.
+# The first (internal) step is to convert the numpy file
+# into a FITS file, which in the second step is converted
+# into the final ROOT output file.
+#
+# In order to launch the batch execution, the files
+# npy2root.sh, npy2fits.py and fits2root.cc have to reside
+# in the directory from which this script is invoked.
+#
+# To launch the job(s) issue the command ($ = prompt) :
+#
+# $ condor_submit npy2root.sub
+#
+# All log files will be returned into the (working aka host)
+# directory from which the job was launched.
+# 
+# Nick van Eijndhoven, IIHE-VUB, Brussels.
+# UTC February 7, 2022  19:49
+##############################################################
+
+universe   = vanilla
+getenv     = TRUE
+HOMEDIR    = $ENV(HOME)
+HOSTDIR    = $ENV(PWD)
+
+OUTPUTDIR  = /pnfs/iihe/icecube/data/IC86/exp/gfu/version-002-p06
+
+# Enable the HTCondor file transfer mechanism
+should_transfer_files = YES
+
+# Suppress the automatic transfer of output files (except for log files)
+transfer_output_files=""
+
+executable = npy2root.sh
+
+batch_name = npy2root
+
+JOBNAME    = $(batch_name)$(Process)
+
+arguments  = $(JOBNAME) $(HOMEDIR) $(HOSTDIR) $(OUTPUTDIR) $(filename)
+
+joblog     = $(JOBNAME)-$(Cluster)-$(Process)-job.log
+sublog     = $(JOBNAME)-$(Cluster)-$(Process)-sub.log
+
+error      = $(joblog)
+output     = $(joblog)
+log        = $(sublog)
+
+queue filename matching files /pnfs/iihe/icecube/data/ana/analyses/gfu/version-002-p06/IC86*_data.npy

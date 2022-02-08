@@ -29,11 +29,11 @@ rootcint -f zzzrnopackdict.cxx -c -I$NCFS/ncfspack/source RNOHeaders.h RNOLinkDe
 ### Compile and create the ROOT loadable shared library
 g++ $gccroot *.cxx   
 # 
-rm zzzrnopackdict.*
-rm *.o
+rm -f zzzrnopackdict.*
+rm -f *.o
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $ROOTSYS/lib
 
 ### Return to the scripts directory
 cd ../scripts

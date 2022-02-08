@@ -29,11 +29,11 @@ rootcint -f zzzicepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDe
 ### Compile and create the ROOT loadable shared library
 g++ $gccroot *.cxx   
 # 
-rm zzzicepackdict.*
-rm *.o
+rm -f zzzicepackdict.*
+rm -f *.o
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $ROOTSYS/lib
 
 ### Return to the scripts directory
 cd ../scripts

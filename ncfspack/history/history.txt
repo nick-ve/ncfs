@@ -1289,3 +1289,13 @@
                 The version indicator in NcVersion has been updated to 4.8.1.
 06-feb-2022 NvE Support for data type LOGICAL introduced for FITS tables in class NcFITSIO.
                 The version indicator in NcVersion has been updated to 4.8.2.
+08-feb-2022 NvE Memberfunction IsTable() introduced in class NcFITSIO and removal of leading and trailing
+                blanks corrected in NcFITSIO::GetKeywordValue().
+                In the amdgcclib.sh files of the various /scripts folders is the "rm" command replaced by "rm -f"
+                and is the "mv" command replaced by "rm -f" in order to prevent confirmation prompts at some systems. 
+                Also a new folder /convert (and its sub-folders) to contain various format conversion facilities
+                has been introduced at the top level.
+                Since this folder contains Python (.py) and HTCondor (.sub) scripts, these file extensions
+                have also been added to the .gitattributes file to ensure that these files will always have
+                only LF line endings at checkout.
+                The version indicator in NcVersion has been updated to 4.8.3.

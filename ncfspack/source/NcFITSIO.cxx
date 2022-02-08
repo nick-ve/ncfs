@@ -279,7 +279,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 6, 2022  00:42Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  17:02Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -812,10 +812,20 @@ TString NcFITSIO::GetKeywordValue(TString keyname,Int_t mode)
   } 
  }
 
- value=value.Strip(value.kBoth,' '); // Remove leading and trailing blanks
  value.ReplaceAll("'","");          // Remove the single quotes
+ value=value.Strip(value.kBoth,' '); // Remove leading and trailing blanks
 
  return value;
+}
+///////////////////////////////////////////////////////////////////////////
+Bool_t NcFITSIO::IsTable() const
+{
+// Indicate whether the current HDU is a Table (kTRUE) or not (kFALSE).
+
+ Bool_t flag=kFALSE;
+ if (fType==kTableHDU) flag=kTRUE;
+
+ return flag; 
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableNrows() const

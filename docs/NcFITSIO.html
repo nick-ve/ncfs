@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Feb  6 01:38:54 2022            -->
+<!--   Date: Tue Feb  8 18:10:07 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -310,7 +310,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 6, 2022  00:42Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  17:02Z
 
 </pre></div>
 </div></div>
@@ -393,6 +393,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#NcFITSIO:IsTable">IsTable</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcFITSIO:ListFileHeader">ListFileHeader</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcFITSIO:ListHDUHeader">ListHDUHeader</a>() <span class="keyword">const</span></td></tr>
@@ -637,6 +638,10 @@ return false;}
     For example, the HDU keyword value 'Zenith  ' will be provided as TString=<span class="string">"Zenith"</span>.
  2) Conversion from a TString to a numerical value can easily be obtained
     via the TString memberfunctions Atof(), Atoi() and Atoll().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:IsTable" href="src/NcFITSIO.cxx.html#zgLIbE">IsTable</a>() const</span><br />
+<div class="funccomm"><pre> Indicate whether the current HDU is a Table (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableNrows" href="src/NcFITSIO.cxx.html#YBvj.D">GetTableNrows</a>() const</span><br />
@@ -1233,7 +1238,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Feb  6 01:38:55 2022 </em><em>&raquo; Last generated: 2022-02-06 01:38</em><br />
+<em>&raquo; Last changed: Tue Feb  8 18:10:08 2022 </em><em>&raquo; Last generated: 2022-02-08 18:10</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
