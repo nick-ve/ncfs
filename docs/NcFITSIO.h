@@ -43,6 +43,7 @@ class NcFITSIO : public TNamed
   void ListFileHeader(Int_t mode=1) const;
   TString GetKeywordValue(TString keyname,Int_t mode=0);
   Bool_t IsTable() const;
+  Int_t GetHDUCount() const;
 
   // Table access methods
   Int_t GetTableNrows() const;

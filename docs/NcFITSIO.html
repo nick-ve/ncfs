@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Feb  8 21:52:55 2022            -->
+<!--   Date: Wed Feb  9 22:39:49 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -310,7 +310,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  21:35Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 9, 2022  22:27Z
 
 </pre></div>
 </div></div>
@@ -349,6 +349,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcFITSIO:GetColumnNumber">GetColumnNumber</a>(TString colname, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcFITSIO:GetHDUCount">GetHDUCount</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#NcFITSIO:GetImageArray@1">GetImageArray</a>(TArrayD&amp; arr, TArrayI ifirst, <a href="./ListOfTypes.html#UInt_t">UInt_t</a> npix)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#NcFITSIO:GetImageArray">GetImageArray</a>(TArrayD&amp; arr, TArrayI ifirst, TArrayI ilast, TArrayI incr)</td></tr>
@@ -642,6 +643,10 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcFITSIO:IsTable" href="src/NcFITSIO.cxx.html#R437tD">IsTable</a>() const</span><br />
 <div class="funccomm"><pre> Indicate whether the current HDU is a Table (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetHDUCount" href="src/NcFITSIO.cxx.html#mUiQND">GetHDUCount</a>() const</span><br />
+<div class="funccomm"><pre> Provide the total number of HDUs present in the FITS file.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcFITSIO:GetTableNrows" href="src/NcFITSIO.cxx.html#NyBl.D">GetTableNrows</a>() const</span><br />
@@ -1238,7 +1243,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Tue Feb  8 21:52:56 2022 </em><em>&raquo; Last generated: 2022-02-08 21:52</em><br />
+<em>&raquo; Last changed: Wed Feb  9 22:39:50 2022 </em><em>&raquo; Last generated: 2022-02-09 22:39</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

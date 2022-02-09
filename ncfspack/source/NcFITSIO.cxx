@@ -279,7 +279,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 8, 2022  21:35Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 9, 2022  22:27Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -838,6 +838,42 @@ Bool_t NcFITSIO::IsTable() const
  if (fType==kTableHDU) flag=kTRUE;
 
  return flag; 
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcFITSIO::GetHDUCount() const
+{
+// Provide the total number of HDUs present in the FITS file.
+
+ Int_t nhdus=0;
+
+ // Open a local mode of the FITS file without any filters
+ fitsfile* fp=0;
+ int status=0;
+ fits_open_file(&fp,fFilename.Data(),READONLY,&status);
+
+ if (status)
+ {
+  cout << " *" << ClassName() << "::GetHDUCount* Could not open file : " << fFilename << endl;
+  fits_close_file(fp,&status);
+  return 0;
+ }
+
+ int n=0;
+ fits_get_num_hdus(fp,&n,&status);
+
+ if (status)
+ {
+  cout << " *" << ClassName() << "::GetHDUCount* Could not read the number of HDUs" << endl;
+  fits_close_file(fp,&status);
+  return 0;
+ }
+
+ nhdus=n;
+
+ // Close this local "unfiltered" file mode
+ fits_close_file(fp,&status);
+
+ return nhdus; 
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableNrows() const
@@ -2166,7 +2202,7 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
 //
 // The default value is mode=1.
 
- // Open the FITS file without any filters and start at the primary HDU
+ // Open a local mode of the FITS file without any filters and start at the primary HDU
  fitsfile* fp=0;
  int status=0;
  fits_open_file(&fp,fFilename.Data(),READONLY,&status);
@@ -2309,7 +2345,7 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
   }
  }
 
- // Close file
+ // Close this loal "unfiltered" file mode
  fits_close_file(fp,&status);
  return;
 }

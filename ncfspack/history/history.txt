@@ -1301,3 +1301,5 @@
                 The version indicator in NcVersion has been updated to 4.8.3.
                 *** Bug fixed : Double deletion in NcFITSIO::LoadHeaderInfo() when file or HDU was not existing.
                 *** After the fix the version indicator in NcVersion has been updated to 4.8.4.
+09-feb-2022 NvE New memberfunction GetHDUCount() introduced in class NcFITSIO.
+                The version indicator in NcVersion has been updated to 4.8.5.
