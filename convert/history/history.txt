@@ -5,3 +5,7 @@
                 The corresponding version indicator in NcVersion is 4.8.3.
 13-feb-2022 NvE Python scripts for HDF data conversion added and the npy2fits.py
                 script modified to accept (optional) command line arguments.
+14-feb-2022 NvE Shell and HTCondor scripts for HDF data conversion added.
+                Also the determination of the file basename modified in the
+                various shell scripts to enable the treatment of arbitrary 
+                file extensions of the input files.

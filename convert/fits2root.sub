@@ -2,9 +2,7 @@
 # HTCondor submit description file to process the
 # conversion of FITS data files into ROOT files.
 #
-# This template is tailored for IceCube data stored
-# at the IIHE computing cluster, for which the
-# file sequence at the "queue" command below
+# The file sequence at the "queue" command below
 # represents the input data files to be processed
 # as individual jobs.
 #

@@ -20,7 +20,10 @@ export INPUTFILE=$5
 
 export SLAVEDIR=$_CONDOR_SCRATCH_DIR
 
-export FILENAMEBASE=`basename -s .fits $INPUTFILE`
+### Determine the basename of the input filename
+fname=$INPUTFILE
+nodir=$(basename $fname)
+export FILENAMEBASE=${nodir%.*}
 
 export OUTPUTFILE=$OUTPUTDIR/$FILENAMEBASE.root
 

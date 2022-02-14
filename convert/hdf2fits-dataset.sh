@@ -2,14 +2,14 @@
 
 ####################################################
 # Shell script to process the conversion of
-# a numpy data file into a FITS file.
+# an HDF dataset into FITS format.
 #
-# This shell script is launched by the npy2fits.sub
-# HTCondor job description script.
-# See the file npy2fits.sub for further details.
+# This shell script is launched by the
+# hdf2fits-dataset.sub HTCondor job description script.
+# See the file hdf2fits-dataset.sub for further details.
 #
 # Nick van Eijndhoven, IIHE-VUB, Brussels.
-# UTC February 7, 2022  08:56
+# UTC February 14, 2022  16:34
 ####################################################
 
 export JOBNAME=$1
@@ -17,6 +17,7 @@ export HOMEDIR=$2
 export HOSTDIR=$3
 export OUTPUTDIR=$4
 export INPUTFILE=$5
+export DATASET=$6
 
 export SLAVEDIR=$_CONDOR_SCRATCH_DIR
 
@@ -36,21 +37,22 @@ echo " Outputdir=$OUTPUTDIR"
 echo " Inputfile=$INPUTFILE"
 echo " FilenameBase=$FILENAMEBASE"
 echo " Outputfile=$OUTPUTFILE"
+echo " DataSet=$DATASET"
 echo " Slavedir=$SLAVEDIR"
 echo " "
 
 cd $SLAVEDIR
 
 ### Import the necessary input file(s)
-cp $HOSTDIR/npy2fits.py script.py
-cp $INPUTFILE data.npy
+cp $HOSTDIR/hdf2fits-dataset.py script.py
+cp $INPUTFILE data.hdf
 
 ### Load the Python environment
 source /ice3/software/iihe/python.sh
 
 ### Execute the Python script
 echo " Converting the numpy data ..."
-python script.py
+python script.py $DATASET
 
 ### Rename and transfer the produced output file
 rm -f $OUTPUTFILE
