@@ -13,8 +13,6 @@
  * any purpose. It is provided "as is" without express or implied warranty.
  *******************************************************************************/
 
-// $Id: IceCalibrate.cxx 55 2012-01-03 13:30:57Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class IceCalibrate
 // TTask derived class to perform the various calibrations.
@@ -50,7 +48,7 @@
 // structure itself via the device named "IceCalibrate".
 //
 //--- Author: Nick van Eijndhoven 18-sep-2005 Utrecht University
-//- Modified: NvE $Date: 2012-01-03 14:30:57 +0100 (Tue, 03 Jan 2012) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  15:05Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceCalibrate.h"
@@ -93,7 +91,14 @@ void IceCalibrate::SetOMdbase(NcObjMatrix* omdb, TString name)
 void IceCalibrate::SetCalibFile(TString name)
 {
 // Set the calibration ROOT file as created with IceCal2Root.
-// Note : this will overrule a previously attached database. 
+// Note : this will overrule a previously attached database.
+//
+// Environment variables may be used as $(...) in the filenname for convenience.
+// For example "$(HOME)/my-data/calibrations.root".
+
+ // Expand the path name of the provided input file
+ name=gSystem->ExpandPathName(name.Data());
+ 
  if (fCalfile)
  {
   delete fCalfile;

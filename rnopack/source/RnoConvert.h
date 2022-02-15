@@ -4,6 +4,7 @@
 // Copyright(c) 2021, RNO-G Experiment at Summit Station, All rights reserved.
 // See cxx source for full Copyright notice.
 
+#include "TSystem.h"
 #include "TFile.h"
 #include "TChain.h"
 #include "TLeaf.h"
@@ -44,6 +45,6 @@ class RnoConvert : public NcJob
   Int_t fMinSelectLevel;  // Minimum event select level for events to be written out
   Int_t fMaxSelectLevel;  // Maximum event select level for events to be written out
 
- ClassDef(RnoConvert,5) // Job for conversion of RNO-G Root data into RnoEvent data structures.
+ ClassDef(RnoConvert,6) // Job for conversion of RNO-G Root data into RnoEvent data structures.
 };
 #endif

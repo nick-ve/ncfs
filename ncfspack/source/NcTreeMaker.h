@@ -5,6 +5,7 @@
 
 // $Id: NcTreeMaker.h 67 2012-07-18 14:51:01Z nickve $
 
+#include "TSystem.h"
 #include "TFile.h"
 #include "TTree.h"
 
@@ -96,6 +97,6 @@ class NcTreeMaker : public TTask
   void Device();                // Obtain device observables
   void AstroTrack();            // Create individual track observables from astrophysical reference objects
 
- ClassDef(NcTreeMaker,3) // TTask derived class to generate a plain ROOT tree from NCFS generic event structures
+ ClassDef(NcTreeMaker,4) // TTask derived class to generate a plain ROOT tree from NCFS generic event structures
 };
 #endif

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Jul 28 14:18:14 2021            -->
+<!--   Date: Tue Feb 15 15:50:19 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -390,7 +390,7 @@ return false;}
  <a href="./ListOfTypes.html#Double_t">Double_t</a> epoch=t.<a href="./NcTimestamp.html#NcTimestamp:GetJE" title="Double_t NcTimestamp::GetJE(Double_t date,TString mode=&quot;jd&quot;) or overloads">GetJE</a>(mjdate,<span class="string">"mjd"</span>);
 
 --- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 28, 2021  13:48Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 15, 2022  13:16Z
 
 </pre></div>
 </div></div>
@@ -1999,6 +1999,9 @@ return false;}
             https://hpiers.obspm.fr/iers/series/opa/eopc04
             This file contains the archival list of the daily dUT=UT-UTC monitoring.
 
+ Environment variables may be used as $(...) in the filennames for convenience.
+ For example <span class="string">"$(HOME)/my-iers/leap.txt"</span>.
+
  The corresponding daily values of the accumulated Leap Seconds and dUT=UT1-UTC
  are stored in an internal ROOT TTree.
  The return argument provides a pointer to the corresponding TTree to enable
@@ -3291,7 +3294,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Jul 28 14:18:14 2021 </em><em>&raquo; Last generated: 2021-07-28 14:18</em><br />
+<em>&raquo; Last changed: Tue Feb 15 15:50:20 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

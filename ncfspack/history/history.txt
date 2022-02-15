@@ -1303,3 +1303,8 @@
                 *** After the fix the version indicator in NcVersion has been updated to 4.8.4.
 09-feb-2022 NvE New memberfunction GetHDUCount() introduced in class NcFITSIO.
                 The version indicator in NcVersion has been updated to 4.8.5.
+15-feb-2022 NvE File path name expansion introduced in NcTimestamp::LoadUTCparameterFiles(), NcCollider::SetOutputFile(),
+                NcDataStreamStats::AddInputFile(), NcTreeMaker::SetOutputFile(), RnoConvert::AddInputFile(),
+                RnoConvert::SetOutputFile(), IceCalibrate::SetCalibFile() and IceXtalk::SetCalibFile().
+                This will allow to use conveniently environment variables in filenames, like for instance "$(HOME)/my-data/sample.root". 
+                The version indicator in NcVersion has been updated to 4.8.6.

@@ -5,6 +5,7 @@
 
 // $Id: NcCollider.h 122 2016-05-19 18:01:23Z nickve $
 
+#include "TSystem.h"
 #include "TPythia6.h"
 #include "TString.h"
 #include "TFile.h"
@@ -91,6 +92,6 @@ class NcCollider : public TPythia6
   void GetFractions(Float_t zp,Float_t ap,Float_t zt,Float_t at); // Determine various N-N collision fractions
   TString GetPyname(Int_t kf); // Provide the correctly truncated Pythia particle name for PDG code kf  
 
- ClassDef(NcCollider,8) // Pythia based universal (astro)physics event generator
+ ClassDef(NcCollider,9) // Pythia based universal (astro)physics event generator
 };
 #endif

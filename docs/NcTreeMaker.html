@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:25 2019            -->
+<!--   Date: Tue Feb 15 15:50:20 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcTreeMaker.h.html">header file</a>
 <a class="descrheadentry" href="src/NcTreeMaker.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcTreeMaker_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -66,33 +66,33 @@ return false;}
  The selection of the specific observables to appear in the output tree
  is performed via the <a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a> memberfunction.
  The user may define a restricted set of tracks to be processed via the
- memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>.
+ memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>.  
  The user may define a restricted set of devices to be processed via the
  memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>.
 
  By making use of setting the so called <span class="string">"user data words"</span> of tracks and events
  the user can have full flexibility on the data to appear in the output tree.
  The <a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a> memberfunction allows to specify also which <span class="string">"user data words"</span> one wants
- to obtain in the output tree for tracks and/or events.
+ to obtain in the output tree for tracks and/or events.  
 
  Note : Tracks without vector information will be skipped.
-
+ 
  An <a href="./NcAstrolab.html">NcAstrolab</a> object may be specified via the memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:SetAstrolab" title="void NcTreeMaker::SetAstrolab(NcAstrolab* lab)">SetAstrolab</a>.
  The available (astrophysical) reference objects will lead to so called <span class="string">"astrotracks"</span>.
  The astrotrack directions correspond to hypothetical tracks of messengers arriving
  from the (astrophysical) reference object.
  These directions (in radians) are provided in the local lab coordinate system from the
- location where the (astrophysical) phenomenon would be at the time of the current event.
+ location where the (astrophysical) phenomenon would be at the time of the current event. 
  The timestamps of the astrotracks correspond to the timestamps as stored for the
  reference objects in the <a href="./NcAstrolab.html">NcAstrolab</a>, which in general is the actual timestamp
  of the astrophysical observation.
  The latter allows investigation of a possible time difference between the observation
- of an (astrophysical) phenomenon and the regular detected tracks/signals in the detector.
+ of an (astrophysical) phenomenon and the regular detected tracks/signals in the detector. 
  Also the ICRS longitude (l) and latitude (b) of the (astrophysical) reference objects
  are provided in radians.
 
  Example :
-
+ ---------
  gSystem-&gt;Load(<span class="string">"ncfspack"</span>);
 
  <a href="./NcTreeMaker.html">NcTreeMaker</a> mktree;
@@ -136,7 +136,7 @@ return false;}
  mktree.<a href="./NcTreeMaker.html#NcTreeMaker:CloseTree" title="void NcTreeMaker::CloseTree()">CloseTree</a>();
 
 --- Author: Nick van Eijndhoven 03-apr-2008 Utrecht University
-- Modified: NvE $Date: 2014-02-06 20:59:16 +0100 (Thu, 06 Feb 2014) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  14:33Z
 
 </pre></div>
 </div></div>
@@ -370,30 +370,35 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcTreeMaker:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcTreeMaker_Lib" id="MapNcTreeMaker_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcTreeMaker_Inh" class="tabsel" href="inh/NcTreeMaker_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcTreeMaker_Inh.png');">Inheritance</a>
-<a id="imgNcTreeMaker_InhMem" class="tab" href="inhmem/NcTreeMaker_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcTreeMaker_InhMem.png');">Inherited Members</a>
-<a id="imgNcTreeMaker_Incl" class="tab" href="incl/NcTreeMaker_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcTreeMaker_Incl.png');">Includes</a>
-<a id="imgNcTreeMaker_Lib" class="tab" href="lib/NcTreeMaker_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcTreeMaker_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcTreeMaker_Inh" src="inh/NcTreeMaker_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TTask</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcTreeMaker" href="./NcTreeMaker.html">NcTreeMaker</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:NcTreeMaker" href="src/NcTreeMaker.cxx.html#TavkYC">NcTreeMaker</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTreeMaker"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"ROOT tree data generation"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:NcTreeMaker" href="src/NcTreeMaker.cxx.html#C42NcC">NcTreeMaker</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTreeMaker"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"ROOT tree data generation"</span>)</span><br />
 <div class="funccomm"><pre> Default constructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:_NcTreeMaker" href="src/NcTreeMaker.cxx.html#stn1I">~NcTreeMaker</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:_NcTreeMaker" href="src/NcTreeMaker.cxx.html#Xjx3M">~NcTreeMaker</a>()</span><br />
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:NcTreeMaker@1" href="src/NcTreeMaker.cxx.html#p5_BrC">NcTreeMaker</a>(<span class="keyword">const</span> <a href="./NcTreeMaker.html">NcTreeMaker</a>&amp; q)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTreeMaker:NcTreeMaker@1" href="src/NcTreeMaker.cxx.html#tH7BrC">NcTreeMaker</a>(<span class="keyword">const</span> <a href="./NcTreeMaker.html">NcTreeMaker</a>&amp; q)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetOutputFile" href="src/NcTreeMaker.cxx.html#qJRTuB">SetOutputFile</a>(TString fname, TString ftitle, TString tname = <span class="string">"Data"</span>, TString ttitle = <span class="string">"All event data"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetOutputFile" href="src/NcTreeMaker.cxx.html#O.etuB">SetOutputFile</a>(TString fname, TString ftitle, TString tname = <span class="string">"Data"</span>, TString ttitle = <span class="string">"All event data"</span>)</span><br />
 <div class="funccomm"><pre> Create the output file for the ROOT data tree.
  Also the overall output tree is created.
 
@@ -402,14 +407,17 @@ return false;}
  tname  : Name of the overall output tree to be created.
  ttitle : Title of the overall output tree to be created.
 
+ Environment variables may be used as $(...) in the filenname for convenience.
+ For example <span class="string">"$(HOME)/my-data/sample.root"</span>.
+
  By default tname=<span class="string">"Data"</span> and ttitle=<span class="string">"All event data"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:CloseTree" href="src/NcTreeMaker.cxx.html#n5172B">CloseTree</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:CloseTree" href="src/NcTreeMaker.cxx.html#H_y72B">CloseTree</a>()</span><br />
 <div class="funccomm"><pre> Proper writing and closing of the output tree structure(s).
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetTrackMaximum" href="src/NcTreeMaker.cxx.html#pZ23HC">SetTrackMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetTrackMaximum" href="src/NcTreeMaker.cxx.html#psnDIC">SetTrackMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
 <div class="funccomm"><pre> Set maximum number of tracks per name in the output tree.
  In the constructor n is set to a default of 1000, which implies that each
  trackname can occur at maximum 1000 times in the output tree storage.
@@ -419,13 +427,13 @@ return false;}
 
  Note : In case all tracks are selected via invokation of <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"*"</span>)
         then the generic name <span class="string">"trk"</span> will be given to each track in the
-        produced output tree.
+        produced output tree. 
         This implies that the argument <span class="string">"n"</span> (or the default 1000) defines
         the total number of tracks per event that can occur in the produced
-        output tree.
+        output tree. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:UseTracks" href="src/NcTreeMaker.cxx.html#hZmIFC">UseTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:UseTracks" href="src/NcTreeMaker.cxx.html#gggTkC">UseTracks</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
 <div class="funccomm"><pre> Specification of the track names to be used for the investigation
  of individual track observables.
 
@@ -435,18 +443,18 @@ return false;}
  n : Specifies the max. number of these tracks to be used
 
  mode = 0 : The provided name should exactly match the trackname
-        1 : The provided name should be part of the trackname
+        1 : The provided name should be part of the trackname 
 
  Notes :
-
+ -------
  1) n&lt;0 will use all the existing tracks of the specified name.
     See the remarks in the docs of memberfunction <a href="./NcTreeMaker.html#NcTreeMaker:SetTrackMaximum" title="void NcTreeMaker::SetTrackMaximum(Int_t n)">SetTrackMaximum</a>
     concerning the maximum number of tracks that can appear in the
-    produced output tree.
+    produced output tree. 
 
  2) The provided name (specifically with mode=1) should be unique among
     all the provided names, since these names will define the various
-    variable names in the output tree.
+    variable names in the output tree.  
 
  The defaults are n=-1 and mode=0.
 
@@ -454,7 +462,7 @@ return false;}
  will result in an incremental effect.
 
  Example :
-
+ ---------
  <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"IceDwalk"</span>,5);
  <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"IceLinefit"</span>,2);
  <a href="./NcTreeMaker.html#NcTreeMaker:UseTracks" title="void NcTreeMaker::UseTracks(TString name,Int_t n=-1,Int_t mode=0)">UseTracks</a>(<span class="string">"Pythia"</span>);
@@ -463,13 +471,13 @@ return false;}
  Pythia tracks which are encountered in the event structure.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:UseDevices" href="src/NcTreeMaker.cxx.html#Y01xVB">UseDevices</a>(TString classname)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:UseDevices" href="src/NcTreeMaker.cxx.html#JdOpjD">UseDevices</a>(TString classname)</span><br />
 <div class="funccomm"><pre> Specification of the device classes to be used for the various observables.
 
  classname : Specifies the device class (e.g. <span class="string">"IceGOM"</span>).
 
  All devices of (or derived from) the specified classname will be taken
- into account as well as all the hits which belong to them.
+ into account as well as all the hits which belong to them. 
 
  Note : Specification of classname=<span class="string">"TObject"</span> will result in using
         all existing devices (and recorded hits).
@@ -478,16 +486,16 @@ return false;}
  will result in an incremental effect.
 
  Example :
-
- <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceAOM);</span>
- <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceIDOM);</span>
+ ---------
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceAOM);</span>
+ <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceIDOM);</span>
  <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>(<span class="string">"IceTDOM"</span>);
 
  This will take into account all devices (derived from) <a href="./IceAOM.html">IceAOM</a>, <a href="./IceIDOM.html">IceIDOM</a>
  and <a href="./IceTDOM.html">IceTDOM</a> as well as all the hits of these devices.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Select" href="src/NcTreeMaker.cxx.html#S29rOB">Select</a>(TString type, TString obs, TString uname = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Select" href="src/NcTreeMaker.cxx.html#iyTm4E">Select</a>(TString type, TString obs, TString uname = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> <a href="./NcTreeMaker.html#NcTreeMaker:Select" title="void NcTreeMaker::Select(TString type,TString obs,TString uname=&quot;&quot;)">Select</a> the observable to appear in the output tree.
 
  type  : Selection type specifier (e.g. <span class="string">"track"</span>, <span class="string">"event"</span> or <span class="string">"device"</span>).
@@ -504,7 +512,7 @@ return false;}
        <span class="string">"sec"</span>    ==&gt; (Fractional) Number of elapsed seconds in the MJD
        <span class="string">"id"</span>     ==&gt; <a href="./NcTreeMaker.html#NcTreeMaker:Track" title="void NcTreeMaker::Track()">Track</a> identifier (for tracks only)
        <span class="string">"nsig"</span>   ==&gt; Number of associated signals (for tracks only)
-                    Note : Only signals of selected devices (see <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>) will be considered
+                    Note : Only signals of selected devices (see <a href="./NcTreeMaker.html#NcTreeMaker:UseDevices" title="void NcTreeMaker::UseDevices(TString classname)">UseDevices</a>) will be considered 
        <span class="string">"jrun"</span>   ==&gt; Run number (for event only)
        <span class="string">"jevt"</span>   ==&gt; <a href="./NcTreeMaker.html#NcTreeMaker:Event" title="void NcTreeMaker::Event()">Event</a> number (for event only)
        <span class="string">"weight"</span> ==&gt; <a href="./NcTreeMaker.html#NcTreeMaker:Event" title="void NcTreeMaker::Event()">Event</a> weight (for event only)
@@ -514,7 +522,7 @@ return false;}
        <span class="string">"*"</span>      ==&gt; All possible observables (except user data words) for the specified selection type
 
  Note :
-
+ ------
  A track or event can have various user data words.
  These user data words can be specified here one by one through subsequent invokations
  of this member function with the observable name <span class="string">"user"</span> and the required user data word name <span class="string">"uname"</span>.
@@ -522,7 +530,7 @@ return false;}
  In the default constructor all observables are de-activated for selection.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetAstrolab" href="src/NcTreeMaker.cxx.html#Gb2AIC">SetAstrolab</a>(<a href="./NcAstrolab.html">NcAstrolab</a>* lab)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:SetAstrolab" href="src/NcTreeMaker.cxx.html#eqAKcC">SetAstrolab</a>(<a href="./NcAstrolab.html">NcAstrolab</a>* lab)</span><br />
 <div class="funccomm"><pre> Specify the astrolab to be used.
  This will lead to the appearance of so called <span class="string">"astrotracks"</span> from
  (astrophysical) reference objects in the produced output tree.
@@ -530,49 +538,49 @@ return false;}
  In case lab=0 no <span class="string">"astrotracks"</span> are produced.
 
  Note :
-
+ ------
  An internal copy of the specified Astrolab will be made.
  In case one wants to modify the Astrolab, this should be done via
  the corresponding pointer which is provided via <a href="./NcTreeMaker.html#NcTreeMaker:GetAstrolab" title="NcAstrolab* NcTreeMaker::GetAstrolab()">GetAstrolab</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcAstrolab.html">NcAstrolab</a>* <a class="funcname" name="NcTreeMaker:GetAstrolab" href="src/NcTreeMaker.cxx.html#sIGZAD">GetAstrolab</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcAstrolab.html">NcAstrolab</a>* <a class="funcname" name="NcTreeMaker:GetAstrolab" href="src/NcTreeMaker.cxx.html#Wq1x9C">GetAstrolab</a>() const</span><br />
 <div class="funccomm"><pre> Provide pointer to the astrolab.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Exec" href="src/NcTreeMaker.cxx.html#LkjvRE">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Exec" href="src/NcTreeMaker.cxx.html#nuWuRE">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
 <div class="funccomm"><pre> Implementation of the ouput tree creation and filling.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Track" href="src/NcTreeMaker.cxx.html#w2cU_B">Track</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Track" href="src/NcTreeMaker.cxx.html#Y7aU_B">Track</a>()</span><br />
 <div class="funccomm"><pre> Obtain individual track observables.
  Note : Tracks without vector information will be skipped.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Event" href="src/NcTreeMaker.cxx.html#AmQ8o">Event</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Event" href="src/NcTreeMaker.cxx.html#AlT8o">Event</a>()</span><br />
 <div class="funccomm"><pre> Obtain total event observables.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Device" href="src/NcTreeMaker.cxx.html#RRC8mC">Device</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:Device" href="src/NcTreeMaker.cxx.html#llp0mC">Device</a>()</span><br />
 <div class="funccomm"><pre> Obtain device observables.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:AstroTrack" href="src/NcTreeMaker.cxx.html#OtXux">AstroTrack</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTreeMaker:AstroTrack" href="src/NcTreeMaker.cxx.html#SF.mx">AstroTrack</a>()</span><br />
 <div class="funccomm"><pre> Create individual track observables from (astrophysical) reference objects.
  The astrotrack directions correspond to hypothetical tracks of messengers arriving
  from the (astrophysical) reference object.
  These directions (in radians) are provided in the local lab coordinate system from the
- location where the (astrophysical) phenomenon would be at the time of the current event.
+ location where the (astrophysical) phenomenon would be at the time of the current event. 
  The timestamps of the astrotracks correspond to the timestamps as stored for the
  reference objects in the <a href="./NcAstrolab.html">NcAstrolab</a>, which in general is the actual timestamp
  of the astrophysical observation.
  The latter allows investigation of a possible time difference between the observation
- of an (astrophysical) phenomenon and the regular detected tracks/signals in the detector.
+ of an (astrophysical) phenomenon and the regular detected tracks/signals in the detector. 
  Also the ICRS longitude (l) and latitude (b) of the (astrophysical) reference objects
  are provided in radians.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcTreeMaker:Clone" href="src/NcTreeMaker.cxx.html#EqgRP">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcTreeMaker:Clone" href="src/NcTreeMaker.cxx.html#wCIyB">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
  correct type depending on the object type, a feature which may be very useful
@@ -584,7 +592,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:25 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Tue Feb 15 15:50:20 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

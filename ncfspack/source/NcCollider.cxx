@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcCollider.cxx 126 2016-05-26 13:01:32Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcCollider
 // Pythia based universal (astro)physics event generator.
@@ -122,7 +120,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven 22-nov-2002 Utrecht University
-//- Modified: NvE $Date: 2016-05-26 15:01:32 +0200 (Thu, 26 May 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  13:38Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcCollider.h"
@@ -213,7 +211,13 @@ NcCollider::~NcCollider()
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetOutputFile(TString s)
 {
-// Create the output file containing all the data in ROOT output format.
+// Create the output file containing all the NcEvent structures in a ROOT Tree.
+//
+// Environment variables may be used as $(...) in the filenname for convenience.
+// For example "$(HOME)/my-data/sample.ncfspack".
+
+ // Expand the path name of the provided output filename
+ s=gSystem->ExpandPathName(s.Data()); 
 
  // Flush and close the current existing output file (if any)
  // This will also delete the existing output tree connected to this file

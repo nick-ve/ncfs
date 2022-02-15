@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Jan  7 12:07:09 2022            -->
+<!--   Date: Tue Feb 15 15:50:20 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -78,7 +78,7 @@ return false;}
  Please refer to /macros/convert.cc for a usage example.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022  11:54Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  14:51Z
 
 </pre></div>
 </div></div>
@@ -339,6 +339,9 @@ return false;}
  file : Name of the input file to be added (wildcards are allowed)
  tree : Name of the Tree containing the data
 
+ Environment variables may be used as $(...) in the filenname for convenience.
+ For example <span class="string">"$(HOME)/my-data/station11/combined.root"</span>.
+
  Note : The name of the Tree has to be the same for all added input files.
 </pre></div>
 </div>
@@ -348,6 +351,9 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:SetOutputFile@1" href="src/RnoConvert.cxx.html#VBP7vC">SetOutputFile</a>(TString name)</span><br />
 <div class="funccomm"><pre> Create the output file for the <a href="./RnoEvent.html">RnoEvent</a> data.
+
+ Environment variables may be used as $(...) in the filenname for convenience.
+ For example <span class="string">"$(HOME)/my-data/sample.rnopack"</span>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:SetSelectLevels" href="src/RnoConvert.cxx.html#vFTMkC">SetSelectLevels</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> min, <a href="./ListOfTypes.html#Int_t">Int_t</a> max)</span><br />
@@ -403,7 +409,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Jan  7 12:07:09 2022 </em><em>&raquo; Last generated: 2022-01-07 12:07</em><br />
+<em>&raquo; Last changed: Tue Feb 15 15:50:21 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

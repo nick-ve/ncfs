@@ -74,7 +74,7 @@
 //        no cross talk hit correction will be performed.
 //
 //--- Author: Nick van Eijndhoven 11-aug-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel June 20, 2021  18:43Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  15:16Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceXtalk.h"
@@ -111,7 +111,14 @@ void IceXtalk::SetOMdbase(NcObjMatrix* omdb)
 void IceXtalk::SetCalibFile(TString name)
 {
 // Set the calibration ROOT file as created with IceCal2Root.
-// Note : this will overrule a previously attached database. 
+// Note : this will overrule a previously attached database.
+//
+// Environment variables may be used as $(...) in the filenname for convenience.
+// For example "$(HOME)/my-data/calibrations.root".
+
+ // Expand the path name of the provided input file
+ name=gSystem->ExpandPathName(name.Data());
+ 
  if (fCalfile)
  {
   delete fCalfile;

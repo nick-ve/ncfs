@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <math.h>
 
+#include "TSystem.h"
 #include "TTimeStamp.h"
 #include "TString.h"
 #include "TTree.h"
@@ -127,6 +128,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,12) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,13) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

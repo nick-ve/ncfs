@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 15 09:20:40 2021            -->
+<!--   Date: Tue Feb 15 15:50:19 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -205,7 +205,7 @@ return false;}
  fstat.<a href="./#TTask:ExecuteTask" title="void TTask::ExecuteTask(Option_t* option=&quot;0&quot;)">ExecuteTask</a>();
 
 --- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 15, 2021  07:24Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  13:59Z
 
 </pre></div>
 </div></div>
@@ -429,8 +429,11 @@ return false;}
 
  Notes :
 
- 1) This memberfunction may be invoked several times to accumulate data files.
- 2) The <span class="string">"tree"</span> name may vary for different input files, but the <span class="string">"branch"</span> name
+
+ 1) Environment variables may be used as $(...) in the filenname for convenience.
+    For example <span class="string">"$(HOME)/my-data/sample.ncfspack"</span>.
+ 2) This memberfunction may be invoked several times to accumulate data files.
+ 3) The <span class="string">"tree"</span> name may vary for different input files, but the <span class="string">"branch"</span> name
     has to be the same for all the input files.
 </pre></div>
 </div>
@@ -552,7 +555,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul 15 09:20:40 2021 </em><em>&raquo; Last generated: 2021-07-15 09:20</em><br />
+<em>&raquo; Last changed: Tue Feb 15 15:50:19 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

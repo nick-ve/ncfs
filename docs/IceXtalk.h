@@ -4,8 +4,7 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceXtalk.h 5 2010-03-19 10:10:02Z nickve $
-
+#include "TSystem.h"
 #include "TROOT.h"
 #include "TTask.h"
 #include "TString.h"
@@ -32,6 +31,6 @@ class IceXtalk : public TTask
   Float_t fPmin;       // The minimal probability to induce cross talk 
   Float_t fPe;         // The nominal Xtalk signal in photo-electron equivalent
 
- ClassDef(IceXtalk,3) // TTask derived class to perform cross talk hit correction
+ ClassDef(IceXtalk,4) // TTask derived class to perform cross talk hit correction
 };
 #endif

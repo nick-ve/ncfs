@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 28, 2021  13:48Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 15, 2022  13:16Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -2711,6 +2711,9 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 //            https://hpiers.obspm.fr/iers/series/opa/eopc04
 //            This file contains the archival list of the daily dUT=UT-UTC monitoring.
 //
+// Environment variables may be used as $(...) in the filennames for convenience.
+// For example "$(HOME)/my-iers/leap.txt".
+//
 // The corresponding daily values of the accumulated Leap Seconds and dUT=UT1-UTC
 // are stored in an internal ROOT TTree.
 // The return argument provides a pointer to the corresponding TTree to enable
@@ -2729,6 +2732,10 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 // Note : In case of an error or inconsistency, no ROOT TTree will be created
 //        and the returned pointer will be zero.
 
+ // Expand the input file pathnames 
+ leapfile=gSystem->ExpandPathName(leapfile.Data());
+ dutfile=gSystem->ExpandPathName(dutfile.Data());
+  
  if (fUTCdata)
  {
   delete fUTCdata;

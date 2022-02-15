@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Mar 21 09:34:34 2019            -->
+<!--   Date: Tue Feb 15 15:50:17 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/IceCalibrate.h.html">header file</a>
 <a class="descrheadentry" href="src/IceCalibrate.cxx.html">source file</a>
-
+<a class="descrheadentry" href="IceCalibrate_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -70,13 +70,13 @@ return false;}
  A specific OM database may be attached by means of the <a href="./IceCalibrate.html#IceCalibrate:SetOMdbase" title="void IceCalibrate::SetOMdbase(NcObjMatrix* omdb,TString name=&quot;MuDaq&quot;)">SetOMdbase</a>()
  or <a href="./IceCalibrate.html#IceCalibrate:SetCalibFile" title="void IceCalibrate::SetCalibFile(TString name)">SetCalibFile</a>() memberfunctions.
  Further details about the OM database can be found in the docs
- of IceCal2Root and IceDB2Root.
+ of <a href="./IceCal2Root.html">IceCal2Root</a> and <a href="./IceDB2Root.html">IceDB2Root</a>.
 
  In the calibration procedure, all event data in memory is scanned and
  replaced by calibrated data if a calibration function is present.
  When data is succesfully calibrated, the corresponding de-calibration
  function is stored in the event data at the appropriate place to allow
- access to uncalibrated data as well (see <a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a> for
+ access to uncalibrated data as well (see <a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a> for 
  further details).
  When the input event in memory already contained calibrated data
  (i.e. de-calibration functions are present in the event data), the event
@@ -85,7 +85,7 @@ return false;}
  In case no corresponding calibration function is present, the calibration
  of those specific data will not be performed.
  This implies that running this task on calibrated data without having
- attached an OM database, will result in fully de-calibrated data.
+ attached an OM database, will result in fully de-calibrated data. 
  In case an OM slot was flagged as bad in the OM database, this flag
  will be copied into the event data for the corresponding OM.
 
@@ -93,7 +93,7 @@ return false;}
  structure itself via the device named <span class="string">"IceCalibrate"</span>.
 
 --- Author: Nick van Eijndhoven 18-sep-2005 Utrecht University
-- Modified: NvE $Date: 2012-01-03 14:30:57 +0100 (Tue, 03 Jan 2012) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  15:05Z
 
 </pre></div>
 </div></div>
@@ -261,48 +261,56 @@ return false;}
 </table></div>
 </div>
 <h2><a id="IceCalibrate:Class_Charts"></a>Class Charts</h2>
-<map name="MapIceCalibrate_Lib" id="MapIceCalibrate_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgIceCalibrate_Inh" class="tabsel" href="inh/IceCalibrate_Inh.png" onclick="javascript:return SetImg('Charts','inh/IceCalibrate_Inh.png');">Inheritance</a>
-<a id="imgIceCalibrate_InhMem" class="tab" href="inhmem/IceCalibrate_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/IceCalibrate_InhMem.png');">Inherited Members</a>
-<a id="imgIceCalibrate_Incl" class="tab" href="incl/IceCalibrate_Incl.png" onclick="javascript:return SetImg('Charts','incl/IceCalibrate_Incl.png');">Includes</a>
-<a id="imgIceCalibrate_Lib" class="tab" href="lib/IceCalibrate_Lib.png" onclick="javascript:return SetImg('Charts','lib/IceCalibrate_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapIceCalibrate_Inh" src="inh/IceCalibrate_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TTask</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="IceCalibrate" href="./IceCalibrate.html">IceCalibrate</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCalibrate:IceCalibrate" href="src/IceCalibrate.cxx.html#TfH96B">IceCalibrate</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCalibrate:IceCalibrate" href="src/IceCalibrate.cxx.html#X9ve6B">IceCalibrate</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Default constructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCalibrate:_IceCalibrate" href="src/IceCalibrate.cxx.html#TFhQ.">~IceCalibrate</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCalibrate:_IceCalibrate" href="src/IceCalibrate.cxx.html#H3dQ.">~IceCalibrate</a>()</span><br />
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCalibrate:SetOMdbase" href="src/IceCalibrate.cxx.html#F8S51B">SetOMdbase</a>(<a href="./NcObjMatrix.html">NcObjMatrix</a>* omdb, TString name = <span class="string">"MuDaq"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCalibrate:SetOMdbase" href="src/IceCalibrate.cxx.html#dxww1B">SetOMdbase</a>(<a href="./NcObjMatrix.html">NcObjMatrix</a>* omdb, TString name = <span class="string">"MuDaq"</span>)</span><br />
 <div class="funccomm"><pre> Set the pointer to the OM database.
  The following names can be used: MuDaq, TWRDaq, JEBTDaq and JEBADaq.
- Note : this will overrule a previously attached database.
+ Note : this will overrule a previously attached database. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCalibrate:SetCalibFile" href="src/IceCalibrate.cxx.html#El3C8B">SetCalibFile</a>(TString name)</span><br />
-<div class="funccomm"><pre> Set the calibration ROOT file as created with IceCal2Root.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCalibrate:SetCalibFile" href="src/IceCalibrate.cxx.html#QDnWoB">SetCalibFile</a>(TString name)</span><br />
+<div class="funccomm"><pre> Set the calibration ROOT file as created with <a href="./IceCal2Root.html">IceCal2Root</a>.
  Note : this will overrule a previously attached database.
+
+ Environment variables may be used as $(...) in the filenname for convenience.
+ For example <span class="string">"$(HOME)/my-data/calibrations.root"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCalibrate:Exec" href="src/IceCalibrate.cxx.html#t25BfB">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceCalibrate:Exec" href="src/IceCalibrate.cxx.html#Vn5GfB">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
 <div class="funccomm"><pre> Implementation of the various calibration procedures.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCalibrate:IceCalibrate" href="src/IceCalibrate.h.html#TyslQD">IceCalibrate</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="IceCalibrate:IceCalibrate" href="src/IceCalibrate.h.html#htXDz">IceCalibrate</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Mar 21 09:34:38 2019 </em><em>&raquo; Last generated: 2019-03-21 09:34</em><br />
+<em>&raquo; Last changed: Tue Feb 15 15:50:17 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

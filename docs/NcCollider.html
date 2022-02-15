@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Sep 15 08:01:16 2019            -->
+<!--   Date: Tue Feb 15 15:50:18 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -41,7 +41,7 @@ return false;}
 <span class="descrtitle">Source:</span>
 <a class="descrheadentry" href="src/NcCollider.h.html">header file</a>
 <a class="descrheadentry" href="src/NcCollider.cxx.html">source file</a>
-
+<a class="descrheadentry" href="NcCollider_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
@@ -75,7 +75,7 @@ return false;}
  see the docs of the memberfunctions <a href="./NcCollider.html#NcCollider:SetVertexMode" title="void NcCollider::SetVertexMode(Int_t mode)">SetVertexMode</a> and <a href="./NcCollider.html#NcCollider:SetResolution" title="void NcCollider::SetResolution(Double_t res)">SetResolution</a>.
 
  Example job of minimum biased Pb+Pb interactions :
-
+ --------------------------------------------------
  {
   gSystem-&gt;Load(<span class="string">"libEG"</span>);
   gSystem-&gt;Load(<span class="string">"libEGPythia6"</span>);
@@ -84,7 +84,7 @@ return false;}
   <a href="./NcCollider.html">NcCollider</a>* gen=new <a href="./NcCollider.html">NcCollider</a>();
 
   gen-&gt;<a href="./NcCollider.html#NcCollider:SetOutputFile" title="void NcCollider::SetOutputFile(TString name)">SetOutputFile</a>(<span class="string">"test.root"</span>);
-  gen-&gt;<a href="./NcCollider.html#NcCollider:SetVertexMode" title="void NcCollider::SetVertexMode(Int_t mode)">SetVertexMode</a>(3);
+  gen-&gt;<a href="./NcCollider.html#NcCollider:SetVertexMode" title="void NcCollider::SetVertexMode(Int_t mode)">SetVertexMode</a>(3);    
   gen-&gt;<a href="./NcCollider.html#NcCollider:SetResolution" title="void NcCollider::SetResolution(Double_t res)">SetResolution</a>(1e-6); // 1 micron vertex resolution
 
   gen-&gt;<a href="./NcCollider.html#NcCollider:SetRunNumber" title="void NcCollider::SetRunNumber(Int_t run)">SetRunNumber</a>(1);
@@ -110,7 +110,7 @@ return false;}
    gen-&gt;<a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>(npart);
 
    <a href="./NcEvent.html">NcEvent</a>* evt=gen-&gt;<a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>();
-
+  
    evt-&gt;List();
   }
 
@@ -119,7 +119,7 @@ return false;}
 
 
  Example job of a cosmic nu+p atmospheric interaction.
-
+ -----------------------------------------------------
  {
   gSystem-&gt;Load(<span class="string">"libEG"</span>);
   gSystem-&gt;Load(<span class="string">"libEGPythia6"</span>);
@@ -142,7 +142,7 @@ return false;}
    gen-&gt;<a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>(0,1);
 
    <a href="./NcEvent.html">NcEvent</a>* evt=gen-&gt;<a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>();
-
+  
    evt-&gt;Data();
   }
 
@@ -151,7 +151,7 @@ return false;}
 
 
 --- Author: Nick van Eijndhoven 22-nov-2002 Utrecht University
-- Modified: NvE $Date: 2016-05-26 15:01:32 +0200 (Thu, 26 May 2016) $ NCFS
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  13:38Z
 
 </pre></div>
 </div></div>
@@ -520,18 +520,23 @@ return false;}
 </table></div>
 </div>
 <h2><a id="NcCollider:Class_Charts"></a>Class Charts</h2>
-<map name="MapNcCollider_Lib" id="MapNcCollider_Lib">
-<area shape="rect" id="node1" href="LibraryDependencies.html" title="All Libraries" alt="" coords="140,240,255,288"/>
-</map>
-<div class="tabs">
-<a id="imgNcCollider_Inh" class="tabsel" href="inh/NcCollider_Inh.png" onclick="javascript:return SetImg('Charts','inh/NcCollider_Inh.png');">Inheritance</a>
-<a id="imgNcCollider_InhMem" class="tab" href="inhmem/NcCollider_InhMem.png" onclick="javascript:return SetImg('Charts','inhmem/NcCollider_InhMem.png');">Inherited Members</a>
-<a id="imgNcCollider_Incl" class="tab" href="incl/NcCollider_Incl.png" onclick="javascript:return SetImg('Charts','incl/NcCollider_Incl.png');">Includes</a>
-<a id="imgNcCollider_Lib" class="tab" href="lib/NcCollider_Lib.png" onclick="javascript:return SetImg('Charts','lib/NcCollider_Lib.png');">Libraries</a><br/>
-</div><div class="classcharts"><div class="classchartswidth"></div>
-<img id="Charts" alt="Class Charts" class="classcharts" usemap="#MapNcCollider_Inh" src="inh/NcCollider_Inh.png"/></div>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TPythia6</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcCollider" href="./NcCollider.html">NcCollider</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:NcCollider" href="src/NcCollider.cxx.html#Ug_nXC">NcCollider</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:NcCollider" href="src/NcCollider.cxx.html#g0nrXC">NcCollider</a>()</span><br />
 <div class="funccomm"><pre> Default constructor.
  All variables initialised to default values.
 
@@ -547,15 +552,18 @@ return false;}
  By default these processes are not included.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:_NcCollider" href="src/NcCollider.cxx.html#ohfgaC">~NcCollider</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:_NcCollider" href="src/NcCollider.cxx.html#EThgaC">~NcCollider</a>()</span><br />
 <div class="funccomm"><pre> Default destructor
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetOutputFile" href="src/NcCollider.cxx.html#QlYpKD">SetOutputFile</a>(TString name)</span><br />
-<div class="funccomm"><pre> Create the output file containing all the data in ROOT output format.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetOutputFile" href="src/NcCollider.cxx.html#UDuQLD">SetOutputFile</a>(TString name)</span><br />
+<div class="funccomm"><pre> Create the output file containing all the <a href="./NcEvent.html">NcEvent</a> structures in a ROOT Tree.
+
+ Environment variables may be used as $(...) in the filenname for convenience.
+ For example <span class="string">"$(HOME)/my-data/sample.ncfspack"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetVertexMode" href="src/NcCollider.cxx.html#mPKhO">SetVertexMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetVertexMode" href="src/NcCollider.cxx.html#a7xwN">SetVertexMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
 <div class="funccomm"><pre> Set the mode of the vertex structure creation.
 
  By default all generated tracks will only appear in the <a href="./NcEvent.html">NcEvent</a>
@@ -582,60 +590,60 @@ return false;}
  the resolution parameter. Therefore, no attempt is made to distinguish
  between secondary, tertiary etc... vertices. All sec. vertices are
  linked to the primary one.
-
+  
  Irrespective of the selected mode, all generated tracks can be obtained
  directly from the <a href="./NcEvent.html">NcEvent</a> structure.
  In case (sec.) vertex creation is selected, all generated vertices can
- also be obtained directly from the <a href="./NcEvent.html">NcEvent</a> structure.
+ also be obtained directly from the <a href="./NcEvent.html">NcEvent</a> structure. 
  These (sec.) vertices contain only the corresponding pointers to the various
  tracks which are stored in the <a href="./NcEvent.html">NcEvent</a> structure.
 
  Overview of vertex creation modes :
-
+ -----------------------------------
  mode = 0 ==&gt; No vertex structure will be created
         1 ==&gt; Only primary vertex structure will be created
         2 ==&gt; Unconnected primary and secondary vertices will be created
         3 ==&gt; Primary and secondary vertices will be created where all the
               sec. vertices will be connected to the primary vertex.
               Also the vertex connecting tracks will be automatically
-              generated.
+              generated. 
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetVertexMode" href="src/NcCollider.cxx.html#Fd.AKD">GetVertexMode</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetVertexMode" href="src/NcCollider.cxx.html#v1mBQD">GetVertexMode</a>() const</span><br />
 <div class="funccomm"><pre> Provide the current mode for vertex structure creation.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetResolution" href="src/NcCollider.cxx.html#Z_qRsC">SetResolution</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> res)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetResolution" href="src/NcCollider.cxx.html#wPf1IC">SetResolution</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> res)</span><br />
 <div class="funccomm"><pre> Set the resolution (in meter) for resolving (sec.) vertices.
  By default this resolution is set to 0.1 micron.
  Note : In case no vertex creation has been selected, the value of
         the resolution is totally irrelevant.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcCollider:GetResolution" href="src/NcCollider.cxx.html#c1JAa">GetResolution</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcCollider:GetResolution" href="src/NcCollider.cxx.html#pMO3a">GetResolution</a>() const</span><br />
 <div class="funccomm"><pre> Provide the current resolution (in meter) for resolving (sec.) vertices.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetRunNumber" href="src/NcCollider.cxx.html#n3LJn">SetRunNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> run)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetRunNumber" href="src/NcCollider.cxx.html#GCyvyE">SetRunNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> run)</span><br />
 <div class="funccomm"><pre> Set the user defined run number.
  By default the run number is set to 0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetRunNumber" href="src/NcCollider.cxx.html#a3MkVC">GetRunNumber</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetRunNumber" href="src/NcCollider.cxx.html#XyuFWC">GetRunNumber</a>() const</span><br />
 <div class="funccomm"><pre> Provide the user defined run number.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetPrintFreq" href="src/NcCollider.cxx.html#gkebmB">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetPrintFreq" href="src/NcCollider.cxx.html#MaZjmB">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
 <div class="funccomm"><pre> Set the print frequency for every <span class="string">'n'</span> events.
  By default the printfrequency is set to 1 (i.e. every event).
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetPrintFreq" href="src/NcCollider.cxx.html#Hj4MLE">GetPrintFreq</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetPrintFreq" href="src/NcCollider.cxx.html#u3BnLE">GetPrintFreq</a>() const</span><br />
 <div class="funccomm"><pre> Provide the user selected print frequency.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetUserControl" href="src/NcCollider.cxx.html#Q0frIE">SetUserControl</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetUserControl" href="src/NcCollider.cxx.html#srpBME">SetUserControl</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
 <div class="funccomm"><pre> Set the user control flag w.r.t. disabling automatic optimisation
  of some Pythia default MC parameters for soft interactions in view of
  nucleus-nucleus collisions and astrophysical processes.
@@ -645,81 +653,81 @@ return false;}
  See the <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>() memberfunctions for further details w.r.t. the optimisations.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetUserControl" href="src/NcCollider.cxx.html#Ay29DE">GetUserControl</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetUserControl" href="src/NcCollider.cxx.html#rnxi.B">GetUserControl</a>() const</span><br />
 <div class="funccomm"><pre> Provide the value of the user control flag.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetElastic" href="src/NcCollider.cxx.html#wlX_lB">SetElastic</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetElastic" href="src/NcCollider.cxx.html#oJ1w1B">SetElastic</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
 <div class="funccomm"><pre> Set the flag w.r.t. inclusion of elastic and diffractive processes.
  By default these processes are not included.
  Flag = 0 : Do not include elastic and diffractive processes
         1 : Elastic and diffractive processes will be included
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetElastic" href="src/NcCollider.cxx.html#vIYnmB">GetElastic</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetElastic" href="src/NcCollider.cxx.html#f6m5EC">GetElastic</a>() const</span><br />
 <div class="funccomm"><pre> Provide the value of the control flag for elastic and diffractive processes.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetMultiple" href="src/NcCollider.cxx.html#yGqRYB">SetMultiple</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetMultiple" href="src/NcCollider.cxx.html#teD1wE">SetMultiple</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> flag)</span><br />
 <div class="funccomm"><pre> Set the flag w.r.t. inclusion of multiple interactions.
  By default these processes are included.
  Flag = 0 : Do not include multiple interactions
         1 : Multiple interactions will be included
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetMultiple" href="src/NcCollider.cxx.html#W2wcID">GetMultiple</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetMultiple" href="src/NcCollider.cxx.html#DR8YID">GetMultiple</a>() const</span><br />
 <div class="funccomm"><pre> Provide the value of the control flag for multiple interactions.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetEcmsMin" href="src/NcCollider.cxx.html#sR7e.C">SetEcmsMin</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ecms)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetEcmsMin" href="src/NcCollider.cxx.html#suLR.C">SetEcmsMin</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ecms)</span><br />
 <div class="funccomm"><pre> Set the minimal CMS energy (in GeV) for events to get generated.
  Notes :
-
+ -------
  1) This memberfunction may be invoked at will before the initialisation
-    or before the generation of any event.
+    or before the generation of any event. 
  2) By default a minimal CMS energy of 2.7 GeV is required for event generation.
     At lower values the underlying Pythia event generation gets rather slow
     because of the limited available phase-space.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcCollider:GetEcmsMin" href="src/NcCollider.cxx.html#LiBnFC">GetEcmsMin</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcCollider:GetEcmsMin" href="src/NcCollider.cxx.html#d.jM4B">GetEcmsMin</a>() const</span><br />
 <div class="funccomm"><pre> Provide the minimal CMS energy (in GeV) for events to get generated.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetRandomSeed" href="src/NcCollider.cxx.html#nhzrKC">SetRandomSeed</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> iseed)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetRandomSeed" href="src/NcCollider.cxx.html#rHMjbC">SetRandomSeed</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> iseed)</span><br />
 <div class="funccomm"><pre> Initialise the random number generator with a specific sequence.
  Regular allowed values are 0&lt;=iseed&lt;=900000000.
  However, also the specification iseed&lt;0 is allowed to obtain an
  automatic sequence selection as explained below.
 
  Notes :
-
+ -------
  1) In case the user does not invoke this memberfunction, the default
-    Pythia seed will be used.
+    Pythia seed will be used. 
  2) This memberfunction may be invoked at will before the initialisation
-    or before the generation of any event.
+    or before the generation of any event. 
  3) A convenient way to automatically start each <a href="./NcCollider.html">NcCollider</a> run with a
     different seed is to construct the seed from e.g. the date and time.
     An automatic (quasi unique) seed generation based on date and time information
     (with second precision) is obtained by providing iseed&lt;0 as input argument.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetRandomSeed" href="src/NcCollider.cxx.html#uG0RFE">GetRandomSeed</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetRandomSeed" href="src/NcCollider.cxx.html#etvRFE">GetRandomSeed</a>()</span><br />
 <div class="funccomm"><pre> Provide the value of the current random number sequence seed.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcCollider:GetWin" href="src/NcCollider.cxx.html#vToprB">GetWin</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcCollider:GetWin" href="src/NcCollider.cxx.html#GHSGrB">GetWin</a>() const</span><br />
 <div class="funccomm"><pre> Provide the value of the Pythia energy indicator (in GeV) used for initialisation.
  For regular frame=<span class="string">"free"</span> processing the value is set to -1, whereas a positive value
  indicates forced CMS processing. See <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>() for further details.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:Init" href="src/NcCollider.cxx.html#nAMsEB">Init</a>(TString frame, TString beam, TString target, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:Init" href="src/NcCollider.cxx.html#pV4BIB">Init</a>(TString frame, TString beam, TString target, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 0)</span><br />
 <div class="funccomm"><pre> Initialisation of the underlying Pythia generator package.
  The event number is reset to 0.
 
  Input arguments :
-
+ -----------------
  frame   : <span class="string">"cms"</span>  --&gt; Colliding beam experiment in the CM frame (beam=+z, target=-z direction)
            <span class="string">"fixt"</span> --&gt; Fixed target experiment with beam in the +z direction
            <span class="string">"free"</span> --&gt; System defined by the user via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>
@@ -741,7 +749,7 @@ return false;}
                             and that the event data in the user frame (defined via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>) is only available
                             from the produced <a href="./NcEvent.html">NcEvent</a> structure (see memberfunction <a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>).
                             Due to internal Pythia accuracy issues it turns out that forcing the event generation
-                            in the CMS may also result in faster processing.
+                            in the CMS may also result in faster processing.  
                             In case win&lt;0 it is a dummy parameter of which the value is irrelevant and the cross section
                             initialisations are based on the settings of <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span> with the setting of <span class="string">"fact"</span>
                             taken into account.
@@ -754,9 +762,9 @@ return false;}
            energy with the highest cross section. In general this is just the highest foreseen energy
            (e.g. hadron-hadron interactions) or at some resonance (e.g. e+e- interactions).
            To use a certain interaction energy for cross section initialisations without changing the actual
-           beam and/or target 3-momenta, please refer to the <span class="string">"fact"</span> input argument outlined hereafter.
+           beam and/or target 3-momenta, please refer to the <span class="string">"fact"</span> input argument outlined hereafter. 
            Note that with weighting sometimes no event is generated after invoking <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>()
-           to preserve the correct relative number of events for different energies.
+           to preserve the correct relative number of events for different energies. 
            The information whether an event has been generated or not is indicated via the
            return argument of <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>().
  fact    : Multiplication factor for the beam or target 3-momentum to be used for initialisation purposes
@@ -775,30 +783,30 @@ return false;}
 
  By default pbeam=0, ptarget=0, wxsec=1 and fact=0.
 
- Return value :
-
+ Return value : 
+ --------------
  In case an error occurred, a value 1 will be returned. Otherwise the return value is 0.
 
  For the beam and target particle specifications the following naming conventions are used :
-
+ 
  Leptons :
-
+ ---------
  <span class="string">"e-"</span>, <span class="string">"e+"</span>, <span class="string">"mu-"</span>, <span class="string">"mu+"</span>, <span class="string">"tau-"</span>, <span class="string">"tau+"</span>, <span class="string">"nue"</span>, <span class="string">"numu"</span>, <span class="string">"nutau"</span>
 
  Mesons :
-
+ --------
  <span class="string">"pi+"</span>, <span class="string">"pi-"</span>, <span class="string">"pi0"</span>, <span class="string">"K+"</span>, <span class="string">"K-"</span>, <span class="string">"KS0"</span>, <span class="string">"KL0"</span>
 
  Baryons :
-
+ ---------
  <span class="string">"p"</span>, <span class="string">"n"</span>, <span class="string">"Lambda0"</span>, <span class="string">"Sigma+"</span>, <span class="string">"Sigma-"</span>, <span class="string">"Sigma0"</span>, <span class="string">"Xi-"</span>, <span class="string">"Xi0"</span>, <span class="string">"Omega-"</span>
 
  (Virtual) Photons :
-
+ -------------------
  <span class="string">"gamma"</span>      : Real photon
  <span class="string">"gamma/e-"</span>   : Virtual photon in an <span class="string">"e-"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"e-"</span> energy;   not possible with frame=<span class="string">"free"</span>
  <span class="string">"gamma/e+"</span>   : Virtual photon in an <span class="string">"e+"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"e+"</span> energy;   not possible with frame=<span class="string">"free"</span>
- <span class="string">"gamma/mu-"</span>  : Virtual photon in a <span class="string">"mu-"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"mu-"</span> energy;  not possible with frame=<span class="string">"free"</span>
+ <span class="string">"gamma/mu-"</span>  : Virtual photon in a <span class="string">"mu-"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"mu-"</span> energy;  not possible with frame=<span class="string">"free"</span> 
  <span class="string">"gamma/mu+"</span>  : Virtual photon in a <span class="string">"mu+"</span> beam;  <span class="string">"win"</span> refers to the <span class="string">"mu+"</span> energy;  not possible with frame=<span class="string">"free"</span>
  <span class="string">"gamma/tau-"</span> : Virtual photon in a <span class="string">"tau-"</span> beam; <span class="string">"win"</span> refers to the <span class="string">"tau-"</span> energy; not possible with frame=<span class="string">"free"</span>
  <span class="string">"gamma/tau+"</span> : Virtual photon in a <span class="string">"tau+"</span> beam; <span class="string">"win"</span> refers to the <span class="string">"tau+"</span> energy; not possible with frame=<span class="string">"free"</span>
@@ -810,8 +818,8 @@ return false;}
  more suitable running conditions for soft processes in view of
  astrophysical processes.
 
- The optimisations consist of :
-
+ The optimisations consist of : 
+ ------------------------------
  * Usage of real photons for photon beams or targets
  * No minimum CMS energy is required for initialisation (see <a href="./NcCollider.html#NcCollider:SetEcmsMin" title="void NcCollider::SetEcmsMin(Double_t ecms)">SetEcmsMin</a>).
  * Activation of the default K factor values
@@ -827,13 +835,13 @@ return false;}
  of multiple interactions via the memberfunction <a href="./NcCollider.html#NcCollider:SetMultiple" title="void NcCollider::SetMultiple(Int_t flag)">SetMultiple</a>().
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:Init@1" href="src/NcCollider.cxx.html#CThu1E">Init</a>(TString frame, <a href="./ListOfTypes.html#Int_t">Int_t</a> zp, <a href="./ListOfTypes.html#Int_t">Int_t</a> ap, <a href="./ListOfTypes.html#Int_t">Int_t</a> zt, <a href="./ListOfTypes.html#Int_t">Int_t</a> at, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:Init@1" href="src/NcCollider.cxx.html#iOfu1E">Init</a>(TString frame, <a href="./ListOfTypes.html#Int_t">Int_t</a> zp, <a href="./ListOfTypes.html#Int_t">Int_t</a> ap, <a href="./ListOfTypes.html#Int_t">Int_t</a> zt, <a href="./ListOfTypes.html#Int_t">Int_t</a> at, <a href="./ListOfTypes.html#Float_t">Float_t</a> win, <a href="./Nc3Vector.html">Nc3Vector</a>* pbeam = 0, <a href="./Nc3Vector.html">Nc3Vector</a>* ptarget = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> wxsec = 1)</span><br />
 <div class="funccomm"><pre> Initialisation of the underlying Pythia generator package for the generation
  of nucleus-nucleus interactions.
  The event number is reset to 0.
 
  Input arguments :
-
+ -----------------
  frame   : <span class="string">"cms"</span>  --&gt; Colliding beam experiment in the nucleon-nucleon CM frame (beam=+z, target=-z direction)
            <span class="string">"fixt"</span> --&gt; Fixed target experiment with beam in the +z direction
            <span class="string">"free"</span> --&gt; System defined by the user via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>
@@ -843,7 +851,7 @@ return false;}
  at      : A value for the (Z,A) target nucleus
  win     : Energy of the system depending on the frame specification.
            frame=<span class="string">"cms"</span>  --&gt; win is the total cms energy (in GeV) per nucleon-nucleon collision
-           frame=<span class="string">"fixt"</span> --&gt; win is the momentum (in GeV/c) per nucleon of the beam
+           frame=<span class="string">"fixt"</span> --&gt; win is the momentum (in GeV/c) per nucleon of the beam 
            frame=<span class="string">"free"</span> --&gt; win&gt;=0 forces event generation in the nucleon-nucleon CMS followed by a Lorentz boost (using <a href="./NcBoost.html">NcBoost</a>)
                             according to the user defined conditions via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span> (see below).
                             For win&gt;0 the nucleon-nucleon CM energy (Ecms) for cross section initialisations is set to the value of <span class="string">"win"</span>.
@@ -856,7 +864,7 @@ return false;}
                             and that the event data in the user frame (defined via <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>) is only available
                             from the produced <a href="./NcEvent.html">NcEvent</a> structure (see memberfunction <a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>).
                             Due to internal Pythia accuracy issues it turns out that forcing the event generation
-                            in the CMS may also result in faster processing.
+                            in the CMS may also result in faster processing.  
                             In case win&lt;0 it is a dummy parameter of which the value is irrelevant and the cross section
                             initialisations are based on the settings of <span class="string">"pbeam"</span> and <span class="string">"ptarget"</span>.
  pbeam   : Beam 3-momentum in GeV/c per nucleon   (only to be provided if frame=<span class="string">"free"</span>).
@@ -866,24 +874,24 @@ return false;}
            at different energies within the same generation run via frame=<span class="string">"free"</span> and <a href="./NcCollider.html#NcCollider:SetMomentum" title="void NcCollider::SetMomentum(Nc3Vector&amp; p,Int_t mode)">SetMomentum</a>().
            The most accurate weighting is obtained by invoking this <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>() function at the interaction
            energy with the highest cross section. In general this is just the highest foreseen energy
-           (e.g. hadron-hadron interactions) or at some resonance (e.g. e+e- interactions).
+           (e.g. hadron-hadron interactions) or at some resonance (e.g. e+e- interactions). 
            Note that with weighting sometimes no event is generated after invoking <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>()
-           to preserve the correct relative number of events for different energies.
+           to preserve the correct relative number of events for different energies. 
            The information whether an event has been generated or not is indicated via the
            return argument of <a href="./NcCollider.html#NcCollider:MakeEvent" title="Int_t NcCollider::MakeEvent(Int_t npt=0,Int_t mlist=-1,Int_t medit=1)">MakeEvent</a>().
 
  By default pbeam=0, ptarget=0 and wxsec=1.
 
- Return value :
-
+ Return value : 
+ --------------
  In case an error occurred, a value 1 will be returned. Otherwise the return value is 0.
 
  Some Pythia default MC parameters are automatically modified to provide
  more suitable running conditions for soft processes in view of
  nucleus-nucleus interactions and astrophysical processes.
 
- The optimisations consist of :
-
+ The optimisations consist of : 
+ ------------------------------
  * No minimum CMS energy is required for initialisation (see <a href="./NcCollider.html#NcCollider:SetEcmsMin" title="void NcCollider::SetEcmsMin(Double_t ecms)">SetEcmsMin</a>).
  * Activation of the default K factor values
    with separate settings for ordinary and color annihilation graphs.
@@ -898,23 +906,23 @@ return false;}
  of multiple interactions via the memberfunction <a href="./NcCollider.html#NcCollider:SetMultiple" title="void NcCollider::SetMultiple(Int_t flag)">SetMultiple</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:GetFractions" href="src/NcCollider.cxx.html#RIhUMD">GetFractions</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> zp, <a href="./ListOfTypes.html#Float_t">Float_t</a> ap, <a href="./ListOfTypes.html#Float_t">Float_t</a> zt, <a href="./ListOfTypes.html#Float_t">Float_t</a> at)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:GetFractions" href="src/NcCollider.cxx.html#lM1Vv">GetFractions</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> zp, <a href="./ListOfTypes.html#Float_t">Float_t</a> ap, <a href="./ListOfTypes.html#Float_t">Float_t</a> zt, <a href="./ListOfTypes.html#Float_t">Float_t</a> at)</span><br />
 <div class="funccomm"><pre> Determine the fractions for the various N-N collision processes.
  The various processes are : p+p, n+p, p+n and n+n.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetMomentum" href="src/NcCollider.cxx.html#Ue74XD">SetMomentum</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetMomentum" href="src/NcCollider.cxx.html#Uh_4XD">SetMomentum</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; p, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
 <div class="funccomm"><pre> Set c.q. modify the beam or target particle 3-momentum in the case frame=<span class="string">"free"</span>.
- Invokation of this function only has effect after the initialisation via <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>().
+ Invokation of this function only has effect after the initialisation via <a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>(). 
 
  Input argument :
-
+ ----------------
  p : Momentum 3-vector in GeV/c
  mode : 1 ==&gt; Modify the beam particle 3-momentum
         2 ==&gt; Modify the target particle 3-momentum
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:MakeEvent" href="src/NcCollider.cxx.html#NQl01C">MakeEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> npt = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mlist = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> medit = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:MakeEvent" href="src/NcCollider.cxx.html#df.61C">MakeEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> npt = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> mlist = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> medit = 1)</span><br />
 <div class="funccomm"><pre> Generate one event.
  In case of a nucleus-nucleus interaction, the argument 'npt' denotes
  the total number of participant nucleons.
@@ -925,7 +933,7 @@ return false;}
  In case the user has selected the creation of vertex structures, the spectator
  tracks will be linked to the primary vertex.
  However, specification of npt&lt;0 will suppress the storage of spectator tracks.
- In the latter case abs(npt) will be taken as the number of participants.
+ In the latter case abs(npt) will be taken as the number of participants.  
  In case of a standard Pythia run for 'elementary' particle interactions,
  the value of npt is totally irrelevant.
 
@@ -935,13 +943,13 @@ return false;}
 
  The argument 'medit' denotes the edit mode used for <a href="./#TPythia6:Pyedit" title="void TPythia6::Pyedit(int medit)">Pyedit</a>().
  Note : medit&lt;0 suppresses the invokation of <a href="./#TPythia6:Pyedit" title="void TPythia6::Pyedit(int medit)">Pyedit</a>().
- By default, only 'stable' final particles are kept (i.e. medit=1).
+ By default, only 'stable' final particles are kept (i.e. medit=1). 
 
  In the case of a standard Pythia run concerning 'elementary' particle
  interactions, the projectile and target particle ID's for the created
  event structure are set to the corresponding Pythia KF codes.
  All the A and Z values are in that case set to zero.
- In case of a nucleus-nucleus interaction, the proper A and Z values for
+ In case of a nucleus-nucleus interaction, the proper A and Z values for 
  the projectile and target particles are set in the event structure.
  However, in this case both particle ID's are set to zero.
 
@@ -952,7 +960,7 @@ return false;}
  or that an error occurred (-1).
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcEvent.html">NcEvent</a>* <a class="funcname" name="NcCollider:GetEvent" href="src/NcCollider.cxx.html#QMtiS">GetEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> select = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcEvent.html">NcEvent</a>* <a class="funcname" name="NcCollider:GetEvent" href="src/NcCollider.cxx.html#jTsiS">GetEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> select = 0) const</span><br />
 <div class="funccomm"><pre> Provide pointer to the generated event structure.
 
  select = 0 : Always return the pointer to the generated event.
@@ -963,18 +971,18 @@ return false;}
  By invoking <a href="./NcCollider.html#NcCollider:GetEvent" title="NcEvent* NcCollider::GetEvent(Int_t select=0)">GetEvent</a>() the default of select=0 will be used.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:EndRun" href="src/NcCollider.cxx.html#XRaU8C">EndRun</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:EndRun" href="src/NcCollider.cxx.html#PSdU8C">EndRun</a>()</span><br />
 <div class="funccomm"><pre> Properly flush last data to the output file and close it (if needed).
  This will also delete the existing output tree connected to this file
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetStable" href="src/NcCollider.cxx.html#IYJatC">SetStable</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cls = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetStable" href="src/NcCollider.cxx.html#UmFatC">SetStable</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> cls = 0)</span><br />
 <div class="funccomm"><pre> Declare whether a particle (class) must be regarded as stable or not.
 
  Input arguments :
-
+ -----------------
  id    = The Pythia KF particle code, which basically is the PDG particle identifier code.
-       = 0 ==&gt; Will invoke the setting for a whole particle class (see below).
+       = 0 ==&gt; Will invoke the setting for a whole particle class (see below).  
  mode  = 1 : The specified particle (class) will be regarded as stable.
          0 : The specified particle (class) will be able to decay.
  cls   = 1 : Quarks
@@ -989,31 +997,31 @@ return false;}
  Default values are mode=1 and cls=0.
 
  Notes :
-
+ -------
  1) This function should be invoked after the initialisation call
     to <a href="./NcCollider.html">NcCollider</a>::<a href="./NcCollider.html#NcCollider:Init" title="Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam=0,Nc3Vector* ptarget=0,Int_t wxsec=1,Double_t fact=0) or overloads">Init</a>.
  2) Due to the internals of Pythia, there is no need to specify particles
     and their corresponding anti-particles separately as (un)stable.
-    Once a particle has been declared (un)stable, the corresponding
+    Once a particle has been declared (un)stable, the corresponding 
     anti-particle will be treated in the same way.
  3) After declaring a whole particle class stable/unstable, specific particles
     can be (re)declared unstable/stable by invoking this function again
     for the specific particle(s).
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SelectEvent" href="src/NcCollider.cxx.html#OoTIcE">SelectEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SelectEvent" href="src/NcCollider.cxx.html#iiX_bE">SelectEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id)</span><br />
 <div class="funccomm"><pre> Add a particle to the event selection list.
  The parameter <span class="string">"id"</span> indicates the Pythia KF particle code, which
  basically is the PDG particle identifier code.
  In case the user has built a selection list via this procedure, only the
  events in which one of the particles specified in the list was generated
- will be kept.
+ will be kept. 
  The investigation of the generated particles takes place when the complete
  event is in memory, including all (shortlived) mother particles and resonances.
  So, the settings of the various particle decay modes have no influence on
  the event selection described here.
 
- If no list has been specified, all events will be accepted.
+ If no list has been specified, all events will be accepted.  
 
  Note : id=0 will delete the selection list.
 
@@ -1023,13 +1031,13 @@ return false;}
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetSelectionFlag" href="src/NcCollider.cxx.html#vYqQsC">GetSelectionFlag</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:GetSelectionFlag" href="src/NcCollider.cxx.html#OCgGrC">GetSelectionFlag</a>() const</span><br />
 <div class="funccomm"><pre> Return the value of the selection flag for the total event.
  When the event passed the selection criteria as specified via
  <a href="./NcCollider.html#NcCollider:SelectEvent" title="void NcCollider::SelectEvent(Int_t id)">SelectEvent</a>() the value 1 is returned, otherwise the value 0 is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:IsSelected" href="src/NcCollider.cxx.html#LItWhC">IsSelected</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcCollider:IsSelected" href="src/NcCollider.cxx.html#DvFehC">IsSelected</a>()</span><br />
 <div class="funccomm"><pre> Check whether the generated (sub)event contains one of the particles
  specified in the selection list via <a href="./NcCollider.html#NcCollider:SelectEvent" title="void NcCollider::SelectEvent(Int_t id)">SelectEvent</a>().
  If this is the case or when no selection list is present, the value 1
@@ -1040,7 +1048,7 @@ return false;}
         also a value 0 will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetSpectatorPmin" href="src/NcCollider.cxx.html#RxuOOC">SetSpectatorPmin</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pmin)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcCollider:SetSpectatorPmin" href="src/NcCollider.cxx.html#AVMxvC">SetSpectatorPmin</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> pmin)</span><br />
 <div class="funccomm"><pre> Set minimal momentum in GeV/c for spectator tracks to be stored.
  Spectator tracks with a momentum below this threshold will not be stored
  in the (output) event structure.
@@ -1048,14 +1056,14 @@ return false;}
  Note that when the user wants to boost the event into another reference
  frame these spectator tracks might have got momenta above the threshold.
  However, when the spectator tracks were not stored in the event structure
- in the original frame, there is no way to retreive them anymore.
+ in the original frame, there is no way to retreive them anymore. 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcCollider:GetSpectatorPmin" href="src/NcCollider.cxx.html#nUN8EE">GetSpectatorPmin</a>() const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcCollider:GetSpectatorPmin" href="src/NcCollider.cxx.html#nE_yxC">GetSpectatorPmin</a>() const</span><br />
 <div class="funccomm"><pre> Provide the minimal spectator momentum in GeV/c.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcCollider:GetPyname" href="src/NcCollider.cxx.html#MxEpuC">GetPyname</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> kf)</span><br />
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcCollider:GetPyname" href="src/NcCollider.cxx.html#mjTSeC">GetPyname</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> kf)</span><br />
 <div class="funccomm"><pre> Provide the correctly truncated Pythia particle name for PGD code kf
 
  The <a href="./#TPythia6:TPythia6" title="TPythia6 TPythia6::TPythia6(const TPythia6&amp; ) or overloads">TPythia6</a>::<a href="./#TPythia6:Pyname" title="void TPythia6::Pyname(int kf,char* name)">Pyname</a> returned name is copied into a TString and truncated
@@ -1065,14 +1073,14 @@ return false;}
  that particle names never contain blanks.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:NcCollider" href="src/NcCollider.h.html#G6.VCC">NcCollider</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcCollider:NcCollider" href="src/NcCollider.h.html#AE9.KB">NcCollider</a>()</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Sep 15 08:01:17 2019 </em><em>&raquo; Last generated: 2019-09-15 08:01</em><br />
+<em>&raquo; Last changed: Tue Feb 15 15:50:19 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

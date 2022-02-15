@@ -33,7 +33,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022  11:54Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  14:51Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -113,7 +113,13 @@ void RnoConvert::AddInputFile(TString file,TString tree)
 // file : Name of the input file to be added (wildcards are allowed)
 // tree : Name of the Tree containing the data
 //
+// Environment variables may be used as $(...) in the filenname for convenience.
+// For example "$(HOME)/my-data/station11/combined.root".
+//
 // Note : The name of the Tree has to be the same for all added input files.
+
+ // Expand the path name of the provided input file
+ file=gSystem->ExpandPathName(file.Data());
 
  if (!fData) fData=new TChain(tree.Data());
 
@@ -135,6 +141,12 @@ void RnoConvert::SetOutputFile(TFile* ofile)
 void RnoConvert::SetOutputFile(TString name)
 {
 // Create the output file for the RnoEvent data.
+//
+// Environment variables may be used as $(...) in the filenname for convenience.
+// For example "$(HOME)/my-data/sample.rnopack".
+
+ // Expand the path name of the specified output file
+ name=gSystem->ExpandPathName(name.Data());
 
  if (fOutfile) delete fOutfile;
  fOutfile=new TFile(name.Data(),"RECREATE","RNO-G data in RnoEvent structure");

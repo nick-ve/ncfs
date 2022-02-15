@@ -174,7 +174,7 @@
 // fstat.ExecuteTask();
 //
 //--- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 15, 2021  07:24Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  13:59Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDataStreamStats.h"
@@ -682,9 +682,15 @@ void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)
 //
 // Notes :
 // -------
-// 1) This memberfunction may be invoked several times to accumulate data files.
-// 2) The "tree" name may vary for different input files, but the "branch" name
+//
+// 1) Environment variables may be used as $(...) in the filenname for convenience.
+//    For example "$(HOME)/my-data/sample.ncfspack".
+// 2) This memberfunction may be invoked several times to accumulate data files.
+// 3) The "tree" name may vary for different input files, but the "branch" name
 //    has to be the same for all the input files.
+
+ // Expand the path name of the provided input file
+ file=gSystem->ExpandPathName(file.Data());
 
  // Initialise the master data Chain and the Branch name if needed
  if (!fData)

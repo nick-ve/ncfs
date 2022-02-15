@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "TSystem.h"
 #include "TTask.h"
 #include "TFile.h"
 #include "TChain.h"
@@ -47,6 +48,6 @@ class NcDataStreamStats : public TTask
   TObjArray* fAct;     // Array with activated tags
   TObjArray* fDeact;   // Array with de-activated tags
  
- ClassDef(NcDataStreamStats,3) // Provide event classification tag statistics.
+ ClassDef(NcDataStreamStats,4) // Provide event classification tag statistics.
 };
 #endif

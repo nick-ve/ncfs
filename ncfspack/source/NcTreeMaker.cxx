@@ -27,8 +27,6 @@
  * resulting from your use of this software.                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcTreeMaker.cxx 93 2014-02-06 19:59:16Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class NcTreeMaker
 // TTask based processor to convert NCFS generic event structures into a plain
@@ -107,7 +105,7 @@
 // mktree.CloseTree();
 //
 //--- Author: Nick van Eijndhoven 03-apr-2008 Utrecht University
-//- Modified: NvE $Date: 2014-02-06 20:59:16 +0100 (Thu, 06 Feb 2014) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  14:33Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcTreeMaker.h"
@@ -429,7 +427,13 @@ void NcTreeMaker::SetOutputFile(TString fname,TString ftitle,TString tname,TStri
 // tname  : Name of the overall output tree to be created.
 // ttitle : Title of the overall output tree to be created.
 //
+// Environment variables may be used as $(...) in the filenname for convenience.
+// For example "$(HOME)/my-data/sample.root".
+//
 // By default tname="Data" and ttitle="All event data".
+
+ // Expand the path name of the specified output file
+ fname=gSystem->ExpandPathName(fname.Data());
 
  if (fOutfile) delete fOutfile;
  fOutfile=new TFile(fname.Data(),"RECREATE",ftitle.Data());
