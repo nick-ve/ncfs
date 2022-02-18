@@ -1,6 +1,6 @@
 ##############################################################
 # HTCondor submit description file template to process the
-# conversion of an HDF dataset into FITS format.
+# conversion of a 1D HDF dataset into a FITS Table column.
 #
 # The file sequence at the "queue" command below
 # represents the input data files to be processed
@@ -21,22 +21,22 @@
 # together with the Cluster and Process name. 
 #
 # The actual shell script for processing is contained
-# in the file hdf2fits-dataset.sh, which in turn invokes
-# the file hdf2fits-dataset.py containing the python script.
+# in the file hdf2fits-column.sh, which in turn invokes
+# the file hdf2fits-column.py containing the python script.
 #
 # In order to launch the batch execution, the files
-# hdf2fits-dataset.sh and hdf2fits-dataset.py have to reside
+# hdf2fits-column.sh and hdf2fits-column.py have to reside
 # in the directory from which this script is invoked.
 #
 # To launch the job(s) issue the command ($ = prompt) :
 #
-# $ condor_submit hdf2fits-dataset.sub
+# $ condor_submit hdf2fits-column.sub
 #
 # All log files will be returned into the (working aka host)
 # directory from which the job was launched.
 # 
 # Nick van Eijndhoven, IIHE-VUB, Brussels.
-# UTC February 18, 2022  17:36
+# UTC February 18, 2022  17:17
 ##############################################################
 
 universe   = vanilla
@@ -46,7 +46,7 @@ HOSTDIR    = $ENV(PWD)
 
 OUTPUTDIR  = $(HOSTDIR)
 
-DATASET    = MCMuon
+DATASET    = azimuths
 
 # Enable the HTCondor file transfer mechanism
 should_transfer_files = YES
@@ -54,9 +54,9 @@ should_transfer_files = YES
 # Suppress the automatic transfer of output files (except for log files)
 transfer_output_files=""
 
-executable = hdf2fits-dataset.sh
+executable = hdf2fits-column.sh
 
-batch_name = hdf2fits-dataset
+batch_name = hdf2fits-column
 
 JOBNAME    = $(batch_name)$(Process)
 
@@ -69,5 +69,5 @@ error      = $(joblog)
 output     = $(joblog)
 log        = $(sublog)
 
-queue filename matching files $(HOSTDIR)/Gen2*.hdf5
+queue filename matching files $(HOSTDIR)/test.hdf5
 

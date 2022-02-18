@@ -2,14 +2,14 @@
 
 ####################################################
 # Shell script to process the conversion of
-# an HDF dataset into FITS format.
+# a 1D HDF dataset into aFITS Table column.
 #
 # This shell script is launched by the
-# hdf2fits-dataset.sub HTCondor job description script.
-# See the file hdf2fits-dataset.sub for further details.
+# hdf2fits-column.sub HTCondor job description script.
+# See the file hdf2fits-column.sub for further details.
 #
 # Nick van Eijndhoven, IIHE-VUB, Brussels.
-# UTC February 18, 2022  17:37
+# UTC February 18, 2022  17:14
 ####################################################
 
 export JOBNAME=$1
@@ -48,7 +48,7 @@ echo " "
 cd $SLAVEDIR
 
 ### Import the necessary input file(s)
-cp $HOSTDIR/hdf2fits-dataset.py script.py
+cp $HOSTDIR/hdf2fits-column.py script.py
 cp $INPUTFILE data.hdf
 
 ### Load the Python environment

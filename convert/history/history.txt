@@ -9,3 +9,7 @@
                 Also the determination of the file basename modified in the
                 various shell scripts to enable the treatment of arbitrary 
                 file extensions of the input files.
+18-feb-2022 NvE Scripts for conversion of a 1D HDF dataset into a FITS Table column
+                (hdf2fits-column) added.
+                Also the dataset name added to the FITS output filename for
+                hdf2fits-dataset.sh and hdf2fits-dataset.sub. 
