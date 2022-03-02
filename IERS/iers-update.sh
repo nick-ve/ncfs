@@ -5,13 +5,13 @@
 # The data are stored in the directory $NCFS/IERS.
 #
 # At the IIHE computer cluster I have set up a personal crontab entry
-# to automatically execute this script on a daily basis at 02:00h.
+# to automatically execute this script on a daily basis at 01:00h.
 #
 # The option -N at the wget command ensures to only retrieve the file
 # when the timestamp at the server is newer than the local one.
 # This will avoid unnecessary data transport.
 #
-# Nick van Eijndhoven, IIHE-VUB, Brussel March 2, 2022  09:44Z
+# Nick van Eijndhoven, IIHE-VUB, Brussel March 2, 2022  13:13Z
 #######################################################################
 
 ### Go to the $NCFS/IERS directory
