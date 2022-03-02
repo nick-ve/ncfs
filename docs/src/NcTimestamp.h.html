@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Feb 15 15:50:20 2022            -->
+<!--   Date: Wed Mar  2 14:00:18 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -84,7 +84,7 @@
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcTimestamp.html#NcTimestamp:GetUnixTime" title="Double_t NcTimestamp::GetUnixTime()">GetUnixTime</a>(); <span class="comment">// Provide the corresponding Unix time (fractional) second count</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a>&amp; leap,<a href="../ListOfTypes.html#Double_t">Double_t</a>&amp; dut) <span class="keyword">const</span>;           <span class="comment">// Provide the UTC parameters</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> mjd,<a href="../ListOfTypes.html#Int_t">Int_t</a>&amp; leap,<a href="../ListOfTypes.html#Double_t">Double_t</a>&amp; dut) <span class="keyword">const</span>; <span class="comment">// Provide the UTC parameters for MJD from the IERS data</span>
-  TTree* <a href="../NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(TString leapfile,TString dutfile); <span class="comment">// Load IERS data for automatic setting of Leap Seconds and dUT=UT-UTC</span>
+  TTree* <a href="../NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>(TString leapfile=<span class="string">"$(NCFS)/IERS/leap.txt"</span>,TString dutfile=<span class="string">"$(NCFS)/IERS/dut.txt"</span>); <span class="comment">// Load IERS data for automatic setting of Leap Seconds and dUT=UT-UTC</span>
   TTree* <a href="../NcTimestamp.html#NcTimestamp:GetIERSdatabase" title="TTree* NcTimestamp::GetIERSdatabase()">GetIERSdatabase</a>() <span class="keyword">const</span>; <span class="comment">// Provide the pointer to the internal IERS database TTree</span>
   <span class="keyword">void</span> <a href="../NcTimestamp.html#NcTimestamp:SetNs" title="void NcTimestamp::SetNs(Int_t ns)">SetNs</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> ns);                                 <span class="comment">// <a href="../#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the remaining fractional number of sec in nanoseconds</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcTimestamp.html#NcTimestamp:GetNs" title="Int_t NcTimestamp::GetNs()">GetNs</a>() <span class="keyword">const</span>;                                  <span class="comment">// Provide remaining fractional number of sec in nanoseconds</span>
@@ -149,7 +149,7 @@
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcTimestamp.html#NcTimestamp:fCalcs" title="Int_t NcTimestamp::fCalcs">fCalcs</a>;      <span class="comment">// The <a href="../#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> seconds counter value at Julian parameter calculation</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcTimestamp.html#NcTimestamp:fCalcns" title="Int_t NcTimestamp::fCalcns">fCalcns</a>;     <span class="comment">// The <a href="../#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> nanoseconds counter value at Julian parameter calculation</span>
 
- ClassDef(<a href="../NcTimestamp.html">NcTimestamp</a>,13) <span class="comment">// Handling of timestamps for (astro)particle physics research.</span>
+ ClassDef(<a href="../NcTimestamp.html">NcTimestamp</a>,14) <span class="comment">// Handling of timestamps for (astro)particle physics research.</span>
 };
 <span class="cpp">#endif</span>
 </pre>
@@ -160,7 +160,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2022-02-15 15:50 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
+<em>&raquo; Last changed: 2022-03-02 14:00 </em><em>&raquo; Last generated: 2022-03-02 14:00</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Feb 15 15:50:19 2022            -->
+<!--   Date: Wed Mar  2 14:00:17 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -121,7 +121,7 @@ return false;}
     The accuracy of dUT=UT1-UTC is about 10 microseconds, so in case of accurate astronomical
     timing the user is advised to specify dUT in the various <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a>() facilities or use <a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>().
     An automatic setting of dUT is provided based on the IERS data files.
-    Please refer to the member function <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() for further details.
+    Please refer to the member function <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() for further details.
 
  4) In some cases Unix Time (also called POSIX Time or UNIX Epoch Time) is used.
     Unix Time is closely releated to UTC and represents the (fractional) elapsed second count
@@ -297,13 +297,13 @@ return false;}
  // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Universal Time (UTC)
  // and also record UT1 and the corresponding International Atomic Time (TAI)
  // using automatic <span class="string">"leap"</span> and <span class="string">"dut"</span> settings from the IERS data files
- t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
+ t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
  t.<a href="./NcTimestamp.html#NcTimestamp:SetUT" title="void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc=&quot;A&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetUT</a>(<span class="string">"17-05-2011"</span>,<span class="string">"05:43:18.31468"</span>,0,<span class="string">"A"</span>);
 
  // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> a specific <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>/Time in Global Positioning System time (GPS)
  // and also record the corresponding Universal Times (UTC and UT1) and TAI
  // using automatic <span class="string">"leap"</span> and <span class="string">"dut"</span> settings from the IERS data files
- t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
+ t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
  t.<a href="./NcTimestamp.html#NcTimestamp:SetTAI" title="Int_t NcTimestamp::SetTAI(TString type,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut=0) or overloads">SetTAI</a>(<span class="string">"GPS"</span>,<span class="string">"17-05-2011"</span>,<span class="string">"05:43:18.31468"</span>,0,<span class="string">"A"</span>,0,0);
 
  // Retrieve Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> to ns precision
@@ -335,7 +335,7 @@ return false;}
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjsec=1528;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjns=185643;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjps=35;
- t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
+ t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
  t.<a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjd,mjsec,mjns,mjps,<span class="string">"A"</span>);
 
  t.<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
@@ -347,7 +347,7 @@ return false;}
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjsec=1528;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjns=185643;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> mjps=35;
- t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
+ t.<a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>(<span class="string">"leap.txt"</span>,<span class="string">"dut.txt"</span>);
  t.<a href="./NcTimestamp.html#NcTimestamp:SetMJD" title="void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps=0,TString utc=&quot;U&quot;,Int_t leap=0,Double_t dut=0) or overloads">SetMJD</a>(mjd,mjsec,mjns,mjps,<span class="string">"U"</span>);
 
  t.<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
@@ -390,7 +390,7 @@ return false;}
  <a href="./ListOfTypes.html#Double_t">Double_t</a> epoch=t.<a href="./NcTimestamp.html#NcTimestamp:GetJE" title="Double_t NcTimestamp::GetJE(Double_t date,TString mode=&quot;jd&quot;) or overloads">GetJE</a>(mjdate,<span class="string">"mjd"</span>);
 
 --- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 15, 2022  13:16Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 2, 2022  13:30Z
 
 </pre></div>
 </div></div>
@@ -480,7 +480,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:IsLeapYear@1"><span class="baseclass">TTimeStamp::</span>IsLeapYear</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:IsLeapYear"><span class="baseclass">TTimeStamp::</span>IsLeapYear</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#NcTimestamp:IsUT1">IsUT1</a>() <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="#NcTimestamp:LoadUTCparameterFiles">LoadUTCparameterFiles</a>(TString leapfile, TString dutfile)</td></tr>
+<tr class="func"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="#NcTimestamp:LoadUTCparameterFiles">LoadUTCparameterFiles</a>(TString leapfile = <span class="string">"$(NCFS)/IERS/leap.txt"</span>, TString dutfile = <span class="string">"$(NCFS)/IERS/dut.txt"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#time_t">time_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:MktimeFromUTC"><span class="baseclass">TTimeStamp::</span>MktimeFromUTC</a>(<a href="./ListOfTypes.html#tm_t">tm_t</a>* tmstruct)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TTimeStamp:operator_double"><span class="baseclass">TTimeStamp::</span>operator double</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcTimestamp.html">NcTimestamp</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcTimestamp:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcTimestamp.html">NcTimestamp</a>&amp;)</td></tr>
@@ -1119,7 +1119,7 @@ return false;}
                 The date/time that was specified represents UTC, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
@@ -1190,7 +1190,7 @@ return false;}
                 The date/time that was specified represents UTC, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
@@ -1261,7 +1261,7 @@ return false;}
                 The date/time that was specified represents UTC, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
@@ -1332,7 +1332,7 @@ return false;}
                 The date/time that was specified represents UTC, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
@@ -1403,7 +1403,7 @@ return false;}
                 The date/time that was specified represents UTC, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
@@ -1474,7 +1474,7 @@ return false;}
                 The date/time that was specified represents UTC, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The date/time that was specified represents UT1, and serves as the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that the reference time represents UT1.
@@ -1558,7 +1558,7 @@ return false;}
     Also JD=0 will be set to indicate that something went wrong.
     The same holds in case utc=<span class="string">"A"</span> and no data files have been loaded, or no
     IERS information for the provided date/time is available.
- 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+ 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>().
  3) In case a date/time setting outside the range of the IERS information is required,
     the manual setting of <span class="string">"leap"</span> and <span class="string">"dut"</span> has to be invoked.
 </pre></div>
@@ -1605,7 +1605,7 @@ return false;}
     Also JD=0 will be set to indicate that something went wrong.
     The same holds in case utc=<span class="string">"A"</span> and no data files have been loaded, or no
     IERS information for the provided date/time is available.
- 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+ 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>().
  3) In case a date/time setting outside the range of the IERS information is required,
     the manual setting of <span class="string">"leap"</span> and <span class="string">"dut"</span> has to be invoked.
  4) The <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> EPOCH starts at 01-jan-1970 00:00:00 UT
@@ -1668,7 +1668,7 @@ return false;}
     Also JD=0 will be set to indicate that something went wrong.
     The same holds in case utc=<span class="string">"A"</span> and no data files have been loaded, or no
     IERS information for the provided date/time is available.
- 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+ 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>().
  3) In case a date/time setting outside the range of the IERS information is required,
     the manual setting of <span class="string">"leap"</span> and <span class="string">"dut"</span> has to be invoked.
  4) The <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> EPOCH starts at 01-jan-1970 00:00:00 UT
@@ -1736,7 +1736,7 @@ return false;}
     Also JD=0 will be set to indicate that something went wrong.
     The same holds in case utc=<span class="string">"A"</span> and no data files have been loaded, or no
     IERS information for the provided date/time is available.
- 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+ 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>().
  3) In case a date/time setting outside the range of the IERS information is required,
     the manual setting of <span class="string">"leap"</span> and <span class="string">"dut"</span> has to be invoked.
 </pre></div>
@@ -1789,7 +1789,7 @@ return false;}
     Also JD=0 will be set to indicate that something went wrong.
     The same holds in case utc=<span class="string">"A"</span> and no data files have been loaded, or no
     IERS information for the provided date/time is available.
- 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+ 2) For the available IERS information please refer to the docs of <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>().
  3) In case a date/time setting outside the range of the IERS information is required,
     the manual setting of <span class="string">"leap"</span> and <span class="string">"dut"</span> has to be invoked.
 </pre></div>
@@ -1955,7 +1955,7 @@ return false;}
                 may be used by the calling function to determine UT1, which may then become the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+                For further details see the memberfunction <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>().
         <span class="string">"U"</span> ==&gt; The time that was specified c.q. stored represents UT1, which will remain the reference time.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
@@ -1983,7 +1983,7 @@ return false;}
     or via one of the Julian <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a> facilities was actually UT1.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TTree* <a class="funcname" name="NcTimestamp:LoadUTCparameterFiles" href="src/NcTimestamp.cxx.html#vBG1gE">LoadUTCparameterFiles</a>(TString leapfile, TString dutfile)</span><br />
+<div class="funcdoc"><span class="funcname">TTree* <a class="funcname" name="NcTimestamp:LoadUTCparameterFiles" href="src/NcTimestamp.cxx.html#vBG1gE">LoadUTCparameterFiles</a>(TString leapfile = <span class="string">"$(NCFS)/IERS/leap.txt"</span>, TString dutfile = <span class="string">"$(NCFS)/IERS/dut.txt"</span>)</span><br />
 <div class="funccomm"><pre> Load the IERS data for automatic setting of Leap Seconds and dUT=UT1-UTC.
 
  For the current timestamp the corresponding Leap seconds and dUT are set.
@@ -2001,6 +2001,11 @@ return false;}
 
  Environment variables may be used as $(...) in the filennames for convenience.
  For example <span class="string">"$(HOME)/my-iers/leap.txt"</span>.
+
+ The default file names are :
+
+ leapfile=<span class="string">"$(NCFS)/IERS/leap.txt"</span>
+ dutfile=<span class="string">"$(NCFS)/IERS/dut.txt"</span>
 
  The corresponding daily values of the accumulated Leap Seconds and dUT=UT1-UTC
  are stored in an internal ROOT TTree.
@@ -2024,7 +2029,7 @@ return false;}
 <div class="funcdoc"><span class="funcname">TTree* <a class="funcname" name="NcTimestamp:GetIERSdatabase" href="src/NcTimestamp.cxx.html#Lzc9F">GetIERSdatabase</a>() const</span><br />
 <div class="funccomm"><pre> Provide the pointer to the internal IERS database TTree.
  In case no database TTree exists the pointer value 0 will be returned.
- For details please refer to the member function <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>().
+ For details please refer to the member function <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>().
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTimestamp:Add" href="src/NcTimestamp.cxx.html#HqLn8C">Add</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0)</span><br />
@@ -2393,7 +2398,7 @@ return false;}
                 will be used to determine UT1, which will from now on be the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
@@ -2462,7 +2467,7 @@ return false;}
                 will be used to determine UT1, which will from now on be the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
@@ -2522,7 +2527,7 @@ return false;}
                 will be used to determine UT1, which will from now on be the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
@@ -2584,7 +2589,7 @@ return false;}
                 will be used to determine UT1, which will from now on be the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
@@ -2652,7 +2657,7 @@ return false;}
                 will be used to determine UT1, which will from now on be the reference time.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
                 In case the corresponding UTC parameters are not found, this mode is equivalent to utc=<span class="string">"N"</span>.
-                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
+                For further details see the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>().
         <span class="string">"U"</span> ==&gt; The time that was specified represents UT1, which will become the reference time.
                 This mode is equivalent to utc=<span class="string">"A"</span> apart from the fact that UT1 will not be modified.
                 The retrieved UTC parameters will serve to determine the TAI related time recording.
@@ -3274,7 +3279,7 @@ return false;}
 
  1) TAI related date/time info (i.e. TAI, UTC, GPS and TT) is only available if
     UTC parameters were provided.
-    Please refer to the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>() for details.
+    Please refer to the memberfunctions <a href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles" title="TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;,TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)">LoadUTCparameterFiles</a>() and <a href="./NcTimestamp.html#NcTimestamp:GetUTCparameters" title="Int_t NcTimestamp::GetUTCparameters(Int_t&amp; leap,Double_t&amp; dut) or overloads">GetUTCparameters</a>() for details.
  2) In case the MJD falls outside the <a href="./#TTimeStamp:TTimeStamp" title="TTimeStamp TTimeStamp::TTimeStamp() or overloads">TTimeStamp</a> range, the date info will be omitted.
 </pre></div>
 </div>
@@ -3294,7 +3299,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Tue Feb 15 15:50:20 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
+<em>&raquo; Last changed: Wed Mar  2 14:00:18 2022 </em><em>&raquo; Last generated: 2022-03-02 14:00</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

@@ -63,7 +63,7 @@ class NcTimestamp : public TTimeStamp
   Double_t GetUnixTime(); // Provide the corresponding Unix time (fractional) second count
   Int_t GetUTCparameters(Int_t& leap,Double_t& dut) const;           // Provide the UTC parameters
   Int_t GetUTCparameters(Int_t mjd,Int_t& leap,Double_t& dut) const; // Provide the UTC parameters for MJD from the IERS data
-  TTree* LoadUTCparameterFiles(TString leapfile,TString dutfile); // Load IERS data for automatic setting of Leap Seconds and dUT=UT-UTC
+  TTree* LoadUTCparameterFiles(TString leapfile="$(NCFS)/IERS/leap.txt",TString dutfile="$(NCFS)/IERS/dut.txt"); // Load IERS data for automatic setting of Leap Seconds and dUT=UT-UTC
   TTree* GetIERSdatabase() const; // Provide the pointer to the internal IERS database TTree
   void SetNs(Int_t ns);                                 // Set the remaining fractional number of sec in nanoseconds
   Int_t GetNs() const;                                  // Provide remaining fractional number of sec in nanoseconds
@@ -128,6 +128,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,13) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,14) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

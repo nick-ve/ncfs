@@ -1310,4 +1310,6 @@
                 The version indicator in NcVersion has been updated to 4.8.6.
 02-mar-2022 NvE New folder /IERS introduced containing a shell script to import c.q. update the IERS
                 Leap-Second and dUT data. These (updated) data will also be placed in the /IERS folder,
-                together with a log file of the performed update.  
+                together with a log file of the performed update.
+                These IERS data files have now been set as default file names in NcTimestamp::LoadUTCparameterFiles(). 
+                The version indicator in NcVersion has been updated to 4.8.7.

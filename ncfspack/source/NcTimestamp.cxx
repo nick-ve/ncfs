@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 15, 2022  13:16Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 2, 2022  13:30Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -2713,6 +2713,11 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 //
 // Environment variables may be used as $(...) in the filennames for convenience.
 // For example "$(HOME)/my-iers/leap.txt".
+//
+// The default file names are :
+// ----------------------------
+// leapfile="$(NCFS)/IERS/leap.txt"
+// dutfile="$(NCFS)/IERS/dut.txt"
 //
 // The corresponding daily values of the accumulated Leap Seconds and dUT=UT1-UTC
 // are stored in an internal ROOT TTree.
