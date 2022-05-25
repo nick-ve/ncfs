@@ -1313,3 +1313,8 @@
                 together with a log file of the performed update.
                 These IERS data files have now been set as default file names in NcTimestamp::LoadUTCparameterFiles(). 
                 The version indicator in NcVersion has been updated to 4.8.7.
+25-may-2022 NvE Functionality of class NcSample extended by the introduction of functions to enable generic
+                weight and error setting for extracted histograms and graphs.
+                This includes also a facility to extend a TGraph or TGraph2D into TGraphErrors or TGraph2DErrors, respectively.
+                Also direct treatment of a TGraph object introduced in class NcBlocks.
+                The version indicator in NcVersion has been updated to 4.8.8.

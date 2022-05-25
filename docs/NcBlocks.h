@@ -22,12 +22,13 @@ class NcBlocks
   Double_t GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t ntrig=0); // Get Bayesian Block partitions for the given data array
   Double_t GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t ntrig=0); // Get Bayesian Block partitions for the given data array
   Double_t GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig=0); // Get Bayesian Block partitions for measurements of an observable
+  Double_t GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig=0); // Get Bayesian Block partitions for measurements of an observable
 
  protected:
   Int_t fMode; // The Data Mode
   Double_t GetPrior(Int_t n,Double_t fpr);           // Provide the prior fitness value for each block
   Double_t GetBlockFitness(Double_t n,Double_t len); // Provide the block fitness for Data Modes 1 and 2 
 
- ClassDef(NcBlocks,1) // Bayesian Block treatment of sequential data
+ ClassDef(NcBlocks,2) // Bayesian Block treatment of sequential data
 };
 #endif

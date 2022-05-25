@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Dec 12 13:52:01 2021            -->
+<!--   Date: Wed May 25 22:23:08 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -91,7 +91,7 @@ return false;}
  a Switched Capacitor Array (SCA) and an Analog to Digital Converter (ADC).
 
  Interfaces with various graphics facilities are provided like for instance
- <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100) or overloads">Get1DHistogram</a>(), <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a>() etc...
+ <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i,TF1* f=0) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100,TF1* f=0) or overloads">Get1DHistogram</a>(), <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a>() etc...
 
  Example :
 
@@ -104,7 +104,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 12, 2021  13:42Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 25, 2022  20:21Z
 
 </pre></div>
 </div></div>
@@ -151,12 +151,12 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">TH1D</td><td class="funcname"><a class="funcname" href="#NcSample:Get1DHistogram">Get1DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</td></tr>
-<tr class="func"><td class="funcret">TH1D</td><td class="funcname"><a class="funcname" href="#NcSample:Get1DHistogram@1">Get1DHistogram</a>(TString nameA, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</td></tr>
-<tr class="func"><td class="funcret">TH2D</td><td class="funcname"><a class="funcname" href="#NcSample:Get2DHistogram">Get2DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</td></tr>
-<tr class="func"><td class="funcret">TH2D</td><td class="funcname"><a class="funcname" href="#NcSample:Get2DHistogram@1">Get2DHistogram</a>(TString nameA, TString nameB, TString nameC = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</td></tr>
-<tr class="func"><td class="funcret">TH3D</td><td class="funcname"><a class="funcname" href="#NcSample:Get3DHistogram">Get3DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> m = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</td></tr>
-<tr class="func"><td class="funcret">TH3D</td><td class="funcname"><a class="funcname" href="#NcSample:Get3DHistogram@1">Get3DHistogram</a>(TString nameA, TString nameB, TString nameC, TString nameD = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</td></tr>
+<tr class="func"><td class="funcret">TH1D</td><td class="funcname"><a class="funcname" href="#NcSample:Get1DHistogram">Get1DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TH1D</td><td class="funcname"><a class="funcname" href="#NcSample:Get1DHistogram@1">Get1DHistogram</a>(TString nameA, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TH2D</td><td class="funcname"><a class="funcname" href="#NcSample:Get2DHistogram">Get2DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TH2D</td><td class="funcname"><a class="funcname" href="#NcSample:Get2DHistogram@1">Get2DHistogram</a>(TString nameA, TString nameB, TString nameC = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TH3D</td><td class="funcname"><a class="funcname" href="#NcSample:Get3DHistogram">Get3DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> m = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TH3D</td><td class="funcname"><a class="funcname" href="#NcSample:Get3DHistogram@1">Get3DHistogram</a>(TString nameA, TString nameB, TString nameC, TString nameD = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100, TF1* f = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCor">GetCor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCor@1">GetCor</a>(TString nameA, TString nameB) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCov">GetCov</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
@@ -168,14 +168,18 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry@1">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString nameA, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TString nameB = <span class="string">"-"</span>)</td></tr>
-<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
-<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(TString nameA)</td></tr>
-<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@2">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</td></tr>
-<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@3">GetGraph</a>(TString nameA, TString nameB)</td></tr>
-<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@6">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</td></tr>
-<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@7">GetGraph</a>(TString nameA, TString nameB, TString nameC)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(TString nameA, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@2">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@3">GetGraph</a>(TString nameA, TString nameB, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@6">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@7">GetGraph</a>(TString nameA, TString nameB, TString nameC, TF1* f = 0)</td></tr>
 <tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@4">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@5">GetGraph</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret">TGraph2DErrors</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph2DErrors">GetGraph2DErrors</a>(TGraph2D* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> ix = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iy = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iz = 0, TF1* fx = 0, TF1* fy = 0, TF1* fz = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph2DErrors</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph2DErrors@1">GetGraph2DErrors</a>(TGraph2D* g, TString nameA, TString nameB, TString nameC, TF1* fx = 0, TF1* fy = 0, TF1* fz = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraphErrors</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraphErrors">GetGraphErrors</a>(TGraph* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> ix = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iy = 0, TF1* fx = 0, TF1* fy = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraphErrors</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraphErrors@1">GetGraphErrors</a>(TGraph* g, TString nameA, TString nameB, TF1* fx = 0, TF1* fy = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetIndex">GetIndex</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetMaximum">GetMaximum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
@@ -970,32 +974,38 @@ return false;}
  The default values are mode=0 and k=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram" href="src/NcSample.cxx.html#ZncBNE">Get1DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</span><br />
+<div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram" href="src/NcSample.cxx.html#jUM_DE">Get1DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TH1D histogram with the values of variable i.
  If j&gt;0 the corresponding value of variable j will be used as a weight.
+ In case j&gt;0 and also the 1-dimensional function <span class="string">"f"</span> is specified,
+ then the function value of variable j will be used as a weight.
  The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The input argument <span class="string">"nbx"</span> defines the number of bins on the X-axis.
  The first variable has index 1.
 
  Note : This facility is only available if the storage mode has been activated.
 
- The default values are j=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and nbx=100.
+ The default values are j=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100 and f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram@1" href="src/NcSample.cxx.html#HYI4wC">Get1DHistogram</a>(TString nameA, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100)</span><br />
+<div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:Get1DHistogram@1" href="src/NcSample.cxx.html#RHnewE">Get1DHistogram</a>(TString nameA, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TH1D histogram for the variable specified with nameA.
  If nameB is valid, the corresponding value of that variable will be used as a weight.
+ In case nameB is valid and also the 1-dimensional function <span class="string">"f"</span> is specified,
+ then the function value of nameB will be used as a weight.
  The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The input argument <span class="string">"nbx"</span> defines the number of bins on the X-axis.
 
  Note : This facility is only available if the storage mode has been activated.
 
- The default values are nameB=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and nbx=100.
+ The default values are nameB=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100 and f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TH2D <a class="funcname" name="NcSample:Get2DHistogram" href="src/NcSample.cxx.html#x6QgNE">Get2DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</span><br />
+<div class="funcdoc"><span class="funcname">TH2D <a class="funcname" name="NcSample:Get2DHistogram" href="src/NcSample.cxx.html#jh2zIE">Get2DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TH2D histogram for the values of variables i and j.
  If k&gt;0 the corresponding value of variable k will be used as a weight.
+ In case k&gt;0 and also the 1-dimensional function <span class="string">"f"</span> is specified,
+ then the function value of variable k will be used as a weight.
  The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The input arguments <span class="string">"nbx"</span> and <span class="string">"nby"</span> define the number of bins on the X-axis
  and Y-axis, respectively.
@@ -1003,24 +1013,28 @@ return false;}
 
  Note : This facility is only available if the storage mode has been activated.
 
- The default values are k=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100 and nby=100.
+ The default values are k=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100 and f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TH2D <a class="funcname" name="NcSample:Get2DHistogram@1" href="src/NcSample.cxx.html#Fc2kAD">Get2DHistogram</a>(TString nameA, TString nameB, TString nameC = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100)</span><br />
+<div class="funcdoc"><span class="funcname">TH2D <a class="funcname" name="NcSample:Get2DHistogram@1" href="src/NcSample.cxx.html#zPPawC">Get2DHistogram</a>(TString nameA, TString nameB, TString nameC = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TH2D histogram for the variables specified with nameA and nameB.
  If nameC is valid, the corresponding value of that variable will be used as a weight.
+ In case nameC is valid and also the 1-dimensional function <span class="string">"f"</span> is specified,
+ then the function value of nameC will be used as a weight.
  The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The input arguments <span class="string">"nbx"</span> and <span class="string">"nby"</span> define the number of bins on the X-axis
  and Y-axis, respectively.
 
  Note : This facility is only available if the storage mode has been activated.
 
- The default values are nameC=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100 and nby=100.
+ The default values are nameC=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100 and f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TH3D <a class="funcname" name="NcSample:Get3DHistogram" href="src/NcSample.cxx.html#NHDrlB">Get3DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> m = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</span><br />
+<div class="funcdoc"><span class="funcname">TH3D <a class="funcname" name="NcSample:Get3DHistogram" href="src/NcSample.cxx.html#W0J7lB">Get3DHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Int_t">Int_t</a> m = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TH3D histogram for the values of variables i, j and k.
  If m&gt;0 the corresponding value of variable m will be used as a weight.
+ In case m&gt;0 and also the 1-dimensional function <span class="string">"f"</span> is specified,
+ then the function value of variable m will be used as a weight.
  The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The input arguments <span class="string">"nbx"</span>, <span class="string">"nby"</span> and <span class="string">"nbz"</span> define the number of bins on the X-axis,
  Y-axis and Z-axis, respectively.
@@ -1028,45 +1042,143 @@ return false;}
 
  Note : This facility is only available if the storage mode has been activated.
 
- The default values are m=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100 and nbz=100.
+ The default values are m=0, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100, nbz=100 and f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TH3D <a class="funcname" name="NcSample:Get3DHistogram@1" href="src/NcSample.cxx.html#RShhSB">Get3DHistogram</a>(TString nameA, TString nameB, TString nameC, TString nameD = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100)</span><br />
+<div class="funcdoc"><span class="funcname">TH3D <a class="funcname" name="NcSample:Get3DHistogram@1" href="src/NcSample.cxx.html#EIaZ2B">Get3DHistogram</a>(TString nameA, TString nameB, TString nameC, TString nameD = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> sumw2 = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbx = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nby = 100, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbz = 100, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TH3D histogram for the variables specified with nameA, nameB and nameC.
  If nameD is valid, the corresponding value of that variable will be used as a weight.
+ In case nameD is valid and also the 1-dimensional function <span class="string">"f"</span> is specified,
+ then the function value of nameD will be used as a weight.
  The input argument <span class="string">"sumw2"</span> activates (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) TH1::Sumw2() option or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The input arguments <span class="string">"nbx"</span>, <span class="string">"nby"</span> and <span class="string">"nbz"</span> define the number of bins on the X-axis,
  Y-axis and Z-axis, respectively.
 
  Note : This facility is only available if the storage mode has been activated.
 
- The default values are nameD=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100 and nbz=100.
+ The default values are nameD=<span class="string">"-"</span>, sumw2=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, nbx=100, nby=100, nbz=100 and f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph" href="src/NcSample.cxx.html#Tg3xKE">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph" href="src/NcSample.cxx.html#f4xG8C">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable i.
+ In case the 1-dimensional function <span class="string">"f"</span> is specified, then the
+ function value of variable i will be used as at the Y-axis.
  The first variable has index 1.
 
  Note : This facility is only available if the storage mode has been activated.
+
+ The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#ckC9dE">GetGraph</a>(TString nameA)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#tnzSJC">GetGraph</a>(TString nameA, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable with nameA.
+ In case the 1-dimensional function <span class="string">"f"</span> is specified, then the
+ function value of nameA will be used as at the Y-axis.
 
  Note : This facility is only available if the storage mode has been activated.
+
+ The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@2" href="src/NcSample.cxx.html#LHtCx">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@2" href="src/NcSample.cxx.html#VIuBvE">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i and Y-axis=variable j.
+ In case the 1-dimensional function <span class="string">"f"</span> is specified, then the
+ function value of variable j will be used as at the Y-axis.
  The first variable has index 1.
 
  Note : This facility is only available if the storage mode has been activated.
+
+ The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@3" href="src/NcSample.cxx.html#UNWAT">GetGraph</a>(TString nameA, TString nameB)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@3" href="src/NcSample.cxx.html#VPo8jB">GetGraph</a>(TString nameA, TString nameB, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable with nameA and Y-axis=variable with nameB.
+ In case the 1-dimensional function <span class="string">"f"</span> is specified, then the
+ function value of nameB will be used as at the Y-axis.
 
  Note : This facility is only available if the storage mode has been activated.
+
+ The default value is f=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraphErrors <a class="funcname" name="NcSample:GetGraphErrors" href="src/NcSample.cxx.html#bCYRa">GetGraphErrors</a>(TGraph* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> ix = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iy = 0, TF1* fx = 0, TF1* fy = 0)</span><br />
+<div class="funccomm"><pre> Provide a Graph with new c.q. modified errors.
+ The returned object is a TGraphErrors and the provided input Graph is not modified.
+
+ Input arguments :
+
+ gr : Pointer to a TGraph or TGraphErrors object to provide the (X,Y) data points
+ ix : Index of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fx function) values will be used to set the X-errors
+ iy : Index of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fy function) values will be used to set the Y-errors
+ fx : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified <span class="string">"ix variable"</span>
+ fy : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified <span class="string">"iy variable"</span>
+
+ Notes :
+
+ 1) The error will always be stored as the absolute value of the specified variable or function value.
+ 2) If the variable index and corresponding function pointer are both zero, the corresponding errors are all set to 0.
+ 3) In case a non-zero value of ix or iy is specified, the storage mode has to be active.
+ 4) In case a non-zero value of ix or iy is specified, the entries of this <a href="./NcSample.html">NcSample</a> and Graph should sequentially match.
+
+ Examples :
+
+ 1) ix=3, fx=0, iy=4, fy=0
+    The X-errors will be set equal to the absolute values of the 3rd variable of this <a href="./NcSample.html">NcSample</a> object
+    and the Y-errors will be set to the absolute values of the 4th variable of this <a href="./NcSample.html">NcSample</a> object.
+ 2) ix=3, fx=0, iy=0, fy=<span class="string">"sqrt(x)"</span>
+    The X-errors will be set equal to the absolute values of the 3rd variable of this <a href="./NcSample.html">NcSample</a> object
+    and the Y-errors will be set to the square root of the corresponding Y-value of the input graph.
+ 3) ix=3, fx=<span class="string">"0.1*x"</span>, iy=4, fy=<span class="string">"sqrt(x)"</span>
+    The X-errors will be set equal to the absolute value of 0.1 times the values of the 3rd variable of this <a href="./NcSample.html">NcSample</a> object
+    and the Y-errors will be set to the square root of the values of the 4th variable of this <a href="./NcSample.html">NcSample</a> object.
+ 4) ix=0, fx=0, iy=4, fy=<span class="string">"sqrt(abs(x))"</span>
+    The X-errors will be set to 0 and the Y-errors will be set to the square root of the absolute values of the 4th variable
+    of this <a href="./NcSample.html">NcSample</a> object.
+ 5) ix=0, fx=<span class="string">"sqrt(x)"</span>, iy=0, fy=<span class="string">"0.1*x"</span>
+    The X-errors will be set to the square root of the corresponding X-value of the input graph and the Y-errors will be set to
+    the absolute value of 0.1 times the corresponding Y-value of the input graph.
+
+ The defaults are ix=0, iy=0, fx=0 and fy=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraphErrors <a class="funcname" name="NcSample:GetGraphErrors@1" href="src/NcSample.cxx.html#znZ_4">GetGraphErrors</a>(TGraph* g, TString nameA, TString nameB, TF1* fx = 0, TF1* fy = 0)</span><br />
+<div class="funccomm"><pre> Provide a Graph with new c.q. modified errors.
+ The returned object is a TGraphErrors and the provided input Graph is not modified.
+
+ Input arguments :
+
+ gr    : Pointer to a TGraph or TGraphErrors object to provide the (X,Y) data points
+ nameA : Name of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fx function) values will be used to set the X-errors
+ nameB : Name of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fy function) values will be used to set the Y-errors
+ fx    : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified <span class="string">"nameA variable"</span>
+ fy    : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified <span class="string">"nameB variable"</span>
+
+ Notes :
+
+ 1) The error will always be stored as the absolute value of the specified variable or function value.
+ 2) If the variable name doesn't exist and the corresponding function pointer is zero, the corresponding errors are all set to 0.
+ 3) In case an existing variable name is specified, the storage mode has to be active.
+ 4) In case an existing variable name is specified, the entries of this <a href="./NcSample.html">NcSample</a> and Graph should sequentially match.
+
+ Examples :
+
+ 1) nameA=<span class="string">"Time"</span>, fx=0, nameB=<span class="string">"Amp"</span>, fy=0
+    The X-errors will be set equal to the absolute values of the variable <span class="string">"Time"</span> of this <a href="./NcSample.html">NcSample</a> object
+    and the Y-errors will be set to the absolute values of the variable <span class="string">"Amp"</span> of this <a href="./NcSample.html">NcSample</a> object.
+ 2) nameA=<span class="string">"Time"</span>, fx=0, nameB=<span class="string">"-"</span>, fy=<span class="string">"sqrt(x)"</span>
+    The X-errors will be set equal to the absolute values of the variable <span class="string">"Time"</span> of this <a href="./NcSample.html">NcSample</a> object
+    and the Y-errors will be set to the square root of the corresponding Y-value of the input graph.
+ 3) nameA=<span class="string">"Time"</span>, fx=<span class="string">"0.1*x"</span>, iy=<span class="string">"Amp"</span>, fy=<span class="string">"sqrt(x)"</span>
+    The X-errors will be set equal to the absolute value of 0.1 times the values of the <span class="string">"Time"</span> variable of this <a href="./NcSample.html">NcSample</a> object
+    and the Y-errors will be set to the square root of the values of the <span class="string">"Amp"</span> variable of this <a href="./NcSample.html">NcSample</a> object.
+ 4) nameA=<span class="string">"-"</span>, fx=0, nameB=<span class="string">"Amp"</span>, fy=<span class="string">"sqrt(abs(x))"</span>
+    The X-errors will be set to 0 and the Y-errors will be set to the square root of the absolute values of the <span class="string">"Amp"</span> variable
+    of this <a href="./NcSample.html">NcSample</a> object.
+ 5) nameA=<span class="string">"-"</span>, fx=<span class="string">"sqrt(x)"</span>, nameB=<span class="string">"-"</span>, fy=<span class="string">"0.1*x"</span>
+    The X-errors will be set to the square root of the corresponding X-value of the input graph and the Y-errors will be set to
+    the absolute value of 0.1 times the corresponding Y-value of the input graph.
+
+ The defaults are fx=0 and fy=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@4" href="src/NcSample.cxx.html#pWpGXC">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
@@ -1144,17 +1256,115 @@ return false;}
  The default value is smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@6" href="src/NcSample.cxx.html#MG2_7B">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@6" href="src/NcSample.cxx.html#CynLhD">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
+ In case the 1-dimensional function <span class="string">"f"</span> is specified, the function value of variable k
+ will be used as at the Z-axis.
  The first variable has index 1.
 
  Note : This facility is only available if the storage mode has been activated.
+
+ The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@7" href="src/NcSample.cxx.html#wiyviD">GetGraph</a>(TString nameA, TString nameB, TString nameC)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@7" href="src/NcSample.cxx.html#YBB6UC">GetGraph</a>(TString nameA, TString nameB, TString nameC, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
+ In case the 1-dimensional function <span class="string">"f"</span> is specified, then the function value of nameC
+ will be used as at the Z-axis.
 
  Note : This facility is only available if the storage mode has been activated.
+
+ The default value is f=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph2DErrors <a class="funcname" name="NcSample:GetGraph2DErrors" href="src/NcSample.cxx.html#dOPd6C">GetGraph2DErrors</a>(TGraph2D* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> ix = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iy = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iz = 0, TF1* fx = 0, TF1* fy = 0, TF1* fz = 0)</span><br />
+<div class="funccomm"><pre> Provide a Graph2D with new c.q. modified errors.
+ The returned object is a TGraph2DErrors and the provided input Graph2D is not modified.
+
+ Input arguments :
+
+ gr : Pointer to a TGraph2D or TGraph2DErrors object to provide the (X,Y,Z) data points
+ ix : Index of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fx function) values will be used to set the X-errors
+ iy : Index of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fy function) values will be used to set the Y-errors
+ iz : Index of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fy function) values will be used to set the Y-errors
+ fx : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified <span class="string">"ix variable"</span>
+ fy : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified <span class="string">"iy variable"</span>
+ fz : 1-dimensional function to specify the Z-errors as a function of either the actual Z-value or specified <span class="string">"iz variable"</span>
+
+ Notes :
+
+ 1) The error will always be stored as the absolute value of the specified variable or function value.
+ 2) If the variable index and corresponding function pointer are both zero, the corresponding errors are all set to 0.
+ 3) In case a non-zero value of ix, iy or iz is specified, the storage mode has to be active.
+ 4) In case a non-zero value of ix,iy or iz is specified, the entries of this <a href="./NcSample.html">NcSample</a> and Graph should sequentially match.
+
+ Examples :
+
+ 1) ix=3, fx=0, iy=4, fy=0, iz=2, fz=0
+    The X-errors will be set equal to the absolute values of the 3rd variable of this <a href="./NcSample.html">NcSample</a> object,
+    the Y-errors will be set to the absolute values of the 4th variable of this <a href="./NcSample.html">NcSample</a> object
+    and the Z-errors will be set to the absolute values of the 2nd variable of this <a href="./NcSample.html">NcSample</a> object.
+ 2) ix=3, fx=0, iy=0, fy=<span class="string">"sqrt(x)"</span>, iz=2, fz=0
+    The X-errors will be set equal to the absolute values of the 3rd variable of this <a href="./NcSample.html">NcSample</a> object,
+    the Y-errors will be set to the square root of the corresponding Y-values of the input graph
+    and the Z-errors will be set to the absolute values of the 2nd variable of this <a href="./NcSample.html">NcSample</a> object.
+ 3) ix=3, fx=<span class="string">"0.1*x"</span>, iy=4, fy=<span class="string">"sqrt(x)"</span>, iz=0, fz=<span class="string">"sqrt(x)"</span>
+    The X-errors will be set equal to the absolute value of 0.1 times the values of the 3rd variable of this <a href="./NcSample.html">NcSample</a> object,
+    the Y-errors will be set to the square root of the values of the 4th variable of this <a href="./NcSample.html">NcSample</a> object
+    and the Z-errors will be set to the square root of the corresponding Z-values of the input graph.
+ 4) ix=0, fx=0, iy=4, fy=<span class="string">"sqrt(abs(x))"</span>, iz=1, fz=0
+    The X-errors will be set to 0, the Y-errors will be set to the square root of the absolute values of the 4th variable
+    of this <a href="./NcSample.html">NcSample</a> object, and the Z-errors will be set to the absolute values of the 1st variable of this <a href="./NcSample.html">NcSample</a> object.
+ 5) ix=0, fx=<span class="string">"sqrt(x)"</span>, iy=0, fy=<span class="string">"0.1*x"</span>, iz=0, fz=0
+    The X-errors will be set to the square root of the corresponding X-values of the input graph, the Y-errors will be set to
+    the absolute value of 0.1 times the corresponding Y-values of the input graph and the Z-errors will be set to 0.
+
+ The defaults are ix=0, iy=0, iz=0, fx=0, fy=0 and fz=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph2DErrors <a class="funcname" name="NcSample:GetGraph2DErrors@1" href="src/NcSample.cxx.html#txtzs">GetGraph2DErrors</a>(TGraph2D* g, TString nameA, TString nameB, TString nameC, TF1* fx = 0, TF1* fy = 0, TF1* fz = 0)</span><br />
+<div class="funccomm"><pre> Provide a Graph2D with new c.q. modified errors.
+ The returned object is a TGraph2DErrors and the provided input Graph2D is not modified.
+
+ Input arguments :
+
+ gr    : Pointer to a TGraph or TGraphErrors object to provide the (X,Y) data points
+ nameA : Name of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fx function) values will be used to set the X-errors
+ nameB : Name of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fy function) values will be used to set the Y-errors
+ nameC : Name of the variable of this <a href="./NcSample.html">NcSample</a> object of which the (fz function) values will be used to set the Z-errors
+ fx    : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified <span class="string">"nameA variable"</span>
+ fy    : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified <span class="string">"nameB variable"</span>
+ fz    : 1-dimensional function to specify the Z-errors as a function of either the actual Z-value or specified <span class="string">"nameC variable"</span>
+
+ Notes :
+
+ 1) The error will always be stored as the absolute value of the specified variable or function value.
+ 2) If the variable name doesn't exist and the corresponding function pointer is zero, the corresponding errors are all set to 0.
+ 3) In case an existing variable name is specified, the storage mode has to be active.
+ 4) In case an existing variable name is specified, the entries of this <a href="./NcSample.html">NcSample</a> and Graph should sequentially match.
+
+ Examples :
+
+ 1) nameA=<span class="string">"Time"</span>, fx=0, nameB=<span class="string">"Amp"</span>, fy=0, nameC=<span class="string">"ADC"</span>, fz=0
+    The X-errors will be set equal to the absolute values of the variable <span class="string">"Time"</span> of this <a href="./NcSample.html">NcSample</a> object,
+    the Y-errors will be set to the absolute values of the variable <span class="string">"Amp"</span> of this <a href="./NcSample.html">NcSample</a> object
+    and the Z-errors will be set to the absolute values of the variable <span class="string">"ADC"</span> of this <a href="./NcSample.html">NcSample</a> object
+ 2) nameA=<span class="string">"Time"</span>, fx=0, nameB=<span class="string">"-"</span>, fy=<span class="string">"sqrt(x)"</span>, nameC=<span class="string">"ADC"</span>, fz=0
+    The X-errors will be set equal to the absolute values of the variable <span class="string">"Time"</span> of this <a href="./NcSample.html">NcSample</a> object,
+    the Y-errors will be set to the square root of the corresponding Y-values of the input graph
+    and the Z-errors will be set to the absolute values of the variable <span class="string">"ADC"</span> of this <a href="./NcSample.html">NcSample</a> object
+ 3) nameA=<span class="string">"Time"</span>, fx=<span class="string">"0.1*x"</span>, iy=<span class="string">"Amp"</span>, fy=<span class="string">"sqrt(x)"</span>, iz=0, fz=<span class="string">"sqrt(x)"</span>
+    The X-errors will be set equal to the absolute value of 0.1 times the values of the <span class="string">"Time"</span> variable of this <a href="./NcSample.html">NcSample</a> object,
+    the Y-errors will be set to the square root of the values of the <span class="string">"Amp"</span> variable of this <a href="./NcSample.html">NcSample</a> object
+    and the Z-errors will be set to the square root of the corresponding Z-values of the input graph.
+ 4) nameA=<span class="string">"-"</span>, fx=0, nameB=<span class="string">"Amp"</span>, fy=<span class="string">"sqrt(abs(x))"</span>, nameC=<span class="string">"ADC"</span>, fz=0
+    The X-errors will be set to 0, the Y-errors will be set to the square root of the absolute values of the <span class="string">"Amp"</span> variable
+    of this <a href="./NcSample.html">NcSample</a> object, and the Z-values will be set to the absolute values of the <span class="string">"ADC"</span> variable of this <a href="./NcSample.html">NcSample</a> object.
+ 5) nameA=<span class="string">"-"</span>, fx=<span class="string">"sqrt(x)"</span>, nameB=<span class="string">"-"</span>, fy=<span class="string">"0.1*x"</span>, nameC=<span class="string">"-"</span>, fz=0
+    The X-errors will be set to the square root of the corresponding X-values of the input graph, the Y-errors will be set to
+    the absolute value of 0.1 times the corresponding Y-values of the input graph and the Z-errors will be set to 0.
+
+ The defaults are fx=0, fy=0 and fz=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TGraphQQ <a class="funcname" name="NcSample:GetQQplot" href="src/NcSample.cxx.html#tkucrB">GetQQplot</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</span><br />
@@ -1637,7 +1847,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Dec 12 13:52:02 2021 </em><em>&raquo; Last generated: 2021-12-12 13:52</em><br />
+<em>&raquo; Last changed: Wed May 25 22:23:08 2022 </em><em>&raquo; Last generated: 2022-05-25 22:23</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

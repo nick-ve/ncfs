@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 12, 2021  13:42Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 25, 2022  20:21Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -2229,27 +2229,38 @@ void NcSample::GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode,Int_t k
  delete [] values;
 }
 ///////////////////////////////////////////////////////////////////////////
-TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
+TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx,TF1* f)
 {
 // Provide a TH1D histogram with the values of variable i.
 // If j>0 the corresponding value of variable j will be used as a weight.
+// In case j>0 and also the 1-dimensional function "f" is specified,
+// then the function value of variable j will be used as a weight.
 // The input argument "sumw2" activates (kTRUE) TH1::Sumw2() option or not (kFALSE).
 // The input argument "nbx" defines the number of bins on the X-axis.
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
-// The default values are j=0, sumw2=kFALSE and nbx=100.
+// The default values are j=0, sumw2=kFALSE, nbx=100 and f=0.
 
  TString s="1D Histogram for NcSample ";
  s+=GetName();
- s+=";Variable ";
+ s+=";";
  s+=fNames[i-1];
  s+=";Counts";
  if (j>0)
  {
-  s+=" weighted with Variable ";
-  s+=fNames[j-1];
+  s+=" weighted by : ";
+  if (f)
+  {
+   TString sf=f->GetExpFormula("p");
+   sf.ReplaceAll("x",fNames[j-1]);   
+   s+=sf;
+  }
+  else
+  {
+   s+=fNames[j-1];
+  }
  }
 
  Double_t xlow=GetMinimum(i);
@@ -2284,6 +2295,7 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
   if (j>0)
   {
    y=GetEntry(ip,j);
+   if (f) y=f->Eval(y);
    hist.Fill(x,y);
   }
   else
@@ -2295,26 +2307,30 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx)
  return hist;
 }
 ///////////////////////////////////////////////////////////////////////////
-TH1D NcSample::Get1DHistogram(TString nameA,TString nameB,Bool_t sumw2,Int_t nbx)
+TH1D NcSample::Get1DHistogram(TString nameA,TString nameB,Bool_t sumw2,Int_t nbx,TF1* f)
 {
 // Provide a TH1D histogram for the variable specified with nameA.
 // If nameB is valid, the corresponding value of that variable will be used as a weight.
+// In case nameB is valid and also the 1-dimensional function "f" is specified,
+// then the function value of nameB will be used as a weight.
 // The input argument "sumw2" activates (kTRUE) TH1::Sumw2() option or not (kFALSE).
 // The input argument "nbx" defines the number of bins on the X-axis.
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
-// The default values are nameB="-", sumw2=kFALSE and nbx=100.
+// The default values are nameB="-", sumw2=kFALSE, nbx=100 and f=0.
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
- return Get1DHistogram(i,j,sumw2,nbx);
+ return Get1DHistogram(i,j,sumw2,nbx,f);
 }
 ///////////////////////////////////////////////////////////////////////////
-TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int_t nby)
+TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int_t nby,TF1* f)
 {
 // Provide a TH2D histogram for the values of variables i and j.
 // If k>0 the corresponding value of variable k will be used as a weight.
+// In case k>0 and also the 1-dimensional function "f" is specified,
+// then the function value of variable k will be used as a weight.
 // The input argument "sumw2" activates (kTRUE) TH1::Sumw2() option or not (kFALSE).
 // The input arguments "nbx" and "nby" define the number of bins on the X-axis
 // and Y-axis, respectively.
@@ -2322,19 +2338,28 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
-// The default values are k=0, sumw2=kFALSE, nbx=100 and nby=100.
+// The default values are k=0, sumw2=kFALSE, nbx=100, nby=100 and f=0.
 
  TString s="2D Histogram for NcSample ";
  s+=GetName();
- s+=";Variable ";
+ s+=";";
  s+=fNames[i-1];
- s+=";Variable ";
+ s+=";";
  s+=fNames[j-1];
  s+=";Counts";
  if (k>0)
  {
-  s+=" weighted with Variable ";
-  s+=fNames[k-1];
+  s+=" weighted by : ";
+  if (f)
+  {
+   TString sf=f->GetExpFormula("p");
+   sf.ReplaceAll("x",fNames[k-1]);
+   s+=sf;
+  }
+  else
+  {
+   s+=fNames[k-1];
+  }
  }
 
  Double_t xlow=GetMinimum(i);
@@ -2378,6 +2403,7 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
   if (k>0)
   {
    z=GetEntry(ip,k);
+   if (f) z=f->Eval(z);
    hist.Fill(x,y,z);
   }
   else
@@ -2389,28 +2415,32 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
  return hist;
 }
 ///////////////////////////////////////////////////////////////////////////
-TH2D NcSample::Get2DHistogram(TString nameA,TString nameB,TString nameC,Bool_t sumw2,Int_t nbx,Int_t nby)
+TH2D NcSample::Get2DHistogram(TString nameA,TString nameB,TString nameC,Bool_t sumw2,Int_t nbx,Int_t nby,TF1* f)
 {
 // Provide a TH2D histogram for the variables specified with nameA and nameB.
 // If nameC is valid, the corresponding value of that variable will be used as a weight.
+// In case nameC is valid and also the 1-dimensional function "f" is specified,
+// then the function value of nameC will be used as a weight.
 // The input argument "sumw2" activates (kTRUE) TH1::Sumw2() option or not (kFALSE).
 // The input arguments "nbx" and "nby" define the number of bins on the X-axis
 // and Y-axis, respectively.
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
-// The default values are nameC="-", sumw2=kFALSE, nbx=100 and nby=100.
+// The default values are nameC="-", sumw2=kFALSE, nbx=100, nby=100 and f=0.
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
  Int_t k=GetIndex(nameC);
- return Get2DHistogram(i,j,k,sumw2,nbx,nby);
+ return Get2DHistogram(i,j,k,sumw2,nbx,nby,f);
 }
 ///////////////////////////////////////////////////////////////////////////
-TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t nbx,Int_t nby,Int_t nbz)
+TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t nbx,Int_t nby,Int_t nbz,TF1* f)
 {
 // Provide a TH3D histogram for the values of variables i, j and k.
 // If m>0 the corresponding value of variable m will be used as a weight.
+// In case m>0 and also the 1-dimensional function "f" is specified,
+// then the function value of variable m will be used as a weight.
 // The input argument "sumw2" activates (kTRUE) TH1::Sumw2() option or not (kFALSE).
 // The input arguments "nbx", "nby" and "nbz" define the number of bins on the X-axis,
 // Y-axis and Z-axis, respectively.
@@ -2418,21 +2448,30 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
-// The default values are m=0, sumw2=kFALSE, nbx=100, nby=100 and nbz=100.
+// The default values are m=0, sumw2=kFALSE, nbx=100, nby=100, nbz=100 and f=0.
 
  TString s="3D Histogram for NcSample ";
  s+=GetName();
  if (m>0)
  {
-  s+=" with Variable ";
-  s+=fNames[m-1];
+  s+=" with ";
+  if (f)
+  {
+   TString sf=f->GetExpFormula("p");
+   sf.ReplaceAll("x",fNames[m-1]);
+   s+=sf;
+  }
+  else
+  {
+   s+=fNames[m-1];
+  }
   s+=" as weight";
  }
- s+=";Variable ";
+ s+=";";
  s+=fNames[i-1];
- s+=";Variable ";
+ s+=";";
  s+=fNames[j-1];
- s+=";Variable ";
+ s+=";";
  s+=fNames[k-1];
 
  Double_t xlow=GetMinimum(i);
@@ -2483,6 +2522,7 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
   if (m>0)
   {
    t=GetEntry(ip,m);
+   if (f) t=f->Eval(t);
    hist.Fill(x,y,z,t);
   }
   else
@@ -2494,31 +2534,37 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
  return hist;
 }
 ///////////////////////////////////////////////////////////////////////////
-TH3D NcSample::Get3DHistogram(TString nameA,TString nameB,TString nameC,TString nameD,Bool_t sumw2,Int_t nbx,Int_t nby,Int_t nbz)
+TH3D NcSample::Get3DHistogram(TString nameA,TString nameB,TString nameC,TString nameD,Bool_t sumw2,Int_t nbx,Int_t nby,Int_t nbz,TF1* f)
 {
 // Provide a TH3D histogram for the variables specified with nameA, nameB and nameC.
 // If nameD is valid, the corresponding value of that variable will be used as a weight.
+// In case nameD is valid and also the 1-dimensional function "f" is specified,
+// then the function value of nameD will be used as a weight.
 // The input argument "sumw2" activates (kTRUE) TH1::Sumw2() option or not (kFALSE).
 // The input arguments "nbx", "nby" and "nbz" define the number of bins on the X-axis,
 // Y-axis and Z-axis, respectively.
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
-// The default values are nameD="-", sumw2=kFALSE, nbx=100, nby=100 and nbz=100.
+// The default values are nameD="-", sumw2=kFALSE, nbx=100, nby=100, nbz=100 and f=0.
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
  Int_t k=GetIndex(nameC);
  Int_t m=GetIndex(nameD);
- return Get3DHistogram(i,j,k,m,sumw2,nbx,nby,nbz);
+ return Get3DHistogram(i,j,k,m,sumw2,nbx,nby,nbz,f);
 }
 ///////////////////////////////////////////////////////////////////////////
-TGraph NcSample::GetGraph(Int_t i)
+TGraph NcSample::GetGraph(Int_t i,TF1* f)
 {
 // Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable i.
+// In case the 1-dimensional function "f" is specified, then the
+// function value of variable i will be used as at the Y-axis.
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
 
  TGraph gr;
  gr.SetName("NcSample");
@@ -2541,14 +2587,24 @@ TGraph NcSample::GetGraph(Int_t i)
  {
   x=ip+1;
   y=GetEntry(ip+1,i);
+  if (f) y=f->Eval(y);
   gr.SetPoint(ip,x,y);
  }
 
  TString s="TGraph for NcSample ";
  s+=GetName();
  s+=" : X-axis=Sampling number ";
- s+="  Y-axis=variable ";
- s+=fNames[i-1];
+ s+="  Y-axis=";
+ TString sf=fNames[i-1];
+ if (f)
+ {
+  sf=f->GetExpFormula("p");
+  sf.ReplaceAll("x",fNames[i-1]);
+ }
+ s+=sf;
+ s+=";Sampling number;";
+ s+=sf;
+
  gr.SetTitle(s.Data());
 
  gr.SetMarkerStyle(20);
@@ -2558,22 +2614,30 @@ TGraph NcSample::GetGraph(Int_t i)
  return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
-TGraph NcSample::GetGraph(TString nameA)
+TGraph NcSample::GetGraph(TString nameA,TF1* f)
 {
 // Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable with nameA.
+// In case the 1-dimensional function "f" is specified, then the
+// function value of nameA will be used as at the Y-axis.
 //
 // Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
 
  Int_t i=GetIndex(nameA);
- return GetGraph(i);
+ return GetGraph(i,f);
 }
 ///////////////////////////////////////////////////////////////////////////
-TGraph NcSample::GetGraph(Int_t i,Int_t j)
+TGraph NcSample::GetGraph(Int_t i,Int_t j,TF1* f)
 {
 // Provide a TGraph with : X-axis=variable i and Y-axis=variable j.
+// In case the 1-dimensional function "f" is specified, then the
+// function value of variable j will be used as at the Y-axis.
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
 
  TGraph gr;
  gr.SetName("NcSample");
@@ -2596,15 +2660,27 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j)
  {
   x=GetEntry(ip+1,i);
   y=GetEntry(ip+1,j);
+  if (f) y=f->Eval(y);
   gr.SetPoint(ip,x,y);
  }
 
  TString s="TGraph for NcSample ";
  s+=GetName();
- s+=" : X-axis=variable ";
+ s+=" : X-axis=";
  s+=fNames[i-1];
- s+="  Y-axis=variable ";
- s+=fNames[j-1];
+ s+="  Y-axis=";
+ TString sf=fNames[j-1];
+ if (f)
+ {
+  sf=f->GetExpFormula("p");
+  sf.ReplaceAll("x",fNames[j-1]);
+ }
+ s+=sf;
+ s+=";";
+ s+=fNames[i-1];
+ s+=";";
+ s+=sf;
+
  gr.SetTitle(s.Data());
 
  gr.SetMarkerStyle(20);
@@ -2614,15 +2690,252 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j)
  return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
-TGraph NcSample::GetGraph(TString nameA,TString nameB)
+TGraph NcSample::GetGraph(TString nameA,TString nameB,TF1* f)
 {
 // Provide a TGraph with : X-axis=variable with nameA and Y-axis=variable with nameB.
+// In case the 1-dimensional function "f" is specified, then the
+// function value of nameB will be used as at the Y-axis.
 //
 // Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
- return GetGraph(i,j);
+ return GetGraph(i,j,f);
+}
+///////////////////////////////////////////////////////////////////////////
+TGraphErrors NcSample::GetGraphErrors(TGraph* gr,Int_t ix,Int_t iy,TF1* fx,TF1* fy)
+{
+// Provide a Graph with new c.q. modified errors.
+// The returned object is a TGraphErrors and the provided input Graph is not modified.
+//
+// Input arguments :
+// -----------------
+// gr : Pointer to a TGraph or TGraphErrors object to provide the (X,Y) data points
+// ix : Index of the variable of this NcSample object of which the (fx function) values will be used to set the X-errors 
+// iy : Index of the variable of this NcSample object of which the (fy function) values will be used to set the Y-errors 
+// fx : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified "ix variable" 
+// fy : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified "iy variable"
+//
+// Notes :
+// -------
+// 1) The error will always be stored as the absolute value of the specified variable or function value.
+// 2) If the variable index and corresponding function pointer are both zero, the corresponding errors are all set to 0.
+// 3) In case a non-zero value of ix or iy is specified, the storage mode has to be active.
+// 4) In case a non-zero value of ix or iy is specified, the entries of this NcSample and Graph should sequentially match.
+//
+// Examples :
+// ----------
+// 1) ix=3, fx=0, iy=4, fy=0 
+//    The X-errors will be set equal to the absolute values of the 3rd variable of this NcSample object
+//    and the Y-errors will be set to the absolute values of the 4th variable of this NcSample object.
+// 2) ix=3, fx=0, iy=0, fy="sqrt(x)"
+//    The X-errors will be set equal to the absolute values of the 3rd variable of this NcSample object
+//    and the Y-errors will be set to the square root of the corresponding Y-value of the input graph.
+// 3) ix=3, fx="0.1*x", iy=4, fy="sqrt(x)" 
+//    The X-errors will be set equal to the absolute value of 0.1 times the values of the 3rd variable of this NcSample object
+//    and the Y-errors will be set to the square root of the values of the 4th variable of this NcSample object.
+// 4) ix=0, fx=0, iy=4, fy="sqrt(abs(x))" 
+//    The X-errors will be set to 0 and the Y-errors will be set to the square root of the absolute values of the 4th variable
+//    of this NcSample object.
+// 5) ix=0, fx="sqrt(x)", iy=0, fy="0.1*x" 
+//    The X-errors will be set to the square root of the corresponding X-value of the input graph and the Y-errors will be set to
+//    the absolute value of 0.1 times the corresponding Y-value of the input graph.
+//
+// The defaults are ix=0, iy=0, fx=0 and fy=0.
+
+ TGraphErrors gre;
+
+ if (!gr)
+ {
+  cout << " *NcSample::GetGraphErrors* Error : No input Graph is specified." << endl;
+  return gre;
+ }
+
+ TString name=gr->GetName();
+ name+="-E";
+
+ gre.SetName(name);
+
+ if ((ix || iy) && !fStore)
+ {
+  cout << " *NcSample::GetGraphErrors* Error : Storage mode has not been activated." << endl;
+  return gre;
+ }
+
+ if (ix<0 || ix>fDim || iy<0 || iy>fDim)
+ {
+  cout << " *NcSample::GetGraphErros* Error : Invalid index encountered ix=" << ix << " iy=" << iy << endl;
+  return gre;
+ }
+
+ // The number of data points of the input Graph
+ Int_t np=gr->GetN();
+
+ if (!np)
+ {
+  cout << " *NcSample::GetGraphErrors* Error : Input Graph does not contain any data points." << endl;
+  return gre;
+ }
+
+ if ((ix || iy) && np!=fN)
+ {
+  cout << " *NcSample::GetGraphErrors* Error : Entries don't match Nsample=" << fN << " Ngraph=" << np << endl;
+  return gre;
+ }
+
+ Double_t x=0;
+ Double_t y=0;
+ Double_t ex=0;
+ Double_t ey=0;
+ for (Int_t ip=0; ip<np; ip++)
+ {
+  gr->GetPoint(ip,x,y);
+  if (ix) ex=GetEntry(ip+1,ix);
+  if (fx)
+  {
+   if (!ix)
+   {
+    ex=fx->Eval(x);
+   }
+   else
+   {
+    ex=fx->Eval(ex);
+   }
+  }
+  if (iy) ey=GetEntry(ip+1,iy);
+  if (fy)
+  {
+   if (!iy)
+   {
+    ey=fy->Eval(y);
+   }
+   else
+   {
+    ey=fy->Eval(ey);
+   }
+  }
+  ex=fabs(ex);
+  ey=fabs(ey);
+  gre.SetPoint(ip,x,y);
+  gre.SetPointError(ip,ex,ey);
+ }
+
+ TString sfx="0";
+ if (ix || fx)
+ {
+  sfx="|";
+  if (!fx)
+  {
+   sfx+=fNames[ix-1];
+  }
+  else
+  {
+   sfx+=fx->GetExpFormula("p");
+   if (ix) sfx.ReplaceAll("x",fNames[ix-1]);
+  }
+  sfx+="|";
+ }
+
+ TString sfy="0";
+ if (iy || fy)
+ {
+  sfy="|";
+  if (!fy)
+  {
+   sfy+=fNames[iy-1];
+  }
+  else
+  {
+   sfy+=fy->GetExpFormula("p");
+   if (iy)
+   {
+    sfy.ReplaceAll("x",fNames[iy-1]);
+   }
+   else
+   {
+    sfy.ReplaceAll("x","y");
+   }
+  }
+  sfy+="|";
+ }
+
+ TString s="TGraphErrors for Graph : ";
+ s+=gr->GetName();
+ s+="   X-error=";
+ s+=sfx;
+ s+=" Y-error=";
+ s+=sfy;
+
+ // Copy the axes titles of the input Graph (if present)
+ TAxis* axis=0;
+ axis=gr->GetXaxis();
+ if (axis)
+ {
+  s+=";";
+  s+=axis->GetTitle();
+ } 
+ axis=gr->GetYaxis();
+ if (axis)
+ {
+  s+=";";
+  s+=axis->GetTitle();
+ } 
+
+ gre.SetTitle(s.Data());
+
+ gre.SetMarkerStyle(20);
+ gre.SetMarkerSize(0.5);
+ gre.SetDrawOption("AP");
+
+ return gre;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraphErrors NcSample::GetGraphErrors(TGraph* gr,TString nameA,TString nameB,TF1* fx,TF1* fy)
+{
+// Provide a Graph with new c.q. modified errors.
+// The returned object is a TGraphErrors and the provided input Graph is not modified.
+//
+// Input arguments :
+// -----------------
+// gr    : Pointer to a TGraph or TGraphErrors object to provide the (X,Y) data points
+// nameA : Name of the variable of this NcSample object of which the (fx function) values will be used to set the X-errors 
+// nameB : Name of the variable of this NcSample object of which the (fy function) values will be used to set the Y-errors 
+// fx    : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified "nameA variable" 
+// fy    : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified "nameB variable"
+//
+// Notes :
+// -------
+// 1) The error will always be stored as the absolute value of the specified variable or function value.
+// 2) If the variable name doesn't exist and the corresponding function pointer is zero, the corresponding errors are all set to 0.
+// 3) In case an existing variable name is specified, the storage mode has to be active.
+// 4) In case an existing variable name is specified, the entries of this NcSample and Graph should sequentially match.
+//
+// Examples :
+// ----------
+// 1) nameA="Time", fx=0, nameB="Amp", fy=0 
+//    The X-errors will be set equal to the absolute values of the variable "Time" of this NcSample object
+//    and the Y-errors will be set to the absolute values of the variable "Amp" of this NcSample object.
+// 2) nameA="Time", fx=0, nameB="-", fy="sqrt(x)"
+//    The X-errors will be set equal to the absolute values of the variable "Time" of this NcSample object
+//    and the Y-errors will be set to the square root of the corresponding Y-value of the input graph.
+// 3) nameA="Time", fx="0.1*x", iy="Amp", fy="sqrt(x)" 
+//    The X-errors will be set equal to the absolute value of 0.1 times the values of the "Time" variable of this NcSample object
+//    and the Y-errors will be set to the square root of the values of the "Amp" variable of this NcSample object.
+// 4) nameA="-", fx=0, nameB="Amp", fy="sqrt(abs(x))" 
+//    The X-errors will be set to 0 and the Y-errors will be set to the square root of the absolute values of the "Amp" variable
+//    of this NcSample object.
+// 5) nameA="-", fx="sqrt(x)", nameB="-", fy="0.1*x" 
+//    The X-errors will be set to the square root of the corresponding X-value of the input graph and the Y-errors will be set to
+//    the absolute value of 0.1 times the corresponding Y-value of the input graph.
+//
+// The defaults are fx=0 and fy=0.
+
+ Int_t ix=GetIndex(nameA);
+ Int_t iy=GetIndex(nameB);
+
+ return GetGraphErrors(gr,ix,iy,fx,fy);
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
@@ -2720,9 +3033,9 @@ TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
 
  TString s="TGraphTime for NcSample ";
  s+=GetName();
- s+=";Variable ";
+ s+=";";
  s+=fNames[i-1];
- s+=";Variable ";
+ s+=";";
  s+=fNames[j-1];
  fGraphT->SetNameTitle("",s.Data());
 
@@ -2772,12 +3085,16 @@ TGraphTime* NcSample::GetGraph(TString nameA,TString nameB,Int_t mode,TString na
  return GetGraph(i,j,mode,k,smp);
 }
 ///////////////////////////////////////////////////////////////////////////
-TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
+TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TF1* f)
 {
 // Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
+// In case the 1-dimensional function "f" is specified, the function value of variable k
+// will be used as at the Z-axis.
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
 
  TGraph2D gr;
  gr.SetName("NcSample");
@@ -2808,17 +3125,31 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
   x=GetEntry(ip+1,i);
   y=GetEntry(ip+1,j);
   z=GetEntry(ip+1,k);
+  if (f) z=f->Eval(z);
   gr.SetPoint(ip,x,y,z);
  }
 
  TString s="TGraph2D for NcSample ";
  s+=GetName();
- s+=" : X-axis=variable ";
+ s+=" : X-axis=";
  s+=fNames[i-1];
- s+="  Y-axis=variable ";
+ s+="  Y-axis=";
  s+=fNames[j-1];
- s+="  Z-axis=variable ";
- s+=fNames[k-1];
+ s+="  Z-axis=";
+ TString sf=fNames[k-1];
+ if (f)
+ {
+  sf=f->GetExpFormula("p");
+  sf.ReplaceAll("x",fNames[k-1]);
+ }
+ s+=sf;
+ s+=";";
+ s+=fNames[i-1];
+ s+=";";
+ s+=fNames[j-1];
+ s+=";";
+ s+=sf;
+
  gr.SetTitle(s.Data());
 
  gr.SetMarkerStyle(20);
@@ -2828,16 +3159,315 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k)
  return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
-TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC)
+TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TF1* f)
 {
 // Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
+// In case the 1-dimensional function "f" is specified, then the function value of nameC
+// will be used as at the Z-axis.
 //
 // Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
  Int_t k=GetIndex(nameC);
- return GetGraph(i,j,k);
+ return GetGraph(i,j,k,f);
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,Int_t ix,Int_t iy,Int_t iz,TF1* fx,TF1* fy,TF1* fz)
+{
+// Provide a Graph2D with new c.q. modified errors.
+// The returned object is a TGraph2DErrors and the provided input Graph2D is not modified.
+//
+// Input arguments :
+// -----------------
+// gr : Pointer to a TGraph2D or TGraph2DErrors object to provide the (X,Y,Z) data points
+// ix : Index of the variable of this NcSample object of which the (fx function) values will be used to set the X-errors 
+// iy : Index of the variable of this NcSample object of which the (fy function) values will be used to set the Y-errors 
+// iz : Index of the variable of this NcSample object of which the (fy function) values will be used to set the Y-errors 
+// fx : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified "ix variable" 
+// fy : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified "iy variable"
+// fz : 1-dimensional function to specify the Z-errors as a function of either the actual Z-value or specified "iz variable"
+//
+// Notes :
+// -------
+// 1) The error will always be stored as the absolute value of the specified variable or function value.
+// 2) If the variable index and corresponding function pointer are both zero, the corresponding errors are all set to 0.
+// 3) In case a non-zero value of ix, iy or iz is specified, the storage mode has to be active.
+// 4) In case a non-zero value of ix,iy or iz is specified, the entries of this NcSample and Graph should sequentially match.
+//
+// Examples :
+// ----------
+// 1) ix=3, fx=0, iy=4, fy=0, iz=2, fz=0 
+//    The X-errors will be set equal to the absolute values of the 3rd variable of this NcSample object,
+//    the Y-errors will be set to the absolute values of the 4th variable of this NcSample object
+//    and the Z-errors will be set to the absolute values of the 2nd variable of this NcSample object.
+// 2) ix=3, fx=0, iy=0, fy="sqrt(x)", iz=2, fz=0
+//    The X-errors will be set equal to the absolute values of the 3rd variable of this NcSample object,
+//    the Y-errors will be set to the square root of the corresponding Y-values of the input graph
+//    and the Z-errors will be set to the absolute values of the 2nd variable of this NcSample object.
+// 3) ix=3, fx="0.1*x", iy=4, fy="sqrt(x)", iz=0, fz="sqrt(x)" 
+//    The X-errors will be set equal to the absolute value of 0.1 times the values of the 3rd variable of this NcSample object,
+//    the Y-errors will be set to the square root of the values of the 4th variable of this NcSample object
+//    and the Z-errors will be set to the square root of the corresponding Z-values of the input graph.
+// 4) ix=0, fx=0, iy=4, fy="sqrt(abs(x))", iz=1, fz=0 
+//    The X-errors will be set to 0, the Y-errors will be set to the square root of the absolute values of the 4th variable
+//    of this NcSample object, and the Z-errors will be set to the absolute values of the 1st variable of this NcSample object. 
+// 5) ix=0, fx="sqrt(x)", iy=0, fy="0.1*x", iz=0, fz=0
+//    The X-errors will be set to the square root of the corresponding X-values of the input graph, the Y-errors will be set to
+//    the absolute value of 0.1 times the corresponding Y-values of the input graph and the Z-errors will be set to 0.
+//
+// The defaults are ix=0, iy=0, iz=0, fx=0, fy=0 and fz=0.
+
+ TGraph2DErrors gre;
+
+ if (!gr)
+ {
+  cout << " *NcSample::GetGraph2DErrors* Error : No input Graph is specified." << endl;
+  return gre;
+ }
+
+ TString name=gr->GetName();
+ name+="-E";
+
+ gre.SetName(name);
+
+ if ((ix || iy || iz) && !fStore)
+ {
+  cout << " *NcSample::GetGraph2DErrors* Error : Storage mode has not been activated." << endl;
+  return gre;
+ }
+
+ if (ix<0 || ix>fDim || iy<0 || iy>fDim || iz<0 || iz>fDim)
+ {
+  cout << " *NcSample::GetGraph2DErrors* Error : Invalid index encountered ix=" << ix << " iy=" << iy << " iz=" << iz << endl;
+  return gre;
+ }
+
+ // The number of data points of the input Graph
+ Int_t np=gr->GetN();
+
+ if (!np)
+ {
+  cout << " *NcSample::GetGraph2DErrors* Error : Input Graph does not contain any data points." << endl;
+  return gre;
+ }
+
+ if ((ix || iy || iz) && np!=fN)
+ {
+  cout << " *NcSample::GetGraph2DErrors* Error : Entries don't match Nsample=" << fN << " Ngraph=" << np << endl;
+  return gre;
+ }
+
+ Double_t* xarr=gr->GetX();
+ Double_t* yarr=gr->GetY();
+ Double_t* zarr=gr->GetZ();
+ Double_t x=0;
+ Double_t y=0;
+ Double_t z=0;
+ Double_t ex=0;
+ Double_t ey=0;
+ Double_t ez=0;
+ for (Int_t ip=0; ip<np; ip++)
+ {
+  x=xarr[ip];
+  y=yarr[ip];
+  z=zarr[ip];
+  if (ix) ex=GetEntry(ip+1,ix);
+  if (fx)
+  {
+   if (!ix)
+   {
+    ex=fx->Eval(x);
+   }
+   else
+   {
+    ex=fx->Eval(ex);
+   }
+  }
+  if (iy) ey=GetEntry(ip+1,iy);
+  if (fy)
+  {
+   if (!iy)
+   {
+    ey=fy->Eval(y);
+   }
+   else
+   {
+    ey=fy->Eval(ey);
+   }
+  }
+  if (iz) ez=GetEntry(ip+1,iz);
+  if (fz)
+  {
+   if (!iz)
+   {
+    ez=fz->Eval(z);
+   }
+   else
+   {
+    ez=fz->Eval(ez);
+   }
+  }
+  ex=fabs(ex);
+  ey=fabs(ey);
+  ez=fabs(ez);
+  gre.SetPoint(ip,x,y,z);
+  gre.SetPointError(ip,ex,ey,ez);
+ }
+
+ TString sfx="0";
+ if (ix || fx)
+ {
+  sfx="|";
+  if (!fx)
+  {
+   sfx+=fNames[ix-1];
+  }
+  else
+  {
+   sfx+=fx->GetExpFormula("p");
+   if (ix) sfx.ReplaceAll("x",fNames[ix-1]);
+  }
+  sfx+="|";
+ }
+
+ TString sfy="0";
+ if (iy || fy)
+ {
+  sfy="|";
+  if (!fy)
+  {
+   sfy+=fNames[iy-1];
+  }
+  else
+  {
+   sfy+=fy->GetExpFormula("p");
+   if (iy)
+   {
+    sfy.ReplaceAll("x",fNames[iy-1]);
+   }
+   else
+   {
+    sfy.ReplaceAll("x","y");
+   }
+  }
+  sfy+="|";
+ }
+
+ TString sfz="0";
+ if (iz || fz)
+ {
+  sfz="|";
+  if (!fz)
+  {
+   sfz+=fNames[iz-1];
+  }
+  else
+  {
+   sfz+=fz->GetExpFormula("p");
+   if (iz)
+   {
+    sfz.ReplaceAll("x",fNames[iz-1]);
+   }
+   else
+   {
+    sfz.ReplaceAll("x","z");
+   }
+  }
+  sfz+="|";
+ }
+
+ TString s="TGraphErrors for Graph : ";
+ s+=gr->GetName();
+ s+="   X-error=";
+ s+=sfx;
+ s+=" Y-error=";
+ s+=sfy;
+ s+=" Z-error=";
+ s+=sfz;
+
+ // Copy the axes titles of the input Graph (if present)
+ TAxis* axis=0;
+ axis=gr->GetXaxis();
+ if (axis)
+ {
+  s+=";";
+  s+=axis->GetTitle();
+ } 
+ axis=gr->GetYaxis();
+ if (axis)
+ {
+  s+=";";
+  s+=axis->GetTitle();
+ } 
+ axis=gr->GetZaxis();
+ if (axis)
+ {
+  s+=";";
+  s+=axis->GetTitle();
+ } 
+
+ gre.SetTitle(s.Data());
+
+ gre.SetMarkerStyle(20);
+ gre.SetMarkerSize(0.5);
+ gre.SetDrawOption("err P");
+
+ return gre;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,TString nameA,TString nameB,TString nameC,TF1* fx,TF1* fy,TF1* fz)
+{
+// Provide a Graph2D with new c.q. modified errors.
+// The returned object is a TGraph2DErrors and the provided input Graph2D is not modified.
+//
+// Input arguments :
+// -----------------
+// gr    : Pointer to a TGraph or TGraphErrors object to provide the (X,Y) data points
+// nameA : Name of the variable of this NcSample object of which the (fx function) values will be used to set the X-errors 
+// nameB : Name of the variable of this NcSample object of which the (fy function) values will be used to set the Y-errors 
+// nameC : Name of the variable of this NcSample object of which the (fz function) values will be used to set the Z-errors 
+// fx    : 1-dimensional function to specify the X-errors as a function of either the actual X-value or specified "nameA variable" 
+// fy    : 1-dimensional function to specify the Y-errors as a function of either the actual Y-value or specified "nameB variable"
+// fz    : 1-dimensional function to specify the Z-errors as a function of either the actual Z-value or specified "nameC variable"
+//
+// Notes :
+// -------
+// 1) The error will always be stored as the absolute value of the specified variable or function value.
+// 2) If the variable name doesn't exist and the corresponding function pointer is zero, the corresponding errors are all set to 0.
+// 3) In case an existing variable name is specified, the storage mode has to be active.
+// 4) In case an existing variable name is specified, the entries of this NcSample and Graph should sequentially match.
+//
+// Examples :
+// ----------
+// 1) nameA="Time", fx=0, nameB="Amp", fy=0, nameC="ADC", fz=0
+//    The X-errors will be set equal to the absolute values of the variable "Time" of this NcSample object,
+//    the Y-errors will be set to the absolute values of the variable "Amp" of this NcSample object
+//    and the Z-errors will be set to the absolute values of the variable "ADC" of this NcSample object
+// 2) nameA="Time", fx=0, nameB="-", fy="sqrt(x)", nameC="ADC", fz=0
+//    The X-errors will be set equal to the absolute values of the variable "Time" of this NcSample object,
+//    the Y-errors will be set to the square root of the corresponding Y-values of the input graph
+//    and the Z-errors will be set to the absolute values of the variable "ADC" of this NcSample object
+// 3) nameA="Time", fx="0.1*x", iy="Amp", fy="sqrt(x)", iz=0, fz="sqrt(x)"
+//    The X-errors will be set equal to the absolute value of 0.1 times the values of the "Time" variable of this NcSample object,
+//    the Y-errors will be set to the square root of the values of the "Amp" variable of this NcSample object
+//    and the Z-errors will be set to the square root of the corresponding Z-values of the input graph.
+// 4) nameA="-", fx=0, nameB="Amp", fy="sqrt(abs(x))", nameC="ADC", fz=0
+//    The X-errors will be set to 0, the Y-errors will be set to the square root of the absolute values of the "Amp" variable
+//    of this NcSample object, and the Z-values will be set to the absolute values of the "ADC" variable of this NcSample object.
+// 5) nameA="-", fx="sqrt(x)", nameB="-", fy="0.1*x", nameC="-", fz=0
+//    The X-errors will be set to the square root of the corresponding X-values of the input graph, the Y-errors will be set to
+//    the absolute value of 0.1 times the corresponding Y-values of the input graph and the Z-errors will be set to 0.
+//
+// The defaults are fx=0, fy=0 and fz=0.
+
+ Int_t ix=GetIndex(nameA);
+ Int_t iy=GetIndex(nameB);
+ Int_t iz=GetIndex(nameC);
+
+ return GetGraph2DErrors(gr,ix,iy,iz,fx,fy,fz);
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
@@ -2899,16 +3529,18 @@ TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
  s+=GetName();
  if (f)
  {
-  s+=" of Variable ";
+  s+=" of ";
   s+=fNames[i-1];
-  s+=" versus Function ";
-  s+=f->GetExpFormula("p");
+  s+=" versus f(a)=";
+  TString sf=f->GetExpFormula("p");
+  sf.ReplaceAll("x","a");
+  s+=sf;
  }
  else
  {
-  s+=";Variable ";
+  s+=";";
   s+=fNames[i-1];
-  s+=";Variable ";
+  s+=";";
   s+=fNames[j-1];
  }
 
