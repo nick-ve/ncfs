@@ -341,7 +341,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 25, 2022  23:27Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 27, 2022  22:50Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBlocks.h"
@@ -1104,6 +1104,118 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
  TGraphErrors gre=s.GetGraphErrors(&gr,0,0,0,&f);
 
  Double_t xtrig=GetBlocks(gre,fpr,hout,ntrig);
+
+ return xtrig; 
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t ntrig)
+{
+// Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
+// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+//
+// Note : The other member function with TGraphErrors input provides more flexibilty.
+//
+// The error of each y-value is determined by the absolute value of f(y), where the
+// function is described by the input argument "f" following the TF1 string format convention.
+// This provides an easy way to perform quickly a Bayesian Block analysis directly
+// on a TGraph object instead of having to convert it first into a TGraphErrors object.
+// However, the error setting facility provided here is rather limited, so it
+// is intended to serve only for simple situations.
+// For more flexibility and accuracy, please refer to the other member function that
+// takes a TGraphErrors object as input, or refer to the class NcSample which
+// contains a facility to extend TGraph objects into TGraphError objects. 
+//
+// Note :
+// ------
+// It is essential that the errors on the y-values are provided, since they are
+// used as weights in the statistical analysis.
+// The errors on the x-values are omitted, since they are not used in the process.
+//
+// Each new block is started at a so called Change Point, to indicate a significant change
+// in the measured value based on the recordings in the provided TGraphErrors object.
+// The various Change Points represent the start of the various (variable) sized bins
+// of the resulting histogram "hout".
+// Since the data treatment is inherently sequential, the user may use the argument "ntrig"
+// to trigger c.q. stop after the occurrence of ntrig Change Points.
+// For instance, an online trigger system may be obtained by specifying ntrig=1.
+//
+// Meaning of the input argument "ntrig" :
+// ---------------------------------------
+// ntrig >0 : Only consider Change Points indicating a rising edge
+//       <0 : Only consider Change Points indicating a falling edge
+//       =0 : No triggering c.q. early stopping of the data processing will be performed
+//
+// The default value is ntrig=0.
+//
+// The returned value is the "X-value" of the selected Change Point, e.g. trigger time.
+// In case ntrig=0 the return value corresponds to the 1st Change Point, irrespective
+// whether that represents a rising or falling edge.
+//
+// In case of inconsistent input, the value 0 is returned.
+
+ TF1 func("func",f);
+ NcSample s;
+ TGraphErrors gre=s.GetGraphErrors(&gr,0,0,0,&func);
+
+ Double_t xtrig=GetBlocks(gre,fpr,hout,ntrig);
+
+ return xtrig; 
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_t ntrig)
+{
+// Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
+// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+//
+// Note : The other member function with TGraphErrors input provides more flexibilty.
+//
+// The error of each y-value is determined by "nrms" times the RMS deviation of all the y-values,
+// which often provides an efficient way to ignore noise variations of a background pedestal.
+// This provides an easy way to perform quickly a Bayesian Block analysis directly
+// on a TGraph object instead of having to convert it first into a TGraphErrors object.
+// However, the error setting facility provided here is rather limited, so it
+// is intended to serve only for simple situations.
+// For more flexibility and accuracy, please refer to the other member function that
+// takes a TGraphErrors object as input, or refer to the class NcSample which
+// contains a facility to extend TGraph objects into TGraphError objects. 
+//
+// Note :
+// ------
+// It is essential that the errors on the y-values are provided, since they are
+// used as weights in the statistical analysis.
+// The errors on the x-values are omitted, since they are not used in the process.
+//
+// Each new block is started at a so called Change Point, to indicate a significant change
+// in the measured value based on the recordings in the provided TGraphErrors object.
+// The various Change Points represent the start of the various (variable) sized bins
+// of the resulting histogram "hout".
+// Since the data treatment is inherently sequential, the user may use the argument "ntrig"
+// to trigger c.q. stop after the occurrence of ntrig Change Points.
+// For instance, an online trigger system may be obtained by specifying ntrig=1.
+//
+// Meaning of the input argument "ntrig" :
+// ---------------------------------------
+// ntrig >0 : Only consider Change Points indicating a rising edge
+//       <0 : Only consider Change Points indicating a falling edge
+//       =0 : No triggering c.q. early stopping of the data processing will be performed
+//
+// The default value is ntrig=0.
+//
+// The returned value is the "X-value" of the selected Change Point, e.g. trigger time.
+// In case ntrig=0 the return value corresponds to the 1st Change Point, irrespective
+// whether that represents a rising or falling edge.
+//
+// In case of inconsistent input, the value 0 is returned.
+
+ // Obtain the RMS deviation of all the y-values
+ Double_t rms=gr.GetRMS(2);
+
+ // Determine the error for each y-value and convert into a function format
+ Double_t err=fabs(nrms*rms);
+ TString f="0.*x+";
+ f+=err;
+
+ Double_t xtrig=GetBlocks(gr,f,fpr,hout,ntrig);
 
  return xtrig; 
 }

@@ -1318,3 +1318,7 @@
                 This includes also a facility to extend a TGraph or TGraph2D into TGraphErrors or TGraph2DErrors, respectively.
                 Also direct treatment of a TGraph object introduced in class NcBlocks.
                 The version indicator in NcVersion has been updated to 4.8.8.
+27-may-2022 NvE Functionality of class NcSample and NcBlocks extended by the introduction of function definitions
+                via a simple TString input argument, which allows on the fly use of various functions.
+                Also TGraph error setting in terms of RMS deviation of all the y-values introduced in NcBlocks. 
+                The version indicator in NcVersion has been updated to 4.8.9.

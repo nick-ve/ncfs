@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 25, 2022  20:21Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 27, 2022  23:12Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -2614,6 +2614,19 @@ TGraph NcSample::GetGraph(Int_t i,TF1* f)
  return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
+TGraph NcSample::GetGraph(Int_t i,TString f)
+{
+// Provide a TGraph with : X-axis=sampling entry number and Y-axis=f(variable i).
+// The 1D function "f" has to be specified following the TF1 string format convention,
+// The first variable has index 1.
+//
+// Note : This facility is only available if the storage mode has been activated.
+
+ TF1 func("func",f);
+
+ return GetGraph(i,&func);
+}
+///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(TString nameA,TF1* f)
 {
 // Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable with nameA.
@@ -2688,6 +2701,20 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j,TF1* f)
  gr.SetDrawOption("AP");
 
  return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcSample::GetGraph(Int_t i,Int_t j,TString f)
+{
+// Provide a TGraph with : X-axis=variable i and Y-axis=f(variable j).
+// The 1D function "f" has to be specified following the TF1 string format convention,
+// The first variable has index 1.
+//
+// Note : This facility is only available if the storage mode has been activated.
+//
+
+ TF1 func("func",f);
+
+ return GetGraph(i,j,&func);
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(TString nameA,TString nameB,TF1* f)
@@ -3159,6 +3186,19 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TF1* f)
  return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
+TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TString f)
+{
+// Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=f(variable k).
+// The 1D function "f" has to be specified following the TF1 string format convention.
+// The first variable has index 1.
+//
+// Note : This facility is only available if the storage mode has been activated.
+
+ TF1 func("func",f);
+
+ return GetGraph(i,j,k,&func);
+}
+///////////////////////////////////////////////////////////////////////////
 TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TF1* f)
 {
 // Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
@@ -3173,6 +3213,18 @@ TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TF1* f)
  Int_t j=GetIndex(nameB);
  Int_t k=GetIndex(nameC);
  return GetGraph(i,j,k,f);
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TString f)
+{
+// Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=f(variable nameC).
+// The 1D function "f" has to be specified following the TF1 string format convention,
+//
+// Note : This facility is only available if the storage mode has been activated.
+
+ TF1 func("func",f);
+
+ return GetGraph(nameA,nameB,nameC,&func);
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,Int_t ix,Int_t iy,Int_t iz,TF1* fx,TF1* fy,TF1* fz)

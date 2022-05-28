@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed May 25 22:23:08 2022            -->
+<!--   Date: Sat May 28 00:10:16 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -104,7 +104,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 25, 2022  20:21Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 27, 2022  23:12Z
 
 </pre></div>
 </div></div>
@@ -169,13 +169,17 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry@1">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString nameA, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TString nameB = <span class="string">"-"</span>)</td></tr>
 <tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TF1* f = 0)</td></tr>
-<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(TString nameA, TF1* f = 0)</td></tr>
-<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@2">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</td></tr>
-<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@3">GetGraph</a>(TString nameA, TString nameB, TF1* f = 0)</td></tr>
-<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@6">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TF1* f = 0)</td></tr>
-<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@7">GetGraph</a>(TString nameA, TString nameB, TString nameC, TF1* f = 0)</td></tr>
-<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@4">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
-<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@5">GetGraph</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@1">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@2">GetGraph</a>(TString nameA, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@3">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@4">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString f)</td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@5">GetGraph</a>(TString nameA, TString nameB, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@8">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@9">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TString f)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@10">GetGraph</a>(TString nameA, TString nameB, TString nameC, TF1* f = 0)</td></tr>
+<tr class="func"><td class="funcret">TGraph2D</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@11">GetGraph</a>(TString nameA, TString nameB, TString nameC, TString f)</td></tr>
+<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@6">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="func"><td class="funcret">TGraphTime*</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph@7">GetGraph</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="func"><td class="funcret">TGraph2DErrors</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph2DErrors">GetGraph2DErrors</a>(TGraph2D* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> ix = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iy = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iz = 0, TF1* fx = 0, TF1* fy = 0, TF1* fz = 0)</td></tr>
 <tr class="func"><td class="funcret">TGraph2DErrors</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph2DErrors@1">GetGraph2DErrors</a>(TGraph2D* g, TString nameA, TString nameB, TString nameC, TF1* fx = 0, TF1* fy = 0, TF1* fz = 0)</td></tr>
 <tr class="func"><td class="funcret">TGraphErrors</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraphErrors">GetGraphErrors</a>(TGraph* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> ix = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iy = 0, TF1* fx = 0, TF1* fy = 0)</td></tr>
@@ -1070,7 +1074,15 @@ return false;}
  The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#tnzSJC">GetGraph</a>(TString nameA, TF1* f = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@1" href="src/NcSample.cxx.html#kIbDlD">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString f)</span><br />
+<div class="funccomm"><pre> Provide a TGraph with : X-axis=sampling entry number and Y-axis=f(variable i).
+ The 1D function <span class="string">"f"</span> has to be specified following the TF1 string format convention,
+ The first variable has index 1.
+
+ Note : This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@2" href="src/NcSample.cxx.html#tnzSJC">GetGraph</a>(TString nameA, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable with nameA.
  In case the 1-dimensional function <span class="string">"f"</span> is specified, then the
  function value of nameA will be used as at the Y-axis.
@@ -1080,7 +1092,7 @@ return false;}
  The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@2" href="src/NcSample.cxx.html#VIuBvE">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@3" href="src/NcSample.cxx.html#VIuBvE">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i and Y-axis=variable j.
  In case the 1-dimensional function <span class="string">"f"</span> is specified, then the
  function value of variable j will be used as at the Y-axis.
@@ -1091,7 +1103,16 @@ return false;}
  The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@3" href="src/NcSample.cxx.html#VPo8jB">GetGraph</a>(TString nameA, TString nameB, TF1* f = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@4" href="src/NcSample.cxx.html#wJx9HE">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString f)</span><br />
+<div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i and Y-axis=f(variable j).
+ The 1D function <span class="string">"f"</span> has to be specified following the TF1 string format convention,
+ The first variable has index 1.
+
+ Note : This facility is only available if the storage mode has been activated.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcSample:GetGraph@5" href="src/NcSample.cxx.html#VPo8jB">GetGraph</a>(TString nameA, TString nameB, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable with nameA and Y-axis=variable with nameB.
  In case the 1-dimensional function <span class="string">"f"</span> is specified, then the
  function value of nameB will be used as at the Y-axis.
@@ -1181,7 +1202,7 @@ return false;}
  The defaults are fx=0 and fy=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@4" href="src/NcSample.cxx.html#pWpGXC">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@6" href="src/NcSample.cxx.html#pWpGXC">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
 <div class="funccomm"><pre> Provide a pointer to a TGraphTime with : X-axis=variable i and Y-axis=variable j.
  The first variable has index 1.
 
@@ -1219,7 +1240,7 @@ return false;}
  The default value is smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@5" href="src/NcSample.cxx.html#kAtr8C">GetGraph</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
+<div class="funcdoc"><span class="funcname">TGraphTime* <a class="funcname" name="NcSample:GetGraph@7" href="src/NcSample.cxx.html#kAtr8C">GetGraph</a>(TString nameA, TString nameB, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString nameC, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> smp = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
 <div class="funccomm"><pre> Provide a pointer to a TGraphTime with : X-axis=variable nameA and Y-axis=variable nameB.
 
  Note :
@@ -1256,7 +1277,7 @@ return false;}
  The default value is smp=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@6" href="src/NcSample.cxx.html#CynLhD">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TF1* f = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@8" href="src/NcSample.cxx.html#CynLhD">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
  In case the 1-dimensional function <span class="string">"f"</span> is specified, the function value of variable k
  will be used as at the Z-axis.
@@ -1267,7 +1288,15 @@ return false;}
  The default value is f=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@7" href="src/NcSample.cxx.html#YBB6UC">GetGraph</a>(TString nameA, TString nameB, TString nameC, TF1* f = 0)</span><br />
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@9" href="src/NcSample.cxx.html#i27zuD">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> k, TString f)</span><br />
+<div class="funccomm"><pre> Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=f(variable k).
+ The 1D function <span class="string">"f"</span> has to be specified following the TF1 string format convention.
+ The first variable has index 1.
+
+ Note : This facility is only available if the storage mode has been activated.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@10" href="src/NcSample.cxx.html#YBB6UC">GetGraph</a>(TString nameA, TString nameB, TString nameC, TF1* f = 0)</span><br />
 <div class="funccomm"><pre> Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
  In case the 1-dimensional function <span class="string">"f"</span> is specified, then the function value of nameC
  will be used as at the Z-axis.
@@ -1275,6 +1304,13 @@ return false;}
  Note : This facility is only available if the storage mode has been activated.
 
  The default value is f=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph2D <a class="funcname" name="NcSample:GetGraph@11" href="src/NcSample.cxx.html#PeWKtB">GetGraph</a>(TString nameA, TString nameB, TString nameC, TString f)</span><br />
+<div class="funccomm"><pre> Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=f(variable nameC).
+ The 1D function <span class="string">"f"</span> has to be specified following the TF1 string format convention,
+
+ Note : This facility is only available if the storage mode has been activated.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TGraph2DErrors <a class="funcname" name="NcSample:GetGraph2DErrors" href="src/NcSample.cxx.html#dOPd6C">GetGraph2DErrors</a>(TGraph2D* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> ix = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iy = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> iz = 0, TF1* fx = 0, TF1* fy = 0, TF1* fz = 0)</span><br />
@@ -1847,7 +1883,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed May 25 22:23:08 2022 </em><em>&raquo; Last generated: 2022-05-25 22:23</em><br />
+<em>&raquo; Last changed: Sat May 28 00:10:16 2022 </em><em>&raquo; Last generated: 2022-05-28 00:10</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

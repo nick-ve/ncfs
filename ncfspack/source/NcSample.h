@@ -88,15 +88,19 @@ class NcSample : public TNamed
   TH3D Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m=0,Bool_t sumw2=kFALSE,Int_t nbx=100,Int_t nby=100,Int_t nbz=100,TF1* f=0); // Provide a TH3D with values of variables i, j and k (weighted with (a function of) variable m)
   TH3D Get3DHistogram(TString nameA,TString nameB,TString nameC,TString nameD="-",Bool_t sumw2=kFALSE,Int_t nbx=100,Int_t nby=100,Int_t nbz=100,TF1* f=0); // Provide a TH3D for variables nameA, nameB and nameC (weighted with (a function of) variable nameD)
   TGraph GetGraph(Int_t i,TF1* f=0);                     // Provide a TGraph with values of (a function of) variable i vs. the sampling entry number
+  TGraph GetGraph(Int_t i,TString f);                    // Provide a TGraph with values of (a function of) variable i vs. the sampling entry number
   TGraph GetGraph(TString nameA,TF1* f=0);               // Provide a TGraph for (a function of) variable nameA vs. the sampling entry number
   TGraph GetGraph(Int_t i,Int_t j,TF1* f=0);             // Provide a TGraph with values of (a function of) variable j vs. variable i
+  TGraph GetGraph(Int_t i,Int_t j,TString f);            // Provide a TGraph with values of (a function of) variable j vs. variable i
   TGraph GetGraph(TString nameA,TString nameB,TF1* f=0); // Provide a TGraph for (a function of) variable nameB vs. variable nameA
   TGraphErrors GetGraphErrors(TGraph* g,Int_t ix=0,Int_t iy=0,TF1* fx=0,TF1* fy=0);       // Provide a Graph with new c.q. modified errors
   TGraphErrors GetGraphErrors(TGraph* g,TString nameA,TString nameB,TF1* fx=0,TF1* fy=0); // Provide a Graph with new c.q. modified errors
   TGraphTime* GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp=kTRUE);                   // Provide a TGraphTime with (ordered) values of variables i and j
   TGraphTime* GetGraph(TString nameA,TString nameB,Int_t mode,TString nameC,Bool_t smp=kTRUE); // Provide a TGraphTime with (ordered) values of variables nameA and nameB
-  TGraph2D GetGraph(Int_t i,Int_t j,Int_t k,TF1* f=0);                   // Provide a TGraph2D with values of (a function of) variable k vs. i and j
-  TGraph2D GetGraph(TString nameA,TString nameB,TString nameC,TF1* f=0); // Provide a TGraph2D for (a function of) variable nameC vs. nameA and nameB
+  TGraph2D GetGraph(Int_t i,Int_t j,Int_t k,TF1* f=0);                    // Provide a TGraph2D with values of (a function of) variable k vs. i and j
+  TGraph2D GetGraph(Int_t i,Int_t j,Int_t k,TString f);                   // Provide a TGraph2D with values of (a function of) variable k vs. i and j
+  TGraph2D GetGraph(TString nameA,TString nameB,TString nameC,TF1* f=0);  // Provide a TGraph2D for (a function of) variable nameC vs. nameA and nameB
+  TGraph2D GetGraph(TString nameA,TString nameB,TString nameC,TString f); // Provide a TGraph2D for (a function of) variable nameC vs. nameA and nameB
   TGraph2DErrors GetGraph2DErrors(TGraph2D* g,Int_t ix=0,Int_t iy=0,Int_t iz=0,TF1* fx=0,TF1* fy=0,TF1* fz=0);          // Provide a Graph2D with new c.q. modified errors
   TGraph2DErrors GetGraph2DErrors(TGraph2D* g,TString nameA,TString nameB,TString nameC,TF1* fx=0,TF1* fy=0,TF1* fz=0); // Provide a Graph2D with new c.q. modified errors
   TGraphQQ GetQQplot(Int_t i,Int_t j,TF1* f=0);             // Provide a TGraphQQ for the values of variables i and j or the function f replacing j 
@@ -151,6 +155,6 @@ class NcSample : public TNamed
   void List(Int_t i);                 // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const;   // Correlation statistics info for i-th and j-th variable
 
- ClassDef(NcSample,12) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,13) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif
