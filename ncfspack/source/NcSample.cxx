@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 27, 2022  23:12Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 18, 2022  10:21Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -2229,6 +2229,96 @@ void NcSample::GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode,Int_t k
  delete [] values;
 }
 ///////////////////////////////////////////////////////////////////////////
+TH1D NcSample::GetSamplingHistogram(Int_t i,TF1* f)
+{
+// Provide a TH1D histogram with : X-axis=sampling entry number and Y-axis=variable i.
+// In case the 1-dimensional function "f" is specified, then the
+// function value of variable i will be used as at the Y-axis.
+// The first variable has index 1.
+//
+// Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
+
+ TString s="Sampling Histogram for NcSample ";
+ s+=GetName();
+ s+=";Sampling number;";
+ if (f)
+ {
+  TString sf=f->GetExpFormula("p");
+  sf.ReplaceAll("x",fNames[i-1]);   
+  s+=sf;
+ }
+ else
+ {
+  s+=fNames[i-1];
+ }
+
+ TH1D hist("",s,fN,0,fN);
+
+ if (!fStore)
+ {
+  cout << " *NcSample::GetSamplingHistogram* Error : Storage mode has not been activated." << endl;
+  return hist;
+ }
+
+ if (i<1 || i>fDim)
+ {
+  cout << " *NcSample::GetSamplingHistogram* Error : Invalid index encountered i=" << i << endl;
+  return hist;
+ }
+
+ Double_t y=0;
+ for (Int_t ip=1; ip<=fN; ip++)
+ {
+  y=GetEntry(ip,i);
+  if (f) y=f->Eval(y);
+  hist.SetBinContent(ip,y);
+ }
+
+ return hist;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1D NcSample::GetSamplingHistogram(Int_t i,TString f)
+{
+// Provide a TH1D with : X-axis=sampling entry number and Y-axis=f(variable i).
+// The 1D function "f" has to be specified following the TF1 string format convention,
+// The first variable has index 1.
+//
+// Note : This facility is only available if the storage mode has been activated.
+
+ TF1 func("func",f);
+
+ return GetSamplingHistogram(i,&func);
+}
+///////////////////////////////////////////////////////////////////////////
+TH1D NcSample::GetSamplingHistogram(TString nameA,TF1* f)
+{
+// Provide a TH1D with : X-axis=sampling entry number and Y-axis=variable with nameA.
+// In case the 1-dimensional function "f" is specified, then the
+// function value of nameA will be used as at the Y-axis.
+//
+// Note : This facility is only available if the storage mode has been activated.
+//
+// The default value is f=0.
+
+ Int_t i=GetIndex(nameA);
+ return GetSamplingHistogram(i,f);
+}
+///////////////////////////////////////////////////////////////////////////
+TH1D NcSample::GetSamplingHistogram(TString nameA,TString f)
+{
+// Provide a TH1D with : X-axis=sampling entry number and Y-axis=f(variable with nameA).
+// The 1D function "f" has to be specified following the TF1 string format convention,
+// The first variable has index 1.
+//
+// Note : This facility is only available if the storage mode has been activated.
+
+ TF1 func("func",f);
+
+ return GetSamplingHistogram(nameA,&func);
+}
+///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx,TF1* f)
 {
 // Provide a TH1D histogram with the values of variable i.
@@ -2781,7 +2871,7 @@ TGraphErrors NcSample::GetGraphErrors(TGraph* gr,Int_t ix,Int_t iy,TF1* fx,TF1* 
  }
 
  TString name=gr->GetName();
- name+="-E";
+ name+=".E";
 
  gre.SetName(name);
 
@@ -3281,7 +3371,7 @@ TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,Int_t ix,Int_t iy,Int_t i
  }
 
  TString name=gr->GetName();
- name+="-E";
+ name+=".E";
 
  gre.SetName(name);
 

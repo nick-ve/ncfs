@@ -1322,3 +1322,10 @@
                 via a simple TString input argument, which allows on the fly use of various functions.
                 Also TGraph error setting in terms of RMS deviation of all the y-values introduced in NcBlocks. 
                 The version indicator in NcVersion has been updated to 4.8.9.
+31-may-2022 NvE Functionality of class NcBlocks extended by the introduction of member functions Add(),
+                which allow to add c.q. subtract the Bayesian Block values from the original distribution.
+17-jun-2022 NvE Functionality of class NcBlocks extended by the introduction of member function Rebin(),
+                which will allow to convert variable binned Bayesian Block partitions into a uniformly
+                binned histogram which can for instance be used for a Fourier transform.
+18-jun-2022 NvE Functionality of class NcSample extended by introduction of member functions GetSamplingHistogram().
+                The version indicator in NcVersion has been updated to 4.8.10.

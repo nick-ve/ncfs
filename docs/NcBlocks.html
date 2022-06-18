@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sat May 28 00:10:15 2022            -->
+<!--   Date: Sat Jun 18 11:39:31 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -138,6 +138,7 @@ return false;}
 
  <a href="./ListOfTypes.html#Float_t">Float_t</a> fpr=0.1;
  TH1F hblock;
+ hblock.SetName(<span class="string">"hblock"</span>);
  q.<a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>(s,1,fpr,&amp;hblock);
 
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
@@ -156,7 +157,7 @@ return false;}
 
  <a href="./NcBlocks.html">NcBlocks</a> q;
 
- TH1F h(<span class="string">"h"</span>,<span class="string">"Example 2: Binned data;Time in sec.;Weighted counts"</span>,100,0,100);
+ TH1F h(<span class="string">"h"</span>,<span class="string">"Example 2: Binned data (Data Mode 2);Time in sec.;Weighted counts"</span>,100,0,100);
 
  h.Fill(0,1.5);
  h.Fill(1,1.0);
@@ -195,16 +196,25 @@ return false;}
 
  <a href="./ListOfTypes.html#Float_t">Float_t</a> fpr=0.1;
  TH1F hblock;
+ hblock.SetName(<span class="string">"hblock"</span>);
  q.<a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>(&amp;h,fpr,&amp;hblock);
 
+ // Subtract the Block values from the original histogram bin contents
+ // without scaling w.r.t. the bin size
+ TH1F hdif;
+ q.<a href="./NcBlocks.html#NcBlocks:Add" title="void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;h,&amp;hblock,&amp;hdif,0,-1);
+
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.Divide(1,2);
+ c.Divide(1,3);
  c.cd(1);
  h.SetLineWidth(2);
  h.Draw();
  hblock.Draw(<span class="string">"same"</span>);
  c.cd(2);
  hblock.Draw();
+ c.cd(3);
+ hdif.SetLineWidth(2);
+ hdif.Draw();
 
 
  Example 3: Measurement data (Data Mode 3)
@@ -218,6 +228,7 @@ return false;}
 
  TGraphErrors gr;
  gr.SetName(<span class="string">"Cosine"</span>);
+ gr.SetTitle(<span class="string">"Example 3 : Measurement data (Data Mode 3);x in radians;cos(x)"</span>);
 
  // Create and store some artificial measurements
  <a href="./ListOfTypes.html#Double_t">Double_t</a> pi=acos(-1.);
@@ -248,15 +259,22 @@ return false;}
 
  <a href="./ListOfTypes.html#Float_t">Float_t</a> fpr=0.1;
  TH1F hblock;
+ hblock.SetName(<span class="string">"hblock"</span>);
  q.<a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>(gr,fpr,&amp;hblock);
 
+ // Subtract the Block values from the original graph
+ TGraphErrors gdif;
+ q.<a href="./NcBlocks.html#NcBlocks:Add" title="void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;gr,&amp;hblock,&amp;gdif,-1);
+
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.Divide(1,2);
+ c.Divide(1,3);
  c.cd(1);
  gr.Draw(<span class="string">"A*"</span>);
  hblock.Draw(<span class="string">"same"</span>);
  c.cd(2);
  hblock.Draw();
+ c.cd(3);
+ gdif.Draw(<span class="string">"A*"</span>);
 
 
  Example 4: Triggering
@@ -311,6 +329,7 @@ return false;}
  <a href="./ListOfTypes.html#Float_t">Float_t</a> fpr=0.1;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig=1;
  TH1F hblock;
+ hblock.SetName(<span class="string">"hblock"</span>);
  <a href="./ListOfTypes.html#Double_t">Double_t</a> xtrig=q.<a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>(&amp;h,fpr,&amp;hblock,ntrig);
 
  <a href="./ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" Data stream triggered at : "</span> &lt;&lt; xtrig &lt;&lt; endl;
@@ -338,6 +357,7 @@ return false;}
  <a href="./ListOfTypes.html#Int_t">Int_t</a> up=3*nevt/4;
  <a href="./ListOfTypes.html#Float_t">Float_t</a> add=0;
  TH1F hblock;
+ hblock.SetName(<span class="string">"hblock"</span>);
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
  // Construct and store artificial event times
  for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=1; i&lt;=nevt; i++)
@@ -372,7 +392,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 27, 2022  22:50Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 17, 2022  11:03Z
 
 </pre></div>
 </div></div>
@@ -384,6 +404,8 @@ return false;}
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcBlocks:NcBlocks">NcBlocks</a>()</td></tr>
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcBlocks:NcBlocks@1">NcBlocks</a>(<span class="keyword">const</span> <a href="./NcBlocks.html">NcBlocks</a>&amp; q)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcBlocks:_NcBlocks">~NcBlocks</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add@1">Add</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcBlocks:Class">Class</a>()</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks">GetBlocks</a>(TH1* hin, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@4">GetBlocks</a>(TGraphErrors gr, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
@@ -395,6 +417,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@7">GetBlocks</a>(TGraph gr, <a href="./ListOfTypes.html#Double_t">Double_t</a> nrms, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcBlocks:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcBlocks.html">NcBlocks</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcBlocks:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcBlocks.html">NcBlocks</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Rebin">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
@@ -483,6 +506,8 @@ return false;}
 <div class="funccomm"><pre> Get the Bayesian Block partitions for the binned data (Data Mode 2) of histogram <span class="string">"hin"</span>
  with a <a href="./ListOfTypes.html#bool">false</a> positive rate <span class="string">"fpr"</span>, and provide the results in the 1-D histogram <span class="string">"hout"</span>.
 
+ Note : Both <span class="string">"hin"</span> and <span class="string">"hout"</span> must be existing 1-dimensional histograms.
+
  Each new block is started at a so called Change Point, to indicate a significant change
  in the bin contents of the input histogram <span class="string">"hin"</span>.
  The various Change Points represent the start of the various (variable) sized bins
@@ -511,7 +536,10 @@ return false;}
  with a <a href="./ListOfTypes.html#bool">false</a> positive rate <span class="string">"fpr"</span>, and provide the results in 1-D histogram <span class="string">"hout"</span>.
  A common case is where the <a href="./NcSample.html">NcSample</a> contains recorded event times.
 
- Note : The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+ Notes :
+
+ 1) The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+ 2) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
 
  Each new block is started at a so called Change Point, to indicate a significant change
  in the event rate based on the recordings in the provided <a href="./NcSample.html">NcSample</a>.
@@ -547,6 +575,7 @@ return false;}
  1) The data in array <span class="string">"arr"</span> are interpreted as Data Mode 1.
     For Data Mode 2 or Data Mode 3 treatment, please use the corresponding <a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>() function.
  2) The data elements in the array <span class="string">"arr"</span> do not need to be ordered.
+ 3) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
 
  Each new block is started at a so called Change Point, to indicate a significant change
  in the event rate based on the recordings in the provided array.
@@ -582,6 +611,7 @@ return false;}
  1) The data in array <span class="string">"arr"</span> are interpreted as Data Mode 1.
     For Data Mode 2 or Data Mode 3 treatment, please use the corresponding <a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>() function.
  2) The data elements in the array <span class="string">"arr"</span> do not need to be ordered.
+ 3) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
 
  Each new block is started at a so called Change Point, to indicate a significant change
  in the event rate based on the recordings in the provided array.
@@ -610,11 +640,12 @@ return false;}
 <div class="funccomm"><pre> Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
  with a <a href="./ListOfTypes.html#bool">false</a> positive rate <span class="string">"fpr"</span>, and provide the results in 1-D histogram <span class="string">"hout"</span>.
 
- Note :
+ Notes :
 
- It is essential that the errors on the y-values are provided, since they are
- used as weights in the statistical analysis.
- The errors on the x-values may be omitted, since they are not used in the process.
+ 1) It is essential that the errors on the y-values are provided, since they are
+    used as weights in the statistical analysis.
+    The errors on the x-values may be omitted, since they are not used in the process.
+ 2) <span class="string">"hout"</span> must be an existing 1-dimenstional histogram.
 
  Each new block is started at a so called Change Point, to indicate a significant change
  in the measured value based on the recordings in the provided TGraphErrors object.
@@ -643,7 +674,10 @@ return false;}
 <div class="funccomm"><pre> Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
  with a <a href="./ListOfTypes.html#bool">false</a> positive rate <span class="string">"fpr"</span>, and provide the results in 1-D histogram <span class="string">"hout"</span>.
 
- Note : The other member function with TGraphErrors input provides more flexibilty.
+ Notes :
+
+ 1) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 2) The other member function with TGraphErrors input provides more flexibilty.
 
  The error of each y-value is determined by the absolute value of f(y).
  This provides an easy way to perform quickly a Bayesian Block analysis directly
@@ -687,7 +721,10 @@ return false;}
 <div class="funccomm"><pre> Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
  with a <a href="./ListOfTypes.html#bool">false</a> positive rate <span class="string">"fpr"</span>, and provide the results in 1-D histogram <span class="string">"hout"</span>.
 
- Note : The other member function with TGraphErrors input provides more flexibilty.
+ Notes :
+
+ 1) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 2) The other member function with TGraphErrors input provides more flexibilty.
 
  The error of each y-value is determined by the absolute value of f(y), where the
  function is described by the input argument <span class="string">"f"</span> following the TF1 string format convention.
@@ -732,7 +769,10 @@ return false;}
 <div class="funccomm"><pre> Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
  with a <a href="./ListOfTypes.html#bool">false</a> positive rate <span class="string">"fpr"</span>, and provide the results in 1-D histogram <span class="string">"hout"</span>.
 
- Note : The other member function with TGraphErrors input provides more flexibilty.
+ Notes :
+
+ 1) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 2) The other member function with TGraphErrors input provides more flexibilty.
 
  The error of each y-value is determined by <span class="string">"nrms"</span> times the RMS deviation of all the y-values,
  which often provides an efficient way to ignore noise variations of a background pedestal.
@@ -773,12 +813,91 @@ return false;}
  In case of inconsistent input, the value 0 is returned.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Add" href="src/NcBlocks.cxx.html#Y_i4SB">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funccomm"><pre> Provide the 1-dimensional histogram hout=h1+c*h2+d.
+ So, for c=-1 and d=0, the values contained in the histogram <span class="string">"h2"</span> will be
+ subtracted from the corresponding bin values of the input histogram <span class="string">"h1"</span>.
+ The output histogram <span class="string">"hout"</span> will be given the same binning as the histogram <span class="string">"h1"</span>.
+
+ Note : All histograms <span class="string">"h1"</span>, <span class="string">"h2"</span> and <span class="string">"hout"</span> must be existing 1-dimensional histograms.
+
+ This facility is mainly intended for <span class="string">"adding"</span> the variable binned Bayesian Block values
+ (contained in <span class="string">"h2"</span>) to the corresponding values contained in the bins of <span class="string">"h1"</span>.
+ However, it can be applied to other combinations of 1-dimensional histograms as well.
+
+ All provided histograms have to be 1-dimensional and histograms with
+ variable bin sizes are supported. However, all bin sizes of <span class="string">"h1"</span>
+ have to be smaller than or equal to the smallest bin size of <span class="string">"h2"</span>.
+ Obviously, this is always the case when <span class="string">"h2"</span> contains the Bayesian Block
+ partitions of <span class="string">"h1"</span>.
+
+ The input parameter <span class="string">"scale"</span> allows to scale (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not scale (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
+ the bin content of <span class="string">"h2"</span> to be <span class="string">"added"</span>, to the corresponding bin width of <span class="string">"h1"</span>.
+
+ Note :
+
+ Since this facility is mainly intended for <span class="string">"adding"</span> variable binned Bayesian Blocks,
+ scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
+ the use of scaling will correctly reflect the resulting (event) counts in each bin.
+
+ The default value is d=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Add@1" href="src/NcBlocks.cxx.html#KBTKS">Add</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funccomm"><pre> Provide the TGraph gout=gr+c*h+d, where <span class="string">"h"</span> is a 1-dimensional histogram.
+ So, for c=-1 and d=0, the values contained in the histogram <span class="string">"h"</span> will be
+ subtracted from the corresponding values of the input graph <span class="string">"gr"</span>.
+
+ Notes :
+
+ 1) Both graphs <span class="string">"gr"</span> and <span class="string">"gout"</span> as well as histogram <span class="string">"h"</span> must be existing.
+ 2) In case both <span class="string">"gr"</span> and <span class="string">"gout"</span> are TGraphErrors objects, the errors
+    of <span class="string">"gout"</span> will be set to the values of the errors of the input graph <span class="string">"gr"</span>.
+
+ This facility is mainly intended for <span class="string">"adding"</span> the variable binned Bayesian Block values
+ corresponding to the mode 3 data contained in the graph <span class="string">"gr"</span>.
+ However, it can be applied to any combination of input graph <span class="string">"gr"</span> and histogram <span class="string">"h"</span>.
+
+ The default value is d=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Rebin" href="src/NcBlocks.cxx.html#sskJMB">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</span><br />
+<div class="funccomm"><pre> Provide the 1-dimensional histogram <span class="string">"hout"</span> as a uniformly binned version of the
+ input 1-dimensional histogram <span class="string">"hin"</span> over the interval [xmin,xmax].
+ This will for instance allow a Fourier analysis of a Bayesian Block result in the time domain.
+
+ Note : Both histograms <span class="string">"hin"</span> and <span class="string">"hout"</span> must be existing 1-dimensional histograms.
+
+ The bin size of <span class="string">"hout"</span> has to be smaller than or equal to the smallest bin size of
+ <span class="string">"hin"</span> encountered in the interval [xmin,xmax] (see also notes below).
+
+ Function arguments :
+
+ hin   : Pointer to the input histogram
+ hout  : Pointer to the output histogram
+ scale : Scale the bin content to the bin width (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
+ nbins : The number of bins for the output histogram (see notes below)
+ xmin  : The minimal x-value for the output histogram (see notes below)
+ xmax  : The maximal x-value for the output histogram (see notes below)
+
+ Notes :
+
+ 1) Since this facility is mainly intended for re-binning variable binned Bayesian Blocks,
+    scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
+    the use of scaling will correctly reflect the number of (event) counts in each bin.
+ 2) If nbins&lt;1 the bin size of <span class="string">"hout"</span> will automatically be set to the smallest bin size of
+    <span class="string">"hin"</span> that is encountered in the interval [xmin,xmax].
+ 3) In case xmax&lt;xmin, the xmin and xmax values of the input histogram are used.
+
+ The default values are nbins=0, xmin=0 and xmax=-1.
+</pre></div>
+</div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sat May 28 00:10:15 2022 </em><em>&raquo; Last generated: 2022-05-28 00:10</em><br />
+<em>&raquo; Last changed: Sat Jun 18 11:39:31 2022 </em><em>&raquo; Last generated: 2022-06-18 11:39</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

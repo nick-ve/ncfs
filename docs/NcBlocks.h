@@ -25,12 +25,15 @@ class NcBlocks
   Double_t GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig=0); // Get Bayesian Block partitions for measurements of an observable
   Double_t GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t ntrig=0); // Get Bayesian Block partitions for measurements of an observable
   Double_t GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_t ntrig=0); // Get Bayesian Block partitions for measurements of an observable
+  void Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0); // Provide the histogram hout=h1+c*h2+d
+  void Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d=0);         // Provide the graph gout=gr+c*h+d
+  void Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins=0,Double_t xmin=0,Double_t xmax=-1); // Provide the histogram hout as an equally binned version of hin
 
  protected:
   Int_t fMode; // The Data Mode
   Double_t GetPrior(Int_t n,Double_t fpr);           // Provide the prior fitness value for each block
   Double_t GetBlockFitness(Double_t n,Double_t len); // Provide the block fitness for Data Modes 1 and 2 
 
- ClassDef(NcBlocks,3) // Bayesian Block treatment of sequential data
+ ClassDef(NcBlocks,5) // Bayesian Block treatment of sequential data
 };
 #endif

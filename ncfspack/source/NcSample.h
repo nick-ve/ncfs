@@ -81,6 +81,10 @@ class NcSample : public TNamed
   Double_t GetEntry(Int_t i,Int_t j,Int_t mode=0,Int_t k=0); // Access the i-th (ordered) entry and provide the value of the j-th variable
   Double_t GetEntry(Int_t i,TString nameA,Int_t mode=0,TString nameB="-"); // Access the i-th (ordered) entry and provide the value of the variable with nameA
   void GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode=0,Int_t k=0); // Provide the [ifirst,ilast] (ordered) entries via NcSample "s"
+  TH1D GetSamplingHistogram(Int_t i,TF1* f=0);        // Provide a TH1D with values of (a function of) variable i vs. the sampling entry number
+  TH1D GetSamplingHistogram(Int_t i,TString f);       // Provide a TH1D with values of (a function of) variable i vs. the sampling entry number
+  TH1D GetSamplingHistogram(TString nameA,TF1* f=0);  // Provide a TH1D for (a function of) variable nameA vs. the sampling entry number
+  TH1D GetSamplingHistogram(TString nameA,TString f); // Provide a TH1D for (a function of) variable nameA vs. the sampling entry number
   TH1D Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100,TF1* f=0); // Provide a TH1D for variable i (weighted with (a function of) variable j)
   TH1D Get1DHistogram(TString nameA,TString nameB="-",Bool_t sumw2=kFALSE,Int_t nbx=100,TF1* f=0); // Provide a TH1D for variable nameA (weighted with (a function of) variable nameB)
   TH2D Get2DHistogram(Int_t i,Int_t j,Int_t k=0,Bool_t sumw2=kFALSE,Int_t nbx=100,Int_t nby=100,TF1* f=0); // Provide a TH2D for variables i and j (weighted with (a function of) variable k)
@@ -155,6 +159,6 @@ class NcSample : public TNamed
   void List(Int_t i);                 // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const;   // Correlation statistics info for i-th and j-th variable
 
- ClassDef(NcSample,13) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,14) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

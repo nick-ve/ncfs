@@ -107,6 +107,7 @@
 //
 // Float_t fpr=0.1;
 // TH1F hblock;
+// hblock.SetName("hblock");
 // q.GetBlocks(s,1,fpr,&hblock);
 //
 // TCanvas c("c","c");
@@ -125,7 +126,7 @@
 //
 // NcBlocks q;
 //
-// TH1F h("h","Example 2: Binned data;Time in sec.;Weighted counts",100,0,100);
+// TH1F h("h","Example 2: Binned data (Data Mode 2);Time in sec.;Weighted counts",100,0,100);
 //
 // h.Fill(0,1.5);
 // h.Fill(1,1.0);
@@ -164,16 +165,25 @@
 //
 // Float_t fpr=0.1;
 // TH1F hblock;
+// hblock.SetName("hblock");
 // q.GetBlocks(&h,fpr,&hblock);
 //
+// // Subtract the Block values from the original histogram bin contents
+// // without scaling w.r.t. the bin size
+// TH1F hdif;
+// q.Add(&h,&hblock,&hdif,0,-1);
+//
 // TCanvas c("c","c");
-// c.Divide(1,2);
+// c.Divide(1,3);
 // c.cd(1);
 // h.SetLineWidth(2);
 // h.Draw();
 // hblock.Draw("same");
 // c.cd(2);
 // hblock.Draw();
+// c.cd(3);
+// hdif.SetLineWidth(2);
+// hdif.Draw();
 //
 //
 // Example 3: Measurement data (Data Mode 3)
@@ -187,6 +197,7 @@
 //
 // TGraphErrors gr;
 // gr.SetName("Cosine");
+// gr.SetTitle("Example 3 : Measurement data (Data Mode 3);x in radians;cos(x)");
 //
 // // Create and store some artificial measurements
 // Double_t pi=acos(-1.);
@@ -217,15 +228,22 @@
 //
 // Float_t fpr=0.1;
 // TH1F hblock;
+// hblock.SetName("hblock");
 // q.GetBlocks(gr,fpr,&hblock);
 //
+// // Subtract the Block values from the original graph
+// TGraphErrors gdif;
+// q.Add(&gr,&hblock,&gdif,-1);
+//
 // TCanvas c("c","c");
-// c.Divide(1,2);
+// c.Divide(1,3);
 // c.cd(1);
 // gr.Draw("A*");
 // hblock.Draw("same");
 // c.cd(2);
 // hblock.Draw();
+// c.cd(3);
+// gdif.Draw("A*");
 //
 //
 // Example 4: Triggering
@@ -280,6 +298,7 @@
 // Float_t fpr=0.1;
 // Int_t ntrig=1;
 // TH1F hblock;
+// hblock.SetName("hblock");
 // Double_t xtrig=q.GetBlocks(&h,fpr,&hblock,ntrig);
 //
 // cout << " Data stream triggered at : " << xtrig << endl;
@@ -307,6 +326,7 @@
 // Int_t up=3*nevt/4;
 // Float_t add=0;
 // TH1F hblock;
+// hblock.SetName("hblock");
 // TCanvas c("c","c");
 // // Construct and store artificial event times
 // for (Int_t i=1; i<=nevt; i++)
@@ -341,7 +361,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 27, 2022  22:50Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 17, 2022  11:03Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBlocks.h"
@@ -462,6 +482,8 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
 // Get the Bayesian Block partitions for the binned data (Data Mode 2) of histogram "hin"
 // with a false positive rate "fpr", and provide the results in the 1-D histogram "hout".
 //
+// Note : Both "hin" and "hout" must be existing 1-dimensional histograms.
+//
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the bin contents of the input histogram "hin".
 // The various Change Points represent the start of the various (variable) sized bins
@@ -495,10 +517,9 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  if (!fMode)
  {
   fMode=2;
-  TString title,s;
-  title="Bayesian Block representation with fpr= %-10.3g";
-  s=title.Format(title.Data(),fpr);
-  hout->SetTitle(s.Data());
+  TString title;
+  title.Form("Bayesian Block representation with FPR= %-.3g",fpr);
+  hout->SetTitle(title);
  }
 
  TArrayD best(n);    // Array with optimal fitness values
@@ -689,7 +710,7 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  TString title,str;
  title="Bayesian Block representation for histogram ";
  title+=hin->GetName();
- title+=" with FPR= %-10.3g";
+ title+=" with FPR= %-.3g";
  title+=";";
  str=hin->GetXaxis()->GetTitle();
  if (str=="") str="Recordings (e.g. time)";
@@ -704,8 +725,7 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  // Indicate the requested trigger in a legend
  if (ntrig)
  {
-  title="Requested trigger at : %-10.3g";
-  str=title.Format(title.Data(),xtrig);
+  str.Form("Requested trigger at : %-.3g",xtrig);
 
   TLegend* leg=new TLegend(0.5,0.85,0.7,0.9,str);
   leg->SetFillColor(0);
@@ -731,7 +751,10 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 // A common case is where the NcSample contains recorded event times.
 //
-// Note : The Store Mode of the NcSample must be activated. 
+// Notes :
+// -------
+// 1) The Store Mode of the NcSample must be activated.
+// 2) "hout" must be an existing 1-dimensional histogram.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided NcSample.
@@ -796,7 +819,7 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  TString title,str;
  title="Bayesian Block representation for NcSample ";
  title+=s.GetName();
- title+=" with fpr= %-10.3g";
+ title+=" with FPR= %-.3g";
  title+=";Recordings of variable ";
  title+=i;
  title+=" (";
@@ -823,6 +846,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 // 1) The data in array "arr" are interpreted as Data Mode 1.
 //    For Data Mode 2 or Data Mode 3 treatment, please use the corresponding GetBlocks() function.
 // 2) The data elements in the array "arr" do not need to be ordered.
+// 3) "hout" must be an existing 1-dimensional histogram.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided array.
@@ -877,11 +901,10 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
  Double_t xtrig=GetBlocks(s,1,fpr,hout,ntrig);
 
  // Set the output histogram and axes titles
- TString title,str;
- title="Bayesian Block representation for unbinned array data with fpr= %-10.3g";
+ TString title;
+ title.Form("Bayesian Block representation for unbinned array data with FPR= %-.3g",fpr);
  title+=";Recordings (e.g. time);Count rate";
- str=title.Format(title.Data(),fpr);
- hout->SetTitle(str.Data());
+ hout->SetTitle(title);
 
  return xtrig;
 }
@@ -898,6 +921,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 // 1) The data in array "arr" are interpreted as Data Mode 1.
 //    For Data Mode 2 or Data Mode 3 treatment, please use the corresponding GetBlocks() function.
 // 2) The data elements in the array "arr" do not need to be ordered.
+// 3) "hout" must be an existing 1-dimensional histogram.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided array.
@@ -952,11 +976,10 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
  Double_t xtrig=GetBlocks(s,1,fpr,hout,ntrig);
 
  // Set the output histogram and axes titles
- TString title,str;
- title="Bayesian Block representation for unbinned array data with fpr= %-10.3g";
+ TString title;
+ title.Form("Bayesian Block representation for unbinned array data with FPR= %-.3g",fpr);
  title+=";Recordings (e.g. time);Count rate";
- str=title.Format(title.Data(),fpr);
- hout->SetTitle(str.Data());
+ hout->SetTitle(title);
 
  return xtrig;
 }
@@ -966,11 +989,12 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
-// Note :
-// ------
-// It is essential that the errors on the y-values are provided, since they are
-// used as weights in the statistical analysis.
-// The errors on the x-values may be omitted, since they are not used in the process.
+// Notes :
+// -------
+// 1) It is essential that the errors on the y-values are provided, since they are
+//    used as weights in the statistical analysis.
+//    The errors on the x-values may be omitted, since they are not used in the process.
+// 2) "hout" must be an existing 1-dimenstional histogram.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the measured value based on the recordings in the provided TGraphErrors object.
@@ -1044,12 +1068,28 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 
  // Set the output histogram and axes titles
  TString title,str;
+ TString xtitle="Samplings (e.g. time)";
+ TString ytitle="Measured value";
+ TAxis* ax=gr.GetXaxis();
+ if (ax)
+ {
+  str=ax->GetTitle();
+  if (str != "") xtitle=str;
+ }
+ ax=gr.GetYaxis();
+ if (ax)
+ {
+  str=ax->GetTitle();
+  if (str != "") ytitle=str;
+ }
  title="Bayesian Block representation for TGraphErrors ";
  title+=gr.GetName();
- title+=" with fpr= %-10.3g";
- title+=";Samplings (e.g. time);Measured value";
- str=title.Format(title.Data(),fpr);
- hout->SetTitle(str.Data());
+ title+=" with FPR= %-.3g;";
+ title+=xtitle;
+ title+=";";
+ title+=ytitle;
+ str=title.Format(title,fpr);
+ hout->SetTitle(str);
 
  delete [] xbins;
 
@@ -1061,7 +1101,10 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
-// Note : The other member function with TGraphErrors input provides more flexibilty.
+// Notes :
+// -------
+// 1) "hout" must be an existing 1-dimensional histogram.
+// 2) The other member function with TGraphErrors input provides more flexibilty.
 //
 // The error of each y-value is determined by the absolute value of f(y).
 // This provides an easy way to perform quickly a Bayesian Block analysis directly
@@ -1113,7 +1156,10 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t nt
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
-// Note : The other member function with TGraphErrors input provides more flexibilty.
+// Notes :
+// -------
+// 1) "hout" must be an existing 1-dimensional histogram.
+// 2) The other member function with TGraphErrors input provides more flexibilty.
 //
 // The error of each y-value is determined by the absolute value of f(y), where the
 // function is described by the input argument "f" following the TF1 string format convention.
@@ -1167,7 +1213,10 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
-// Note : The other member function with TGraphErrors input provides more flexibilty.
+// Notes :
+// -------
+// 1) "hout" must be an existing 1-dimensional histogram.
+// 2) The other member function with TGraphErrors input provides more flexibilty.
 //
 // The error of each y-value is determined by "nrms" times the RMS deviation of all the y-values,
 // which often provides an efficient way to ignore noise variations of a background pedestal.
@@ -1218,5 +1267,418 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
  Double_t xtrig=GetBlocks(gr,f,fpr,hout,ntrig);
 
  return xtrig; 
+}
+///////////////////////////////////////////////////////////////////////////
+void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
+{
+// Provide the 1-dimensional histogram hout=h1+c*h2+d.
+// So, for c=-1 and d=0, the values contained in the histogram "h2" will be 
+// subtracted from the corresponding bin values of the input histogram "h1".
+// The output histogram "hout" will be given the same binning as the histogram "h1".
+//
+// Note : All histograms "h1", "h2" and "hout" must be existing 1-dimensional histograms.
+//
+// This facility is mainly intended for "adding" the variable binned Bayesian Block values
+// (contained in "h2") to the corresponding values contained in the bins of "h1".  
+// However, it can be applied to other combinations of 1-dimensional histograms as well.
+//
+// All provided histograms have to be 1-dimensional and histograms with
+// variable bin sizes are supported. However, all bin sizes of "h1"
+// have to be smaller than or equal to the smallest bin size of "h2".
+// Obviously, this is always the case when "h2" contains the Bayesian Block
+// partitions of "h1".
+//
+// The input parameter "scale" allows to scale (kTRUE) or not scale (kFALSE)
+// the bin content of "h2" to be "added", to the corresponding bin width of "h1".
+//
+// Note :
+// ------
+// Since this facility is mainly intended for "adding" variable binned Bayesian Blocks,
+// scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
+// the use of scaling will correctly reflect the resulting (event) counts in each bin.
+//
+// The default value is d=0.
+
+ if (hout) hout->Reset();
+
+ if (!h1 || !h2 || !hout) return;
+
+ Int_t ndim1=h1->GetDimension();
+ Int_t ndim2=h2->GetDimension();
+ Int_t ndimo=hout->GetDimension();
+
+ if (ndim1!=1 || ndim2!=1 || ndimo!=1)
+ {
+  cout << " *NcBlocks::Add* Error : Histograms should all be 1-dimensional." << endl;
+  return;
+ }
+
+ // Make the X-axis of "hout" identical to the X-axis of "h1"
+ TString name=hout->GetName();
+ h1->Copy(*hout);
+ hout->Reset();
+
+ TString name1=h1->GetName();
+ if (name1=="") name1="h1";
+
+ TString name2=h2->GetName();
+ if (name2=="") name2="h2";
+
+ TString sc="+";
+ if (c<0) sc="-";
+ if (fabs(c)!=1)
+ {
+  sc.Form("%-+.3g",c);
+  sc+="*";
+ }
+
+ TString sd="";
+ sd.Form("%-+.3g",d);
+
+ TString title="Resulting histogram of: ";
+ title+=name1;
+ if (c)
+ {
+  title+=sc;
+  title+=name2;
+ }
+ if (d) title+=sd;
+ if (scale)
+ {
+  title+=" (scaled w.r.t. bin size)"; 
+ }
+ else
+ {
+  title+=" (not scaled w.r.t. bin size)"; 
+ }
+ title+=";";
+ TAxis* axis1=h1->GetXaxis();
+ title+=axis1->GetTitle();
+ title+=";";
+ axis1=h1->GetYaxis();
+ title+=axis1->GetTitle();
+
+ hout->SetName(name);
+ hout->SetTitle(title);
+
+ Int_t nb1=h1->GetNbinsX();
+ Int_t nb2=h2->GetNbinsX();
+
+ if (!nb1 || !nb2) return;
+
+ // Get the largest bin size of "h1"
+ Double_t bwidth1=0;
+ Double_t bwmax1=0;
+ for (Int_t i=1; i<=nb1; i++)
+ {
+  bwidth1=h1->GetBinWidth(i);
+  if (i==1 || bwidth1>bwmax1) bwmax1=bwidth1;
+ }
+
+ // Get the smallest bin size of "h2" 
+ Double_t bwidth2=0;
+ Double_t bwmin2=0;
+ for (Int_t i=1; i<=nb2; i++)
+ {
+  bwidth2=h2->GetBinWidth(i);
+  if (i==1 || bwidth2<bwmin2) bwmin2=bwidth2;
+ }
+
+ if (bwmax1>bwmin2)
+ {
+  cout << " *NcBlocks::Add* Error : Larger bin size encountered in histogram " << name1 << " than in " << name2 << endl;
+  return;
+ }
+
+ // Loop over all the bins of the input histogram h1
+ Double_t x1=0;
+ Double_t y1=0;
+ Int_t i2=0;
+ Double_t y2=0;
+ Double_t ynew=0;
+ TAxis* axis2=h2->GetXaxis();
+ for (Int_t i1=1; i1<=nb1; i1++)
+ {
+  x1=h1->GetBinCenter(i1);
+  y1=h1->GetBinContent(i1);
+  bwidth1=h1->GetBinWidth(i1);
+  i2=axis2->FindFixBin(x1);
+  y2=h2->GetBinContent(i2);
+  bwidth2=h2->GetBinWidth(i2);
+
+  // Do not consider underflow or overflow bins
+  if (i2<1 || i2>nb2) continue;
+
+  if (scale) y2*=bwidth1/bwidth2;
+  ynew=y1+c*y2+d;
+  hout->SetBinContent(i1,ynew);
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
+{
+// Provide the TGraph gout=gr+c*h+d, where "h" is a 1-dimensional histogram.
+// So, for c=-1 and d=0, the values contained in the histogram "h" will be 
+// subtracted from the corresponding values of the input graph "gr".
+//
+// Notes :
+// -------
+// 1) Both graphs "gr" and "gout" as well as histogram "h" must be existing.
+// 2) In case both "gr" and "gout" are TGraphErrors objects, the errors
+//    of "gout" will be set to the values of the errors of the input graph "gr".
+//
+// This facility is mainly intended for "adding" the variable binned Bayesian Block values
+// corresponding to the mode 3 data contained in the graph "gr".
+// However, it can be applied to any combination of input graph "gr" and histogram "h".
+//
+// The default value is d=0.
+
+ if (gout) gout->Set(0);
+
+ if (!gr || !h || !gout) return;
+
+ TString nameg=gr->GetName();
+ if (nameg=="") nameg="gr";
+
+ TString nameh=h->GetName();
+ if (nameh=="") nameh="h";
+
+ TString sc="+";
+ if (c<0) sc="-";
+ if (fabs(c)!=1)
+ {
+  sc.Form("%-+.3g",c);
+  sc+="*";
+ }
+
+ TString sd="";
+ sd.Form("%-+.3g",d);
+
+ TString title="Resulting graph of: ";
+ title+=nameg;
+ if (c)
+ {
+  title+=sc;
+  title+=nameh;
+ }
+ if (d) title+=sd;
+ title+=";";
+ TAxis* axis=0;
+ axis=gr->GetXaxis();
+ title+=axis->GetTitle();
+ title+=";";
+ axis=gr->GetYaxis();
+ title+=axis->GetTitle();
+
+ gout->SetTitle(title);
+
+ Int_t ndim=h->GetDimension();
+
+ if (ndim!=1)
+ {
+  cout << " *NcBlocks::Add* Error : Histogram " << nameh << " should be 1-dimensional." << endl;
+  return;
+ }
+
+ Int_t np=gr->GetN();
+ Int_t nb=h->GetNbinsX();
+
+ if (!np || !nb) return;
+
+ // Loop over all the points in the graph
+ Double_t x=0;
+ Double_t y=0;
+ Double_t ex=0;
+ Double_t ey=0;
+ Int_t hbin=0;
+ Double_t hval=0;
+ Double_t ynew=0;
+ axis=h->GetXaxis();
+ for (Int_t i=0; i<np; i++)
+ {
+  gr->GetPoint(i,x,y);
+  hbin=axis->FindFixBin(x);
+  hval=h->GetBinContent(hbin);
+
+  // Do not consider underflow or overflow bins
+  if (hbin<1 || hbin>nb) continue;
+
+  ynew=y+c*hval+d;
+  gout->SetPoint(i,x,ynew);
+
+  if (gr->InheritsFrom("TGraphErrors") && gout->InheritsFrom("TGraphErrors"))
+  {
+   TGraphErrors* gre=(TGraphErrors*)gr;
+   TGraphErrors* goute=(TGraphErrors*)gout;
+   ex=gre->GetErrorX(i);
+   ey=gre->GetErrorY(i);
+   goute->SetPointError(i,ex,ey);
+  }
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,Double_t xmax)
+{
+// Provide the 1-dimensional histogram "hout" as a uniformly binned version of the
+// input 1-dimensional histogram "hin" over the interval [xmin,xmax].
+// This will for instance allow a Fourier analysis of a Bayesian Block result in the time domain.
+//
+// Note : Both histograms "hin" and "hout" must be existing 1-dimensional histograms.
+//
+// The bin size of "hout" has to be smaller than or equal to the smallest bin size of
+// "hin" encountered in the interval [xmin,xmax] (see also notes below).
+//
+// Function arguments :
+// --------------------
+// hin   : Pointer to the input histogram
+// hout  : Pointer to the output histogram
+// scale : Scale the bin content to the bin width (kTRUE) or not (kFALSE)
+// nbins : The number of bins for the output histogram (see notes below)
+// xmin  : The minimal x-value for the output histogram (see notes below)
+// xmax  : The maximal x-value for the output histogram (see notes below)
+//
+// Notes :
+// -------
+// 1) Since this facility is mainly intended for re-binning variable binned Bayesian Blocks,
+//    scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
+//    the use of scaling will correctly reflect the number of (event) counts in each bin.
+// 2) If nbins<1 the bin size of "hout" will automatically be set to the smallest bin size of
+//    "hin" that is encountered in the interval [xmin,xmax].
+// 3) In case xmax<xmin, the xmin and xmax values of the input histogram are used.
+//
+// The default values are nbins=0, xmin=0 and xmax=-1.
+
+ if (hout) hout->Reset();
+
+ if (!hin || !hout) return;
+
+ Int_t ndimi=hin->GetDimension();
+ Int_t ndimo=hout->GetDimension();
+
+ if (ndimi!=1 || ndimo!=1)
+ {
+  cout << " *NcBlocks::Rebin* Error : Histograms should both be 1-dimensional." << endl;
+  return;
+ }
+
+ Int_t nb1=hin->GetNbinsX();
+
+ if (!nb1) return;
+
+ TAxis* xaxis=hin->GetXaxis();
+ TAxis* yaxis=hin->GetYaxis();
+
+ if (xmax<xmin)
+ {
+  xmin=xaxis->GetXmin();
+  xmax=xaxis->GetXmax();
+ }
+
+ Double_t bwidth1=0;
+ Double_t xlow1=0;
+ Double_t xup1=0;
+
+ // Automatic binwidth setting
+ if (nbins<=0)
+ {
+  Double_t bwmin=-1;
+  for (Int_t i=1; i<=nb1; i++)
+  {
+   bwidth1=hin->GetBinWidth(i);
+   xlow1=hin->GetBinLowEdge(i);
+   xup1=xlow1+bwidth1;
+
+   if (xlow1>=xmax || xup1<=xmin) continue;
+
+   if (bwmin<0 || bwidth1<bwmin) bwmin=bwidth1;
+  }
+
+  if (bwmin<0)
+  {
+   cout << " *NcBlocks::Rebin* Error : Input histogram had no data in requested interval [xmin,xmax]." << endl;
+   return;
+  }
+
+  Double_t rnbins=(xmax-xmin)/bwmin;
+  nbins=int(rnbins);
+  Double_t diff=rnbins-double(nbins);
+  if (diff) nbins=nbins+1;
+ }
+
+ hout->SetBins(nbins,xmin,xmax);
+ Double_t bwidth=hout->GetBinWidth(1);
+
+ TString name=hin->GetName();
+ if (name=="") name="hin";
+
+ TString snb="";
+ snb.Form("   nbins=%-i",nbins);
+
+ TString smin="";
+ smin.Form(" xmin=%-.3g",xmin);
+
+ TString smax="";
+ smax.Form(" xmax=%-.3g",xmax);
+
+ TString title="Uniformly binned version of histogram: ";
+ title+=name;
+ title+=snb;
+ title+=smin;
+ title+=smax;
+ if (scale)
+ {
+  title+=" (scaled w.r.t. bin size)"; 
+ }
+ else
+ {
+  title+=" (not scaled w.r.t. bin size)"; 
+ }
+ title+=";";
+ title+=xaxis->GetTitle();
+ title+=";";
+ title+=yaxis->GetTitle();
+
+ hout->SetTitle(title);
+
+ // Check if the binning of "hout" is not coarser than that of "hin" within [xmin,xmax]
+ Bool_t coarser=kFALSE;
+ for (Int_t i=1; i<=nb1; i++)
+ {
+  bwidth1=hin->GetBinWidth(i);
+  xlow1=hin->GetBinLowEdge(i);
+  xup1=xlow1+bwidth1;
+
+  if (xlow1>=xmax || xup1<=xmin) continue;
+
+  if (bwidth1<bwidth)
+  {
+   coarser=kTRUE;
+   break;
+  }
+ }
+
+ if (coarser)
+ {
+  cout << " *NcBlocks::Rebin* Error : Input histogram had finer binning than output histogram." << endl;
+  return;
+ }
+
+ // Loop over all the bins of the output histogram hout
+ Double_t x=0;
+ Int_t i1=0;
+ Double_t y1=0;
+ for (Int_t i=1; i<=nbins; i++)
+ {
+  x=hout->GetBinCenter(i);
+  i1=xaxis->FindFixBin(x);
+
+  // Do not consider underflow or overflow bins
+  if (i1<1 || i1>nb1) continue;
+
+  y1=hin->GetBinContent(i1);
+  bwidth1=hin->GetBinWidth(i1);
+  if (scale) y1=y1*bwidth/bwidth1;
+  hout->SetBinContent(i,y1);
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
