@@ -34,3 +34,7 @@
 07-jan-2022 NvE Functionality of event selection level extended in RnoConvert and version indication
                 removed from the constructor, since this is now done in the NcJob constructor.
                 ROOT macro convert.cc in folder /macros updated to reflect extended RnoConvert functionality.
+05-jul-2022 NvE Functionality of RnoGANT::GetNumber() extended to provide also the DAQ channel number.
+11-jul-2022 NvE New class RnoMonitor introduced and the ROOT macro convert.cc in folder /macros extended
+                to include a monitor task in the processing. Also a standalone ROOT macro analyze.cc added
+                in folder /macros to serve as an example to investigate files containing RnoEvent structures.

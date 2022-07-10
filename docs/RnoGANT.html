@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jul 11 02:04:41 2021            -->
+<!--   Date: Tue Jul  5 10:57:39 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -150,7 +150,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, May 3, 2021  10:52Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:35Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 5, 2022  10:27Z
 
 </pre></div>
 </div></div>
@@ -208,7 +208,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#RnoGANT:GetANTId">GetANTId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> station, <a href="./ListOfTypes.html#Int_t">Int_t</a> string, <a href="./ListOfTypes.html#Int_t">Int_t</a> level) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#RnoGANT:GetANTId">GetANTId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> station, <a href="./ListOfTypes.html#Int_t">Int_t</a> string, <a href="./ListOfTypes.html#Int_t">Int_t</a> number) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalFunction"><span class="baseclass">NcAttrib::</span>GetCalFunction</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">TF1*</td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalFunction@1"><span class="baseclass">NcAttrib::</span>GetCalFunction</a>(TString name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcAttrib.html#NcAttrib:GetCalWord"><span class="baseclass">NcAttrib::</span>GetCalWord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j = 1) <span class="keyword">const</span></td></tr>
@@ -656,11 +656,11 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetString" href="src/RnoGANT.cxx.html#dxJ7nB">GetString</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0) const</span><br />
-<div class="funccomm"><pre> Provide the corresponding string number for this antenna.
+<div class="funccomm"><pre> Provide the string number for the antenna with the specified unique <span class="string">"id"</span>.
 
- In case the user has specified the input argument id&gt;0, the string number
- corresponding to the specified id for the current antenna class will be returned.
- Otherwise the string number corresponding with the current antenna will be returned.
+ For id=0, the string number corresponding with the current antenna will be returned.
+
+ Note : For the surface antennas the value 0 will be returned.
 
  In case of inconsistent data, the value -1 is returned.
 
@@ -668,7 +668,16 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetNumber" href="src/RnoGANT.cxx.html#BIkeaE">GetNumber</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0) const</span><br />
-<div class="funccomm"><pre> Provide the corresponding antenna number according to the specified unique <span class="string">"id"</span>.
+<div class="funccomm"><pre> Provide the antenna or DAQ channel number according to the specified unique <span class="string">"id"</span>.
+
+ Input argument :
+
+ id &gt; 0 : Antenna number (see below) for the specified unique <span class="string">"id"</span> will be provided.
+    = 0 : Antenna number (see below) for the current antenna will be provided.
+    &lt; 0 : DAQ channel number for the current antenna will be provided.
+
+ Definition of antenna number :
+
  Number=j indicates the j-th antenna on the string, where j=1
  corresponds to the antenna at the top of the power string.
 
@@ -677,17 +686,23 @@ return false;}
  The surface antennas are not connected to a string, but they are
  numbered 1-9 to reflect the Channels 12-20 consecutively.
 
- In case the user has specified the input argument id&gt;0,
- the number corresponding to this id for the current antenna class will be returned.
- Otherwise the number corresponding with the current antenna will be returned.
-
  The default value is id=0;
 
  In case of inconsistent input the value -1 is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetANTId" href="src/RnoGANT.cxx.html#Y4mFME">GetANTId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> station, <a href="./ListOfTypes.html#Int_t">Int_t</a> string, <a href="./ListOfTypes.html#Int_t">Int_t</a> level) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="RnoGANT:GetANTId" href="src/RnoGANT.cxx.html#Y4mFME">GetANTId</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> station, <a href="./ListOfTypes.html#Int_t">Int_t</a> string, <a href="./ListOfTypes.html#Int_t">Int_t</a> number) const</span><br />
 <div class="funccomm"><pre> Provide the antenna unique ID based on the station, string and number indicators.
+
+ Definition of antenna number :
+
+ Number=j indicates the j-th antenna on the string, where j=1
+ corresponds to the antenna at the top of the power string.
+
+ The top level antennas on the helper strings correspond to number=7.
+
+ The surface antennas are not connected to a string, but they are
+ numbered 1-9 to reflect the Channels 12-20 consecutively.
 
  In case of inconsistent input the value -1 is returned.
 </pre></div>
@@ -754,7 +769,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Jul 11 02:04:41 2021 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
+<em>&raquo; Last changed: Tue Jul  5 10:57:39 2022 </em><em>&raquo; Last generated: 2022-07-05 10:57</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

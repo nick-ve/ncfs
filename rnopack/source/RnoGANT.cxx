@@ -105,7 +105,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, May 3, 2021  10:52Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2021  19:35Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 5, 2022  10:27Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoGANT.h"
@@ -154,11 +154,11 @@ Int_t RnoGANT::GetStation(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoGANT::GetString(Int_t id) const
 {
-// Provide the corresponding string number for this antenna.
+// Provide the string number for the antenna with the specified unique "id".
 //
-// In case the user has specified the input argument id>0, the string number
-// corresponding to the specified id for the current antenna class will be returned.
-// Otherwise the string number corresponding with the current antenna will be returned.
+// For id=0, the string number corresponding with the current antenna will be returned.
+//
+// Note : For the surface antennas the value 0 will be returned. 
 //
 // In case of inconsistent data, the value -1 is returned.
 //
@@ -186,7 +186,16 @@ Int_t RnoGANT::GetString(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoGANT::GetNumber(Int_t id) const
 {
-// Provide the corresponding antenna number according to the specified unique "id".
+// Provide the antenna or DAQ channel number according to the specified unique "id".
+//
+// Input argument :
+// ----------------
+// id > 0 : Antenna number (see below) for the specified unique "id" will be provided.
+//    = 0 : Antenna number (see below) for the current antenna will be provided.
+//    < 0 : DAQ channel number for the current antenna will be provided.
+//
+// Definition of antenna number :
+// ------------------------------
 // Number=j indicates the j-th antenna on the string, where j=1
 // corresponds to the antenna at the top of the power string.
 //
@@ -195,16 +204,25 @@ Int_t RnoGANT::GetNumber(Int_t id) const
 // The surface antennas are not connected to a string, but they are
 // numbered 1-9 to reflect the Channels 12-20 consecutively.
 //
-// In case the user has specified the input argument id>0,
-// the number corresponding to this id for the current antenna class will be returned.
-// Otherwise the number corresponding with the current antenna will be returned.
-//
 // The default value is id=0;
 //
 // In case of inconsistent input the value -1 is returned.
 
  Int_t number=-1;
 
+ // DAQ channel number was requested
+ if (id<0)
+ {
+  TString name=GetName();
+
+  if (!name.Contains("Ch")) return -1;
+
+  name.ReplaceAll("Ch","");
+  number=name.Atoi();
+  return number;
+ }
+
+ // Antenna number was requested 
  Int_t antid=GetUniqueID();
  if (id>0) antid=id;
 
@@ -221,6 +239,16 @@ Int_t RnoGANT::GetNumber(Int_t id) const
 Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t number) const
 {
 // Provide the antenna unique ID based on the station, string and number indicators.
+//
+// Definition of antenna number :
+// ------------------------------
+// Number=j indicates the j-th antenna on the string, where j=1
+// corresponds to the antenna at the top of the power string.
+//
+// The top level antennas on the helper strings correspond to number=7.
+//
+// The surface antennas are not connected to a string, but they are
+// numbered 1-9 to reflect the Channels 12-20 consecutively.
 //
 // In case of inconsistent input the value -1 is returned.
 

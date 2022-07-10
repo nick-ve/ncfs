@@ -1,24 +1,49 @@
-// ROOT macro to test the RNO-G data conversion into RnoEvent structures
-// Nick van Eijndhoven, IIHE-VUB, Brussels, January 7, 2022  12:02Z
+/////////////////////////////////////////////////////////////////////////
+// ROOT macro to convert RNO-G plain ROOT data into RnoEvent structures.
+//
+// In this macro also the task RnoMonitor is invoked in order to
+// search for recurrent astrophysical signals due to Earth's rotation.
+// The produced monitoring histograms are written to an output file
+// which here is specified as monitor.root.
+//
+// To run this macro interactively, just do ($ is prompt)
+//
+// $root convert.cc
+//
+// or for batch processing
+//
+// $root -b -q convert.cc >output.log
+//
+// Note :
+// ------
+// In case the RNO-G mattak software package is not loaded, the ROOT
+// processor may issue several warnings about missing dictionaries
+// for the mattak classes.
+// Since the mattak package is not needed here, these warnings may be
+// safely ignored.
+//
+// Nick van Eijndhoven, IIHE-VUB, Brussels, July 10, 2022  22:20Z
+/////////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
  gSystem->Load("rnopack");
 
  RnoConvert q("RnoConvert","RNO-G data to RnoEvent data structure conversion");
 
- // Limit the number of entries for testing
+ // Optionally limit the number of entries for testing
  q.SetMaxEvents(-1);
 
  // Print frequency to produce a short summary print every printfreq events
- q.SetPrintFreq(5);
+ q.SetPrintFreq(10);
 
  // Set the required event selection level interval for events to be written out
  q.SetSelectLevels(0,-1);
 
  // The RNO-G Root data input filename(s)
- q.AddInputFile("./data/station11/run101/combined.root","combined");
+ q.AddInputFile("./data/station21/random-triggers/run442/combined.root","combined");
 
  // Output file for the event structures
+ // Comment the line below if you want to suppress producing an output file
  q.SetOutputFile("myevents.rnopack");
 
  // Provide an overview listing of the input data chain
@@ -53,9 +78,21 @@
  // after completion of the ROOT macro.
  ///////////////////////////////////////////////////////////////////
 
+ // Add a monitoring task
+ RnoMonitor* moni=new RnoMonitor();
+ moni->SetDeviceClass("RnoULPDA");
+ moni->SetSampleVariable("ADC","0.618*x-8.133");
+ moni->DefineCentralValue("RMS");
+ moni->SetNbins24(24*4);
+
+ q.Add(moni);
+
  // Perform the conversion and execute subtasks (if any)
  // on an event-by-event basis
  // Invokation with the default argument is essential
  // to obtain event-by-event processing of the sub-tasks.
  q.ExecuteJob();
+
+ // Write the monitoring histograms to a ROOT output file
+ moni->WriteHistograms("monitor.root");
 }

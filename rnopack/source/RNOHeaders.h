@@ -22,3 +22,4 @@
 #include "RnoDetector.h"
 #include "RnoEvent.h"
 #include "RnoConvert.h"
+#include "RnoMonitor.h"

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Jul 11 02:04:41 2021            -->
+<!--   Date: Tue Jul  5 10:57:39 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -36,12 +36,12 @@
   <span class="keyword">virtual</span> <a href="../#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a href="../RnoGANT.html#RnoGANT:Clone" title="TObject* RnoGANT::Clone(const char* name=&quot;&quot;)">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name=<span class="string">""</span>) <span class="keyword">const</span>; <span class="comment">// Make a deep copy and provide its pointer</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../RnoGANT.html#RnoGANT:GetStation" title="Int_t RnoGANT::GetStation(Int_t id=0)">GetStation</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> id=0) <span class="keyword">const</span>;                <span class="comment">// Provide the corresponding station number</span>
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../RnoGANT.html#RnoGANT:GetString" title="Int_t RnoGANT::GetString(Int_t id=0)">GetString</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> id=0) <span class="keyword">const</span>;                 <span class="comment">// Provide the corresponding string number</span>
-  <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../RnoGANT.html#RnoGANT:GetNumber" title="Int_t RnoGANT::GetNumber(Int_t id=0)">GetNumber</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> id=0) <span class="keyword">const</span>;                 <span class="comment">// Provide the corresponding antenna number</span>
-  <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../RnoGANT.html#RnoGANT:GetANTId" title="Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t level)">GetANTId</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> station,<a href="../ListOfTypes.html#Int_t">Int_t</a> string,<a href="../ListOfTypes.html#Int_t">Int_t</a> level) <span class="keyword">const</span>; <span class="comment">// Provide unique ID based on station, string and number indicators</span>
+  <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../RnoGANT.html#RnoGANT:GetNumber" title="Int_t RnoGANT::GetNumber(Int_t id=0)">GetNumber</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> id=0) <span class="keyword">const</span>;                 <span class="comment">// Provide the corresponding antenna or DAQ channel number</span>
+  <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../RnoGANT.html#RnoGANT:GetANTId" title="Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t number)">GetANTId</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> station,<a href="../ListOfTypes.html#Int_t">Int_t</a> string,<a href="../ListOfTypes.html#Int_t">Int_t</a> number) <span class="keyword">const</span>; <span class="comment">// Provide unique ID based on station, string and number indicators</span>
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../RnoGANT.html#RnoGANT:GetTimeResidual" title="Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString name=&quot;LE&quot;,Int_t mode=7,Int_t vgroup=1) or overloads">GetTimeResidual</a>(<a href="../NcEvent.html">NcEvent</a>* evt,<a href="../NcTrack.html">NcTrack</a>* t,<a href="../NcSignal.html">NcSignal</a>* s,TString name=<span class="string">"LE"</span>,<a href="../ListOfTypes.html#Int_t">Int_t</a> mode=7,<a href="../ListOfTypes.html#Int_t">Int_t</a> vgroup=1) <span class="keyword">const</span>; <span class="comment">// Provide time residual of a signal w.r.t. a track</span>
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../RnoGANT.html#RnoGANT:GetTimeResidual" title="Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString name=&quot;LE&quot;,Int_t mode=7,Int_t vgroup=1) or overloads">GetTimeResidual</a>(<a href="../NcEvent.html">NcEvent</a>* evt,<a href="../NcTrack.html">NcTrack</a>* t,<a href="../ListOfTypes.html#Int_t">Int_t</a> j,TString name=<span class="string">"LE"</span>,<a href="../ListOfTypes.html#Int_t">Int_t</a> mode=7,<a href="../ListOfTypes.html#Int_t">Int_t</a> vgroup=1) <span class="keyword">const</span>;     <span class="comment">// Provide time residual of a signal w.r.t. a track</span>
 
- ClassDef(<a href="../RnoGANT.html">RnoGANT</a>,2) <span class="comment">// Signal (Hit) handling of an RNO-G Generic Antenna (GANT).</span>
+ ClassDef(<a href="../RnoGANT.html">RnoGANT</a>,3) <span class="comment">// Signal (Hit) handling of an RNO-G Generic Antenna (GANT).</span>
 };
 <span class="cpp">#endif</span>
 </pre>
@@ -52,7 +52,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-07-11 02:04 </em><em>&raquo; Last generated: 2021-07-11 02:04</em><br />
+<em>&raquo; Last changed: 2022-07-05 10:57 </em><em>&raquo; Last generated: 2022-07-05 10:57</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

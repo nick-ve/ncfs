@@ -1329,3 +1329,6 @@
                 binned histogram which can for instance be used for a Fourier transform.
 18-jun-2022 NvE Functionality of class NcSample extended by introduction of member functions GetSamplingHistogram().
                 The version indicator in NcVersion has been updated to 4.8.10.
+10-jul-2022 NvE New class RnoMonitor introduced in /rnopack and also some example ROOT macros added c.q. extended
+                in the folder /rnopack/macros. See rnopack/history for further details. 
+                The version indicator in NcVersion has been updated to 4.9.

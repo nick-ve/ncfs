@@ -27,5 +27,6 @@
  #pragma link C++ class RnoDetector+;
  #pragma link C++ class RnoEvent+;
  #pragma link C++ class RnoConvert+;
+ #pragma link C++ class RnoMonitor+;
 #endif
  
