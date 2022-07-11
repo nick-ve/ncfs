@@ -3,10 +3,17 @@
 // structures that have been produced by RnoConvert.
 // See the macro convert.cc in this folder for details.
 //
+// All input and output data files are specified in this ROOT macro.
+// In this template the input data file is named "data.rnopack".
+//
 // In this macro the task RnoMonitor is invoked in order to
 // search for recurrent astrophysical signals due to Earth's rotation.
 // The produced monitoring histograms are written to an output file
 // which here is specified as monitor.root.
+//
+// Keeping these generic names allows the user to use this ROOT macro "as is"
+// and provide/rename the corresponding files via the convert.sub HTCondor
+// batch processing script.
 //
 // To run this macro interactively, just do ($ is prompt)
 //
@@ -45,7 +52,7 @@
 
  // Access to the input data
  TChain* data=new TChain("T");
- data->Add("./data/station21/random-triggers/run442/combined.rnopack");
+ data->Add("data.rnopack");
 
  // Define a pointer for an event
  RnoEvent* evt=0;

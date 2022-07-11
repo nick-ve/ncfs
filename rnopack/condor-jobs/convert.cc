@@ -1,6 +1,19 @@
 /////////////////////////////////////////////////////////////////////////
 // ROOT macro to convert RNO-G plain ROOT data into RnoEvent structures.
 //
+// The input and output data files are specified in this ROOT macro.
+// In this template the RNO-G input data file is named "data.root" and
+// the converted output file is named "data.rnopack".
+//
+// Keeping these generic names allows the user to use this ROOT macro "as is"
+// and provide/rename the corresponding files via the convert.sub HTCondor
+// batch processing script.
+//
+// Note :
+// ------
+// By commenting out the SetOutputFile("data.rnopack") statement below,
+// the production of the rnopack output file is suppressed. 
+//
 // In this macro also the task RnoMonitor is invoked in order to
 // search for recurrent astrophysical signals due to Earth's rotation.
 // The produced monitoring histograms are written to an output file
@@ -39,12 +52,11 @@
  // Set the required event selection level interval for events to be written out
  q.SetSelectLevels(0,-1);
 
- // The RNO-G Root data input filename(s)
- q.AddInputFile("./data/station21/random-triggers/run442/combined.root","combined");
+ // The RNO-G Root data input and output filename(s)
+ q.AddInputFile("data.root","combined");
 
- // Output file for the event structures
  // Comment the line below if you want to suppress producing an output file
- q.SetOutputFile("myevents.rnopack");
+ q.SetOutputFile("data.rnopack");
 
  // Provide an overview listing of the input data chain
  q.ListInput();

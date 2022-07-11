@@ -38,3 +38,5 @@
 11-jul-2022 NvE New class RnoMonitor introduced and the ROOT macro convert.cc in folder /macros extended
                 to include a monitor task in the processing. Also a standalone ROOT macro analyze.cc added
                 in folder /macros to serve as an example to investigate files containing RnoEvent structures.
+                Furthermore, a folder /condor-jobs has been added in which several HTCondor job templates
+                are provided to process RNO-G data.
