@@ -55,5 +55,6 @@
  #pragma link C++ class NcStokes+;
  #pragma link C++ class NcBlocks+;
  #pragma link C++ class NcTransform+;
+ #pragma link C++ class NcTaggingStats+;
 #endif
  

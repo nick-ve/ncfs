@@ -68,9 +68,9 @@
 // All data files that contain NcEvent (or derived) data structures are allowed.
 //
 // In order to obtain the required data, the NcEvent (or derived) structure should
-// contain an NcDevice with the corresponding name (e.g. Trigger, Filter,...).
+// contain an NcDevice (based) object with the corresponding name (e.g. Trigger, Filter,...).
 //
-// The following two varieties of such an NcDevice may be present :
+// The following two varieties of such an NcDevice (based) object may be present :
 //
 // 1) NcTagger (derived) devices. (The recommended option)
 //    These devices have pre-defined memberfunctions and an internal data structure
@@ -93,7 +93,11 @@
 // by invoking the statement "ExecuteTask()" as indicated in the example below.   
 //  
 // This class is a generalisation of the original trigger-stats.cc and filter-stats.cc
-// ROOT macros of Nick van Eijndhoven (IIHE-VUB, Brussel, 09-dec-2009). 
+// ROOT macros of Nick van Eijndhoven (IIHE-VUB, Brussel, 09-dec-2009).
+//
+// Note : The class NcTaggingStats provides a similar facility that can be invoked
+//        as a (sub)task in an event-by-event task processing environment, which in some
+//        cases might provide more flexibility.
 //
 // Example 1:
 // ==========
@@ -115,15 +119,6 @@
 //
 // fstat.ListInputFiles();
 //
-// // Activate some tags to investigate re-tagging for a selected event sample
-// fstat.ActivateTag("GFU");         // Gamma ray Follow Up stream
-// fstat.ActivateTag("HESE");        // High-Energy Starting Event stream
-// fstat.ActivateTag("EstresAlert"); // Enhanced Starting track alert stream
-// fstat.ActivateTag("EHEAlert");    // Extreme High Energy event alert stream
-//
-// // De-activate some tags to investigate re-tagging for background reduction
-// fstat.DeactivateTag("EHEAlertFilterHB"); // Extreme High Energy alert Heart Beat stream
-//
 // // Provide a progress output line every 1000 events 
 // fstat.SetPrintFrequency(1000);
 //
@@ -135,6 +130,15 @@
 // // The statement below shows the alternative for a "Trigger" analysis
 // // where the trigger tags do not have "pass" nor "write" indicators.
 // // fstat.SetDeviceNames("Trigger","*","*");
+//
+// // Activate some tags to investigate re-tagging for a selected event sample
+// fstat.ActivateTag("GFU");         // Gamma ray Follow Up stream
+// fstat.ActivateTag("HESE");        // High-Energy Starting Event stream
+// fstat.ActivateTag("EstresAlert"); // Enhanced Starting track alert stream
+// fstat.ActivateTag("EHEAlert");    // Extreme High Energy event alert stream
+//
+// // De-activate some tags to investigate re-tagging for background reduction
+// fstat.DeactivateTag("EHEAlertFilterHB"); // Extreme High Energy alert Heart Beat stream
 //
 // // Perform the analysis.
 // fstat.ExecuteTask();
@@ -157,24 +161,24 @@
 //
 // fstat.ListInputFiles();
 //
-// // Activate some tags to investigate re-tagging for a selected event sample
-// fstat.ActivateTag("LPDA"); // Surface LPDA trigger 
-// fstat.ActivateTag("PA");   // Deep ice Phased Array trigger
-//
-// // De-activate some tags to investigate re-tagging for background reduction
-// fstat.DeactivateTag("CR"); // Cosmic Ray trigger
-//
 // // Provide a progress output line every 1000 events 
 // fstat.SetPrintFrequency(1000);
 //
 // // Specify that we will access the NcTagger (derived) device named "Trigger"
 // fstat.SetDevice("Trigger");
 //
+// // Activate some (fictative) tags to investigate re-tagging for a selected event sample
+// fstat.ActivateTag("LPDA"); // Surface LPDA trigger 
+// fstat.ActivateTag("PA");   // Deep ice Phased Array trigger
+//
+// // De-activate some (fictative) tags to investigate re-tagging for background reduction
+// fstat.DeactivateTag("CR"); // Cosmic Ray trigger
+//
 // // Perform the analysis.
 // fstat.ExecuteTask();
 //
 //--- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  13:59Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  10:29Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDataStreamStats.h"
@@ -544,7 +548,7 @@ void NcDataStreamStats::Exec(Option_t* opt)
    Double_t ratetot=double(nevt)/dt;
    cout << " Total tagged event rate (Hz) : " << ratetot << endl; 
    Double_t ratecombitot=double(nevtcomb)/dt;
-   if (ndeact) cout << " User reduced event rate (Hz) : " << ratecombitot << endl;
+   if (nact || ndeact) cout << " User reduced event rate (Hz) : " << ratecombitot << endl;
 
    // Rate per tag channel
    Double_t ratecond=0;

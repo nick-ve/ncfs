@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 15 07:08:09 2021            -->
+<!--   Date: Tue Jul 26 11:13:26 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -79,8 +79,19 @@ return false;}
  but for instance only after every 1000 instances of an activated <span class="string">"pass"</span> flag.
  This results in a downscale factor of 1000 for that tag stream.
 
- Note : The default initialization reflects the situation without downscaling,
-        which corresponds to pass=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and <a href="./#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+ Tailoring of the tag settings is provided via the member functions <a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>() and <a href="./NcTagger.html#NcTagger:SetWrite" title="void NcTagger::SetWrite(TString name,Bool_t flag)">SetWrite</a>().
+
+ Note :
+
+ The standard tagging logic reflects the situation without downscaling,
+ which corresponds to the following default behaviour of <a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>() :
+
+ pass=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> --&gt; write=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>
+ pass=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>  --&gt; write=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>
+
+ In case the user wants to reflect a different relation between the <span class="string">"pass"</span> and <span class="string">"write"</span> flags,
+ as is the case for a downscaled data stream, the <a href="./NcTagger.html#NcTagger:SetWrite" title="void NcTagger::SetWrite(TString name,Bool_t flag)">SetWrite</a>() member function has to be invoked
+ AFTER invokation of the corresponding <a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>().
 
  This class provides a generic basis to handle various event classification tags.
  By introducing instances of this (or a derived) class into an <a href="./NcEvent.html">NcEvent</a> c.q. <a href="./NcDetector.html">NcDetector</a>
@@ -105,6 +116,46 @@ return false;}
   evt.<a href="./NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>();
   trig.<a href="./NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>();
   filt.<a href="./NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>();
+
+  // Fill the event structure with recorded data
+  ... read DAQ structures
+  ... obtain the trigger information
+  ... etc.
+
+  // The trigger data
+  trig.<a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>(<span class="string">"SMT3"</span>,<a href="./ListOfTypes.html#Bool_t">kTRUE</a>);  // Simple Multiplicity Trigger (3 coincidences)
+  trig.<a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>(<span class="string">"SMT8"</span>,<a href="./ListOfTypes.html#Bool_t">kFALSE</a>); // Simple Multiplicity Trigger (8 coincidences)
+  trig.<a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>(<span class="string">"ITOP"</span>,<a href="./ListOfTypes.html#Bool_t">kFALSE</a>); // IceTop trigger
+
+  // From the trigger info, this seems to be a low multipicity (=low energy) event.
+  // Note that by default the <span class="string">"write"</span> tag is set accordingly for all these triggers.
+
+  // Perform some reconstruction tasks
+  ... track reconstruction
+  ... energy reconstruction
+  ... topology reconstruction
+  ... etc.
+
+  // The filtered event stream
+  filt.<a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>(<span class="string">"Muon"</span>,<a href="./ListOfTypes.html#Bool_t">kFALSE</a>);   // Reconstructed muon track
+  filt.<a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>(<span class="string">"EHE"</span>,<a href="./ListOfTypes.html#Bool_t">kFALSE</a>);    // Extreme High Energy event
+  filt.<a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>(<span class="string">"LowUp"</span>,<a href="./ListOfTypes.html#Bool_t">kTRUE</a>);   // Low energy upgoing event
+  filt.<a href="./NcTagger.html#NcTagger:SetWrite" title="void NcTagger::SetWrite(TString name,Bool_t flag)">SetWrite</a>(<span class="string">"LowUp"</span>,<a href="./ListOfTypes.html#Bool_t">kFALSE</a>); // This event will not be written due to <span class="string">"LowUp"</span> downscaling
+  filt.<a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>(<span class="string">"Solar"</span>,<a href="./ListOfTypes.html#Bool_t">kTRUE</a>);   // Event related to solar activity
+
+  // Based on the filter info, the event will be written because of the <span class="string">"Solar"</span> filter.
+
+  // Add the trigger and filter data into the event structure
+  evt.AddDevice(trig);
+  evt.AddDevice(filt);
+ }
+
+ In case this sample of events is written into a file, the trigger and filter statistics
+ may be investigated by means of the <a href="./NcTaggingStats.html">NcTaggingStats</a> or <a href="./NcDataStreamStats.html">NcDataStreamStats</a> facilities.
+
+--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 12, 2021  16:36Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  08:05Z
+
 </pre></div>
 </div></div>
 
@@ -562,10 +613,24 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTagger:SetPass" href="src/NcTagger.cxx.html#kmwSoD">SetPass</a>(TString name, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> flag)</span><br />
 <div class="funccomm"><pre> Set the pass flag of the tag with the specified name.
+
+ Note :
+
+ The standard tagging logic reflects the situation without downscaling,
+ which corresponds to the following default behaviour :
+
+ flag=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> --&gt; pass=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and write=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>
+ flag=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>  --&gt; pass=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>  and write=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>
+
+ In case the user wants to reflect a different relation between the <span class="string">"pass"</span> and <span class="string">"write"</span> flags,
+ as is the case for a downscaled data stream, the <a href="./NcTagger.html#NcTagger:SetWrite" title="void NcTagger::SetWrite(TString name,Bool_t flag)">SetWrite</a>() member function has to be invoked
+ AFTER this <a href="./NcTagger.html#NcTagger:SetPass" title="void NcTagger::SetPass(TString name,Bool_t flag)">SetPass</a>() invokation.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTagger:SetWrite" href="src/NcTagger.cxx.html#Ps1y2E">SetWrite</a>(TString name, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> flag)</span><br />
 <div class="funccomm"><pre> Set the write flag of the tag with the specified name.
+
+ Note : The setting of the pass flag is not modified.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Bool_t">Bool_t</a> <a class="funcname" name="NcTagger:GetPass" href="src/NcTagger.cxx.html#BSUKcE">GetPass</a>(TString name)</span><br />
@@ -596,7 +661,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul 15 07:08:09 2021 </em><em>&raquo; Last generated: 2021-07-15 07:08</em><br />
+<em>&raquo; Last changed: Tue Jul 26 11:13:26 2022 </em><em>&raquo; Last generated: 2022-07-26 11:13</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

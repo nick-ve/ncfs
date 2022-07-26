@@ -48,15 +48,26 @@
 // but for instance only after every 1000 instances of an activated "pass" flag.
 // This results in a downscale factor of 1000 for that tag stream.
 //
-// Note : The default initialization reflects the situation without downscaling,
-//        which corresponds to pass=kFALSE and Write=kTRUE.
+// Tailoring of the tag settings is provided via the member functions SetPass() and SetWrite().
+//
+// Note :
+// ------
+// The standard tagging logic reflects the situation without downscaling,
+// which corresponds to the following default behaviour of SetPass() :
+//
+// pass=kFALSE --> write=kFALSE
+// pass=kTRUE  --> write=kTRUE
+//
+// In case the user wants to reflect a different relation between the "pass" and "write" flags,
+// as is the case for a downscaled data stream, the SetWrite() member function has to be invoked
+// AFTER invokation of the corresponding SetPass(). 
 //
 // This class provides a generic basis to handle various event classification tags.
 // By introducing instances of this (or a derived) class into an NcEvent c.q. NcDetector
 // (or derived) structure, these may be accessed via the usual device retrieval functions.
 //
 // Usage example :
-// ===============
+// =============== 
 //
 // // Load the necessary libraries
 // gSystem->Load("ncfspack");
@@ -74,11 +85,11 @@
 //  evt.Reset();
 //  trig.Reset();
 //  filt.Reset();
- 
+// 
 //  // Fill the event structure with recorded data
 //  ... read DAQ structures
 //  ... obtain the trigger information
-//  ...
+//  ... etc.
 //
 //  // The trigger data
 //  trig.SetPass("SMT3",kTRUE);  // Simple Multiplicity Trigger (3 coincidences)
@@ -86,12 +97,13 @@
 //  trig.SetPass("ITOP",kFALSE); // IceTop trigger
 //
 //  // From the trigger info, this seems to be a low multipicity (=low energy) event.
-//  // Note that by default the "write" tag is kTRUE for all these triggers.
+//  // Note that by default the "write" tag is set accordingly for all these triggers.
 //
-//  // Perform some reconstruction tasks (tracks, energy, topology etc...)
-//  ...
-//  ...
-//  ...
+//  // Perform some reconstruction tasks
+//  ... track reconstruction
+//  ... energy reconstruction
+//  ... topology reconstruction
+//  ... etc.
 //
 //  // The filtered event stream
 //  filt.SetPass("Muon",kFALSE);   // Reconstructed muon track 
@@ -108,10 +120,10 @@
 // }
 //
 // In case this sample of events is written into a file, the trigger and filter statistics
-// may be investigated by means of the NcDataStreamStats facility. 
+// may be investigated by means of the NcTaggingStats or NcDataStreamStats facilities. 
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 12, 2021  16:36Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 15, 2021  06:46Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  08:05Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTagger.h"
@@ -137,16 +149,31 @@ NcTagger::NcTagger(const NcTagger& q) : NcDevice(q)
 void NcTagger::SetPass(TString name,Bool_t flag)
 {
 // Set the pass flag of the tag with the specified name.
+//
+// Note :
+// ------
+// The standard tagging logic reflects the situation without downscaling,
+// which corresponds to the following default behaviour :
+//
+// flag=kFALSE --> pass=kFALSE and write=kFALSE
+// flag=kTRUE  --> pass=kTRUE  and write=kTRUE
+//
+// In case the user wants to reflect a different relation between the "pass" and "write" flags,
+// as is the case for a downscaled data stream, the SetWrite() member function has to be invoked
+// AFTER this SetPass() invokation. 
 
  Float_t value=0;
  if (flag) value=1;
 
  SetTag(name,"Pass",value);
+ SetTag(name,"Write",value);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTagger::SetWrite(TString name,Bool_t flag)
 {
 // Set the write flag of the tag with the specified name.
+//
+// Note : The setting of the pass flag is not modified.
 
  Float_t value=0;
  if (flag) value=1;
@@ -202,7 +229,7 @@ void NcTagger::SetTag(TString hitname,TString slotname,Float_t value)
   sig.AddNamedSlot("Pass");
   sig.AddNamedSlot("Write");
   sig.SetSignal(0,"Pass");
-  sig.SetSignal(1,"Write");
+  sig.SetSignal(0,"Write");
   sig.SetSignal(value,slotname);
   AddHit(sig);
  }

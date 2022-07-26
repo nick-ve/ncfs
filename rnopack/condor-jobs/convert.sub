@@ -2,8 +2,8 @@
 # HTCondor submit description file to process the conversion
 # of RNO-G plain ROOT data into RnoEvent structures.
 #
-# The file sequence at the "queue" command below
-# represents the input data files to be processed
+# The run sequence at the "queue" command below
+# defines the input data files to be processed
 # as individual jobs.
 #
 # From each input file the filename base is constructed
@@ -39,7 +39,10 @@ getenv     = TRUE
 HOMEDIR    = $ENV(HOME)
 HOSTDIR    = $ENV(PWD)
 
-OUTPUTDIR  = $(HOSTDIR)
+OUTPUTDIR  = /pnfs/iihe/rno-g/rnopack-data/2021/station22/run$(RUN)
+
+# The input filename(s)
+filename   = /pnfs/iihe/rno-g/data/2021/station22/run$(RUN)/combined.root
 
 # Enable the HTCondor file transfer mechanism
 should_transfer_files = YES
@@ -49,7 +52,7 @@ transfer_output_files=""
 
 executable = convert.sh
 
-batch_name = convert
+batch_name = rno-convert
 
 JOBNAME    = $(batch_name)$(Process)
 
@@ -62,5 +65,6 @@ error      = $(joblog)
 output     = $(joblog)
 log        = $(sublog)
 
-queue filename matching files /pnfs/iihe/rno-g/data/2021/station21/run442/combined.root
+# Specify the range of run numbers to be processed
+queue RUN from seq 284 287 |
 

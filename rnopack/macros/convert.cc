@@ -5,6 +5,8 @@
 // search for recurrent astrophysical signals due to Earth's rotation.
 // The produced monitoring histograms are written to an output file
 // which here is specified as monitor.root.
+// In addition to this, the task NcTaggingStats is invoked to provide
+// the trigger statistics. 
 //
 // To run this macro interactively, just do ($ is prompt)
 //
@@ -22,7 +24,7 @@
 // Since the mattak package is not needed here, these warnings may be
 // safely ignored.
 //
-// Nick van Eijndhoven, IIHE-VUB, Brussels, July 10, 2022  22:20Z
+// Nick van Eijndhoven, IIHE-VUB, Brussels, July 26, 2022  20:07Z
 /////////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -85,7 +87,14 @@
  moni->DefineCentralValue("RMS");
  moni->SetNbins24(24*4);
 
+ // Specify a trigger statistics task
+ NcTaggingStats* trigstat=new NcTaggingStats("RnoTrigger","RNO-G trigger statistics");
+ trigstat->SetDevice("Trigger");
+ trigstat->ActivateTag("radiant"); // The Radiant (=surface) triggers
+ trigstat->ActivateTag("lt");      // The Low Threshold trigger 
+
  q.Add(moni);
+ q.Add(trigstat);
 
  // Perform the conversion and execute subtasks (if any)
  // on an event-by-event basis
@@ -95,4 +104,7 @@
 
  // Write the monitoring histograms to a ROOT output file
  moni->WriteHistograms("monitor.root");
+ 
+ // Provide the trigger statistics
+ trigstat->ShowStatistics();
 }

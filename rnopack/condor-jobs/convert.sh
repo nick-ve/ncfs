@@ -9,7 +9,7 @@
 # See the file convert.sub for further details.
 #
 # Nick van Eijndhoven, IIHE-VUB, Brussels.
-# UTC July 11, 2022  10:16
+# UTC July 15, 2022  16:55
 ####################################################
 
 export JOBNAME=$1
@@ -39,6 +39,9 @@ echo " Outputfile=$OUTPUTFILE"
 echo " Slavedir=$SLAVEDIR"
 echo " "
 
+### Create the output directory, if not already present
+mkdir -p $OUTPUTDIR
+
 cd $SLAVEDIR
 
 ### Import the necessary input file(s)
@@ -56,7 +59,6 @@ root -b -q macro.cc
 rm -f data.root
 
 ### Rename and transfer the produced output file
-rm -f $OUTPUTFILE
 mv -f data.rnopack $OUTPUTFILE
 
 ### Transfer additionally produced histogram etc. ROOT files

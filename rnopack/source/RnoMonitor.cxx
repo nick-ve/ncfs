@@ -42,7 +42,7 @@
 // which is also located in the folder /rnopack/macros.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 10, 2022  21:14Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 20, 2022  11:51Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoMonitor.h"
@@ -362,42 +362,20 @@ void RnoMonitor::Exec(Option_t* opt)
   hnlmst24->Fill(time);
  } // End of loop over devices
 
- // Storage of the used parameters in the RnoMonitor device
- NcDevice params;
- params.SetNameTitle("RnoMonitor","RnoMonitor processor parameters");
- str="DeviceClass=";
- str+=fDevClass;
- params.AddNamedSlot(str);
- params.SetSignal(0,str);
- str="DeviceSample";
- if (sxname!="")
- {
-  str+="=";
-  str+=sxname;
- }
- params.AddNamedSlot(str);
- params.SetSignal(fDevSample,str);
- str="SampleVariable=";
- str+=varname;
- params.AddNamedSlot(str);
- params.SetSignal(fVarIndex,str);
- str="MonitorValue=";
- str+=monval;
- params.AddNamedSlot(str);
- params.SetSignal(0,str);
- params.AddNamedSlot("Nbins24");
- params.SetSignal(fNbins24,"Nbins24");
-
- fEvt->AddDevice(params);
-
  if (fFirst)
  {
   cout << endl;
   cout << " *" << ClassName() << "::Exec* Processor parameter settings." << endl;
-  params.Data();
- }
+  cout << " Processor name ............ : " << GetName() << endl;
+  cout << " Processor title ........... : " << GetTitle() << endl;
+  cout << " Device class .............. : " << fDevClass << endl;
+  cout << " Device sample ............. : Index=" << fDevSample << " Name=" << sxname << endl; 
+  cout << " Sample variable ........... : Index=" << fVarIndex << " Name=" << varname << endl;
+  cout << " Monitor value ............. : " << monval << endl;
+  cout << " Number of bins for 24 hours : " << fNbins24 << endl;
 
- fFirst=kFALSE;
+  fFirst=kFALSE;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::ListHistograms() const

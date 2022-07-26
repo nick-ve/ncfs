@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Feb 15 15:50:19 2022            -->
+<!--   Date: Tue Jul 26 11:13:25 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -99,9 +99,9 @@ return false;}
  All data files that contain <a href="./NcEvent.html">NcEvent</a> (or derived) data structures are allowed.
 
  In order to obtain the required data, the <a href="./NcEvent.html">NcEvent</a> (or derived) structure should
- contain an <a href="./NcDevice.html">NcDevice</a> with the corresponding name (e.g. Trigger, Filter,...).
+ contain an <a href="./NcDevice.html">NcDevice</a> (based) object with the corresponding name (e.g. Trigger, Filter,...).
 
- The following two varieties of such an <a href="./NcDevice.html">NcDevice</a> may be present :
+ The following two varieties of such an <a href="./NcDevice.html">NcDevice</a> (based) object may be present :
 
  1) <a href="./NcTagger.html">NcTagger</a> (derived) devices. (The recommended option)
     These devices have pre-defined memberfunctions and an internal data structure
@@ -126,6 +126,10 @@ return false;}
  This class is a generalisation of the original trigger-stats.cc and filter-stats.cc
  ROOT macros of Nick van Eijndhoven (IIHE-VUB, Brussel, 09-dec-2009).
 
+ Note : The class <a href="./NcTaggingStats.html">NcTaggingStats</a> provides a similar facility that can be invoked
+        as a (sub)task in an event-by-event task processing environment, which in some
+        cases might provide more flexibility.
+
  Example 1:
 
 
@@ -146,15 +150,6 @@ return false;}
 
  fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ListInputFiles" title="void NcDataStreamStats::ListInputFiles(Option_t* opt=&quot;&quot;)">ListInputFiles</a>();
 
- // Activate some tags to investigate re-tagging for a selected event sample
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);         // Gamma ray Follow Up stream
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);        // High-Energy Starting Event stream
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>); // Enhanced Starting track alert stream
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EHEAlert"</span>);    // Extreme High Energy event alert stream
-
- // De-activate some tags to investigate re-tagging for background reduction
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>); // Extreme High Energy alert Heart Beat stream
-
  // Provide a progress output line every 1000 events
  fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetPrintFrequency" title="void NcDataStreamStats::SetPrintFrequency(Int_t m)">SetPrintFrequency</a>(1000);
 
@@ -166,6 +161,15 @@ return false;}
  // The statement below shows the alternative for a <span class="string">"Trigger"</span> analysis
  // where the trigger tags do not have <span class="string">"pass"</span> nor <span class="string">"write"</span> indicators.
  // fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetDeviceNames" title="void NcDataStreamStats::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
+
+ // Activate some tags to investigate re-tagging for a selected event sample
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);         // Gamma ray Follow Up stream
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);        // High-Energy Starting Event stream
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>); // Enhanced Starting track alert stream
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EHEAlert"</span>);    // Extreme High Energy event alert stream
+
+ // De-activate some tags to investigate re-tagging for background reduction
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>); // Extreme High Energy alert Heart Beat stream
 
  // Perform the analysis.
  fstat.<a href="./#TTask:ExecuteTask" title="void TTask::ExecuteTask(Option_t* option=&quot;0&quot;)">ExecuteTask</a>();
@@ -188,24 +192,24 @@ return false;}
 
  fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ListInputFiles" title="void NcDataStreamStats::ListInputFiles(Option_t* opt=&quot;&quot;)">ListInputFiles</a>();
 
- // Activate some tags to investigate re-tagging for a selected event sample
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"LPDA"</span>); // Surface LPDA trigger
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"PA"</span>);   // Deep ice Phased Array trigger
-
- // De-activate some tags to investigate re-tagging for background reduction
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"CR"</span>); // Cosmic Ray trigger
-
  // Provide a progress output line every 1000 events
  fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetPrintFrequency" title="void NcDataStreamStats::SetPrintFrequency(Int_t m)">SetPrintFrequency</a>(1000);
 
  // Specify that we will access the <a href="./NcTagger.html">NcTagger</a> (derived) device named <span class="string">"Trigger"</span>
  fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetDevice" title="void NcDataStreamStats::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>(<span class="string">"Trigger"</span>);
 
+ // Activate some (fictative) tags to investigate re-tagging for a selected event sample
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"LPDA"</span>); // Surface LPDA trigger
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"PA"</span>);   // Deep ice Phased Array trigger
+
+ // De-activate some (fictative) tags to investigate re-tagging for background reduction
+ fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"CR"</span>); // Cosmic Ray trigger
+
  // Perform the analysis.
  fstat.<a href="./#TTask:ExecuteTask" title="void TTask::ExecuteTask(Option_t* option=&quot;0&quot;)">ExecuteTask</a>();
 
 --- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  13:59Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  10:29Z
 
 </pre></div>
 </div></div>
@@ -555,7 +559,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Tue Feb 15 15:50:19 2022 </em><em>&raquo; Last generated: 2022-02-15 15:50</em><br />
+<em>&raquo; Last changed: Tue Jul 26 11:13:25 2022 </em><em>&raquo; Last generated: 2022-07-26 11:13</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

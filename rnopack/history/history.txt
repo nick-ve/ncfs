@@ -40,3 +40,6 @@
                 in folder /macros to serve as an example to investigate files containing RnoEvent structures.
                 Furthermore, a folder /condor-jobs has been added in which several HTCondor job templates
                 are provided to process RNO-G data.
+20-jul-2022 NvE Storage of processor parameters in the RnoEvent structure replaced by just some printout
+                at the first invokation of RnoMonitor::Exec().
+26-jul-2022 NvE Treatment of trigger info extended in RnoConvert.cxx.

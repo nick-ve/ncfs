@@ -33,7 +33,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  14:51Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  19:48Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -267,6 +267,7 @@ void RnoConvert::Exec(Option_t* opt)
   cout << " Output characteristics : splitlevel = " << fSplit << " buffersize = " << fBsize << endl;
   cout << " Required event selection level interval for output : [" << fMinSelectLevel << "," << fMaxSelectLevel << "]" << endl;
  }
+ cout << endl;
 
  ListEnvironment();
 
@@ -294,8 +295,6 @@ void RnoConvert::Exec(Option_t* opt)
 
  // Trigger info
  NcTagger trigger("Trigger","Trigger tags");
- const Int_t ntrig=7;
- TString trignames[ntrig]={"rf","force","pps","ext","radiant","lt","surface"};
 
  // The waveforms of all channels are stored as Short_t radiant_data[24][2048]
  // but will be readout linearly, as indicated below. 
@@ -304,6 +303,7 @@ void RnoConvert::Exec(Option_t* opt)
  // but will be readout linearly, as indicated below. 
 
  // Loop over the entries in the input data chain
+ TBranch* bx=0;
  TLeaf* lx=0;
  Int_t idx=0;
  Int_t nsamples=0; // The sampling buffer length
@@ -314,7 +314,10 @@ void RnoConvert::Exec(Option_t* opt)
  pedestal.SetStoreMode(1);
  Int_t idsample=0; // Index for the NcSample in the NcDevice storage
  TString name="";
+ TString namex1="";
+ TString namex2="";
  Float_t value=0;
+ Int_t ivalue=0;
  Bool_t flag=kFALSE;
  Int_t iradiant=0; // RADIANT firmware update sequence number
  Int_t iflower=0;  // FLOWER firmware update sequence number
@@ -383,18 +386,99 @@ void RnoConvert::Exec(Option_t* opt)
   // Trigger data
   trigger.Reset();
 
-  for (Int_t jtrig=0; jtrig<ntrig; jtrig++)
+  bx=fData->GetBranch("trigger_info");
+  if (bx)
   {
-   name="trigger_info.";
-   name+=trignames[jtrig];
-   name+="_trigger";
-   lx=fData->GetLeaf(name);
-   if (lx)
+   TObjArray* subbranches=bx->GetListOfBranches();
+   for (Int_t jbx=0; jbx<subbranches->GetEntries(); jbx++)
    {
-    flag=kFALSE;
-    if (TMath::Nint(lx->GetValue())) flag=kTRUE;
-    trigger.SetPass(trignames[jtrig],flag);
-    trigger.SetWrite(trignames[jtrig],flag);
+    TBranch* bsub=(TBranch*)subbranches->At(jbx);
+    if (!bsub) continue;
+    TObjArray* leaves=bsub->GetListOfLeaves();
+    for (Int_t jlx=0; jlx<leaves->GetEntries(); jlx++)
+    {
+     lx=(TLeaf*)leaves->At(jlx);
+     if (!lx) continue;
+
+     name=lx->GetName();
+     name.ReplaceAll("trigger_info.","");
+     value=lx->GetValue();
+     ivalue=TMath::Nint(value);
+     namex1="";
+     namex2="";
+
+     // The low threshold time window and number of coincidences
+     if (name.Contains("lt_info.window")) namex1="lt-window";
+     if (name.Contains("lt_info.num_coinc")) namex1="lt-ncoinc";
+
+     if (namex1!="")
+     {
+      trigger.AddNamedSlot(namex1);
+      trigger.SetSignal(value,namex1);
+      continue;
+     }
+
+     // The various radiant (=surface) time windows and number of coincidences
+     if (name.Contains("radiant_info.RF_window"))
+     {
+      namex1="LPDA-up-window";
+      namex2="LPDA-down-window";
+      value=lx->GetValue(0);
+      trigger.AddNamedSlot(namex1);
+      trigger.SetSignal(value,namex1);
+      value=lx->GetValue(1);
+      trigger.AddNamedSlot(namex2);
+      trigger.SetSignal(value,namex2);
+      continue;
+     }
+     if (name.Contains("radiant_info.RF_ncoinc"))
+     {
+      namex1="LPDA-up-ncoinc";
+      namex2="LPDA-down-ncoinc";
+      value=lx->GetValue(0);
+      trigger.AddNamedSlot(namex1);
+      trigger.SetSignal(value,namex1);
+      value=lx->GetValue(1);
+      trigger.AddNamedSlot(namex2);
+      trigger.SetSignal(value,namex2);
+      continue;
+     }
+
+     if (!name.Contains("_trigger")) continue;
+
+     // Settings of the various radiant (=surface) triggers
+     if (name.Contains("which_radiant"))
+     {
+      namex1="LPDA-up_trigger";
+      namex2="LPDA-down_trigger";
+      if (ivalue<-100) // None of the surface triggers
+      {
+       trigger.SetPass(namex1,kFALSE);
+       trigger.SetPass(namex2,kFALSE);
+      }
+      if (ivalue==-1) // Both upward and downward surface triggers
+      {
+       trigger.SetPass(namex1,kTRUE);
+       trigger.SetPass(namex2,kTRUE);
+      }
+      if (ivalue==0) // Only upward surface trigger
+      {
+       trigger.SetPass(namex1,kTRUE);
+       trigger.SetPass(namex2,kFALSE);
+      }
+      if (ivalue==1) // Only downward surface trigger
+      {
+       trigger.SetPass(namex1,kFALSE);
+       trigger.SetPass(namex2,kTRUE);
+      }
+     }
+     else
+     {
+      flag=kFALSE;
+      if (ivalue) flag=kTRUE;
+      trigger.SetPass(name,flag);
+     }
+    }
    }
   }
 

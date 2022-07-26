@@ -1332,3 +1332,8 @@
 10-jul-2022 NvE New class RnoMonitor introduced in /rnopack and also some example ROOT macros added c.q. extended
                 in the folder /rnopack/macros. See rnopack/history for further details. 
                 The version indicator in NcVersion has been updated to 4.9.
+26-jul-2022 NvE Bug fixed in re-tagging statistics treatment of class NcDataStreamStats and default behaviour
+                for NcTagger::SetPass() introduced to reflect data streams without downscaling.
+                Also new class NcTaggingStats introduced and trigger info treatment extended in RnoConvert
+                (see rnopack/history for further details).
+                The version indicator in NcVersion has been updated to 4.10.

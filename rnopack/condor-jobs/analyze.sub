@@ -2,8 +2,8 @@
 # HTCondor submit description file to process the investigation
 # of RNO-G data files containing RnoEvent structures.
 #
-# The file sequence at the "queue" command below
-# represents the input data files to be processed
+# The run sequence at the "queue" command below
+# defines the input data files to be processed
 # as individual jobs.
 #
 # For each individual job a jobname is constructed
@@ -35,7 +35,10 @@ getenv     = TRUE
 HOMEDIR    = $ENV(HOME)
 HOSTDIR    = $ENV(PWD)
 
-OUTPUTDIR  = $(HOSTDIR)
+OUTPUTDIR  = /pnfs/iihe/rno-g/rnopack-data/2021/station22/run$(RUN)/analysis
+
+# The input filename(s)
+filename   = /pnfs/iihe/rno-g/rnopack-data/2021/station22/run$(RUN)/combined.rnopack
 
 # Enable the HTCondor file transfer mechanism
 should_transfer_files = YES
@@ -58,5 +61,5 @@ error      = $(joblog)
 output     = $(joblog)
 log        = $(sublog)
 
-queue filename matching files $(HOSTDIR)/combined.rnopack
-
+# Specify the range of run numbers to be processed
+queue RUN from seq 284 287 |

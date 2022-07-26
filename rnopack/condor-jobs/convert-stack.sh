@@ -28,6 +28,9 @@ echo " Outputdir=$OUTPUTDIR"
 echo " Slavedir=$SLAVEDIR"
 echo " "
 
+### Create the output directory, if not already present
+mkdir -p $OUTPUTDIR
+
 cd $SLAVEDIR
 
 ### Import the necessary input file(s)

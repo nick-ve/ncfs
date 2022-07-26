@@ -50,3 +50,4 @@
 #include "NcStokes.h"
 #include "NcBlocks.h"
 #include "NcTransform.h"
+#include "NcTaggingStats.h"
