@@ -33,7 +33,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  19:48Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 28, 2022  11:08Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -277,14 +277,18 @@ void RnoConvert::Exec(Option_t* opt)
  // Check for the maximum number of events to be processed
  if (fMaxevt>-1 && nen>fMaxevt) nen=fMaxevt;
 
+ // The leaves in the input chain
+ TObjArray* leaves=fData->GetListOfLeaves();
+ Int_t nleaves=leaves->GetEntries();
+
  //////////////////////////////////////
  // Variables in the RNO-G data tree //
  //////////////////////////////////////
 
  // Header info
  Int_t run=0;
- Int_t event=-1;
- Int_t station=-1;
+ Int_t event=0;
+ Int_t station=0;
  Double_t trigtime=0;
 
  // DAQ info
@@ -296,26 +300,31 @@ void RnoConvert::Exec(Option_t* opt)
  // Trigger info
  NcTagger trigger("Trigger","Trigger tags");
 
- // The waveforms of all channels are stored as Short_t radiant_data[24][2048]
- // but will be readout linearly, as indicated below. 
+ // The waveforms of all channels are provided as Short_t radiant_data[24][2048]
+ // but will be readout linearly and stored as an NcSample for each channel, as indicated below. 
+ NcSample signal("Signals","Radiant signals");
+ signal.SetStoreMode(1);
 
- // The pedestals of all channels are stored as UShort_t pedestals[24][4096]
- // but will be readout linearly, as indicated below. 
+ // The pedestals of all channels are provided as UShort_t pedestals[24][4096]
+ // but will be readout linearly and stored as an NcSample for each channel, as indicated below. 
+ NcSample pedestal("Pedestals","Pedestal values");
+ pedestal.SetStoreMode(1);
 
- // Loop over the entries in the input data chain
- TBranch* bx=0;
+ ///////////////////////////////////////////////////
+ // Loop over the entries in the input data chain //
+ ///////////////////////////////////////////////////
+
  TLeaf* lx=0;
+ TLeaf* lradiant=0;  // Pointer to the Radiant waveform data
+ TLeaf* lpedestal=0; // Pointer to the Pedestal waveform data
  Int_t idx=0;
  Int_t nsamples=0; // The sampling buffer length
  NcDevice* devx=0;
- NcSample signal("Signals","Radiant signals");
- signal.SetStoreMode(1);
- NcSample pedestal("Pedestals","Pedestal values");
- pedestal.SetStoreMode(1);
  Int_t idsample=0; // Index for the NcSample in the NcDevice storage
  TString name="";
  TString namex1="";
  TString namex2="";
+ TString namex3="";
  Float_t value=0;
  Int_t ivalue=0;
  Bool_t flag=kFALSE;
@@ -323,6 +332,7 @@ void RnoConvert::Exec(Option_t* opt)
  Int_t iflower=0;  // FLOWER firmware update sequence number
  Float_t fsample;  // The DAQ sampling rate in Hz
  Int_t nwritten=0; // The number of events written to output
+
  for (Int_t ient=0; ient<nen; ient++)
  {
   // Reset the detector structure
@@ -331,25 +341,127 @@ void RnoConvert::Exec(Option_t* opt)
 
   fData->GetEntry(ient);
 
-  // Header data
-  if (fData->GetBranch("header"))
+  // Loop over all the leaves and extract the relevant data for this entry.
+  // This approach makes the functionality independent of the Tree/Branch structure.
+  run=0;
+  event=0;
+  station=0;
+  trigtime=0;
+  nsamples=0;
+  trigger.Reset();
+  lradiant=0;
+  lpedestal=0;
+  for (Int_t ileaf=0; ileaf<nleaves; ileaf++)
   {
-   lx=fData->GetLeaf("header.run_number","run_number");
-   if (lx) run=lx->GetValue();
-   lx=fData->GetLeaf("header.event_number","event_number");
-   if (lx) event=lx->GetValue();
-   lx=fData->GetLeaf("header.station_number","station_number");
-   if (lx) station=lx->GetValue();
-   lx=fData->GetLeaf("header.trigger_time","trigger_time");
-   if (lx) trigtime=lx->GetValue();
-  }
-  else // The corresponding data from a pedestal file
-  {
-   lx=fData->GetLeaf("station_number");
-   if (lx) station=lx->GetValue();
-   lx=fData->GetLeaf("when");
-   if (lx) trigtime=lx->GetValue();
-  }
+   lx=(TLeaf*)leaves->At(ileaf);
+
+   if (!lx) continue;
+
+   name=lx->GetName();
+
+   // Header data
+   if (!run && name=="run_number") run=lx->GetValue();
+   if (!event && name=="event_number") event=lx->GetValue();
+   if (!station && name=="station_number") station=lx->GetValue();
+   if (!trigtime && name=="trigger_time") trigtime=lx->GetValue();
+   if (!trigtime && name=="when") trigtime=lx->GetValue(); // In case of a pedestal data file
+   if (!nsamples && name=="buffer_length") nsamples=lx->GetValue();
+
+   // Trigger data
+   if (name.Contains("trigger_info"))
+   {
+    name.ReplaceAll("trigger_info.","");
+    value=lx->GetValue();
+    ivalue=TMath::Nint(value);
+    namex1="";
+    namex2="";
+    namex3="";
+
+    // The low threshold time window and number of coincidences
+    if (name.Contains("lt_info.window")) namex1="lt-window";
+    if (name.Contains("lt_info.num_coinc")) namex1="lt-ncoinc";
+
+    if (namex1!="")
+    {
+     trigger.AddNamedSlot(namex1);
+     trigger.SetSignal(value,namex1);
+     continue;
+    }
+
+    // The various radiant (=surface) time windows and number of coincidences
+    if (name.Contains("radiant_info.RF_window"))
+    {
+     namex1="LPDA-up-window";
+     namex2="LPDA-down-window";
+     value=lx->GetValue(0);
+     trigger.AddNamedSlot(namex1);
+     trigger.SetSignal(value,namex1);
+     value=lx->GetValue(1);
+     trigger.AddNamedSlot(namex2);
+     trigger.SetSignal(value,namex2);
+     continue;
+    }
+    if (name.Contains("radiant_info.RF_ncoinc"))
+    {
+     namex1="LPDA-up-ncoinc";
+     namex2="LPDA-down-ncoinc";
+     value=lx->GetValue(0);
+     trigger.AddNamedSlot(namex1);
+     trigger.SetSignal(value,namex1);
+     value=lx->GetValue(1);
+     trigger.AddNamedSlot(namex2);
+     trigger.SetSignal(value,namex2);
+     continue;
+    }
+
+    // The actual trigger tags
+    if (name.Contains("_trigger"))
+    {
+     // Settings of the various radiant (=surface) triggers
+     if (name.Contains("which_radiant"))
+     {
+      namex1="LPDA-up_trigger";
+      namex2="LPDA-down_trigger";
+      namex3="radiant-unknown_trigger";
+      if (ivalue<-100) // None of the surface triggers
+      {
+       trigger.SetPass(namex1,kFALSE);
+       trigger.SetPass(namex2,kFALSE);
+       trigger.SetPass(namex3,kFALSE);
+      }
+      if (ivalue==-1) // Unknown radiant trigger
+      {
+       trigger.SetPass(namex1,kFALSE);
+       trigger.SetPass(namex2,kFALSE);
+       trigger.SetPass(namex3,kTRUE);
+      }
+      if (ivalue==0) // Only upward surface trigger
+      {
+       trigger.SetPass(namex1,kTRUE);
+       trigger.SetPass(namex2,kFALSE);
+       trigger.SetPass(namex3,kFALSE);
+      }
+      if (ivalue==1) // Only downward surface trigger
+      {
+       trigger.SetPass(namex1,kFALSE);
+       trigger.SetPass(namex2,kTRUE);
+       trigger.SetPass(namex3,kFALSE);
+      }
+     }
+     else
+     {
+      flag=kFALSE;
+      if (ivalue) flag=kTRUE;
+      trigger.SetPass(name,flag);
+     }
+    }
+   } // End of trigger data
+
+   // Pointers to the waveform data
+   if (name=="radiant_data") lradiant=lx;
+   if (name=="pedestals") lpedestal=lx;   
+
+  } // End of loop over the leaves
 
   // Create this station in the detector structure
   RnoStation* stax=det.GetStation(station,kTRUE);
@@ -357,9 +469,9 @@ void RnoConvert::Exec(Option_t* opt)
   if (!stax) break;
 
   // DAQ info
-  iradiant=2;
-  iflower=0;
-  fsample=3.2e9;
+  iradiant=2;    // The RADIANT update version
+  iflower=0;     // The FLOWER update version
+  fsample=3.2e9; // The sampling rate in Hz
   if (station==11)
   {
    if (run<571) iradiant=1;
@@ -383,113 +495,11 @@ void RnoConvert::Exec(Option_t* opt)
 
   stax->AddDevice(daq);
 
-  // Trigger data
-  trigger.Reset();
-
-  bx=fData->GetBranch("trigger_info");
-  if (bx)
-  {
-   TObjArray* subbranches=bx->GetListOfBranches();
-   for (Int_t jbx=0; jbx<subbranches->GetEntries(); jbx++)
-   {
-    TBranch* bsub=(TBranch*)subbranches->At(jbx);
-    if (!bsub) continue;
-    TObjArray* leaves=bsub->GetListOfLeaves();
-    for (Int_t jlx=0; jlx<leaves->GetEntries(); jlx++)
-    {
-     lx=(TLeaf*)leaves->At(jlx);
-     if (!lx) continue;
-
-     name=lx->GetName();
-     name.ReplaceAll("trigger_info.","");
-     value=lx->GetValue();
-     ivalue=TMath::Nint(value);
-     namex1="";
-     namex2="";
-
-     // The low threshold time window and number of coincidences
-     if (name.Contains("lt_info.window")) namex1="lt-window";
-     if (name.Contains("lt_info.num_coinc")) namex1="lt-ncoinc";
-
-     if (namex1!="")
-     {
-      trigger.AddNamedSlot(namex1);
-      trigger.SetSignal(value,namex1);
-      continue;
-     }
-
-     // The various radiant (=surface) time windows and number of coincidences
-     if (name.Contains("radiant_info.RF_window"))
-     {
-      namex1="LPDA-up-window";
-      namex2="LPDA-down-window";
-      value=lx->GetValue(0);
-      trigger.AddNamedSlot(namex1);
-      trigger.SetSignal(value,namex1);
-      value=lx->GetValue(1);
-      trigger.AddNamedSlot(namex2);
-      trigger.SetSignal(value,namex2);
-      continue;
-     }
-     if (name.Contains("radiant_info.RF_ncoinc"))
-     {
-      namex1="LPDA-up-ncoinc";
-      namex2="LPDA-down-ncoinc";
-      value=lx->GetValue(0);
-      trigger.AddNamedSlot(namex1);
-      trigger.SetSignal(value,namex1);
-      value=lx->GetValue(1);
-      trigger.AddNamedSlot(namex2);
-      trigger.SetSignal(value,namex2);
-      continue;
-     }
-
-     if (!name.Contains("_trigger")) continue;
-
-     // Settings of the various radiant (=surface) triggers
-     if (name.Contains("which_radiant"))
-     {
-      namex1="LPDA-up_trigger";
-      namex2="LPDA-down_trigger";
-      if (ivalue<-100) // None of the surface triggers
-      {
-       trigger.SetPass(namex1,kFALSE);
-       trigger.SetPass(namex2,kFALSE);
-      }
-      if (ivalue==-1) // Both upward and downward surface triggers
-      {
-       trigger.SetPass(namex1,kTRUE);
-       trigger.SetPass(namex2,kTRUE);
-      }
-      if (ivalue==0) // Only upward surface trigger
-      {
-       trigger.SetPass(namex1,kTRUE);
-       trigger.SetPass(namex2,kFALSE);
-      }
-      if (ivalue==1) // Only downward surface trigger
-      {
-       trigger.SetPass(namex1,kFALSE);
-       trigger.SetPass(namex2,kTRUE);
-      }
-     }
-     else
-     {
-      flag=kFALSE;
-      if (ivalue) flag=kTRUE;
-      trigger.SetPass(name,flag);
-     }
-    }
-   }
-  }
-
   stax->AddDevice(trigger);
 
   // Readout the signal waveforms of all Radiant channels
-  nsamples=0;
-  lx=fData->GetLeaf("waveforms.buffer_length","buffer_length");
-  if (lx) nsamples=TMath::Nint(lx->GetValue());
   if (!nsamples) nsamples=2048;
-  lx=fData->GetLeaf("radiant_data");
+  lx=lradiant;
   if (lx)
   {
    idsample++;
@@ -518,7 +528,7 @@ void RnoConvert::Exec(Option_t* opt)
 
   // Readout the pedestals of all Radiant channels
   nsamples=4096;
-  lx=fData->GetLeaf("pedestals");
+  lx=lpedestal;
   if (lx)
   {
    idsample++;

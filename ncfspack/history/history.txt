@@ -1336,4 +1336,6 @@
                 for NcTagger::SetPass() introduced to reflect data streams without downscaling.
                 Also new class NcTaggingStats introduced and trigger info treatment extended in RnoConvert
                 (see rnopack/history for further details).
-                The version indicator in NcVersion has been updated to 4.10.
+01-aug-2022 NvE Data retrieval completely based on looping over the Leaf list in order to be
+                completely independent of the data Tree c.q. Branch structure in RnoConvert.cxx.
+                The version indicator in NcVersion has been updated to 4.10.1.

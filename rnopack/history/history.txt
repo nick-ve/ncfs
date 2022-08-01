@@ -43,3 +43,5 @@
 20-jul-2022 NvE Storage of processor parameters in the RnoEvent structure replaced by just some printout
                 at the first invokation of RnoMonitor::Exec().
 26-jul-2022 NvE Treatment of trigger info extended in RnoConvert.cxx.
+01-aug-2022 NvE Data retrieval completely based on looping over the Leaf list in order to be
+                completely independent of the data Tree c.q. Branch structure in RnoConvert.cxx.
