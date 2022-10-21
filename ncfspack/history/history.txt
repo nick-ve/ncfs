@@ -1339,3 +1339,15 @@
 01-aug-2022 NvE Data retrieval completely based on looping over the Leaf list in order to be
                 completely independent of the data Tree c.q. Branch structure in RnoConvert.cxx.
                 The version indicator in NcVersion has been updated to 4.10.1.
+10-oct-2022 NvE New member function NcTimestamp::GetLAT() introduced, and functionality of
+                NcTimestamp::GetDayTimeString() extended.
+12-oct-2022 NvE Date and time string separator characters (e.g. "-", "/" or ":") replaced by "" instead of " "
+                in the string processing of NcTimestamp::SetUT() memberfunctions.
+16-oct-2022 NvE Docs completed c.q. corrected for input argument "U" in NcTimestamp::SetEpoch().
+21-oct-2022 NvE Functionality of NcAstrolab::DisplaySignal() extended and new memberfunctions
+                InitDataNames(), SetDataNames() and LoadInputData() introduced to provide a generic
+                mechanism to enter (astro)physical data.
+                The memberfunction LoadGCNdata(), which was part of the beta version of burst analysis,
+                has been removed, since it is now replaced by LoadInputData().
+                The ROOT macro burst-model.cc in the folder physics/macros has been adapted accordingly.
+                The version indicator in NcVersion has been updated to 4.10.2.

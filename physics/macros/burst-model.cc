@@ -52,8 +52,29 @@
 /// lab.MakeBurstRecoAngresdist("IC86*data.root","tree","logE","angErr","rad","dec","rad",200,1e7);
 
  // Obtain burst locations, durations etc.
-/// lab.LoadBurstGCNdata("../grbweb/GRBweb.root","T"); // Load from observed GCN data
- lab.GenBurstGCNdata(500,"GRB"); // Generate fictative burst GCN data
+
+/*************
+ // Use this code to load observed GCN data
+ lab.InitDataNames(1,"equ");
+ lab.SetDataNames("Date","date","yyyymmdd");
+ lab.SetDataNames("Tobs","mjdtrig","MJD");
+ lab.SetDataNames("a","ra","deg");
+ lab.SetDataNames("b","dec","deg");
+ lab.SetDataNames("csigma","sigmapos","deg");
+ lab.SetDataNames("T90","t90");
+ lab.SetDataNames("Tstart","mjdt90start","MJD");
+ lab.SetDataNames("T100","t100");
+ lab.SetDataNames("S","fluence");
+ lab.SetDataNames("z","z");
+
+ lab.ListDataNames();
+
+ Bool_t src=kTRUE;
+ lab.LoadInputData(src,"../grbweb/GRBweb.root","T");
+**************/
+
+ // Use this statement to generate fictative burst GCN data
+ lab.GenBurstGCNdata(500,"GRB");
 
  // Provide a listing of the first 10 stored burst positions
  cout << endl;

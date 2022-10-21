@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.                     *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -65,6 +65,11 @@
 // the location of an observation or angular differences with reference signals.
 // These facilities will enable a background c.q. blind analysis in studying
 // correlations with external (astrophysical) phenomena.
+//
+// The member function sequence InitDataNames(), SetDataNames() and LoadInputData()
+// provides a generic facility to load both observations and reference signals
+// from ROOT data files in Tree format.
+// This provides a convenient way to load e.g. experimental observations or (GCN) catalog data.
 //
 // This NcAstrolab class also provides a facility to model c.q. perform the
 // analysis of transient phenomena by means of (stacked) time series observations.
@@ -159,7 +164,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 22, 2021  10:06Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 21, 2022  10:43Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -249,6 +254,11 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
 
  // Function to parametrize the Neutrino-Lepton kinematic opening angle
  fNuAngle=0;
+
+ // Specifications of the data from a ROOT input Tree  
+ fDataDir=0;
+ fDataFrame="undefined";
+ fDataMode="undefined";
 
  // Storage for transient burst investigations
  fBurstParameters=0;
@@ -2478,6 +2488,39 @@ Int_t NcAstrolab::GetSignalIndex(TString name,Int_t type)
  return index;
 }
 ///////////////////////////////////////////////////////////////////////////
+Int_t NcAstrolab::GetSignalIndex(NcSignal* s,Int_t type)
+{
+// Provide storage index of the specified signal.
+//
+// type = 0 --> Provide the index of a reference signal
+//      = 1 --> Provide the index of a measured signal
+//
+// In case no matching signal is found, the value -1 is returned.
+
+ if (!s) return -1;
+
+ Int_t index=-1;
+ 
+ TObjArray* arr=fRefs;
+ if (type) arr=fSigs;
+ 
+ if (!arr) return -1;
+
+ for (Int_t i=0; i<arr->GetSize(); i++)
+ {
+  NcSignal* sx=(NcSignal*)arr->At(i);
+  if (!sx) continue;
+
+  if (sx==s)
+  {
+   index=i+1;
+   break;
+  }
+ }
+
+ return index;
+}
+///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref,TString emode,Int_t type)
 {
 // Print data of a stored signal in user specified coordinates at the specific timestamp ts.
@@ -4648,8 +4691,20 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
 // merh : Mercator projection plotted in a 2-D histogram
 // ang  : Straight sin(b) vs. l plot with colored markers
 // angh : Straight sin(b) vs. l plot in a 2-D histogram
+// UTh  : Day view (0-24 hours) of b vs. Universal Time
+// LTh  : Day view (0-24 hours) of b vs. Local Time
+// GSTh : Day view (0-24 hours) of b vs. Greenwich Siderial Time
+// LSTh : Day view (0-24 hours) of b vs. Local Siderial Time
+// UYh  : Year view of b vs. day of the year at the Universal Time of the specified timestamp
+// LYh  : Year view of b vs. day of the year at the Local Time of the specified timestamp
+// GSYh : Year view of b vs. day of the year at the Greenwich Siderial Time of the specified timestamp
+// LSYh : Year view of b vs. day of the year at the Local Siderial Time of the specified timestamp
 //
-// Note : The ang(h) plot allows for easy identification of an isotropic distribution.
+// Notes :
+// -------
+// 1) The ang(h) plot allows for easy identification of an isotropic distribution.
+// 2) For the projections "GSTh", "LSTh", "GSYh" and "LSYh", the input argument "mode"
+//    also determines whether they show the Mean (mode="M") or Apparent (mode="T") Sidereal Time. 
 //
 // The input argument "clr" allows to clear (1) the display before drawing or not (0).
 //
@@ -4725,6 +4780,8 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
 
  Int_t hist=0;
  if (proj=="hamh" || proj=="aith" || proj=="merh" || proj=="cylh" || proj=="angh") hist=1;
+ if (proj=="UTh" || proj=="LTh" || proj=="GSTh" || proj=="LSTh") hist=1;
+ if (proj=="UYh" || proj=="LYh" || proj=="GSYh" || proj=="LSYh") hist=1;
 
  // Update the display for this signal position
 
@@ -5202,10 +5259,168 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
   {
    fHist[type]->Fill(x*xfac,theta*180./pi);
   }
-  else
+  else if (proj=="hamh" || proj=="aith" || proj=="cylh" || proj=="angh")
   {
    fHist[type]->Fill(x*xfac,y*yfac);
   }
+  else if (proj=="UTh" || proj=="LTh" || proj=="GSTh" || proj=="LSTh") // The 24 hour day view
+  {
+   // Set histogram binning and axes attributes
+   fHist[type]->SetBins(100,0,24,181,-90.5,90.5);
+   if (!ts) ts=(NcTimestamp*)this;
+   NcTimestamp tx=(*ts);
+   Double_t toffset=GetLabTimeOffset();
+   TString title="Day view at ";
+   title+=GetName();
+   title+=" on ";
+   TString date;
+   ts->GetDayTimeString("UT",0,0,&date);
+   title+=date;
+   TString tmode="UT";
+   if (proj=="LTh") tmode="LMT";
+   if (proj=="GSTh")
+   {
+    tmode="GMST";
+    if (mode=="T") tmode="GAST";
+   }
+   if (proj=="LSTh")
+   {
+    tmode="LMST";
+    if (mode=="T") tmode="LAST";
+   }
+   if (proj=="UTh") title+=";Universal Time";
+   if (proj=="LTh") title+=";Local Time";
+   if (proj=="GSTh") title+=";Greenwich Sidereal Time";
+   if (proj=="LSTh") title+=";Local Sidereal Time";
+   if (proj!="UTh")
+   {
+    title+=" (";
+    title+=tmode;
+    title+=")";
+   }
+   title+=" in hours;";
+   TString ytitle="Declination ";
+   if (frame=="equ" && mode=="J") ytitle+="(J2000)";
+   if (frame=="equ" && mode=="B") ytitle+="(B1950)";
+   if (frame=="equ" && mode=="M") ytitle+="(Mean)";
+   if (frame=="equ" && mode=="T") ytitle+="(True)";
+   if (frame=="gal") ytitle="Galactic latitude";
+   if (frame=="ecl") ytitle="Geocentric Ecliptic latitude";
+   if (frame=="hor") ytitle="Horizon altitude";
+   if (frame=="icr") ytitle="ICRS latitude";
+   if (frame=="loc") ytitle="Angle w.r.t. local frame equator";
+   ytitle+=" in degrees";
+   title+=ytitle;
+   fHist[type]->SetTitle(title);
+   fHist[type]->SetStats(kFALSE);
+
+   // Fill the day view histogram
+   Double_t hour=0;
+   Double_t d,a,b;
+   for (Int_t i=0; i<24; i++)
+   {
+    if (tmode=="UT") hour=tx.GetUT();
+    if (tmode=="LMT") hour=tx.GetLT(toffset);
+    if (tmode=="GMST") hour=tx.GetGMST();
+    if (tmode=="GAST") hour=tx.GetGAST();
+    if (tmode=="LMST") hour=tx.GetLMST(toffset);
+    if (tmode=="LAST") hour=tx.GetLAST(toffset);
+
+    // Get coordinates at this time step
+    GetSignal(d,a,"deg",b,"deg",frame,&tx,jref,mode,type);
+    
+    if (frame=="hor") b=90.-b;
+    if (frame=="loc") b=90.-a;
+
+    fHist[type]->Fill(hour,b);
+
+    tx.Add(1); // Add 1 hour for each time step
+   }
+  }
+  else if (proj=="UYh" || proj=="LYh" || proj=="GSYh" || proj=="LSYh") // The day of the year view
+  {
+   // Set histogram binning and axes attributes
+   fHist[type]->SetBins(1500,0,370,181,-90.5,90.5);
+   if (!ts) ts=(NcTimestamp*)this;
+   NcTimestamp tx=(*ts);
+   Double_t toffset=GetLabTimeOffset();
+   TString year="";
+   year+=int(ts->GetEpoch("J"));
+   TString tmode="UT";
+   if (proj=="LYh") tmode="LMT";
+   if (proj=="GSYh")
+   {
+    tmode="GMST";
+    if (mode=="T") tmode="GAST";
+   }
+   if (proj=="LSYh")
+   {
+    tmode="LMST";
+    if (mode=="T") tmode="LAST";
+   }
+   TString time;
+   if (proj=="UYh" || proj=="GSYh") ts->GetDayTimeString(tmode,0,0,0,&time);
+   if (proj=="LYh" || proj=="LSYh") ts->GetDayTimeString(tmode,0,toffset,0,&time);
+
+   TString title="Year view at ";
+   title+=GetName();
+   title+=" in ";
+   title+=year;
+   title+=" at ";
+   title+=time;
+   title+=";Day of the year;";
+   TString ytitle="Declination ";
+   if (frame=="equ" && mode=="J") ytitle+="(J2000)";
+   if (frame=="equ" && mode=="B") ytitle+="(B1950)";
+   if (frame=="equ" && mode=="M") ytitle+="(Mean)";
+   if (frame=="equ" && mode=="T") ytitle+="(True)";
+   if (frame=="gal") ytitle="Galactic latitude";
+   if (frame=="ecl") ytitle="Geocentric Ecliptic latitude";
+   if (frame=="hor") ytitle="Horizon altitude";
+   if (frame=="icr") ytitle="ICRS latitude";
+   if (frame=="loc") ytitle="Angle w.r.t. local frame equator";
+   ytitle+=" in degrees";
+   title+=ytitle;
+   fHist[type]->SetTitle(title);
+   fHist[type]->SetStats(kFALSE);
+
+   // Fill the year view histogram
+   // Start at 01-jan 00:00:00h for the corresponding year at the selected location
+   // and then set the time according to the specified timestamp
+   Double_t hour=0;
+   if (proj=="UYh" || proj=="GSYh") // Location is Greenwich
+   {
+    tx.SetUT(year.Atoi(),1,1,"00:00:00");
+    hour=ts->GetUT();
+   }
+   if (proj=="LYh" || proj=="LSYh") // The lab location
+   {
+    tx.SetLT(toffset,year.Atoi(),1,1,"00:00:00");
+    hour=ts->GetLT(toffset);
+   }
+   tx.Add(hour); // Set the selected time
+
+   Double_t d,a,b;
+   Int_t day=0;
+   for (Int_t i=0; i<367; i++)
+   {
+
+    // Get coordinates at this time step
+    GetSignal(d,a,"deg",b,"deg",frame,&tx,jref,mode,type);
+    
+    if (frame=="hor") b=90.-b;
+    if (frame=="loc") b=90.-a;
+
+    if (proj=="UYh" || proj=="GSYh") day=tx.GetDayOfYear();
+    if (proj=="LYh" || proj=="LSYh") day=tx.GetDayOfYear(kFALSE,toffset);
+
+    fHist[type]->Fill(day,b);
+
+    tx.Add(24); // Add 1 day (= 24 hours) for each time step
+   }
+  }
+
+  // Draw the selected histogram
   if ((!type && fHist[1]) || (type && fHist[0]))
   {
    fHist[type]->Draw("same");
@@ -5213,6 +5428,26 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
   else
   {
    fHist[type]->Draw();
+
+   // Draw a horizontal thick line to mark the horizon c.q. equator for the day and year views
+   if (proj=="UTh" || proj=="LTh" || proj=="GSTh" || proj=="LSTh" ||
+       proj=="UYh" || proj=="LYh" || proj=="GSYh" || proj=="LSYh")
+   {
+    if (!fMarkers)
+    {
+     fMarkers=new TObjArray();
+     fMarkers->SetOwner();
+    }
+    TLine* line=0;
+    if (proj=="UTh" || proj=="LTh" || proj=="GSTh" || proj=="LSTh") line=new TLine(0,0,24,0);
+    if (proj=="UYh" || proj=="LYh" || proj=="GSYh" || proj=="LSYh") line=new TLine(0,0,370,0);
+    if (line)
+    {
+     line->SetLineWidth(3);
+     fMarkers->Add(line);
+     line->Draw();
+    }
+   }
   }
  }
 }
@@ -5281,13 +5516,33 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TStrin
 // merh : Mercator projection plotted in a 2-D histogram
 // ang  : Straight sin(b) vs. l plot with colored markers
 // angh : Straight sin(b) vs. l plot in a 2-D histogram
+// UTh  : Day view (0-24 hours) of b vs. Universal Time
+// LTh  : Day view (0-24 hours) of b vs. Local Time
+// GSTh : Day view (0-24 hours) of b vs. Greenwich Siderial Time
+// LSTh : Day view (0-24 hours) of b vs. Local Siderial Time
+// UYh  : Year view of b vs. day of the year at the Universal Time of the specified timestamp
+// LYh  : Year view of b vs. day of the year at the Local Time of the specified timestamp
+// GSYh : Year view of b vs. day of the year at the Greenwich Siderial Time of the specified timestamp
+// LSYh : Year view of b vs. day of the year at the Local Siderial Time of the specified timestamp
 //
-// Note : The ang(h) plot allows for easy identification of an isotropic distribution.
+// Notes :
+// -------
+// 1) In case the name specifies a solar system object which was not yet stored according to "type",
+//    the corresponding signal will be created and stored with the specified timestamp.
+//    All geocentric name specifications for solar system objects as indicated in the
+//    docs of NcTimestamp::Almanac() are supported.
+// 2) The ang(h) plot allows for easy identification of an isotropic distribution.
+// 3) For the projections "GSTh", "LSTh", "GSYh" and "LSYh", the input argument "mode"
+//    also determines whether they show the Mean (mode="M") or Apparent (mode="T") Sidereal Time. 
 //
 // The input argument "clr" allows to clear (1) the display before drawing or not (0).
 //
 // The default values are : proj="ham", clr=0 and type=0.
 
+ // Create a signal for a solar system object if needed
+ Double_t d,a,b;
+ GetSignal(d,a,"deg",b,"deg",frame,ts,name,mode,type);
+  
  Int_t j=GetSignalIndex(name,type);
  if (j>0)
  {
@@ -5368,8 +5623,20 @@ void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TStri
 // merh : Mercator projection plotted in a 2-D histogram
 // ang  : Straight sin(b) vs. l plot with colored markers
 // angh : Straight sin(b) vs. l plot in a 2-D histogram
+// UTh  : Day view (0-24 hours) of b vs. Universal Time
+// LTh  : Day view (0-24 hours) of b vs. Local Time
+// GSTh : Day view (0-24 hours) of b vs. Greenwich Siderial Time
+// LSTh : Day view (0-24 hours) of b vs. Local Siderial Time
+// UYh  : Year view of b vs. day of the year at the Universal Time of the specified timestamp
+// LYh  : Year view of b vs. day of the year at the Local Time of the specified timestamp
+// GSYh : Year view of b vs. day of the year at the Greenwich Siderial Time of the specified timestamp
+// LSYh : Year view of b vs. day of the year at the Local Siderial Time of the specified timestamp
 //
-// Note : The ang(h) plot allows for easy identification of an isotropic distribution.
+// Notes :
+// -------
+// 1) The ang(h) plot allows for easy identification of an isotropic distribution.
+// 2) For the projections "GSTh", "LSTh", "GSYh" and "LSYh", the input argument "mode"
+//    also determines whether they show the Mean (mode="M") or Apparent (mode="T") Sidereal Time. 
 //
 // The input argument "clr" allows to clear (1) the display before drawing or not (0).
 //
@@ -5740,6 +6007,8 @@ Double_t NcAstrolab::GetPhysicalParameter(TString name) const
 // Hbarc2 = The value of the conversion constant (hbar*c)^2 in GeV^2 barn
 // Mnucl  = The nucleon mass (=average of proton and neutron mass) in MeV/c^2
 // Sin2w  = The sin^2 of the Weinberg angle
+// Jy     = Flux density of 1 Jansky (1e-23 erg s^-1 cm^-2 Hz^-1)
+// Erg    = The equivalent of 1 erg in GeV
 
  Double_t val=0;
 
@@ -5781,6 +6050,12 @@ Double_t NcAstrolab::GetPhysicalParameter(TString name) const
  if (name=="Sin2w")
  {
   val=1.-pow(fMW/fMZ,2.);
+  return val;
+ }
+ if (name=="Jy") return 1e-23;
+ if (name=="Erg")
+ {
+  val=1e-7/(fQe*1e9);
   return val;
  }
 
@@ -8429,6 +8704,243 @@ TH1F NcAstrolab::GetCumulHistogram(TF1* f,TString name,Int_t nbins,Double_t xmin
  return hcd;
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::InitDataNames(Int_t dir,TString frame,TString mode)
+{
+// Initialisation of the correspondence table between physical observables
+// and their names in a ROOT input Tree.
+// The actual correspondence settings are performed by invokation of SetDataNames().
+// 
+// Input arguments :
+// -----------------
+// dir   = >0 ==> Coordinates indicate the arrival direction
+//         <0 ==> Coordinates indicate the direction of motion
+//
+// frame = "equ" ==> Equatorial coordinates with right ascension and declination.
+//         "gal" ==> Galactic coordinates with longitude and latitude.
+//         "ecl" ==> Geocentric ecliptic coordinates with longitude and latitude.
+//         "hor" ==> Horizontal coordinates at the NcAstrolab location, with azimuth angle and zenith angle.
+//         "icr" ==> ICRS coordinates with longitude and latitude.
+//         "loc" ==> Local coordinates at the NcAstrolab location, with usual spherical angles theta and phi.
+//
+// mode  = "M" ==> Equatorial coordinates are the mean values 
+//         "T" ==> Equatorial coordinates are the true values
+//         "B" ==> Besselian (B1950) reference epoch equatorial coordinates 
+//         "J" ==> Julian (J2000) reference epoch equatorial coordinates 
+//
+// The default value is mode="J".
+
+ if (!dir || (frame!="equ" && frame!="gal" && frame!="ecl" && frame!="hor" && frame!="icr" && frame!="loc") ||
+     (mode!="M" && mode!="T" && mode!="B" && mode!="J"))
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::InitDataNames* Invalid input encountered." << endl;
+  cout << " dir=" << dir << " frame=" << frame << " mode=" << mode << endl;
+  return;
+ }
+
+ fDataDir=dir;
+ fDataFrame=frame;
+ fDataMode=mode;
+ 
+ // Reset the correspondence table
+ fDataNames.Reset();
+
+ TString sdir="arrival";
+ if (dir<0) sdir="moving";
+ 
+ if (frame=="equ")
+ {
+  if (mode=="M") frame="mean";
+  if (mode=="T") frame="true";
+  if (mode=="B") frame="B1950";
+  if (mode=="J") frame="J2000";
+  frame+=" equatorial";
+ }
+ if (frame=="gal") frame="galactic";
+ if (frame=="ecl") frame="ecliptic";
+ if (frame=="hor") frame="horizontal";
+ if (frame=="icr") frame="ICRS";
+ if (frame=="loc") frame="local";
+
+ cout << endl;
+ cout << " *" << ClassName() << "::InitDataNames* Prepared for input of " << sdir << " directions in " << frame << " coordinates." << endl; 
+ cout << endl;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::SetDataNames(TString obsname,TString varname,TString units,TString func)
+{
+// Specification of the correspondence table between pre-defined (physical) observables
+// and their names in a ROOT input Tree.
+// In order to be compatible with the generic data reading member function LoadInputData(),
+// only the pre-defined (physical) observable names listed below are accepted.
+//
+// Note :
+// ------
+// Make sure to invoke InitDataNames() first, before providing the various settings here.
+//
+// Input arguments :
+// -----------------
+// obsname : Name of the (physical) observable (see below)
+// varname : Name of the corresponding variable in the ROOT Tree
+// units   : The units in which the input value is provided (see below)
+//           This includes scaling w.r.t. standard units like GeV, pc, second etc.
+//           Example : units="1e3" would represent TeV instead of the standard GeV in case of an energy.
+// func    : Function that has been applied on the value of the observable (see below).
+//
+// Accepted (physical) observable names are :
+// ------------------------------------------
+// Run       : Run number
+// Event     : Event number
+// Eventb    : Sub-event number
+// DetId     : Detector identifier
+// Date      : The UTC observation date with as possible units "ddmmyyy", "yyyymmdd", "mmddyyyy" or "yyyyddmm"
+// Tobs      : The UTC observation c.q. trigger timestamp with as possible units "JD", "MJD", "TJD", "hms" or "hrs"
+// Tstart    : Generic UTC start timestamp with as possible units "JD", "MJD", "TJD", "hms" or "hrs"
+// Tend      : Generic UTC end timestamp with as possible units "JD", "MJD", "TJD", "hms" or "hrs"
+// d         : Distance with a number as units (Standard unit is pc)
+// a         : right ascension, longitude, azimuth angle or spherical angle theta (depending on the reference frame)
+// b         : declination, latitude, zenith angle or spherical angle phi (depending on the reference frame)
+// z         : Redshift
+// E         : Energy with a number as units (Standard unit is GeV)
+// L         : Luminosity with a number as units (Standard unit is erg s^-1. [For particle counts : s^-1])
+// S         : Fluence with a number as units (Standard unit is erg cm^-2. [For particle counts : cm^-2])
+// F         : Flux with a number as units (Standard unit is erg cm^-2 s^-1 [For particle counts : cm^-2 s^-1])
+// I         : Intensity with a number as units (Standard unit is erg cm^-2 s^-1 sr^-1 [For particle counts : cm^-2 s^-1 sr^-1])
+// J         : Flux density with a number as units (Standard unit is Jy, i.e. 1e-23 erg cm^-2 s^-1 Hz^-1)
+// T90       : T90 burst duration with a number as units (Standard unit is second)
+// T100      : T100 burst duration with a number as units (Standard unit is second)
+// dsigma    : The on d
+// csigma    : The angular uncertainty in a cone around the position or direction
+// zsigma    : The uncertainty on z
+// Esigma    : The uncertainty on E
+// Lsigma    : The uncertainty on L
+// Ssigma    : The uncertainty on S
+// Fsigma    : The uncertainty on F
+// Isigma    : The uncertainty on I
+// T90sigma  : The uncertainty on T90 
+// T100sigma : The uncertainty on T90 
+//
+// Note : In case Tobs, Tstart or Tend are specified in "hms" or "hrs", also Date has to be provided.
+//
+// Accepted specifications for units are :
+// ---------------------------------------
+// "1"   : Standard units are used like GeV, pc, second (or days in case of Julian Dates)
+//         Any other numerical value will be used for unit conversion (see below for examples)
+// "rad" : Angle provided in radians
+// "deg" : Angle provided in degrees
+// "dms" : Angle provided in dddmmss.sss
+// "hms" : Angle or time provided in hhmmss.sss
+// "hrs" : Angle or time provided in fractional hours
+// "JD"  : Timestamp provided as Julian Date
+// "MJD" : Timestamp provided as Modified Julian Date
+// "TJD" : Timestamp provided as Truncated Julian Date
+//
+// Accepted specifications for func are :
+// --------------------------------------
+// "Log" : Log10 of the value of the corresponding observable
+// "Ln"  : Natural logarithm of the value of the corresponding observable
+//
+// Input examples :
+// ----------------
+// ("E","Enu","1","Log")      : The ROOT Tree variable "Enu" represents Log10(energy) in GeV.
+// ("Date","date","yyyymmdd") : The ROOT Tree variable "date" represents the date as yyyymmdd.
+// ("Tstart","time","hms")    : The ROOT Tree variable "time" represents a timestamp as hhmmss.sss.
+// ("d","dist","1e6")         : The ROOT Tree variable "dist" represents the distance in Mpc.
+// ("Tobs","trig","MJD")      : The ROOT Tree variable "trig" represents the observation time in MJD.
+//
+// The defaults are units="1" and func="none".
+
+ Bool_t error=kFALSE;
+
+ if (obsname!="Run" && obsname!="Event" && obsname!="Eventb" && obsname!="DetId"
+     && obsname!="Date" && obsname!="Tobs" && obsname!="Tstart" && obsname!="Tend"
+     && obsname!="d" && obsname!="a" && obsname!="b" && obsname!="z"
+     && obsname!="E" && obsname!="L" && obsname!="S" && obsname!="F" && obsname!="I" && obsname!="J"
+     && obsname!="T90" && obsname!="T100"
+     && obsname!="dsigma" && obsname!="csigma" && obsname!="zsigma"
+     && obsname!="Esigma" && obsname!="Lsigma" && obsname!="Ssigma" && obsname!="Fsigma" && obsname!="Isigma"
+     && obsname!="T90sigma" && obsname!="T100sigma") error=kTRUE;
+ if (obsname=="Date" && (units!="ddmmyyyy" && units!="yyyymmdd" && units!="mmddyyyy" && units!="yyyyddmm")) error=kTRUE;
+ if ((obsname=="Tobs" || obsname=="Tstart" || obsname=="Tend")
+     && (units!="JD" && units!="MJD" && units!="TJD" && units!="hms" && units!="hrs")) error=kTRUE;
+ if ((obsname=="a" || obsname=="b" || obsname=="csigma")
+     && (units!="rad" && units!="deg" && units!="dms" && units!="hms" && units!="hrs")) error=kTRUE;
+ if (func!="none" && func!="Log" && func!="Ln") error=kTRUE;
+
+ if (error)
+ {
+  cout << " *" << ClassName() << "::SetDataNames* Invalid input encountered." << endl;
+  cout << " obsname=" << obsname << " units=" << units << " func=" << func << endl;
+  return;
+ }
+
+ Int_t n=fDataNames.GetMaxRow();
+ TObjString* obs=new TObjString(obsname);
+ TObjString* var=new TObjString(varname);
+ TObjString* u=new TObjString(units);
+ TObjString* f=new TObjString(func);
+ TObjString* val=new TObjString(""); // Value will be filled in LoadInputData()
+
+ fDataNames.EnterObject(n+1,1,obs);
+ fDataNames.EnterObject(n+1,2,var);
+ fDataNames.EnterObject(n+1,3,u);
+ fDataNames.EnterObject(n+1,4,f);
+ fDataNames.EnterObject(n+1,5,val);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::ListDataNames()
+{
+// Listing of the correspondance table between physical observables
+// and their names in a ROOT input Tree.
+
+ TString sdir="undefined";
+ if (fDataDir>0) sdir="arrival";
+ if (fDataDir<0) sdir="moving";
+
+ TString frame="undefined";
+ if (fDataFrame=="equ")
+ {
+  if (fDataMode=="M") frame="mean";
+  if (fDataMode=="T") frame="true";
+  if (fDataMode=="B") frame="B1950";
+  if (fDataMode=="J") frame="J2000";
+  frame+=" equatorial";
+ }
+ if (fDataFrame=="gal") frame="galactic";
+ if (fDataFrame=="ecl") frame="ecliptic";
+ if (fDataFrame=="hor") frame="horizontal";
+ if (fDataFrame=="icr") frame="ICRS";
+ if (fDataFrame=="loc") frame="local";
+
+ cout << endl;
+ cout << " *" << ClassName() << "::ListDataNames* Settings for input of " << sdir << " directions in " << frame << " coordinates." << endl; 
+
+ Int_t n=fDataNames.GetMaxRow();
+
+ if (n<1)
+ {
+  cout << " *** No settings were specified ***" << endl;
+ }
+ else
+ {
+  cout << " *** The following " << n << " settings were specified ***" << endl;
+ }
+
+ TObjString* obs=0;
+ TObjString* var=0;
+ TObjString* u=0;
+ TObjString* f=0;
+ for (Int_t i=1; i<=n; i++)
+ {
+  obs=(TObjString*)fDataNames.GetObject(i,1);
+  var=(TObjString*)fDataNames.GetObject(i,2);
+  u=(TObjString*)fDataNames.GetObject(i,3);
+  f=(TObjString*)fDataNames.GetObject(i,4);
+  cout << " obsname=" << obs->GetString() << " varname=" << var->GetString() << " units=" << u->GetString() << " func=" << f->GetString() << endl;
+ }
+ cout << endl;
+}
+///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 {
 // Specification of a certain transient burst parameter setting.
@@ -8451,7 +8963,8 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 //
 // The available parameter names are :
 //
-// Nmax;     // Maximal number of bursts to be accepted for analysis (<0 : no limitation)
+// Nmaxsrc;  // Maximal number of sources c.q. bursts to be accepted for analysis (<0 : no limitation)
+// Nmaxevt;  // Maximal number of observed events to be accepted for analysis (<0 : no limitation)
 // Declmin   // Minimal declination (J2000 in degrees) for burst position acceptance
 // Declmax   // Maximal declination (J2000 in degrees) for burst position acceptance
 // T90min    // Minimal duration (t90 in sec) for burst acceptance (<0 : [|T90min|,T90max] with random T90 when missing in loaded data)
@@ -8499,7 +9012,8 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 //
 // Default settings (tailored for IceCube 86 strings) :
 // ----------------------------------------------------
-// Nmax=-1
+// Nmaxsrc=-1
+// Nmaxevt=-1
 // [Declmin,Declmax]=[-90,90]
 // [T90min,T90max]=[1e-5,1e5]
 // [Zmin,Zmax]=[-1e-6,20]
@@ -8545,8 +9059,10 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
  else
  {
   Double_t pi=acos(-1.);
-
-  name="Nmax";
+  name="Nmaxsrc";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(-1,name);
+  name="Nmaxevt";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(-1,name);
   name="Declmin";
@@ -8770,7 +9286,8 @@ void NcAstrolab::ListBurstParameters() const
 // **********************************************************************************
 
  // User provided settings
- Int_t fNmax=TMath::Nint(fBurstParameters->GetSignal("Nmax"));
+ Int_t fNmaxsrc=TMath::Nint(fBurstParameters->GetSignal("Nmaxsrc"));
+ Int_t fNmaxevt=TMath::Nint(fBurstParameters->GetSignal("Nmaxevt"));
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
  Float_t fT90min=fBurstParameters->GetSignal("T90min");
@@ -8819,15 +9336,24 @@ void NcAstrolab::ListBurstParameters() const
 
  // Internal statistics
  Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
+ Int_t fNevts=TMath::Nint(fBurstParameters->GetSignal("Nevts"));
 
  cout << " ========================= User provided burst settings ===============================" << endl;
- if (fNmax<0)
+ if (fNmaxsrc<0)
  {
-  cout << " No limitation has been put on the number of bursts to be accepted for analysis." << endl;
+  cout << " No limitation has been put on the number of sources c.q. bursts to be accepted for analysis." << endl;
  }
  else
  {
-  cout << " Maximal number of bursts to be accepted for analysis : " << fNmax << endl;
+  cout << " Maximal number of sources c.q. bursts to be accepted for analysis : " << fNmaxsrc << endl;
+ }
+ if (fNmaxevt<0)
+ {
+  cout << " No limitation has been put on the number of observed events to be accepted for analysis." << endl;
+ }
+ else
+ {
+  cout << " Maximal number of observed events to be accepted for analysis : " << fNmaxevt << endl;
  }
  cout << " Declination interval (J2000 in degrees) for burst position acceptance : [" << fDeclmin << "," << fDeclmax << "]" << endl;
  cout << " Duration interval (t90 in sec) for burst acceptance : [" << fabs(fT90min) << "," << fT90max << "]" << endl;
@@ -8916,7 +9442,7 @@ void NcAstrolab::ListBurstParameters() const
 
  cout << endl;
  cout << " ============================== Derived parameters ====================================" << endl;
- cout << " Combined burst position and event reco angular uncertainty interval (sigma in degrees) : [" << fMinsigmatot << "," << fMaxsigmatot << "]" << endl;
+ cout << " Combined source c.q. burst position and event reco angular uncertainty interval (sigma in degrees) : [" << fMinsigmatot << "," << fMaxsigmatot << "]" << endl;
  cout << " Solid angle coverage (in steradian) corresponding to the selected declination band : " << fOmegaDecl << endl;
  cout << " Background event rate (Hz) for the selected declination band : " << fRbkgDecl << endl;
  cout << " Mean number of background events per hour from the selected declination band : " << fNbkgHour << endl;
@@ -8928,54 +9454,78 @@ void NcAstrolab::ListBurstParameters() const
   cout << " Median burst T90 duration (in sec.) from the data sample : " << fabs(fAvgrbt90) << endl;
   cout << " Median burst position uncertainty (sigma in degrees) from the data sample : " << fAvgrbsigma << endl;
  }
+ if (fNevts>0) cout << " Number of observed events accepted for analysis : " << fNevts << endl;
  cout << " ======================================================================================" << endl;
  cout << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t date2,Int_t nmax,TString type)
+void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,Int_t date2,Int_t nmax,TString type)
 {
-// Load observed burst GCN data, e.g. GRB data from GCN notices as available from
-// https://icecube.wisc.edu/~grbweb_public.
+// Generic facility to load source (e.g. GCN) or observed event data.
 //
 // **********************************************************************************
 // * This is a beta test version, so currently no backward compatibility guaranteed *
 // **********************************************************************************
 //
-// The input data has to be provided via a ROOT Tree which will be searched
-// for data on the variable names specified below.
-// In case data for a certain variable is not present, the non-physical value -999
-// will be stored, unless the user has selected random generation of the variables
-// T90 and/or z and/or sigmapos as specified via SetBurstParameter(). 
+// The input data has to be provided as numerical values via a ROOT Tree which will be
+// searched for data on the variable names as specified via SetDataNames().
 //
-//  Name             Description
-// ---------------------------------------------------------------
-// "date"        Observation date as yyyymmdd
-// "ra"          Right ascension (J2000) in decimal degrees
-// "dec"         Declination (J2000) in decimal degrees
-// "sigmapos"    The 1-sigma angular uncertainty on the burst position in decimal degrees
-// "t90"         The T90 burst duration in seconds
-// "mjdtrig"     The (fractional) MJD of the burst trigger
-// "mjdt90start" The (fractional) MJD of the T90 start time
-// "t100"        The T100 burst duration in seconds
-// "fluence"     The observed fluence of the burst in erg/cm^2
-// "z"           The redshift of the burst
+// The necessary minimal set of pre-defined observables (see SetDataNames) is :
+// (a,b,Tobs) [and Date in case Tobs is in units "hms" or "hrs"].
+// The observables (a,b,Tobs) are used to automatically construct and store the signal entries,
+// as outlined in SetSignal().
+//
+// All requested values will (also) be stored in NcSignal slots with the pre-defined
+// observable name and in the standard units as defined in SetDataNames().
+//
+// Special standard units used for storage are :
+// 1) yyyymmdd for Date
+// 2) MJD for Tobs, Tstart and Tend.
+// 3) Degrees for all angles
+//
+// Note that the values of "a" and "b" are not stored as NcSignal slots, since their
+// meaning depends on the used reference frame.
+// Retrieval of the values of "a" and "b" should be performed via the GetSignal() facility.
+//
+// In case data for a requested observable is not present, the non-physical value -999
+// will be stored, unless the user has selected random generation of that observable
+// via the specifications in SetBurstParameter(). 
 //
 // Input arguments :
 // -----------------
+// src   : Flag to indicate source (e.g. GCN) data (kTRUE) or observed events (kFALSE)
 // file  : Name of the input file containing the ROOT Tree (wildcards are allowed)
 // tree  : Name of the Tree containing the data
 // date1 : The date (yyyymmdd) of the start of the observation period [date1,date2] (0=No restriction)
 // date2 : The date (yyyymmdd) of the end of the observation period [date1,date2] (0=No restriction)
-// nmax  : Maximum number of bursts to be accepted from this input file (<0 : no limitation)
-// type  : Identifier of the transient (alert) type (e.g. "GRB", "GW", "IC",....)
+// nmax  : Maximum number of sources or events to be accepted from this input file (<0 : no limitation)
+// type  : Identifier of the source (c.q. burst) or observed event (alert) type (e.g. "GRB", "GW", "IC",...)
+//         When type="-" the source type is set to "GRB" and the event type is set to "EVT".         
 //
-// The default values are date1=0, date2=0, nmax=-1 and type="GRB".
+// The default values are date1=0, date2=0, nmax=-1 and type="-".
 //
 // Note : This memberfunction make be invoked several times to read different files
 //        to accumulate data.
 
+ // Set the default type identifier
+ if (type=="-" && src) type="GRB";
+ if (type=="-" && !src) type="EVT";
+
+ Int_t nvars=fDataNames.GetMaxRow();
+
+ if (nvars<1)
+ {
+  cout << " *" << ClassName() << "::LoadInputData* No variables were specified for " << type << " data."<< endl;
+  return;
+ }
+
+ // Set the data mode : observed events or source data
+ Int_t iobs=1;
+ if (src) iobs=0;
+
  // Retreive the needed parameters
- Int_t fNmax=TMath::Nint(fBurstParameters->GetSignal("Nmax"));
+ Int_t fNmaxsrc=TMath::Nint(fBurstParameters->GetSignal("Nmaxsrc"));
+ Int_t fNmaxevt=TMath::Nint(fBurstParameters->GetSignal("Nmaxevt"));
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
  Float_t fT90min=fBurstParameters->GetSignal("T90min");
@@ -8984,199 +9534,313 @@ void NcAstrolab::LoadBurstGCNdata(TString file,TString tree,Int_t date1,Int_t da
  Float_t fZmax=fBurstParameters->GetSignal("Zmax");
  Float_t fSigmamin=fBurstParameters->GetSignal("Sigmamin");
  Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
+ Float_t fEmin=fBurstParameters->GetSignal("Emin");
+ Float_t fEmax=fBurstParameters->GetSignal("Emax");
+ Float_t fAngresmin=fBurstParameters->GetSignal("Angresmin");
+ Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
 
  // Internal statistics
- Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
+ Int_t fNgrbs=GetNsignals(0);
+ Int_t fNevts=GetNsignals(1);
 
- // Get access to a redshift distribution to draw randomly redshifts if needed
+ // Get access to a redshift distribution to draw randomly source redshifts if needed
  TH1* zdist=0;
- if (fZmin<0)
- {
-  zdist=(TH1*)fBurstHistos.FindObject("hz");
-  if (!zdist)
-  {
-   cout << " *" << ClassName() << "::LoadBurstGCNdata* Archival observed redshift distribution not found." << endl;
-   cout << " A Landau fit from Swift GRB redshift data will be used to provide missing z values." << endl;
-   cout << endl;
+ if (src && fZmin<0) zdist=GetBurstZdist("LoadInputData()",type);
 
-   zdist=(TH1*)fBurstHistos.FindObject("hzfit");
-   if (!zdist)
-   {
-    TF1 f("f","59.54*TMath::Landau(x,1.092,0.5203)");
-    f.SetRange(0,10);
-    f.SetNpx(10000);
-    TH1* hf=f.GetHistogram();
-    zdist=(TH1*)hf->Clone();
-    zdist->SetNameTitle("hzfit","Landau fit for Swift GRB z data");
-    zdist->GetXaxis()->SetTitle("GRB redshift");
-    zdist->GetYaxis()->SetTitle("Counts");
-    fBurstHistos.Add(zdist);
-   }
-  }
- }
-
- // Get access to a T90 distribution to draw randomly T90 values if needed
+ // Get access to a T90 distribution to draw randomly source c.q. burst T90 values if needed
  TH1* t90dist=0;
- if (fT90min<0)
- {
-  t90dist=(TH1*)fBurstHistos.FindObject("ht90");
-  if (!t90dist)
-  {
-   cout << " *" << ClassName() << "::LoadBurstGCNData* Observational T90 distribution not found." << endl;
-   cout << " A double Gaussian fit from Fermi GRB T90 data will be used to provide missing T90 values." << endl;
-   cout << endl;
- 
-   t90dist=(TH1*)fBurstHistos.FindObject("ht90fit");
-   if (!t90dist)
-   {
-    TF1 ft("ft","44.39*TMath::Gaus(x,-0.131,0.481)+193.8*TMath::Gaus(x,1.447,0.4752)");
-    ft.SetRange(-5,5);
-    ft.SetNpx(10000);
-    TH1* hft=ft.GetHistogram();
-    t90dist=(TH1*)hft->Clone();
-    t90dist->SetNameTitle("ht90fit","Double Gauss fit for Fermi t90 data");
-    t90dist->GetXaxis()->SetTitle("GRB duration ^{10}log(T90) in sec.");
-    t90dist->GetYaxis()->SetTitle("Counts");
-    fBurstHistos.Add(t90dist);
-   } 
-  }
- }
+ if (src && fT90min<0) t90dist=GetBurstT90dist("LoadInputData()",type);
 
- // Get access to a 1-sigma position uncertainty distribution to draw randomly position uncertaintes
+ // Get access to a 1-sigma position uncertainty distribution to draw randomly source position uncertaintes
  TH1* sigmaposdist=0;
- if (fSigmamin<0)
- {
-  sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmapos");
-  if (!sigmaposdist)
-  {
-   cout << endl;
-   cout << " *" << ClassName() << "::LoadBurstGCNdata* Archival observed position uncertainty distribution not found." << endl;
-   cout << " A Landau fit from observed data will be used to provide random 1-sigma uncertainty values." << endl;
+ if (src && fSigmamin<0) sigmaposdist=GetBurstSigmaPosdist("LoadInputData()",type);
 
-   sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmaposfit");
-   if (!sigmaposdist)
-   { 
-    TF1 fsigmapos("fsigmapos","245.2*TMath::Landau(x,-2.209,0.6721,1)");
-    fsigmapos.SetRange(0,90);
-    fsigmapos.SetNpx(10000);
-    TH1* hfsigmapos=fsigmapos.GetHistogram();
-    sigmaposdist=(TH1*)hfsigmapos->Clone();
-    sigmaposdist->SetNameTitle("hsigmaposfit","Landau fit for burst 1-sigma position uncertainty data");
-    sigmaposdist->GetXaxis()->SetTitle("Burst position uncertainty (sigma in degrees)");
-    sigmaposdist->GetYaxis()->SetTitle("Counts");
-    fBurstHistos.Add(sigmaposdist);
-   }
-  }
- }
+ // The TTree containing the source (c.q. burst) or observed event data
+ TChain data(tree.Data());
+ data.Add(file.Data());
 
- // The TTree containing the burst data
- TChain gcn(tree.Data());
- gcn.Add(file.Data());
+ // The pre-defined (physical) observables
+ TString obsname;
+ TString varname;
+ TString units;
+ TString func;
 
- Int_t date;
- Float_t ra,dec,sigmapos,t90,t100,fluence,z;
- Double_t mjdtrig,mjdt90start;
+ // The (physical) observable value in string format
+ TObjString* pval=0;
+ TString val;
 
- fNgrbs=GetNsignals(0);
- Float_t sigmagrb=0;
- Float_t t90grb=0;
- Float_t zgrb=0;
+ // The retrieved numerical (physical) observable value from the ROOT Tree
+ Double_t value;
+
+ // Some of the pre-defined observable values that are used for selections
+ // or that need special treatment
+ TString Date,Tobs,Tstart,Tend;
+ Double_t d,a,b;
+ Float_t z,csigma,T90,T100,E;
+
+ UInt_t yyyy,mm,dd; // The date format
+ Int_t h,m;  // The integer hour and minute time format
+ Double_t s; // The (fractional) seconds time format
+ Int_t dmode=0;
  Int_t idate=0;
+ Int_t jdate=0;
  TString grbname;
- NcTimestamp ts;
+ NcTimestamp tobs;
+ NcTimestamp tstart;
+ NcTimestamp tend;
  NcSignal* sx=0;
- Int_t ngcn=0;
+ Int_t nnew=0;
  TLeaf* lx=0;
- for (Int_t ient=0; ient<gcn.GetEntries(); ient++)
+ Int_t jlast=0;
+
+ // Loop over the data entries in the input Tree
+ for (Int_t ient=0; ient<data.GetEntries(); ient++)
  {
-  if (nmax>=0 && ngcn>=nmax) break;
-  if (fNmax>=0 && (fNgrbs+ngcn)>=fNmax) break;
+  if (nmax>=0 && nnew>=nmax) break;
+  if (src && fNmaxsrc>=0 && (fNgrbs+nnew)>=fNmaxsrc) break;
+  if (!src && fNmaxevt>=0 && (fNevts+nnew)>=fNmaxevt) break;
 
-  gcn.GetEntry(ient);
+  data.GetEntry(ient);
 
-  date=-999;
-  lx=gcn.GetLeaf("date");
-  if (lx) date=lx->GetValue();  
-  ra=-999;
-  lx=gcn.GetLeaf("ra");
-  if (lx) ra=lx->GetValue();  
-  dec=-999;
-  lx=gcn.GetLeaf("dec");
-  if (lx) dec=lx->GetValue();  
-  sigmapos=-999;
-  lx=gcn.GetLeaf("sigmapos");
-  if (lx) sigmapos=lx->GetValue();  
-  t90=-999;
-  lx=gcn.GetLeaf("t90");
-  if (lx) t90=lx->GetValue();  
-  mjdtrig=-999;
-  lx=gcn.GetLeaf("mjdtrig");
-  if (lx) mjdtrig=lx->GetValue();  
-  mjdt90start=-999;
-  lx=gcn.GetLeaf("mjdt90start");
-  if (lx) mjdt90start=lx->GetValue();  
-  t100=-999;
-  lx=gcn.GetLeaf("t100");
-  if (lx) t100=lx->GetValue();  
-  fluence=-999;
-  lx=gcn.GetLeaf("fluence");
-  if (lx) fluence=lx->GetValue();  
+  // Initialisation of the values that are used for selections
+  // or that need special treatment
+  Date="none";
+  Tobs="none";
+  Tstart="none";
+  Tend="none";
+  d=-999;
+  a=-999;
+  b=-999;
   z=-999;
-  lx=gcn.GetLeaf("z");
-  if (lx) z=lx->GetValue();  
+  csigma=-999;
+  T90=-999;
+  T100=-999;
+  E=-999;
 
-  if (date1 && date<date1) continue;
-  if (date2 && date>date2) continue;
+  // Loop over the selected input variables and retrieve the corresponding input value
+  for (Int_t ivar=1; ivar<=nvars; ivar++)
+  {
+   obsname=((TObjString*)fDataNames.GetObject(ivar,1))->GetString();
+   varname=((TObjString*)fDataNames.GetObject(ivar,2))->GetString();
+   units=((TObjString*)fDataNames.GetObject(ivar,3))->GetString();
+   func=((TObjString*)fDataNames.GetObject(ivar,4))->GetString();
 
-  if (mjdtrig<0 || mjdt90start<0) continue;
+   pval=(TObjString*)fDataNames.GetObject(ivar,5);
+
+   if (!pval) continue;
+
+   lx=data.GetLeaf(varname);
    
-  if (dec<fDeclmin || dec>fDeclmax) continue;
+   // Record -999 for missing data
+   if (!lx)
+   {
+    pval->SetString("-999");
+    continue;
+   }
 
-  t90grb=t90;
-  if (t90grb<=0) t90grb=t100;
-  if (fT90min<0 && t90grb<0 && t90dist) t90grb=t90dist->GetRandom();
+   value=lx->GetValue();
 
-  if (t90grb<fabs(fT90min) || t90grb>fT90max) continue;
+   if (func=="Log") value=pow(value,10);
+   if (func=="Ln") value=exp(value);
 
-  zgrb=z;
-  if (fZmin<0 && zgrb<0 && zdist) zgrb=zdist->GetRandom();
+   // Convert all angular values to degrees
+   if (obsname=="a" || obsname=="b" || obsname=="csigma") value=ConvertAngle(value,units,"deg");
 
-  if (zgrb<fabs(fZmin) || zgrb>fZmax) continue;
+   // Store the obtained value in string format
+   val="";
+   val+=value;
+   pval->SetString(val);
 
-  sigmagrb=sigmapos;
-  if (fSigmamin<0 && sigmagrb<0 && sigmaposdist) sigmagrb=sigmaposdist->GetRandom();
+   // Special values needed for later selections
+   if (obsname=="Date")
+   {
+    Date="";
+    Date+=int(value);
+    if (units=="ddmmyyyy") dmode=0;
+    if (units=="yyyymmdd") dmode=1;
+    if (units=="mmddyyyy") dmode=2;
+    if (units=="yyyyddmm") dmode=3;
+   }
+   if (obsname=="Tobs")
+   {
+    Tobs="set"; // Indicate that Tobs is encountered
+    if (units=="JD") tobs.SetJD(value);
+    if (units=="MJD") tobs.SetMJD(value);
+    if (units=="TJD") tobs.SetTJD(value);
+    if (units=="hms")
+    {
+     Tobs="";
+     Tobs+=value;
+    }
+    if (units=="hrs") // Convert "hrs" to "hms" time format
+    {
+     Tobs="";
+     Convert(value,h,m,s);
+     value=s+double(100*m+10000*h);
+     Tobs+=value;
+    }
+   }
+   if (obsname=="Tstart")
+   {
+    Tstart="set"; // Indicate that Tstart is encountered
+    if (units=="JD") tstart.SetJD(value);
+    if (units=="MJD") tstart.SetMJD(value);
+    if (units=="TJD") tstart.SetTJD(value);
+    if (units=="hms")
+    {
+     Tstart="";
+     Tstart+=value;
+    }
+    if (units=="hrs") // Convert "hrs" to "hms" time format
+    {
+     Tstart="";
+     Convert(value,h,m,s);
+     value=s+double(100*m+10000*h);
+     Tstart+=value;
+    }
+   }
+   if (obsname=="Tend")
+   {
+    Tend="set"; // Indicate that Tend is encountered
+    if (units=="JD") tend.SetJD(value);
+    if (units=="MJD") tend.SetMJD(value);
+    if (units=="TJD") tend.SetTJD(value);
+    if (units=="hms")
+    {
+     Tend="";
+     Tend+=value;
+    }
+    if (units=="hrs") // Convert "hrs" to "hms" time format
+    {
+     Tend="";
+     Convert(value,h,m,s);
+     value=s+double(100*m+10000*h);
+     Tend+=value;
+    }
+   }
+   if (obsname=="d") d=value;  
+   if (obsname=="a") a=value;  
+   if (obsname=="b") b=value;  
+   if (obsname=="z") z=value;  
+   if (obsname=="csigma") csigma=value;  
+   if (obsname=="T90") T90=value;  
+   if (obsname=="T100") T100=value;
+   if (obsname=="E") E=value;  
+  } // End of the loop over the selected input variables
 
-  if (sigmagrb<fabs(fSigmamin) || sigmagrb>fSigmamax) continue;
+  // For angular coordinates the distance may be irrelevant
+  if (d<=0) d=1;
 
-  idate=date%1000000;
+  // Check for the presence of valid location data
+  if (a<-900 || b<-900) continue;
+
+  // Construct the various timestamps from the (date,time) specification if needed
+  if (Tobs!="none" && Tobs!="set" && Date!="none") tobs.SetUT(Date,Tobs,dmode);  
+  if (Tstart!="none" && Tstart!="set" && Date!="none") tstart.SetUT(Date,Tstart,dmode);  
+  if (Tend!="none" && Tend!="set" && Date!="none") tend.SetUT(Date,Tend,dmode);
+
+  // Check for the presence of a valid observation c.q. trigger timestamp
+  if (Tobs=="none" || (Tobs!="set" && Date=="none")) continue;
+
+  // Obtain the date in yyyymmdd format
+  tobs.GetDate(kTRUE,0,&yyyy,&mm,&dd);
+  idate=dd+100*mm+10000*yyyy;
+  // Compose the name of the source c.q. burst with the common yymmdd suffix
+  jdate=idate%1000000;
   grbname=type;
-  grbname+=idate;
-  ts.SetMJD(mjdtrig);
-  sx=SetSignal(1,ra,"deg",dec,"deg","equ",&ts,-1,"J",grbname);
+  grbname+=jdate;
+
+  if (date1 && idate<date1) continue;
+  if (date2 && idate>date2) continue;
+
+  if (src) // Source c.q. burst specific selections
+  {
+   if (T90<=0) T90=T100;
+   if (fT90min<0 && T90<0 && t90dist) T90=t90dist->GetRandom();
+
+   if (T90<fabs(fT90min) || T90>fT90max) continue;
+
+   if (fZmin<0 && z<0 && zdist) z=zdist->GetRandom();
+
+   if (z<fabs(fZmin) || z>fZmax) continue;
+
+   if (fSigmamin<0 && csigma<0 && sigmaposdist) csigma=sigmaposdist->GetRandom();
+
+   if (csigma<fabs(fSigmamin) || csigma>fSigmamax) continue;
+  }
+  else // Observed event specific selections
+  {
+   if (E<fEmin || E>fEmax) continue;
+   if (csigma<fAngresmin || csigma>fAngresmax) continue;
+  }
+
+  // Store the location c.q. arrival direction data
+  sx=SetSignal(d,a,"deg",b,"deg",fDataFrame,&tobs,-1,fDataMode,grbname,iobs);
+
+  // Obtain the RA and DEC coordinates for acceptance selection
+  jlast=GetSignalIndex(sx,iobs);
+  GetSignal(d,a,"deg",b,"deg","equ",&tobs,jlast,"J",iobs);
+
+  // Remove the signal again when it falls outside the acceptance
+  if (b<fDeclmin || b>fDeclmax)
+  {
+   RemoveSignal(jlast,iobs,1);
+   sx=0;
+   continue;
+  }
 
   if (!sx) continue;
 
-  ngcn++;
+  nnew++;
 
-  sx->AddNamedSlot("t90");
-  sx->SetSignal(t90grb,"t90");
-  sx->AddNamedSlot("sigmagrb");
-  sx->SetSignal(sigmagrb,"sigmagrb");
-  sx->AddNamedSlot("fluence");
-  sx->SetSignal(fluence,"fluence");
-  sx->AddNamedSlot("z");
-  sx->SetSignal(zgrb,"z");
+  // Storing the requested data in NcSignal slots
+  for (Int_t ivar=1; ivar<=nvars; ivar++)
+  {
+   obsname=((TObjString*)fDataNames.GetObject(ivar,1))->GetString();
+   val=((TObjString*)fDataNames.GetObject(ivar,5))->GetString();
+   value=val.Atof();
 
+   // The values of the observables a and b depend on the reference frame
+   // They should be retrieved via the GetSignal() facility
+   if (obsname=="a" || obsname=="b") continue;
+
+   // The Date and timestamps in specific format
+   if (obsname=="Date") value=idate;
+   if (obsname=="Tobs") value=tobs.GetMJD();
+   if (obsname=="Tstart") value=tstart.GetMJD();
+   if (obsname=="TEnd") value=tend.GetMJD();
+
+   // Values that may have got random values
+   if (obsname=="z") value=z;
+   if (obsname=="csigma") value=csigma;
+   if (obsname=="T90") value=T90;
+
+   sx->AddNamedSlot(obsname);
+   sx->SetSignal(value,obsname);
+  }
+ } // End of loop over the entries of the input Tree
+
+ Int_t nstored=GetNsignals(iobs);
+
+ cout << endl;
+ if (src)
+ {
+  // Update internal statistics
+  fBurstParameters->AddNamedSlot("Ngrbs");
+  fBurstParameters->SetSignal(nstored,"Ngrbs");
+  cout << " *" << ClassName() << "::LoadInputData* " << nnew << " new source(s) of type " << type
+       << " stored from Tree:" << tree << " of file(s):" << file << endl;
+  cout << " Total number of stored sources c.q. bursts : " << nstored << endl;
  }
-
- // Update internal statistics
- fNgrbs=GetNsignals(0);
- fBurstParameters->AddNamedSlot("Ngrbs");
- fBurstParameters->SetSignal(fNgrbs,"Ngrbs");
-
- cout << " *" << ClassName() << "::LoadBurstGCNdata* " << ngcn << " bursts of type " << type
-      << " were stored from Tree:" << tree << " of file(s):" << file << endl;
- cout << " Total number of stored bursts : " << fNgrbs << endl;
+ else
+ {
+  // Update internal statistics
+  fBurstParameters->AddNamedSlot("Nevts");
+  fBurstParameters->SetSignal(nstored,"Nevts");
+  cout << " *" << ClassName() << "::LoadInputData* " << nnew
+       << " new observed event(s) were stored from Tree:" << tree << " of file(s):" << file << endl;
+  cout << " Total number of stored events : " << nstored << endl;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
@@ -9191,7 +9855,7 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
 // **********************************************************************************
 
  // Retreive the needed parameters
- Int_t fNmax=TMath::Nint(fBurstParameters->GetSignal("Nmax"));
+ Int_t fNmaxsrc=TMath::Nint(fBurstParameters->GetSignal("Nmaxsrc"));
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
  Float_t fT90min=fBurstParameters->GetSignal("T90min");
@@ -9202,75 +9866,23 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
  Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
 
  // Internal statistics
- Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
+ Int_t fNgrbs=GetNsignals(0);
 
  // Get access to a redshift distribution to draw randomly redshifts
- TH1* zdist=(TH1*)fBurstHistos.FindObject("hz");
- if (!zdist)
- {
-  cout << endl;
-  cout << " *" << ClassName() << "::GenBurstGCNdata* Archival observed redshift distribution not found." << endl;
-  cout << " A Landau fit from Swift GRB redshift data will be used to provide random z values." << endl;
-
-  zdist=(TH1*)fBurstHistos.FindObject("hzfit");
-  if (!zdist)
-  { 
-   TF1 fz("fz","59.54*TMath::Landau(x,1.092,0.5203)");
-   fz.SetRange(0,10);
-   fz.SetNpx(10000);
-   TH1* hfz=fz.GetHistogram();
-   zdist=(TH1*)hfz->Clone();
-   zdist->SetNameTitle("hzfit","Landau fit for Swift GRB z data");
-   zdist->GetXaxis()->SetTitle("GRB redshift");
-   zdist->GetYaxis()->SetTitle("Counts");
-   fBurstHistos.Add(zdist);
-  }
- }
+ TH1* zdist=GetBurstZdist("GenBurstGCNdata()",name);
 
  // Get access to a T90 distribution to draw randomly T90 values
- TH1* t90dist=(TH1*)fBurstHistos.FindObject("ht90");
- if (!t90dist)
- {
-  cout << endl;
-  cout << " *" << ClassName() << "::GenBurstGCNData* Observational T90 distribution not found." << endl;
-  cout << " A double Gaussian fit from Fermi GRB T90 data will be used to provide random T90 values." << endl;
-
-  t90dist=(TH1*)fBurstHistos.FindObject("ht90fit");
-  if (!t90dist)
-  {
-   TF1 ft("ft","44.39*TMath::Gaus(x,-0.131,0.481)+193.8*TMath::Gaus(x,1.447,0.4752)");
-   ft.SetRange(-5,5);
-   ft.SetNpx(10000);
-   TH1* hft=ft.GetHistogram();
-   t90dist=(TH1*)hft->Clone();
-   t90dist->SetNameTitle("ht90fit","Double Gauss fit for Fermi t90 data");
-   t90dist->GetXaxis()->SetTitle("GRB duration ^{10}log(T90) in sec.");
-   t90dist->GetYaxis()->SetTitle("Counts");
-   fBurstHistos.Add(t90dist);
-  } 
- }
+ TH1* t90dist=GetBurstT90dist("GenBurstGCNdata()",name);
 
  // Get access to a 1-sigma position uncertainty distribution to draw randomly position uncertaintes
- TH1* sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmapos");
- if (!sigmaposdist)
+ TH1* sigmaposdist=GetBurstSigmaPosdist("GenBurstGCNdata()",name);
+
+ if (!zdist || !t90dist || !sigmaposdist)
  {
   cout << endl;
-  cout << " *" << ClassName() << "::GenBurstGCNdata* Archival observed position uncertainty distribution not found." << endl;
-  cout << " A Landau fit from observed data will be used to provide random 1-sigma uncertainty values." << endl;
-
-  sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmaposfit");
-  if (!sigmaposdist)
-  { 
-   TF1 fsigmapos("fsigmapos","245.2*TMath::Landau(x,-2.209,0.6721,1)");
-   fsigmapos.SetRange(0,90);
-   fsigmapos.SetNpx(10000);
-   TH1* hfsigmapos=fsigmapos.GetHistogram();
-   sigmaposdist=(TH1*)hfsigmapos->Clone();
-   sigmaposdist->SetNameTitle("hsigmaposfit","Landau fit for burst 1-sigma position uncertainty data");
-   sigmaposdist->GetXaxis()->SetTitle("Burst position uncertainty (sigma in degrees)");
-   sigmaposdist->GetYaxis()->SetTitle("Counts");
-   fBurstHistos.Add(sigmaposdist);
-  }
+  cout << " *" << ClassName() << "::GenBurstGCNdata* A distribution for random values is missing." << endl; 
+  cout << endl;
+  return;
  }
 
  Float_t thlow=fDeclmin+90.;
@@ -9285,11 +9897,10 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
  TString grbname;
  Double_t thetagrb,phigrb;
  Int_t ngen=0;
- fNgrbs=GetNsignals(0);
 
  for (Int_t igrb=1; igrb<=n; igrb++)
  {
-  if (fNmax>=0 && (fNgrbs+ngen)>=fNmax) break;
+  if (fNmaxsrc>=0 && (fNgrbs+ngen)>=fNmaxsrc) break;
 
   zgrb=-1;
   if (fabs(fZmin)==fZmax) zgrb=fZmax; 
@@ -9327,10 +9938,10 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
 
   ngen++;
 
-  sx->AddNamedSlot("t90");
-  sx->SetSignal(t90grb,"t90");
-  sx->AddNamedSlot("sigmagrb");
-  sx->SetSignal(sigmagrb,"sigmagrb");
+  sx->AddNamedSlot("T90");
+  sx->SetSignal(t90grb,"T90");
+  sx->AddNamedSlot("csigma");
+  sx->SetSignal(sigmagrb,"csigma");
   sx->AddNamedSlot("z");
   sx->SetSignal(zgrb,"z");
 
@@ -9342,7 +9953,7 @@ void NcAstrolab::GenBurstGCNdata(Int_t n,TString name)
  fBurstParameters->SetSignal(fNgrbs,"Ngrbs");
 
  cout << endl;
- cout << " *" << ClassName() << "::GenBurstGCNdata* " << ngen << " generated bursts with name " << name << " were stored." << endl;
+ cout << " *" << ClassName() << "::GenBurstGCNdata* " << ngen << " new generated bursts with name " << name << " were stored." << endl;
  cout << " Total number of stored bursts : " << fNgrbs << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -9437,6 +10048,48 @@ void NcAstrolab::MakeBurstZdist(TString file,TString tree,TString name,Int_t nb,
       << " of Tree:" << tree << " in file(s):" << file << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
+TH1* NcAstrolab::GetBurstZdist(TString name,TString type)
+{
+// Internal member function to provide the archival c.q. fitted burst redshift distribution.
+// The input argument "name" serves to identify the calling function in the printout.
+// The input argument "type" serves to identify the source class for which a fit has to be provided.
+// Currently only a fit for GRB is available.
+
+ TH1* zdist=(TH1*)fBurstHistos.FindObject("hz");
+ if (!zdist)
+ {
+  if (type.Contains("GRB"))
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetBurstZdist* Called from " << name << endl;
+   cout << " *** Archival observed redshift distribution not found. ***" << endl;
+   cout << " A Landau fit from Swift GRB redshift data will be used to provide missing c.q. random z values." << endl;
+
+   zdist=(TH1*)fBurstHistos.FindObject("hzfit");
+   if (!zdist)
+   { 
+    TF1 fz("fz","59.54*TMath::Landau(x,1.092,0.5203)");
+    fz.SetRange(0,10);
+    fz.SetNpx(10000);
+    TH1* hfz=fz.GetHistogram();
+    zdist=(TH1*)hfz->Clone();
+    zdist->SetNameTitle("hzfit","Landau fit for Swift GRB z data");
+    zdist->GetXaxis()->SetTitle("GRB redshift");
+    zdist->GetYaxis()->SetTitle("Counts");
+    fBurstHistos.Add(zdist);
+   }
+  }
+  else // Source class for which no fit is available
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetBurstZdist* Called from " << name << endl;
+   cout << " *** No redshift fit is available for source class " << type << " ***" << endl;
+  }
+ }
+
+ return zdist;
+}
+///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::MakeBurstT90dist(TString file,TString tree,TString name,Int_t nb,Float_t xmin,Float_t xmax)
 {
 // Read observed archival T90 data and create a log10(T90) distribution.
@@ -9512,6 +10165,48 @@ void NcAstrolab::MakeBurstT90dist(TString file,TString tree,TString name,Int_t n
 
  cout << " *" << ClassName() << "::MakeBurstT90dist* " << nt90 << " archival T90 values have been obtained from variable:" << name
       << " of Tree:" << tree << " in file(s):" << file << endl;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1* NcAstrolab::GetBurstT90dist(TString name,TString type)
+{
+// Internal member function to provide the archival c.q. fitted burst T90 distribution.
+// The input argument "name" serves to identify the calling function in the printout.
+// The input argument "type" serves to identify the source class for which a fit has to be provided.
+// Currently only a fit for GRB is available.
+
+ TH1* t90dist=(TH1*)fBurstHistos.FindObject("ht90");
+ if (!t90dist)
+ {
+  if (type.Contains("GRB"))
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetBurstT90dist* Called from " << name << endl;
+   cout << " *** Observational T90 distribution not found. ***" << endl;
+   cout << " A double Gaussian fit from Fermi GRB T90 data will be used to provide missing c.q. random T90 values." << endl;
+
+   t90dist=(TH1*)fBurstHistos.FindObject("ht90fit");
+   if (!t90dist)
+   {
+    TF1 ft("ft","44.39*TMath::Gaus(x,-0.131,0.481)+193.8*TMath::Gaus(x,1.447,0.4752)");
+    ft.SetRange(-5,5);
+    ft.SetNpx(10000);
+    TH1* hft=ft.GetHistogram();
+    t90dist=(TH1*)hft->Clone();
+    t90dist->SetNameTitle("ht90fit","Double Gauss fit for Fermi t90 data");
+    t90dist->GetXaxis()->SetTitle("GRB duration ^{10}log(T90) in sec.");
+    t90dist->GetYaxis()->SetTitle("Counts");
+    fBurstHistos.Add(t90dist);
+   }
+  }
+  else // Source class for which no fit is available
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetBurstT90dist* Called from " << name << endl;
+   cout << " *** No T90 fit is available for source class " << type << " ***" << endl;
+  }
+ }
+
+ return t90dist;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::MakeBurstSigmaPosdist(TString file,TString tree,TString name,TString u,Int_t nb,Float_t xmin,Float_t xmax)
@@ -9601,6 +10296,48 @@ void NcAstrolab::MakeBurstSigmaPosdist(TString file,TString tree,TString name,TS
 
  cout << " *" << ClassName() << "::MakeBurstSigmaPosdist* " << nsigmapos << " archival sigmapos values have been obtained from variable:" << name
       << " of Tree:" << tree << " in file(s):" << file << endl;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1* NcAstrolab::GetBurstSigmaPosdist(TString name,TString type)
+{
+// Internal member function to provide the archival c.q. fitted 1-sigma burst position uncertainty distribution.
+// The input argument "name" serves to identify the calling function in the printout.
+// The input argument "type" serves to identify the source class for which a fit has to be provided.
+// Currently only a fit for GRB is available.
+
+ TH1* sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmapos");
+ if (!sigmaposdist)
+ {
+  if (type.Contains("GRB"))
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetBurstSigmaPosdist* Called from " << name << endl;
+   cout << " *** Archival observed GRB position uncertainty distribution not found. ***" << endl;
+   cout << " A Landau fit from observed GRB data will be used to provide missing c.q. random 1-sigma uncertainty values." << endl;
+
+   sigmaposdist=(TH1*)fBurstHistos.FindObject("hsigmaposfit");
+   if (!sigmaposdist)
+   { 
+    TF1 fsigmapos("fsigmapos","245.2*TMath::Landau(x,-2.209,0.6721,1)");
+    fsigmapos.SetRange(0,90);
+    fsigmapos.SetNpx(10000);
+    TH1* hfsigmapos=fsigmapos.GetHistogram();
+    sigmaposdist=(TH1*)hfsigmapos->Clone();
+    sigmaposdist->SetNameTitle("hsigmaposfit","Landau fit for burst 1-sigma position uncertainty data");
+    sigmaposdist->GetXaxis()->SetTitle("Burst position uncertainty (sigma in degrees)");
+    sigmaposdist->GetYaxis()->SetTitle("Counts");
+    fBurstHistos.Add(sigmaposdist);
+   }
+  }
+  else // Source class for which no fit is available
+  {
+   cout << endl;
+   cout << " *" << ClassName() << "::GetBurstSigmaPosdist* Called from " << name << endl;
+   cout << " *** No position uncertainty fit is available for source class " << type << " ***" << endl;
+  }
+ }
+
+ return sigmaposdist;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::MakeBurstEnergydist(Int_t mode,TF1& spec,Double_t Emin,Double_t Emax,Int_t nbins)
@@ -10299,20 +11036,18 @@ void NcAstrolab::GenBurstSignals()
  // of the randomiser by the user at the start of the analysis.
  if (!fRan) fRan=new NcRandom(-1);
 
+ ////////////////////////////////////////////
+ // Initialise the final sample histograms //
+ ////////////////////////////////////////////
+
+ InitBurstHistograms();
+
  // Retreive the needed parameters
  Float_t fDeclmin=fBurstParameters->GetSignal("Declmin");
  Float_t fDeclmax=fBurstParameters->GetSignal("Declmax");
- Float_t fT90min=fBurstParameters->GetSignal("T90min");
- Float_t fT90max=fBurstParameters->GetSignal("T90max");
- Float_t fZmin=fBurstParameters->GetSignal("Zmin");
- Float_t fZmax=fBurstParameters->GetSignal("Zmax");
- Float_t fSigmamin=fBurstParameters->GetSignal("Sigmamin");
- Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
  Float_t fTimres=fBurstParameters->GetSignal("Timres");
  Float_t fEmin=fBurstParameters->GetSignal("Emin");
  Float_t fEmax=fBurstParameters->GetSignal("Emax");
- Float_t fAlphasig=fBurstParameters->GetSignal("Alphasig");
- Float_t fAlphabkg=fBurstParameters->GetSignal("Alphabkg");
  Int_t fKinangle=TMath::Nint(fBurstParameters->GetSignal("Kinangle"));
  Float_t fAngresmin=fBurstParameters->GetSignal("Angresmin");
  Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
@@ -10321,16 +11056,12 @@ void NcAstrolab::GenBurstSignals()
  Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
  Float_t fAvgrbz=fBurstParameters->GetSignal("Avgrbz");
  Float_t fAvgrbt90=fBurstParameters->GetSignal("Avgrbt90");
+ Float_t fAvgrbsigma=fBurstParameters->GetSignal("Avgrbsigma");
  Float_t fTmin=fBurstParameters->GetSignal("Tmin");
  Float_t fTmax=fBurstParameters->GetSignal("Tmax");
  Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
  Float_t fDawin=fBurstParameters->GetSignal("Dawin");
  Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
- Float_t fTbin=fBurstParameters->GetSignal("Tbin");
- Int_t fTbint90=TMath::Nint(fBurstParameters->GetSignal("Tbint90"));
- Float_t fNbkg=fBurstParameters->GetSignal("Nbkg");
- Float_t fVarTbin=fBurstParameters->GetSignal("VarTbin");
- Float_t fAbin=fBurstParameters->GetSignal("Abin");
  Float_t fGrbnu=fBurstParameters->GetSignal("Grbnu");
  Int_t fInburst=TMath::Nint(fBurstParameters->GetSignal("Inburst"));
  Float_t fDtnu=fBurstParameters->GetSignal("Dtnu");
@@ -10338,15 +11069,7 @@ void NcAstrolab::GenBurstSignals()
 
  // Derived parameters
  Float_t fMaxsigmatot=fBurstParameters->GetSignal("Maxsigmatot");
- Float_t fMinsigmatot=fBurstParameters->GetSignal("Minsigmatot");
  Float_t fNbkgWin=fBurstParameters->GetSignal("NbkgWin");
-
- // Set default energy spectra if needed
- TH1* edist=0;
- edist=(TH1*)fBurstHistos.FindObject("hsigE");
- if (!edist) MakeBurstEnergydist(2,fAlphasig,fEmin,fEmax,10000);
- edist=(TH1*)fBurstHistos.FindObject("hbkgE");
- if (!edist) MakeBurstEnergydist(1,fAlphabkg,fEmin,fEmax,10000);
 
  ////////////////////////////////////////////////
  // Some Burst statistics from the loaded data //
@@ -10354,327 +11077,35 @@ void NcAstrolab::GenBurstSignals()
 
  Int_t fNgrbs=GetNsignals(0);
 
- Float_t xmin=0;
- Float_t xmax=0;
- Float_t range=0;
- Int_t nbins=0;
-
- // Creation of the burst redshift histo
- xmin=fabs(fZmin);
- xmax=fZmax;
- range=xmax-xmin;
- nbins=TMath::Nint(range/0.1); // Bins of 0.1
- if (nbins<1)
- {
-  xmin=xmin-0.5;
-  xmax=xmax+0.5;
-  nbins=10;
- }
- TH1F* hzburst=new TH1F("hzburst","Burst redshifts in the final sample",nbins,xmin,xmax);
- fBurstHistos.Add(hzburst);
- hzburst->GetXaxis()->SetTitle("Burst redshift");
- hzburst->GetYaxis()->SetTitle("Counts");
-
- // Creation of the corresponding physical distance histo
- xmin=GetPhysicalDistance(xmin);
- xmax=GetPhysicalDistance(xmax);
- TH1F* hdburst=new TH1F("hdburst","Burst distances in the final sample derived from the redshifts",nbins,xmin,xmax);
- fBurstHistos.Add(hdburst);
- hdburst->GetXaxis()->SetTitle("Burst physical distance in Mpc");
- hdburst->GetYaxis()->SetTitle("Counts");
-
- // Creation of the burst t90 duration histo
- xmin=-5;
- if (fabs(fT90min)>0) xmin=log10(fabs(fT90min));
- xmax=5;
- if (fT90max>0) xmax=log10(fT90max);
- range=xmax-xmin;
- nbins=TMath::Nint(range/0.2); // Bins of 0.2
- if (nbins<1)
- {
-  xmin=xmin-1.;
-  xmax=xmax+1.;
-  nbins=10;
- }
- TH1F* ht90burst=new TH1F("ht90burst","Burst durations in the final sample",nbins,xmin,xmax);
- fBurstHistos.Add(ht90burst);
- ht90burst->GetXaxis()->SetTitle("Burst duration ^{10}log(T90) in sec.");
- ht90burst->GetYaxis()->SetTitle("Counts");
-
- // Creation of the burst position uncertainty histos
- xmin=fabs(fSigmamin);
- xmax=fSigmamax;
- range=xmax-xmin;
- nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
- if (nbins<1)
- {
-  xmin=xmin-0.5;
-  xmax=xmax+0.5;
-  nbins=10;
- }
- TH1F* hsigmaburst=new TH1F("hsigmaburst","Burst position uncertainties in the final sample",nbins,xmin,xmax);
- fBurstHistos.Add(hsigmaburst);
- hsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
- hsigmaburst->GetYaxis()->SetTitle("Counts");
-
- TH1F* hbkgsigmaburst=new TH1F("hbkgsigmaburst","Off-source burst position uncertainties in the final sample",nbins,xmin,xmax);
- fBurstHistos.Add(hbkgsigmaburst);
- hbkgsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
- hbkgsigmaburst->GetYaxis()->SetTitle("Counts");
-
- TH1F* htotsigmaburst=new TH1F("htotsigmaburst","On-source burst position uncertainties in the final sample",nbins,xmin,xmax);
- fBurstHistos.Add(htotsigmaburst);
- htotsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
- htotsigmaburst->GetYaxis()->SetTitle("Counts");
-
- // Creation of the off-source and on-source event reconstruction uncertainty histos
- xmin=fabs(fAngresmin);
- xmax=fAngresmax+0.001;
- range=xmax-xmin;
- nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
- if (nbins<1)
- {
-  xmin=xmin-0.5;
-  xmax=xmax+0.5;
-  nbins=10;
- }
- TH1F* hbkgsigmareco=new TH1F("hbkgsigmareco","Off-source event reconstruction uncertainties in the final sample",nbins,xmin,xmax);
- fBurstHistos.Add(hbkgsigmareco);
- hbkgsigmareco->GetXaxis()->SetTitle("Event angular reconstruction uncertainty (sigma in degrees)");
- hbkgsigmareco->GetYaxis()->SetTitle("Counts");
-
- TH1F* htotsigmareco=new TH1F("htotsigmareco","On-source event reconstruction uncertainties in the final sample",nbins,xmin,xmax);
- fBurstHistos.Add(htotsigmareco);
- htotsigmareco->GetXaxis()->SetTitle("Event angular reconstruction uncertainty (sigma in degrees)");
- htotsigmareco->GetYaxis()->SetTitle("Counts");
-
- // Creation of the off-source and on-source combined burst position and track resolution uncertainty histo
- xmin=fMinsigmatot;
- xmax=fMaxsigmatot+0.001;
- range=xmax-xmin;
- nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
- if (nbins<1)
- {
-  xmin=xmin-0.5;
-  xmax=xmax+0.5;
-  nbins=10;
- }
- TH1F* hbkgsigmacomb=new TH1F("hbkgsigmacomb","Off-source combined burst position and event reconstruction uncertainty",nbins,xmin,xmax);
- fBurstHistos.Add(hbkgsigmacomb);
- hbkgsigmacomb->GetXaxis()->SetTitle("Combined burst position and event reco angular uncertainty (sigma in degrees)");
- hbkgsigmacomb->GetYaxis()->SetTitle("Counts");
-
- TH1F* htotsigmacomb=new TH1F("htotsigmacomb","On-source combined burst position and event reconstruction uncertainty",nbins,xmin,xmax);
- fBurstHistos.Add(htotsigmacomb);
- htotsigmacomb->GetXaxis()->SetTitle("Combined burst position and event reco angular uncertainty (sigma in degrees)");
- htotsigmacomb->GetYaxis()->SetTitle("Counts");
-
- NcSignal* sx=0;
- Float_t zgrb=0;
- Double_t dgrb=0;
- Float_t t90grb=0;
- Float_t sigmagrb=0;
- NcSample zsample;
- zsample.SetStoreMode();
- NcSample t90sample;
- t90sample.SetStoreMode();
- NcSample sigmasample;
- sigmasample.SetStoreMode();
- Int_t nsig=GetNsignals(0,1);
- for (Int_t i=1; i<=nsig; i++)
- {
-  sx=GetSignal(i,0);
-
-  if (!sx) continue;
-
-  zgrb=sx->GetSignal("z");
-  dgrb=GetPhysicalDistance(zgrb);
-  t90grb=sx->GetSignal("t90");
-  sigmagrb=sx->GetSignal("sigmagrb");
-
-  hzburst->Fill(zgrb);
-  hdburst->Fill(dgrb);
-  if (t90grb>0) ht90burst->Fill(log10(t90grb));
-  hsigmaburst->Fill(sigmagrb);
-
-  if (fAvgrbz<0) zsample.Enter(zgrb);
-  if (fAvgrbt90<0) t90sample.Enter(t90grb);
-  sigmasample.Enter(sigmagrb);
- }
-
- // Determine median redshift if requested
- if (fAvgrbz<0)
- {
-  fAvgrbz=zsample.GetMedian(1);
-  fAvgrbz*=-1.;
- }
-
- // Determine median T90 duration if requested
- if (fAvgrbt90<0)
- {
-  fAvgrbt90=t90sample.GetMedian(1);
-  fAvgrbt90*=-1.;
- }
-
- Float_t fAvgrbsigma=sigmasample.GetMedian(1);
-
- //////////////////////////////////////////////
- // The implementation of the actual program //
- //////////////////////////////////////////////
-
- Float_t pi=acos(-1.);
-
- Float_t danglow=0;     // Lower value (in degrees) of angular difference histo
- Float_t dangup=fDawin; // Upper value (in degrees) of angular difference histo
- if (fDatype) dangup=fDawin*fabs(fMaxsigmatot);
- if (dangup<0 || dangup>180) dangup=180;
-
- //////////////////////////////////////////////////////////////////////////
- // Automatic definition of the various signal and background histograms //
- // based on the provided user settings                                  //
- //////////////////////////////////////////////////////////////////////////
-
- Int_t ntbins=0;
- Double_t* binarr=0;
- if (fabs(fTbin)>0) // Fixed time bins
- {
-  if (fTbin>0) // User specified time binning
-  {
-   if (fTbint90) fTbin=fTbin*fabs(fAvgrbt90); 
-   ntbins=int(fDtwin/fTbin);
-  }
-  else // Automatic time binning to get the specified maximal bkg counts per bin
-  {
-   ntbins=int(fNbkgWin*float(fNgrbs)/fNbkg);
-  }
- }
- else // Variable time bins
- {
-  Int_t nbx=int(fDtwin/fVarTbin);
-  Float_t gamma=fabs(fAvgrbz)+1.;
-  Float_t* bins=new Float_t[nbx];
-  ntbins=0;
-  Float_t xlow=0,xup=0,size=fVarTbin;
-  for (Int_t i=0; i<nbx-1; i++)
-  {
-   xup=xlow+size;
-   if (xup>fDtwin/2.) // Store the last lowerbound
-   {
-    bins[i]=xlow;
-    ntbins++;
-    break;
-   }
-   bins[i]=xlow;
-   ntbins++;
-   xlow=xup;
-   size=xlow*gamma;
-  }
-  binarr=new Double_t[2*ntbins-1];
-  for (Int_t j=ntbins; j>0; j--)
-  {
-   binarr[ntbins-j]=-bins[j-1];
-   binarr[ntbins+j-2]=bins[j-1];
-  }
-  ntbins=2*ntbins-2;
- }
-
- // Binning for the opening angle histo
- Int_t nabins=int((dangup-danglow)/fAbin);
- if (fAbin<0) nabins=int(((dangup-danglow)/180.)*fNbkgWin*float(fNgrbs)/fNbkg);
-
- // Binning for the cos(opening angle) histo
- Float_t upcos=cos(danglow*pi/180.);
- Float_t lowcos=cos(dangup*pi/180.);
- Int_t nabins2=int((upcos-lowcos)/(1.-cos(fAbin*pi/180.)));
- if (fAbin<0) nabins2=int(((upcos-lowcos)/2.)*fNbkgWin*float(fNgrbs)/fNbkg);
- if (nabins2<0) nabins2*=-1;
-
- if (ntbins<2) ntbins=2;
- if (nabins<2) nabins=2;
- if (nabins2<2) nabins2=2;
-
- Float_t tbinfine=0.1; // Bin size (in sec) for the fine binned histos
- Int_t ntbinsfine=int(fDtwin/tbinfine);
-
- TString title,s;
- title="Arrival times of off-source events in time window";
- title+=";Event arrival time (in sec) w.r.t. burst trigger;Counts per bin of size %-10.3g";
- s=title.Format(title.Data(),tbinfine);
- TH1F* bkgtfine=new TH1F("bkgtfine",s.Data(),ntbinsfine,fTmin,fTmax);
- fBurstHistos.Add(bkgtfine);
-
- title="Arrival times of on-source events in time window";
- title+=";Event arrival time (in sec) w.r.t. burst trigger;Counts per bin of size %-10.3g";
- s=title.Format(title.Data(),tbinfine);
- TH1F* tottfine=new TH1F("tottfine",s.Data(),ntbinsfine,fTmin,fTmax);
- fBurstHistos.Add(tottfine);
-
- TH1F* bkgt=0;
- TH1F* tott=0;
- TH2F* bkg2=0;
- TH2F* tot2=0;
- if (fabs(fTbin)>0) // Fixed time bins
- {
-  bkgt=new TH1F("bkgt","Arrival times of off-source events in time window",ntbins,fTmin,fTmax);
-  tott=new TH1F("tott","Arrival times of on-source events in time window",ntbins,fTmin,fTmax);
-  bkg2=new TH2F("bkg2","Arrival time vs. opening angle of off-source events in time window",
-                nabins,danglow,dangup,ntbins,fTmin,fTmax);
-  tot2=new TH2F("tot2","Arrival time vs. opening angle of on-soure events in time window",
-                nabins,danglow,dangup,ntbins,fTmin,fTmax);
- }
- else // Variable time bins
- {
-  bkgt=new TH1F("bkgt","Arrival times of off-source events in time window",ntbins,binarr);
-  tott=new TH1F("tott","Arrival times of on-source events in time window",ntbins,binarr);
-  bkg2=new TH2F("bkg2","Arrival time vs. opening angle of off-source events in time window",
-                nabins,danglow,dangup,ntbins,binarr);
-  tot2=new TH2F("tot2","Arrival time  vs. opening angle of on-source events in time window",
-                nabins,danglow,dangup,ntbins,binarr);
- }
- fBurstHistos.Add(bkgt);
- fBurstHistos.Add(tott);
- fBurstHistos.Add(bkg2);
- fBurstHistos.Add(tot2);
-
- // The opening angle histo
- TH1F* bkga=new TH1F("bkga","Opening angle of off-source events in time window;Opening angle (degrees);Counts",
-                     nabins,danglow,dangup);
- TH1F* tota=new TH1F("tota","Opening angle of on-source events in time window;Opening angle (degrees);Counts",
-                     nabins,danglow,dangup);
- fBurstHistos.Add(bkga);
- fBurstHistos.Add(tota);
-
- // The cos(opening angle) histo
- TH1F* bkgcosa=new TH1F("bkgcosa","cos(opening angle) of off-source events in time window;cos(opening angle);Counts",
-                        nabins2,lowcos,upcos);
- TH1F* totcosa=new TH1F("totcosa","cos(opening angle) of on-source events in time window;cos(opening angle);Counts",
-                        nabins2,lowcos,upcos);
- fBurstHistos.Add(bkgcosa);
- fBurstHistos.Add(totcosa);
-
- // Set titles for the various arrival time histos
- Float_t bsize=fTbin;
- if (fTbin<0) bsize=fDtwin/float(ntbins);
- s="Counts per time bin";
- if (fabs(fTbin)>0)
- {
-  TString stemp="Counts per bin of size %-10.3g";
-  s=stemp.Format(stemp.Data(),bsize);
- }
- bkgt->GetXaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
- bkgt->GetYaxis()->SetTitle(s.Data());
- tott->GetXaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
- tott->GetYaxis()->SetTitle(s.Data());
- bkg2->GetXaxis()->SetTitle("Opening angle (degrees)");
- bkg2->GetYaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
- tot2->GetXaxis()->SetTitle("Opening angle (degrees)");
- tot2->GetYaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
+ TH1* hbkgsigmaburst=(TH1*)fBurstHistos.FindObject("hbkgsigmaburst");
+ TH1* htotsigmaburst=(TH1*)fBurstHistos.FindObject("htotsigmaburst");
+ TH1* hbkgsigmareco=(TH1*)fBurstHistos.FindObject("hbkgsigmareco");
+ TH1* htotsigmareco=(TH1*)fBurstHistos.FindObject("htotsigmareco");
+ TH1* hbkgsigmacomb=(TH1*)fBurstHistos.FindObject("hbkgsigmacomb");
+ TH1* htotsigmacomb=(TH1*)fBurstHistos.FindObject("htotsigmacomb");
+ TH1* bkgtfine=(TH1*)fBurstHistos.FindObject("bkgtfine");
+ TH1* tottfine=(TH1*)fBurstHistos.FindObject("tottfine");
+ TH1* bkgt=(TH1*)fBurstHistos.FindObject("bkgt");
+ TH1* tott=(TH1*)fBurstHistos.FindObject("tott");
+ TH2* bkg2=(TH2*)fBurstHistos.FindObject("bkg2");
+ TH2* tot2=(TH2*)fBurstHistos.FindObject("tot2");
+ TH1* bkga=(TH1*)fBurstHistos.FindObject("bkga");
+ TH1* tota=(TH1*)fBurstHistos.FindObject("tota");
+ TH1* bkgcosa=(TH1*)fBurstHistos.FindObject("bkgcosa");
+ TH1* totcosa=(TH1*)fBurstHistos.FindObject("totcosa");
 
  //////////////////////////////////////////////////////////
  // Generation of the signal and background observations //
  // based on the provided user settings                  //
  //////////////////////////////////////////////////////////
 
+ Float_t pi=acos(-1.);
+
+ NcSignal* sx=0;
+ Float_t zgrb=0;
+ Double_t dgrb=0;
+ Float_t t90grb=0;
+ Float_t sigmagrb=0;
  NcPosition rgrb;
  Int_t nmu;
  Double_t thetagrb,phigrb;
@@ -10715,8 +11146,8 @@ void NcAstrolab::GenBurstSignals()
 
   tx=sx->GetTimestamp();
   zgrb=sx->GetSignal("z");
-  t90grb=sx->GetSignal("t90");
-  sigmagrb=sx->GetSignal("sigmagrb");
+  t90grb=sx->GetSignal("T90");
+  sigmagrb=sx->GetSignal("csigma");
   GetSignal(dgrb,thetagrb,"deg",phigrb,"deg","loc",tx,igrb+1);
   rgrb.SetPosition(1,thetagrb,phigrb,"sph","deg");
 
@@ -11219,6 +11650,377 @@ void NcAstrolab::GenBurstSignals()
  fBurstParameters->SetSignal(ratebkg,"ratebkg");
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::InitBurstHistograms()
+{
+// Internal memberfunction to initialize the histograms for transient burst analyses.
+//
+// **********************************************************************************
+// * This is a beta test version, so currently no backward compatibility guaranteed *
+// **********************************************************************************
+
+ // Retreive the needed parameters
+ Float_t fT90min=fBurstParameters->GetSignal("T90min");
+ Float_t fT90max=fBurstParameters->GetSignal("T90max");
+ Float_t fZmin=fBurstParameters->GetSignal("Zmin");
+ Float_t fZmax=fBurstParameters->GetSignal("Zmax");
+ Float_t fSigmamin=fBurstParameters->GetSignal("Sigmamin");
+ Float_t fSigmamax=fBurstParameters->GetSignal("Sigmamax");
+ Float_t fEmin=fBurstParameters->GetSignal("Emin");
+ Float_t fEmax=fBurstParameters->GetSignal("Emax");
+ Float_t fAlphasig=fBurstParameters->GetSignal("Alphasig");
+ Float_t fAlphabkg=fBurstParameters->GetSignal("Alphabkg");
+ Float_t fAngresmin=fBurstParameters->GetSignal("Angresmin");
+ Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
+ Float_t fAvgrbz=fBurstParameters->GetSignal("Avgrbz");
+ Float_t fAvgrbt90=fBurstParameters->GetSignal("Avgrbt90");
+ Float_t fTmin=fBurstParameters->GetSignal("Tmin");
+ Float_t fTmax=fBurstParameters->GetSignal("Tmax");
+ Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
+ Float_t fDawin=fBurstParameters->GetSignal("Dawin");
+ Int_t fDatype=TMath::Nint(fBurstParameters->GetSignal("Datype"));
+ Float_t fTbin=fBurstParameters->GetSignal("Tbin");
+ Int_t fTbint90=TMath::Nint(fBurstParameters->GetSignal("Tbint90"));
+ Float_t fNbkg=fBurstParameters->GetSignal("Nbkg");
+ Float_t fVarTbin=fBurstParameters->GetSignal("VarTbin");
+ Float_t fAbin=fBurstParameters->GetSignal("Abin");
+
+ // Derived parameters
+ Float_t fMaxsigmatot=fBurstParameters->GetSignal("Maxsigmatot");
+ Float_t fMinsigmatot=fBurstParameters->GetSignal("Minsigmatot");
+ Float_t fNbkgWin=fBurstParameters->GetSignal("NbkgWin");
+
+ // Set default energy spectra if needed
+ TH1* edist=0;
+ edist=(TH1*)fBurstHistos.FindObject("hsigE");
+ if (!edist) MakeBurstEnergydist(2,fAlphasig,fEmin,fEmax,10000);
+ edist=(TH1*)fBurstHistos.FindObject("hbkgE");
+ if (!edist) MakeBurstEnergydist(1,fAlphabkg,fEmin,fEmax,10000);
+
+ ////////////////////////////////////////////////
+ // Some Burst statistics from the loaded data //
+ ////////////////////////////////////////////////
+
+ Int_t fNgrbs=GetNsignals(0);
+
+ Float_t xmin=0;
+ Float_t xmax=0;
+ Float_t range=0;
+ Int_t nbins=0;
+
+ // Creation of the burst redshift histo
+ xmin=fabs(fZmin);
+ xmax=fZmax;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hzburst=new TH1F("hzburst","Burst redshifts in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hzburst);
+ hzburst->GetXaxis()->SetTitle("Burst redshift");
+ hzburst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the corresponding physical distance histo
+ xmin=GetPhysicalDistance(xmin);
+ xmax=GetPhysicalDistance(xmax);
+ TH1F* hdburst=new TH1F("hdburst","Burst distances in the final sample derived from the redshifts",nbins,xmin,xmax);
+ fBurstHistos.Add(hdburst);
+ hdburst->GetXaxis()->SetTitle("Burst physical distance in Mpc");
+ hdburst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the burst t90 duration histo
+ xmin=-5;
+ if (fabs(fT90min)>0) xmin=log10(fabs(fT90min));
+ xmax=5;
+ if (fT90max>0) xmax=log10(fT90max);
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.2); // Bins of 0.2
+ if (nbins<1)
+ {
+  xmin=xmin-1.;
+  xmax=xmax+1.;
+  nbins=10;
+ }
+ TH1F* ht90burst=new TH1F("ht90burst","Burst durations in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(ht90burst);
+ ht90burst->GetXaxis()->SetTitle("Burst duration ^{10}log(T90) in sec.");
+ ht90burst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the burst position uncertainty histos
+ xmin=fabs(fSigmamin);
+ xmax=fSigmamax;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hsigmaburst=new TH1F("hsigmaburst","Burst position uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hsigmaburst);
+ hsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
+ hsigmaburst->GetYaxis()->SetTitle("Counts");
+
+ TH1F* hbkgsigmaburst=new TH1F("hbkgsigmaburst","Off-source burst position uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hbkgsigmaburst);
+ hbkgsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
+ hbkgsigmaburst->GetYaxis()->SetTitle("Counts");
+
+ TH1F* htotsigmaburst=new TH1F("htotsigmaburst","On-source burst position uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(htotsigmaburst);
+ htotsigmaburst->GetXaxis()->SetTitle("Burst position angular uncertainty (sigma in degrees)");
+ htotsigmaburst->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the off-source and on-source event reconstruction uncertainty histos
+ xmin=fabs(fAngresmin);
+ xmax=fAngresmax+0.001;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hbkgsigmareco=new TH1F("hbkgsigmareco","Off-source event reconstruction uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(hbkgsigmareco);
+ hbkgsigmareco->GetXaxis()->SetTitle("Event angular reconstruction uncertainty (sigma in degrees)");
+ hbkgsigmareco->GetYaxis()->SetTitle("Counts");
+
+ TH1F* htotsigmareco=new TH1F("htotsigmareco","On-source event reconstruction uncertainties in the final sample",nbins,xmin,xmax);
+ fBurstHistos.Add(htotsigmareco);
+ htotsigmareco->GetXaxis()->SetTitle("Event angular reconstruction uncertainty (sigma in degrees)");
+ htotsigmareco->GetYaxis()->SetTitle("Counts");
+
+ // Creation of the off-source and on-source combined burst position and track resolution uncertainty histo
+ xmin=fMinsigmatot;
+ xmax=fMaxsigmatot+0.001;
+ range=xmax-xmin;
+ nbins=TMath::Nint(range/0.1); // Bins of 0.1 degree
+ if (nbins<1)
+ {
+  xmin=xmin-0.5;
+  xmax=xmax+0.5;
+  nbins=10;
+ }
+ TH1F* hbkgsigmacomb=new TH1F("hbkgsigmacomb","Off-source combined burst position and event reconstruction uncertainty",nbins,xmin,xmax);
+ fBurstHistos.Add(hbkgsigmacomb);
+ hbkgsigmacomb->GetXaxis()->SetTitle("Combined burst position and event reco angular uncertainty (sigma in degrees)");
+ hbkgsigmacomb->GetYaxis()->SetTitle("Counts");
+
+ TH1F* htotsigmacomb=new TH1F("htotsigmacomb","On-source combined burst position and event reconstruction uncertainty",nbins,xmin,xmax);
+ fBurstHistos.Add(htotsigmacomb);
+ htotsigmacomb->GetXaxis()->SetTitle("Combined burst position and event reco angular uncertainty (sigma in degrees)");
+ htotsigmacomb->GetYaxis()->SetTitle("Counts");
+
+ NcSignal* sx=0;
+ Float_t zgrb=0;
+ Double_t dgrb=0;
+ Float_t t90grb=0;
+ Float_t sigmagrb=0;
+ NcSample zsample;
+ zsample.SetStoreMode();
+ NcSample t90sample;
+ t90sample.SetStoreMode();
+ NcSample sigmasample;
+ sigmasample.SetStoreMode();
+ Int_t nsig=GetNsignals(0,1);
+ for (Int_t i=1; i<=nsig; i++)
+ {
+  sx=GetSignal(i,0);
+
+  if (!sx) continue;
+
+  zgrb=sx->GetSignal("z");
+  dgrb=GetPhysicalDistance(zgrb);
+  t90grb=sx->GetSignal("T90");
+  sigmagrb=sx->GetSignal("csigma");
+
+  hzburst->Fill(zgrb);
+  hdburst->Fill(dgrb);
+  if (t90grb>0) ht90burst->Fill(log10(t90grb));
+  hsigmaburst->Fill(sigmagrb);
+
+  if (fAvgrbz<0) zsample.Enter(zgrb);
+  if (fAvgrbt90<0) t90sample.Enter(t90grb);
+  sigmasample.Enter(sigmagrb);
+ }
+
+ // Determine median redshift if requested
+ if (fAvgrbz<0)
+ {
+  fAvgrbz=zsample.GetMedian(1);
+  fAvgrbz*=-1.;
+ }
+
+ // Determine median T90 duration if requested
+ if (fAvgrbt90<0)
+ {
+  fAvgrbt90=t90sample.GetMedian(1);
+  fAvgrbt90*=-1.;
+ }
+
+ Float_t fAvgrbsigma=sigmasample.GetMedian(1);
+
+ Float_t pi=acos(-1.);
+
+ Float_t danglow=0;     // Lower value (in degrees) of angular difference histo
+ Float_t dangup=fDawin; // Upper value (in degrees) of angular difference histo
+ if (fDatype) dangup=fDawin*fabs(fMaxsigmatot);
+ if (dangup<0 || dangup>180) dangup=180;
+
+ //////////////////////////////////////////////////////////////////////////
+ // Automatic definition of the various signal and background histograms //
+ // based on the provided user settings                                  //
+ //////////////////////////////////////////////////////////////////////////
+
+ Int_t ntbins=0;
+ Double_t* binarr=0;
+ if (fabs(fTbin)>0) // Fixed time bins
+ {
+  if (fTbin>0) // User specified time binning
+  {
+   if (fTbint90) fTbin=fTbin*fabs(fAvgrbt90); 
+   ntbins=int(fDtwin/fTbin);
+  }
+  else // Automatic time binning to get the specified maximal bkg counts per bin
+  {
+   ntbins=int(fNbkgWin*float(fNgrbs)/fNbkg);
+  }
+ }
+ else // Variable time bins
+ {
+  Int_t nbx=int(fDtwin/fVarTbin);
+  Float_t gamma=fabs(fAvgrbz)+1.;
+  Float_t* bins=new Float_t[nbx];
+  ntbins=0;
+  Float_t xlow=0,xup=0,size=fVarTbin;
+  for (Int_t i=0; i<nbx-1; i++)
+  {
+   xup=xlow+size;
+   if (xup>fDtwin/2.) // Store the last lowerbound
+   {
+    bins[i]=xlow;
+    ntbins++;
+    break;
+   }
+   bins[i]=xlow;
+   ntbins++;
+   xlow=xup;
+   size=xlow*gamma;
+  }
+  binarr=new Double_t[2*ntbins-1];
+  for (Int_t j=ntbins; j>0; j--)
+  {
+   binarr[ntbins-j]=-bins[j-1];
+   binarr[ntbins+j-2]=bins[j-1];
+  }
+  ntbins=2*ntbins-2;
+ }
+
+ // Binning for the opening angle histo
+ Int_t nabins=int((dangup-danglow)/fAbin);
+ if (fAbin<0) nabins=int(((dangup-danglow)/180.)*fNbkgWin*float(fNgrbs)/fNbkg);
+
+ // Binning for the cos(opening angle) histo
+ Float_t upcos=cos(danglow*pi/180.);
+ Float_t lowcos=cos(dangup*pi/180.);
+ Int_t nabins2=int((upcos-lowcos)/(1.-cos(fAbin*pi/180.)));
+ if (fAbin<0) nabins2=int(((upcos-lowcos)/2.)*fNbkgWin*float(fNgrbs)/fNbkg);
+ if (nabins2<0) nabins2*=-1;
+
+ if (ntbins<2) ntbins=2;
+ if (nabins<2) nabins=2;
+ if (nabins2<2) nabins2=2;
+
+ Float_t tbinfine=0.1; // Bin size (in sec) for the fine binned histos
+ Int_t ntbinsfine=int(fDtwin/tbinfine);
+
+ TString title,s;
+ title="Arrival times of off-source events in time window";
+ title+=";Event arrival time (in sec) w.r.t. burst trigger;Counts per bin of size %-10.3g";
+ s=title.Format(title.Data(),tbinfine);
+ TH1F* bkgtfine=new TH1F("bkgtfine",s.Data(),ntbinsfine,fTmin,fTmax);
+ fBurstHistos.Add(bkgtfine);
+
+ title="Arrival times of on-source events in time window";
+ title+=";Event arrival time (in sec) w.r.t. burst trigger;Counts per bin of size %-10.3g";
+ s=title.Format(title.Data(),tbinfine);
+ TH1F* tottfine=new TH1F("tottfine",s.Data(),ntbinsfine,fTmin,fTmax);
+ fBurstHistos.Add(tottfine);
+
+ TH1F* bkgt=0;
+ TH1F* tott=0;
+ TH2F* bkg2=0;
+ TH2F* tot2=0;
+ if (fabs(fTbin)>0) // Fixed time bins
+ {
+  bkgt=new TH1F("bkgt","Arrival times of off-source events in time window",ntbins,fTmin,fTmax);
+  tott=new TH1F("tott","Arrival times of on-source events in time window",ntbins,fTmin,fTmax);
+  bkg2=new TH2F("bkg2","Arrival time vs. opening angle of off-source events in time window",
+                nabins,danglow,dangup,ntbins,fTmin,fTmax);
+  tot2=new TH2F("tot2","Arrival time vs. opening angle of on-soure events in time window",
+                nabins,danglow,dangup,ntbins,fTmin,fTmax);
+ }
+ else // Variable time bins
+ {
+  bkgt=new TH1F("bkgt","Arrival times of off-source events in time window",ntbins,binarr);
+  tott=new TH1F("tott","Arrival times of on-source events in time window",ntbins,binarr);
+  bkg2=new TH2F("bkg2","Arrival time vs. opening angle of off-source events in time window",
+                nabins,danglow,dangup,ntbins,binarr);
+  tot2=new TH2F("tot2","Arrival time  vs. opening angle of on-source events in time window",
+                nabins,danglow,dangup,ntbins,binarr);
+ }
+ fBurstHistos.Add(bkgt);
+ fBurstHistos.Add(tott);
+ fBurstHistos.Add(bkg2);
+ fBurstHistos.Add(tot2);
+
+ // The opening angle histo
+ TH1F* bkga=new TH1F("bkga","Opening angle of off-source events in time window;Opening angle (degrees);Counts",
+                     nabins,danglow,dangup);
+ TH1F* tota=new TH1F("tota","Opening angle of on-source events in time window;Opening angle (degrees);Counts",
+                     nabins,danglow,dangup);
+ fBurstHistos.Add(bkga);
+ fBurstHistos.Add(tota);
+
+ // The cos(opening angle) histo
+ TH1F* bkgcosa=new TH1F("bkgcosa","cos(opening angle) of off-source events in time window;cos(opening angle);Counts",
+                        nabins2,lowcos,upcos);
+ TH1F* totcosa=new TH1F("totcosa","cos(opening angle) of on-source events in time window;cos(opening angle);Counts",
+                        nabins2,lowcos,upcos);
+ fBurstHistos.Add(bkgcosa);
+ fBurstHistos.Add(totcosa);
+
+ // Set titles for the various arrival time histos
+ Float_t bsize=fTbin;
+ if (fTbin<0) bsize=fDtwin/float(ntbins);
+ s="Counts per time bin";
+ if (fabs(fTbin)>0)
+ {
+  TString stemp="Counts per bin of size %-10.3g";
+  s=stemp.Format(stemp.Data(),bsize);
+ }
+ bkgt->GetXaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
+ bkgt->GetYaxis()->SetTitle(s.Data());
+ tott->GetXaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
+ tott->GetYaxis()->SetTitle(s.Data());
+ bkg2->GetXaxis()->SetTitle("Opening angle (degrees)");
+ bkg2->GetYaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
+ tot2->GetXaxis()->SetTitle("Opening angle (degrees)");
+ tot2->GetYaxis()->SetTitle("Event arrival time (in sec) w.r.t. burst trigger");
+
+ // Update internal statistics
+ fBurstParameters->SetSignal(fAvgrbz,"Avgrbz");
+ fBurstParameters->SetSignal(fAvgrbt90,"Avgrbt90");
+ fBurstParameters->AddNamedSlot("Avgrbsigma");
+ fBurstParameters->SetSignal(fAvgrbsigma,"Avgrbsigma");
+}
+///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::BurstCompensate(Int_t& nmugrb)
 {
 // Compensate statistical underfluctuation in the number of transient burst muons.
@@ -11290,8 +12092,8 @@ void NcAstrolab::BurstCompensate(Int_t& nmugrb)
   GetSignal(dgrb,thetagrb,"deg",phigrb,"deg","loc",tx,jgrb);
   rgrb.SetPosition(1,thetagrb,phigrb,"sph","deg");
   zgrb=sx->GetSignal("z");
-  t90grb=sx->GetSignal("t90");
-  sigmagrb=sx->GetSignal("sigmagrb");
+  t90grb=sx->GetSignal("T90");
+  sigmagrb=sx->GetSignal("csigma");
   fixedwinset=TMath::Nint(sx->GetSignal("fixedwinset"));
   dangmaxOn=sx->GetSignal("dangmaxOn");
   OmegaOn=sx->GetSignal("OmegaOn");
@@ -11300,7 +12102,7 @@ void NcAstrolab::BurstCompensate(Int_t& nmugrb)
 
   // Obtain actual GRB position
   rgrb2.Load(rgrb);
-  SmearPosition(rgrb2,sigmagrb); //@@@@@@
+  SmearPosition(rgrb2,sigmagrb); //@@@@@@ Is this needed ?
 
   nmugrb++;
 

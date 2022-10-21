@@ -1,13 +1,13 @@
 #ifndef NcAstrolab_h
 #define NcAstrolab_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <math.h>
 
 #include "TROOT.h"
 #include "TTask.h"
-#include "TString.h"
+#include "TObjString.h"
 #include "TRotMatrix.h"
 #include "TObjArray.h"
 #include "TArrayI.h"
@@ -83,6 +83,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode="T",Int_t type=0); // Print stored signal data
   void ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode="T",Int_t nmax=10,Int_t j=-1,Int_t type=-1); // List stored signals
   Int_t GetSignalIndex(TString name,Int_t type=0); // Provide storage index of the signal with the specified name
+  Int_t GetSignalIndex(NcSignal* s,Int_t type);    // Provide storage index of the specified signal
   Double_t GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref=0,Int_t type=0);// Provide the Local Hour Angle in degrees
   void SetLocalFrame(Double_t t1,Double_t p1,Double_t t2,Double_t p2,Double_t t3,Double_t p3); // Define local coordinate frame
   using NcTimestamp::GetDifference;
@@ -132,12 +133,15 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t KolmogorovTest(TString mode,TH1* h1,TH1* h2=0,TF1* pdf=0,Double_t nr=1000,TH1F* ksh=0,Int_t ncut=0,Double_t* nrx=0,Int_t mark=1); // Perform a K-S test
   TH1F GetCumulHistogram(TH1* h,TString name,TString mode="F") const; // Provide the Cumulative Distribution Histogram from an input histogram
   TH1F GetCumulHistogram(TF1* f,TString name,Int_t nbins,Double_t xmin,Double_t xmax,TString mode="F") const; // Provide the Cumulative Distribution Histogram from an input function
+  void InitDataNames(Int_t dir,TString frame,TString mode="J"); // Initialisation of the input data variable names correspondence table
+  void SetDataNames(TString obsname,TString varname,TString units="1",TString func="none"); // Specification of the input data variable names correspondence table
+  void ListDataNames(); // Listing of the input data variable names correspondence table
 
   // Facilities for transient burst investigation
   void SetBurstParameter(TString name,Double_t value); // Specification of a certain transient burst parameter setting
   NcDevice* GetBurstParameters();    // Provide the device containing all the burst parameter settings
   void ListBurstParameters() const;  // Listing of all the burst parameter settings
-  void LoadBurstGCNdata(TString file,TString tree,Int_t date1=0,Int_t date2=0,Int_t nmax=-1,TString type="GRB");  // Load observed burst GCN data
+  void LoadInputData(Bool_t src,TString file,TString tree,Int_t date1=0,Int_t date2=0,Int_t nmax=-1,TString type="-");  // Load source (c.q. burst) or observed event data
   void GenBurstGCNdata(Int_t n,TString name="GRB"); // Generate fictative burst GCN data
   void GenBurstSignals(); // Generate detector signals from the stored transient bursts
   void ListBurstHistograms() const;            // Provide a list of all the stored transient burst histograms
@@ -259,13 +263,23 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetBackgroundRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a background rate "b"
   Double_t GetSignalRateProb(Double_t* vars,Double_t* pars); // Posterior Bayesian probability for a source signal rate "s"
 
+  // Specifications of the data from a ROOT input Tree  
+  Int_t fDataDir;         // Indicator for arrival (1) or moving (-1) directions
+  TString fDataFrame;     // The frame in which coordinates are provided
+  TString fDataMode;      // Indicator for equatorial coordinates mode (Mean, True, B1950 or J2000)
+  NcObjMatrix fDataNames; // The correspondence table between physical observables and variable names
+
   // Storage for transient burst investigations
   NcDevice* fBurstParameters; // Various parameters describing the transient burst
   TObjArray fBurstHistos;     // Storage of all the produced transient burst histograms
 
-  // Internal function for transient burst investigations
+  // Internal functions for transient burst investigations
   void BurstCompensate(Int_t& nmugrb);
+  void InitBurstHistograms();
+  TH1* GetBurstZdist(TString name,TString type);
+  TH1* GetBurstT90dist(TString name,TString type);
+  TH1* GetBurstSigmaPosdist(TString name,TString type);
  
- ClassDef(NcAstrolab,34) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,35) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

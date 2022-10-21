@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 2, 2022  13:30Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 16, 2022  15:36Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -3744,7 +3744,7 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t l
  Int_t hh=0;
  Int_t mm=0;
  Double_t s=0;
- time.ReplaceAll(":"," ");
+ time.ReplaceAll(":","");
  uttime=time.Atof();
  iword=int(uttime);
  hh=iword/10000;
@@ -3824,8 +3824,8 @@ void NcTimestamp::SetUT(TString date,TString time,Int_t mode,TString utc,Int_t l
  Int_t month=0;
  Int_t day=0;
  TString datex=date;
- datex.ReplaceAll("-"," ");
- datex.ReplaceAll("/"," ");
+ datex.ReplaceAll("-","");
+ datex.ReplaceAll("/","");
  utdate=datex.Atoi();
  iword=utdate;
  if (mode==0)
@@ -4102,9 +4102,12 @@ Double_t NcTimestamp::GetGAST()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetLT(Double_t offset)
 {
-// Provide the corresponding local time in fractional hours.
+// Provide the corresponding UT based (aka mean solar) Local Time in fractional hours.
 // The "offset" denotes the time difference in (fractional) hours w.r.t. UT.
-// A mean solar day lasts 24h (i.e. 86400s).
+// A mean solar day lasts 24h (i.e. 86400s), so this local time is directly
+// related to UT, which is obtained when offset=0.
+//
+// Note : This local time is often referred to as Local Mean Time (LMT).
 //
 // In case a hh:mm:ss format is needed, please use the Convert() facility. 
 
@@ -4112,6 +4115,46 @@ Double_t NcTimestamp::GetLT(Double_t offset)
  Double_t h=GetUT();
  
  h+=offset;
+
+ while (h<0)
+ {
+  h+=24.;
+ }
+ while (h>24)
+ {
+  h-=24.;
+ }
+
+ return h;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcTimestamp::GetLAT(Double_t offset)
+{
+// Provide the corresponding Local Apparent (solar) Time in fractional hours.
+// The "offset" denotes the time difference in (fractional) hours of the
+// UT based (aka mean solar) Local Time w.r.t. UT.
+//
+// Note : The UT based local time is often referred to as Local Mean Time (LMT).
+//
+// The local apparent time (LAT) is based on the actual observed location of the Sun,
+// which may deviate considerably from the UT based local mean time (LMT) due to the
+// movement of the Earth around the Sun and the orientation of the Earth's axis.
+//
+// The difference between the Local Apparent Time (LAT) and Local Mean Time (LMT)
+// is called the Equation of Time (EoT), with EoT=LAT-LMT.
+// See also the member function Almanac(). 
+// 
+// In case a hh:mm:ss format is needed, please use the Convert() facility. 
+
+ // Current UT time in fractional hours
+ Double_t h=GetUT();
+
+ // Equation of Time
+ Double_t eot; // LAT-LMT
+ Almanac(0,0,0,0,"Sun",0,0,0,&eot,10);
+ eot/=3600.; // Convert to fractional hours
+ 
+ h+=offset+eot;
 
  while (h<0)
  {
@@ -5087,13 +5130,22 @@ void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc,Int_t leap,Double
 //        "J" ==> Julian epoch
 // utc  : Flag to denote whether the UTC parameters "leap" and "dut" (see below) are provided or not.
 //        "N" ==> No UTC parameters will be stored.
-//                The TAI related time recording is disabled and the values of
-//                the Leap Seconds and dut=UT-UTC will be set to zero.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
+//                The resulting date/time represents UTC, and serves as the reference time.
+//                Since no Leap Second info is available, the TAI related time recording is disabled
+//                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
 //        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
+//                The resulting date/time represents UTC, and serves as the reference time.
+//                The provided UTC parameters will serve to determine the TAI related time recording.
 //        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
-//                For further details see the memberfunction SetUTCparameters().
+//                The resulting date/time represents UTC, and serves as the reference time.
+//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                In case the corresponding UTC parameters are not found, this mode is equivalent to utc="N".
+//                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
+//        "U" ==> The resulting date/time represents UT1, and serves as the reference time.
+//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                This mode is equivalent to utc="A" apart from the fact that the reference time represents UT1.
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT-UTC in seconds.
 //
@@ -5115,7 +5167,7 @@ void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc,Int_t leap,Double
 // 2) In case utc="A" and no data files have been loaded, or no information is available,
 //    the utc="N" mode will be invoked.
 //
-// The default values are utc="A", leap=0 and dut=0.
+// The default values are utc="U", leap=0 and dut=0.
 
  Double_t jd=GetJD(e,mode);
  SetJD(jd,utc,leap,dut);
@@ -5135,9 +5187,12 @@ Double_t NcTimestamp::GetEpoch(TString mode)
  return e;
 }
 ///////////////////////////////////////////////////////////////////////////
-TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
+TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TString* date,TString* time)
 {
 // Get a string with date and time info for the date/time system specified via "mode".
+// The returned string contains both the date and time info, but via the optional arguments
+// "date" and "time" the user may also retrieve the date and time info separately, when a
+// non-zero pointer value is provided.
 //
 // The argument "mode" my have the values :
 // "UT", "UT1", "UTC", "GAT", "GMST", "GAST", "GPS", "TAI", "TT", "LMT", "LAT", "LMST" or "LAST"
@@ -5157,16 +5212,23 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
 // When an offset value is specified, the corresponding local times
 // LMT and LMST (or LAT and LAST) are available as well.
 //
-// The default values are ndig=0 and offset=0.
+// The default values are ndig=0, offset=0, day=0 and time=0.
 //
 // Notes :
 // -------
 // 1) TAI related date/time info (i.e. TAI, UTC, GPS and TT) is only available if
 //    UTC parameters were provided.
 //    Please refer to the memberfunctions LoadUTCparameterFiles() and GetUTCparameters() for details.
-// 2) In case the MJD falls outside the TTimeStamp range, the date info will be omitted.
+// 2) In case the MJD falls outside the TTimeStamp range, the date info will be omitted from the
+//    combined date/time string and the (optional) date string will contain "---". 
 
  Bool_t set=kFALSE;
+
+ TString sdate=mode;
+ sdate+=" information unavailable";
+
+ TString stime=mode;
+ stime+=" information unavailable";
 
  TString daytime=mode;
  daytime+=" information unavailable";
@@ -5183,15 +5245,7 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
  ULong64_t sfrac=0;
  Double_t gat=0;
  Double_t gast=0;
- Bool_t date=kFALSE;
-
- // Equation of Time and Equation of Equinoxes
- Double_t eot; // LAT-LMT
- Double_t eox; // LAST-LMST
- eox=Almanac(0,0,0,0,"Sun",0,0,0,&eot,10);
- // Convert to fractional hours
- eox/=3600.;
- eot/=3600.;
+ Bool_t bdate=kFALSE;
 
  Int_t mjd,mjsec,mjns;
  GetMJD(mjd,mjsec,mjns);
@@ -5209,14 +5263,14 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
   {
    GetDate(kTRUE,0,&y,&m,&d);
    wd=GetDayOfWeek(kTRUE,0);
-   date=kTRUE;
+   bdate=kTRUE;
   }
   if (mode=="UT") GetUT(hh,mm,ss,ns,ps);
   if (mode=="GMST") GetGMST(hh,mm,ss,ns,ps);
   if (mode=="GAT")
   {
-   // Obtain GAT via the Equation of Time as offset
-   gat=GetLT(eot);
+   // Obtain GAT as LAT without offset
+   gat=GetLAT(0);
    Convert(gat,hh,mm,ss,ns,ps);
   }
   if (mode=="GAST")
@@ -5240,7 +5294,7 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
    {
     tx.GetDate(kTRUE,0,&y,&m,&d);
     wd=tx.GetDayOfWeek(kTRUE,0);
-    date=kTRUE;
+    bdate=kTRUE;
    }
    GetTAI(hh,mm,ss,ns,ps,mode);
  
@@ -5260,12 +5314,12 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
   {
    t2.GetDate(kTRUE,0,&y,&m,&d);
    wd=t2.GetDayOfWeek(kTRUE,0);
-   date=kTRUE;
+   bdate=kTRUE;
   }
   // Determine the local time by including the offset w.r.t. the original timestamp
   Double_t hlt=0;
   if (mode=="LMT") hlt=GetLT(offset);
-  if (mode=="LAT") hlt=GetLT(offset+eot); // Obtain LAT via the Equation of Time as extra offset
+  if (mode=="LAT") hlt=GetLAT(offset);
   if (mode=="LMST") hlt=GetLMST(offset);
   if (mode=="LAST") hlt=GetLAST(offset);
   Convert(hlt,hh,mm,ss,ns,ps);
@@ -5274,56 +5328,75 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset)
  }
 
  // No match found with requested date/time system
- if (!set) return daytime;
+ if (!set)
+ {
+  if (date) *date=sdate;
+  if (time) *time=stime;
+  return daytime;
+ }
 
  // Create the date and time info string
- daytime="";
+ sdate="";
+ stime="";
 
  // The date string
- if (date)
+ if (bdate)
  {
-  daytime=day[wd-1];
-  daytime+=" ";
-  if (d<10) daytime+="0";
-  daytime+=d;
-  daytime+="-";
-  daytime+=month[m-1];
-  daytime+="-";
-  daytime+=y;
-  daytime+=" ";
+  sdate=day[wd-1];
+  sdate+=" ";
+  if (d<10) sdate+="0";
+  sdate+=d;
+  sdate+="-";
+  sdate+=month[m-1];
+  sdate+="-";
+  sdate+=y;
  }
 
  // The time string
- if (hh<10) daytime+="0";
- daytime+=hh;
- daytime+=":";
- if (mm<10) daytime+="0";
- daytime+=mm;
- daytime+=":";
- if (ss<10) daytime+="0";
- daytime+=ss;
+ if (hh<10) stime+="0";
+ stime+=hh;
+ stime+=":";
+ if (mm<10) stime+="0";
+ stime+=mm;
+ stime+=":";
+ if (ss<10) stime+="0";
+ stime+=ss;
  if (ndig>0)
  {
-  daytime+=".";
+  stime+=".";
   s=double(ns)*1e-9+double(ps)*1e-12;
   s*=pow(10.,ndig);
   sfrac=ULong64_t(s);
   ULong64_t isfrac=pow(10,ndig-1);
   while (sfrac<isfrac)
   {
-   daytime+="0";
+   stime+="0";
    isfrac/=10;
   }
-  daytime+=sfrac;
+  if (sfrac) stime+=sfrac;
  }
+
+ // Construct the combined date/time string
+ daytime=sdate;
+ daytime+=" ";
+ daytime+=stime;
+
  // Add the time system indicator
  if (mode=="UT")
  {
   mode="UT1";
   if (!fUtc) mode="UTC";
  }
+ if (sdate=="") sdate="---";
+ sdate+=" ";
+ sdate+=mode;
+ stime+=" ";
+ stime+=mode;
  daytime+=" ";
  daytime+=mode;
+
+ if (date) *date=sdate;
+ if (time) *time=stime;
 
  return daytime;
 }

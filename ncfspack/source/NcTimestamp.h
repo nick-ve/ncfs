@@ -87,7 +87,8 @@ class NcTimestamp : public TTimeStamp
   void GetGMST(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps); // Corresponding Greenwich Mean Sidereal Time (GMST)
   Double_t GetGMST(); // Provide corresponding Greenwich Mean Sidereal Time (GMST) in fractional hours
   Double_t GetGAST(); // Provide corresponding Greenwich Apparent Sidereal Time (GAST) in fractional hours
-  Double_t GetLT(Double_t offset);  // Provide corresponding Local Time (LT) in fractional hours
+  Double_t GetLT(Double_t offset);   // Provide corresponding Local Time (LT) in fractional hours
+  Double_t GetLAT(Double_t offset);  // Provide corresponding Local Apparent Time (LAT) in fractional hours
   Double_t GetLMST(Double_t offset); // Provide corresponding Local Mean Sidereal Time (LMST) in fractional hours
   Double_t GetLAST(Double_t offset); // Provide corresponding Local Apparent Sidereal Time (LAST) in fractional hours
   void SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns=0,Int_t ps=0,TString utc="A",Int_t leap=0,Double_t dut=0); // Set data according to LT
@@ -98,7 +99,7 @@ class NcTimestamp : public TTimeStamp
   Double_t Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name="",Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0); // Provide astronomical observables
   void SetEpoch(Double_t e,TString mode,TString utc="U",Int_t leap=0,Double_t dut=0); // Set time parameters according to the specified epoch
   Double_t GetEpoch(TString mode); // Provide the requested epoch
-  TString GetDayTimeString(TString mode,Int_t ndig=0,Double_t offset=0); // Provide the date and time in TString format
+  TString GetDayTimeString(TString mode,Int_t ndig=0,Double_t offset=0,TString* date=0,TString* time=0); // Provide the date and time in TString format
   void SetSystemTime(); // Set UTC (or UT1) to the current time of the system clock
   Bool_t IsUT1() const; // Indicate whether the reference time is UT1 (kTRUE) or UTC (kFALSE)
 
@@ -128,6 +129,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,14) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,15) // Handling of timestamps for (astro)particle physics research.
 };
 #endif
