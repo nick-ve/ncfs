@@ -98,8 +98,8 @@ class NcAstrolab : public TTask,public NcTimestamp
   Int_t GetPositionScramble(Double_t* dmin=0,Double_t* dmax=0,TF1* df=0,Double_t* thmin=0,Double_t* thmax=0,TF1* thf=0,Double_t* phimin=0,Double_t* phimax=0,TF1* phif=0); // Get position scrambling parameters
   void SetMaxDt(Double_t s); // Set maximum time difference (in sec) for GetSignal 
   Double_t GetMaxDt() const; // Provide maximum time difference (in sec) for GetSignal 
-  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j=0,TString proj="ham",Int_t clr=0); // Display stored signal
-  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj="ham",Int_t clr=0,Int_t type=0); // Display stored signal
+  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j=0,TString proj="ham",Int_t clr=0,TString name=""); // Display stored signal
+  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj="ham",Int_t clr=0,Int_t type=0);  // Display stored signal
   void DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj="ham",Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1); // Display all stored signals
   void SetMarkerSize(Float_t size,Int_t type); // Set size for the marker symbols of the skymaps and related histograms 
   void SetCentralMeridian(Int_t mode=0,Double_t phi=0,TString u="deg");  // Set central meridian and orientation for the sky display
@@ -280,6 +280,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1* GetBurstT90dist(TString name,TString type);
   TH1* GetBurstSigmaPosdist(TString name,TString type);
  
- ClassDef(NcAstrolab,35) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,36) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

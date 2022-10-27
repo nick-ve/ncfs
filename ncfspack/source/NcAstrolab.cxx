@@ -164,7 +164,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 21, 2022  10:43Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 27, 2022  10:31Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -4620,7 +4620,7 @@ Int_t NcAstrolab::GetPositionScramble(Double_t* dmin,Double_t* dmax,TF1* df,Doub
  return fRscmode; 
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j,TString proj,Int_t clr)
+void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j,TString proj,Int_t clr,TString name)
 {
 // Display a stored signal in a user specified coordinate projection
 // at the specific timestamp ts.
@@ -4641,6 +4641,10 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
 // Reference signals are indicated as red triangles.
 // The Galactic Center is indicated as a red star.
 // The size of the marker symbols may be tailored via the member function SetMarkerSize().
+//
+// In case a non-empty string for the input parameter "name" is provided, this name will
+// appear in the title text of the display. In this way the user can indicate the name
+// of the object that is displayed.
 //
 // In case no stored signal was available or one of the input arguments was
 // invalid, no display is produced.
@@ -4708,7 +4712,7 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
 //
 // The input argument "clr" allows to clear (1) the display before drawing or not (0).
 //
-// The default values are : j=0, proj="ham" and clr=0.
+// The default values are : j=0, proj="ham", clr=0 and name="".
 //
 // This routine is based on initial work by Garmt de Vries-Uiterweerd.
 
@@ -4797,21 +4801,26 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
  TString slow;     // The most lower coordinate indicator
  sup="90#circ";
  slow="-90#circ";
+ if (name!="")
+ {
+  titleup=name;
+  titleup+=" ";
+ }
  if (frame=="equ")
  {
-  titleup="Geocentric Equatorial (";
+  titleup+="Geocentric Equatorial (";
   titleup+=mode;
   if (mode=="J") titleup+="2000";
   if (mode=="B") titleup+="1950";
   titleup+=") ";
  }
- if (frame=="gal") titleup="Heliocentric Galactic";
- if (frame=="ecl") titleup=" Geocentric Ecliptic";
- if (frame=="hor") titleup="  Standard Horizon";
- if (frame=="icr") titleup="Static Barycentric ICRS";
+ if (frame=="gal") titleup+="Heliocentric Galactic";
+ if (frame=="ecl") titleup+=" Geocentric Ecliptic";
+ if (frame=="hor") titleup+="  Standard Horizon";
+ if (frame=="icr") titleup+="Static Barycentric ICRS";
  if (frame=="loc")
  {
-  titleup=" User defined Local";
+  titleup+=" User defined Local";
   sup=" 0#circ";
   slow="180#circ";
  }
@@ -5072,10 +5081,12 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
    // The header and footer text
    TLatex* header=new TLatex;
    fMarkers->Add(header);
-   header->DrawLatex(-1.2,yup+0.2,titleup.Data());
+   header->SetTextAlign(21); // Text will be horizontally centered
+   header->DrawLatex(0,yup+0.2,titleup.Data());
    TLatex* footer=new TLatex;
    fMarkers->Add(footer);
-   footer->DrawLatex(-1.7,ylow-0.25,titlelow.Data());
+   footer->SetTextAlign(21); // Text will be horizontally centered
+   footer->DrawLatex(0,ylow-0.25,titlelow.Data());
 
    // The left side angular value indicator
    TLatex* left=new TLatex;
@@ -5270,7 +5281,13 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
    if (!ts) ts=(NcTimestamp*)this;
    NcTimestamp tx=(*ts);
    Double_t toffset=GetLabTimeOffset();
-   TString title="Day view at ";
+   TString title="Day view";
+   if (name!="")
+   {
+    title+=" of ";
+    title+=name;
+   }
+   title+=" at ";
    title+=GetName();
    title+=" on ";
    TString date;
@@ -5362,7 +5379,13 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t 
    if (proj=="UYh" || proj=="GSYh") ts->GetDayTimeString(tmode,0,0,0,&time);
    if (proj=="LYh" || proj=="LSYh") ts->GetDayTimeString(tmode,0,toffset,0,&time);
 
-   TString title="Year view at ";
+   TString title="Year view";
+   if (name!="")
+   {
+    title+=" of ";
+    title+=name;
+   }
+   title+=" at ";
    title+=GetName();
    title+=" in ";
    title+=year;
@@ -5547,7 +5570,7 @@ void NcAstrolab::DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TStrin
  if (j>0)
  {
   if (type) j=-j;
-  DisplaySignal(frame,mode,ts,j,proj,clr);
+  DisplaySignal(frame,mode,ts,j,proj,clr,name);
  }
 }
 ///////////////////////////////////////////////////////////////////////////

@@ -1351,3 +1351,6 @@
                 has been removed, since it is now replaced by LoadInputData().
                 The ROOT macro burst-model.cc in the folder physics/macros has been adapted accordingly.
                 The version indicator in NcVersion has been updated to 4.10.2.
+27-oct-2022 NvE Support for object name indication in the (header) title and automatic centering of the
+                header and footer title strings introduced in NcAstrolab::DisplaySignal().
+                The version indicator in NcVersion has been updated to 4.10.3.

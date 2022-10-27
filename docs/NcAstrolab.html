@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Oct 21 10:51:55 2022            -->
+<!--   Date: Thu Oct 27 10:45:01 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -195,7 +195,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 21, 2022  10:43Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 27, 2022  10:31Z
 
 </pre></div>
 </div></div>
@@ -239,7 +239,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:Data">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString u = <span class="string">"deg"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utc = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Date"><span class="baseclass">NcTimestamp::</span>Date</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignal">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignal">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, TString name = <span class="string">""</span>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignal@1">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString name, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignals">DisplaySignals</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
@@ -2689,7 +2689,7 @@ return false;}
  mode=lab.<a href="./NcAstrolab.html#NcAstrolab:GetPositionScramble" title="Int_t NcAstrolab::GetPositionScramble(Double_t* dmin=0,Double_t* dmax=0,TF1* df=0,Double_t* thmin=0,Double_t* thmax=0,TF1* thf=0,Double_t* phimin=0,Double_t* phimax=0,TF1* phif=0)">GetPositionScramble</a>(&amp;dlow,&amp;dup,&amp;func);
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:DisplaySignal" href="src/NcAstrolab.cxx.html#XyNtEC">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:DisplaySignal" href="src/NcAstrolab.cxx.html#V9HkuD">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, TString name = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Display a stored signal in a user specified coordinate projection
  at the specific timestamp ts.
 
@@ -2709,6 +2709,10 @@ return false;}
  Reference signals are indicated as red triangles.
  The Galactic Center is indicated as a red star.
  The size of the marker symbols may be tailored via the member function <a href="./NcAstrolab.html#NcAstrolab:SetMarkerSize" title="void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)">SetMarkerSize</a>().
+
+ In case a non-empty string for the input parameter <span class="string">"name"</span> is provided, this name will
+ appear in the title text of the display. In this way the user can indicate the name
+ of the object that is displayed.
 
  In case no stored signal was available or one of the input arguments was
  invalid, no display is produced.
@@ -2776,7 +2780,7 @@ return false;}
 
  The input argument <span class="string">"clr"</span> allows to clear (1) the display before drawing or not (0).
 
- The default values are : j=0, proj=<span class="string">"ham"</span> and clr=0.
+ The default values are : j=0, proj=<span class="string">"ham"</span>, clr=0 and name=<span class="string">""</span>.
 
  This routine is based on initial work by Garmt de Vries-Uiterweerd.
 </pre></div>
@@ -4808,7 +4812,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Oct 21 10:51:57 2022 </em><em>&raquo; Last generated: 2022-10-21 10:51</em><br />
+<em>&raquo; Last changed: Thu Oct 27 10:45:03 2022 </em><em>&raquo; Last generated: 2022-10-27 10:45</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
