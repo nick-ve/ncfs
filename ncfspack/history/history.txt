@@ -1362,3 +1362,5 @@
                 in order to avoid memory problems which were encountered when processing many data files in
                 a stacked fashion.
                 The version indicator in NcVersion has been updated to 4.10.4.
+17-nov-2022 NvE Also /ice3/software/iihe/ncfs.sh replaced by the new /software/icecube/iihe/ncfs.sh
+                in all the HTCondor example .sh shell scripts.

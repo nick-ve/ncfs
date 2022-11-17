@@ -40,7 +40,7 @@ cp $HOSTDIR/analyze.cc macro.cc
 cp $INPUTFILE data.rnopack
 
 ### Load the NCFS environment
-source /ice3/software/iihe/ncfs.sh
+source /software/icecube/iihe/ncfs.sh
 
 ### Execute the ROOT macro
 echo " "

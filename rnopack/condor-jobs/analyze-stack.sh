@@ -37,7 +37,7 @@ cd $SLAVEDIR
 cp $HOSTDIR/analyze-stack.cc macro.cc
 
 ### Load the NCFS environment
-source /ice3/software/iihe/ncfs.sh
+source /software/icecube/iihe/ncfs.sh
 
 ### Execute the ROOT macro
 echo " "

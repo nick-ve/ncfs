@@ -49,7 +49,7 @@ cp $HOSTDIR/convert.cc macro.cc
 cp $INPUTFILE data.root
 
 ### Load the NCFS environment
-source /ice3/software/iihe/ncfs.sh
+source /software/icecube/iihe/ncfs.sh
 
 ### Execute the ROOT macro
 echo " "
