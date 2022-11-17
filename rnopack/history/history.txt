@@ -45,3 +45,9 @@
 26-jul-2022 NvE Treatment of trigger info extended in RnoConvert.cxx.
 01-aug-2022 NvE Data retrieval completely based on looping over the Leaf list in order to be
                 completely independent of the data Tree c.q. Branch structure in RnoConvert.cxx.
+16-nov-2022 NvE Functionality of RnoMonitor extended with the monitoring statistics RMSdeviation,
+                SpreadMean and SpreadMedian and memberfunction DefineCentralValue() renamed to
+                DefineStatistic(). The corresponding example macros have been updated accordingly.
+17-nov-2022 NvE In RnoConvert::Exec() the leaves list is now updated for each individual Tree in the TChain
+                in order to avoid memory problems which were encountered when processing many data files in
+                a stacked fashion.

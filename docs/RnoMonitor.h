@@ -19,7 +19,7 @@ class RnoMonitor : public TTask
   void SetDeviceSample(Int_t j);                      // Specify the sample to be used from the stored device samples
   void SetSampleVariable(Int_t i,TString f="-");      // Specify the (function of the) sample variable to be used 
   void SetSampleVariable(TString name,TString f="-"); // Specify the (function of the) sample variable to be used 
-  void DefineCentralValue(TString mode);              // Select Mean, Median or RMS as central value for monitoring
+  void DefineStatistic(TString mode);                 // Select the statistic for monitoring
   void SetNbins24(Int_t n);                           // Set the number of bins for the 24 hour monitoring histograms
   void ListHistograms() const;                        // Provide a list of all the stored histograms
   void WriteHistograms(TString filename);             // Write all stored histograms to a ROOT output file
@@ -38,6 +38,6 @@ class RnoMonitor : public TTask
   TString fAvMode;    // The sampling averaging mode
   Bool_t fFirst;      // Flag to indicate first pass through the processor
 
- ClassDef(RnoMonitor,1) // TTask derived class to monitor RNO-G data over certain time periods.
+ ClassDef(RnoMonitor,2) // TTask derived class to monitor RNO-G data over certain time periods.
 };
 #endif

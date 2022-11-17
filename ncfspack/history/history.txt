@@ -1354,3 +1354,11 @@
 27-oct-2022 NvE Support for object name indication in the (header) title and automatic centering of the
                 header and footer title strings introduced in NcAstrolab::DisplaySignal().
                 The version indicator in NcVersion has been updated to 4.10.3.
+10-nov-2022 NvE Leading zero added (if needed) for the year indicator of object names like GRB081224 in NcAstrolab.
+16-nov-2022 NvE Functionality of RnoMonitor extended with the monitoring statistics RMSdeviation,
+                SpreadMean and SpreadMedian and memberfunction DefineCentralValue() renamed to
+                DefineStatistic(). The corresponding example macros have been updated accordingly.
+17-nov-2022 NvE In RnoConvert::Exec() the leaves list is now updated for each individual Tree in the TChain
+                in order to avoid memory problems which were encountered when processing many data files in
+                a stacked fashion.
+                The version indicator in NcVersion has been updated to 4.10.4.

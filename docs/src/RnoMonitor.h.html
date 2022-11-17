@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 21 11:00:31 2022            -->
+<!--   Date: Thu Nov 17 11:51:18 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -40,7 +40,7 @@
   <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:SetDeviceSample" title="void RnoMonitor::SetDeviceSample(Int_t j)">SetDeviceSample</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> j);                      <span class="comment">// Specify the sample to be used from the stored device samples</span>
   <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:SetSampleVariable" title="void RnoMonitor::SetSampleVariable(Int_t i,TString f=&quot;-&quot;) or overloads">SetSampleVariable</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> i,TString f=<span class="string">"-"</span>);      <span class="comment">// Specify the (function of the) sample variable to be used </span>
   <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:SetSampleVariable" title="void RnoMonitor::SetSampleVariable(Int_t i,TString f=&quot;-&quot;) or overloads">SetSampleVariable</a>(TString name,TString f=<span class="string">"-"</span>); <span class="comment">// Specify the (function of the) sample variable to be used </span>
-  <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:DefineCentralValue" title="void RnoMonitor::DefineCentralValue(TString mode)">DefineCentralValue</a>(TString mode);              <span class="comment">// Select Mean, Median or RMS as central value for monitoring</span>
+  <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:DefineStatistic" title="void RnoMonitor::DefineStatistic(TString mode)">DefineStatistic</a>(TString mode);                 <span class="comment">// Select the statistic for monitoring</span>
   <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:SetNbins24" title="void RnoMonitor::SetNbins24(Int_t n)">SetNbins24</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> n);                           <span class="comment">// Set the number of bins for the 24 hour monitoring histograms</span>
   <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:ListHistograms" title="void RnoMonitor::ListHistograms()">ListHistograms</a>() <span class="keyword">const</span>;                        <span class="comment">// Provide a list of all the stored histograms</span>
   <span class="keyword">void</span> <a href="../RnoMonitor.html#RnoMonitor:WriteHistograms" title="void RnoMonitor::WriteHistograms(TString filename)">WriteHistograms</a>(TString filename);             <span class="comment">// <a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a> all stored histograms to a ROOT output file</span>
@@ -59,7 +59,7 @@
   TString <a href="../RnoMonitor.html#RnoMonitor:fAvMode" title="TString RnoMonitor::fAvMode">fAvMode</a>;    <span class="comment">// The sampling averaging mode</span>
   <a href="../ListOfTypes.html#Bool_t">Bool_t</a> <a href="../RnoMonitor.html#RnoMonitor:fFirst" title="Bool_t RnoMonitor::fFirst">fFirst</a>;      <span class="comment">// Flag to indicate first pass through the processor</span>
 
- ClassDef(<a href="../RnoMonitor.html">RnoMonitor</a>,1) <span class="comment">// <a href="../#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> derived class to monitor RNO-G data over certain time periods.</span>
+ ClassDef(<a href="../RnoMonitor.html">RnoMonitor</a>,2) <span class="comment">// <a href="../#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> derived class to monitor RNO-G data over certain time periods.</span>
 };
 <span class="cpp">#endif</span>
 </pre>
@@ -70,7 +70,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2022-07-21 11:00 </em><em>&raquo; Last generated: 2022-07-21 11:00</em><br />
+<em>&raquo; Last changed: 2022-11-17 11:51 </em><em>&raquo; Last generated: 2022-11-17 11:51</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

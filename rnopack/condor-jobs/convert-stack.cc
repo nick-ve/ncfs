@@ -35,7 +35,7 @@
 // Since the mattak package is not needed here, these warnings may be
 // safely ignored.
 //
-// Nick van Eijndhoven, IIHE-VUB, Brussels, July 14, 2022  16:57Z
+// Nick van Eijndhoven, IIHE-VUB, Brussels, November 17, 2022  12:38Z
 /////////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -135,7 +135,7 @@
  RnoMonitor* moni=new RnoMonitor();
  moni->SetDeviceClass("RnoLPDA");
  moni->SetSampleVariable("ADC","0.618*x-8.133");
- moni->DefineCentralValue("RMS");
+ moni->DefineStatistic("RMSdeviation");
  moni->SetNbins24(24*4);
 
  q.Add(moni);

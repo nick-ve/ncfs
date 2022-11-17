@@ -33,7 +33,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 28, 2022  11:08Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 17, 2022  09:39Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -277,10 +277,6 @@ void RnoConvert::Exec(Option_t* opt)
  // Check for the maximum number of events to be processed
  if (fMaxevt>-1 && nen>fMaxevt) nen=fMaxevt;
 
- // The leaves in the input chain
- TObjArray* leaves=fData->GetListOfLeaves();
- Int_t nleaves=leaves->GetEntries();
-
  //////////////////////////////////////
  // Variables in the RNO-G data tree //
  //////////////////////////////////////
@@ -314,6 +310,10 @@ void RnoConvert::Exec(Option_t* opt)
  // Loop over the entries in the input data chain //
  ///////////////////////////////////////////////////
 
+ TTree* tx=0;         // Pointer to the current Tree in the Chain
+ TTree* txold=0;      // Pointer to the previous Tree (if any) in the Chain
+ TObjArray* leaves=0; // Array with pointers to the leaves of the current Tree
+ Int_t nleaves=0;
  TLeaf* lx=0;
  TLeaf* lradiant=0;  // Pointer to the Radiant waveform data
  TLeaf* lpedestal=0; // Pointer to the Pedestal waveform data
@@ -340,6 +340,15 @@ void RnoConvert::Exec(Option_t* opt)
   idsample=0;
 
   fData->GetEntry(ient);
+
+  tx=fData->GetTree();
+  if (tx!=txold)
+  {
+   leaves=tx->GetListOfLeaves();
+   nleaves=0;
+   if (leaves) nleaves=leaves->GetEntries();
+   txold=tx;
+  }
 
   // Loop over all the leaves and extract the relevant data for this entry.
   // This approach makes the functionality independent of the Tree/Branch structure.

@@ -164,7 +164,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 27, 2022  10:31Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 10, 2022  15:21Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -9771,6 +9771,7 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
   // Compose the name of the source c.q. burst with the common yymmdd suffix
   jdate=idate%1000000;
   grbname=type;
+  if (jdate<100000) grbname+="0"; // Add leading zero for the year if needed
   grbname+=jdate;
 
   if (date1 && idate<date1) continue;

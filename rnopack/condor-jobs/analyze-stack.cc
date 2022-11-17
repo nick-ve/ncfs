@@ -28,7 +28,7 @@
 //
 // $root -b -q analyze.cc >output.log
 //
-//--- Nick van Eijndhoven, IIHE-VUB, Brussels, July 10, 2022  19:38Z
+//--- Nick van Eijndhoven, IIHE-VUB, Brussels, November 17, 2022  12:36Z
 //////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -93,7 +93,7 @@
  RnoMonitor* moni=new RnoMonitor();
  moni->SetDeviceClass("RnoULPDA");
  moni->SetSampleVariable("ADC","0.618*x-8.133");
- moni->DefineCentralValue("RMS");
+ moni->DefineStatistic("RMSdeviation");
  moni->SetNbins24(24*4);
 
  // Add the task(s) to the top level job structure

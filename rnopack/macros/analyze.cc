@@ -18,7 +18,7 @@
 //
 // $root -b -q analyze.cc >output.log
 //
-//--- Nick van Eijndhoven, IIHE-VUB, Brussels, July 26, 2022  20:17Z
+//--- Nick van Eijndhoven, IIHE-VUB, Brussels, November 17, 2022  12:42Z
 //////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -36,7 +36,7 @@
  RnoMonitor* moni=new RnoMonitor();
  moni->SetDeviceClass("RnoULPDA"); // Only use the upward LPDAs
  moni->SetSampleVariable("ADC","0.618*x-8.133"); // Convert ADC->mV
- moni->DefineCentralValue("RMS");
+ moni->DefineStatistic("RMSdeviation");
  moni->SetNbins24(24*4);
 
  // Specify a trigger statistics task

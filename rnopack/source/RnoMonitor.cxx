@@ -42,7 +42,7 @@
 // which is also located in the folder /rnopack/macros.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 20, 2022  11:51Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 16, 2022  11:24Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoMonitor.h"
@@ -62,9 +62,9 @@ RnoMonitor::RnoMonitor(const char* name,const char* title) : TTask(name,title)
  fVarFunc=0;
  fNbins24=24;
  fHistos.SetOwner();
- fValues.SetStoreMode(1);
- fAvMode="Median";
  fFirst=kTRUE;
+
+ DefineStatistic("RMSdeviation");
 
  NcAstrolab lab;
  lab.SetExperiment("RNO-G");
@@ -144,29 +144,42 @@ void RnoMonitor::SetSampleVariable(TString name,TString f)
  if (f!="-") fVarFunc=new TF1("VarFunc",f);
 }
 ///////////////////////////////////////////////////////////////////////////
-void RnoMonitor::DefineCentralValue(TString mode)
+void RnoMonitor::DefineStatistic(TString mode)
 {
-// Specify the central value to be used for monitoring.
-// Supported (case sensitive) input is "Mean", "Median" or "RMS".
+// Specify the statistic to be used for monitoring of the (function) values
+// val(i) of the selected sample variable, as specified by SetSampleVariable().
 //
-// In the default constructor the mode "Median" is initialised.
+// Supported (case sensitive) input is :
+// -------------------------------------
+// "Mean"         : The mean of all val(i)
+// "Median"       : The median of all val(i)
+// "RMS"          : The Root Mean Square of all val(i)
+//                  Note : This is NOT the RMS deviation defined as sqrt(variance)
+// "SpreadMean"   : The average of all |mean-val(i)|
+// "SpreadMedian" : The average of all |median-val(i)|
+// "RMSdeviation" : The Root Mean Square deviation from the mean of all val(i)
+//                  This is also known as sqrt(variance)
+//
+// Notes :
+// -------
+// 1) The statistics "Mean", "Median" and "RMS" are sensitive to pedestal offsets.
+// 2) For large data samples, the statistics "Median", "SpreadMean" and "SpreadMedian"
+//    may lead to rather long CPU times.
+//
+// In the default constructor the mode "RMSdeviation" is initialised.
 
- if (mode!="Mean" && mode!="Median" && mode!="RMS")
+ if (mode!="Mean" && mode!="Median" && mode!="RMS" && mode!="SpreadMean" && mode!="SpreadMedian" && mode!="RMSdeviation")
  {
-  cout << " *" << ClassName() << "::DefineCentralValue* Unknown mode : " << mode << endl;
+  cout << " *" << ClassName() << "::DefineStatistic* Unknown mode : " << mode << endl;
   cout << " Will continue with current mode : " << fAvMode << endl;
   return;
  }
 
- fAvMode="Median";
- if (mode=="Mean") fAvMode="Mean";
- if (mode=="RMS") fAvMode="RMS";
+ fAvMode=mode;
 
- if (fAvMode=="Mean" || fAvMode=="RMS")
- {
-  fValues.Reset();
-  fValues.SetStoreMode(0);
- }
+ fValues.Reset();
+ fValues.SetStoreMode(0);
+ if (fAvMode=="Median" || fAvMode=="SpreadMean" || fAvMode=="SpreadMedian") fValues.SetStoreMode(1);
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetNbins24(Int_t n)
@@ -252,6 +265,9 @@ void RnoMonitor::Exec(Option_t* opt)
    if (fAvMode=="Mean") val=sx->GetMean(fVarIndex);
    if (fAvMode=="Median") val=sx->GetMedian(fVarIndex);
    if (fAvMode=="RMS") val=sx->GetRMS(fVarIndex);
+   if (fAvMode=="SpreadMean") val=sx->GetSpread(fVarIndex,1);
+   if (fAvMode=="SpreadMedian") val=sx->GetSpread(fVarIndex,0);
+   if (fAvMode=="RMSdeviation") val=sx->GetSigma(fVarIndex,0);
    monval+=varname;
   }
   else
@@ -266,6 +282,9 @@ void RnoMonitor::Exec(Option_t* opt)
    if (fAvMode=="Mean") val=fValues.GetMean(1);
    if (fAvMode=="Median") val=fValues.GetMedian(1);
    if (fAvMode=="RMS") val=fValues.GetRMS(1);
+   if (fAvMode=="SpreadMean") val=fValues.GetSpread(1,1);
+   if (fAvMode=="SpreadMedian") val=fValues.GetSpread(1,0);
+   if (fAvMode=="RMSdeviation") val=fValues.GetSigma(1,0);
    monval+=fVarFunc->GetExpFormula("p");
    monval.ReplaceAll("x",varname);
   }

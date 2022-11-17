@@ -45,6 +45,6 @@ class RnoConvert : public NcJob
   Int_t fMinSelectLevel;  // Minimum event select level for events to be written out
   Int_t fMaxSelectLevel;  // Maximum event select level for events to be written out
 
- ClassDef(RnoConvert,6) // Job for conversion of RNO-G Root data into RnoEvent data structures.
+ ClassDef(RnoConvert,7) // Job for conversion of RNO-G Root data into RnoEvent data structures.
 };
 #endif

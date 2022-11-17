@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Jul 21 11:00:31 2022            -->
+<!--   Date: Thu Nov 17 11:51:18 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -87,7 +87,7 @@ return false;}
  which is also located in the folder /rnopack/macros.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 20, 2022  11:51Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 16, 2022  11:24Z
 
 </pre></div>
 </div></div>
@@ -111,7 +111,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Continue"><span class="baseclass">TTask::</span>Continue</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoMonitor:DefineCentralValue">DefineCentralValue</a>(TString mode)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoMonitor:DefineStatistic">DefineStatistic</a>(TString mode)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -329,11 +329,28 @@ return false;}
  In case f=<span class="string">"-"</span> (which is the default) is specified, just the value of the specified variable is used.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoMonitor:DefineCentralValue" href="src/RnoMonitor.cxx.html#TLtLy">DefineCentralValue</a>(TString mode)</span><br />
-<div class="funccomm"><pre> Specify the central value to be used for monitoring.
- Supported (case sensitive) input is <span class="string">"Mean"</span>, <span class="string">"Median"</span> or <span class="string">"RMS"</span>.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoMonitor:DefineStatistic" href="src/RnoMonitor.cxx.html#mMUT0E">DefineStatistic</a>(TString mode)</span><br />
+<div class="funccomm"><pre> Specify the statistic to be used for monitoring of the (function) values
+ val(i) of the selected sample variable, as specified by <a href="./RnoMonitor.html#RnoMonitor:SetSampleVariable" title="void RnoMonitor::SetSampleVariable(Int_t i,TString f=&quot;-&quot;) or overloads">SetSampleVariable</a>().
 
- In the default constructor the mode <span class="string">"Median"</span> is initialised.
+ Supported (case sensitive) input is :
+
+ <span class="string">"Mean"</span>         : The mean of all val(i)
+ <span class="string">"Median"</span>       : The median of all val(i)
+ <span class="string">"RMS"</span>          : The Root Mean Square of all val(i)
+                  Note : This is NOT the RMS deviation defined as sqrt(variance)
+ <span class="string">"SpreadMean"</span>   : The average of all |mean-val(i)|
+ <span class="string">"SpreadMedian"</span> : The average of all |median-val(i)|
+ <span class="string">"RMSdeviation"</span> : The Root Mean Square deviation from the mean of all val(i)
+                  This is also known as sqrt(variance)
+
+ Notes :
+
+ 1) The statistics <span class="string">"Mean"</span>, <span class="string">"Median"</span> and <span class="string">"RMS"</span> are sensitive to pedestal offsets.
+ 2) For large data samples, the statistics <span class="string">"Median"</span>, <span class="string">"SpreadMean"</span> and <span class="string">"SpreadMedian"</span>
+    may lead to rather <a href="./ListOfTypes.html#long">long</a> CPU times.
+
+ In the default constructor the mode <span class="string">"RMSdeviation"</span> is initialised.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoMonitor:SetNbins24" href="src/RnoMonitor.cxx.html#gJ3_BB">SetNbins24</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
@@ -359,7 +376,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Jul 21 11:00:31 2022 </em><em>&raquo; Last generated: 2022-07-21 11:00</em><br />
+<em>&raquo; Last changed: Thu Nov 17 11:51:18 2022 </em><em>&raquo; Last generated: 2022-11-17 11:51</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
