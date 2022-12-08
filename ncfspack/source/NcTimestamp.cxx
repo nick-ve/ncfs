@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 16, 2022  15:36Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 25, 2022  22:35Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -473,8 +473,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
   {
    GetDate(kTRUE,0,&y,&m,&d);
    wd=GetDayOfWeek(kTRUE,0);
-   cout << " " << day[wd-1].Data() << ", " << setfill('0') << setw(2) << d << " "
-        << setfill(' ') << month[m-1].Data() << " " << y << " ";
+   printf(" %-s, %02d %-s %-d ",day[wd-1].Data(),d,month[m-1].Data(),y);
    date=kTRUE;
   }
   else
@@ -483,9 +482,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
    date=kFALSE;
   }
   GetUT(hh,mm,ss,ns,ps);
-  cout << setfill('0') << setw(2) << hh << ":"
-       << setw(2) << mm << ":" << setw(2) << ss << "."
-       << setw(9) << ns << setw(3) << ps;
+  printf("%02d:%02d:%02d.%09d%03d",hh,mm,ss,ns,ps);
   if (!fUtc)
   {
    cout << " (UTC) ";
@@ -497,9 +494,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 
   // The GMST time information
   GetGMST(hh,mm,ss,ns,ps);
-  cout << setfill('0') << setw(2) << hh << ":"
-       << setw(2) << mm << ":" << setw(2) << ss << "."
-       << setw(9) << ns << setw(3) << ps << " (GMST)" << endl;
+  printf("%02d:%02d:%02d.%09d%03d (GMST)\n",hh,mm,ss,ns,ps);
 
   // Equation of Time and Equation of Equinoxes
   Double_t eot;
@@ -550,8 +545,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
    {
     t2.GetDate(kTRUE,0,&y,&m,&d);
     wd=t2.GetDayOfWeek(kTRUE,0);
-    cout << " " << day[wd-1].Data() << ", " << setfill('0') << setw(2) << d << " "
-         << setfill(' ') << month[m-1].Data() << " " << y << " ";
+    printf(" %-s, %02d %-s %-d ",day[wd-1].Data(),d,month[m-1].Data(),y);
     date=kTRUE;
    }
    else
@@ -586,26 +580,20 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
   GetJD(jd,jsec,jns);
   Int_t tjd,tjsec,tjns;
   GetTJD(tjd,tjsec,tjns);
-  cout << " Julian Epoch : " << setprecision(25) << GetJE()
-       << " Besselian Epoch : " << setprecision(25) << GetBE() << endl;
-  cout << " JD : " << jd << " sec : " << jsec << " ns : " << jns << " ps : " << fJps
-       << " Fractional : " << setprecision(25) << GetJD() << endl;
-  cout << " MJD : " << mjd << "  sec : " << mjsec << " ns : " << mjns << " ps : " << fJps
-       << " Fractional : " << setprecision(25) << GetMJD() << endl;
-  cout << " TJD : " << tjd << "  sec : " << tjsec << " ns : " << tjns << " ps : " << fJps
-       << " Fractional : " << setprecision(25) << GetTJD() << endl;
+  printf(" Julian Epoch : %-.20f Besselian Epoch : %-.20f\n",GetJE(),GetBE());
+  printf(" JD  : %7d sec : %5d ns : %9d ps : %3d Fractional : %25.17f\n",jd,jsec,jns,fJps,GetJD());
+  printf(" MJD : %7d sec : %5d ns : %9d ps : %3d Fractional : %25.17f\n",mjd,mjsec,mjns,fJps,GetMJD());
+  printf(" TJD : %7d sec : %5d ns : %9d ps : %3d Fractional : %25.17f\n",tjd,tjsec,tjns,fJps,GetTJD());
   if (fUtc && fUtc!=-3)
   {
-   cout << " TAI : " << fTmjd << "  sec : " << fTsec << " ns : " << fTns << " ps : " << fTps
-        << " Fractional : " << setprecision(25) << GetTAI() << endl;
+   printf(" TAI : %7d sec : %5d ns : %9d ps : %3d Fractional : %25.17f\n",fTmjd,fTsec,fTns,fTps,GetTAI());
   }
  }
 
  // TAI related information
  if (mode==4 && fUtc && fUtc!=-3)
  {
-  cout << " Cumulated (TAI-UTC) leap seconds: " << setfill(' ') << setw(3) << fLeap 
-       << " UT1-UTC : " << setprecision(6) << fDut << " sec.";
+  printf( " Cumulated (TAI-UTC) leap seconds: %-3d UT1-UTC : %-.6f sec.",fLeap,fDut);
   if (fUtc<0) cout << " (IERS database)" << endl;
   if (fUtc>0) cout << " (Manual setting)" << endl;
  
@@ -616,8 +604,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
   {
    tx.GetDate(kTRUE,0,&y,&m,&d);
    wd=tx.GetDayOfWeek(kTRUE,0);
-   cout << " " << day[wd-1].Data() << ", " << setfill('0') << setw(2) << d << " "
-        << setfill(' ') << month[m-1].Data() << " " << y << " ";
+   printf(" %-s, %02d %-s %-d ",day[wd-1].Data(),d,month[m-1].Data(),y);
    date=kTRUE;
   }
   else
@@ -628,14 +615,10 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 
   // Determine the TAI derived times
   GetTAI(hh,mm,ss,ns,ps,"TAI");
-  cout << setfill('0') << setw(2) << hh << ":"
-       << setw(2) << mm << ":" << setw(2) << ss << "."
-       << setw(9) << ns << setw(3) << ps << " (TAI) ";
+  printf("%02d:%02d:%02d.%09d%03d (TAI) ",hh,mm,ss,ns,ps);
 
   GetTAI(hh,mm,ss,ns,ps,"UTC");
-  cout << setfill('0') << setw(2) << hh << ":"
-       << setw(2) << mm << ":" << setw(2) << ss << "."
-       << setw(9) << ns << setw(3) << ps << " (UTC)" << endl;
+  printf("%02d:%02d:%02d.%09d%03d (UTC)\n",hh,mm,ss,ns,ps);
 
   GetTAI(hh,mm,ss,ns,ps,"GPS");
   if (!date)
@@ -646,14 +629,10 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
   {
    cout << "                  ";
   }
-  cout << setfill('0') << setw(2) << hh << ":"
-       << setw(2) << mm << ":" << setw(2) << ss << "."
-       << setw(9) << ns << setw(3) << ps << " (GPS) ";
+  printf("%02d:%02d:%02d.%09d%03d (GPS) ",hh,mm,ss,ns,ps);
 
   GetTAI(hh,mm,ss,ns,ps,"TT");
-  cout << setfill('0') << setw(2) << hh << ":"
-       << setw(2) << mm << ":" << setw(2) << ss << "."
-       << setw(9) << ns << setw(3) << ps << " (TT)" << endl;
+  printf("%02d:%02d:%02d.%09d%03d (TT)\n",hh,mm,ss,ns,ps);
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1066,10 +1045,8 @@ void NcTimestamp::PrintTime(Double_t h,Int_t ndig) const
  s*=pow(10.,ndig);
  sfrac=ULong64_t(s);
 
- if (h<0) cout << "-";
- cout << setfill('0')
-      << setw(2) << hh << ":" << setw(2) << mm << ":"
-      << setw(2) << ss << "." << setw(ndig) << sfrac;
+ if (h<0) printf("%-s","-");
+ printf("%02d:%02d:%02d.%0*llu",hh,mm,ss,ndig,sfrac);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::FillJulian()

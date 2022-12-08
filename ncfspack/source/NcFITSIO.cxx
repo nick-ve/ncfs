@@ -279,7 +279,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel February 9, 2022  22:27Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel November 26, 2022  01:53Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
@@ -742,6 +742,7 @@ Bool_t NcFITSIO::SelectHDU(TString extname)
 //
 // Examples for extension name specifications :
 // --------------------------------------------
+// "[3]" will select the HDU of extension #3
 // "[HUBBLE]" will select the HDU stored as [HUBBLE].
 // "[HUBBLE][#row<10]" will select the HDU stored as [HUBBLE] and select only row numbers <10
 // "[HUBBLE][RA>0.5]" will select the HDU stored as [HUBBLE] and select only
@@ -2080,7 +2081,6 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
        << cstart << "," << cend << "] (name width is " << width << " characters)."<< endl;
   cout << endl;
 
-  cout.setf(ios::left); // Left adjusted printout
   for (Int_t i=cstart; i<=cend; i++)
   {
    if (fColumnTypes[i-1]==kString) type="STRING";
@@ -2112,9 +2112,8 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
   cout << endl;
 
   // List the header with the (selected) column names
-  if (width<7) width=7;               // Minimal width needed for scientific notation
-  Int_t nold=cout.precision(width-7); // Adjust precision and save the original value
-  cout.setf(ios::left);               // Print values left adjusted
+  if (width<7) width=7; // Minimal width needed for scientific notation
+  Int_t prec=width-7;   // Adjust the precision
   TString str;
   Int_t nchars=0;
   for (Int_t col=cstart; col<=cend; col++)
@@ -2123,10 +2122,11 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
    str=str.Strip(str.kBoth,' ');
    str.Resize(width);
    if (col==cstart) cout << " ";
-   cout << str << "| ";
+   printf("%s| ",str.Data());
    nchars+=(width+2);
   }
   cout << endl;
+  if (nchars>0) nchars--; // Don't count the space at the end
   cout << " ";
   while(nchars--)
   {
@@ -2148,7 +2148,7 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
      if (!ndim) str="---";
      str=str.Strip(str.kBoth,' ');
      str.Resize(width);
-     cout << str;
+     printf("%s",str.Data());
     }
     else // Numerical value
     {
@@ -2157,20 +2157,17 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
      ndim=GetTableCell(val,row,col);
      if (ndim)
      {
-      cout << setw(width) << val;
+      printf("%-*.*g",width,prec,val);
      }
      else
      {
-      cout << str;
+      printf("%s",str.Data());
      }
     }
     cout << "| ";
    } // end of column loop
    cout << endl;
   } // end of row loop
-
-  // Reset precision to original value
-  cout.precision(nold);
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2182,12 +2179,11 @@ void NcFITSIO::ListHDUHeader() const
  cout << " *" << ClassName() << "::ListHDUHeader* The current HDU header record " << fExtensionName  << endl;
  cout << endl;
 
- cout.setf(ios::left);
  for (Int_t i=0; i<fNkeys; i++)
  {
-  cout << " " << setw(8) << fKeyNames[i] << " = " << fKeyValues[i];
-  if (fComments[i].Length()>0) cout << " / " << fComments[i];
-  cout << endl;
+  printf(" %-8s = %-s",fKeyNames[i].Data(),fKeyValues[i].Data());
+  if (fComments[i].Length()>0) printf(" / %-s",fComments[i].Data());
+  printf("\n");
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2304,10 +2300,11 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
    // Obtain the extension name if specified in the HDU
    if (keynames[i-1]=="EXTNAME")
    {
-    extname="[";
-    extname+=keyvalues[i-1];
+    extname=keyvalues[i-1];
+    extname.ReplaceAll("'",""); // Remove all single quotes
+    extname=extname.Strip(extname.kBoth,' '); // Remove leading and trailing blanks
+    extname.Prepend("[");
     extname+="]";
-    extname.ReplaceAll("'",""); // Remove the single quotes
    }
   }
 
@@ -2317,12 +2314,11 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
   // List the contents of the HDU header record
   if (mode)
   {
-   cout.setf(ios::left);
    for (Int_t i=0; i<nkeys; i++)
    {
-    cout << " " << setw(8) << keynames[i] << " = " << keyvalues[i];
-    if (comments[i].Length()>0) cout << " / " << comments[i];
-    cout << endl;
+    printf(" %-8s = %-s",keynames[i].Data(),keyvalues[i].Data());
+    if (comments[i].Length()>0) printf(" / %-s",comments[i].Data());
+    printf("\n");
    }
    cout << endl;
   }

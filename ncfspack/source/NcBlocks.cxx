@@ -29,7 +29,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 // Class NcBlocks
-// Class for Bayesian Block treatment of sequential data.
+// Class for (Bayesian) Block treatment of sequential data.
 //
 // This class provides a tool set to detect and characterize local variability 
 // in sequential data.
@@ -44,11 +44,27 @@
 // 2) Counts of events in time bins.
 // 3) Measurements of a (quasi) continuous observable at a sequence of points in time.
 //
-// For each Data Mode a dedicated analysis procedure is provided via the various
-// GetBlocks() member functions.
+// A Bayesian Block analysis provides a procedure to automatically detect local
+// variability in the data stream by a dynamic partitioning of the dataset, resulting
+// in data blocks of different length over which the event rate, event count or
+// measured value can be regarded as constant.
 //
-// Local variability in the sequential data stream is indicated by so called Change Points,
-// at which a step is introduced in e.g. the event rate, event count or measured value.
+// For each Data Mode a dedicated Bayesian Block analysis procedure is provided via
+// the various GetBlocks() member functions.
+//
+// On the other hand, this class also provides GetBlocks() member functions which allow
+// the user to form blocks defined by a fixed number of "n" samplings c.q. bins.
+// In this case the height of each block is defined by the mean (or median) value of the
+// recorded values within each set of "n" samplings.
+// These member functions provide an efficient way to identify (pedestal) variations in case
+// these might be expected to occur after recording "n" samples due to the specific DAQ design.
+// In principle a Bayesian Block analysis would also be able to identify these variations
+// over the sets of "n" samplings, but the analysis over a fixed number of "n" samplings
+// is much faster than the dynamic Bayesian Block analysis. 
+//
+// In a Bayesian Block analysis, local variability in the sequential data stream is indicated
+// by so called Change Points, at which a step is introduced in e.g. the event rate, event count
+// or measured value.
 //
 // Since the data treatment is inherently sequential, it is also possible to
 // trigger c.q. stop after the occurrence of a certain number of Change Points.
@@ -56,7 +72,7 @@
 // first occurrence of a Change Point.
 // Please refer to the documentation of the GetBlocks() member functions for further details. 
 //
-// Details of the various algorithms can be found in the publication :
+// Details of the various Bayesian Block algorithms can be found in the publication :
 //
 // J.D. Scargle et al., The Astrophysical Journal 764 (2013) 167. (ArXiv:1207.5578).
 //
@@ -361,7 +377,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 17, 2022  11:03Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 8, 2022  08:06Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBlocks.h"
@@ -780,7 +796,7 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
 
  if (!hout)
  {
-  cout << " *NcBlock::GetBlocks* Error : Output histogram not specified." << endl;
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
   return 0;
  }
 
@@ -790,7 +806,7 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
 
  if (n<2 || !store || dim<1 || i<1 || i>dim || fpr<0 || fpr>1)
  {
-  cout << " *NcBlock::GetBlocks* Inconsistent input for NcSample treatment." << endl;
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for NcSample treatment." << endl;
   cout << " Store Mode:" << store << " Entries:" << n << " Dimension:" << dim << " i:" << i << " fpr:" << fpr << endl; 
   return 0;
  }
@@ -872,13 +888,13 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 
  if (!hout)
  {
-  cout << " *NcBlock::GetBlocks* Error : Output histogram not specified." << endl;
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
   return 0;
  }
 
  if (!arr || n<2 || fpr<0 || fpr>1)
  {
-  cout << " *NcBlock::GetBlocks* Inconsistent input for array treatment." << endl;
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for array treatment." << endl;
   if (!arr)
   {
    cout << " Array pointer is 0." << endl;
@@ -947,13 +963,13 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 
  if (!hout)
  {
-  cout << " *NcBlock::GetBlocks* Error : Output histogram not specified." << endl;
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
   return 0;
  }
 
  if (!arr || n<2 || fpr<0 || fpr>1)
  {
-  cout << " *NcBlock::GetBlocks* Inconsistent input for array treatment." << endl;
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for array treatment." << endl;
   if (!arr)
   {
    cout << " Array pointer is 0." << endl;
@@ -1020,7 +1036,7 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 
  if (!hout)
  {
-  cout << " *NcBlock::GetBlocks* Error : Output histogram not specified." << endl;
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
   return 0;
  }
 
@@ -1028,7 +1044,7 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 
  if (n<2 || fpr<0 || fpr>1)
  {
-  cout << " *NcBlock::GetBlocks* Inconsistent input for TGraphErrors treatment." << endl;
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for TGraphErrors treatment." << endl;
   cout << " Entries:" << n << " fpr:" << fpr << endl; 
   return 0;
  }
@@ -1267,6 +1283,451 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
  Double_t xtrig=GetBlocks(gr,f,fpr,hout,ntrig);
 
  return xtrig; 
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::GetBlocks(TH1* hin,TH1* hout,Int_t n,Int_t mode)
+{
+// Get the block partitions consisting of "n" consecutive bins for binned data
+// contained in histogram "hin" with as block height the mean, median or RMS value
+// of the contained "n" bins and provide the results in the 1-D histogram "hout".
+//
+// This facility provides an efficient way to identify pedestal variations in case these
+// might be expected to occur after recording "n" samples due to the specific DAQ design.
+//
+// mode = 0 --> Use the mean as average value
+//        1 --> Use the median as average value
+//        2 --> Use the Root Mean Square (RMS) as average value
+//              Note : This is NOT the RMS deviation defined as sqrt(variance)
+//
+// The default value is mode=0;
+//
+// Notes :
+// -------
+// 1) "hout" must be an existing 1-dimensional histogram.
+// 2) The blocks represent the bins of "hout", which may have variable length
+//    in case the sampling was not continuous.
+//    As such, the structure of the output histogram is comparable to the result
+//    of a Bayesian Block analysis.  
+//
+// The returned value is the number of produced blocks. 
+// In case of inconsistent input, the value 0 is returned.
+
+ if (!hin)
+ {
+  cout << " *NcBlocks::GetBlocks* Error : Input histogram not specified." << endl;
+  return 0;
+ }
+
+ if (!hout)
+ {
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  return 0;
+ }
+
+ Int_t nbins=hin->GetNbinsX();
+
+ if (!nbins || n<1 || n>nbins || mode<0 || mode>2)
+ {
+  cout << " *NcBlocks::GetBlocks* Inconsistent input nbins=" << nbins << " n=" << n << " mode=" << mode << endl;
+  return 0;
+ }
+
+ // Retrieve the various sets of "n" bins from the input histogram
+ Int_t jbin=0;
+ Double_t x=0;
+ Double_t y=0;
+ Double_t xlow=0;
+ Double_t xup=0;
+ Double_t binwidth=0;
+ NcSample s;
+ if (mode==1) s.SetStoreMode(1);
+ Int_t nblocks=0;
+ Double_t average=0;
+ TArrayD xarr(nbins);
+ TArrayD yarr(nbins);
+ while (jbin<nbins)
+ {
+  for (Int_t i=0; i<n; i++)
+  {
+   jbin++;
+
+   if (jbin>nbins) break;
+
+   x=hin->GetBinCenter(jbin);
+   y=hin->GetBinContent(jbin);
+   binwidth=hin->GetBinWidth(jbin);
+   if (i==0) xlow=hin->GetBinLowEdge(jbin);
+   xup=x+0.5*binwidth;
+   s.Enter(x,y);
+  }
+  if (mode==0) average=s.GetMean(2);
+  if (mode==1) average=s.GetMedian(2);
+  if (mode==2) average=s.GetRMS(2);
+  nblocks++;
+  xarr.SetAt(xlow,nblocks-1);
+  yarr.SetAt(average,nblocks-1);
+  s.Reset();
+ } // End of while loop
+
+ // Create the corresponding variable binned output histogram
+ Double_t* xbins=new Double_t[nblocks+1];
+ Double_t* yvals=new Double_t[nblocks+1];
+
+ for (Int_t i=0; i<nblocks; i++)
+ {
+  xbins[i]=xarr.At(i);
+  yvals[i]=yarr.At(i);
+ }
+ // Add an extra bin to contain the last data
+ xbins[nblocks]=(1.+1e-6)*xup;
+ yvals[nblocks]=yvals[nblocks-1];
+
+ hout->SetBins(nblocks,xbins);
+ for (Int_t i=1; i<=nblocks; i++)
+ {
+  hout->SetBinContent(i,yvals[i-1]);
+ }
+
+ hout->SetLineWidth(2);
+ hout->SetLineColor(kBlue);
+ hout->SetStats(kFALSE);
+
+ // Set the output histogram and axes titles
+ TString title,str;
+ title="Block representation for histogram ";
+ title+=hin->GetName();
+ title+=" grouped in %-d consecutive bins";
+ title+=";";
+ str=hin->GetXaxis()->GetTitle();
+ if (str=="") str="Recordings (e.g. time)";
+ title+=str;
+ if (mode==0) title+=";Mean ";
+ if (mode==1) title+=";Median ";
+ if (mode==2) title+=";RMS ";
+ str=hin->GetYaxis()->GetTitle();
+ if (str=="") str="Counts";
+ title+=str;
+ str=title.Format(title.Data(),n);
+ hout->SetTitle(str.Data());
+
+ delete [] xbins;
+ delete [] yvals;
+
+ return nblocks;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::GetBlocks(NcSample s,Int_t i,TH1* hout,Int_t n,Int_t mode)
+{
+// Get the block partitions consisting of "n" consecutive samplings for the
+// i-th variable of NcSample "s", with as block height the mean, median or RMS value
+// of the contained "n" samples and provide the results in the 1-D histogram "hout".
+//
+// This facility provides an efficient way to identify pedestal variations in case these
+// might be expected to occur after recording "n" samples due to the specific DAQ design.
+//
+// mode = 0 --> Use the mean as average value
+//        1 --> Use the median as average value
+//        2 --> Use the Root Mean Square (RMS) as average value
+//              Note : This is NOT the RMS deviation defined as sqrt(variance)
+//
+// The default value is mode=0;
+//
+// Notes :
+// -------
+// 1) The Store Mode of the NcSample must be activated.
+// 2) "hout" must be an existing 1-dimensional histogram.
+// 3) The blocks represent the bins of "hout", which may have variable length
+//    in case the sampling was not continuous.
+//    As such, the structure of the output histogram is comparable to the result
+//    of a Bayesian Block analysis.  
+//
+// The returned value is the number of produced blocks. 
+// In case of inconsistent input, the value 0 is returned.
+
+ if (!hout)
+ {
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  return 0;
+ }
+
+ Int_t nen=s.GetN();
+ Int_t store=s.GetStoreMode();
+ Int_t dim=s.GetDimension();
+
+ if (!store || dim<1 || i<1 || i>dim || n<1 || n>nen || mode<0 || mode>2)
+ {
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for NcSample treatment." << endl;
+  cout << " Store Mode:" << store << " Entries:" << nen << " Dimension:" << dim << " i:" << i << " n:" << n << " mode:" << mode << endl; 
+  return 0;
+ }
+
+ TGraph gr=s.GetGraph(i);
+
+ Int_t nblocks=GetBlocks(&gr,hout,n,mode);
+
+ // Set the output histogram and axes titles
+ TString title,str;
+ title="Block representation for NcSample ";
+ title+=s.GetName();
+ title+=" grouped in %-d consecutive samples";
+ title+=";Sampling number";
+ if (mode==0) title+=";Mean ";
+ if (mode==1) title+=";Median ";
+ if (mode==2) title+=";RMS ";
+ title+="of variable ";
+ title+=i;
+ title+=" (";
+ title+=s.GetVariableName(i);
+ title+=")";
+ str=title.Format(title.Data(),n);
+ hout->SetTitle(str.Data());
+
+ return nblocks;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::GetBlocks(Int_t nr,Double_t* arr,TH1* hout,Int_t n,Int_t mode)
+{
+// Get the block partitions consisting of "n" consecutive elements of the "nr" data recordings
+// contained in the data array "arr", and provide the results in the 1-D histogram "hout".
+//
+// This facility provides an efficient way to identify pedestal variations in case these
+// might be expected to occur after recording "n" samples due to the specific DAQ design.
+//
+// mode = 0 --> Use the mean as average value
+//        1 --> Use the median as average value
+//        2 --> Use the Root Mean Square (RMS) as average value
+//              Note : This is NOT the RMS deviation defined as sqrt(variance)
+//
+// The default value is mode=0;
+//
+// Notes :
+// -------
+// 1) The data elements in the array "arr" do not need to be ordered.
+// 2) "hout" must be an existing 1-dimensional histogram.
+// 3) The blocks represent the bins of "hout", which may have variable length
+//    in case the sampling was not continuous.
+//    As such, the structure of the output histogram is comparable to the result
+//    of a Bayesian Block analysis.  
+//
+// The returned value is the number of produced blocks. 
+// In case of inconsistent input, the value 0 is returned.
+
+ if (!hout)
+ {
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  return 0;
+ }
+
+ if (!arr || n<1 || n>nr || mode<0 || mode>2)
+ {
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for array treatment." << endl;
+  if (!arr)
+  {
+   cout << " Array pointer is 0." << endl;
+  }
+  else
+  {
+   cout << " Entries:" << nr << " n:" << n << " mode:" << mode << endl;
+  }
+  return 0;
+ }
+
+ NcSample s;
+ s.SetStoreMode();
+
+ for (Int_t i=0; i<nr; i++)
+ {
+  s.Enter(arr[i]);
+ }
+
+ Int_t nblocks=GetBlocks(s,1,hout,n,mode);
+
+ // Set the output histogram and axes titles
+ TString title;
+ title.Form("Block representation for array data grouped in %-d consecutive recordings",n);
+ title+=";Sampling number";
+ if (mode==0) title+=";Mean ";
+ if (mode==1) title+=";Median ";
+ if (mode==2) title+=";RMS ";
+ title+="value";
+ hout->SetTitle(title);
+
+ return nblocks;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::GetBlocks(Int_t nr,Float_t* arr,TH1* hout,Int_t n,Int_t mode)
+{
+// Get the block partitions consisting of "n" consecutive elements of the "nr" data recordings
+// contained in the data array "arr", and provide the results in the 1-D histogram "hout".
+//
+// This facility provides an efficient way to identify pedestal variations in case these
+// might be expected to occur after recording "n" samples due to the specific DAQ design.
+//
+// mode = 0 --> Use the mean as average value
+//        1 --> Use the median as average value
+//        2 --> Use the Root Mean Square (RMS) as average value
+//              Note : This is NOT the RMS deviation defined as sqrt(variance)
+//
+// The default value is mode=0;
+//
+// Notes :
+// -------
+// 1) The data elements in the array "arr" do not need to be ordered.
+// 2) "hout" must be an existing 1-dimensional histogram.
+// 3) The blocks represent the bins of "hout", which may have variable length
+//    in case the sampling was not continuous.
+//    As such, the structure of the output histogram is comparable to the result
+//    of a Bayesian Block analysis.  
+//
+// The returned value is the number of produced blocks. 
+// In case of inconsistent input, the value 0 is returned.
+
+ if (!hout)
+ {
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  return 0;
+ }
+
+ if (!arr || n<1 || n>nr || mode<0 || mode>2)
+ {
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for array treatment." << endl;
+  if (!arr)
+  {
+   cout << " Array pointer is 0." << endl;
+  }
+  else
+  {
+   cout << " Entries:" << nr << " n:" << n << " mode:" << mode << endl;
+  }
+  return 0;
+ }
+
+ NcSample s;
+ s.SetStoreMode();
+
+ for (Int_t i=0; i<nr; i++)
+ {
+  s.Enter(arr[i]);
+ }
+
+ Int_t nblocks=GetBlocks(s,1,hout,n,mode);
+
+ // Set the output histogram and axes titles
+ TString title;
+ title.Form("Block representation for array data grouped in %-d consecutive recordings",n);
+ title+=";Sampling number";
+ if (mode==0) title+=";Mean ";
+ if (mode==1) title+=";Median ";
+ if (mode==2) title+=";RMS ";
+ title+="value";
+ hout->SetTitle(title);
+
+ return nblocks;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode)
+{
+// Get the block partitions consisting of "n" consecutive samples for measurements
+// of an observable with as block height the mean, median or RMS of the values
+// of the contained "n" samples and provide the results in the 1-D histogram "hout".
+//
+// This facility provides an efficient way to identify pedestal variations in case these
+// might be expected to occur after recording "n" samples due to the specific DAQ design.
+//
+// mode = 0 --> Use the mean as average value
+//        1 --> Use the median as average value
+//        2 --> Use the Root Mean Square (RMS) as average value
+//              Note : This is NOT the RMS deviation defined as sqrt(variance)
+//
+// The default value is mode=0;
+//
+// Notes :
+// -------
+// 1) "hout" must be an existing 1-dimensional histogram.
+// 2) The blocks represent the bins of "hout", which may have variable length
+//    in case the sampling was not continuous.
+//    As such, the structure of the output histogram is comparable to the result
+//    of a Bayesian Block analysis.  
+//
+// The returned value is the number of produced blocks. 
+// In case of inconsistent input, the value 0 is returned.
+
+ if (!gr)
+ {
+  cout << " *NcBlocks::GetBlocks* Error : Input TGraph not specified." << endl;
+  return 0;
+ }
+
+ if (!hout)
+ {
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  return 0;
+ }
+
+ if (n<1 || mode<0 || mode>2)
+ {
+  cout << " *NcBlocks::GetBlocks* Inconsistent input for TGraph treatment : n=" << n << " mode=" << mode << endl;
+  return 0;
+ }
+
+ Int_t npoints=gr->GetN();
+
+ if (!npoints) return 0;
+
+ // Sort the data points with increasing x-value
+ gr->Sort();
+
+ // Represent each observation as a value in a variable binned histogram
+ Double_t* xbins=new Double_t[npoints+1];
+ Double_t x=0;
+ Double_t y=0;
+ for (Int_t i=0; i<npoints; i++)
+ {
+  gr->GetPoint(i,x,y);
+  xbins[i]=x;
+ }
+ // Add an extra bin to contain the last measurement
+ xbins[npoints]=(1.+1e-6)*xbins[npoints-1];
+
+ TH1F hin("","",npoints,xbins);
+ for (Int_t j=1; j<=npoints; j++)
+ {
+  gr->GetPoint(j-1,x,y);
+  hin.SetBinContent(j,y);
+ }
+
+ Int_t nblocks=GetBlocks(&hin,hout,n,mode);
+
+ // Set the output histogram and axes titles
+ TString title,str;
+ TString xtitle="Samplings (e.g. time)";
+ TString ytitle="Measured value";
+ TAxis* ax=gr->GetXaxis();
+ if (ax)
+ {
+  str=ax->GetTitle();
+  if (str != "") xtitle=str;
+ }
+ ax=gr->GetYaxis();
+ if (ax)
+ {
+  str=ax->GetTitle();
+  if (str != "") ytitle=str;
+ }
+ title="Block representation for TGraph ";
+ title+=gr->GetName();
+ title+=" grouped in %-d consecutive samples;";
+ title+=xtitle;
+ if (mode==0) title+=";Mean ";
+ if (mode==1) title+=";Median ";
+ if (mode==2) title+=";RMS ";
+ title+=ytitle;
+ str=title.Format(title,n);
+ hout->SetTitle(str);
+
+ delete [] xbins;
+
+ return nblocks;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)

@@ -1364,3 +1364,12 @@
                 The version indicator in NcVersion has been updated to 4.10.4.
 17-nov-2022 NvE Also /ice3/software/iihe/ncfs.sh replaced by the new /software/icecube/iihe/ncfs.sh
                 in all the HTCondor example .sh shell scripts.
+25-nov-2022 NvE To obtain better printout formatting, several "cout" statements have been replaced by "printf()"
+                in NcTimestamp and NcFITSIO.
+27-nov-2022 NvE Also in NcAstrolab several "cout" statements replaced by "printf() to obtain better printout formatting,
+                and the functionality of PrintAngle() and PrintSignal() extended by introduction of an alignment
+                parameter which provides now nice tabular like output in ListSignals().
+08-dec-2022 NvE Functionality of NcBlocks extended with blocks of fixed length defined by the user on basis
+                of a specified number of samplings c.q. bins.
+                Also the printout of NcSample::SetStoreMode() removed and included in NcSample::Data().
+

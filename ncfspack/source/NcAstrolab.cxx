@@ -164,7 +164,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 10, 2022  15:21Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 27, 2022  10:07Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -872,7 +872,7 @@ Double_t NcAstrolab::GetLAST()
  return h;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig) const
+void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig,Bool_t align) const
 {
 // Printing of angles in various formats.
 //
@@ -891,11 +891,17 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig) const
 //
 // The argument "ndig" specifies the number of digits for the fractional
 // part (e.g. ndig=6 for "dms" corresponds to micro-arcsecond precision).
-// No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
-// will appear as 03.4 on the output.
+// Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+// will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
 // Due to computer accuracy, precision on the pico-arcsecond level may get lost.
 //
-// The default is ndig=1.
+// The argument "align", when set to kTRUE, ensures that for a certain selected
+// output format, all provided output strings will have the same length.
+// This will allow the user to provide data in an aligned tabular format.
+// When "align" is set to kFALSE, the produced output will be in the most
+// compact format.
+//
+// The defaults are ndig=1 and align=kFALSE.
 //
 // Note : The angle info is printed without additional spaces or "endline".
 //        This allows the print to be included in various composite output formats.
@@ -904,18 +910,20 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig) const
 
  if (out=="deg" || out=="rad")
  {
-  cout.setf(ios::fixed,ios::floatfield);
-  Int_t nold=cout.precision(ndig);
-  cout << b << " " << out.Data();
-  cout.precision(nold);
-  cout.unsetf(ios::floatfield);
+  if (align)
+  {
+   printf("%*.*f %-s",5+ndig,ndig,b,out.Data());
+  }
+  else
+  {
+   printf("%-.*f %-s",ndig,b,out.Data());
+  }
   return; 
  }
 
  Double_t epsilon=1.e-12; // Accuracy in (arc)seconds
  Int_t word=0,ddd=0,hh=0,mm=0,ss=0;
  Double_t s;
- ULong64_t sfrac=0;
 
  if (out=="dms")
  {
@@ -945,11 +953,16 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig) const
   {
    ddd-=360;
   }
-  s*=pow(10.,ndig);
-  sfrac=ULong64_t(s);
-  if (b<0) cout << "-";
-  cout << ddd << "d " << mm << "' " << ss << "."
-       << setfill('0') << setw(ndig) << sfrac << "\"";
+  if (b<0) ddd=-ddd;
+  s+=double(ss);
+  if (align)
+  {
+   printf("%4dd %02d' %0*.*f\"",ddd,mm,3+ndig,ndig,s);
+  }
+  else
+  {
+   printf("%-dd %-d' %-.*f\"",ddd,mm,ndig,s);
+  }
   return;
  }
 
@@ -981,11 +994,16 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig) const
   {
    hh-=24;
   }
-  s*=pow(10.,ndig);
-  sfrac=ULong64_t(s);
-  if (b<0) cout << "-";
-  cout << hh << "h " << mm << "m " << ss << "."
-       << setfill('0') << setw(ndig) << sfrac << "s";
+  if (b<0) hh=-hh;
+  s+=double(ss);
+  if (align)
+  {
+   printf("%3dh %02dm %0*.*fs",hh,mm,3+ndig,ndig,s);
+  }
+  else
+  {
+   printf("%-dh %-dm %-.*fs",hh,mm,ndig,s);
+  }
   return;
  }
 }
@@ -2521,7 +2539,7 @@ Int_t NcAstrolab::GetSignalIndex(NcSignal* s,Int_t type)
  return index;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref,TString emode,Int_t type)
+void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref,TString emode,Int_t type,Bool_t align)
 {
 // Print data of a stored signal in user specified coordinates at the specific timestamp ts.
 // In case ts=0 the actual timestamp of the stored signal will be taken.
@@ -2530,9 +2548,15 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
 //
 // The argument "ndig" specifies the number of digits for the fractional
 // part (e.g. ndig=6 for "dms" corresponds to micro-arcsecond precision).
-// No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
-// will appear as 03.4 on the output.
+// Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+// will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
 // Due to computer accuracy, precision on the pico-arcsecond level may get lost.
+//
+// The argument "align", when set to kTRUE, ensures that all coordinate
+// output strings will have the same length.
+// This will allow the user to provide data in an aligned tabular format.
+// When "align" is set to kFALSE, the coordinate output will be in the most
+// compact format.
 //
 // Note : The angle info is printed without additional spaces or "endline".
 //        This allows the print to be included in various composite output formats.
@@ -2590,7 +2614,7 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
 // For jref=0 always the first stored measurement will be printed for backward compatibility,
 // but the user is advised not to use this obsolete method anymore.
 //
-// Default values are jref=0, emode="T" and type=0.
+// Default values are jref=0, emode="T", type=0 and align=kFALSE.
 
  NcSignal* sx=GetSignal(jref,type);
 
@@ -2615,9 +2639,6 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
   slha="LMHA";
  }
 
- TString name=sx->GetName();
- if (name != "") cout << name.Data() << " ";
-
  if (frame=="equ")
  {
   Double_t a,d;
@@ -2625,13 +2646,15 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
   a=r.GetX(3,"sph","rad");
   if (mode=="B" || mode=="b") mode="B1950";
   if (mode=="J" || mode=="j") mode="J2000";
-  cout << "Equatorial (" << mode.Data() <<") a : "; PrintAngle(a,"rad","hms",ndig);
-  cout << " ("; PrintAngle(a,"rad","deg",ndig); cout << ")";
-  cout << " d : "; PrintAngle(d,"deg","dms",ndig);
-  cout << " ("; PrintAngle(d,"deg","deg",ndig); cout << ")";
-  cout << " " << slha.Data() << " : "; PrintAngle(lha,"deg","hms",ndig);
-  cout << " ("; PrintAngle(lha,"deg","deg",ndig); cout << ")";
-  return;
+  cout << "Equatorial (" << mode.Data() <<") | a :";
+  if (!align) {cout << " ";} PrintAngle(a,"rad","hms",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(a,"rad","deg",ndig,align);
+  cout << " | b :";
+  if (!align) {cout << " ";} PrintAngle(d,"deg","dms",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(d,"deg","deg",ndig,align);
+  cout << " | " << slha.Data() << " : ";
+  PrintAngle(lha,"deg","hms",ndig,align);
+  cout << " "; PrintAngle(lha,"deg","deg",ndig,align);
  }
 
  if (frame=="gal")
@@ -2639,13 +2662,15 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
   Double_t l,b;
   b=90.-r.GetX(2,"sph","deg");
   l=r.GetX(3,"sph","deg");
-  cout << "Galactic l : "; PrintAngle(l,"deg","deg",ndig);
-  cout << " ("; PrintAngle(l,"deg","dms",ndig); cout << ")";
-  cout << " b : "; PrintAngle(b,"deg","deg",ndig); 
-  cout << " ("; PrintAngle(b,"deg","dms",ndig); cout << ")";
-  cout << " " << slha.Data() << " : "; PrintAngle(lha,"deg","hms",ndig);
-  cout << " ("; PrintAngle(lha,"deg","deg",ndig); cout << ")";
-  return;
+  cout << "Galactic | l :";
+  if (!align) {cout << " ";} PrintAngle(l,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(l,"deg","dms",ndig,align);
+  cout << " | b :";
+  if (!align) {cout << " ";} PrintAngle(b,"deg","deg",ndig,align); 
+  if (!align) {cout << " ";} PrintAngle(b,"deg","dms",ndig,align);
+  cout << " | " << slha.Data() << " : ";
+  PrintAngle(lha,"deg","hms",ndig,align);
+  cout << " "; PrintAngle(lha,"deg","deg",ndig,align);
  }
 
  if (frame=="icr")
@@ -2653,13 +2678,15 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
   Double_t l,b;
   b=90.-r.GetX(2,"sph","deg");
   l=r.GetX(3,"sph","deg");
-  cout << "ICRS l : "; PrintAngle(l,"deg","deg",ndig);
-  cout << " ("; PrintAngle(l,"deg","dms",ndig); cout << ")";
-  cout << " b : "; PrintAngle(b,"deg","deg",ndig);
-  cout << " ("; PrintAngle(b,"deg","dms",ndig); cout << ")";
-  cout << " " << slha.Data() << " : "; PrintAngle(lha,"deg","hms",ndig);
-  cout << " ("; PrintAngle(lha,"deg","deg",ndig); cout << ")";
-  return;
+  cout << "ICRS | l :";
+  if (!align) {cout << " ";} PrintAngle(l,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(l,"deg","dms",ndig,align);
+  cout << " | b :";
+  if (!align) {cout << " ";} PrintAngle(b,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(b,"deg","dms",ndig,align);
+  cout << " | " << slha.Data() << " : ";
+  PrintAngle(lha,"deg","hms",ndig,align);
+  cout << " "; PrintAngle(lha,"deg","deg",ndig,align);
  }
 
  if (frame=="ecl")
@@ -2667,13 +2694,15 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
   Double_t l,b;
   b=90.-r.GetX(2,"sph","deg");
   l=r.GetX(3,"sph","deg");
-  cout << "Geocentric ecliptic l : "; PrintAngle(l,"deg","deg",ndig);
-  cout << " ("; PrintAngle(l,"deg","dms",ndig); cout << ")";
-  cout << " b : "; PrintAngle(b,"deg","deg",ndig);
-  cout << " ("; PrintAngle(b,"deg","dms",ndig); cout << ")";
-  cout << " " << slha.Data() << " : "; PrintAngle(lha,"deg","hms",ndig);
-  cout << " ("; PrintAngle(lha,"deg","deg",ndig); cout << ")";
-  return;
+  cout << "Geocentric ecliptic | l :";
+  if (!align) {cout << " ";} PrintAngle(l,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(l,"deg","dms",ndig,align);
+  cout << " | b :";
+  if (!align) {cout << " ";} PrintAngle(b,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(b,"deg","dms",ndig,align);
+  cout << " | " << slha.Data() << " : ";
+  PrintAngle(lha,"deg","hms",ndig,align);
+  cout << " "; PrintAngle(lha,"deg","deg",ndig,align);
  }
 
  if (frame=="hor")
@@ -2688,30 +2717,39 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
   {
    azi+=360.;
   }
-  cout << "Horizontal azi : "; PrintAngle(azi,"deg","deg",ndig);
-  cout << " ("; PrintAngle(azi,"deg","dms",ndig); cout << ")";
-  cout << " alt : "; PrintAngle(alt,"deg","deg",ndig);
-  cout << " ("; PrintAngle(alt,"deg","dms",ndig); cout << ")";
-  cout << " " << slha.Data() << " : "; PrintAngle(lha,"deg","hms",ndig);
-  cout << " ("; PrintAngle(lha,"deg","deg",ndig); cout << ")";
-  return;
+  cout << "Horizontal | azi :";
+  if (!align) {cout << " ";} PrintAngle(azi,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(azi,"deg","dms",ndig,align);
+  cout << " | alt :";
+  if (!align) {cout << " ";} PrintAngle(alt,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(alt,"deg","dms",ndig,align);
+  cout << " | " << slha.Data() << " : ";
+  PrintAngle(lha,"deg","hms",ndig,align);
+  cout << " "; PrintAngle(lha,"deg","deg",ndig,align);
  }
 
  if (frame=="loc")
  {
   Double_t theta=r.GetX(2,"sph","deg");
   Double_t phi=r.GetX(3,"sph","deg");
-  cout << "Local-frame phi : "; PrintAngle(phi,"deg","deg",ndig);
-  cout << " ("; PrintAngle(phi,"deg","dms",ndig); cout << ")";
-  cout << " theta : "; PrintAngle(theta,"deg","deg",ndig);
-  cout << " ("; PrintAngle(theta,"deg","dms",ndig); cout << ")";
-  cout << " " << slha.Data() << " : "; PrintAngle(lha,"deg","hms",ndig);
-  cout << " ("; PrintAngle(lha,"deg","deg",ndig); cout << ")";
-  return;
+  cout << "Local-frame | phi :";
+  if (!align) {cout << " ";} PrintAngle(phi,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(phi,"deg","dms",ndig,align);
+  cout << " | theta :";
+  if (!align) {cout << " ";} PrintAngle(theta,"deg","deg",ndig,align);
+  if (!align) {cout << " ";} PrintAngle(theta,"deg","dms",ndig,align);
+  cout << " | " << slha.Data() << " : ";
+  PrintAngle(lha,"deg","hms",ndig,align);
+  cout << " "; PrintAngle(lha,"deg","deg",ndig,align);
  }
+
+ cout << " |";
+
+ TString name=sx->GetName();
+ if (name != "") cout << " " << name.Data();
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode,Int_t type)
+void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode,Int_t type,Bool_t align)
 {
 // Print data of the stored signal with the specified name and type in user specified coordinates
 // at the specific timestamp ts.
@@ -2731,9 +2769,15 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
 //
 // The argument "ndig" specifies the number of digits for the fractional
 // part (e.g. ndig=6 for "dms" corresponds to micro-arcsecond precision).
-// No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
-// will appear as 03.4 on the output.
+// Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+// will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
 // Due to computer accuracy, precision on the pico-arcsecond level may get lost.
+//
+// The argument "align", when set to kTRUE, ensures that all coordinate
+// output strings will have the same length.
+// This will allow the user to provide data in an aligned tabular format.
+// When "align" is set to kFALSE, the coordinate output will be in the most
+// compact format.
 //
 // Note : The angle info is printed without additional spaces or "endline".
 //        This allows the print to be included in various composite output formats.
@@ -2777,13 +2821,13 @@ void NcAstrolab::PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t nd
 //        "B" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //        "J" --> Time and local hour angle type determined by input argument "emode" ("M" or "T")
 //
-// The default values are emode="T" and type=0.
+// The default values are emode="T", type=0 and align=kFALSE
 
  // Set c.q. update coordinates for Solar system objects
  SetSolarSystem(name,ts,type);
 
  Int_t j=GetSignalIndex(name,type);
- if (j>=0) PrintSignal(frame,mode,ts,ndig,j,emode,type);
+ if (j>=0) PrintSignal(frame,mode,ts,ndig,j,emode,type,align);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode,Int_t nmax,Int_t j,Int_t type)
@@ -2808,8 +2852,8 @@ void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode
 //
 // The argument "ndig" specifies the number of digits for the fractional
 // part (e.g. ndig=6 for "dms" corresponds to micro-arcsecond precision).
-// No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
-// will appear as 03.4 on the output.
+// Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+// will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
 // Due to computer accuracy, precision on the pico-arcsecond level may get lost.
 //
 // Note : The angle info is printed without additional spaces or "endline".
@@ -2857,6 +2901,8 @@ void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode
 // The default values are ndig=1, emode="T", nmax=10, j=-1 and type=-1.
 
  Int_t iprint=0;
+ Int_t width=log10(nmax); // Width for printing of the index
+ width++;
 
  NcSignal* sx=0;
  NcTimestamp* tx=0;
@@ -3008,7 +3054,7 @@ void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig,TString emode
    }
    if (type==1 || (!type && j<0)) tx=0;
    if (!type && !j) tx=(NcTimestamp*)this;
-   cout << " Index : " << i << " "; PrintSignal(frame,mode,tx,ndig,i,emode,type); cout << endl;
+   printf(" Index : %*d ",width,i); PrintSignal(frame,mode,tx,ndig,i,emode,type,kTRUE); printf("\n");
   }
   iprint=1;
  }

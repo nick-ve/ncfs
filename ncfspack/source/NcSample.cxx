@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 18, 2022  10:21Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 8, 2022  12:55Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -1331,6 +1331,30 @@ void NcSample::Data(Int_t i,Int_t j)
  const char* title=GetTitle();
 
  cout << " *" << ClassName() << "::Data*";
+ if (strlen(name))  cout << " Info for sample Name : " << name;
+ if (strlen(title)) cout << " Title : " << title;
+ cout << endl;
+ cout << " Access to the individual data entries is";
+ if (!fStore) cout << " not";
+ cout << " possible (StoreMode=" << fStore << ")" << endl;
+
+ if (fStore && fNmax)
+ {
+  if (fNmax==fN && fRemove)
+  {
+   cout << " *** At entering data the dynamic FIFO storage was limited to " << fNmax << " entries";
+  }
+  else
+  {
+   cout << " *** At entering new data the dynamic FIFO storage will be limited to " << fNmax << " entries";
+  }
+  if (!fMoveVariable) cout << " using the order of original entering.";
+  if (fMoveVariable>0) cout << " after increasing";
+  if (fMoveVariable<0) cout << " after decreasing";
+  if (fMoveVariable) cout << " ordering w.r.t. variable " << abs(fMoveVariable);
+  cout << endl;
+ }
+
  if (i<0 || i>fDim || j<0 || j>fDim)
  {
   cout << " Inconsistent input i=" << i << " and j=" << j << " for dimension " << fDim << endl;
@@ -1340,24 +1364,12 @@ void NcSample::Data(Int_t i,Int_t j)
  if (i && !j)  cout << " Statistics of variable " << i;
  if (!i && j)  cout << " Statistics of variable " << j;
  if (i && j)   cout << " Correlation statistics of the variables " << i << " and " << j;
- if (strlen(name))  cout << " for sample Name : " << name;
- if (strlen(title)) cout << " Title : " << title;
  cout << endl;
 
  if (!fN)
  {
   cout << " No data has been entered." << endl;
   return;
- }
-
- if (fNmax==fN && fRemove)
- {
-  cout << " At entering new data the dynamic FIFO storage was limited to " << fNmax << " entries";
-  if (!fMoveVariable) cout << " using the order of original entering.";
-  if (fMoveVariable>0) cout << " after increasing";
-  if (fMoveVariable<0) cout << " after decreasing";
-  if (fMoveVariable) cout << " ordering w.r.t. variable " << abs(fMoveVariable);
-  cout << endl;
  }
 
  // Statistics and correlations of all variables
@@ -1468,7 +1480,7 @@ void NcSample::ListOrdered(Int_t mode,Int_t i)
  cout << endl;
  if (fNmax==fN && fRemove)
  {
-  cout << " At entering new data the dynamic FIFO storage was limited to " << fNmax << " entries";
+  cout << " *** At entering data the dynamic FIFO storage was limited to " << fNmax << " entries";
   if (!fMoveVariable) cout << " using the order of original entering.";
   if (fMoveVariable>0) cout << " after increasing";
   if (fMoveVariable<0) cout << " after decreasing";
@@ -1595,15 +1607,6 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 // Note : Specification of storage mode can only be performed before the
 //        first data item is entered or after invokation of Reset(). 
 
- TString name=GetName();
- TString title=GetTitle();
-
- cout << " *NcSample::SetStoreMode*";
- if (name!="" || title!="") cout << " for sample";
- if (name!="") cout << " Name:" << name;
- if (title!="") cout << " Title:" << title;
- cout << endl;
-
  if (fN)
  {
   cout << "  Storage mode can only be set before first data." << endl;
@@ -1620,7 +1623,6 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
   fNmax=nmax;
   fMoveVariable=i;
  }
- cout << "  Effective values : mode=" << fStore << " nmax=" << fNmax << " i=" << fMoveVariable << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetStoreMode() const
