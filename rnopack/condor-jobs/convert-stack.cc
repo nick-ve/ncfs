@@ -57,7 +57,7 @@
  //////////////////////////////////////////////////////
 
  // Definition of the input file(s)
- TString dir="/pnfs/iihe/rno-g/data/2021/station22/run";
+ TString dir="/pnfs/iihe/rno-g/data/station22/run";
  TString file;
  for (Int_t irun=8; irun<=23; irun++)
  {
@@ -133,9 +133,10 @@
 
  // Add a monitoring task
  RnoMonitor* moni=new RnoMonitor();
- moni->SetDeviceClass("RnoLPDA");
+ moni->SetDevices("RnoLPDA");
  moni->SetSampleVariable("ADC","0.618*x-8.133");
  moni->DefineStatistic("RMSdeviation");
+ moni->SetBaselineMode(0);
  moni->SetNbins24(24*4);
 
  q.Add(moni);

@@ -1372,4 +1372,8 @@
 08-dec-2022 NvE Functionality of NcBlocks extended with blocks of fixed length defined by the user on basis
                 of a specified number of samplings c.q. bins.
                 Also the printout of NcSample::SetStoreMode() removed and included in NcSample::Data().
+19-dec-2022 NvE Functionality of RnoMonitor extended by introduction of the memberfunction SetBaselineMode()
+                and the memberfunction SetDeviceClass() renamed to SetDevices() to provide more flexibility.
+                The corresponding example macros have been updated accordingly.
+                The version indicator in NcVersion has been updated to 4.11.
 

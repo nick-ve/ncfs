@@ -35,10 +35,10 @@ getenv     = TRUE
 HOMEDIR    = $ENV(HOME)
 HOSTDIR    = $ENV(PWD)
 
-OUTPUTDIR  = /pnfs/iihe/rno-g/rnopack-data/2021/station22/run$(RUN)/analysis
+OUTPUTDIR  = /pnfs/iihe/rno-g/rnopack-data/station22/run$(RUN)/analysis
 
 # The input filename(s)
-filename   = /pnfs/iihe/rno-g/rnopack-data/2021/station22/run$(RUN)/combined.rnopack
+filename   = /pnfs/iihe/rno-g/rnopack-data/station22/run$(RUN)/combined.rnopack
 
 # Enable the HTCondor file transfer mechanism
 should_transfer_files = YES

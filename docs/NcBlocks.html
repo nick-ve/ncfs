@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sat Jun 18 11:39:31 2022            -->
+<!--   Date: Mon Dec 19 09:56:17 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -60,7 +60,7 @@ return false;}
 <div class="classdescr">
 <pre>
  <a href="./NcBlocks.html#NcBlocks:Class" title="TClass* NcBlocks::Class()">Class</a> <a href="./NcBlocks.html">NcBlocks</a>
- <a href="./NcBlocks.html#NcBlocks:Class" title="TClass* NcBlocks::Class()">Class</a> for Bayesian Block treatment of sequential data.
+ <a href="./NcBlocks.html#NcBlocks:Class" title="TClass* NcBlocks::Class()">Class</a> for (Bayesian) Block treatment of sequential data.
 
  This class provides a tool set to detect and characterize local variability
  in sequential data.
@@ -75,11 +75,27 @@ return false;}
  2) Counts of events in time bins.
  3) Measurements of a (quasi) continuous observable at a sequence of points in time.
 
- For each Data Mode a dedicated analysis procedure is provided via the various
- <a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>() member functions.
+ A Bayesian Block analysis provides a procedure to automatically detect local
+ variability in the data stream by a dynamic partitioning of the dataset, resulting
+ in data blocks of different length over which the event rate, event count or
+ measured value can be regarded as constant.
 
- Local variability in the sequential data stream is indicated by so called Change Points,
- at which a step is introduced in e.g. the event rate, event count or measured value.
+ For each Data Mode a dedicated Bayesian Block analysis procedure is provided via
+ the various <a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>() member functions.
+
+ On the other hand, this class also provides <a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>() member functions which allow
+ the user to form blocks defined by a fixed number of <span class="string">"n"</span> samplings c.q. bins.
+ In this case the height of each block is defined by the mean (or median) value of the
+ recorded values within each set of <span class="string">"n"</span> samplings.
+ These member functions provide an efficient way to identify (pedestal) variations in case
+ these might be expected to occur after recording <span class="string">"n"</span> samples due to the specific DAQ design.
+ In principle a Bayesian Block analysis would also be able to identify these variations
+ over the sets of <span class="string">"n"</span> samplings, but the analysis over a fixed number of <span class="string">"n"</span> samplings
+ is much faster than the dynamic Bayesian Block analysis.
+
+ In a Bayesian Block analysis, local variability in the sequential data stream is indicated
+ by so called Change Points, at which a step is introduced in e.g. the event rate, event count
+ or measured value.
 
  Since the data treatment is inherently sequential, it is also possible to
  trigger c.q. stop after the occurrence of a certain number of Change Points.
@@ -87,7 +103,7 @@ return false;}
  first occurrence of a Change Point.
  Please refer to the documentation of the <a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>() member functions for further details.
 
- Details of the various algorithms can be found in the publication :
+ Details of the various Bayesian Block algorithms can be found in the publication :
 
  J.D. Scargle et al., The Astrophysical Journal 764 (2013) 167. (ArXiv:1207.5578).
 
@@ -392,7 +408,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 17, 2022  11:03Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 8, 2022  08:06Z
 
 </pre></div>
 </div></div>
@@ -409,12 +425,17 @@ return false;}
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcBlocks:Class">Class</a>()</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks">GetBlocks</a>(TH1* hin, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@4">GetBlocks</a>(TGraphErrors gr, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@8">GetBlocks</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@12">GetBlocks</a>(TGraph* gr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@1">GetBlocks</a>(<a href="./NcSample.html">NcSample</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@2">GetBlocks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* arr, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@3">GetBlocks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Float_t">Float_t</a>* arr, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@5">GetBlocks</a>(TGraph gr, TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@6">GetBlocks</a>(TGraph gr, TString f, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@7">GetBlocks</a>(TGraph gr, <a href="./ListOfTypes.html#Double_t">Double_t</a> nrms, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@9">GetBlocks</a>(<a href="./NcSample.html">NcSample</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@10">GetBlocks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nr, <a href="./ListOfTypes.html#Double_t">Double_t</a>* arr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@11">GetBlocks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nr, <a href="./ListOfTypes.html#Float_t">Float_t</a>* arr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
 <tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcBlocks:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcBlocks.html">NcBlocks</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcBlocks:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcBlocks.html">NcBlocks</a>&amp;)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Rebin">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</td></tr>
@@ -813,6 +834,142 @@ return false;}
  In case of inconsistent input, the value 0 is returned.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:GetBlocks@8" href="src/NcBlocks.cxx.html#xrpBxB">GetBlocks</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Get the block partitions consisting of <span class="string">"n"</span> consecutive bins for binned data
+ contained in histogram <span class="string">"hin"</span> with as block height the mean, median or RMS value
+ of the contained <span class="string">"n"</span> bins and provide the results in the 1-D histogram <span class="string">"hout"</span>.
+
+ This facility provides an efficient way to identify pedestal variations in case these
+ might be expected to occur after recording <span class="string">"n"</span> samples due to the specific DAQ design.
+
+ mode = 0 --&gt; Use the mean as average value
+        1 --&gt; Use the median as average value
+        2 --&gt; Use the Root Mean Square (RMS) as average value
+              Note : This is NOT the RMS deviation defined as sqrt(variance)
+
+ The default value is mode=0;
+
+ Notes :
+
+ 1) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 2) The blocks represent the bins of <span class="string">"hout"</span>, which may have variable length
+    in case the sampling was not continuous.
+    As such, the structure of the output histogram is comparable to the result
+    of a Bayesian Block analysis.
+
+ The returned value is the number of produced blocks.
+ In case of inconsistent input, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:GetBlocks@9" href="src/NcBlocks.cxx.html#W5llWB">GetBlocks</a>(<a href="./NcSample.html">NcSample</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Get the block partitions consisting of <span class="string">"n"</span> consecutive samplings for the
+ i-th variable of <a href="./NcSample.html">NcSample</a> <span class="string">"s"</span>, with as block height the mean, median or RMS value
+ of the contained <span class="string">"n"</span> samples and provide the results in the 1-D histogram <span class="string">"hout"</span>.
+
+ This facility provides an efficient way to identify pedestal variations in case these
+ might be expected to occur after recording <span class="string">"n"</span> samples due to the specific DAQ design.
+
+ mode = 0 --&gt; Use the mean as average value
+        1 --&gt; Use the median as average value
+        2 --&gt; Use the Root Mean Square (RMS) as average value
+              Note : This is NOT the RMS deviation defined as sqrt(variance)
+
+ The default value is mode=0;
+
+ Notes :
+
+ 1) The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+ 2) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 3) The blocks represent the bins of <span class="string">"hout"</span>, which may have variable length
+    in case the sampling was not continuous.
+    As such, the structure of the output histogram is comparable to the result
+    of a Bayesian Block analysis.
+
+ The returned value is the number of produced blocks.
+ In case of inconsistent input, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:GetBlocks@10" href="src/NcBlocks.cxx.html#wYRCC">GetBlocks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nr, <a href="./ListOfTypes.html#Double_t">Double_t</a>* arr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Get the block partitions consisting of <span class="string">"n"</span> consecutive elements of the <span class="string">"nr"</span> data recordings
+ contained in the data array <span class="string">"arr"</span>, and provide the results in the 1-D histogram <span class="string">"hout"</span>.
+
+ This facility provides an efficient way to identify pedestal variations in case these
+ might be expected to occur after recording <span class="string">"n"</span> samples due to the specific DAQ design.
+
+ mode = 0 --&gt; Use the mean as average value
+        1 --&gt; Use the median as average value
+        2 --&gt; Use the Root Mean Square (RMS) as average value
+              Note : This is NOT the RMS deviation defined as sqrt(variance)
+
+ The default value is mode=0;
+
+ Notes :
+
+ 1) The data elements in the array <span class="string">"arr"</span> do not need to be ordered.
+ 2) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 3) The blocks represent the bins of <span class="string">"hout"</span>, which may have variable length
+    in case the sampling was not continuous.
+    As such, the structure of the output histogram is comparable to the result
+    of a Bayesian Block analysis.
+
+ The returned value is the number of produced blocks.
+ In case of inconsistent input, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:GetBlocks@11" href="src/NcBlocks.cxx.html#XNXHIC">GetBlocks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nr, <a href="./ListOfTypes.html#Float_t">Float_t</a>* arr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Get the block partitions consisting of <span class="string">"n"</span> consecutive elements of the <span class="string">"nr"</span> data recordings
+ contained in the data array <span class="string">"arr"</span>, and provide the results in the 1-D histogram <span class="string">"hout"</span>.
+
+ This facility provides an efficient way to identify pedestal variations in case these
+ might be expected to occur after recording <span class="string">"n"</span> samples due to the specific DAQ design.
+
+ mode = 0 --&gt; Use the mean as average value
+        1 --&gt; Use the median as average value
+        2 --&gt; Use the Root Mean Square (RMS) as average value
+              Note : This is NOT the RMS deviation defined as sqrt(variance)
+
+ The default value is mode=0;
+
+ Notes :
+
+ 1) The data elements in the array <span class="string">"arr"</span> do not need to be ordered.
+ 2) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 3) The blocks represent the bins of <span class="string">"hout"</span>, which may have variable length
+    in case the sampling was not continuous.
+    As such, the structure of the output histogram is comparable to the result
+    of a Bayesian Block analysis.
+
+ The returned value is the number of produced blocks.
+ In case of inconsistent input, the value 0 is returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:GetBlocks@12" href="src/NcBlocks.cxx.html#RiNf5D">GetBlocks</a>(TGraph* gr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</span><br />
+<div class="funccomm"><pre> Get the block partitions consisting of <span class="string">"n"</span> consecutive samples for measurements
+ of an observable with as block height the mean, median or RMS of the values
+ of the contained <span class="string">"n"</span> samples and provide the results in the 1-D histogram <span class="string">"hout"</span>.
+
+ This facility provides an efficient way to identify pedestal variations in case these
+ might be expected to occur after recording <span class="string">"n"</span> samples due to the specific DAQ design.
+
+ mode = 0 --&gt; Use the mean as average value
+        1 --&gt; Use the median as average value
+        2 --&gt; Use the Root Mean Square (RMS) as average value
+              Note : This is NOT the RMS deviation defined as sqrt(variance)
+
+ The default value is mode=0;
+
+ Notes :
+
+ 1) <span class="string">"hout"</span> must be an existing 1-dimensional histogram.
+ 2) The blocks represent the bins of <span class="string">"hout"</span>, which may have variable length
+    in case the sampling was not continuous.
+    As such, the structure of the output histogram is comparable to the result
+    of a Bayesian Block analysis.
+
+ The returned value is the number of produced blocks.
+ In case of inconsistent input, the value 0 is returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Add" href="src/NcBlocks.cxx.html#Y_i4SB">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
 <div class="funccomm"><pre> Provide the 1-dimensional histogram hout=h1+c*h2+d.
  So, for c=-1 and d=0, the values contained in the histogram <span class="string">"h2"</span> will be
@@ -897,7 +1054,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sat Jun 18 11:39:31 2022 </em><em>&raquo; Last generated: 2022-06-18 11:39</em><br />
+<em>&raquo; Last changed: Mon Dec 19 09:56:17 2022 </em><em>&raquo; Last generated: 2022-12-19 09:56</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

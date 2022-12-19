@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Nov 17 11:51:14 2022            -->
+<!--   Date: Mon Dec 19 09:56:15 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -195,7 +195,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 10, 2022  15:21Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 27, 2022  10:07Z
 
 </pre></div>
 </div></div>
@@ -429,9 +429,9 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:PrintAngle">PrintAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:PrintSignal">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:PrintSignal@1">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, TString name, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:PrintAngle">PrintAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:PrintSignal">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:PrintSignal@1">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, TString name, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:PrintTime"><span class="baseclass">NcTimestamp::</span>PrintTime</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> h, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RandomPosition">RandomPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v, <a href="./ListOfTypes.html#Double_t">Double_t</a> thetamin, <a href="./ListOfTypes.html#Double_t">Double_t</a> thetamax, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimin, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimax)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
@@ -917,7 +917,7 @@ return false;}
  In case a hh:mm:ss format is needed, please use the <a href="./NcTimestamp.html#NcTimestamp:Convert" title="void NcTimestamp::Convert(Double_t date,Int_t&amp; days,Int_t&amp; secs,Int_t&amp; ns) or overloads">Convert</a>() facility.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:PrintAngle" href="src/NcAstrolab.cxx.html#mPjx0E">PrintAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:PrintAngle" href="src/NcAstrolab.cxx.html#Bl0gH">PrintAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>) const</span><br />
 <div class="funccomm"><pre> Printing of angles in various formats.
 
  The input argument <span class="string">"a"</span> denotes the angle to be printed.
@@ -935,11 +935,17 @@ return false;}
 
  The argument <span class="string">"ndig"</span> specifies the number of digits for the fractional
  part (e.g. ndig=6 for <span class="string">"dms"</span> corresponds to micro-arcsecond precision).
- No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
- will appear as 03.4 on the output.
+ Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+ will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
  Due to computer accuracy, precision on the pico-arcsecond level may get lost.
 
- The default is ndig=1.
+ The argument <span class="string">"align"</span>, when set to <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, ensures that for a certain selected
+ output format, all provided output strings will have the same length.
+ This will allow the user to provide data in an aligned tabular format.
+ When <span class="string">"align"</span> is set to <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, the produced output will be in the most
+ compact format.
+
+ The defaults are ndig=1 and align=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>.
 
  Note : The angle info is printed without additional spaces or <span class="string">"endline"</span>.
         This allows the print to be included in various composite output formats.
@@ -1710,7 +1716,7 @@ return false;}
  In case no matching signal is found, the value -1 is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:PrintSignal" href="src/NcAstrolab.cxx.html#F4KhF">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:PrintSignal" href="src/NcAstrolab.cxx.html#CivWqE">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a> data of a stored signal in user specified coordinates at the specific timestamp ts.
  In case ts=0 the actual timestamp of the stored signal will be taken.
  In case no stored signal was available or one of the input arguments was
@@ -1718,9 +1724,15 @@ return false;}
 
  The argument <span class="string">"ndig"</span> specifies the number of digits for the fractional
  part (e.g. ndig=6 for <span class="string">"dms"</span> corresponds to micro-arcsecond precision).
- No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
- will appear as 03.4 on the output.
+ Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+ will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
  Due to computer accuracy, precision on the pico-arcsecond level may get lost.
+
+ The argument <span class="string">"align"</span>, when set to <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, ensures that all coordinate
+ output strings will have the same length.
+ This will allow the user to provide data in an aligned tabular format.
+ When <span class="string">"align"</span> is set to <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, the coordinate output will be in the most
+ compact format.
 
  Note : The angle info is printed without additional spaces or <span class="string">"endline"</span>.
         This allows the print to be included in various composite output formats.
@@ -1778,10 +1790,10 @@ return false;}
  For jref=0 always the first stored measurement will be printed for backward compatibility,
  but the user is advised not to use this obsolete method anymore.
 
- Default values are jref=0, emode=<span class="string">"T"</span> and type=0.
+ Default values are jref=0, emode=<span class="string">"T"</span>, type=0 and align=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:PrintSignal@1" href="src/NcAstrolab.cxx.html#uUbgcC">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, TString name, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:PrintSignal@1" href="src/NcAstrolab.cxx.html#bvRJ3">PrintSignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig, TString name, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a> data of the stored signal with the specified name and type in user specified coordinates
  at the specific timestamp ts.
  In case ts=0 the actual timestamp of the stored signal will be taken.
@@ -1800,9 +1812,15 @@ return false;}
 
  The argument <span class="string">"ndig"</span> specifies the number of digits for the fractional
  part (e.g. ndig=6 for <span class="string">"dms"</span> corresponds to micro-arcsecond precision).
- No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
- will appear as 03.4 on the output.
+ Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+ will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
  Due to computer accuracy, precision on the pico-arcsecond level may get lost.
+
+ The argument <span class="string">"align"</span>, when set to <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, ensures that all coordinate
+ output strings will have the same length.
+ This will allow the user to provide data in an aligned tabular format.
+ When <span class="string">"align"</span> is set to <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, the coordinate output will be in the most
+ compact format.
 
  Note : The angle info is printed without additional spaces or <span class="string">"endline"</span>.
         This allows the print to be included in various composite output formats.
@@ -1846,7 +1864,7 @@ return false;}
         <span class="string">"B"</span> --&gt; Time and local hour angle type determined by input argument <span class="string">"emode"</span> (<span class="string">"M"</span> or <span class="string">"T"</span>)
         <span class="string">"J"</span> --&gt; Time and local hour angle type determined by input argument <span class="string">"emode"</span> (<span class="string">"M"</span> or <span class="string">"T"</span>)
 
- The default values are emode=<span class="string">"T"</span> and type=0.
+ The default values are emode=<span class="string">"T"</span>, type=0 and align=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:ListSignals" href="src/NcAstrolab.cxx.html#cV9AfD">ListSignals</a>(TString frame, TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1)</span><br />
@@ -1870,8 +1888,8 @@ return false;}
 
  The argument <span class="string">"ndig"</span> specifies the number of digits for the fractional
  part (e.g. ndig=6 for <span class="string">"dms"</span> corresponds to micro-arcsecond precision).
- No rounding will be performed, so an arcsecond count of 3.473 with ndig=1
- will appear as 03.4 on the output.
+ Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+ will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
  Due to computer accuracy, precision on the pico-arcsecond level may get lost.
 
  Note : The angle info is printed without additional spaces or <span class="string">"endline"</span>.
@@ -4812,7 +4830,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Nov 17 11:51:16 2022 </em><em>&raquo; Last generated: 2022-11-17 11:51</em><br />
+<em>&raquo; Last changed: Mon Dec 19 09:56:17 2022 </em><em>&raquo; Last generated: 2022-12-19 09:56</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

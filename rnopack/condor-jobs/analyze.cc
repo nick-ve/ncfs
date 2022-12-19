@@ -39,9 +39,10 @@
 
  // The monitoring task
  RnoMonitor* moni=new RnoMonitor();
- moni->SetDeviceClass("RnoULPDA"); // Only use the upward LPDAs
+ moni->SetDevices("RnoULPDA"); // Only use the upward LPDAs
  moni->SetSampleVariable("ADC","0.618*x-8.133"); // Convert ADC->mV
  moni->DefineStatistic("RMSdeviation");
+ moni->SetBaselineMode(0); // No baseline correction
  moni->SetNbins24(24*4);
 
  // Add the task(s) to the top level job structure

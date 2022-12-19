@@ -50,7 +50,7 @@
  ///////////////////////////////////////////////
 
  // Definition of the input file(s)
- TString dir="/pnfs/iihe/rno-g/rnopack-data/2021/station22/run";
+ TString dir="/pnfs/iihe/rno-g/rnopack-data/station22/run";
  TString file;
  for (Int_t irun=306; irun<=309; irun++)
  {
@@ -91,9 +91,10 @@
 
  // The monitoring task
  RnoMonitor* moni=new RnoMonitor();
- moni->SetDeviceClass("RnoULPDA");
+ moni->SetDevices("RnoULPDA");
  moni->SetSampleVariable("ADC","0.618*x-8.133");
  moni->DefineStatistic("RMSdeviation");
+ moni->SetBaselineMode(0);
  moni->SetNbins24(24*4);
 
  // Add the task(s) to the top level job structure

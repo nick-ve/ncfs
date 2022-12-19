@@ -51,3 +51,6 @@
 17-nov-2022 NvE In RnoConvert::Exec() the leaves list is now updated for each individual Tree in the TChain
                 in order to avoid memory problems which were encountered when processing many data files in
                 a stacked fashion.
+19-dec-2022 NvE Functionality of RnoMonitor extended by introduction of the memberfunction SetBaselineMode()
+                and the memberfunction SetDeviceClass() renamed to SetDevices() to provide more flexibility.
+                The corresponding example macros have been updated accordingly.

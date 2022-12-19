@@ -63,7 +63,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   void SetLT(TString date,TString time,Int_t mode);                 // Set specified Local Time
   void SetLT(Int_t y,Int_t d,Int_t s,Int_t ns=0,Int_t ps=0); // Set Local Time based on elapsed days, secs etc...
   Double_t ConvertAngle(Double_t a,TString in,TString out) const;       // Angular format conversions
-  void PrintAngle(Double_t a,TString in,TString out,Int_t ndig=1) const;// Print angle in various formats
+  void PrintAngle(Double_t a,TString in,TString out,Int_t ndig=1,Bool_t align=kFALSE) const;// Print angle in various formats
   Double_t GetSolidAngle(Double_t thetamin,Double_t thetamax,TString tu,Double_t phimin,Double_t phimax,TString pu) const; // Provide solid angle between the specified boundaries
   NcSignal* SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode="T",TString name="",Int_t type=0); // Store generic signal
   NcSignal* SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,TString s,Double_t e,Int_t jref,TString mode,TString name="",Int_t type=0);// Store generic signal
@@ -79,8 +79,8 @@ class NcAstrolab : public TTask,public NcTimestamp
   void RemoveRefSignal(TString name,Int_t compress);                // Remove a stored reference signal object
   void RemoveSignal(Int_t j,Int_t type,Int_t compress);             // Remove a stored signal object
   void RemoveSignal(TString name,Int_t type,Int_t compress);        // Remove a stored signal object
-  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref=0,TString emode="T",Int_t type=0); // Print stored signal data
-  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode="T",Int_t type=0); // Print stored signal data
+  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref=0,TString emode="T",Int_t type=0,Bool_t align=kFALSE); // Print stored signal data
+  void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode="T",Int_t type=0,Bool_t align=kFALSE); // Print stored signal data
   void ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode="T",Int_t nmax=10,Int_t j=-1,Int_t type=-1); // List stored signals
   Int_t GetSignalIndex(TString name,Int_t type=0); // Provide storage index of the signal with the specified name
   Int_t GetSignalIndex(NcSignal* s,Int_t type);    // Provide storage index of the specified signal
@@ -280,6 +280,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1* GetBurstT90dist(TString name,TString type);
   TH1* GetBurstSigmaPosdist(TString name,TString type);
  
- ClassDef(NcAstrolab,36) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,37) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

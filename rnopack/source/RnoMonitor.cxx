@@ -41,8 +41,11 @@
 // An example of such an implementation can be seen in the ROOT macro analyze.cc
 // which is also located in the folder /rnopack/macros.
 //
+// Note : Events that have been rejected by invokation of NcEventSelector
+//        will not be taken into account for the monitoring.
+//
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 16, 2022  11:24Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 18, 2022  12:59Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoMonitor.h"
@@ -55,7 +58,6 @@ RnoMonitor::RnoMonitor(const char* name,const char* title) : TTask(name,title)
 // Default constructor.
 
  fEvt=0;
- fDevClass="RnoGANT";
  fDevSample=1;
  fVarIndex=1;
  fVarName="";
@@ -64,7 +66,9 @@ RnoMonitor::RnoMonitor(const char* name,const char* title) : TTask(name,title)
  fHistos.SetOwner();
  fFirst=kTRUE;
 
+ SetDevices("RnoGANT");
  DefineStatistic("RMSdeviation");
+ SetBaselineMode(0);
 
  NcAstrolab lab;
  lab.SetExperiment("RNO-G");
@@ -74,15 +78,31 @@ RnoMonitor::RnoMonitor(const char* name,const char* title) : TTask(name,title)
 RnoMonitor::~RnoMonitor()
 {
 // Default destructor.
+
+ if (fVarFunc)
+ {
+  delete fVarFunc;
+  fVarFunc=0;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
-void RnoMonitor::SetDeviceClass(TString devclass)
+void RnoMonitor::SetDevices(TString devclass,Int_t ista,Int_t ichan)
 {
-// Specify the class of the (derived) devices to be analysed.
+// Specify the devices to be analysed.
 //
-// In the default constructor this is set to "RnoGANT" to select all antennas.
+// Input arguments :
+// -----------------
+// devclass : The class of the (derived) devices to be analysed.
+// ista     : The station number (<0 means all available stations)
+// ichan    : The channel number (<0 means all available channels)
+//
+// In the default constructor devclass is set to "RnoGANT" to select all antenna types
+// and also all channels and all stations are selected.
+// At invokation of this member function, the default values are ista=-1 and ichan=-1.
 
  fDevClass=devclass;
+ fSta=ista;
+ fChan=ichan;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetDeviceSample(Int_t j)
@@ -149,8 +169,8 @@ void RnoMonitor::DefineStatistic(TString mode)
 // Specify the statistic to be used for monitoring of the (function) values
 // val(i) of the selected sample variable, as specified by SetSampleVariable().
 //
-// Supported (case sensitive) input is :
-// -------------------------------------
+// Supported (case sensitive) input for "mode" is :
+// ------------------------------------------------
 // "Mean"         : The mean of all val(i)
 // "Median"       : The median of all val(i)
 // "RMS"          : The Root Mean Square of all val(i)
@@ -159,14 +179,15 @@ void RnoMonitor::DefineStatistic(TString mode)
 // "SpreadMedian" : The average of all |median-val(i)|
 // "RMSdeviation" : The Root Mean Square deviation from the mean of all val(i)
 //                  This is also known as sqrt(variance)
-//
 // Notes :
 // -------
-// 1) The statistics "Mean", "Median" and "RMS" are sensitive to pedestal offsets.
-// 2) For large data samples, the statistics "Median", "SpreadMean" and "SpreadMedian"
-//    may lead to rather long CPU times.
+// 1) The statistics "Mean", "Median" and "RMS" are sensitive to pedestal offsets,
+//    whereas all statistics are sensitive to baseline variations within the recorded time trace.
+//    Please refer to the member function SetBaselineMode() to mitigate these effects.
+// 3) For large data samples, the statistics "Median", "SpreadMean" and "SpreadMedian"
+//    may lead to long(er) CPU times.
 //
-// In the default constructor the mode "RMSdeviation" is initialised.
+// In the default constructor mode="RMSdeviation" is initialised.
 
  if (mode!="Mean" && mode!="Median" && mode!="RMS" && mode!="SpreadMean" && mode!="SpreadMedian" && mode!="RMSdeviation")
  {
@@ -179,7 +200,65 @@ void RnoMonitor::DefineStatistic(TString mode)
 
  fValues.Reset();
  fValues.SetStoreMode(0);
- if (fAvMode=="Median" || fAvMode=="SpreadMean" || fAvMode=="SpreadMedian") fValues.SetStoreMode(1);
+ if (fAvMode=="Median"  || fAvMode=="SpreadMean"  || fAvMode=="SpreadMedian") fValues.SetStoreMode(1);
+}
+///////////////////////////////////////////////////////////////////////////
+void RnoMonitor::SetBaselineMode(Int_t mode,Int_t n,Double_t nrms,Double_t fpr)
+{
+// Specify the (variable) baseline to be subtracted from the recorded waveform before extracting
+// the values of the statistic selected for monitoring, as specified by DefineStatistic().
+// Variable baseline subtraction will allow to obtain a time trace with an overall baseline at 0.
+//
+// Input arguments :
+// -----------------
+// mode : 0 --> No baseline subtraction
+//        1 --> Represent the baseline as fixed blocks of "n" consecutive samplings
+//              with as amplitude the mean of the corresponding "n" samplings
+//        2 --> Represent the baseline as fixed blocks of "n" consecutive samplings
+//              with as amplitude the median of the corresponding "n" samplings
+//        3 --> Represent the baseline as dynamic Bayesian Blocks obtained with the
+//              parameters "nrms" and "fpr" as outlined below.
+//
+// The input argument "nrms" tailors the sensitivity to fluctuations for the
+// Bayesian Block baseline analysis, in case that is selected.
+// Each recorded value in the time trace is given an error of "nrms" times the
+// RMS deviation of all the recorded values.
+// The input argument "fpr" represents the False Positive Rate for the Bayesian Block analysis.
+// See NcBlocks::GetBlocks() for further details.
+//
+// Notes :
+// -------
+// 1) All statistics are sensitive to baseline variations within the recorded time trace.
+//    If mode>0, the corresponding baseline correction of the time trace is performed to
+//    correct for pedestal offsets c.q. baseline variations.
+//    In general this will result in a time trace with a baseline at 0.
+// 2) Parameter values (n, nrms or fpr) that are not applicable to the selected "mode"
+//    are set to the unphysical value -1.
+// 3) For large data samples, the invokation of the Bayesian Block analysis may lead
+//    to rather long CPU times.
+//
+// In the default constructor mode=0 is initialised, which also implies n=-1, nrms=-1 and fpr=-1.
+// At invokation of this member function, the default values are n=128, nrms=1.2 and fpr=0.1. 
+
+ if (mode<0 || mode>3 || n<1 || nrms<0 || fpr<0)
+ {
+  cout << " *" << ClassName() << "::SetBaselineMode* Inconsistent input." << endl;
+  cout << " mode:" << mode << " n:" << n << " nrms:" << nrms << " fpr:" << fpr << endl;
+  cout << " Will continue with current settings : mode=" << mode << " n=" << n << " nrms=" << nrms << " fpr=" << fpr << endl;
+  return;
+ }
+
+ if (mode<3)
+ {
+  nrms=-1;
+  fpr=-1;
+ }
+ if (!mode || mode==3) n=-1;
+
+ fBasemode=mode;
+ fBlocksize=n;
+ fNrms=nrms;
+ fFPR=fpr;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetNbins24(Int_t n)
@@ -201,6 +280,10 @@ void RnoMonitor::SetNbins24(Int_t n)
 void RnoMonitor::Exec(Option_t* opt)
 {
 // Implementation of the monitoring procedures.
+//
+// Note : The determination of the final bin values and errors is performed
+//        in the member function WriteHistograms() after all data 
+//        have been processed.
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));
@@ -225,8 +308,9 @@ void RnoMonitor::Exec(Option_t* opt)
  TString sxname="none";
  TString varname="none";
  TString monval="none";
- Float_t val=0;
+ Double_t val=0;
  Double_t time=0; // Time in fractional hours
+ Double_t x=0; // The x value of a point in the graph
 
  // The daily 24 hour monitoring histograms
  TH1F* hut24=0;
@@ -250,11 +334,16 @@ void RnoMonitor::Exec(Option_t* opt)
 
   ista=antx->GetStation();
   ichan=antx->GetNumber(-1);
+
+  // Check for the user selected station and channel numbers
+  if (fSta>=0 && ista!=fSta) continue;
+  if (fChan>=0 && ichan!=fChan) continue;
    
   sx=antx->GetSample(fDevSample);
 
   if (!sx) continue;
 
+  // Construct the text for the monitored observable
   sxname=sx->GetName();
   if (!fVarIndex) fVarIndex=sx->GetIndex(fVarName);
   varname=sx->GetVariableName(fVarIndex);
@@ -262,33 +351,46 @@ void RnoMonitor::Exec(Option_t* opt)
   monval+="[";
   if (!fVarFunc)
   {
-   if (fAvMode=="Mean") val=sx->GetMean(fVarIndex);
-   if (fAvMode=="Median") val=sx->GetMedian(fVarIndex);
-   if (fAvMode=="RMS") val=sx->GetRMS(fVarIndex);
-   if (fAvMode=="SpreadMean") val=sx->GetSpread(fVarIndex,1);
-   if (fAvMode=="SpreadMedian") val=sx->GetSpread(fVarIndex,0);
-   if (fAvMode=="RMSdeviation") val=sx->GetSigma(fVarIndex,0);
    monval+=varname;
   }
   else
   {
-   fValues.Reset();
-   for (Int_t ival=1; ival<=sx->GetN(); ival++)
-   {
-    val=sx->GetEntry(ival,fVarIndex);
-    val=fVarFunc->Eval(val);
-    fValues.Enter(val);
-   }
-   if (fAvMode=="Mean") val=fValues.GetMean(1);
-   if (fAvMode=="Median") val=fValues.GetMedian(1);
-   if (fAvMode=="RMS") val=fValues.GetRMS(1);
-   if (fAvMode=="SpreadMean") val=fValues.GetSpread(1,1);
-   if (fAvMode=="SpreadMedian") val=fValues.GetSpread(1,0);
-   if (fAvMode=="RMSdeviation") val=fValues.GetSigma(1,0);
    monval+=fVarFunc->GetExpFormula("p");
    monval.ReplaceAll("x",varname);
   }
   monval+="]";
+
+  // Perform the (Bayesian) Block baseline correction if requested
+  if (fBasemode)
+  {
+   fGin=fEvt->GetSamplingGraph(ista,ichan);
+   if (fBasemode==3)
+   {
+    fBB.GetBlocks(fGin,fNrms,fFPR,&fHblock);
+   }
+   else
+   {
+    fBB.GetBlocks(&fGin,&fHblock,fBlocksize,fBasemode-1);
+   }
+   fBB.Add(&fGin,&fHblock,&fGout,-1);
+  }
+
+  // Construct the sample with the selected statistic values 
+  fValues.Reset();
+  for (Int_t ival=1; ival<=sx->GetN(); ival++)
+  {
+   val=sx->GetEntry(ival,fVarIndex);
+   if (fBasemode) fGout.GetPoint(ival-1,x,val);
+   if (fVarFunc) val=fVarFunc->Eval(val);
+   fValues.Enter(val);
+  }
+
+  if (fAvMode=="Mean")         val=fValues.GetMean(1);
+  if (fAvMode=="Median")       val=fValues.GetMedian(1);
+  if (fAvMode=="RMS")          val=fValues.GetRMS(1);
+  if (fAvMode=="SpreadMean")   val=fValues.GetSpread(1,1);
+  if (fAvMode=="SpreadMedian") val=fValues.GetSpread(1,0);
+  if (fAvMode=="RMSdeviation") val=fValues.GetSigma(1,0);
 
   str="hUT24-S";
   str+=ista;
@@ -310,7 +412,9 @@ void RnoMonitor::Exec(Option_t* opt)
    str.Form("Daily monitoring (%-.3g min. periods) of Station%-i ",bsize,ista);
    str+=antx->GetName();
    str2=str;
-   str2+=";Universal Time (hours);Averaged ";
+   str2+=";Universal Time (hours);";
+   if (fBasemode) str2+="*";
+   str2+="Averaged ";
    str2+=monval;
    hut24->SetTitle(str2);
    fHistos.Add(hut24);
@@ -336,7 +440,9 @@ void RnoMonitor::Exec(Option_t* opt)
    str.Form("Daily monitoring (%-.3g min. periods) of Station%-i ",bsize,ista);
    str+=antx->GetName();
    str2=str;
-   str2+=";Summit Local Time (hours);Averaged ";
+   str2+=";Summit Local Time (hours);";
+   if (fBasemode) str2+="*";
+   str2+="Averaged ";
    str2+=monval;
    hlt24->SetTitle(str2);
    fHistos.Add(hlt24);
@@ -362,7 +468,9 @@ void RnoMonitor::Exec(Option_t* opt)
    str.Form("Daily monitoring (%-.3g min. periods) of Station%-i ",bsize,ista);
    str+=antx->GetName();
    str2=str;
-   str2+=";Summit Mean Siderial Time (hours);Averaged ";
+   str2+=";Summit Mean Siderial Time (hours);";
+   if (fBasemode) str2+="*";
+   str2+="Averaged ";
    str2+=monval;
    hlmst24->SetTitle(str2);
    fHistos.Add(hlmst24);
@@ -383,14 +491,30 @@ void RnoMonitor::Exec(Option_t* opt)
 
  if (fFirst)
  {
+  TString sbase="None";
+  if (fBasemode==1) sbase="Mean of consecutive sample blocks";
+  if (fBasemode==2) sbase="Median of consecutive sample blocks";
+  if (fBasemode==3) sbase="Bayesian Blocks";
   cout << endl;
   cout << " *" << ClassName() << "::Exec* Processor parameter settings." << endl;
   cout << " Processor name ............ : " << GetName() << endl;
   cout << " Processor title ........... : " << GetTitle() << endl;
   cout << " Device class .............. : " << fDevClass << endl;
+  cout << " Station number ............ : " << fSta << " (<0 means all stations)" << endl;
+  cout << " Channel number ............ : " << fChan << " (<0 means all channels)" << endl;
   cout << " Device sample ............. : Index=" << fDevSample << " Name=" << sxname << endl; 
   cout << " Sample variable ........... : Index=" << fVarIndex << " Name=" << varname << endl;
   cout << " Monitor value ............. : " << monval << endl;
+  cout << " Baseline correction mode .. : " << fBasemode << " (" << sbase << ")" << endl;
+  if (fBasemode==1 || fBasemode==2)
+  {
+   cout << " Baseline block size ....... : " << fBlocksize << " samples" << endl;
+  }
+  if (fBasemode==3)
+  {
+   cout << " Bayesian Block nrms ....... : " << fNrms << endl;
+   cout << " Bayesian Block FPR ........ : " << fFPR << endl;
+  }
   cout << " Number of bins for 24 hours : " << fNbins24 << endl;
 
   fFirst=kFALSE;
@@ -415,10 +539,22 @@ void RnoMonitor::ListHistograms() const
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::WriteHistograms(TString filename)
 {
-// Write all the generated histograms to a ROOT file with the specified filename.
+// Write the baseline parameter settings and all the generated histograms
+// to a ROOT file with the specified filename.
+
+ // The Tree with the baseline parameter settings
+ TTree Parameters("Parameters","Parameter settings");
+ Parameters.Branch("BaseMode",&fBasemode,"BaseMode/I Baseline");
+ Parameters.Branch("Blocksize",&fBlocksize,"Blocksize/I # samples");
+ Parameters.Branch("Nrms",&fNrms,"Nrms/D # RMS deviations");
+ Parameters.Branch("FPR",&fFPR,"FPR/D False Positive Rate");
+ Parameters.Fill();
 
  // The output file for the produced histograms
  TFile fout(filename,"RECREATE","RnoMonitor results");
+
+ // Write the parameter settings to the output file
+ Parameters.Write();
 
  // Write all the histos to the output file
  Int_t nh=fHistos.GetEntries();
@@ -456,7 +592,8 @@ void RnoMonitor::WriteHistograms(TString filename)
     if (!nk) continue;
 
     mu=hx->GetBinContent(ibin)/double(nk);
-    sumw2=arrw2->At(ibin);
+    sumw2=0;
+    if (arrw2) sumw2=arrw2->At(ibin);
     msq=sumw2/double(nk);
     rms=sqrt(msq);
 
@@ -464,7 +601,8 @@ void RnoMonitor::WriteHistograms(TString filename)
     if (fAvMode=="RMS") cval=rms;
     
     var=msq-pow(mu,2);
-    s=sqrt(fabs(var));
+    s=0;
+    if (var>=0) s=sqrt(var);
 
     hx->SetBinContent(ibin,cval);
     hx->SetBinError(ibin,s);
@@ -475,6 +613,7 @@ void RnoMonitor::WriteHistograms(TString filename)
   hx->Write(); // Write this histogram to the output file
  }
 
+ // Flush the output file buffers to disk
  fout.Write();
 
  cout << endl;
