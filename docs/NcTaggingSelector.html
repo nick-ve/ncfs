@@ -8,7 +8,7 @@
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>NcTaggingStats</title>
+<title>NcTaggingSelector</title>
 <meta name="rating" content="General" />
 <meta name="objecttype" content="Manual" />
 <meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
@@ -19,7 +19,7 @@
 <body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
 <div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
 <a name="TopOfPage"></a>
-<script type="text/javascript">WriteFollowPageBox('class NcTaggingStats','','NcTaggingStats.h');</script>
+<script type="text/javascript">WriteFollowPageBox('class NcTaggingSelector','','NcTaggingSelector.h');</script>
 <div id="toplinks">
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Quick Links:</span>
@@ -39,31 +39,31 @@ return false;}
 </div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Source:</span>
-<a class="descrheadentry" href="src/NcTaggingStats.h.html">header file</a>
-<a class="descrheadentry" href="src/NcTaggingStats.cxx.html">source file</a>
-<a class="descrheadentry" href="NcTaggingStats_Tree.pdf">inheritance tree (.pdf)</a> 
+<a class="descrheadentry" href="src/NcTaggingSelector.h.html">header file</a>
+<a class="descrheadentry" href="src/NcTaggingSelector.cxx.html">source file</a>
+<a class="descrheadentry" href="NcTaggingSelector_Tree.pdf">inheritance tree (.pdf)</a> 
 </div></div>
 <div class="descrhead"><div class="descrheadcontent">
 <span class="descrtitle">Sections:</span>
-<a class="descrheadentry" href="#NcTaggingStats:description">class description</a> 
-<a class="descrheadentry" href="#NcTaggingStats:Function_Members">function members</a>
-<a class="descrheadentry" href="#NcTaggingStats:Data_Members">data members</a>
-<a class="descrheadentry" href="#NcTaggingStats:Class_Charts">class charts</a>
+<a class="descrheadentry" href="#NcTaggingSelector:description">class description</a> 
+<a class="descrheadentry" href="#NcTaggingSelector:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcTaggingSelector:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcTaggingSelector:Class_Charts">class charts</a>
 </div></div>
 </div>
 <div class="location">
 <a class="locationlevel" href="index.html">NCFS</a>
  &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
- &#187; <a class="locationlevel" href="#TopOfPage">NcTaggingStats</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcTaggingSelector</a>
 </div>
-<div class="dropshadow"><div class="withshadow"><h1><a name="NcTaggingStats:description"></a>class NcTaggingStats: public <a href="./NcTaggingBase.html">NcTaggingBase</a></h1>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcTaggingSelector:description"></a>class NcTaggingSelector: public <a href="./NcTaggingBase.html">NcTaggingBase</a></h1>
 <div class="classdescr">
 <pre>
- <a href="./NcTaggingStats.html#NcTaggingStats:Class" title="TClass* NcTaggingStats::Class()">Class</a> <a href="./NcTaggingStats.html">NcTaggingStats</a>
- <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> derived class to perform statistics of event classification tags.
+ <a href="./NcTaggingSelector.html#NcTaggingSelector:Class" title="TClass* NcTaggingSelector::Class()">Class</a> <a href="./NcTaggingSelector.html">NcTaggingSelector</a>
+ <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a> derived class to perform event selection based on the event classification tag settings.
 
- This class is the event-by-event processor version of <a href="./NcDataStreamStats.html">NcDataStreamStats</a>, and has to be
- run as a sub-task within an <a href="./NcJob.html">NcJob</a> environment that performs event-by-event analysis.
+ This class has to be run as a sub-task within an <a href="./NcJob.html">NcJob</a> environment that performs
+ event-by-event analysis.
 
  During data taking or online/offline processing one usually records
  various tags for each event to indicate which trigger or filter criteria
@@ -83,20 +83,26 @@ return false;}
  This results in a downscale factor of 1000 for that tag stream.
 
  This class provides a processor to investigate the tag settings on an event-by-event
- basis and provide an overview of the various event tags that were encountered
- and the corresponding event rates.
+ basis and provide an event selection based on these tag settings.
+ The resulting <span class="string">"select"</span> or <span class="string">"reject"</span> decision will be indicated in the corresponding
+ <a href="./NcEvent.html">NcEvent</a> (or derived) structure via the <a href="./NcEvent.html">NcEvent</a>::<a href="./NcEvent.html#NcEvent:SetSelectLevel" title="void NcEvent::SetSelectLevel(Int_t level)">SetSelectLevel</a>() and is later on
+ available via the <a href="./NcEvent.html">NcEvent</a>::<a href="./NcEvent.html#NcEvent:GetSelectLevel" title="Int_t NcEvent::GetSelectLevel()">GetSelectLevel</a>() during subsequent data analysis.
 
- In addition to this, it offers also the possibility to tailor a re-tagging procedure,
- of which the results are provided next to the regular tag statistics.
- Via the memberfunctions <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() and <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() the user can (de)activate
- certain tags in order to perform a re-tagging to investigate the effect in view of
- defining specific event samples or background reduction.
+ Via the memberfunctions <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() and <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() the user can specify
+ certain tags in order to tailor the selection criteria.
+ At least one of the tags that have been specified via <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() needs to have
+ the corresponding tag criteria fulfilled (i.e. the <span class="string">"pass"</span> indicator set to 1)
+ to mark the event as a candidate for selection.
+ All tags that have been specified via <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() need to have the corresponding
+ tag criteria NOT fulfilled (i.e. the <span class="string">"pass"</span> indicator set to 0) in order not to reject
+ the candidate event.
+
  In case none of these memberfunctions <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() or <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() are invoked,
- all tags are regarded to be active in the re-tagging procedure.
- In case <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() is invoked, all tags that are not explicitly activated by the user
- will be considered de-activated in the re-tagging procedure.
- It should be noted that the tags which are explicitly de-activated via <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>()
- can not be activated anymore via invokation of <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>().
+ no check on the event tag settings will be performed, and the event selection level
+ will remain unchanged.
+
+ It should be noted that the tags which are specified via <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>()
+ can not be specified anymore via invokation of <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>().
  Please refer to the docs of these memberfunctions for further details.
 
  In order to obtain the required data, the <a href="./NcEvent.html">NcEvent</a> (or derived) structure should
@@ -121,7 +127,7 @@ return false;}
     <span class="string">"pass"</span> indicator and <span class="string">"write"</span> indicator (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>, respectively)
     are specified via the memberfunction <a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>().
 
- The examples below show how to configure an <a href="./NcTaggingStats.html">NcTaggingStats</a> object, that is meant to be
+ The examples below show how to configure an <a href="./NcTaggingSelector.html">NcTaggingSelector</a> object, that is meant to be
  run as a sub-task in an <a href="./NcJob.html">NcJob</a> (derived) environment for an event-by-event analysis.
 
  Example 1:
@@ -133,25 +139,25 @@ return false;}
  // The <span class="string">"pass"</span> and <span class="string">"write"</span> tags were named <span class="string">"condition"</span> and <span class="string">"prescale"</span>, respectively.
 
  // Initialisation to perform an analysis of IceCube event filter statistics
- <a href="./NcTaggingStats.html">NcTaggingStats</a>* fstat=new <a href="./NcTaggingStats.html">NcTaggingStats</a>(<span class="string">"FilterStats"</span>,<span class="string">"IceCube event filter statistics"</span>);
+ <a href="./NcTaggingSelector.html">NcTaggingSelector</a>* fsel=new <a href="./NcTaggingSelector.html">NcTaggingSelector</a>(<span class="string">"FilterSel"</span>,<span class="string">"IceCube event filter selection"</span>);
 
  // Specify that we will access the <a href="./NcDevice.html">NcDevice</a> named <span class="string">"Filter"</span>
  // and that the <span class="string">"pass"</span> indicator is called <span class="string">"condition"</span>
  // and the <span class="string">"write"</span> indicator is called <span class="string">"prescale"</span>
- fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Filter"</span>,<span class="string">"condition"</span>,<span class="string">"prescale"</span>);
+ fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Filter"</span>,<span class="string">"condition"</span>,<span class="string">"prescale"</span>);
 
  // The statement below shows the alternative for a <span class="string">"Trigger"</span> analysis
  // where the trigger tags do not have <span class="string">"pass"</span> nor <span class="string">"write"</span> indicators.
- // fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
+ // fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
 
- // Activate some tags to investigate re-tagging for a selected event sample
- fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);         // Gamma ray Follow Up stream
- fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);        // High-Energy Starting Event stream
- fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>); // Enhanced Starting track alert stream
- fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EHEAlert"</span>);    // Extreme High Energy event alert stream
+ // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+ fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);         // Gamma ray Follow Up stream
+ fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);        // High-Energy Starting Event stream
+ fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>); // Enhanced Starting track alert stream
+ fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EHEAlert"</span>);    // Extreme High Energy event alert stream
 
- // De-activate some tags to investigate re-tagging for background reduction
- // This can be used to de-activate tag names that were activated above
+ // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
+ // This can also be used to de-activate tag names that were activated above
  // because of a matching name pattern.
  fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>); // Extreme High Energy alert Heart Beat stream
 
@@ -164,48 +170,47 @@ return false;}
  // and given the name <span class="string">"Trigger"</span>.
 
  // Initialisation to perform an analysis of RNO-G event trigger statistics
- <a href="./NcTaggingStats.html">NcTaggingStats</a>* trigstat=new <a href="./NcTaggingStats.html">NcTaggingStats</a>(<span class="string">"TriggerStats"</span>,<span class="string">"RNO-G trigger statistics"</span>);
+ <a href="./NcTaggingSelector.html">NcTaggingSelector</a>* trigsel=new <a href="./NcTaggingSelector.html">NcTaggingSelector</a>(<span class="string">"TriggerSel"</span>,<span class="string">"RNO-G event trigger selection"</span>);
 
  // Specify that we will access the <a href="./NcTagger.html">NcTagger</a> (derived) device named <span class="string">"Trigger"</span>
- trigstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>(<span class="string">"Trigger"</span>);
+ trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>(<span class="string">"Trigger"</span>);
 
- // Activate some tags to investigate re-tagging for a selected event sample
- trigstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"radiant"</span>); // RADIANT trigger
- trigstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"lt"</span>);      // Low threshold trigger
+ // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+ trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"radiant"</span>); // RADIANT trigger
+ trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"lt"</span>);      // Low threshold trigger
 
- // De-activate some tags to investigate re-tagging for background reduction
- // This can be used to de-activate tag names that were activated above
+ // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
+ // This can also be used to de-activate tag names that were activated above
  // because of a matching name pattern.
- trigstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"radiant_surface"</span>); // Surface trigger (fictative)
+ trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"radiant_surface"</span>); // Surface trigger (fictative)
 
- Once the user has configured the <a href="./NcTaggingStats.html">NcTaggingStats</a> object, it has to be added as a (sub)task
+
+ Once the user has configured the <a href="./NcTaggingSelector.html">NcTaggingSelector</a> object, it has to be added as a (sub)task
  into the <a href="./NcJob.html">NcJob</a> (derived) environment for the event-by-event analysis.
- The final tagging statistics are obtained by invoking <a href="./NcTaggingStats.html#NcTaggingStats:ShowStatistics" title="void NcTaggingStats::ShowStatistics()">ShowStatistics</a>() after the
- <a href="./NcJob.html">NcJob</a> (based) processing has completed.
 
  Templates for a pure <a href="./NcJob.html">NcJob</a> and an <a href="./NcJob.html">NcJob</a> derived event-by-event task processing
  can be found in /rnopack/macros/analyze.cc and /rnopack/macros/convert.cc, respectively.
 
---- Author: Nick van Eijndhoven 18-jul-2022, IIHE-VUB, Brussel
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:30Z
+--- Author: Nick van Eijndhoven 21-dec-2022, IIHE-VUB, Brussel
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:28Z
 
 </pre></div>
 </div></div>
 
 <div id="functions">
-<h2><a id="NcTaggingStats:Function_Members"></a>Function Members (Methods)</h2>
+<h2><a id="NcTaggingSelector:Function_Members"></a>Function Members (Methods)</h2>
 <div class="access" id="funcpubl"><b>public:</b>
 <table class="func" id="tabfuncpubl" cellspacing="0">
-<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTaggingStats:NcTaggingStats@1">NcTaggingStats</a>(<span class="keyword">const</span> <a href="./NcTaggingStats.html">NcTaggingStats</a>&amp;)</td></tr>
-<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTaggingStats:NcTaggingStats">NcTaggingStats</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTaggingStats"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event tag statistics"</span>)</td></tr>
-<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcTaggingStats:_NcTaggingStats">~NcTaggingStats</a>()</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:NcTaggingSelector@1">NcTaggingSelector</a>(<span class="keyword">const</span> <a href="./NcTaggingSelector.html">NcTaggingSelector</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:NcTaggingSelector">NcTaggingSelector</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTaggingSelector"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event selection"</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:_NcTaggingSelector">~NcTaggingSelector</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:ActivateTag"><span class="baseclass">NcTaggingBase::</span>ActivateTag</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Add"><span class="baseclass">TTask::</span>Add</a>(<a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>* task)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Browse"><span class="baseclass">TTask::</span>Browse</a>(TBrowser* b)</td></tr>
-<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcTaggingStats:Class">Class</a>()</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:Class">Class</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:CleanTasks"><span class="baseclass">TTask::</span>CleanTasks</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Clear"><span class="baseclass">TTask::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -221,7 +226,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingStats:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
@@ -250,7 +255,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
-<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcTaggingStats:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsActive"><span class="baseclass">TTask::</span>IsActive</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TTask:IsFolder"><span class="baseclass">TTask::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
@@ -269,7 +274,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
-<tr class="func"><td class="funcret"><a href="./NcTaggingStats.html">NcTaggingStats</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcTaggingStats:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcTaggingStats.html">NcTaggingStats</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcTaggingSelector.html">NcTaggingSelector</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcTaggingSelector.html">NcTaggingSelector</a>&amp;)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
@@ -293,11 +298,10 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
-<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingStats:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingStats:ShowStatistics">ShowStatistics</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingStats:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingStats:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
@@ -317,7 +321,7 @@ return false;}
 </div>
 
 <div id="datamembers">
-<h2><a name="NcTaggingStats:Data_Members"></a>Data Members</h2>
+<h2><a name="NcTaggingSelector:Data_Members"></a>Data Members</h2>
 <div class="access" id="enumpubl"><b>public:</b>
 <table class="data" id="tabenumpubl" cellspacing="0">
 <tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
@@ -375,7 +379,7 @@ return false;}
 
 </table></div>
 </div>
-<h2><a id="NcTaggingStats:Class_Charts"></a>Class Charts</h2>
+<h2><a id="NcTaggingSelector:Class_Charts"></a>Class Charts</h2>
 <!--INHERITANCE TREE-->
 <table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
 <table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
@@ -392,7 +396,7 @@ return false;}
 </td>
 </tr></table></td>
 <td>&larr;</td><td>
-<center><big><b><tt><a name="NcTaggingStats" href="./NcTaggingStats.html">NcTaggingStats</a></tt></b></big></center>
+<center><big><b><tt><a name="NcTaggingSelector" href="./NcTaggingSelector.html">NcTaggingSelector</a></tt></b></big></center>
 </td>
 <td><table><tr>
 <td></td>
@@ -400,30 +404,26 @@ return false;}
 </tr></table>
 </td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTaggingStats:NcTaggingStats" href="src/NcTaggingStats.cxx.html#XjJriD">NcTaggingStats</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTaggingStats"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event tag statistics"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTaggingSelector:NcTaggingSelector" href="src/NcTaggingSelector.cxx.html#t.sPw">NcTaggingSelector</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTaggingSelector"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event selection"</span>)</span><br />
 <div class="funccomm"><pre> Constructor and initialisation of default parameters.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTaggingStats:_NcTaggingStats" href="src/NcTaggingStats.cxx.html#necy">~NcTaggingStats</a>()</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTaggingSelector:_NcTaggingSelector" href="src/NcTaggingSelector.cxx.html#ZbqEzD">~NcTaggingSelector</a>()</span><br />
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTaggingStats:Exec" href="src/NcTaggingStats.cxx.html#Yu0KP">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTaggingSelector:Exec" href="src/NcTaggingSelector.cxx.html#qUn4ZD">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
 <div class="funccomm"><pre> Perform the tagging analysis.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTaggingStats:ShowStatistics" href="src/NcTaggingStats.cxx.html#zEVIiC">ShowStatistics</a>()</span><br />
-<div class="funccomm"><pre> Provide The final statistics.
-</pre></div>
-</div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTaggingStats:NcTaggingStats" href="src/NcTaggingStats.h.html#KwBMq">NcTaggingStats</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTaggingStats"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event tag statistics"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcTaggingSelector:NcTaggingSelector" href="src/NcTaggingSelector.h.html#D4XiVB">NcTaggingSelector</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcTaggingSelector"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event selection"</span>)</span><br />
 </div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Dec 22 02:59:07 2022 </em><em>&raquo; Last generated: 2022-12-22 02:59</em><br />
+<em>&raquo; Last changed: Thu Dec 22 02:59:06 2022 </em><em>&raquo; Last generated: 2022-12-22 02:59</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

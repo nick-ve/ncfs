@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Jul 26 11:13:25 2022            -->
+<!--   Date: Thu Dec 22 02:59:03 2022            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -56,7 +56,7 @@ return false;}
  &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
  &#187; <a class="locationlevel" href="#TopOfPage">NcDataStreamStats</a>
 </div>
-<div class="dropshadow"><div class="withshadow"><h1><a name="NcDataStreamStats:description"></a>class NcDataStreamStats: public TTask</h1>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcDataStreamStats:description"></a>class NcDataStreamStats: public <a href="./NcTaggingBase.html">NcTaggingBase</a></h1>
 <div class="classdescr">
 <pre>
  <a href="./NcDataStreamStats.html#NcDataStreamStats:Class" title="TClass* NcDataStreamStats::Class()">Class</a> <a href="./NcDataStreamStats.html">NcDataStreamStats</a>
@@ -84,15 +84,15 @@ return false;}
 
  In addition to this, it offers also the possibility to tailor a re-tagging procedure,
  of which the results are provided next to the regular tag statistics.
- Via the memberfunctions <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>() and <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>() the user can (de)activate
+ Via the memberfunctions <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() and <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() the user can (de)activate
  certain tags in order to perform a re-tagging to investigate the effect in view of
  defining specific event samples or background reduction.
- In case none of these memberfunctions <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>() or <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>() are invoked,
+ In case none of these memberfunctions <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() or <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() are invoked,
  all tags are regarded to be active in the re-tagging procedure.
- In case <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>() is invoked, all tags that are not explicitly activated by the user
+ In case <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() is invoked, all tags that are not explicitly activated by the user
  will be considered de-activated in the re-tagging procedure.
- It should be noted that the tags which are explicitly de-activated via <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>()
- can not be activated anymore via invokation of <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>().
+ It should be noted that the tags which are explicitly de-activated via <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>()
+ can not be activated anymore via invokation of <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>().
  Please refer to the docs of these memberfunctions for further details.
 
  The input data is specified via the memberfunction <a href="./NcDataStreamStats.html#NcDataStreamStats:AddInputFile" title="void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)">AddInputFile</a>().
@@ -107,7 +107,7 @@ return false;}
     These devices have pre-defined memberfunctions and an internal data structure
     which is tailored for the handling of event tags.
     Specification of the device to be investigated is performed via invokation of
-    the memberfunction <a href="./NcDataStreamStats.html#NcDataStreamStats:SetDevice" title="void NcDataStreamStats::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>().
+    the memberfunction <a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>().
 
  2) A generic <a href="./NcDevice.html">NcDevice</a>. (Not recommended; Only for backward compatibility with old data files)
     For a generic <a href="./NcDevice.html">NcDevice</a> object to serve as a tagging device, the user has to create a device
@@ -118,7 +118,7 @@ return false;}
     (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>) are often used.
     The name of the required device (e.g. <span class="string">"Filter"</span>) and the naming conventions of the
     <span class="string">"pass"</span> indicator and <span class="string">"write"</span> indicator (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>, respectively)
-    are specified via the memberfunction <a href="./NcDataStreamStats.html#NcDataStreamStats:SetDeviceNames" title="void NcDataStreamStats::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>().
+    are specified via the memberfunction <a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>().
 
  Once the user has provided all necessary information, the analysis is performed
  by invoking the statement <span class="string">"ExecuteTask()"</span> as indicated in the example below.
@@ -144,7 +144,7 @@ return false;}
  gSystem-&gt;Load(<span class="string">"icepack"</span>);
 
  // Initialisation to perform an analysis of IceCube event filter statistics
- <a href="./NcDataStreamStats.html">NcDataStreamStats</a> fstat;
+ <a href="./NcDataStreamStats.html">NcDataStreamStats</a> fstat(<span class="string">"FilterStats"</span>,<span class="string">"IceCube event filter statistics"</span>);
 
  fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:AddInputFile" title="void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)">AddInputFile</a>(<span class="string">"*.icepack"</span>,<span class="string">"T"</span>,<span class="string">"IceEvent"</span>);
 
@@ -156,20 +156,22 @@ return false;}
  // Specify that we will access the <a href="./NcDevice.html">NcDevice</a> named <span class="string">"Filter"</span>
  // and that the <span class="string">"pass"</span> indicator is called <span class="string">"condition"</span>
  // and the <span class="string">"write"</span> indicator is called <span class="string">"prescale"</span>
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetDeviceNames" title="void NcDataStreamStats::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Filter"</span>,<span class="string">"condition"</span>,<span class="string">"prescale"</span>);
+ fstat.<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Filter"</span>,<span class="string">"condition"</span>,<span class="string">"prescale"</span>);
 
  // The statement below shows the alternative for a <span class="string">"Trigger"</span> analysis
  // where the trigger tags do not have <span class="string">"pass"</span> nor <span class="string">"write"</span> indicators.
- // fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetDeviceNames" title="void NcDataStreamStats::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
+ // fstat.<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
 
  // Activate some tags to investigate re-tagging for a selected event sample
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);         // Gamma ray Follow Up stream
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);        // High-Energy Starting Event stream
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>); // Enhanced Starting track alert stream
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EHEAlert"</span>);    // Extreme High Energy event alert stream
+ fstat.<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);         // Gamma ray Follow Up stream
+ fstat.<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);        // High-Energy Starting Event stream
+ fstat.<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>); // Enhanced Starting track alert stream
+ fstat.<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EHEAlert"</span>);    // Extreme High Energy event alert stream
 
  // De-activate some tags to investigate re-tagging for background reduction
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>); // Extreme High Energy alert Heart Beat stream
+ // This can also be used to de-activate tag names that were activated above
+ // because of a matching name pattern.
+ fstat.<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>); // Extreme High Energy alert Heart Beat stream
 
  // Perform the analysis.
  fstat.<a href="./#TTask:ExecuteTask" title="void TTask::ExecuteTask(Option_t* option=&quot;0&quot;)">ExecuteTask</a>();
@@ -186,30 +188,32 @@ return false;}
  gSystem-&gt;Load(<span class="string">"rnopack"</span>);
 
  // Initialisation to perform an analysis of RNO-G event filter statistics
- <a href="./NcDataStreamStats.html">NcDataStreamStats</a> fstat;
+ <a href="./NcDataStreamStats.html">NcDataStreamStats</a> trigstat(<span class="string">"TriggerStats"</span>,<span class="string">"RNO-G trigger statistics"</span>);
 
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:AddInputFile" title="void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)">AddInputFile</a>(<span class="string">"*.rnopack"</span>,<span class="string">"T"</span>,<span class="string">"Events"</span>);
+ trigstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:AddInputFile" title="void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)">AddInputFile</a>(<span class="string">"*.rnopack"</span>,<span class="string">"T"</span>,<span class="string">"Events"</span>);
 
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ListInputFiles" title="void NcDataStreamStats::ListInputFiles(Option_t* opt=&quot;&quot;)">ListInputFiles</a>();
+ trigstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ListInputFiles" title="void NcDataStreamStats::ListInputFiles(Option_t* opt=&quot;&quot;)">ListInputFiles</a>();
 
  // Provide a progress output line every 1000 events
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetPrintFrequency" title="void NcDataStreamStats::SetPrintFrequency(Int_t m)">SetPrintFrequency</a>(1000);
+ trigstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetPrintFrequency" title="void NcDataStreamStats::SetPrintFrequency(Int_t m)">SetPrintFrequency</a>(1000);
 
  // Specify that we will access the <a href="./NcTagger.html">NcTagger</a> (derived) device named <span class="string">"Trigger"</span>
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:SetDevice" title="void NcDataStreamStats::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>(<span class="string">"Trigger"</span>);
+ trigstat.<a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>(<span class="string">"Trigger"</span>);
 
- // Activate some (fictative) tags to investigate re-tagging for a selected event sample
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"LPDA"</span>); // Surface LPDA trigger
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"PA"</span>);   // Deep ice Phased Array trigger
+ // Activate some tags to investigate re-tagging for a selected event sample
+ trigstat.<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"radiant"</span>); // RADIANT trigger
+ trigstat.<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"lt"</span>);      // Low threshold trigger
 
- // De-activate some (fictative) tags to investigate re-tagging for background reduction
- fstat.<a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"CR"</span>); // Cosmic Ray trigger
+ // De-activate some tags to investigate re-tagging for background reduction
+ // This can be used to de-activate tag names that were activated above
+ // because of a matching name pattern.
+ trigstat.<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"radiant_surface"</span>); // Surface trigger (fictative)
 
  // Perform the analysis.
- fstat.<a href="./#TTask:ExecuteTask" title="void TTask::ExecuteTask(Option_t* option=&quot;0&quot;)">ExecuteTask</a>();
+ trigstat.<a href="./#TTask:ExecuteTask" title="void TTask::ExecuteTask(Option_t* option=&quot;0&quot;)">ExecuteTask</a>();
 
 --- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  10:29Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 21, 2022  12:49Z
 
 </pre></div>
 </div></div>
@@ -223,7 +227,7 @@ return false;}
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:_NcDataStreamStats">~NcDataStreamStats</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:ActivateTag">ActivateTag</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:ActivateTag"><span class="baseclass">NcTaggingBase::</span>ActivateTag</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Add"><span class="baseclass">TTask::</span>Add</a>(<a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>* task)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:AddInputFile">AddInputFile</a>(TString file, TString tree, TString branch)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -236,7 +240,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Continue"><span class="baseclass">TTask::</span>Continue</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:DeactivateTag">DeactivateTag</a>(TString name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag"><span class="baseclass">NcTaggingBase::</span>DeactivateTag</a>(TString name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -307,12 +311,12 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakin"><span class="baseclass">TTask::</span>SetBreakin</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakin = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakout"><span class="baseclass">TTask::</span>SetBreakout</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakout = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetDevice">SetDevice</a>(TString dev, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> pass = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> write = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetDeviceNames">SetDeviceNames</a>(TString dev, TString pass, TString write)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetDevice"><span class="baseclass">NcTaggingBase::</span>SetDevice</a>(TString dev, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> pass = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> write = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames"><span class="baseclass">NcTaggingBase::</span>SetDeviceNames</a>(TString dev, TString pass, TString write)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetMaxEvt">SetMaxEvt</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDataStreamStats:SetMaxTag">SetMaxTag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetMaxTag"><span class="baseclass">NcTaggingBase::</span>SetMaxTag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
@@ -335,6 +339,7 @@ return false;}
 <div class="access" id="funcprot"><b>protected:</b>
 <table class="func" id="tabfuncprot" cellspacing="0">
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:ListStatistics"><span class="baseclass">NcTaggingBase::</span>ListStatistics</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
 
 </table></div>
@@ -365,24 +370,39 @@ return false;}
 </table></div>
 <div class="access" id="dataprot"><b>protected:</b>
 <table class="data" id="tabdataprot" cellspacing="0">
-<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcDataStreamStats:fAct"></a>fAct</td><td class="datadesc">Array with activated tags</td></tr>
+<tr class="datainh"><td class="datatype">TArrayI</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fAcombis"><span class="baseclass">NcTaggingBase::</span>fAcombis</a></td><td class="datadesc">(User reduced) combined passing and writing flags per event for the encountered tags</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fAct"><span class="baseclass">NcTaggingBase::</span>fAct</a></td><td class="datadesc">Array with activated tags</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fActive"><span class="baseclass">TTask::</span>fActive</a></td><td class="datadesc">true if task is active</td></tr>
+<tr class="datainh"><td class="datatype">TArrayI</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fApass"><span class="baseclass">NcTaggingBase::</span>fApass</a></td><td class="datadesc">Passing flags per event for the encountered tags</td></tr>
+<tr class="datainh"><td class="datatype">TArrayI</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fAwrites"><span class="baseclass">NcTaggingBase::</span>fAwrites</a></td><td class="datadesc">Writing flags per event for the encountered tags</td></tr>
 <tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fBranchname"></a>fBranchname</td><td class="datadesc">The name of the Branch containing the NcEvent (or derived) data structures</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcSignal.html">NcSignal</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fCombis"><span class="baseclass">NcTaggingBase::</span>fCombis</a></td><td class="datadesc">(User reduced) combined passing and writing statistics for the encountered tags</td></tr>
 <tr class="data"><td class="datatype">TChain*</td><td class="dataname"><a name="NcDataStreamStats:fData"></a>fData</td><td class="datadesc">The master data Chain used for the analysis</td></tr>
-<tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcDataStreamStats:fDeact"></a>fDeact</td><td class="datadesc">Array with de-activated tags</td></tr>
-<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fDevname"></a>fDevname</td><td class="datadesc">The name of the NcDevice that contains the various event tags</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fDeact"><span class="baseclass">NcTaggingBase::</span>fDeact</a></td><td class="datadesc">Array with de-activated tags</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fDevname"><span class="baseclass">NcTaggingBase::</span>fDevname</a></td><td class="datadesc">The name of the NcDevice that contains the various event tags</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcEvent.html">NcEvent</a>*</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fEvt"><span class="baseclass">NcTaggingBase::</span>fEvt</a></td><td class="datadesc">The current event</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcEvent.html">NcEvent</a>*</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fEvtFirst"><span class="baseclass">NcTaggingBase::</span>fEvtFirst</a></td><td class="datadesc">The event that occurred first in time</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcEvent.html">NcEvent</a>*</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fEvtLast"><span class="baseclass">NcTaggingBase::</span>fEvtLast</a></td><td class="datadesc">The event that occurred last in time</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fFirst"><span class="baseclass">NcTaggingBase::</span>fFirst</a></td><td class="datadesc">Flag to indicate first invokation of Exec()</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDataStreamStats:fMaxevt"></a>fMaxevt</td><td class="datadesc">Maximum number of events to be processed</td></tr>
-<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDataStreamStats:fMaxtag"></a>fMaxtag</td><td class="datadesc">Maximum number of tags to be processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fMaxtag"><span class="baseclass">NcTaggingBase::</span>fMaxtag</a></td><td class="datadesc">Maximum number of tags to be processed</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#TMatrixF">TMatrixF</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fMcombis"><span class="baseclass">NcTaggingBase::</span>fMcombis</a></td><td class="datadesc">The tagging matrix with the (User reduced) combined passing and writing flags statistics</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#TMatrixF">TMatrixF</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fMpass"><span class="baseclass">NcTaggingBase::</span>fMpass</a></td><td class="datadesc">The tagging matrix with the passing flags statistics</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#TMatrixF">TMatrixF</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fMwrites"><span class="baseclass">NcTaggingBase::</span>fMwrites</a></td><td class="datadesc">The tagging matrix with the writing flags statistics</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fNevt"><span class="baseclass">NcTaggingBase::</span>fNevt</a></td><td class="datadesc">The number of events that were tagged</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fNevtComb"><span class="baseclass">NcTaggingBase::</span>fNevtComb</a></td><td class="datadesc">Number of user reduced events via selected re-tagging</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
-<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fPassname"></a>fPassname</td><td class="datadesc">Name of the tag passing indicator</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcSignal.html">NcSignal</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fPass"><span class="baseclass">NcTaggingBase::</span>fPass</a></td><td class="datadesc">Passing statistics for the encountered tags</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fPassname"><span class="baseclass">NcTaggingBase::</span>fPassname</a></td><td class="datadesc">Name of the tag passing indicator</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDataStreamStats:fPfreq"></a>fPfreq</td><td class="datadesc">The print frequency for producing a progress output line</td></tr>
 <tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
-<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcDataStreamStats:fWritename"></a>fWritename</td><td class="datadesc">Name of the tag writing indicator</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fWritename"><span class="baseclass">NcTaggingBase::</span>fWritename</a></td><td class="datadesc">Name of the tag writing indicator</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./NcSignal.html">NcSignal</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fWrites"><span class="baseclass">NcTaggingBase::</span>fWrites</a></td><td class="datadesc">Writing statistics for the encountered tags</td></tr>
 <tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBeginTask"><span class="baseclass">TTask::</span>fgBeginTask</a></td><td class="datadesc">pointer to task initiator</td></tr>
 <tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBreakPoint"><span class="baseclass">TTask::</span>fgBreakPoint</a></td><td class="datadesc">pointer to current break point</td></tr>
 
@@ -394,7 +414,15 @@ return false;}
 <table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
 <td><table><tr>
 <td bgcolor="#f7f7f7" align="right">
+<table><tr><td><table><tr>
+<td bgcolor="#efefef" align="right">
 <tt>TTask</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><tt><a name="NcTaggingBase" href="./NcTaggingBase.html">NcTaggingBase</a></tt></center>
+</td>
+</tr></table>
+</td>
 </tr></table></td>
 <td>&larr;</td><td>
 <center><big><b><tt><a name="NcDataStreamStats" href="./NcDataStreamStats.html">NcDataStreamStats</a></tt></b></big></center>
@@ -405,7 +433,7 @@ return false;}
 </tr></table>
 </td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDataStreamStats:NcDataStreamStats" href="src/NcDataStreamStats.cxx.html#Ni7fqE">NcDataStreamStats</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcDataStreamStats"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event tag statistics"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDataStreamStats:NcDataStreamStats" href="src/NcDataStreamStats.cxx.html#N0iGbD">NcDataStreamStats</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcDataStreamStats"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Event tag statistics"</span>)</span><br />
 <div class="funccomm"><pre> Constructor and initialisation of default parameters.
 </pre></div>
 </div>
@@ -413,7 +441,7 @@ return false;}
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDataStreamStats:NcDataStreamStats@1" href="src/NcDataStreamStats.cxx.html#ccI75">NcDataStreamStats</a>(<span class="keyword">const</span> <a href="./NcDataStreamStats.html">NcDataStreamStats</a>&amp; q)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDataStreamStats:NcDataStreamStats@1" href="src/NcDataStreamStats.cxx.html#FaFgiE">NcDataStreamStats</a>(<span class="keyword">const</span> <a href="./NcDataStreamStats.html">NcDataStreamStats</a>&amp; q)</span><br />
 <div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor
 </pre></div>
 </div>
@@ -446,105 +474,15 @@ return false;}
  The default constructor has set n=0 which means no limitation.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetMaxTag" href="src/NcDataStreamStats.cxx.html#oxDpsB">SetMaxTag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
-<div class="funccomm"><pre> Set the maximum number of tags to be processed.
- The default constructor has set n=99.
-</pre></div>
-</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetPrintFrequency" href="src/NcDataStreamStats.cxx.html#XeGJFD">SetPrintFrequency</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m)</span><br />
 <div class="funccomm"><pre> Set print frequency to provide a progress output line every <span class="string">"m"</span> events.
  The default constructor has set m=0 which means that no progress printout is produced.
-</pre></div>
-</div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetDeviceNames" href="src/NcDataStreamStats.cxx.html#pKPhQD">SetDeviceNames</a>(TString dev, TString pass, TString write)</span><br />
-<div class="funccomm"><pre> Set the name of a generic <a href="./NcDevice.html">NcDevice</a> to be investigated and the corresponding names
- of the tag passing and writing indicators.
- Note that the device must have the specific data structure as outlined in
- the general documentation of this class.
-
- It is common that a certain tag has the following two indicators
- pass  : Indicates whether the tag criteria have been fulfilled (1) or not (0)
- write : Indicates whether the event is actually labeled to be written (1) or not (0)
-
- Instead of the names <span class="string">"pass"</span> and <span class="string">"write"</span>, various other naming conventions
- (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>) are often used.
- Via the input arguments <span class="string">"passname"</span> and <span class="string">"writename"</span> one can specify the names
- used by the current experiment.
-
- Notes :
-
- 1) This memberfunction allows the investigation of user defined tagging devices,
-    to be backward compatible with old data files.
-    For new(er) data, the use of <a href="./NcTagger.html">NcTagger</a> (derived) devices is recommended.
- 2) In case passname=<span class="string">"*"</span> and/or writename=<span class="string">"*"</span>, no check will be made for the
-    corresponding indicator setting and a value of 1 will be assumed.
-</pre></div>
-</div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:SetDevice" href="src/NcDataStreamStats.cxx.html#DVmuTE">SetDevice</a>(TString dev, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> pass = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> write = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</span><br />
-<div class="funccomm"><pre> Set the name of an <a href="./NcTagger.html">NcTagger</a> (derived) device and the check modes of the tag
- passing and writing indicators.
-
- The pre-defined tag passing and writing indicators are :
- Pass  : Indicates whether the tag criteria have been fulfilled (1) or not (0)
- <a href="./#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a> : Indicates whether the event is actually labeled to be written (1) or not (0)
-
- In case passcheck=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and/or writecheck=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>, no check will be made for the
- corresponding indicator setting and a value of 1 will be assumed.
-
- The default values are passcheck=<a href="./ListOfTypes.html#Bool_t">kTRUE</a> and writecheck=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:ListInputFiles" href="src/NcDataStreamStats.cxx.html#tNfCqE">ListInputFiles</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Provide an overview of the various input files.
  The input argument <span class="string">"opt"</span> corresponds to the available options of TChain::<a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a>().
  By default opt=<span class="string">""</span>.
-</pre></div>
-</div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:ActivateTag" href="src/NcDataStreamStats.cxx.html#VfQab">ActivateTag</a>(TString name)</span><br />
-<div class="funccomm"><pre> Activate a certain tag for the combined pass*write statistics
- which will enable to study user selected event samples.
- It should be noted that this doesn't affect the results for the
- regular individual <span class="string">"pass"</span> and <span class="string">"write"</span> statistics.
-
- In case the specified <span class="string">"name"</span> matches (part of) a certain tag name, that
- specific tag will be activated.
- All characters in <span class="string">"name"</span> are taken literally, so wildcards are not allowed.
-
- Example :
-
- If name=<span class="string">"LowPt"</span> it would activate both tags <span class="string">"LowPtMuon"</span> and <span class="string">"LowPtPion"</span>.
-
- Notes :
-
- 1) If this memberfunction is not invoked, all tags are regarded as active.
- 2) If this memberfunction is invoked, all tags that are not explicitly activated
-    by the user will be considered de-activated.
- 3) This memberfunction may be invoked several times to activate
-    various tags before executing the task.
- 4) Tags that are explicitly de-activated by the user via invokation of <a href="./NcDataStreamStats.html#NcDataStreamStats:DeactivateTag" title="void NcDataStreamStats::DeactivateTag(TString name)">DeactivateTag</a>()
-    can not be activated anymore.
-</pre></div>
-</div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDataStreamStats:DeactivateTag" href="src/NcDataStreamStats.cxx.html#wjCA6C">DeactivateTag</a>(TString name)</span><br />
-<div class="funccomm"><pre> De-activate a certain tag for the combined pass*write statistics
- which will enable to study background reduction.
- It should be noted that this doesn't affect the results for the
- regular individual <span class="string">"pass"</span> and <span class="string">"write"</span> statistics.
-
- In case the specified <span class="string">"name"</span> matches (part of) a certain tag name, that
- specific tag will be de-activated.
- All characters in <span class="string">"name"</span> are taken literally, so wildcards are not allowed.
-
- Example :
-
- If name=<span class="string">"LowPt"</span> it would de-activate both tags <span class="string">"LowPtMuon"</span> and <span class="string">"LowPtPion"</span>.
-
- Notes :
-
- 1) This memberfunction may be invoked several times to de-activate
-    various tags before executing the task.
- 3) Tags that are explicitly de-activated via this memberfunction
-    can not be activated anymore via invokation of <a href="./NcDataStreamStats.html#NcDataStreamStats:ActivateTag" title="void NcDataStreamStats::ActivateTag(TString name)">ActivateTag</a>().
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcDataStreamStats:Clone" href="src/NcDataStreamStats.cxx.html#O6F31">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
@@ -559,7 +497,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Tue Jul 26 11:13:25 2022 </em><em>&raquo; Last generated: 2022-07-26 11:13</em><br />
+<em>&raquo; Last changed: Thu Dec 22 02:59:04 2022 </em><em>&raquo; Last generated: 2022-12-22 02:59</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
