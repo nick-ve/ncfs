@@ -1381,4 +1381,6 @@
                 Also a new class NcTaggingSelector introduced to enable event selection based on event
                 tagging information, like for instance Trigger and Filter settings.
                 The version indicator in NcVersion has been updated to 5.0.
+22-dec-2022 NvE Bug fixed in NcTaggingSelector. Do not use version 5.0.
+                The version indicator in NcVersion has been updated to 5.1.
 

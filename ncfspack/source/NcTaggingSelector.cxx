@@ -293,6 +293,7 @@ void NcTaggingSelector::Exec(Option_t* opt)
    if (!name.Contains(namex)) continue; 
 
    // Acceptance if the name (pattern) matches and the corresponding tag is set
+   select=-1;
    if (ipass)
    {
     select=1;
