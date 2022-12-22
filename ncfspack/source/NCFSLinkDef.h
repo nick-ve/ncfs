@@ -47,7 +47,6 @@
  #pragma link C++ class NcPsiDistrib+;
  #pragma link C++ class NcVersion+;
  #pragma link C++ class NcVeto+;
- #pragma link C++ class NcDataStreamStats+;
  #pragma link C++ class NcFITSIO+;
  #pragma link C++ class NcDetectorUnit+;
  #pragma link C++ class NcDetector+;
@@ -55,6 +54,9 @@
  #pragma link C++ class NcStokes+;
  #pragma link C++ class NcBlocks+;
  #pragma link C++ class NcTransform+;
+ #pragma link C++ class NcTaggingBase+;
+ #pragma link C++ class NcDataStreamStats+;
  #pragma link C++ class NcTaggingStats+;
+ #pragma link C++ class NcTaggingSelector+;
 #endif
  

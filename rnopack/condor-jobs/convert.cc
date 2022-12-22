@@ -18,6 +18,8 @@
 // search for recurrent astrophysical signals due to Earth's rotation.
 // The produced monitoring histograms are written to an output file
 // which here is specified as monitor.root.
+// The task NcTaggingSelector is used to select only events that were
+// triggered by the RNO-G force_trigger.
 //
 // To run this macro interactively, just do ($ is prompt)
 //
@@ -35,7 +37,7 @@
 // Since the mattak package is not needed here, these warnings may be
 // safely ignored.
 //
-// Nick van Eijndhoven, IIHE-VUB, Brussels, November 17, 2022  12:37Z
+// Nick van Eijndhoven, IIHE-VUB, Brussels, December 22, 2022  02:41Z
 /////////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -90,6 +92,16 @@
  // after completion of the ROOT macro.
  ///////////////////////////////////////////////////////////////////
 
+ // Specify a trigger selection task
+ NcTaggingSelector* trigsel=new NcTaggingSelector("TriggerSel","RNO-G trigger selection");
+ trigsel->SetDevice("Trigger");
+ trigsel->ActivateTag("force");
+ trigsel->DeactivateTag("pps");
+ trigsel->DeactivateTag("ext");
+ trigsel->DeactivateTag("lt");
+ trigsel->DeactivateTag("radiant");
+ trigsel->DeactivateTag("LPDA");
+
  // Add a monitoring task
  RnoMonitor* moni=new RnoMonitor();
  moni->SetDevices("RnoULPDA"); // Only use the upward LPDAs
@@ -98,6 +110,7 @@
  moni->SetBaselineMode(0); // No baseline correction
  moni->SetNbins24(24*4);
 
+ q.Add(trigsel);
  q.Add(moni);
 
  // Perform the conversion and execute subtasks (if any)

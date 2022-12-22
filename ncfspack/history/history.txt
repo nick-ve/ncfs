@@ -1376,4 +1376,9 @@
                 and the memberfunction SetDeviceClass() renamed to SetDevices() to provide more flexibility.
                 The corresponding example macros have been updated accordingly.
                 The version indicator in NcVersion has been updated to 4.11.
+22-dec-2022 NvE New base class NcTaggingBase introduced to centralize event tag processing and the classes
+                NcDataStreamStats and NcTaggingStats derived from it.
+                Also a new class NcTaggingSelector introduced to enable event selection based on event
+                tagging information, like for instance Trigger and Filter settings.
+                The version indicator in NcVersion has been updated to 5.0.
 

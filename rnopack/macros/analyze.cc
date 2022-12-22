@@ -7,6 +7,8 @@
 // search for recurrent astrophysical signals due to Earth's rotation.
 // The produced monitoring histograms are written to an output file
 // which here is specified as monitor.root.
+// The task NcTaggingSelector is used to select only events that were
+// triggered by the RNO-G force_trigger.
 // In addition to this, the task NcTaggingStats is invoked to provide
 // the trigger statistics. 
 //
@@ -18,7 +20,7 @@
 //
 // $root -b -q analyze.cc >output.log
 //
-//--- Nick van Eijndhoven, IIHE-VUB, Brussels, November 17, 2022  12:42Z
+//--- Nick van Eijndhoven, IIHE-VUB, Brussels, December 22, 2022  02:26Z
 //////////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -31,6 +33,16 @@
 
  // Top level job structure
  NcJob job("NcJob","Investigation of RNO-G data in rnopack format");
+
+ // Specify a trigger selection task
+ NcTaggingSelector* trigsel=new NcTaggingSelector("TriggerSel","RNO-G trigger selection");
+ trigsel->SetDevice("Trigger");
+ trigsel->ActivateTag("force");
+ trigsel->DeactivateTag("pps");
+ trigsel->DeactivateTag("ext");
+ trigsel->DeactivateTag("lt");
+ trigsel->DeactivateTag("radiant");
+ trigsel->DeactivateTag("LPDA");
 
  // The monitoring task
  RnoMonitor* moni=new RnoMonitor();
@@ -47,6 +59,7 @@
  trigstat->ActivateTag("lt");      // The Low Threshold trigger 
 
  // Add the task(s) to the top level job structure
+ job.Add(trigsel);
  job.Add(moni);
  job.Add(trigstat);
 

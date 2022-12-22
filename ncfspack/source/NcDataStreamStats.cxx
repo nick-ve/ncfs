@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.                     *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -113,7 +113,7 @@
 // gSystem->Load("icepack");
 //
 // // Initialisation to perform an analysis of IceCube event filter statistics
-// NcDataStreamStats fstat;
+// NcDataStreamStats fstat("FilterStats","IceCube event filter statistics");
 //
 // fstat.AddInputFile("*.icepack","T","IceEvent");
 //
@@ -138,6 +138,8 @@
 // fstat.ActivateTag("EHEAlert");    // Extreme High Energy event alert stream
 //
 // // De-activate some tags to investigate re-tagging for background reduction
+// // This can also be used to de-activate tag names that were activated above
+// // because of a matching name pattern.
 // fstat.DeactivateTag("EHEAlertFilterHB"); // Extreme High Energy alert Heart Beat stream
 //
 // // Perform the analysis.
@@ -155,30 +157,32 @@
 // gSystem->Load("rnopack");
 //
 // // Initialisation to perform an analysis of RNO-G event filter statistics
-// NcDataStreamStats fstat;
+// NcDataStreamStats trigstat("TriggerStats","RNO-G trigger statistics");
 //
-// fstat.AddInputFile("*.rnopack","T","Events");
+// trigstat.AddInputFile("*.rnopack","T","Events");
 //
-// fstat.ListInputFiles();
+// trigstat.ListInputFiles();
 //
 // // Provide a progress output line every 1000 events 
-// fstat.SetPrintFrequency(1000);
+// trigstat.SetPrintFrequency(1000);
 //
 // // Specify that we will access the NcTagger (derived) device named "Trigger"
-// fstat.SetDevice("Trigger");
+// trigstat.SetDevice("Trigger");
 //
-// // Activate some (fictative) tags to investigate re-tagging for a selected event sample
-// fstat.ActivateTag("LPDA"); // Surface LPDA trigger 
-// fstat.ActivateTag("PA");   // Deep ice Phased Array trigger
+// // Activate some tags to investigate re-tagging for a selected event sample
+// trigstat.ActivateTag("radiant"); // RADIANT trigger
+// trigstat.ActivateTag("lt");      // Low threshold trigger
 //
-// // De-activate some (fictative) tags to investigate re-tagging for background reduction
-// fstat.DeactivateTag("CR"); // Cosmic Ray trigger
+// // De-activate some tags to investigate re-tagging for background reduction
+// // This can be used to de-activate tag names that were activated above
+// // because of a matching name pattern.
+// trigstat.DeactivateTag("radiant_surface"); // Surface trigger (fictative)
 //
 // // Perform the analysis.
-// fstat.ExecuteTask();
+// trigstat.ExecuteTask();
 //
 //--- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  10:29Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 21, 2022  12:49Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDataStreamStats.h"
@@ -186,20 +190,14 @@
  
 ClassImp(NcDataStreamStats) // Class implementation to enable ROOT I/O
  
-NcDataStreamStats::NcDataStreamStats(const char* name,const char* title) : TTask(name,title)
+NcDataStreamStats::NcDataStreamStats(const char* name,const char* title) : NcTaggingBase(name,title)
 {
 // Constructor and initialisation of default parameters.
 
  fData=0;
  fBranchname="none";
  fMaxevt=0;
- fMaxtag=99;
  fPfreq=0;
- fDevname="none";
- fPassname="*";
- fWritename="*";
- fAct=0;
- fDeact=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDataStreamStats::~NcDataStreamStats()
@@ -211,23 +209,9 @@ NcDataStreamStats::~NcDataStreamStats()
   delete fData;
   fData=0;
  }
- if (fAct)
- {
-  delete fAct;
-  fAct=0;
- }
- if (fDeact)
- {
-  delete fDeact;
-  fDeact=0;
- }
-
- // Remove the subtasks from the internal TTask list without deleting them
- if (fTasks) fTasks->Clear();
-
 }
 ///////////////////////////////////////////////////////////////////////////
-NcDataStreamStats::NcDataStreamStats(const NcDataStreamStats& q) : TTask(q)
+NcDataStreamStats::NcDataStreamStats(const NcDataStreamStats& q) : NcTaggingBase(q)
 {
 // Copy constructor
 
@@ -235,15 +219,7 @@ NcDataStreamStats::NcDataStreamStats(const NcDataStreamStats& q) : TTask(q)
  if (q.fData) fData=(TChain*)(q.fData->Clone());
  fBranchname=q.fBranchname;
  fMaxevt=q.fMaxevt;
- fMaxtag=q.fMaxtag;
  fPfreq=q.fPfreq;
- fDevname=q.fDevname;
- fPassname=q.fPassname;
- fWritename=q.fWritename;
- fAct=0;
- if (q.fAct) fAct=(TObjArray*)(q.fAct->Clone());
- fDeact=0;
- if (q.fDeact) fDeact=(TObjArray*)(q.fDeact->Clone());
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::Exec(Option_t* opt)
@@ -271,11 +247,8 @@ void NcDataStreamStats::Exec(Option_t* opt)
  cout << " Pass indicator  : " << fPassname << endl;
  cout << " Write indicator : " << fWritename << endl;
 
- // Define a pointer for an event
- NcEvent* evt=0;
-
  // Branch in the tree for the event input
- fData->SetBranchAddress(fBranchname.Data(),&evt);
+ fData->SetBranchAddress(fBranchname.Data(),&fEvt);
 
  Int_t nen=(int)fData->GetEntries();
  cout << endl;
@@ -321,25 +294,24 @@ void NcDataStreamStats::Exec(Option_t* opt)
  }
  cout << endl;
 
- Int_t nevt=0;     // Number of events that were tagged
- Int_t nevtcomb=0; // Number of user reduced events via selected re-tagging
+ fNevt=0;     // Number of events that were tagged
+ fNevtComb=0; // Number of user reduced events via selected re-tagging
 
- NcSignal pass;
  TString title;
  title=fPassname;
  if (title=="*") title="Passing";
  title+=" statistics";
- pass.SetNameTitle(fDevname.Data(),title.Data());
- TArrayI* apass=new TArrayI(fMaxtag);
- TMatrixF* mpass=new TMatrixF(fMaxtag,fMaxtag);
- NcSignal writes;
+ fPass.SetNameTitle(fDevname.Data(),title.Data());
+ fApass.Set(fMaxtag);
+ fMpass.ResizeTo(fMaxtag,fMaxtag);
+ fMpass.Zero();
  title=fWritename;
  if (title=="*") title="Writing";
  title+=" statistics";
- writes.SetNameTitle(fDevname.Data(),title.Data());
- TArrayI* awrites=new TArrayI(fMaxtag);
- TMatrixF* mwrites=new TMatrixF(fMaxtag,fMaxtag);
- NcSignal combis;
+ fWrites.SetNameTitle(fDevname.Data(),title.Data());
+ fAwrites.Set(fMaxtag);
+ fMwrites.ResizeTo(fMaxtag,fMaxtag);
+ fMwrites.Zero();
  title="Combined ";
  if (nact || ndeact) title="User reduced combined ";
  if (fPassname!="*" && fWritename!="*")
@@ -353,17 +325,17 @@ void NcDataStreamStats::Exec(Option_t* opt)
   title+="Passing*Writing";
  }
  title+=" statistics"; 
- combis.SetNameTitle(fDevname.Data(),title.Data());
- TArrayI* acombis=new TArrayI(fMaxtag);
- TMatrixF* mcombis=new TMatrixF(fMaxtag,fMaxtag);
+ fCombis.SetNameTitle(fDevname.Data(),title.Data());
+ fAcombis.Set(fMaxtag);
+ fMcombis.ResizeTo(fMaxtag,fMaxtag);
+ fMcombis.Zero();
 
+ Int_t select=0;
  Int_t ntags=0;
  Int_t jrun=0;
  Int_t jevt=0;
  Int_t perc=0;
  TString name;
- NcEvent* first=0;
- NcEvent* last=0;
  Int_t ipass=0;
  Int_t iwrite=0;
  Int_t combflag=0;
@@ -379,37 +351,41 @@ void NcDataStreamStats::Exec(Option_t* opt)
  for (Int_t ient=0; ient<nen; ient++)
  {
   fData->GetEntry(ient);
-  if (!evt) continue;
+  if (!fEvt) continue;
+
+  // Do not process rejected events
+  select=fEvt->GetSelectLevel();
+  if (select<0) continue;
 
   ntags=0;
-  NcDevice* tagdev=(NcDevice*)evt->GetDevice(fDevname);
+  NcDevice* tagdev=(NcDevice*)fEvt->GetDevice(fDevname);
   if (!tagdev) continue;
 
   ntags=tagdev->GetNhits();
   if (ntags>fMaxtag) ntags=fMaxtag;
 
-  apass->Reset();
-  awrites->Reset();
-  acombis->Reset();
+  fApass.Reset();
+  fAwrites.Reset();
+  fAcombis.Reset();
 
-  jrun=evt->GetRunNumber();
-  jevt=evt->GetEventNumber();
+  jrun=fEvt->GetRunNumber();
+  jevt=fEvt->GetEventNumber();
 
   // Determine the first and last recorded event
-  if (!first) first=new NcEvent(*evt);
-  if (!last) last=new NcEvent(*evt);
-  if (first->GetDifference(evt,"s")<0)
+  if (!fEvtFirst) fEvtFirst=new NcEvent(*fEvt);
+  if (!fEvtLast) fEvtLast=new NcEvent(*fEvt);
+  if (fEvtFirst->GetDifference(fEvt,"s")<0)
   {
-   delete first;
-   first=new NcEvent(*evt);
+   delete fEvtFirst;
+   fEvtFirst=new NcEvent(*fEvt);
   }
-  if (last->GetDifference(evt,"s")>0)
+  if (fEvtLast->GetDifference(fEvt,"s")>0)
   {
-   delete last;
-   last=new NcEvent(*evt);
+   delete fEvtLast;
+   fEvtLast=new NcEvent(*fEvt);
   }
 
-  nevt++;
+  fNevt++;
 
   combflag=0;
   for (Int_t itag=1; itag<=ntags; itag++)
@@ -435,18 +411,18 @@ void NcDataStreamStats::Exec(Option_t* opt)
    }
 
    // Update stats for this tag name
-   pass.AddNamedSlot(name);
-   writes.AddNamedSlot(name);
-   combis.AddNamedSlot(name);
-   pass.AddSignal(ipass,name);
-   idx=pass.GetSlotIndex(name);
-   if (idx && idx<=fMaxtag) apass->AddAt(ipass,idx-1);
-   writes.AddSignal(iwrite,name);
-   idx=writes.GetSlotIndex(name);
-   if (idx && idx<=fMaxtag) awrites->AddAt(iwrite,idx-1);
-   combis.AddSignal(ipass*iwrite,name);
-   idx=combis.GetSlotIndex(name);
-   if (idx && idx<=fMaxtag) acombis->AddAt(ipass*iwrite,idx-1);
+   fPass.AddNamedSlot(name);
+   fWrites.AddNamedSlot(name);
+   fCombis.AddNamedSlot(name);
+   fPass.AddSignal(ipass,name);
+   idx=fPass.GetSlotIndex(name);
+   if (idx && idx<=fMaxtag) fApass.AddAt(ipass,idx-1);
+   fWrites.AddSignal(iwrite,name);
+   idx=fWrites.GetSlotIndex(name);
+   if (idx && idx<=fMaxtag) fAwrites.AddAt(iwrite,idx-1);
+   fCombis.AddSignal(ipass*iwrite,name);
+   idx=fCombis.GetSlotIndex(name);
+   if (idx && idx<=fMaxtag) fAcombis.AddAt(ipass*iwrite,idx-1);
 
    ////////////////////////////////////////////////////////////////////////
    // (De)activate some tags for the combined pass*write statistics      //
@@ -455,7 +431,7 @@ void NcDataStreamStats::Exec(Option_t* opt)
 
    namex="";
    jdeact=0;
-   if (fAct) jdeact=1; // The user has specified the tags to be activated
+   if (nact) jdeact=1; // The user has specified the tags to be activated
 
    // Look for a user selection of activated tags
    for (Int_t i=0; i<nact; i++)
@@ -485,7 +461,7 @@ void NcDataStreamStats::Exec(Option_t* opt)
 
    if (jdeact)
    {
-    combis.SetDead(name);
+    fCombis.SetDead(name);
    }
    else
    {
@@ -493,26 +469,26 @@ void NcDataStreamStats::Exec(Option_t* opt)
    }
   } // End of tag loop
 
-  if (combflag) nevtcomb++;
+  if (combflag) fNevtComb++;
 
   // Update the various tag matrices for this event
-  ntags=pass.GetNslots();
+  ntags=fPass.GetNslots();
   if (ntags>fMaxtag) ntags=fMaxtag;
 
   for (Int_t irow=0; irow<ntags; irow++)
   {
-   ival1=apass->At(irow);
-   ival2=awrites->At(irow);
-   ival3=acombis->At(irow);
+   ival1=fApass.At(irow);
+   ival2=fAwrites.At(irow);
+   ival3=fAcombis.At(irow);
    if (!ival1 && !ival2 && !ival3) continue;
    for (Int_t icol=0; icol<ntags; icol++)
    {
-    ival4=apass->At(icol);
-    if (ival1 && ival4) (*mpass)(irow,icol)+=float(ival4);
-    ival4=awrites->At(icol);
-    if (ival2 && ival4) (*mwrites)(irow,icol)+=float(ival4);
-    ival4=acombis->At(icol);
-    if (ival3 && ival4) (*mcombis)(irow,icol)+=float(ival4);
+    ival4=fApass.At(icol);
+    if (ival1 && ival4) fMpass(irow,icol)+=float(ival4);
+    ival4=fAwrites.At(icol);
+    if (ival2 && ival4) fMwrites(irow,icol)+=float(ival4);
+    ival4=fAcombis.At(icol);
+    if (ival3 && ival4) fMcombis(irow,icol)+=float(ival4);
    }
   }  
 
@@ -524,154 +500,8 @@ void NcDataStreamStats::Exec(Option_t* opt)
 
  } // End of event loop
 
- // The final statistics
- cout << endl;
- cout << " Total number of tagged events : " << nevt << endl;
- cout << endl;
- if (nevt)
- {
-  cout << " ===== First tagged event =====" << endl;
-  first->HeaderData();
-  cout << endl;
-
-  cout << " ===== Last tagged event =====" << endl;
-  last->HeaderData();
-  cout << endl;
-
-  Double_t dt=first->GetDifference(last,"s");
-  cout << " Elapsed timespan (sec.) : " << dt << endl;
-  if (dt<=0) cout << " *** Incorrect timespan. No rates calculated. ***" << endl;
-
-  // The various tagged event rates
-  if (dt>0)
-  {
-   Double_t ratetot=double(nevt)/dt;
-   cout << " Total tagged event rate (Hz) : " << ratetot << endl; 
-   Double_t ratecombitot=double(nevtcomb)/dt;
-   if (nact || ndeact) cout << " User reduced event rate (Hz) : " << ratecombitot << endl;
-
-   // Rate per tag channel
-   Double_t ratecond=0;
-   Double_t ratewrite=0;
-   Double_t ratio=0;
-   cout << endl;
-   cout << " ===== Total tagging rates (Hz) for the various channels =====" << endl;
-   for (Int_t i=1; i<=pass.GetNslots(); i++)
-   {
-    name=pass.GetSlotName(i);
-    ratecond=pass.GetSignal(i)/dt;
-    ratewrite=writes.GetSignal(i)/dt;
-    ratio=1;
-    if (ratecond>0) ratio=ratewrite/ratecond;
-    cout << " " << name.Data() << " ... pass : " << ratecond << "  write : " << ratewrite << " ===> write/pass : " << ratio << endl;
-   }
-  }
-
-  // Overview of the various tagging counts
-  ntags=pass.GetNslots();
-  if (ntags>fMaxtag) ntags=fMaxtag;
-
-  Int_t ndigits1=log10(float(ntags))+1.;
-  Int_t ndigits2=log10(float(nevt))+1.;
-
-  cout << endl;
-  cout << " ===== Total tag passing statistics =====" << endl;
-  pass.Data();
-  cout << endl;
-  cout << " The tag passing matrix with empty slots (=rows/columns) suppressed : " << endl;
-  cout << " -------------------------------------------------------------------- " << endl;
-  cout << setfill(' ');
-  for (Int_t irow=-1; irow<ntags; irow++)
-  {
-   // Skip empty rows to reduce printed matrix size
-   if (irow>-1)
-   {
-    if (pass.GetSignal(irow+1)<1) continue;
-   }
-   cout << " " << setw(ndigits1) << (irow+1);
-   for (Int_t icol=0; icol<ntags; icol++)
-   {
-    // Skip empty columns to reduce printed matrix size
-    if (pass.GetSignal(icol+1)<1) continue;
-    if (irow==-1)
-    {
-     ival1=icol+1;
-    }
-    else
-    {
-     ival1=int((*mpass)(irow,icol));
-    }
-    cout << " " << setw(ndigits2) << ival1;
-   }
-   cout << endl;
-  }
-  
-  if (fWritename!="*")
-  {
-   cout << endl;
-   cout << " ===== Total tag event writing (prescale) statistics =====" << endl;
-   writes.Data();
-   cout << endl;
-   cout << " The tag event writing (prescale) matrix with empty slots (=rows/columns) suppressed : " << endl;
-   cout << " ------------------------------------------------------------------------------------- " << endl;
-   for (Int_t irow=-1; irow<ntags; irow++)
-   {
-    // Skip empty rows to reduce printed matrix size
-    if (irow>-1)
-    {
-     if (writes.GetSignal(irow+1)<1) continue;
-    }
-    cout << " " << setw(ndigits1) << (irow+1);
-    for (Int_t icol=0; icol<ntags; icol++)
-    {
-     // Skip empty columns to reduce printed matrix size
-     if (writes.GetSignal(icol+1)<1) continue;
-     if (irow==-1)
-     {
-      ival1=icol+1;
-     }
-     else
-     {
-      ival1=int((*mwrites)(irow,icol));
-     }
-     cout << " " << setw(ndigits2) << ival1;
-    }
-    cout << endl;
-   }
-  }
-
-  cout << endl;
-  cout << " =====  Combined tag passing and event writing (prescale) statistics     =====" << endl;
-  cout << " ===== with user selected de-activations to study background reduction   =====" << endl;
-  combis.Data();
-  cout << endl;
-  cout << " The combined tag passing and event writing (prescale) matrix with empty slots (=rows/columns) suppressed : " << endl;
-  cout << " ---------------------------------------------------------------------------------------------------------- " << endl;
-  for (Int_t irow=-1; irow<ntags; irow++)
-  {
-   // Skip empty rows to reduce printed matrix size
-   if (irow>-1)
-   {
-    if (combis.GetSignal(irow+1)<1) continue;
-   }
-   cout << " " << setw(ndigits1) << (irow+1);
-   for (Int_t icol=0; icol<ntags; icol++)
-   {
-    // Skip empty columns to reduce printed matrix size
-    if (combis.GetSignal(icol+1)<1) continue;
-    if (irow==-1)
-    {
-     ival1=icol+1;
-    }
-    else
-    {
-     ival1=int((*mcombis)(irow,icol));
-    }
-    cout << " " << setw(ndigits2) << ival1;
-   }
-   cout << endl;
-  }
- }
+ // List the final statistics overview
+ ListStatistics();
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)
@@ -717,69 +547,11 @@ void NcDataStreamStats::SetMaxEvt(Int_t n)
  fMaxevt=n;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcDataStreamStats::SetMaxTag(Int_t n)
-{
-// Set the maximum number of tags to be processed.
-// The default constructor has set n=99.
- fMaxtag=n;
-}
-///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::SetPrintFrequency(Int_t m)
 {
 // Set print frequency to provide a progress output line every "m" events.
 // The default constructor has set m=0 which means that no progress printout is produced.
  fPfreq=m;
-}
-///////////////////////////////////////////////////////////////////////////
-void NcDataStreamStats::SetDeviceNames(TString devname,TString passname,TString writename)
-{
-// Set the name of a generic NcDevice to be investigated and the corresponding names
-// of the tag passing and writing indicators. 
-// Note that the device must have the specific data structure as outlined in
-// the general documentation of this class.
-// 
-// It is common that a certain tag has the following two indicators
-// pass  : Indicates whether the tag criteria have been fulfilled (1) or not (0)
-// write : Indicates whether the event is actually labeled to be written (1) or not (0)
-//
-// Instead of the names "pass" and "write", various other naming conventions
-// (e.g. "condition" and "prescale") are often used.
-// Via the input arguments "passname" and "writename" one can specify the names
-// used by the current experiment.
-//
-// Notes :
-// -------
-// 1) This memberfunction allows the investigation of user defined tagging devices,
-//    to be backward compatible with old data files.
-//    For new(er) data, the use of NcTagger (derived) devices is recommended.
-// 2) In case passname="*" and/or writename="*", no check will be made for the
-//    corresponding indicator setting and a value of 1 will be assumed.
-
- fDevname=devname;
- fPassname=passname; 
- fWritename=writename; 
-}
-///////////////////////////////////////////////////////////////////////////
-void NcDataStreamStats::SetDevice(TString devname,Bool_t passcheck,Bool_t writecheck)
-{
-// Set the name of an NcTagger (derived) device and the check modes of the tag
-// passing and writing indicators.
-// 
-// The pre-defined tag passing and writing indicators are :
-// Pass  : Indicates whether the tag criteria have been fulfilled (1) or not (0)
-// Write : Indicates whether the event is actually labeled to be written (1) or not (0)
-//
-// In case passcheck=kFALSE and/or writecheck=kFALSE, no check will be made for the
-// corresponding indicator setting and a value of 1 will be assumed.
-//
-// The default values are passcheck=kTRUE and writecheck=kTRUE.
-
- fDevname=devname;
- fPassname="Pass"; 
- fWritename="Write";
-
- if (!passcheck) fPassname="*"; 
- if (!writecheck) fWritename="*"; 
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::ListInputFiles(Option_t* opt) const
@@ -793,73 +565,6 @@ void NcDataStreamStats::ListInputFiles(Option_t* opt) const
   cout << endl;
   fData->Print(opt);
  }
-}
-///////////////////////////////////////////////////////////////////////////
-void NcDataStreamStats::ActivateTag(TString name)
-{
-// Activate a certain tag for the combined pass*write statistics
-// which will enable to study user selected event samples.
-// It should be noted that this doesn't affect the results for the
-// regular individual "pass" and "write" statistics.
-//
-// In case the specified "name" matches (part of) a certain tag name, that
-// specific tag will be activated.
-// All characters in "name" are taken literally, so wildcards are not allowed.   
-// 
-// Example :
-// ---------
-// If name="LowPt" it would activate both tags "LowPtMuon" and "LowPtPion".
-//
-// Notes :
-// -------
-// 1) If this memberfunction is not invoked, all tags are regarded as active.
-// 2) If this memberfunction is invoked, all tags that are not explicitly activated
-//    by the user will be considered de-activated.
-// 3) This memberfunction may be invoked several times to activate
-//    various tags before executing the task.
-// 4) Tags that are explicitly de-activated by the user via invokation of DeactivateTag()
-//    can not be activated anymore.
-
- if (!fAct)
- {
-  fAct=new TObjArray();
-  fAct->SetOwner();
- }
- TObjString* s=new TObjString();
- s->SetString(name.Data());
- fAct->Add(s);
-}
-///////////////////////////////////////////////////////////////////////////
-void NcDataStreamStats::DeactivateTag(TString name)
-{
-// De-activate a certain tag for the combined pass*write statistics
-// which will enable to study background reduction.
-// It should be noted that this doesn't affect the results for the
-// regular individual "pass" and "write" statistics.
-//
-// In case the specified "name" matches (part of) a certain tag name, that
-// specific tag will be de-activated.
-// All characters in "name" are taken literally, so wildcards are not allowed.   
-// 
-// Example :
-// ---------
-// If name="LowPt" it would de-activate both tags "LowPtMuon" and "LowPtPion".
-//
-// Notes :
-// -------
-// 1) This memberfunction may be invoked several times to de-activate
-//    various tags before executing the task.
-// 3) Tags that are explicitly de-activated via this memberfunction
-//    can not be activated anymore via invokation of ActivateTag().
-
- if (!fDeact)
- {
-  fDeact=new TObjArray();
-  fDeact->SetOwner();
- }
- TObjString* s=new TObjString();
- s->SetString(name.Data());
- fDeact->Add(s);
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDataStreamStats::Clone(const char* name) const

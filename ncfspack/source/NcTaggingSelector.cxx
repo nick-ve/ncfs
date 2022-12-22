@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 2022, NCFS/IIHE, All Rights Reserved.                          *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -28,11 +28,11 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
-// Class NcTaggingStats
-// TTask derived class to perform statistics of event classification tags.
+// Class NcTaggingSelector
+// TTask derived class to perform event selection based on the event classification tag settings.
 //  
-// This class is the event-by-event processor version of NcDataStreamStats, and has to be
-// run as a sub-task within an NcJob environment that performs event-by-event analysis. 
+// This class has to be run as a sub-task within an NcJob environment that performs
+// event-by-event analysis. 
 //
 // During data taking or online/offline processing one usually records
 // various tags for each event to indicate which trigger or filter criteria
@@ -52,20 +52,26 @@
 // This results in a downscale factor of 1000 for that tag stream.
 //
 // This class provides a processor to investigate the tag settings on an event-by-event
-// basis and provide an overview of the various event tags that were encountered
-// and the corresponding event rates.
+// basis and provide an event selection based on these tag settings.
+// The resulting "select" or "reject" decision will be indicated in the corresponding
+// NcEvent (or derived) structure via the NcEvent::SetSelectLevel() and is later on
+// available via the NcEvent::GetSelectLevel() during subsequent data analysis.
 //
-// In addition to this, it offers also the possibility to tailor a re-tagging procedure,
-// of which the results are provided next to the regular tag statistics.
-// Via the memberfunctions ActivateTag() and DeactivateTag() the user can (de)activate
-// certain tags in order to perform a re-tagging to investigate the effect in view of
-// defining specific event samples or background reduction.
+// Via the memberfunctions ActivateTag() and DeactivateTag() the user can specify
+// certain tags in order to tailor the selection criteria.
+// At least one of the tags that have been specified via ActivateTag() needs to have
+// the corresponding tag criteria fulfilled (i.e. the "pass" indicator set to 1)
+// to mark the event as a candidate for selection.
+// All tags that have been specified via DeactivateTag() need to have the corresponding
+// tag criteria NOT fulfilled (i.e. the "pass" indicator set to 0) in order not to reject
+// the candidate event.
+// 
 // In case none of these memberfunctions ActivateTag() or DeactivateTag() are invoked,
-// all tags are regarded to be active in the re-tagging procedure. 
-// In case DeactivateTag() is invoked, all tags that are not explicitly activated by the user
-// will be considered de-activated in the re-tagging procedure.
-// It should be noted that the tags which are explicitly de-activated via DeactivateTag()
-// can not be activated anymore via invokation of ActivateTag().
+// no check on the event tag settings will be performed, and the event selection level
+// will remain unchanged.
+//
+// It should be noted that the tags which are specified via DeactivateTag()
+// can not be specified anymore via invokation of ActivateTag().
 // Please refer to the docs of these memberfunctions for further details.
 //
 // In order to obtain the required data, the NcEvent (or derived) structure should
@@ -90,7 +96,7 @@
 //    "pass" indicator and "write" indicator (e.g. "condition" and "prescale", respectively)
 //    are specified via the memberfunction SetDeviceNames().
 //
-// The examples below show how to configure an NcTaggingStats object, that is meant to be
+// The examples below show how to configure an NcTaggingSelector object, that is meant to be
 // run as a sub-task in an NcJob (derived) environment for an event-by-event analysis.
 //
 // Example 1:
@@ -102,25 +108,25 @@
 // // The "pass" and "write" tags were named "condition" and "prescale", respectively.
 //
 // // Initialisation to perform an analysis of IceCube event filter statistics
-// NcTaggingStats* fstat=new NcTaggingStats("FilterStats","IceCube event filter statistics");
+// NcTaggingSelector* fsel=new NcTaggingSelector("FilterSel","IceCube event filter selection");
 //
 // // Specify that we will access the NcDevice named "Filter"
 // // and that the "pass" indicator is called "condition"
 // // and the "write" indicator is called "prescale"
-// fstat->SetDeviceNames("Filter","condition","prescale");
+// fsel->SetDeviceNames("Filter","condition","prescale");
 //
 // // The statement below shows the alternative for a "Trigger" analysis
 // // where the trigger tags do not have "pass" nor "write" indicators.
-// // fstat->SetDeviceNames("Trigger","*","*");
+// // fsel->SetDeviceNames("Trigger","*","*");
 //
-// // Activate some tags to investigate re-tagging for a selected event sample
-// fstat->ActivateTag("GFU");         // Gamma ray Follow Up stream
-// fstat->ActivateTag("HESE");        // High-Energy Starting Event stream
-// fstat->ActivateTag("EstresAlert"); // Enhanced Starting track alert stream
-// fstat->ActivateTag("EHEAlert");    // Extreme High Energy event alert stream
+// // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+// fsel->ActivateTag("GFU");         // Gamma ray Follow Up stream
+// fsel->ActivateTag("HESE");        // High-Energy Starting Event stream
+// fsel->ActivateTag("EstresAlert"); // Enhanced Starting track alert stream
+// fsel->ActivateTag("EHEAlert");    // Extreme High Energy event alert stream
 //
-// // De-activate some tags to investigate re-tagging for background reduction
-// // This can be used to de-activate tag names that were activated above
+// // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
+// // This can also be used to de-activate tag names that were activated above
 // // because of a matching name pattern.
 // fstat->DeactivateTag("EHEAlertFilterHB"); // Extreme High Energy alert Heart Beat stream
 //
@@ -133,48 +139,47 @@
 // // and given the name "Trigger".
 //
 // // Initialisation to perform an analysis of RNO-G event trigger statistics
-// NcTaggingStats* trigstat=new NcTaggingStats("TriggerStats","RNO-G trigger statistics");
+// NcTaggingSelector* trigsel=new NcTaggingSelector("TriggerSel","RNO-G event trigger selection");
 //
 // // Specify that we will access the NcTagger (derived) device named "Trigger"
-// trigstat->SetDevice("Trigger");
+// trigsel->SetDevice("Trigger");
 //
-// // Activate some tags to investigate re-tagging for a selected event sample
-// trigstat->ActivateTag("radiant"); // RADIANT trigger
-// trigstat->ActivateTag("lt");      // Low threshold trigger
+// // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+// trigsel->ActivateTag("radiant"); // RADIANT trigger
+// trigsel->ActivateTag("lt");      // Low threshold trigger
 //
-// // De-activate some tags to investigate re-tagging for background reduction
-// // This can be used to de-activate tag names that were activated above
+// // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
+// // This can also be used to de-activate tag names that were activated above
 // // because of a matching name pattern.
-// trigstat->DeactivateTag("radiant_surface"); // Surface trigger (fictative)
+// trigsel->DeactivateTag("radiant_surface"); // Surface trigger (fictative)
 //
-// Once the user has configured the NcTaggingStats object, it has to be added as a (sub)task
+//
+// Once the user has configured the NcTaggingSelector object, it has to be added as a (sub)task
 // into the NcJob (derived) environment for the event-by-event analysis.
-// The final tagging statistics are obtained by invoking ShowStatistics() after the
-// NcJob (based) processing has completed.
 //
 // Templates for a pure NcJob and an NcJob derived event-by-event task processing
 // can be found in /rnopack/macros/analyze.cc and /rnopack/macros/convert.cc, respectively.
 //
-//--- Author: Nick van Eijndhoven 18-jul-2022, IIHE-VUB, Brussel
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:30Z
+//--- Author: Nick van Eijndhoven 21-dec-2022, IIHE-VUB, Brussel
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:28Z
 ///////////////////////////////////////////////////////////////////////////
 
-#include "NcTaggingStats.h"
+#include "NcTaggingSelector.h"
 #include "Riostream.h"
  
-ClassImp(NcTaggingStats) // Class implementation to enable ROOT I/O
+ClassImp(NcTaggingSelector) // Class implementation to enable ROOT I/O
  
-NcTaggingStats::NcTaggingStats(const char* name,const char* title) : NcTaggingBase(name,title)
+NcTaggingSelector::NcTaggingSelector(const char* name,const char* title) : NcTaggingBase(name,title)
 {
 // Constructor and initialisation of default parameters.
 }
 ///////////////////////////////////////////////////////////////////////////
-NcTaggingStats::~NcTaggingStats()
+NcTaggingSelector::~NcTaggingSelector()
 {
 // Default destructor.
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcTaggingStats::Exec(Option_t* opt)
+void NcTaggingSelector::Exec(Option_t* opt)
 {
 // Perform the tagging analysis.
 
@@ -183,43 +188,10 @@ void NcTaggingStats::Exec(Option_t* opt)
  if (fAct) nact=fAct->GetEntries();
  if (fDeact) ndeact=fDeact->GetEntries();
 
- // Some intialisations at the first invokation only
+ // Provide parameter settings at the first invokation only
  if (fFirst)
  {
   fFirst=kFALSE;
-
-  TString title;
-  title=fPassname;
-  if (title=="*") title="Passing";
-  title+=" statistics";
-  fPass.SetNameTitle(fDevname,title);
-  fApass.Set(fMaxtag);
-  fMpass.ResizeTo(fMaxtag,fMaxtag);
-  fMpass.Zero();
-  title=fWritename;
-  if (title=="*") title="Writing";
-  title+=" statistics";
-  fWrites.SetNameTitle(fDevname,title);
-  fAwrites.Set(fMaxtag);
-  fMwrites.ResizeTo(fMaxtag,fMaxtag);
-  fMwrites.Zero();
-  title="Combined ";
-  if (nact || ndeact) title="User reduced combined ";
-  if (fPassname!="*" && fWritename!="*")
-  {
-   title+=fPassname;
-   title+="*";
-   title+=fWritename;
-  }
-  else
-  {
-   title+="Passing*Writing";
-  }
-  title+=" statistics"; 
-  fCombis.SetNameTitle(fDevname,title);
-  fAcombis.Set(fMaxtag);
-  fMcombis.ResizeTo(fMaxtag,fMaxtag);
-  fMcombis.Zero();
 
   cout << endl;
   cout << " *" << ClassName() << "::Exec* Processor parameter settings." << endl;
@@ -233,9 +205,46 @@ void NcTaggingStats::Exec(Option_t* opt)
   else
   {
    cout << " Tag device name : " << fDevname << endl;
-   cout << " Pass indicator  : " << fPassname << endl;
-   cout << " Write indicator : " << fWritename << endl;
+   cout << " Pass indicator  : " << fPassname;
+   if (fPassname=="*") cout << " (no event rejection)";
    cout << endl;
+   cout << endl;
+  }
+
+  if (fPassname=="*" || (!nact && !ndeact))
+  {
+   cout << " *** No events will be rejected, since no Pass indicator or tag selections were specified. ***" << endl;
+  }
+
+  if (fPassname!="*")
+  {
+   for (Int_t i=0; i<nact; i++)
+   {
+    if (!i)
+    {
+     cout << " === Tag names (*=wildcard) to mark an event as candidate when any of the corresponding \"" << fPassname << "\" flags is set ===" << endl;
+     cout << endl;
+    }
+    TObjString* tagx=(TObjString*)fAct->At(i);
+    if (!tagx) continue;
+
+    cout << " ... *" << tagx->GetString() << "*" << endl;
+   }
+   if (nact) cout << endl;
+
+   for (Int_t i=0; i<ndeact; i++)
+   {
+    if (!i)
+    {
+     cout << " === Tag names (*=wildcard) to reject the candidate event when any of the corresponding \"" << fPassname << "\" flags is set ===" << endl;
+     cout << endl;
+    }
+    TObjString* tagx=(TObjString*)fDeact->At(i);
+    if (!tagx) continue;
+
+    cout << " ... *" << tagx->GetString() << "*" << endl;
+   }
+   if (ndeact) cout << endl;
   }
  }
 
@@ -251,10 +260,7 @@ void NcTaggingStats::Exec(Option_t* opt)
  Int_t select=fEvt->GetSelectLevel();
  if (select<0) return;
 
- // Reset the various tagging flags for this event
- fApass.Reset();
- fAwrites.Reset();
- fAcombis.Reset();
+ if (!nact && !ndeact) return;
 
  NcDevice* tagdev=(NcDevice*)fEvt->GetDevice(fDevname);
  if (!tagdev) return;
@@ -262,140 +268,57 @@ void NcTaggingStats::Exec(Option_t* opt)
  Int_t ntags=tagdev->GetNhits();
  if (ntags>fMaxtag) ntags=fMaxtag;
 
- // Determine the first and last recorded event
- if (!fEvtFirst) fEvtFirst=new NcEvent(*fEvt);
- if (!fEvtLast) fEvtLast=new NcEvent(*fEvt);
- if (fEvtFirst->GetDifference(fEvt,"s")<0)
- {
-  delete fEvtFirst;
-  fEvtFirst=new NcEvent(*fEvt);
- }
- if (fEvtLast->GetDifference(fEvt,"s")>0)
- {
-  delete fEvtLast;
-  fEvtLast=new NcEvent(*fEvt);
- }
-
- fNevt++;
+ if (!ntags) return;
 
  Int_t ipass=0;
- Int_t iwrite=0;
- Int_t idx=0;
- Int_t combflag=0;
  TString namex="";
- Int_t jdeact=0;
+ select=0;
  for (Int_t itag=1; itag<=ntags; itag++)
  {
   NcSignal* sx=tagdev->GetHit(itag);
   if (!sx) continue;
   name=sx->GetName();
-  if (sx->GetSlotIndex(fPassname))
-  {
-   ipass=int(sx->GetSignal(fPassname)+0.1); // Flag to indicate if the tag passing criteria are satisfied (1) or not (0)
-  }
-  else
-  {
-   ipass=1;
-  }
-  if (sx->GetSlotIndex(fWritename))
-  {
-   iwrite=int(sx->GetSignal(fWritename)+0.1);   // Flag to indicate if this tag would write the event (1) or not (0)
-  }
-  else
-  {
-   iwrite=1;
-  }
+  if (!sx->GetSlotIndex(fPassname)) continue;
 
-  // Update stats for this tag name
-  fPass.AddNamedSlot(name);
-  fWrites.AddNamedSlot(name);
-  fCombis.AddNamedSlot(name);
-  fPass.AddSignal(ipass,name);
-  idx=fPass.GetSlotIndex(name);
-  if (idx && idx<=fMaxtag) fApass.AddAt(ipass,idx-1);
-  fWrites.AddSignal(iwrite,name);
-  idx=fWrites.GetSlotIndex(name);
-  if (idx && idx<=fMaxtag) fAwrites.AddAt(iwrite,idx-1);
-  fCombis.AddSignal(ipass*iwrite,name);
-  idx=fCombis.GetSlotIndex(name);
-  if (idx && idx<=fMaxtag) fAcombis.AddAt(ipass*iwrite,idx-1);
+  // Flag to indicate if the tag passing criteria are satisfied (1) or not (0)
+  ipass=TMath::Nint(sx->GetSignal(fPassname));
 
-  ////////////////////////////////////////////////////////////////////////
-  // (De)activate some tags for the combined pass*write statistics      //
-  // which will enable to study event samples or background reduction   //
-  ////////////////////////////////////////////////////////////////////////
-
-  jdeact=0;
-  if (nact) jdeact=1; // The user has specified the tags to be activated
-
-  // Look for a user selection of activated tags
+  // Look for user specified tags that should be set for this event to be selected
   for (Int_t i=0; i<nact; i++)
   {
    TObjString* sox=(TObjString*)fAct->At(i);
    if (!sox) continue;
    namex=sox->GetString();
-   if (name.Contains(namex))
+
+   if (!name.Contains(namex)) continue; 
+
+   // Acceptance if the name (pattern) matches and the corresponding tag is set
+   if (ipass)
    {
-    jdeact=0;
+    select=1;
     break;
    }
   }
-  // Look for a user selection of de-activated tags
-  // This may de-activate a previously activated tag
+
+  // Look for user specified tags that should NOT be set for this event to be selected
   for (Int_t i=0; i<ndeact; i++)
   {
    TObjString* sox=(TObjString*)fDeact->At(i);
    if (!sox) continue;
    namex=sox->GetString();
-   if (name.Contains(namex))
+
+   if (!name.Contains(namex)) continue; 
+
+   // Rejection if the name (pattern) matches but the corresponding tag is set
+   if (ipass)
    {
-    jdeact=1;
+    select=-1;
     break;
    }
   }
-
-  if (jdeact)
-  {
-   fCombis.SetDead(name);
-  }
-  else
-  {
-   if (ipass*iwrite) combflag=1;
-  }
  } // End of tag loop
 
- if (combflag) fNevtComb++;
-
- // Update the various tag matrices for this event
- ntags=fPass.GetNslots();
- if (ntags>fMaxtag) ntags=fMaxtag;
-
- Int_t ival1=0;
- Int_t ival2=0;
- Int_t ival3=0;
- Int_t ival4=0;
- for (Int_t irow=0; irow<ntags; irow++)
- {
-  ival1=fApass.At(irow);
-  ival2=fAwrites.At(irow);
-  ival3=fAcombis.At(irow);
-  if (!ival1 && !ival2 && !ival3) continue;
-  for (Int_t icol=0; icol<ntags; icol++)
-  {
-   ival4=fApass.At(icol);
-   if (ival1 && ival4) fMpass(irow,icol)+=float(ival4);
-   ival4=fAwrites.At(icol);
-   if (ival2 && ival4) fMwrites(irow,icol)+=float(ival4);
-   ival4=fAcombis.At(icol);
-   if (ival3 && ival4) fMcombis(irow,icol)+=float(ival4);
-  }
- }
-}
-///////////////////////////////////////////////////////////////////////////
-void NcTaggingStats::ShowStatistics()
-{
-// Provide The final statistics.
-
- ListStatistics();
+ // Update the event selection flag in case of rejection
+ if (select) fEvt->SetSelectLevel(select);
 }
 ///////////////////////////////////////////////////////////////////////////
