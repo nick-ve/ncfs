@@ -15,7 +15,12 @@ class NcTaggingSelector : public NcTaggingBase
   NcTaggingSelector(const char* name="NcTaggingSelector",const char* title="Event selection"); // Default constructor
   virtual ~NcTaggingSelector();     // Default destructor
   virtual void Exec(Option_t* opt); // Perform the analysis
+  void SetLogic(TString logic,TString type); // Set the logic for combination of tag selections
+
+ protected:
+  TString fLogicA; // Logic for tags that are requested to be set "passed" (aka Active tags)
+  TString fLogicD; // Logic for tags that are requested to be set "not passed" (aka Deactive tags)
  
- ClassDef(NcTaggingSelector,1) // Perform event selection based on event tag settings
+ ClassDef(NcTaggingSelector,2) // Perform event selection based on event tag settings
 };
 #endif

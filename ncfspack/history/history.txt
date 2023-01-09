@@ -1383,4 +1383,13 @@
                 The version indicator in NcVersion has been updated to 5.0.
 22-dec-2022 NvE Bug fixed in NcTaggingSelector. Do not use version 5.0.
                 The version indicator in NcVersion has been updated to 5.1.
+07-jan-2023 NvE Input argument names of SetDevices() and SetDevice() in NcTaggingBase.h updated to bring
+                them in agreement with the corresponding arguments and docs in NcTaggingBase.cxx.
+                Note that the actual names specified in NcTaggingBase.h are irrelevant and serve only
+                the purpose of clarity for the code. 
+09-jan-2023 NvE Bug fixed and new memberfunction SetLogic() introduced in class NcTaggingSelector.
+                The docs of the memberfunctions ActivateTag() and DeactivateTag() of class NcTaggingBase
+                have been updated accordingly.
+                Do not use version 5.0 or 5.1 for NcTaggingSelector, because of the bugs.
+                The version indicator in NcVersion has been updated to 5.2.
 

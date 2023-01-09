@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Dec 22 19:41:34 2022            -->
+<!--   Date: Mon Jan  9 01:13:35 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -90,12 +90,20 @@ return false;}
 
  Via the memberfunctions <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() and <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() the user can specify
  certain tags in order to tailor the selection criteria.
- At least one of the tags that have been specified via <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() needs to have
- the corresponding tag criteria fulfilled (i.e. the <span class="string">"pass"</span> indicator set to 1)
- to mark the event as a candidate for selection.
- All tags that have been specified via <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() need to have the corresponding
- tag criteria NOT fulfilled (i.e. the <span class="string">"pass"</span> indicator set to 0) in order not to reject
- the candidate event.
+ The logic to be used for the combination of the specified tags can be specified
+ via the memberfunction <a href="./NcTaggingSelector.html#NcTaggingSelector:SetLogic" title="void NcTaggingSelector::SetLogic(TString logic,TString type)">SetLogic</a>().
+ All (for <span class="string">"AND"</span> logic) or at least one (for <span class="string">"OR"</span> logic) of the tags that have been
+ specified via <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() need(s) to have the corresponding tag criteria fulfilled
+ (i.e. the <span class="string">"pass"</span> indicator set to 1) to mark the event as a candidate for selection.
+ All (for <span class="string">"AND"</span> logic) or at least one (for <span class="string">"OR"</span> logic) of the tags that have been
+ specified via <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() need(s) to have the corresponding tag criteria NOT fulfilled
+ (i.e. the <span class="string">"pass"</span> indicator set to 0) in order not to reject the candidate event.
+ Please refer to the docs of these memberfunctions for further details.
+
+ Note that combination of the <span class="string">"AND"</span> and <span class="string">"OR"</span> logical operators allow to obtain
+ any logical composition.
+ As such, consecutive invokations of different instances of this processor allow
+ to obtain any required logical combination c.q. selection of the various tag settings.
 
  In case none of these memberfunctions <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>() or <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>() are invoked,
  no check on the event tag settings will be performed, and the event selection level
@@ -103,7 +111,6 @@ return false;}
 
  It should be noted that the tags which are specified via <a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>()
  can not be specified anymore via invokation of <a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>().
- Please refer to the docs of these memberfunctions for further details.
 
  In order to obtain the required data, the <a href="./NcEvent.html">NcEvent</a> (or derived) structure should
  contain an <a href="./NcDevice.html">NcDevice</a> (based) object with the corresponding name (e.g. Trigger, Filter,...).
@@ -114,7 +121,7 @@ return false;}
     These devices have pre-defined memberfunctions and an internal data structure
     which is tailored for the handling of event tags.
     Specification of the device to be investigated is performed via invokation of
-    the memberfunction <a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>().
+    the memberfunction <a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString devname,Bool_t passcheck=kTRUE,Bool_t writecheck=kTRUE)">SetDevice</a>().
 
  2) A generic <a href="./NcDevice.html">NcDevice</a>. (Not recommended; Only for backward compatibility with old data files)
     For a generic <a href="./NcDevice.html">NcDevice</a> object to serve as a tagging device, the user has to create a device
@@ -125,7 +132,7 @@ return false;}
     (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>) are often used.
     The name of the required device (e.g. <span class="string">"Filter"</span>) and the naming conventions of the
     <span class="string">"pass"</span> indicator and <span class="string">"write"</span> indicator (e.g. <span class="string">"condition"</span> and <span class="string">"prescale"</span>, respectively)
-    are specified via the memberfunction <a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>().
+    are specified via the memberfunction <a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString devname,TString passname,TString writename)">SetDeviceNames</a>().
 
  The examples below show how to configure an <a href="./NcTaggingSelector.html">NcTaggingSelector</a> object, that is meant to be
  run as a sub-task in an <a href="./NcJob.html">NcJob</a> (derived) environment for an event-by-event analysis.
@@ -144,13 +151,14 @@ return false;}
  // Specify that we will access the <a href="./NcDevice.html">NcDevice</a> named <span class="string">"Filter"</span>
  // and that the <span class="string">"pass"</span> indicator is called <span class="string">"condition"</span>
  // and the <span class="string">"write"</span> indicator is called <span class="string">"prescale"</span>
- fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Filter"</span>,<span class="string">"condition"</span>,<span class="string">"prescale"</span>);
+ fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString devname,TString passname,TString writename)">SetDeviceNames</a>(<span class="string">"Filter"</span>,<span class="string">"condition"</span>,<span class="string">"prescale"</span>);
 
  // The statement below shows the alternative for a <span class="string">"Trigger"</span> analysis
  // where the trigger tags do not have <span class="string">"pass"</span> nor <span class="string">"write"</span> indicators.
- // fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
+ // fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString devname,TString passname,TString writename)">SetDeviceNames</a>(<span class="string">"Trigger"</span>,<span class="string">"*"</span>,<span class="string">"*"</span>);
 
- // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+ // Specify some tags to mark candidate events for selection if any of the tagging criteria are fulfilled
+ fsel-&gt;<a href="./NcTaggingSelector.html#NcTaggingSelector:SetLogic" title="void NcTaggingSelector::SetLogic(TString logic,TString type)">SetLogic</a>(<span class="string">"OR"</span>,<span class="string">"A"</span>);
  fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"GFU"</span>);         // Gamma ray Follow Up stream
  fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"HESE"</span>);        // High-Energy Starting Event stream
  fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"EstresAlert"</span>); // Enhanced Starting track alert stream
@@ -159,7 +167,8 @@ return false;}
  // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
  // This can also be used to de-activate tag names that were activated above
  // because of a matching name pattern.
- fstat-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>); // Extreme High Energy alert Heart Beat stream
+ fsel-&gt;<a href="./NcTaggingSelector.html#NcTaggingSelector:SetLogic" title="void NcTaggingSelector::SetLogic(TString logic,TString type)">SetLogic</a>(<span class="string">"OR"</span>,<span class="string">"D"</span>);
+ fsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"EHEAlertFilterHB"</span>); // Extreme High Energy alert Heart Beat stream
 
 
  Example 2:
@@ -173,15 +182,17 @@ return false;}
  <a href="./NcTaggingSelector.html">NcTaggingSelector</a>* trigsel=new <a href="./NcTaggingSelector.html">NcTaggingSelector</a>(<span class="string">"TriggerSel"</span>,<span class="string">"RNO-G event trigger selection"</span>);
 
  // Specify that we will access the <a href="./NcTagger.html">NcTagger</a> (derived) device named <span class="string">"Trigger"</span>
- trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>(<span class="string">"Trigger"</span>);
+ trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString devname,Bool_t passcheck=kTRUE,Bool_t writecheck=kTRUE)">SetDevice</a>(<span class="string">"Trigger"</span>);
 
- // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+ // Specify some tags to mark candidate events for selection if any of the tagging criteria are fulfilled
+ trigsel-&gt;<a href="./NcTaggingSelector.html#NcTaggingSelector:SetLogic" title="void NcTaggingSelector::SetLogic(TString logic,TString type)">SetLogic</a>(<span class="string">"OR"</span>,<span class="string">"A"</span>);
  trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"radiant"</span>); // RADIANT trigger
  trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(<span class="string">"lt"</span>);      // Low threshold trigger
 
  // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
  // This can also be used to de-activate tag names that were activated above
  // because of a matching name pattern.
+ trigsel-&gt;<a href="./NcTaggingSelector.html#NcTaggingSelector:SetLogic" title="void NcTaggingSelector::SetLogic(TString logic,TString type)">SetLogic</a>(<span class="string">"OR"</span>,<span class="string">"D"</span>);
  trigsel-&gt;<a href="./NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(<span class="string">"radiant_surface"</span>); // Surface trigger (fictative)
 
 
@@ -192,7 +203,7 @@ return false;}
  can be found in /rnopack/macros/analyze.cc and /rnopack/macros/convert.cc, respectively.
 
 --- Author: Nick van Eijndhoven 21-dec-2022, IIHE-VUB, Brussel
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:28Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 9, 2023  01:05Z
 
 </pre></div>
 </div></div>
@@ -288,10 +299,11 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakin"><span class="baseclass">TTask::</span>SetBreakin</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakin = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetBreakout"><span class="baseclass">TTask::</span>SetBreakout</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> breakout = 1)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
-<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetDevice"><span class="baseclass">NcTaggingBase::</span>SetDevice</a>(TString dev, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> pass = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> write = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
-<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames"><span class="baseclass">NcTaggingBase::</span>SetDeviceNames</a>(TString dev, TString pass, TString write)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetDevice"><span class="baseclass">NcTaggingBase::</span>SetDevice</a>(TString devname, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> passcheck = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> writecheck = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetDeviceNames"><span class="baseclass">NcTaggingBase::</span>SetDeviceNames</a>(TString devname, TString passname, TString writename)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcTaggingSelector:SetLogic">SetLogic</a>(TString logic, TString type)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTaggingBase.html#NcTaggingBase:SetMaxTag"><span class="baseclass">NcTaggingBase::</span>SetMaxTag</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
@@ -360,6 +372,8 @@ return false;}
 <tr class="datainh"><td class="datatype"><a href="./NcEvent.html">NcEvent</a>*</td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fEvtLast"><span class="baseclass">NcTaggingBase::</span>fEvtLast</a></td><td class="datadesc">The event that occurred last in time</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fFirst"><span class="baseclass">NcTaggingBase::</span>fFirst</a></td><td class="datadesc">Flag to indicate first invokation of Exec()</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcTaggingSelector:fLogicA"></a>fLogicA</td><td class="datadesc">Logic for tags that are requested to be set "passed" (aka Active tags)</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcTaggingSelector:fLogicD"></a>fLogicD</td><td class="datadesc">Logic for tags that are requested to be set "not passed" (aka Deactive tags)</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fMaxtag"><span class="baseclass">NcTaggingBase::</span>fMaxtag</a></td><td class="datadesc">Maximum number of tags to be processed</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#TMatrixF">TMatrixF</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fMcombis"><span class="baseclass">NcTaggingBase::</span>fMcombis</a></td><td class="datadesc">The tagging matrix with the (User reduced) combined passing and writing flags statistics</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#TMatrixF">TMatrixF</a></td><td class="dataname"><a href="./NcTaggingBase.html#NcTaggingBase:fMpass"><span class="baseclass">NcTaggingBase::</span>fMpass</a></td><td class="datadesc">The tagging matrix with the passing flags statistics</td></tr>
@@ -412,6 +426,18 @@ return false;}
 <div class="funccomm"><pre> Default destructor.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTaggingSelector:SetLogic" href="src/NcTaggingSelector.cxx.html#bcgq3D">SetLogic</a>(TString logic, TString type)</span><br />
+<div class="funccomm"><pre> Set the logic for combination of tag setting selections.
+
+ Input arguments :
+
+ logic : The requested tag combination logic (<span class="string">"OR"</span> or <span class="string">"AND"</span>).
+ type  : <span class="string">"A"</span> --&gt; Logic for the tags that are requested to be set <span class="string">"passed"</span> (aka Active tags)
+         <span class="string">"D"</span> --&gt; Logic for the tags that are requested to be set <span class="string">"not passed"</span> (aka Deactive tags)
+
+ Note : In the constructor of this class both logic settings are initialized to <span class="string">"OR"</span>.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcTaggingSelector:Exec" href="src/NcTaggingSelector.cxx.html#qUn4ZD">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</span><br />
 <div class="funccomm"><pre> Perform the tagging analysis.
 </pre></div>
@@ -423,7 +449,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Dec 22 19:41:34 2022 </em><em>&raquo; Last generated: 2022-12-22 19:41</em><br />
+<em>&raquo; Last changed: Mon Jan  9 01:13:35 2023 </em><em>&raquo; Last generated: 2023-01-09 01:13</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

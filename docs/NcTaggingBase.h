@@ -18,13 +18,13 @@ class NcTaggingBase : public TTask
 {
  public:
   NcTaggingBase(const char* name="NcTaggingBase",const char* title="Base class for event tag processing"); // Default constructor
-  virtual ~NcTaggingBase();                                         // Default destructor
-  NcTaggingBase(const NcTaggingBase& q);                            // Copy constructor
-  void SetMaxTag(Int_t n);                                          // Set the maximum number of tags to be processed
-  void SetDeviceNames(TString dev,TString pass,TString write);      // Set the name of the NcDevice and the names of the tag indicators
-  void SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE); // Set the name of the NcTagger (derived) device and the check mode of the tag indicators
-  void ActivateTag(TString name);                                   // Activate a certain tag for user selected event sample studies
-  void DeactivateTag(TString name);                                 // Deactivate a certain tag for background reduction studies
+  virtual ~NcTaggingBase();                                                       // Default destructor
+  NcTaggingBase(const NcTaggingBase& q);                                          // Copy constructor
+  void SetMaxTag(Int_t n);                                                        // Set the maximum number of tags to be processed
+  void SetDeviceNames(TString devname,TString passname,TString writename);        // Set the name of the NcDevice and the names of the tag indicators
+  void SetDevice(TString devname,Bool_t passcheck=kTRUE,Bool_t writecheck=kTRUE); // Set the name of the NcTagger (derived) device and the check mode of the tag indicators
+  void ActivateTag(TString name);                                                 // Activate a certain tag for user selected event sample studies
+  void DeactivateTag(TString name);                                               // Deactivate a certain tag for background reduction studies
  
  protected:
   // Items for general processing

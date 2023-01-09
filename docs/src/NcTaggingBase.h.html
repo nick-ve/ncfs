@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Dec 22 02:59:06 2022            -->
+<!--   Date: Mon Jan  9 01:13:35 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -39,13 +39,13 @@
 {
  <span class="keyword">public</span>:
   <a href="../NcTaggingBase.html">NcTaggingBase</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name=<span class="string">"NcTaggingBase"</span>,<span class="keyword">const</span> <span class="keyword">char</span>* title=<span class="string">"Base class for event tag processing"</span>); <span class="comment">// Default constructor</span>
-  <span class="keyword">virtual</span> <a href="../NcTaggingBase.html#NcTaggingBase:_NcTaggingBase" title="void NcTaggingBase::~NcTaggingBase()">~NcTaggingBase</a>();                                         <span class="comment">// Default destructor</span>
-  <a href="../NcTaggingBase.html">NcTaggingBase</a>(<span class="keyword">const</span> <a href="../NcTaggingBase.html">NcTaggingBase</a>&amp; q);                            <span class="comment">// <a href="../#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor</span>
-  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:SetMaxTag" title="void NcTaggingBase::SetMaxTag(Int_t n)">SetMaxTag</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> n);                                          <span class="comment">// Set the maximum number of tags to be processed</span>
-  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString dev,TString pass,TString write)">SetDeviceNames</a>(TString dev,TString pass,TString write);      <span class="comment">// Set the name of the <a href="../NcDevice.html">NcDevice</a> and the names of the tag indicators</span>
-  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString dev,Bool_t pass=kTRUE,Bool_t write=kTRUE)">SetDevice</a>(TString dev,<a href="../ListOfTypes.html#Bool_t">Bool_t</a> pass=<a href="../ListOfTypes.html#Bool_t">kTRUE</a>,<a href="../ListOfTypes.html#Bool_t">Bool_t</a> write=<a href="../ListOfTypes.html#Bool_t">kTRUE</a>); <span class="comment">// Set the name of the <a href="../NcTagger.html">NcTagger</a> (derived) device and the check mode of the tag indicators</span>
-  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(TString name);                                   <span class="comment">// Activate a certain tag for user selected event sample studies</span>
-  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(TString name);                                 <span class="comment">// Deactivate a certain tag for background reduction studies</span>
+  <span class="keyword">virtual</span> <a href="../NcTaggingBase.html#NcTaggingBase:_NcTaggingBase" title="void NcTaggingBase::~NcTaggingBase()">~NcTaggingBase</a>();                                                       <span class="comment">// Default destructor</span>
+  <a href="../NcTaggingBase.html">NcTaggingBase</a>(<span class="keyword">const</span> <a href="../NcTaggingBase.html">NcTaggingBase</a>&amp; q);                                          <span class="comment">// <a href="../#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor</span>
+  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:SetMaxTag" title="void NcTaggingBase::SetMaxTag(Int_t n)">SetMaxTag</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> n);                                                        <span class="comment">// Set the maximum number of tags to be processed</span>
+  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:SetDeviceNames" title="void NcTaggingBase::SetDeviceNames(TString devname,TString passname,TString writename)">SetDeviceNames</a>(TString devname,TString passname,TString writename);        <span class="comment">// Set the name of the <a href="../NcDevice.html">NcDevice</a> and the names of the tag indicators</span>
+  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:SetDevice" title="void NcTaggingBase::SetDevice(TString devname,Bool_t passcheck=kTRUE,Bool_t writecheck=kTRUE)">SetDevice</a>(TString devname,<a href="../ListOfTypes.html#Bool_t">Bool_t</a> passcheck=<a href="../ListOfTypes.html#Bool_t">kTRUE</a>,<a href="../ListOfTypes.html#Bool_t">Bool_t</a> writecheck=<a href="../ListOfTypes.html#Bool_t">kTRUE</a>); <span class="comment">// Set the name of the <a href="../NcTagger.html">NcTagger</a> (derived) device and the check mode of the tag indicators</span>
+  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:ActivateTag" title="void NcTaggingBase::ActivateTag(TString name)">ActivateTag</a>(TString name);                                                 <span class="comment">// Activate a certain tag for user selected event sample studies</span>
+  <span class="keyword">void</span> <a href="../NcTaggingBase.html#NcTaggingBase:DeactivateTag" title="void NcTaggingBase::DeactivateTag(TString name)">DeactivateTag</a>(TString name);                                               <span class="comment">// Deactivate a certain tag for background reduction studies</span>
  
  <span class="keyword">protected</span>:
   <span class="comment">// Items for general processing</span>
@@ -87,7 +87,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2022-12-22 02:59 </em><em>&raquo; Last generated: 2022-12-22 02:59</em><br />
+<em>&raquo; Last changed: 2023-01-09 01:13 </em><em>&raquo; Last generated: 2023-01-09 01:13</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

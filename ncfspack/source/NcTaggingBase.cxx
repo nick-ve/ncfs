@@ -180,11 +180,14 @@ void NcTaggingBase::ActivateTag(TString name)
 // In case the specified "name" matches (part of) a certain tag name, that
 // specific tag will be used by NcTaggingSelector to mark candidate events
 // for selection for further analysis.
-// This memberfunction may be invoked several times to activate various tags
+// This memberfunction may be invoked several times to select various tags
 // before executing the task.
-// At least one of the tags that have been specified here needs to have the
-// corresponding tag criteria fulfilled (i.e. the "pass" indicator set to 1)
-// to mark the event as a candidate for selection.
+// The logic to be used for the combination of the specified tags can be specified
+// via the memberfunction NcTaggingSelector::SetLogic().
+// All (for "AND" logic) or at least one (for "OR" logic) of the tags that have been
+// specified here need(s) to have the corresponding tag criteria fulfilled
+// (i.e. the "pass" indicator set to 1) to mark the event as a candidate for selection.
+// Please refer to the docs of the class NcTaggingSelector for further details.
 //
 // For investigation of event tag statistics by NcDataStreamStats or NcTaggingStats,
 // this will activate the corresponding tag for the combined pass*write statistics
@@ -218,10 +221,17 @@ void NcTaggingBase::ActivateTag(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingBase::DeactivateTag(TString name)
 {
-// In case the specified "name" matches (part of) a certain tag name, the
-// corresponding tag criteria will be required to be NOT fulfilled 
-// (i.e. the "pass" indicator set to 0) by the event in order not to be
-// flagged "rejected" for further analysis by NcTaggingSelector.
+// In case the specified "name" matches (part of) a certain tag name, that
+// specific tag will be used by NcTaggingSelector to mark candidate events
+// for selection for further analysis.
+// This memberfunction may be invoked several times to select various tags
+// before executing the task.
+// The logic to be used for the combination of the specified tags can be specified
+// via the memberfunction NcTaggingSelector::SetLogic().
+// All (for "AND" logic) or at least one (for "OR" logic) of the tags that have been
+// specified here need(s) to have the corresponding tag criteria NOT fulfilled
+// (i.e. the "pass" indicator set to 0) in order not to reject the candidate event.
+// Please refer to the docs of the class NcTaggingSelector for further details.
 //
 // For investigation of event tag statistics by NcDataStreamStats or NcTaggingStats,
 // this will de-activate the corresponding tag for the combined pass*write statistics

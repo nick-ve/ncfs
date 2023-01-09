@@ -59,12 +59,20 @@
 //
 // Via the memberfunctions ActivateTag() and DeactivateTag() the user can specify
 // certain tags in order to tailor the selection criteria.
-// At least one of the tags that have been specified via ActivateTag() needs to have
-// the corresponding tag criteria fulfilled (i.e. the "pass" indicator set to 1)
-// to mark the event as a candidate for selection.
-// All tags that have been specified via DeactivateTag() need to have the corresponding
-// tag criteria NOT fulfilled (i.e. the "pass" indicator set to 0) in order not to reject
-// the candidate event.
+// The logic to be used for the combination of the specified tags can be specified
+// via the memberfunction SetLogic().
+// All (for "AND" logic) or at least one (for "OR" logic) of the tags that have been
+// specified via ActivateTag() need(s) to have the corresponding tag criteria fulfilled
+// (i.e. the "pass" indicator set to 1) to mark the event as a candidate for selection.
+// All (for "AND" logic) or at least one (for "OR" logic) of the tags that have been
+// specified via DeactivateTag() need(s) to have the corresponding tag criteria NOT fulfilled
+// (i.e. the "pass" indicator set to 0) in order not to reject the candidate event.
+// Please refer to the docs of these memberfunctions for further details.
+//
+// Note that combination of the "AND" and "OR" logical operators allow to obtain
+// any logical composition.
+// As such, consecutive invokations of different instances of this processor allow
+// to obtain any required logical combination c.q. selection of the various tag settings.  
 // 
 // In case none of these memberfunctions ActivateTag() or DeactivateTag() are invoked,
 // no check on the event tag settings will be performed, and the event selection level
@@ -72,7 +80,6 @@
 //
 // It should be noted that the tags which are specified via DeactivateTag()
 // can not be specified anymore via invokation of ActivateTag().
-// Please refer to the docs of these memberfunctions for further details.
 //
 // In order to obtain the required data, the NcEvent (or derived) structure should
 // contain an NcDevice (based) object with the corresponding name (e.g. Trigger, Filter,...).
@@ -119,7 +126,8 @@
 // // where the trigger tags do not have "pass" nor "write" indicators.
 // // fsel->SetDeviceNames("Trigger","*","*");
 //
-// // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+// // Specify some tags to mark candidate events for selection if any of the tagging criteria are fulfilled
+// fsel->SetLogic("OR","A");
 // fsel->ActivateTag("GFU");         // Gamma ray Follow Up stream
 // fsel->ActivateTag("HESE");        // High-Energy Starting Event stream
 // fsel->ActivateTag("EstresAlert"); // Enhanced Starting track alert stream
@@ -128,7 +136,8 @@
 // // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
 // // This can also be used to de-activate tag names that were activated above
 // // because of a matching name pattern.
-// fstat->DeactivateTag("EHEAlertFilterHB"); // Extreme High Energy alert Heart Beat stream
+// fsel->SetLogic("OR","D");
+// fsel->DeactivateTag("EHEAlertFilterHB"); // Extreme High Energy alert Heart Beat stream
 //
 //
 // Example 2:
@@ -144,13 +153,15 @@
 // // Specify that we will access the NcTagger (derived) device named "Trigger"
 // trigsel->SetDevice("Trigger");
 //
-// // Specify some tags to mark candidate events for selection if the tagging criteria are fulfilled
+// // Specify some tags to mark candidate events for selection if any of the tagging criteria are fulfilled
+// trigsel->SetLogic("OR","A");
 // trigsel->ActivateTag("radiant"); // RADIANT trigger
 // trigsel->ActivateTag("lt");      // Low threshold trigger
 //
 // // Specify some tags which will be required to have NOT been fulfilled for selecting the event.
 // // This can also be used to de-activate tag names that were activated above
 // // because of a matching name pattern.
+// trigsel->SetLogic("OR","D");
 // trigsel->DeactivateTag("radiant_surface"); // Surface trigger (fictative)
 //
 //
@@ -161,7 +172,7 @@
 // can be found in /rnopack/macros/analyze.cc and /rnopack/macros/convert.cc, respectively.
 //
 //--- Author: Nick van Eijndhoven 21-dec-2022, IIHE-VUB, Brussel
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:28Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 9, 2023  01:05Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTaggingSelector.h"
@@ -172,11 +183,38 @@ ClassImp(NcTaggingSelector) // Class implementation to enable ROOT I/O
 NcTaggingSelector::NcTaggingSelector(const char* name,const char* title) : NcTaggingBase(name,title)
 {
 // Constructor and initialisation of default parameters.
+
+ fLogicA="OR";
+ fLogicD="OR";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTaggingSelector::~NcTaggingSelector()
 {
 // Default destructor.
+}
+///////////////////////////////////////////////////////////////////////////
+void NcTaggingSelector::SetLogic(TString logic,TString type)
+{
+// Set the logic for combination of tag setting selections.
+//
+// Input arguments :
+// -----------------
+// logic : The requested tag combination logic ("OR" or "AND").
+// type  : "A" --> Logic for the tags that are requested to be set "passed" (aka Active tags) 
+//         "D" --> Logic for the tags that are requested to be set "not passed" (aka Deactive tags)
+//
+// Note : In the constructor of this class both logic settings are initialized to "OR".
+
+ if ((logic!="OR" && logic!="AND") || (type!="A" && type!="D"))
+ {
+  cout << endl;
+  cout << " *" << ClassName() << "::SetLogic* Inconsistent input : logic=" << logic << " type=" << type << endl;
+  cout << " Existing logic settings " << fLogicA << " for type=A and " << fLogicD << " for type=D will be kept." << endl;
+  return;
+ }
+
+ if (type=="A") fLogicA=logic; 
+ if (type=="D") fLogicD=logic; 
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingSelector::Exec(Option_t* opt)
@@ -222,7 +260,7 @@ void NcTaggingSelector::Exec(Option_t* opt)
    {
     if (!i)
     {
-     cout << " === Tag names (*=wildcard) to mark an event as candidate when any of the corresponding \"" << fPassname << "\" flags is set ===" << endl;
+     cout << " === Tag names (*=wildcard) to mark an event as candidate if the " << fLogicA << " of the corresponding \"" << fPassname << "\" flags is true ===" << endl;
      cout << endl;
     }
     TObjString* tagx=(TObjString*)fAct->At(i);
@@ -236,7 +274,7 @@ void NcTaggingSelector::Exec(Option_t* opt)
    {
     if (!i)
     {
-     cout << " === Tag names (*=wildcard) to reject the candidate event when any of the corresponding \"" << fPassname << "\" flags is set ===" << endl;
+     cout << " === Tag names (*=wildcard) to reject the candidate event if the " << fLogicD << " of the corresponding \"" << fPassname << "\" flags is true ===" << endl;
      cout << endl;
     }
     TObjString* tagx=(TObjString*)fDeact->At(i);
@@ -247,6 +285,8 @@ void NcTaggingSelector::Exec(Option_t* opt)
    if (ndeact) cout << endl;
   }
  }
+
+ if (fPassname=="*" || (!nact && !ndeact)) return;
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name));
@@ -260,8 +300,6 @@ void NcTaggingSelector::Exec(Option_t* opt)
  Int_t select=fEvt->GetSelectLevel();
  if (select<0) return;
 
- if (!nact && !ndeact) return;
-
  NcDevice* tagdev=(NcDevice*)fEvt->GetDevice(fDevname);
  if (!tagdev) return;
 
@@ -272,7 +310,10 @@ void NcTaggingSelector::Exec(Option_t* opt)
 
  Int_t ipass=0;
  TString namex="";
- select=0;
+ Int_t nmatchA=0; // Number of matching activated tag name patterns
+ Int_t nmatchD=0; // Number of matching deactivated tag name patterns
+ Int_t nA=0;      // Number of correctly flagged activated tags
+ Int_t nD=0;      // Number of incorrectly flagged deactivated tags
  for (Int_t itag=1; itag<=ntags; itag++)
  {
   NcSignal* sx=tagdev->GetHit(itag);
@@ -290,15 +331,19 @@ void NcTaggingSelector::Exec(Option_t* opt)
    if (!sox) continue;
    namex=sox->GetString();
 
-   if (!name.Contains(namex)) continue; 
-
-   // Acceptance if the name (pattern) matches and the corresponding tag is set
-   select=-1;
-   if (ipass)
+   // Event can never become a candidate if a non-existing tag name (pattern) is required in "AND" logic mode
+   if (fLogicA=="AND" && !tagdev->GetHit(namex,0,1))
    {
-    select=1;
+    nA=nmatchA-1;
     break;
    }
+
+   if (!name.Contains(namex)) continue;
+
+   nmatchA++;
+
+   // Candidate tag setting if the name (pattern) matches and the corresponding tag is set correctly
+   if (ipass) nA++;
   }
 
   // Look for user specified tags that should NOT be set for this event to be selected
@@ -308,18 +353,37 @@ void NcTaggingSelector::Exec(Option_t* opt)
    if (!sox) continue;
    namex=sox->GetString();
 
-   if (!name.Contains(namex)) continue; 
-
-   // Rejection if the name (pattern) matches but the corresponding tag is set
-   if (ipass)
+   // Event can never be rejected based on a non-existing tag name (pattern) in "AND" logic mode
+   if (fLogicD=="AND" && !tagdev->GetHit(namex,0,1))
    {
-    select=-1;
+    nD=nmatchD-1;
     break;
    }
+
+   if (!name.Contains(namex)) continue;
+
+   nmatchD++;
+
+   // Rejection candidate tag setting if the name (pattern) matches but the corresponding tag is set incorrectly
+   if (ipass) nD++;
   }
  } // End of tag loop
 
- // Update the event selection flag in case of rejection
+ // Determine the final selection level for this event
+ select=0;
+ if (nact)
+ {
+  select=-1;
+  if (fLogicA=="OR" && nA) select=1;
+  if (fLogicA=="AND" && nA>=nmatchA) select=1;
+ }
+ if (ndeact)
+ {
+  if (fLogicD=="OR" && nD) select=-1;
+  if (fLogicD=="AND" && nD>=nmatchD) select=-1;
+ }
+
+ // Update the event selection flag in case of explicit selection or rejection
  if (select) fEvt->SetSelectLevel(select);
 }
 ///////////////////////////////////////////////////////////////////////////
