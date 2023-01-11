@@ -1392,4 +1392,6 @@
                 have been updated accordingly.
                 Do not use version 5.0 or 5.1 for NcTaggingSelector, because of the bugs.
                 The version indicator in NcVersion has been updated to 5.2.
+11-jan-2022 NvE Functionality of RnoConvert::SetPrintFreq() extended by introduction of a print level.
+                The version indicator in NcVersion has been updated to 5.21.
 

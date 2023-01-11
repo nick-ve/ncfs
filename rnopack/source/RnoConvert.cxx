@@ -33,7 +33,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 17, 2022  09:39Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 11, 2023  12:08Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
@@ -49,7 +49,8 @@ RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
  fSplit=0;
  fBsize=32000;
  fMaxevt=-1;
- fPrintfreq=1;
+ fPrintfreq=0;
+ fPrintlevel=0;
  fOutfile=0;
  fData=0;
  fMinSelectLevel=0;
@@ -82,12 +83,29 @@ void RnoConvert::SetMaxEvents(Int_t n)
  fMaxevt=n;
 }
 ///////////////////////////////////////////////////////////////////////////
-void RnoConvert::SetPrintFreq(Int_t f)
+void RnoConvert::SetPrintFreq(Int_t m,Int_t level)
 {
-// Set the printfrequency to produce info every f events.
-// f=1 is the default initialisation in the constructor.
+// Set the printfrequency to produce info every "m" events.
+// No printout is produced for m<=0.
+//
+// level=0 --> Only a progress output line is printed
+//       1 --> Only the event header info is printed
+//       2 --> Both a progress output line and the event header info are printed
+//
+// Note : Unsupported input for "level" results in level=0.
+//
+// At invokation of this memberfunction the default value is level=0. 
+// The default constructor has initialized m=0 and level=0.
 
- if (f>=0) fPrintfreq=f;
+ if (level<0 || level>2)
+ {
+  cout << " *" << ClassName() << "::SetPrintFreq* Unsupported input : level=" << level << " --> Print level set to 0." << endl;
+  cout << endl;
+  level=0;
+ }
+
+ fPrintfreq=m;
+ fPrintlevel=level;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetSplitLevel(Int_t split)
@@ -259,8 +277,9 @@ void RnoConvert::Exec(Option_t* opt)
  cout << " ***" << endl;
  cout << " *** Start processing of job " << GetName() << " ***" << endl;
  cout << " ***" << endl;
- cout << " Maximum number of events to be processed : " << fMaxevt << endl;
- cout << " Print frequency : " << fPrintfreq << endl;
+ cout << " Maximum number of events to be processed : " << fMaxevt << " (<0 means all events)" << endl;
+ cout << " Print frequency : " << fPrintfreq << " (<=0 means no printout)" << endl;
+ cout << " Print level     : " << fPrintlevel << endl;
  if (fOutfile)
  {
   cout << " RnoEvent output file : " << fOutfile->GetName() << endl;
@@ -332,6 +351,7 @@ void RnoConvert::Exec(Option_t* opt)
  Int_t iflower=0;  // FLOWER firmware update sequence number
  Float_t fsample;  // The DAQ sampling rate in Hz
  Int_t nwritten=0; // The number of events written to output
+ Int_t perc=0;     // Percentage of the number of processed events
 
  for (Int_t ient=0; ient<nen; ient++)
  {
@@ -576,12 +596,20 @@ void RnoConvert::Exec(Option_t* opt)
   ExecuteTasks(GetName());
 
   // Provide a printout every "Printfreq" events
-  if (fPrintfreq)
+  if (fPrintfreq>0)
   {
-   if (!((ient+1)%fPrintfreq))
+   if ((!(ient%fPrintfreq) || (ient+1)==nen))
    {
-    cout << endl;
-    evt->HeaderData();
+    perc=100*(ient+1)/nen;
+    if (fPrintlevel==0 || fPrintlevel==2)
+    {
+     cout << " *** Processed input entry : " << ient << " run : " << run << " event : " << event << " (" << perc << "%)" << endl;
+    }
+    if (fPrintlevel>0)
+    {
+     evt->HeaderData();
+     cout << endl;
+    }
    }
   }
 

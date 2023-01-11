@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Nov 17 11:51:17 2022            -->
+<!--   Date: Wed Jan 11 12:18:09 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -78,7 +78,7 @@ return false;}
  Please refer to /macros/convert.cc for a usage example.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 17, 2022  09:39Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 11, 2023  12:08Z
 
 </pre></div>
 </div></div>
@@ -200,7 +200,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetOutputFile">SetOutputFile</a>(TFile* ofile)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetOutputFile@1">SetOutputFile</a>(TString name)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetPrintFreq">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> f)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetPrintFreq">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> level = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetSelectLevels">SetSelectLevels</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> min, <a href="./ListOfTypes.html#Int_t">Int_t</a> max)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoConvert:SetSplitLevel">SetSplitLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> split)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -269,6 +269,7 @@ return false;}
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
 <tr class="data"><td class="datatype">TFile*</td><td class="dataname"><a name="RnoConvert:fOutfile"></a>fOutfile</td><td class="datadesc">The RnoEvent data output file</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoConvert:fPrintfreq"></a>fPrintfreq</td><td class="datadesc">The event info printing frequency</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoConvert:fPrintlevel"></a>fPrintlevel</td><td class="datadesc">The event info printing level</td></tr>
 <tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fSelect"><span class="baseclass">NcJob::</span>fSelect</a></td><td class="datadesc">! Temp. array of pointers to user-selected stored objects </td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoConvert:fSplit"></a>fSplit</td><td class="datadesc">The split level of the produced RnoEvent data file</td></tr>
 <tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
@@ -318,9 +319,18 @@ return false;}
  initialisation in the constructor.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:SetPrintFreq" href="src/RnoConvert.cxx.html#E2LVbE">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> f)</span><br />
-<div class="funccomm"><pre> Set the printfrequency to produce info every f events.
- f=1 is the default initialisation in the constructor.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:SetPrintFreq" href="src/RnoConvert.cxx.html#yAphgD">SetPrintFreq</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> level = 0)</span><br />
+<div class="funccomm"><pre> Set the printfrequency to produce info every <span class="string">"m"</span> events.
+ No printout is produced for m&lt;=0.
+
+ level=0 --&gt; Only a progress output line is printed
+       1 --&gt; Only the event header info is printed
+       2 --&gt; Both a progress output line and the event header info are printed
+
+ Note : Unsupported input for <span class="string">"level"</span> results in level=0.
+
+ At invokation of this memberfunction the default value is level=0.
+ The default constructor has initialized m=0 and level=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoConvert:SetSplitLevel" href="src/RnoConvert.cxx.html#od5HcE">SetSplitLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> split)</span><br />
@@ -409,7 +419,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Nov 17 11:51:17 2022 </em><em>&raquo; Last generated: 2022-11-17 11:51</em><br />
+<em>&raquo; Last changed: Wed Jan 11 12:18:09 2023 </em><em>&raquo; Last generated: 2023-01-11 12:18</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
