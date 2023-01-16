@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997-2023, NCFS/IIHE, All Rights Reserved.                     *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -164,7 +164,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 27, 2022  10:07Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, January 16, 2023  16:38Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -237,6 +237,7 @@ NcAstrolab::NcAstrolab(const char* name,const char* title) : TTask(name,title),N
  fPlanck=6.62606957e-34;
  fBoltz=1.3806488e-23;
  fNewton=6.67384e-11;
+ fGn=9.80665;
  fAu=1.49597870700e11;
  fPc=3.08567758149e16;
  // Cosmological parameters from the final Planck 2018 results (arXiv:1807.06209)
@@ -5978,6 +5979,7 @@ void NcAstrolab::SetPhysicalParameter(TString name,Double_t value)
 // Planck  = The value of the Planck constant (h) in J s
 // Boltz   = The value of the Boltzmann constant (k) in J K^-1
 // Newton  = The Newton gravitational constant in m^3 kg^-1 s^-1
+// Gn      = The nominal value of the gravitational acceleration at the Earth surface in m s^-2
 // Au      = The astronomical unit in m
 // Pc      = The parsec in m
 // Hubble  = The Hubble parameter in km s^-1 Mpc^-1
@@ -6048,7 +6050,13 @@ void NcAstrolab::SetPhysicalParameter(TString name,Double_t value)
   fFermi/=pow(frac,3.);
  }
  if (name=="Boltz") fBoltz=value;
- if (name=="Newton") fNewton=value;
+ if (name=="Newton")
+ {
+  frac=value/fNewton;
+  fNewton=value;
+  fGn*=frac;
+ }
+ if (name=="Gn") fGn=value;
  if (name=="Au") fAu=value;
  if (name=="Pc") fPc=value;
  if (name=="Hubble") fHubble=value;
@@ -6098,6 +6106,7 @@ Double_t NcAstrolab::GetPhysicalParameter(TString name) const
  if (name=="Planck") return fPlanck;
  if (name=="Boltz") return fBoltz;
  if (name=="Newton") return fNewton;
+ if (name=="Gn") return fGn;
  if (name=="Au") return fAu;
  if (name=="Pc") return fPc;
  if (name=="Hubble") return fHubble;
@@ -6432,10 +6441,10 @@ Double_t NcAstrolab::GetHubbleParameter(Double_t z,TString u) const
  return val;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcAstrolab::GetNuclearMass(Int_t z,Int_t n,Int_t mode) const
+Double_t NcAstrolab::GetNuclearMass(Int_t Z,Int_t N,Int_t mode) const
 {
 // Provide the nuclear mass or binding energy of a specified nucleus
-// with "z" protons and "n" neutrons.
+// with "Z" protons and "N" neutrons.
 // Here the semi-empirical mass formula is used as indicated on the slides
 // of the lecture "Aspects of Nuclear Physics" by Nick van Eijndhoven.
 // For very light nuclei this may be inaccurate.
@@ -6458,11 +6467,11 @@ Double_t NcAstrolab::GetNuclearMass(Int_t z,Int_t n,Int_t mode) const
 //
 // The default is mode=1.
 
- if (z<0 || n<0) return 0;
+ if (Z<0 || N<0) return 0;
 
- Double_t rz=z;
- Double_t rn=n;
- Double_t ra=z+n;
+ Double_t rz=Z;
+ Double_t rn=N;
+ Double_t ra=Z+N;
 
  // Coefficients from a recent fit mentioned in Tipler's modern physics (4th ed.) textbook.
  // The values in the comment field are the ones of the slides mentioned above.
@@ -6478,8 +6487,8 @@ Double_t NcAstrolab::GetNuclearMass(Int_t z,Int_t n,Int_t mode) const
  Double_t term4=d*pow(rz,2.)/pow(ra,1./3.); // Coulomb term
  Double_t term5=0;                          // Phenomenological correction for light nuclei (pairing energy term)
  
- Int_t oz=z%2; // Flag (1) for odd Z nuclei 
- Int_t on=n%2; // Flag (1) for odd N nuclei
+ Int_t oz=Z%2; // Flag (1) for odd Z nuclei 
+ Int_t on=N%2; // Flag (1) for odd N nuclei
 
  if (oz && on) term5=delta/sqrt(ra);
  if (!oz && !on) term5=-delta/sqrt(ra);
@@ -6488,7 +6497,7 @@ Double_t NcAstrolab::GetNuclearMass(Int_t z,Int_t n,Int_t mode) const
  Double_t bnz=term1-term2-term3-term4-term5;
 
  // In case a single nucleon was specified
- if ((z+n)<2)
+ if ((Z+N)<2)
  {
   bnz=0;
   ra=1;
@@ -6498,25 +6507,25 @@ Double_t NcAstrolab::GetNuclearMass(Int_t z,Int_t n,Int_t mode) const
  Double_t mass=rz*fMp+rn*fMn-bnz;
 
  // Explicit literature values for very light elements
- if (z==1 && n==1) // Deuteron
+ if (Z==1 && N==1) // Deuteron
  {
   mass=2.013553212712*fAmu;
   bnz=rz*fMp+rn*fMn-mass;
  }
 
- if (z==1 && n==2) // Triton
+ if (Z==1 && N==2) // Triton
  {
   mass=3.0155007134*fAmu;
   bnz=rz*fMp+rn*fMn-mass;
  }
 
- if (z==2 && n==1) // Helion
+ if (Z==2 && N==1) // Helion
  {
   mass=3.0149322468*fAmu;
   bnz=rz*fMp+rn*fMn-mass;
  }
 
- if (z==2 && n==2) // Alpha
+ if (Z==2 && N==2) // Alpha
  {
   mass=4.001506179125*fAmu;
   bnz=rz*fMp+rn*fMn-mass;
@@ -6554,6 +6563,396 @@ Double_t NcAstrolab::GetNuclearMass(Int_t z,Int_t n,Int_t mode) const
  return value;
 }
 ///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetRadiationLength(Double_t Z,Double_t A,Double_t rho) const
+{
+// Provide the radiation length of a medium consisting of (averaged) nuclei (Z,A).
+// The radiation length is returned in g/cm^2, #nucleons/cm^2 or cm, depending on
+// the value of "rho" (see below)
+//
+// The radition length (X0) is the mean distance over which the energy of a high-energy electron
+// is reduced by a factor 1/e due to bremmstrahlung.
+// Alternatively, it is also 7/9 times the mean free path of a high-energy photon before
+// pair production occurs.
+//
+// The following approximation was obtained from the Particle Data Group (https://pdg.lbl.gov)
+//
+// X0=716.4*A/[Z(Z+1)(Ln(287/sqrt(Z))] g/cm^2
+//
+// Input arguments :
+// -----------------
+// Z   : The (averaged) atomic number (=number of protons) of the nucleus 
+// A   : The (averaged) mass number (=number of nucleons) of the nucleus
+// rho : <0 --> [X0]=g/cm^2
+//       =0 --> [X0]=#nucleons/cm^2
+//       >0 --> rho=density of the medium in g/cm^3 and [X0]=cm
+//
+// The default value is rho=-1.
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t X0=-1;
+
+ if (Z<=0 || A<1 || A<Z) return -1;
+
+ X0=716.4*A/(Z*(Z+1.)*(log(287./sqrt(Z))));
+
+ Double_t mN=0.001*fGn*fQe/fAmu; // The nucleon mass in gram
+ if (rho==0) X0=X0/mN;
+ if (rho>0) X0=X0/rho;
+
+ return X0;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetMeanFreePath(Double_t sigma,Double_t rho,Int_t mode) const
+{
+// Provide the mean free path "lambda" of a high-energy particle passing through a certain medium.
+// The input parameter "mode" dictates the units of "rho" and the returned value of "lambda" (see below).
+//
+// The mean free path (lambda) is the mean distance over which a high-energy particle travels
+// inside the medium before an interaction occurs.
+// For non (quasi)elastic interactions, this is also called "interaction length",
+// "attenuation length" or "absorption length".
+//
+// The scattering centers (=particles) in the medium are regarded as being stationary,
+// such that we can use the formula :
+//
+// lambda=1/(sigma*n)
+//
+// where "sigma" represents the cross section and "n" represents the number density
+// of the scattering centers in the medium.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// Input arguments :
+// -----------------
+// sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+// rho   : The density of the medium (see below)
+// mode  : 0 --> rho=#particles/cm^3 and [lambda]=cm
+//         1 --> rho=#particles/cm^3 and [lambda]=#particles/cm^2
+//         2 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [lambda]=cm
+//         3 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [lambda]=g/cm^2
+//         4 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [lambda]=#nucleons/cm^2
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t lambda=-1;
+
+ if (sigma<=0 || rho<=0 || mode<0 || mode>4) return -1;
+
+ Double_t mN=0.001*fGn*fQe/fAmu; // The nucleon mass in gram
+ Double_t n=fabs(rho)/mN;        // The number of nucleons per cm^3
+ if (mode<2) n=rho;              // The number of scattering centers per cm^3
+ sigma=sigma*1e-24;              // Convert to cm^2
+
+ lambda=1./(sigma*n);
+
+ if (mode==1 || mode==4) lambda=lambda*n;
+ if (mode==3) lambda=lambda*rho;
+
+ return lambda;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetInteractionProbability(Double_t x,Double_t lambda) const
+{
+// Provide the interaction probability of a high-energy particle traveling
+// a distance "x" through a certain medium.
+//
+// For a mono-energetic beam of identical particles, this probability allows
+// to calculate the interaction rate once the beam luminosity is known.
+//
+// Input arguments :
+// -----------------
+// x      : The distance traveled by the particle inside the medium
+// lambda : The mean free path of the particle in the medium
+//
+// The formula used is : prob=1-exp(-x/lambda).
+//
+// So, when x=lambda, the interaction probability is about 0.63.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// Notes :
+// -------
+// 1) "x" and "lambda" have to be specified in the same units.
+// 2) The probability of pair production by a high-energy photon
+//    may be obtained from the corresponding radiation length X0
+//    by using the fact that lambda=X0*9/7.
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t prob=-1;
+
+ if (x<0 || lambda<=0) return -1;
+
+ prob=1.-exp(-x/lambda);
+
+ return prob;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetInteractionProbability(Double_t x,Double_t sigma,Double_t rho,Int_t mode) const
+{
+// Provide the interaction probability of a high-energy particle traveling
+// a distance "x" through a certain medium.
+// The input parameter "mode" dictates the units of "x" and "rho" (see below).
+//
+// For a mono-energetic beam of identical particles, this probability allows
+// to calculate the interaction rate once the beam luminosity is known.
+//
+// Input arguments :
+// -----------------
+// x     : The distance traveled by the particle inside the medium (see below)
+// sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+// rho   : The density of the medium (see below)
+// mode  : 0 --> rho=#particles/cm^3 and [x]=cm
+//         1 --> rho=#particles/cm^3 and [x]=#particles/cm^2
+//         2 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+//         3 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+//         4 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+//
+// The formula used is : prob=1-exp(-x/lambda),
+// where lambda is the corresponding mean free path.
+//
+// So, when x=lambda, the interaction probability is about 0.63.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t prob=-1;
+
+ Double_t lambda=GetMeanFreePath(sigma,rho,mode);
+
+ if (lambda>0) prob=GetInteractionProbability(x,lambda);
+
+ return prob;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetSurvivalProbability(Double_t x,Double_t lambda) const
+{
+// Provide the survival probability of a high-energy particle traveling
+// a distance "x" through a certain medium.
+//
+// For a mono-energetic beam of identical particles, this probability
+// also represents the beam attenuation factor.
+//
+// Input arguments :
+// -----------------
+// x      : The distance traveled by the particle inside the medium
+// lambda : The mean free path of the particle in the medium
+//
+// The formula used is : prob=exp(-x/lambda).
+//
+// So, when x=lambda, the survial probability is 1/e.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// Notes :
+// -------
+// 1) "x" and "lambda" have to be specified in the same units.
+// 2) The probability for a high-energy photon to survive pair production
+//    may be obtained from the corresponding radiation length X0
+//    by using the fact that lambda=X0*9/7.
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t prob=-1;
+
+ if (x<0 || lambda<=0) return -1;
+
+ prob=exp(-x/lambda);
+
+ return prob;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetSurvivalProbability(Double_t x,Double_t sigma,Double_t rho,Int_t mode) const
+{
+// Provide the survival probability of a high-energy particle traveling
+// a distance "x" through a certain medium.
+// The input parameter "mode" dictates the units of "x" and "rho" (see below).
+//
+// For a mono-energetic beam of identical particles, this probability
+// also represents the beam attenuation factor.
+//
+// Input arguments :
+// -----------------
+// x     : The distance traveled by the particle inside the medium (see below)
+// sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+// rho   : The density of the medium (see below)
+// mode  : 0 --> rho=#particles/cm^3 and [x]=cm
+//         1 --> rho=#particles/cm^3 and [x]=#particles/cm^2
+//         2 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+//         3 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+//         4 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+//
+// The formula used is : prob=exp(-x/lambda),
+// where lambda is the corresponding mean free path.
+//
+// So, when x=lambda, the survial probability is 1/e.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t prob=-1;
+
+ Double_t lambda=GetMeanFreePath(sigma,rho,mode);
+
+ if (lambda>0) prob=GetSurvivalProbability(x,lambda);
+
+ return prob;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetShieldingThickness(Double_t prob,Double_t lambda) const
+{
+// Provide the shielding thickness "x" to obtain the specified survival probability
+// for a high-energy particle.
+// The calculated thickness is returned in the same units as the provided "lambda".
+//
+// Input arguments :
+// -----------------
+// prob   : The requested survival probability
+// lambda : The mean free path of the particle in the medium
+//
+// The formula used is : x=-lambda*Ln(prob).
+//
+// So, when the specified probability is 1/e, the shielding thickness x=lambda.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// Note :
+// ------
+// The shielding thickness for a high-energy photon to undergo pair production
+// may be obtained from the corresponding radiation length X0 by using the fact
+// that lambda=X0*9/7.
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t x=-1;
+
+ if (prob<=0 || prob>1 || lambda<=0) return -1;
+
+ x=-lambda*log(prob);
+
+ return x;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetShieldingThickness(Double_t prob,Double_t sigma,Double_t rho,Int_t mode) const
+{
+// Provide the shielding thickness "x" to obtain the specified survival probability
+// for a high-energy particle.
+// The input parameter "mode" dictates the units of "rho" and the returned value of "x" (see below).
+//
+// Input arguments :
+// -----------------
+// prob  : The requested survival probability
+// sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+// rho   : The density of the medium (see below)
+// mode  : 0 --> rho=#particles/cm^3 and [x]=cm
+//         1 --> rho=#particles/cm^3 and [x]=#particles/cm^2
+//         2 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+//         3 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+//         4 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+//
+// The formula used is : x=-lambda*Ln(prob),
+// where lambda is the corresponding mean free path.
+//
+// So, when the specified probability is 1/e, the shielding thickness x=lambda.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t x=-1;
+
+ if (prob<=0 || prob>1) return -1;
+
+ Double_t lambda=GetMeanFreePath(sigma,rho,mode);
+
+ if (lambda>0) x=GetShieldingThickness(prob,lambda);
+
+ return x;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetTargetThickness(Double_t prob,Double_t lambda) const
+{
+// Provide the target thickness "x" to obtain the specified interaction probability
+// for a high-energy particle.
+// The calculated thickness is returned in the same units as the provided "lambda".
+//
+// Input arguments :
+// -----------------
+// prob   : The requested interaction probability
+// lambda : The mean free path of the particle in the medium
+//
+// The formula used is : x=-lambda*Ln(1-prob).
+//
+// So, when the specified probability is (1-1/e), the shielding thickness x=lambda.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// Note :
+// ------
+// The target thickness for a high-energy photon to undergo pair production
+// may be obtained from the corresponding radiation length X0 by using the fact
+// that lambda=X0*9/7.
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ if (prob<=0 || prob>1 || lambda<=0) return -1;
+
+ Double_t p=1.-prob;
+ Double_t x=GetShieldingThickness(p,lambda);
+
+ return x;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetTargetThickness(Double_t prob,Double_t sigma,Double_t rho,Int_t mode) const
+{
+// Provide the target thickness "x" to obtain the specified interaction probability
+// for a high-energy particle.
+// The input parameter "mode" dictates the units of "rho" and the returned value of "x" (see below).
+//
+// Input arguments :
+// -----------------
+// prob  : The requested interaction probability
+// sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+// rho   : The density of the medium (see below)
+// mode  : 0 --> rho=#particles/cm^3 and [x]=cm
+//         1 --> rho=#particles/cm^3 and [x]=#particles/cm^2
+//         2 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+//         3 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+//         4 --> Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+//
+// The formula used is : x=-lambda*Ln(1-prob),
+// where lambda is the corresponding mean free path.
+//
+// So, when the specified probability is (1-1/e), the shielding thickness x=lambda.
+//
+// For details please refer to the slides of my lectures :
+// https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+//
+// In case of inconsistent input the unphysical value -1 will be returned.
+
+ Double_t x=-1;
+
+ if (prob<=0 || prob>1) return -1;
+
+ Double_t lambda=GetMeanFreePath(sigma,rho,mode);
+
+ Double_t p=1.-prob;
+ if (lambda>0) x=GetShieldingThickness(p,lambda);
+
+ return x;
+}
+///////////////////////////////////////////////////////////////////////////
 Double_t NcAstrolab::GetNeutrinoXsection(Int_t mode,Int_t type,Double_t egev,Double_t xscale,Double_t* eprimgev,Double_t* alpha) const
 {
 // Provide the neutrino cross section and (optional) the average energy
@@ -6574,11 +6973,11 @@ Double_t NcAstrolab::GetNeutrinoXsection(Int_t mode,Int_t type,Double_t egev,Dou
 // -----------------
 // mode   :  1 --> Nucleon target DIS CC cross section
 //           2 --> Nucleon target DIS NC cross section
-//        :  3 --> Nucleon target DIS total cross section
-//        : -1 --> Electron target CC cross section
+//           3 --> Nucleon target DIS total cross section
+//          -1 --> Electron target CC cross section
 //          -2 --> Electron target NC cross section
-//        : -3 --> Electron target total cross section
-//        : -4 --> Special CC process anu_e+e-->anu_mu+mu (not included in other mode values)
+//          -3 --> Electron target total cross section
+//          -4 --> Special CC process anu_e+e-->anu_mu+mu (not included in other mode values)
 // type   :  1 --> Electron neutrino
 //           2 --> Muon neutrino
 //           3 --> Tau neutrino

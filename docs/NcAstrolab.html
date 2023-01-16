@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Dec 19 09:56:15 2022            -->
+<!--   Date: Mon Jan 16 17:45:38 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -195,7 +195,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 27, 2022  10:07Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, January 16, 2023  16:38Z
 
 </pre></div>
 </div></div>
@@ -302,6 +302,8 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetHubbleParameter">GetHubbleParameter</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z, TString u = <span class="string">"Mpc"</span>) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetIERSdatabase"><span class="baseclass">NcTimestamp::</span>GetIERSdatabase</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetInteractionProbability">GetInteractionProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetInteractionProbability@1">GetInteractionProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD@2"><span class="baseclass">NcTimestamp::</span>GetJD</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD@3"><span class="baseclass">NcTimestamp::</span>GetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode = <span class="string">"J"</span>) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD@1"><span class="baseclass">NcTimestamp::</span>GetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; jd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns)</td></tr>
@@ -321,6 +323,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLT">GetLT</a>()</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLuminosityDistance">GetLuminosityDistance</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z, TString u = <span class="string">"Mpc"</span>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetMaxDt">GetMaxDt</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetMeanFreePath">GetMeanFreePath</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetMJD@2"><span class="baseclass">NcTimestamp::</span>GetMJD</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetMJD@3"><span class="baseclass">NcTimestamp::</span>GetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode = <span class="string">"J"</span>) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetMJD@1"><span class="baseclass">NcTimestamp::</span>GetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns)</td></tr>
@@ -333,7 +336,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetNRefSignals">GetNRefSignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetNs"><span class="baseclass">NcTimestamp::</span>GetNs</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetNsignals">GetNsignals</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetNuclearMass">GetNuclearMass</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetNuclearMass">GetNuclearMass</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Z, <a href="./ListOfTypes.html#Int_t">Int_t</a> N, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
@@ -342,8 +345,11 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetPositionScramble">GetPositionScramble</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* dmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* dmax = 0, TF1* df = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* thmax = 0, TF1* thf = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* phimin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* phimax = 0, TF1* phif = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetProperDistance">GetProperDistance</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z, TString u = <span class="string">"Mpc"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> t = 1) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetPs"><span class="baseclass">NcTimestamp::</span>GetPs</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetRadiationLength">GetRadiationLength</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Z, <a href="./ListOfTypes.html#Double_t">Double_t</a> A, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho = -1) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcRandom.html">NcRandom</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetRandomiser">GetRandomiser</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; iseed, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; cnt1, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; cnt2) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#time_t">time_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetSec"><span class="baseclass">TTimeStamp::</span>GetSec</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetShieldingThickness">GetShieldingThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetShieldingThickness@1">GetShieldingThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal@4">GetSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal@5">GetSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal">GetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; d, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; a, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; b, TString bu, TString frame, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, TString mode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
@@ -354,9 +360,13 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalIndex@1">GetSignalIndex</a>(<a href="./NcSignal.html">NcSignal</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
 <tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalRatePDF">GetSignalRatePDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Non, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ton, <a href="./ListOfTypes.html#Int_t">Int_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ra = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Re = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> smax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSolidAngle">GetSolidAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> thetamin, <a href="./ListOfTypes.html#Double_t">Double_t</a> thetamax, TString tu, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimin, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimax, TString pu) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSurvivalProbability">GetSurvivalProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSurvivalProbability@1">GetSurvivalProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTAI@1"><span class="baseclass">NcTimestamp::</span>GetTAI</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTAI"><span class="baseclass">NcTimestamp::</span>GetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; d, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; sec, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> tmjd = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetTAI@2"><span class="baseclass">NcTimestamp::</span>GetTAI</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ss, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps, TString type = <span class="string">"TAI"</span>)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetTargetThickness">GetTargetThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetTargetThickness@1">GetTargetThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetTime"><span class="baseclass">TTimeStamp::</span>GetTime</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* hour = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* min = 0, <a href="./ListOfTypes.html#UInt_t">UInt_t</a>* sec = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetTimeScramble">GetTimeScramble</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* tmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* tmax = 0, TF1* frndm = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#timespec_t">timespec_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetTimeSpec"><span class="baseclass">TTimeStamp::</span>GetTimeSpec</a>() <span class="keyword">const</span></td></tr>
@@ -603,6 +613,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fGal"></a>fGal</td><td class="datadesc">! Type indicator for fG values (0=uninitialised  1=B1950  2=J2000)</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fGammaW"></a>fGammaW</td><td class="datadesc">Full width of W in GeV</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fGammaZ"></a>fGammaZ</td><td class="datadesc">Full width of Z in GeV</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fGn"></a>fGn</td><td class="datadesc">The nominal value of the gravitational acceleration at the Earth surface in m s^-2</td></tr>
 <tr class="data"><td class="datatype">TRotMatrix</td><td class="dataname"><a name="NcAstrolab:fH"></a>fH</td><td class="datadesc">! Matrix for conversion of equatorial to horizontal coordinates</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fHbar"></a>fHbar</td><td class="datadesc">The value of hbar in MeV s</td></tr>
@@ -3102,6 +3113,7 @@ return false;}
  Planck  = The value of the Planck constant (h) in J s
  Boltz   = The value of the Boltzmann constant (k) in J K^-1
  Newton  = The Newton gravitational constant in m^3 kg^-1 s^-1
+ Gn      = The nominal value of the gravitational acceleration at the Earth surface in m s^-2
  Au      = The astronomical unit in m
  Pc      = The parsec in m
  Hubble  = The Hubble parameter in km s^-1 Mpc^-1
@@ -3324,9 +3336,9 @@ return false;}
  In case <span class="string">"u"</span> is incorrectly specified, the value 0 will be returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetNuclearMass" href="src/NcAstrolab.cxx.html#HXWmFE">GetNuclearMass</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> z, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetNuclearMass" href="src/NcAstrolab.cxx.html#zgM1GE">GetNuclearMass</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Z, <a href="./ListOfTypes.html#Int_t">Int_t</a> N, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
 <div class="funccomm"><pre> Provide the nuclear mass or binding energy of a specified nucleus
- with <span class="string">"z"</span> protons and <span class="string">"n"</span> neutrons.
+ with <span class="string">"Z"</span> protons and <span class="string">"N"</span> neutrons.
  Here the semi-empirical mass formula is used as indicated on the slides
  of the lecture <span class="string">"Aspects of Nuclear Physics"</span> by Nick van Eijndhoven.
  For very light nuclei this may be inaccurate.
@@ -3350,6 +3362,290 @@ return false;}
  The default is mode=1.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetRadiationLength" href="src/NcAstrolab.cxx.html#DfsPN">GetRadiationLength</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Z, <a href="./ListOfTypes.html#Double_t">Double_t</a> A, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho = -1) const</span><br />
+<div class="funccomm"><pre> Provide the radiation length of a medium consisting of (averaged) nuclei (Z,A).
+ The radiation length is returned in g/cm^2, #nucleons/cm^2 or cm, depending on
+ the value of <span class="string">"rho"</span> (see below)
+
+ The radition length (X0) is the mean distance over which the energy of a high-energy electron
+ is reduced by a factor 1/e due to bremmstrahlung.
+ Alternatively, it is also 7/9 times the mean free path of a high-energy photon before
+ pair production occurs.
+
+ The following approximation was obtained from the Particle <a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a> Group (https://pdg.lbl.gov)
+
+ X0=716.4*A/[Z(Z+1)(Ln(287/sqrt(Z))] g/cm^2
+
+ Input arguments :
+
+ Z   : The (averaged) atomic number (=number of protons) of the nucleus
+ A   : The (averaged) mass number (=number of nucleons) of the nucleus
+ rho : &lt;0 --&gt; [X0]=g/cm^2
+       =0 --&gt; [X0]=#nucleons/cm^2
+       &gt;0 --&gt; rho=density of the medium in g/cm^3 and [X0]=cm
+
+ The default value is rho=-1.
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetMeanFreePath" href="src/NcAstrolab.cxx.html#g9Z9X">GetMeanFreePath</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) const</span><br />
+<div class="funccomm"><pre> Provide the mean free path <span class="string">"lambda"</span> of a high-energy particle passing through a certain medium.
+ The input parameter <span class="string">"mode"</span> dictates the units of <span class="string">"rho"</span> and the returned value of <span class="string">"lambda"</span> (see below).
+
+ The mean free path (lambda) is the mean distance over which a high-energy particle travels
+ inside the medium before an interaction occurs.
+ For non (quasi)elastic interactions, this is also called <span class="string">"interaction length"</span>,
+ <span class="string">"attenuation length"</span> or <span class="string">"absorption length"</span>.
+
+ The scattering centers (=particles) in the medium are regarded as being stationary,
+ such that we can use the formula :
+
+ lambda=1/(sigma*n)
+
+ where <span class="string">"sigma"</span> represents the cross section and <span class="string">"n"</span> represents the number density
+ of the scattering centers in the medium.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ Input arguments :
+
+ sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+ rho   : The density of the medium (see below)
+ mode  : 0 --&gt; rho=#particles/cm^3 and [lambda]=cm
+         1 --&gt; rho=#particles/cm^3 and [lambda]=#particles/cm^2
+         2 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [lambda]=cm
+         3 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [lambda]=g/cm^2
+         4 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [lambda]=#nucleons/cm^2
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetInteractionProbability" href="src/NcAstrolab.cxx.html#Owols">GetInteractionProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) const</span><br />
+<div class="funccomm"><pre> Provide the interaction probability of a high-energy particle traveling
+ a distance <span class="string">"x"</span> through a certain medium.
+
+ For a mono-energetic beam of identical particles, this probability allows
+ to calculate the interaction rate once the beam luminosity is known.
+
+ Input arguments :
+
+ x      : The distance traveled by the particle inside the medium
+ lambda : The mean free path of the particle in the medium
+
+ The formula used is : prob=1-exp(-x/lambda).
+
+ So, when x=lambda, the interaction probability is about 0.63.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ Notes :
+
+ 1) <span class="string">"x"</span> and <span class="string">"lambda"</span> have to be specified in the same units.
+ 2) The probability of pair production by a high-energy photon
+    may be obtained from the corresponding radiation length X0
+    by using the fact that lambda=X0*9/7.
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetInteractionProbability@1" href="src/NcAstrolab.cxx.html#xpWKD">GetInteractionProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) const</span><br />
+<div class="funccomm"><pre> Provide the interaction probability of a high-energy particle traveling
+ a distance <span class="string">"x"</span> through a certain medium.
+ The input parameter <span class="string">"mode"</span> dictates the units of <span class="string">"x"</span> and <span class="string">"rho"</span> (see below).
+
+ For a mono-energetic beam of identical particles, this probability allows
+ to calculate the interaction rate once the beam luminosity is known.
+
+ Input arguments :
+
+ x     : The distance traveled by the particle inside the medium (see below)
+ sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+ rho   : The density of the medium (see below)
+ mode  : 0 --&gt; rho=#particles/cm^3 and [x]=cm
+         1 --&gt; rho=#particles/cm^3 and [x]=#particles/cm^2
+         2 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+         3 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+         4 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+
+ The formula used is : prob=1-exp(-x/lambda),
+ where lambda is the corresponding mean free path.
+
+ So, when x=lambda, the interaction probability is about 0.63.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetSurvivalProbability" href="src/NcAstrolab.cxx.html#Pzd0tB">GetSurvivalProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) const</span><br />
+<div class="funccomm"><pre> Provide the survival probability of a high-energy particle traveling
+ a distance <span class="string">"x"</span> through a certain medium.
+
+ For a mono-energetic beam of identical particles, this probability
+ also represents the beam attenuation factor.
+
+ Input arguments :
+
+ x      : The distance traveled by the particle inside the medium
+ lambda : The mean free path of the particle in the medium
+
+ The formula used is : prob=exp(-x/lambda).
+
+ So, when x=lambda, the survial probability is 1/e.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ Notes :
+
+ 1) <span class="string">"x"</span> and <span class="string">"lambda"</span> have to be specified in the same units.
+ 2) The probability for a high-energy photon to survive pair production
+    may be obtained from the corresponding radiation length X0
+    by using the fact that lambda=X0*9/7.
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetSurvivalProbability@1" href="src/NcAstrolab.cxx.html#kPDufD">GetSurvivalProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) const</span><br />
+<div class="funccomm"><pre> Provide the survival probability of a high-energy particle traveling
+ a distance <span class="string">"x"</span> through a certain medium.
+ The input parameter <span class="string">"mode"</span> dictates the units of <span class="string">"x"</span> and <span class="string">"rho"</span> (see below).
+
+ For a mono-energetic beam of identical particles, this probability
+ also represents the beam attenuation factor.
+
+ Input arguments :
+
+ x     : The distance traveled by the particle inside the medium (see below)
+ sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+ rho   : The density of the medium (see below)
+ mode  : 0 --&gt; rho=#particles/cm^3 and [x]=cm
+         1 --&gt; rho=#particles/cm^3 and [x]=#particles/cm^2
+         2 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+         3 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+         4 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+
+ The formula used is : prob=exp(-x/lambda),
+ where lambda is the corresponding mean free path.
+
+ So, when x=lambda, the survial probability is 1/e.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetShieldingThickness" href="src/NcAstrolab.cxx.html#hiT32">GetShieldingThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) const</span><br />
+<div class="funccomm"><pre> Provide the shielding thickness <span class="string">"x"</span> to obtain the specified survival probability
+ for a high-energy particle.
+ The calculated thickness is returned in the same units as the provided <span class="string">"lambda"</span>.
+
+ Input arguments :
+
+ prob   : The requested survival probability
+ lambda : The mean free path of the particle in the medium
+
+ The formula used is : x=-lambda*Ln(prob).
+
+ So, when the specified probability is 1/e, the shielding thickness x=lambda.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ Note :
+
+ The shielding thickness for a high-energy photon to undergo pair production
+ may be obtained from the corresponding radiation length X0 by using the fact
+ that lambda=X0*9/7.
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetShieldingThickness@1" href="src/NcAstrolab.cxx.html#OrtwEC">GetShieldingThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) const</span><br />
+<div class="funccomm"><pre> Provide the shielding thickness <span class="string">"x"</span> to obtain the specified survival probability
+ for a high-energy particle.
+ The input parameter <span class="string">"mode"</span> dictates the units of <span class="string">"rho"</span> and the returned value of <span class="string">"x"</span> (see below).
+
+ Input arguments :
+
+ prob  : The requested survival probability
+ sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+ rho   : The density of the medium (see below)
+ mode  : 0 --&gt; rho=#particles/cm^3 and [x]=cm
+         1 --&gt; rho=#particles/cm^3 and [x]=#particles/cm^2
+         2 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+         3 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+         4 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+
+ The formula used is : x=-lambda*Ln(prob),
+ where lambda is the corresponding mean free path.
+
+ So, when the specified probability is 1/e, the shielding thickness x=lambda.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetTargetThickness" href="src/NcAstrolab.cxx.html#MwkdN">GetTargetThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) const</span><br />
+<div class="funccomm"><pre> Provide the target thickness <span class="string">"x"</span> to obtain the specified interaction probability
+ for a high-energy particle.
+ The calculated thickness is returned in the same units as the provided <span class="string">"lambda"</span>.
+
+ Input arguments :
+
+ prob   : The requested interaction probability
+ lambda : The mean free path of the particle in the medium
+
+ The formula used is : x=-lambda*Ln(1-prob).
+
+ So, when the specified probability is (1-1/e), the shielding thickness x=lambda.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ Note :
+
+ The target thickness for a high-energy photon to undergo pair production
+ may be obtained from the corresponding radiation length X0 by using the fact
+ that lambda=X0*9/7.
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetTargetThickness@1" href="src/NcAstrolab.cxx.html#MkmZBC">GetTargetThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) const</span><br />
+<div class="funccomm"><pre> Provide the target thickness <span class="string">"x"</span> to obtain the specified interaction probability
+ for a high-energy particle.
+ The input parameter <span class="string">"mode"</span> dictates the units of <span class="string">"rho"</span> and the returned value of <span class="string">"x"</span> (see below).
+
+ Input arguments :
+
+ prob  : The requested interaction probability
+ sigma : The interaction cross section in barn (1 barn=1e-24 cm^2)
+ rho   : The density of the medium (see below)
+ mode  : 0 --&gt; rho=#particles/cm^3 and [x]=cm
+         1 --&gt; rho=#particles/cm^3 and [x]=#particles/cm^2
+         2 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=cm
+         3 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=g/cm^2
+         4 --&gt; Atomic c.q. nuclear medium with [rho]=g/cm^3 and [x]=#nucleons/cm^2
+
+ The formula used is : x=-lambda*Ln(1-prob),
+ where lambda is the corresponding mean free path.
+
+ So, when the specified probability is (1-1/e), the shielding thickness x=lambda.
+
+ For details please refer to the slides of my lectures :
+ https://sites.google.com/site/nickveweb/lectures/scatteringanddecayprocesses
+
+ In case of inconsistent input the unphysical value -1 will be returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetNeutrinoXsection" href="src/NcAstrolab.cxx.html#yGhLy">GetNeutrinoXsection</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Double_t">Double_t</a> egev, <a href="./ListOfTypes.html#Double_t">Double_t</a> xscale = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* eprimgev = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* alpha = 0) const</span><br />
 <div class="funccomm"><pre> Provide the neutrino cross section and (optional) the average energy
  and opening angle of the produced charged lepton (CC) or (anti)neutrino (NC).
@@ -3369,11 +3665,11 @@ return false;}
 
  mode   :  1 --&gt; Nucleon target DIS CC cross section
            2 --&gt; Nucleon target DIS NC cross section
-        :  3 --&gt; Nucleon target DIS total cross section
-        : -1 --&gt; Electron target CC cross section
+           3 --&gt; Nucleon target DIS total cross section
+          -1 --&gt; Electron target CC cross section
           -2 --&gt; Electron target NC cross section
-        : -3 --&gt; Electron target total cross section
-        : -4 --&gt; Special CC process anu_e+e--&gt;anu_mu+mu (not included in other mode values)
+          -3 --&gt; Electron target total cross section
+          -4 --&gt; Special CC process anu_e+e--&gt;anu_mu+mu (not included in other mode values)
  type   :  1 --&gt; Electron neutrino
            2 --&gt; Muon neutrino
            3 --&gt; Tau neutrino
@@ -4830,7 +5126,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Dec 19 09:56:17 2022 </em><em>&raquo; Last generated: 2022-12-19 09:56</em><br />
+<em>&raquo; Last changed: Mon Jan 16 17:45:40 2023 </em><em>&raquo; Last generated: 2023-01-16 17:45</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

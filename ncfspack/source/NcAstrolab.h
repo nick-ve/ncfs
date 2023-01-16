@@ -1,6 +1,6 @@
 #ifndef NcAstrolab_h
 #define NcAstrolab_h
-// Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997-2023, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <math.h>
@@ -111,8 +111,19 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetLuminosityDistance(Double_t z,TString u="Mpc") const;         // Provide luminosity distance of an object with redshift z in a flat universe
   Double_t GetLightTravelDistance(Double_t z,TString u="Mpc") const;        // Provide light-travel distance of an object with redshift z in a flat universe
   Double_t GetLightTravelTime(Double_t z) const;                            // Provide light-travel time of an object with redshift z in a flat universe
-  Double_t GetHubbleParameter(Double_t z,TString u="Mpc") const; // Provide the Hubble parameter for a certain redshift z in a flat universe
-  Double_t GetNuclearMass(Int_t z,Int_t n,Int_t mode=1) const; // Provide the nuclear mass or binding energy for a nucleus (Z,N)
+  Double_t GetHubbleParameter(Double_t z,TString u="Mpc") const;            // Provide the Hubble parameter for a certain redshift z in a flat universe
+  Double_t GetNuclearMass(Int_t Z,Int_t N,Int_t mode=1) const;              // Provide the nuclear mass or binding energy for a nucleus (Z,N)
+  Double_t GetRadiationLength(Double_t Z,Double_t A,Double_t rho=-1) const; // Provide the radiation length for a medium consisting of (averaged) nuclei (Z,A) 
+  Double_t GetMeanFreePath(Double_t sigma,Double_t rho,Int_t mode) const;   // Provide the mean free path of a high-energy particle passing through a certain medium
+  Double_t GetInteractionProbability(Double_t x,Double_t lambda) const;                        // Provide the interaction probability of a high-energy particle traveling a distance x in a certain medium
+  Double_t GetInteractionProbability(Double_t x,Double_t sigma,Double_t rho,Int_t mode) const; // Provide the interaction probability of a high-energy particle traveling a distance x in a certain medium
+  Double_t GetSurvivalProbability(Double_t x,Double_t lambda) const;                           // Provide the survival probability of a high-energy particle traveling a distance x in a certain medium
+  Double_t GetSurvivalProbability(Double_t x,Double_t sigma,Double_t rho,Int_t mode) const;    // Provide the survival probability of a high-energy particle traveling a distance x in a certain medium
+  Double_t GetShieldingThickness(Double_t prob,Double_t lambda) const;                         // Provide the shielding thickness to obtain the specified survival probability for a high-energy particle
+  Double_t GetShieldingThickness(Double_t prob,Double_t sigma,Double_t rho,Int_t mode) const;  // Provide the shielding thickness to obtain the specified survival probability for a high-energy particle
+  Double_t GetTargetThickness(Double_t prob,Double_t lambda) const;                            // Provide the target thickness to obtain the specified interaction probability for a high-energy particle
+  Double_t GetTargetThickness(Double_t prob,Double_t sigma,Double_t rho,Int_t mode) const;     // Provide the target thickness to obtain the specified interaction probability for a high-energy particle
+
   Double_t GetNeutrinoXsection(Int_t mode,Int_t type,Double_t egev,Double_t xscale=1,Double_t* eprimgev=0,Double_t* alpha=0) const; // Provide neutrino cross section
   Double_t GetNeutrinoAngle(Double_t E,TString u,Int_t mode,TF1* f=0); // Provide the kinematic opening angle between a neutrino and the CC produced corresponding lepton
   void RandomPosition(Nc3Vector& v,Double_t thetamin,Double_t thetamax,Double_t phimin,Double_t phimax); // Random angular position according to an isotropic solid angle distribution
@@ -242,6 +253,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t fPlanck;  // The value of the Planck constant (h) in J s
   Double_t fBoltz;   // The value of the Boltzmann constant (k) in J K^-1
   Double_t fNewton;  // The value of the Newton gravitational constant in m^3 kg^-1 s^-2 
+  Double_t fGn;      // The nominal value of the gravitational acceleration at the Earth surface in m s^-2
   Double_t fAu;      // The Astronomical Unit in m
   Double_t fPc;      // The Parsec in m
   Double_t fHubble;  // The value of the Hubble parameter in km s^-1 Mpc^-1
@@ -280,6 +292,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1* GetBurstT90dist(TString name,TString type);
   TH1* GetBurstSigmaPosdist(TString name,TString type);
  
- ClassDef(NcAstrolab,37) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,38) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

@@ -1394,4 +1394,9 @@
                 The version indicator in NcVersion has been updated to 5.2.
 11-jan-2022 NvE Functionality of RnoConvert::SetPrintFreq() extended by introduction of a print level.
                 The version indicator in NcVersion has been updated to 5.21.
+16-jan-2022 NvE Functionality of class NcAstrolab extended by introduction of the member functions
+                GetRadiationLength(), GetMeanFreePath(), GetInteractionProbability(), GetSurvivalProbability(),
+                GetShieldingThickness() and GetTargetThickness().
+                Also the nominal gravitational acceleration value added to GetPhysicalParameter().
+                The version indicator in NcVersion has been updated to 5.22.
 
