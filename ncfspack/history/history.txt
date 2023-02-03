@@ -1392,11 +1392,15 @@
                 have been updated accordingly.
                 Do not use version 5.0 or 5.1 for NcTaggingSelector, because of the bugs.
                 The version indicator in NcVersion has been updated to 5.2.
-11-jan-2022 NvE Functionality of RnoConvert::SetPrintFreq() extended by introduction of a print level.
+11-jan-2023 NvE Functionality of RnoConvert::SetPrintFreq() extended by introduction of a print level.
                 The version indicator in NcVersion has been updated to 5.21.
-16-jan-2022 NvE Functionality of class NcAstrolab extended by introduction of the member functions
+16-jan-2023 NvE Functionality of class NcAstrolab extended by introduction of the member functions
                 GetRadiationLength(), GetMeanFreePath(), GetInteractionProbability(), GetSurvivalProbability(),
                 GetShieldingThickness() and GetTargetThickness().
                 Also the nominal gravitational acceleration value added to GetPhysicalParameter().
                 The version indicator in NcVersion has been updated to 5.22.
+03-feb-2022 NvE New class NcDSP introduced to provide various Digital Signal Processing tools.
+                The class NcDSP replaces the class NcTransform, but the latter is kept for backward compatibility.
+                The class RnoStation has been modified to use the new class NcDSP.
+                The version indicator in NcVersion has been updated to 5.30.
 

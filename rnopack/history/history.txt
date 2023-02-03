@@ -54,4 +54,5 @@
 19-dec-2022 NvE Functionality of RnoMonitor extended by introduction of the memberfunction SetBaselineMode()
                 and the memberfunction SetDeviceClass() renamed to SetDevices() to provide more flexibility.
                 The corresponding example macros have been updated accordingly.
-11-jan-2022 NvE Functionality of RnoConvert::SetPrintFreq() extended by introduction of a print level.
+11-jan-2023 NvE Functionality of RnoConvert::SetPrintFreq() extended by introduction of a print level.
+03-feb-2023 NvE The class RnoStation has been modified to use the new class NcDSP.

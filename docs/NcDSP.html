@@ -1,0 +1,1119 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Fri Feb  3 16:35:53 2023            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>NcDSP</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class NcDSP','','NcDSP.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/NcDSP.h.html">header file</a>
+<a class="descrheadentry" href="src/NcDSP.cxx.html">source file</a>
+<a class="descrheadentry" href="NcDSP_Tree.pdf">inheritance tree (.pdf)</a> 
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#NcDSP:description">class description</a> 
+<a class="descrheadentry" href="#NcDSP:Function_Members">function members</a>
+<a class="descrheadentry" href="#NcDSP:Data_Members">data members</a>
+<a class="descrheadentry" href="#NcDSP:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">NcDSP</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="NcDSP:description"></a>class NcDSP: public TNamed</h1>
+<div class="classdescr">
+<pre>
+ <a href="./NcDSP.html#NcDSP:Class" title="TClass* NcDSP::Class()">Class</a> <a href="./NcDSP.html">NcDSP</a>
+ <a href="./NcDSP.html#NcDSP:Class" title="TClass* NcDSP::Class()">Class</a> to perform various Digital Signal Processing (DSP) operations on (sequential) data samples.
+
+ For a description of most of the DSP techniques, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ The following discrete transformations (using the FFTW algorithms) are supported :
+ <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> (DFT), <a href="./NcDSP.html#NcDSP:Hartley" title="void NcDSP::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> (DHT), <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> (DST) and <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> (DCT).
+
+ All transformation results have been normalized, such that
+ the inverse transformation provides the original input spectrum.
+
+ In addition to the above transformations, also convolution, correlation
+ and digitization processors are provided.
+
+ For details about the various operations and their options, please refer
+ to the documentation in the corresponding member functions.
+
+ Usage example for a discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform (DFT) :
+
+
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> N=2048;          // Number of samples
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> fsample=3.2e9; // Sampling rate in Hz
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> nu=3e8;        // Signal frequency in Hz
+
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> pi=acos(-1.);
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> omega=2.*pi*nu;  // Signal frequency in rad/sec
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> step=1./fsample; // The time step of each sample
+
+ // Fill the time domain sampled data
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> tdata[N];
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> t=0;
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> y=0;
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;N; i++)
+ {
+  y=cos(omega*t)+5.*sin(3.*omega*t);
+  tdata[i]=y;
+  t+=step;
+ }
+
+ <a href="./NcDSP.html">NcDSP</a> q;
+ q.<a href="./NcDSP.html#NcDSP:SetSamplingFrequency" title="void NcDSP::SetSamplingFrequency(Float_t f)">SetSamplingFrequency</a>(fsample);
+ q.<a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>(N,tdata);
+
+ // Obtain the amplitudes in an array
+ q.<a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>);
+ TArrayD arr=q.<a href="./NcDSP.html#NcDSP:GetData" title="TArrayD NcDSP::GetData(TString mode)">GetData</a>(<span class="string">"AMP out"</span>);
+
+ // Obtain the amplitudes in a histogram
+ TH1F hist;
+ q.<a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>,&amp;hist,<span class="string">"AMP Hz"</span>);
+
+ // Illustration of forward followed by inverse transformation
+
+ // The original time domain input spectrum
+ TH1F hist1;
+ q.<a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>,&amp;hist1,<span class="string">"t"</span>);
+
+ // The forward transformation
+ TH1F hist2;
+ q.<a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"R2C"</span>,&amp;hist2,<span class="string">"AMP Hz"</span>);
+
+ // <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the obtained frequency domain data as new input to obtain
+ // the original time domain spectrum via the inverse transformation
+ q.<a href="./NcDSP.html#NcDSP:LoadResult" title="void NcDSP::LoadResult()">LoadResult</a>();
+
+ // The frequency domain input spectrum
+ TH1F hist3;
+ q.<a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"C2R"</span>,&amp;hist3,<span class="string">"AMP Hz"</span>);
+
+ // Obtain the original time domain spectrum via the inverse transformation
+ TH1F hist4;
+ q.<a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a>(<span class="string">"C2R"</span>,&amp;hist4,<span class="string">"t"</span>);
+
+ TCanvas c1(<span class="string">"c1"</span>,<span class="string">"Forward"</span>);
+ c1.Divide(1,2);
+ c1.cd(1);
+ hist1.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+ c1.cd(2);
+ hist2.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+
+ TCanvas c2(<span class="string">"c2"</span>,<span class="string">"Inverse"</span>);
+ c2.Divide(1,2);
+ c2.cd(1);
+ hist3.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+ c2.cd(2);
+ hist4.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>();
+
+ Usage example for Convolution :
+
+
+ // The input signal
+ const <a href="./ListOfTypes.html#Int_t">Int_t</a> nx=17;
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> x[nx]={0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0};
+
+ // The system impulse response
+ const <a href="./ListOfTypes.html#Int_t">Int_t</a> nh=10;
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> h[nh]={1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1};
+
+ <a href="./NcDSP.html">NcDSP</a> q;
+ q.<a href="./NcDSP.html#NcDSP:SetSamplingFrequency" title="void NcDSP::SetSamplingFrequency(Float_t f)">SetSamplingFrequency</a>(1e9); // Sampling frequency in Hz
+ q.<a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>(nx,x);                // <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the signal input data
+ q.<a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>(nh,h);         // <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the system response data
+
+ printf(<span class="string">" Stored elements : Nsignal=%-i  Nwaveform=%-i \n"</span>,q.<a href="./NcDSP.html#NcDSP:GetN" title="Int_t NcDSP::GetN(Int_t mode=0)">GetN</a>(),q.<a href="./NcDSP.html#NcDSP:GetN" title="Int_t NcDSP::GetN(Int_t mode=0)">GetN</a>(1));
+
+ // Perform the Convolution
+ TH1F hy;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> smin,smax;
+ TArrayD y=q.<a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Convolve</a>(&amp;hy,&amp;smin,&amp;smax);
+
+ printf(<span class="string">" Convolution full coverage between sample numbers %-i and %-i \n"</span>,smin,smax);
+
+ // Plot the various distributions
+ TH1F hx(<span class="string">"hx"</span>,<span class="string">"Input signal"</span>,nx,0,nx);
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=1; i&lt;=nx; i++)
+ {
+  hx.SetBinContent(i,x[i-1]);
+ }
+
+ TH1F hh(<span class="string">"hh"</span>,<span class="string">"Impulse response"</span>,nh,0,nh);
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=1; i&lt;=nh; i++)
+ {
+  hh.SetBinContent(i,h[i-1]);
+ }
+
+ TCanvas c(<span class="string">"c"</span>,<span class="string">"Convolution"</span>);
+ c.Divide(1,3);
+ c.cd(1);
+ hx.SetMarkerStyle(20);
+ hx.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ c.cd(2);
+ hh.SetMarkerStyle(20);
+ hh.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ c.cd(3);
+ hy.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+
+ Usage example for cross-correlation :
+
+
+ // The input signal
+ const <a href="./ListOfTypes.html#Int_t">Int_t</a> nx=17;
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> x[nx]={0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0};
+
+ // The waveform pattern
+ const <a href="./ListOfTypes.html#Int_t">Int_t</a> nh=10;
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> h[nh]={1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1};
+
+ <a href="./NcDSP.html">NcDSP</a> q;
+ q.<a href="./NcDSP.html#NcDSP:SetSamplingFrequency" title="void NcDSP::SetSamplingFrequency(Float_t f)">SetSamplingFrequency</a>(1e9); // Sampling frequency in Hz
+ q.<a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>(nx,x);                // <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the signal input data
+ q.<a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>(nh,h);         // <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the waveform data
+
+ printf(<span class="string">" Stored elements : Nsignal=%-i  Nwaveform=%-i \n"</span>,q.<a href="./NcDSP.html#NcDSP:GetN" title="Int_t NcDSP::GetN(Int_t mode=0)">GetN</a>(),q.<a href="./NcDSP.html#NcDSP:GetN" title="Int_t NcDSP::GetN(Int_t mode=0)">GetN</a>(1));
+
+ // Perform the Cross-Correlation
+ TH1F hy;
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> smin,smax;
+ TArrayD y=q.<a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Correlate</a>(&amp;hy,&amp;smin,&amp;smax);
+
+ printf(<span class="string">" Correlation full coverage between sample numbers %-i and %-i \n"</span>,smin,smax);
+
+ // Plot the various distributions
+ TH1F hx(<span class="string">"hx"</span>,<span class="string">"Input signal"</span>,nx,0,nx);
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=1; i&lt;=nx; i++)
+ {
+  hx.SetBinContent(i,x[i-1]);
+ }
+
+ TH1F hh(<span class="string">"hh"</span>,<span class="string">"Waveform pattern"</span>,nh,0,nh);
+ for (<a href="./ListOfTypes.html#Int_t">Int_t</a> i=1; i&lt;=nh; i++)
+ {
+  hh.SetBinContent(i,h[i-1]);
+ }
+
+ TCanvas c(<span class="string">"c"</span>,<span class="string">"Correlation"</span>);
+ c.Divide(1,3);
+ c.cd(1);
+ hx.SetMarkerStyle(20);
+ hx.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ c.cd(2);
+ hh.SetMarkerStyle(20);
+ hh.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ c.cd(3);
+ hy.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+
+--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 3, 2023  14:17Z
+
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="NcDSP:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDSP:NcDSP@1">NcDSP</a>(<span class="keyword">const</span> <a href="./NcDSP.html">NcDSP</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDSP:NcDSP">NcDSP</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcDSP:_NcDSP">~NcDSP</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcDSP:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcDSP:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Convolve">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Correlate">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Cosine">Cosine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Digitize">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* stp = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* scale = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Fourier">Fourier</a>(TString mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:GetData">GetData</a>(TString mode) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcDSP:GetN">GetN</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#NcDSP:GetSamplingFrequency">GetSamplingFrequency</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Hartley">Hartley</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcDSP:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Load@4">Load</a>(TH1* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Load@5">Load</a>(TGraph* gr, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Load@1">Load</a>(TArray* re, TArray* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Load@2">Load</a>(<a href="./NcSample.html">NcSample</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Load@3">Load</a>(<a href="./NcSample.html">NcSample</a>* s, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Load">Load</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* re, <a href="./ListOfTypes.html#Double_t">Double_t</a>* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:LoadResult">LoadResult</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcDSP.html">NcDSP</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcDSP:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcDSP.html">NcDSP</a>&amp;)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Paint"><span class="baseclass">TObject::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:SampleAndHold@1">SampleAndHold</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ns, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmin = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmax = -1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:SampleAndHold">SampleAndHold</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:SampleAndSum@1">SampleAndSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ns, TH1* hist, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmin = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmax = -1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:SampleAndSum">SampleAndSum</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, TH1* hist = 0) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:SetSamplingFrequency">SetSamplingFrequency</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:SetWaveform@1">SetWaveform</a>(TArray* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:SetWaveform@4">SetWaveform</a>(TH1* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:SetWaveform@5">SetWaveform</a>(TGraph* gr, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:SetWaveform">SetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:SetWaveform@2">SetWaveform</a>(<a href="./NcSample.html">NcSample</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:SetWaveform@3">SetWaveform</a>(<a href="./NcSample.html">NcSample</a>* s, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Sine">Sine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Reset">Reset</a>()</td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="NcDSP:Data_Members"></a>Data Members</h2>
+<div class="access" id="enumpubl"><b>public:</b>
+<table class="data" id="tabenumpubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fImIn"></a>fImIn</td><td class="datadesc">Input array for imaginary components</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fImOut"></a>fImOut</td><td class="datadesc">Output array for imaginary components</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDSP:fN"></a>fN</td><td class="datadesc">The number of data elements to be processed as entered via Load()</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDSP:fNwf"></a>fNwf</td><td class="datadesc">The number of data elements to be processed as entered via SetWaveform();</td></tr>
+<tr class="data"><td class="datatype">TVirtualFFT*</td><td class="dataname"><a name="NcDSP:fProc"></a>fProc</td><td class="datadesc">The FFTW processor</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fReIn"></a>fReIn</td><td class="datadesc">Input array for real components</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fReOut"></a>fReOut</td><td class="datadesc">Output array for real components</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcDSP:fSample"></a>fSample</td><td class="datadesc">The actual data acquisition sampling frequency in Hz</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fWaveform"></a>fWaveform</td><td class="datadesc">(System response) waveform for Convolution, Correlation etc.</td></tr>
+
+</table></div>
+</div>
+<h2><a id="NcDSP:Class_Charts"></a>Class Charts</h2>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TNamed</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="NcDSP" href="./NcDSP.html">NcDSP</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDSP:NcDSP" href="src/NcDSP.cxx.html#DZVnkB">NcDSP</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre> Default constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDSP:_NcDSP" href="src/NcDSP.cxx.html#l5WUaD">~NcDSP</a>()</span><br />
+<div class="funccomm"><pre> Default destructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcDSP:NcDSP@1" href="src/NcDSP.cxx.html#mVc1h">NcDSP</a>(<span class="keyword">const</span> <a href="./NcDSP.html">NcDSP</a>&amp; q)</span><br />
+<div class="funccomm"><pre> <a href="./#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> constructor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Reset" href="src/NcDSP.cxx.html#u7Wi8">Reset</a>()</span><br />
+<div class="funccomm"><pre> Internal member function to reset all data and the FFTW processor.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetSamplingFrequency" href="src/NcDSP.cxx.html#sdLE.">SetSamplingFrequency</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> f)</span><br />
+<div class="funccomm"><pre> Set the actual DAQ sampling frequency in Hz.
+ This sampling frequency may be overwritten by invokation of
+ one of the various <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
+ The sampling frequency is set to 0 in the constructor of this class.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Float_t">Float_t</a> <a class="funcname" name="NcDSP:GetSamplingFrequency" href="src/NcDSP.cxx.html#LhiAd">GetSamplingFrequency</a>() const</span><br />
+<div class="funccomm"><pre> Provide the current value of the DAQ sampling frequency in Hz.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Load" href="src/NcDSP.cxx.html#swcuJB">Load</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* re, <a href="./ListOfTypes.html#Double_t">Double_t</a>* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data to be processed and reset the FFTW processor.
+
+ Note : The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+
+ Input arguments :
+
+ n  : The number of data elements
+ re : Array with real data elements
+ im : Array with imaginary data elements
+ f  : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ If provided, the array size must be at least of dimension <span class="string">"n"</span>.
+
+ The defaults are im=0 and f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Load@1" href="src/NcDSP.cxx.html#XFK9bB">Load</a>(TArray* re, TArray* im = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data to be processed and reset the FFTW processor.
+
+ Note : The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+
+ Input arguments :
+
+ re : Array with real data elements
+ im : Array with imaginary data elements
+ f  : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ If both arrays are provided, the size of the smallest non-empty array
+ will be used to compose the input data.
+
+ The defaults are im=0 and f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Load@2" href="src/NcDSP.cxx.html#PvUWsD">Load</a>(<a href="./NcSample.html">NcSample</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from the <a href="./NcSample.html">NcSample</a> <span class="string">"s"</span> to be processed and reset the FFTW processor.
+
+ Note : The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+
+ Input arguments :
+
+ i : The data of the i-th variable (1=first) of the <a href="./NcSample.html">NcSample</a> are used
+ f : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ Note : The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Load@3" href="src/NcDSP.cxx.html#otXPVE">Load</a>(<a href="./NcSample.html">NcSample</a>* s, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from the <a href="./NcSample.html">NcSample</a> <span class="string">"s"</span> to be processed and reset the FFTW processor.
+
+ Note : The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+
+ Input arguments :
+
+ name : Name of the <a href="./NcSample.html">NcSample</a> variable of which the data are used
+ f    : (optional) Actual data acquisition sampling frequency in Hz
+        In case f&lt;0 the current sampling frequency is not modified.
+
+ Note : The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Load@4" href="src/NcDSP.cxx.html#RtdI4E">Load</a>(TH1* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from a 1-Dimensional histogram to be processed and reset the FFTW processor.
+
+ Note : The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+
+ Input arguments :
+
+ h : Pointer to the 1-D histogram of which the bin contents are used
+ f : (optional) Actual data acquisition sampling frequency in Hz
+     In case f&lt;0 the current sampling frequency is not modified.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Load@5" href="src/NcDSP.cxx.html#t0QTjB">Load</a>(TGraph* gr, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Provide new input data from a TGraph object to be processed and reset the FFTW processor.
+
+ Note : The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+
+ Input arguments :
+
+ gr : Pointer to the TGraph object of which the bin contents are used
+ f  : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:LoadResult" href="src/NcDSP.cxx.html#uZlcs">LoadResult</a>()</span><br />
+<div class="funccomm"><pre> <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a> the current transformation result as new input data in order to enable
+ inverse transformations acting on previous transformation results.
+
+ Notes :
+
+ 1) Invokation of one of the other <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunctions will reset the internal storage,
+    by which previously obtained results will internally be lost.
+    Use the <a href="./NcDSP.html#NcDSP:GetData" title="TArrayD NcDSP::GetData(TString mode)">GetData</a>() memberfunction to retrieve data that might be needed later again.
+ 2) The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetWaveform" href="src/NcDSP.cxx.html#Asm1MB">SetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Set the (system response) waveform for Convolution, Correlation etc.
+
+ Note : The input data stored via <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() will not be modified.
+
+ Input arguments :
+
+ n : The number of data elements
+ h : Array with the waveform data
+ f : (optional) Actual data acquisition sampling frequency in Hz
+     In case f&lt;0 the current sampling frequency is not modified.
+
+ The array size of <span class="string">"h"</span> must be at least of dimension <span class="string">"n"</span>.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetWaveform@1" href="src/NcDSP.cxx.html#KYYN_">SetWaveform</a>(TArray* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Set the (system response) waveform for Convolution, Correlation etc.
+
+ Note : The input data stored via <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() will not be modified.
+
+ Input arguments :
+
+ h : Array with the waveform data
+ f : (optional) Actual data acquisition sampling frequency in Hz
+     In case f&lt;0 the current sampling frequency is not modified.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetWaveform@2" href="src/NcDSP.cxx.html#thmuOC">SetWaveform</a>(<a href="./NcSample.html">NcSample</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Set the (system response) waveform for Convolution, Correlation etc.
+
+ Note : The input data stored via <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() will not be modified.
+
+ Input arguments :
+
+ s : <a href="./NcSample.html">NcSample</a> with the waveform data
+ i : The data of the i-th variable (1=first) of the <a href="./NcSample.html">NcSample</a> are used
+ f : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ Note : The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetWaveform@3" href="src/NcDSP.cxx.html#KITCZB">SetWaveform</a>(<a href="./NcSample.html">NcSample</a>* s, TString name, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Set the (system response) waveform for Convolution, Correlation etc.
+
+ Note : The input data stored via <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() will not be modified.
+
+ Input arguments :
+
+ s    : <a href="./NcSample.html">NcSample</a> with the waveform data
+ name : Name of the <a href="./NcSample.html">NcSample</a> variable of which the data are used
+ f    : (optional) Actual data acquisition sampling frequency in Hz
+        In case f&lt;0 the current sampling frequency is not modified.
+
+ Note : The Store Mode of the <a href="./NcSample.html">NcSample</a> must be activated.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetWaveform@4" href="src/NcDSP.cxx.html#X.VzCB">SetWaveform</a>(TH1* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Set the (system response) waveform for Convolution, Correlation etc.
+
+ Note : The input data stored via <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() will not be modified.
+
+ Input arguments :
+
+ h : Pointer to the 1-D histogram of which the bin contents are used for the waveform data
+ f : (optional) Actual data acquisition sampling frequency in Hz
+     In case f&lt;0 the current sampling frequency is not modified.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetWaveform@5" href="src/NcDSP.cxx.html#qCF1wD">SetWaveform</a>(TGraph* gr, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
+<div class="funccomm"><pre> Set the (system response) waveform for Convolution, Correlation etc.
+
+ Note : The input data stored via <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() will not be modified.
+
+ Input arguments :
+
+ gr : Pointer to the TGraph object of which the bin contents are used for the waveform data
+ f  : (optional) Actual data acquisition sampling frequency in Hz
+      In case f&lt;0 the current sampling frequency is not modified.
+
+ The default value is f=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcDSP:GetN" href="src/NcDSP.cxx.html#HwicvD">GetN</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
+<div class="funccomm"><pre> Provide the number of data elements (to be) processed.
+
+ mode : 0 --&gt; Provide the number of input data elements entered via <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>()
+        1 --&gt; Provide the number of input data elements entered via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>()
+
+ The default value is mode=0 for backward compatibility.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:GetData" href="src/NcDSP.cxx.html#qrqDkE">GetData</a>(TString mode) const</span><br />
+<div class="funccomm"><pre> Provide a selected set of data.
+
+ Input argument :
+
+ sel  : String to specify the contents of the provided data array
+        <span class="string">"RE"</span>   --&gt; The values of the real (re) components
+        <span class="string">"IM"</span>   --&gt; The values of the imaginary (im) components
+        <span class="string">"AMP"</span>  --&gt; The amplitudes, i.e. sqrt(re*re+im*im)
+        <span class="string">"PHIR"</span> --&gt; The phases, i.e. arctan(im/re), in radians
+        <span class="string">"PHID"</span> --&gt; The phases, i.e. arctan(im/re), in degrees
+        <span class="string">"in"</span>   --&gt; The values of the input data are provided
+        <span class="string">"out"</span>  --&gt; The values of the output data are provided
+        <span class="string">"Wave"</span> --&gt; The values of the stored (system response) waveform data are provided
+
+ Examples :
+
+ sel=<span class="string">"AMP out"</span> will provide all the N amplitudes of the resulting data after transformation.
+ sel=<span class="string">"RE in"</span> will provide all the N real components of the input data.
+ sel=<span class="string">"Wave"</span> will provide all the amplitudes of the stored (system response) waveform
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Fourier" href="src/NcDSP.cxx.html#P579wE">Fourier</a>(TString mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT).
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform : Q[k]=(1/sqrt(N))*sum(n=0,n=N-1){X[n]*exp(-i*2pi*(k/N)*n)}
+
+ Inverse <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform : X[n]=(1/sqrt(N))*sum(k=0,k=N-1){Q[k]*exp(i*2pi*(n/N)*k)}
+
+ Input arguments :
+
+ mode : <span class="string">"R2C"</span>  --&gt; Perform a real-input to complex-output discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transformation
+        <span class="string">"C2R"</span>  --&gt; Perform the inverse transformation of <span class="string">"R2C"</span>
+        <span class="string">"C2C"</span>  --&gt; Perform a complex-input to complex-output discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transformation
+        <span class="string">"C2CI"</span> --&gt; Perform the inverse of <span class="string">"C2C"</span>
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the contents and representation of the result histogram
+        <span class="string">"RE"</span>   --&gt; Y-axis shows the values of the real (re) components
+        <span class="string">"IM"</span>   --&gt; Y-axis shows the values of the imaginary (im) components
+        <span class="string">"AMP"</span>  --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+        <span class="string">"PHIR"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+        <span class="string">"PHID"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"AMP f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"RE k 2"</span> will show all N real components as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Hartley" href="src/NcDSP.cxx.html#Jm6K.D">Hartley</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcDSP.html#NcDSP:Hartley" title="void NcDSP::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> Transformation (DHT).
+ Actually, a DHT is closely related to a Discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT)
+ with only real input values.
+ Consequently, the resulting transformed array is also only real.
+
+ Indicating in the frequency domain the DHT data elements by H[k] and the
+ DFT data elements by F[k], we have the following relations :
+
+ 1) Re(F[k])=(H[k]+H[N-k])/2 and Im(F[k])=(H[N-k]-H[k])/2
+ 2) H[k]=Re((1+i)*F[k])
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcDSP.html#NcDSP:Hartley" title="void NcDSP::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transform : Q[k]=(1/sqrt(N))*sum(n=0,n=N-1){X[n]*[cos(2pi*(k/N)*n)+sin(2pi*(k/N)*n)]}
+
+ Inverse <a href="./NcDSP.html#NcDSP:Hartley" title="void NcDSP::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transform : X[n]=(1/sqrt(N))*sum(n=0,k=N-1){Q[k]*[cos(2pi*(n/N)*k)+sin(2pi*(n/N)*k)]}
+
+ So, it is seen that the <a href="./NcDSP.html#NcDSP:Hartley" title="void NcDSP::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transform is its own inverse.
+
+ Input arguments :
+
+ mode : &gt;0     --&gt; Perform the forward X[n]-&gt;Q[k] <a href="./NcDSP.html#NcDSP:Hartley" title="void NcDSP::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transformation
+        &lt;0     --&gt; Perform the backward Q[k]-&gt;X[n] <a href="./NcDSP.html#NcDSP:Hartley" title="void NcDSP::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> transformation
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Cosine" href="src/NcDSP.cxx.html#Xjw6AC">Cosine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> Transformation (DCT).
+ Actually, this is just a regular Discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT)
+ with only real input values which contain an even symmetry.
+ Consequently, the resulting transformed array is also only real with even symmetry.
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 1 : Q[k]=(1/sqrt(2*(N-1)))*[X[0]+pow(-1,k)*X[N-1]+2*sum(n=1,n=N-2){X[n]*cos(pi*n*k/(N-1))}]
+
+ <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+1)*k/N)}]
+
+ <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 3 : Q[k]=(1/sqrt(2N))[X[0]+2*sum(n=0,n=N-1){X[n]*cos(pi*n*(k+0.5)/N)}]
+
+ <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 4 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+0.5)*(k+0.5)/N)}
+
+ Notes :
+
+ 1) The type 1 transformation is only defined for N&gt;1 and is its own inverse.
+ 2) The type 4 transformation is its own inverse.
+ 3) The type 3 transformation is the inverse of type 2 (and vice versa).
+ 4) The type 2 transformation is often called <span class="string">"the"</span> DCT.
+ 5) The type 3 transformation id often called <span class="string">"the"</span> inverse DCT (IDCT).
+
+ Input arguments :
+
+ type : The type of transformation (i.e. 1,2,3 or 4) to be performed
+        The inverse transformations are specified with the corresponding negative type value
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Sine" href="src/NcDSP.cxx.html#dZEkaB">Sine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a normalized 1-dimensional Discrete <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> Transformation (DST).
+ Actually, this is just a regular Discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT)
+ with only real input values which contain an odd symmetry.
+ Consequently, the resulting transformed array is also only real with odd symmetry.
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain array : X[]=X[0],...,X[N-1]
+ Frequency domain array : Q[]=Q[0],...,Q[N-1]
+
+ <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 1 : Q[k]=(1/sqrt(2N+1))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+1)*(k+1)/(N+1))}]
+
+ <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+0.5)*(k+1)/N)}
+
+ <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 3 : Q[k]=(1/sqrt(2N))*[pow(-1,k)*X[N-1]+2*sum(n=0,n=N-2){X[n]*sin(pi*(n+1)*(k+0.5)/N)}]
+
+ <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 4 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+0.5)*(k+0.5)/N)}
+
+ Notes :
+
+ 1) The type 1 transformation is its own inverse.
+ 2) The type 4 transformation is its own inverse.
+ 3) The type 3 transformation is the inverse of type 2 (and vice versa).
+
+ Input arguments :
+
+ type : The type of transformation (i.e. 1,2,3 or 4) to be performed
+        The inverse transformations are specified with the corresponding negative type value
+ hist : (optional) Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>    --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>    --&gt; X-axis represents the actual time in seconds in the time domain
+        <span class="string">"2"</span>    --&gt; X-axis spans the full number of data points, instead of the usual (N/2)+1
+
+ Note : The options <span class="string">"Hz"</span> and <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Convolve" href="src/NcDSP.cxx.html#YrxsE">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Convolve</a> the loaded input data x[] with the data contained in the (system response)
+ waveform h[] and return the resulting data y[] in a TArrayD object.
+ The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions,
+ whereas the (system response) waveform h[] has to be specified by <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>().
+
+ In formula : y[]=x[]*h[].
+
+ The convolution of two (time) series expresses how the shape of one
+ is modified by the other, which makes it a versatile tool to describe
+ system responses, digital filtering processing, superposition of various influences
+ in physical systems etc.
+ The result y[] can be regarded as the weighted sum (or pdf) of X+H, where
+ X and H are two independent random variables with as pdf x[] and h[], respectively.
+ Note that here x[]*h[] is identical to h[]*x[].
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ Input arguments :
+
+ hist : (optional) Histogram with the convolution result
+
+ The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+ resulting convolved data array for which <span class="string">"h"</span> was fully immersed in the
+ input (signal) data.
+ These values i1 and i2 (if requested) are indicated by vertical
+ dashed blue lines in the histogram.
+
+ Note : The sampling (rate) of h[] has to be the same as for the input data x[].
+
+ The default values are hist=0, i1=0 and i2=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Correlate" href="src/NcDSP.cxx.html#wYx.l">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
+<div class="funccomm"><pre> (Cross) <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Correlate</a> the data contained in the waveform h[] with the loaded input data x[]
+ and return the resulting data y[] in a TArrayD object.
+ The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions,
+ whereas the waveform h[] has to be specified by <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>().
+
+ In formula : y[]=h[]*x[].
+
+ The cross-correlation is a measure of similarity of two (time) series as a function
+ of the displacement of one relative to the other.
+ The result y[] can be regarded as the weighted sum (or pdf) of X-H, where
+ X and H are two independent random variables with as pdf x[] and h[], respectively.
+ Note that here h[]*x[] is different from x[]*h[].
+
+ Mathematically it is seen that the cross-correlation h[]*x[] is equivalent
+ to the convolution of h[] and x[], but with the ordering of the elements
+ of the distribution h[] reversed.
+
+ In formula : Cross-correlation h[m]*x[n] is equivalent to Convolution h[-m]*x[n].
+
+ This feature is used here to centralize the computation in the member function <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Convolve</a>(),
+ so that also this <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Correlate</a>() processor will automatically profit from possible CPU speed
+ improvements in the Convolution processor.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ Input arguments :
+
+ hist : (optional) Histogram with the correlation result
+
+ The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+ resulting correlated data array for which <span class="string">"h"</span> was fully immersed in the
+ input (signal) data.
+ These values i1 and i2 (if requested) are indicated by vertical
+ dashed blue lines in the histogram.
+
+ Note : The sampling (rate) of h has to be the same as for the loaded input data x[].
+
+ The default values are hist=0, i1=0 and i2=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Digitize" href="src/NcDSP.cxx.html#zpJppE">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* stp = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* scale = 0) const</span><br />
+<div class="funccomm"><pre> <a href="./NcDSP.html#NcDSP:Digitize" title="TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist=0,Double_t* stp=0,Double_t* scale=0)">Digitize</a> the values of the stored waveform according to an <span class="string">"nbits"</span> ADC.
+ The resulting digitized values are returned in a TArrayD object.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ Input arguments :
+
+ nbits &gt;0 : Digitization of the values will be performed using nbits.
+       &lt;0 : Digitization of the Log10 of the values will be performed using |nbits|.
+            After digitization of the Log10 value, the digitized result (digval) is
+            used to store the corresponding linear value via value=pow(10,digval).
+            So, nbits&lt;0 emulates a Log10 ADC to enhance the dynamic range.
+            Note : When nbits&lt;0 all values to be digitized should be positive.
+ vcal     : Range calibration value of the ADC according to <span class="string">"mode"</span> as indicated below.
+ mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal&lt;0).
+        1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
+        2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal&lt;0).
+        3 : A step size of |vcal| is used providing a digval interval of [-scale,scale].
+
+ Optional output arguments :
+
+ hist  : Histogram with the digitized result
+ stp   : The value of <span class="string">"step size"</span>.
+ scale : The value of <span class="string">"scale"</span>.
+
+ Notes :
+
+ 1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
+    digitized result (digval).
+    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+ 2) In case of a Log10 ADC, the value of <span class="string">"vcal"</span> relates to the Log10 values.
+    So, for a Log10 ADC, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
+    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+    for mode=3, which corresponds to a linear value interval of [0.0001,10000].
+    For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
+    to a linear value interval of [1,1.0777e8].
+    A step size of 0.01 between the Log10 values corresponds to a multiplication factor
+    of 10^0.01 (i.e. about 1.023) for the linear values at each step.
+ 3) In case no waveform is present, just the specs of the specified ADC performance will be printed,
+    but no digitization is performed.
+    This allows to quickly investigate various scenarios without any data treatment.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ In case of inconsistent input parameters, no digitization is performed and an empty TArrayD is returned.
+
+ The default values are hist=0, stp=0 and scale=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:SampleAndHold" href="src/NcDSP.cxx.html#mevJG">SampleAndHold</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1) const</span><br />
+<div class="funccomm"><pre> Perform a Sample-And-Hold operation on the specified function <span class="string">"f"</span>
+ in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+ The result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>.
+
+ If <span class="string">"f"</span> can be regarded as a pulse generator in time, this mimics a
+ sample and hold device with a lock time of <span class="string">"step"</span> time units,
+ or equivalently a sampling frequency of 1/step.
+
+ The input argument <span class="string">"loc"</span> determines whether the resulting data
+ will be recorded at the start (loc&lt;0), center (loc=0) or end (loc&gt;0)
+ of the sampling step size.
+ However, in case the recording location of the last sampling step would
+ exceed <span class="string">"vmax"</span>, the data will be recorded at the value of <span class="string">"vmax"</span>.
+
+ The default values are hist=0 and loc=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:SampleAndHold@1" href="src/NcDSP.cxx.html#vMEBLE">SampleAndHold</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ns, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmin = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmax = -1) const</span><br />
+<div class="funccomm"><pre> Perform a Sample-And-Hold operation on the data contained in the stored waveform
+ over the sampled interval [jmin,jmax], using <span class="string">"n"</span> original samples as the new sampling step size.
+ By convention, the first sample is at j=0.
+ The result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>.
+
+ If the waveform can be regarded as a pulse generator in time, this mimics a
+ sample and hold device with a lock time of <span class="string">"n"</span> time units,
+ or equivalently a sampling frequency which is reduced by a factor 1/n.
+
+ The input argument <span class="string">"loc"</span> determines whether the resulting data
+ will be recorded at the start (loc&lt;0), center (loc=0) or end (loc&gt;0)
+ of the new sampling step size.
+ However, in case the recording location of the last sampling step would
+ exceed <span class="string">"jmax"</span>, the data will be recorded at the value of <span class="string">"jmax"</span>.
+
+ If jmax&lt;=jmin the full data array of the stored waveform will be used.
+
+ The default values are hist=0, loc=-1, jmin=0 and jmax=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:SampleAndSum" href="src/NcDSP.cxx.html#TRMpGD">SampleAndSum</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, TH1* hist = 0) const</span><br />
+<div class="funccomm"><pre> Perform a Sample-And-Sum operation on the specified function <span class="string">"f"</span>
+ in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+ The result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>.
+
+ This procedure resembles a Sample-And-Hold operation, but instead of locking
+ the data recording during the stepsize, the data that appear within <span class="string">"step"</span>
+ are summed c.q. integrated.
+
+ If <span class="string">"f"</span> can be regarded as sampling in time, this mimics a
+ Switched Capacitor Array (SCA) with a time gate of <span class="string">"step"</span> time units,
+ or equivalently a sampling frequency which is reduced by a factor 1/step.
+
+ The default value is hist=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:SampleAndSum@1" href="src/NcDSP.cxx.html#IWFQbE">SampleAndSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ns, TH1* hist, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmin = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jmax = -1) const</span><br />
+<div class="funccomm"><pre> Perform a Sample-And-Sum operation on the data contained in the stored waveform
+ over the sampled interval [jmin,jmax], using <span class="string">"n"</span> original samples as the new sampling step size.
+ By convention, the first sample is at j=0.
+ The result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>.
+
+ This procedure resembles a Sample-And-Hold operation, but instead of locking
+ the data recording during the stepsize of <span class="string">"n"</span> samplings, the data that appear
+ within <span class="string">"n"</span> samplings are summed.
+
+ If the waveform data can be regarded as sampling in time, this mimics a
+ Switched Capacitor Array (SCA) with a time gate of <span class="string">"n"</span> time units,
+ or equivalently a sampling frequency which is reduced by a factor 1/n.
+
+ If jmax&lt;=jmin the full data array of the stored waveform will be used.
+
+ The default values are hist=0, jmin=0 and jmax=-1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcDSP:Clone" href="src/NcDSP.cxx.html#xH8DS">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
+<div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
+ This memberfunction enables automatic creation of new objects of the
+ correct type depending on the object type, a feature which may be very useful
+ for containers like <a href="./NcEvent.html">NcEvent</a> when adding objects in case the
+ container owns the objects.
+</pre></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Fri Feb  3 16:35:53 2023 </em><em>&raquo; Last generated: 2023-02-03 16:35</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>

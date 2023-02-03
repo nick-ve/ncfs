@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Dec 12 13:52:02 2021            -->
+<!--   Date: Fri Feb  3 16:35:53 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -61,6 +61,13 @@ return false;}
 <pre>
  <a href="./NcTransform.html#NcTransform:Class" title="TClass* NcTransform::Class()">Class</a> <a href="./NcTransform.html">NcTransform</a>
  <a href="./NcTransform.html#NcTransform:Class" title="TClass* NcTransform::Class()">Class</a> to perform various discrete transformations of (sequential) data samples.
+
+
+ *** This class has become obsolete.                                          ***
+ *** Please use the class <a href="./NcDSP.html">NcDSP</a> instead, which offers extended functionality. ***
+ *** This class <a href="./NcTransform.html">NcTransform</a> is only kept for backward compatibility.          ***
+
+
 
  The following discrete transformations (using the FFTW algorithms) are supported :
  <a href="./NcTransform.html#NcTransform:Fourier" title="void NcTransform::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> (DFT), <a href="./NcTransform.html#NcTransform:Hartley" title="void NcTransform::Hartley(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hartley</a> (DHT), <a href="./NcTransform.html#NcTransform:Sine" title="void NcTransform::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> (DST) and <a href="./NcTransform.html#NcTransform:Cosine" title="void NcTransform::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> (DCT).
@@ -667,7 +674,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Dec 12 13:52:02 2021 </em><em>&raquo; Last generated: 2021-12-12 13:52</em><br />
+<em>&raquo; Last changed: Fri Feb  3 16:35:54 2023 </em><em>&raquo; Last generated: 2023-02-03 16:35</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

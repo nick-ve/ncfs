@@ -58,5 +58,6 @@
  #pragma link C++ class NcDataStreamStats+;
  #pragma link C++ class NcTaggingStats+;
  #pragma link C++ class NcTaggingSelector+;
+ #pragma link C++ class NcDSP+;
 #endif
  

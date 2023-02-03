@@ -30,7 +30,7 @@
 //   may be extended in the usual way.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  09:54Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 3, 2023  16:30Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoStation.h"
@@ -240,7 +240,7 @@ TH1F RnoStation::GetSamplingDFT(Int_t ich,TString sel,Int_t j)
  Double_t fsample=0;
  if (daq) fsample=daq->GetSignal("Sampling-rate");
 
- NcTransform q;
+ NcDSP q;
  q.Load(&gr,fsample);
  q.Fourier("R2C",&his,sel);
 

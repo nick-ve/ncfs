@@ -7,7 +7,7 @@
 #include "TROOT.h"
 
 #include "NcDetectorUnit.h"
-#include "NcTransform.h"
+#include "NcDSP.h"
 
 #include "RnoString.h"
 #include "RnoULPDA.h"
@@ -28,6 +28,6 @@ class RnoStation : public NcDetectorUnit
  protected:
   TCanvas* fCanvas; //! Pointer to the temp. canvas for displays
 
- ClassDef(RnoStation,4) // Handling of RNO-G event data.
+ ClassDef(RnoStation,5) // Handling of RNO-G event data.
 };
 #endif

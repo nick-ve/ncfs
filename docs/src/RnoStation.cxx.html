@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Dec 22 10:16:40 2021            -->
+<!--   Date: Fri Feb  3 16:35:54 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -51,7 +51,7 @@
 <span class="comment">//   may be extended in the usual way.</span>
 <span class="comment">//</span>
 <span class="comment">//--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z</span>
-<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  09:54Z</span>
+<span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 3, 2023  16:30Z</span>
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
 
 <span class="cpp">#include "<a href="../RnoStation.h">RnoStation.h</a>"</span>
@@ -261,7 +261,7 @@ ClassImp(<a href="../RnoStation.html">RnoStation</a>) <span class="comment">// <
  <a href="../ListOfTypes.html#Double_t">Double_t</a> fsample=0;
  <span class="keyword">if</span> (daq) fsample=daq-&gt;<a href="../NcSignal.html#NcSignal:GetSignal" title="Float_t NcSignal::GetSignal(Int_t j=1,Int_t mode=0) or overloads">GetSignal</a>(<span class="string">"Sampling-rate"</span>);
 
- <a href="../NcTransform.html">NcTransform</a> q;
+ <a href="../NcDSP.html">NcDSP</a> q;
  q.<a href="../Nc3Vector.html#Nc3Vector:Load" title="void Nc3Vector::Load(Nc3Vector&amp; q)">Load</a>(&amp;gr,fsample);
  q.Fourier(<span class="string">"R2C"</span>,&amp;his,sel);
 
@@ -297,7 +297,7 @@ ClassImp(<a href="../RnoStation.html">RnoStation</a>) <span class="comment">// <
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-12-22 10:16 </em><em>&raquo; Last generated: 2021-12-22 10:16</em><br />
+<em>&raquo; Last changed: 2023-02-03 16:35 </em><em>&raquo; Last generated: 2023-02-03 16:35</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
