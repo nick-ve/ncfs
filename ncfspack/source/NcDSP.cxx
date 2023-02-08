@@ -216,7 +216,7 @@
 // hy.Draw("P");
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 3, 2023  14:17Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 8, 2023  09:06Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDSP.h"
@@ -1910,6 +1910,7 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2)
 // waveform h[] and return the resulting data y[] in a TArrayD object.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions,
 // whereas the (system response) waveform h[] has to be specified by SetWaveform().
+// The provided data of x[] and h[] are not modified.
 //
 // In formula : y[]=x[]*h[].
 //
@@ -2037,6 +2038,7 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2)
 // and return the resulting data y[] in a TArrayD object.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions,
 // whereas the waveform h[] has to be specified by SetWaveform().
+// The provided data of x[] and h[] are not modified.
 //
 // In formula : y[]=h[]*x[].
 //
@@ -2120,7 +2122,8 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2)
 TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist,Double_t* stp,Double_t* scale) const
 {
 // Digitize the values of the stored waveform according to an "nbits" ADC.
-// The resulting digitized values are returned in a TArrayD object.
+// The resulting digitized values are returned in a TArrayD object,
+// without modification of the original waveform data.
 //
 // For details about the procedure, please refer to the excellent textbook :
 // "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
@@ -2400,7 +2403,8 @@ TArrayD NcDSP::SampleAndHold(Int_t n,TH1* hist,Int_t loc,Int_t jmin,Int_t jmax) 
 // Perform a Sample-And-Hold operation on the data contained in the stored waveform
 // over the sampled interval [jmin,jmax], using "n" original samples as the new sampling step size.
 // By convention, the first sample is at j=0.
-// The result is returned in a TArrayD object and (optionally) in the histogram "hist".
+// The result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// without modification of the original waveform data.
 //
 // If the waveform can be regarded as a pulse generator in time, this mimics a 
 // sample and hold device with a lock time of "n" time units,
@@ -2565,7 +2569,8 @@ TArrayD NcDSP::SampleAndSum(Int_t n,TH1* hist,Int_t jmin,Int_t jmax) const
 // Perform a Sample-And-Sum operation on the data contained in the stored waveform
 // over the sampled interval [jmin,jmax], using "n" original samples as the new sampling step size.
 // By convention, the first sample is at j=0.
-// The result is returned in a TArrayD object and (optionally) in the histogram "hist".
+// The result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// without modification of the original waveform data.
 //
 // This procedure resembles a Sample-And-Hold operation, but instead of locking
 // the data recording during the stepsize of "n" samplings, the data that appear
@@ -2647,6 +2652,95 @@ TArrayD NcDSP::SampleAndSum(Int_t n,TH1* hist,Int_t jmin,Int_t jmax) const
  }
 
  return data;
+}
+///////////////////////////////////////////////////////////////////////////
+TArrayD NcDSP::FilterMovingAverage(Int_t n,TH1* hist,Int_t* i1,Int_t* i2)
+{
+// Perform a Moving Average filter on the loaded input data x[] with averaging over "n" samples.
+// The result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// without modification of the original input data x[].
+// The input data x[] have to be entered as real numbers by one of the Load() member functions.
+//
+// A Moving Average filter is the optimal time domain filter for reducing random (noise) fluctuations,
+// while retaining sharp step responses.
+// Large values of "n" will result in a large noise reduction, but the edges of the steps
+// become less sharp.
+// On the contrary, small values of "n" will result in sharp step edges, but less noise reduction.
+//
+// Rule of thumb :
+// ---------------
+// The noise is reduced by a factor of sqrt(n) and the rise or fall of an edge
+// is smeared over "n" samples.
+//
+// Notes :
+// -------
+// 1) Actually this filter represents a convolution with a filter kernel
+//    that consists of a rectangular pulse of "n" points and an area of 1.
+// 2) The performance in the frequency domain is very poor, since the Fourier transform
+//    of the time domain rectangular pulse filter kernel results in a sinc function.
+// 3) A Bayesian Block analysis (see the class NcBlocks) in general provides
+//    even better results by allowing "n" to vary dynamically based on the data pattern.
+//    However, the computation time involved for a Bayesian Block analysis
+//    is vastly larger than for a Moving Average filter.
+//
+// For details about the procedure, please refer to the excellent textbook :
+// "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
+// which is online available at http://www.dspguide.com/pdfbook.htm
+//
+// Input arguments :
+// -----------------
+// n    : The number of samples that will be averaged over
+// hist : (optional) Histogram with the convolution result
+//
+// The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+// resulting filtered data array for which the filter kernel was fully immersed
+// in the input (signal) data.
+// These values i1 and i2 (if requested) are indicated by vertical
+// dashed blue lines in the histogram.
+//
+// The default values are hist=0, i1=0 and i2=0.
+
+ TArrayD y(0);
+ if (hist) hist->Reset();
+ Int_t nx=fReIn.GetSize();
+
+ if (nx<1)
+ {
+  printf(" *%-s::FilterMovingAverage* No loaded input data present. \n",ClassName());
+  return y;
+ }
+
+ if (n<1)
+ {
+  printf(" *%-s::FilterMovingAverage* Invalid input n=%-i \n",ClassName(),n);
+  return y;
+ }
+
+ // Storage of the current waveform data
+ TArrayD store=fWaveform;
+
+ // The filter kernel
+ TArrayD h(n);
+ for (Int_t i=0; i<n; i++)
+ {
+  h[i]=1./double(n);
+ }
+ SetWaveform(&h);
+ 
+ // Perform the convolution
+ y=Convolve(hist,i1,i2);
+
+ // Restore the original waveform
+ SetWaveform(&store);
+
+ if (hist)
+ {
+  TString title;
+  title.Form("NcDSP Moving Average Filter result averaged over %-i samples",n);
+  hist->SetTitle(title);
+ }
+
+ return y;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDSP::Clone(const char* name) const

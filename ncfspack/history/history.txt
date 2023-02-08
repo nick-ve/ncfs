@@ -1399,8 +1399,9 @@
                 GetShieldingThickness() and GetTargetThickness().
                 Also the nominal gravitational acceleration value added to GetPhysicalParameter().
                 The version indicator in NcVersion has been updated to 5.22.
-03-feb-2022 NvE New class NcDSP introduced to provide various Digital Signal Processing tools.
+03-feb-2023 NvE New class NcDSP introduced to provide various Digital Signal Processing tools.
                 The class NcDSP replaces the class NcTransform, but the latter is kept for backward compatibility.
                 The class RnoStation has been modified to use the new class NcDSP.
                 The version indicator in NcVersion has been updated to 5.30.
+08-feb-2023 NvE New member function FilterMovingAverage() introduced in class NcDSP.
 
