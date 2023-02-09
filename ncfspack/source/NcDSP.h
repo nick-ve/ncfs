@@ -45,6 +45,10 @@ class NcDSP : public TNamed
   TArrayD SampleAndSum(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1* hist=0) const;  // Perform a Sample-And-Sum operation on function "f"
   TArrayD SampleAndSum(Int_t ns,TH1* hist,Int_t jmin=0,Int_t jmax=-1) const; // Perform a Sample-And-Sum operation on the stored waveform data
   TArrayD FilterMovingAverage(Int_t n,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a Moving Average filter on the loaded data
+  TArrayD FilterLowPass(Double_t fcut,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0);  // Perform a Low Pass filter on the loaded data
+  TArrayD FilterHighPass(Double_t fcut,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a High Pass filter on the loaded data
+  TArrayD FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a Band Pass filter on the loaded data
+  TArrayD FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a Band Reject filter on the loaded data
   Int_t GetN(Int_t mode=0) const;                              // Provide the number of data elements (to be) processed.
   TArrayD GetData(TString mode) const;                         // Provide a selected set of data
 
@@ -62,6 +66,6 @@ class NcDSP : public TNamed
   // Internal member functions
   void Reset();      // Reset all data and the processor
 
- ClassDef(NcDSP,2) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
+ ClassDef(NcDSP,3) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
 };
 #endif

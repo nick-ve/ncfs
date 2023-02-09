@@ -1404,4 +1404,6 @@
                 The class RnoStation has been modified to use the new class NcDSP.
                 The version indicator in NcVersion has been updated to 5.30.
 08-feb-2023 NvE New member function FilterMovingAverage() introduced in class NcDSP.
+09-feb-2023 NvE New member functions FilterLowPass(), FilterHighPass(), FilterBandPass() and FilterBandReject()
+                introduced in class NcDSP.
 

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Feb  8 09:15:56 2023            -->
+<!--   Date: Thu Feb  9 15:51:18 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -247,7 +247,7 @@ return false;}
  hy.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 8, 2023  09:06Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 9, 2023  12:48Z
 
 </pre></div>
 </div></div>
@@ -284,6 +284,10 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ExecuteEvent"><span class="baseclass">TObject::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:FilterBandPass">FilterBandPass</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f1, <a href="./ListOfTypes.html#Double_t">Double_t</a> f2, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:FilterBandReject">FilterBandReject</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f1, <a href="./ListOfTypes.html#Double_t">Double_t</a> f2, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:FilterHighPass">FilterHighPass</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> fcut, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:FilterLowPass">FilterLowPass</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> fcut, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
 <tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:FilterMovingAverage">FilterMovingAverage</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
@@ -1106,7 +1110,7 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:FilterMovingAverage" href="src/NcDSP.cxx.html#KwilYD">FilterMovingAverage</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
 <div class="funccomm"><pre> Perform a Moving Average filter on the loaded input data x[] with averaging over <span class="string">"n"</span> samples.
- The result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
+ The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
  without modification of the original input data x[].
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
 
@@ -1123,11 +1127,13 @@ return false;}
 
  Notes :
 
- 1) Actually this filter represents a convolution with a filter kernel
+ 1) The returned TArrayD contains the filtered time domain data,
+    which can be directly used as input for subsequent DSP processing.
+ 2) Actually this filter represents a convolution with a filter kernel
     that consists of a rectangular pulse of <span class="string">"n"</span> points and an area of 1.
- 2) The performance in the frequency domain is very poor, since the <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform
+ 3) The performance in the frequency domain is very poor, since the <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform
     of the time domain rectangular pulse filter kernel results in a sinc function.
- 3) A Bayesian Block analysis (see the class <a href="./NcBlocks.html">NcBlocks</a>) in general provides
+ 4) A Bayesian Block analysis (see the class <a href="./NcBlocks.html">NcBlocks</a>) in general provides
     even better results by allowing <span class="string">"n"</span> to vary dynamically based on the data pattern.
     However, the computation time involved for a Bayesian Block analysis
     is vastly larger than for a Moving Average filter.
@@ -1139,15 +1145,238 @@ return false;}
  Input arguments :
 
  n    : The number of samples that will be averaged over
- hist : (optional) Histogram with the convolution result
+ hist : (optional) Histogram with the filtered result in the time domain
 
  The (optional) arguments i1 and i2 provide the range [i1,i2] in the
  resulting filtered data array for which the filter kernel was fully immersed
  in the input (signal) data.
  These values i1 and i2 (if requested) are indicated by vertical
- dashed blue lines in the histogram.
+ dashed blue lines in the time domain histogram.
 
  The default values are hist=0, i1=0 and i2=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:FilterLowPass" href="src/NcDSP.cxx.html#NULhiB">FilterLowPass</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> fcut, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
+<div class="funccomm"><pre> Perform a Low Pass filter on the loaded input data x[] with a frequency cut-off
+ specified by <span class="string">"fcut"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> values (see below).
+ The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
+ whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
+ The original input data x[] are not modified.
+ The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
+
+ The implementation here is based on the Blackman windowed-sinc filtering procedure.
+
+ A Blackman Low Pass filter is an excellent frequency domain filter for seperating
+ one band of frequencies from another.
+ Large values of <span class="string">"n"</span> will result in a sharp transition between the pass band and the stop band,
+ but may result in <a href="./ListOfTypes.html#long">long</a>(er) computation times.
+ On the contrary, small values of <span class="string">"n"</span> will result in a less sharp transition between the
+ pass band and the stop band, but result in <a href="./ListOfTypes.html#short">short</a>(er) computation times.
+
+ Rule of thumb :
+
+ The transition bandwidth (BW) between the pass band and the stop band (aka roll-off)
+ may be approximated as BW=4/n.
+
+ Notes :
+
+ 1) The returned TArrayD contains the filtered time domain data,
+    which can be directly used as input for subsequent DSP processing.
+ 2) Repeated application of this filter will further decrease the amplitudes in the stop band.
+ 3) Actually this filter represents a convolution with a time domain filter kernel
+    that consists of a sinc pulse window of <span class="string">"n"</span> points and an area of 1.
+ 4) The performance in the time domain is very poor, since the (inverse) <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform
+    of the frequency domain step pulse filter kernel results in a sinc function.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ Input arguments :
+
+ fcut : The cut-off frequency expressed as a fraction of the sampling frequency
+        For proper functionality one should choose 0&lt;fcut&lt;0.5, because of the
+        underlying <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform.
+ n    : The number of values in the filter kernel
+        For proper functionality this must be an even integer.
+ hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+ hist : (optional) Histogram with the filtered result in the time domain
+
+ The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+ resulting filtered data array for which the filter kernel was fully immersed
+ in the input (signal) data.
+ These values i1 and i2 (if requested) are indicated by vertical
+ dashed blue lines in the time domain histogram.
+
+ The default values are hisf=0, hist=0, i1=0 and i2=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:FilterHighPass" href="src/NcDSP.cxx.html#bsOcmE">FilterHighPass</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> fcut, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
+<div class="funccomm"><pre> Perform a High Pass filter on the loaded input data x[] with a frequency cut-off
+ specified by <span class="string">"fcut"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> values (see below).
+ The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
+ whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
+ The original input data x[] are not modified.
+ The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
+
+ The implementation here is based on a spectrally inverted Blackman windowed-sinc Low Pass filter.
+
+ A Blackman High Pass filter is an excellent frequency domain filter for seperating
+ one band of frequencies from another.
+ Large values of <span class="string">"n"</span> will result in a sharp transition between the pass band and the stop band,
+ but may result in <a href="./ListOfTypes.html#long">long</a>(er) computation times.
+ On the contrary, small values of <span class="string">"n"</span> will result in a less sharp transition between the
+ pass band and the stop band, but result in <a href="./ListOfTypes.html#short">short</a>(er) computation times.
+
+ Rule of thumb :
+
+ The transition bandwidth (BW) between the pass band and the stop band (aka roll-off)
+ may be approximated as BW=4/n.
+
+ Notes :
+
+ 1) The returned TArrayD contains the filtered time domain data,
+    which can be directly used as input for subsequent DSP processing.
+ 2) Repeated application of this filter will further decrease the amplitudes in the stop band.
+ 3) Actually this filter represents a convolution with a time domain filter kernel
+    that consists of a sinc pulse window of <span class="string">"n"</span> points and an area of 1.
+ 4) The performance in the time domain is very poor, since the (inverse) <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform
+    of the frequency domain step pulse filter kernel results in a sinc function.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ Input arguments :
+
+ fcut : The cut-off frequency expressed as a fraction of the sampling frequency
+        For proper functionality one should choose 0&lt;fcut&lt;0.5, because of the
+        underlying <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform.
+ n    : The number of values in the filter kernel
+        For proper functionality this must be an even integer.
+ hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+ hist : (optional) Histogram with the filtered result in the time domain
+
+ The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+ resulting filtered data array for which the filter kernel was fully immersed
+ in the input (signal) data.
+ These values i1 and i2 (if requested) are indicated by vertical
+ dashed blue lines in the time domain histogram.
+
+ The default values are hisf=0, hist=0, i1=0 and i2=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:FilterBandPass" href="src/NcDSP.cxx.html#tDVliB">FilterBandPass</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f1, <a href="./ListOfTypes.html#Double_t">Double_t</a> f2, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
+<div class="funccomm"><pre> Perform a Band Pass filter on the loaded input data x[] in the frequency band
+ specified by <span class="string">"f1"</span> and <span class="string">"f2"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> values (see below).
+ The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
+ whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
+ The original input data x[] are not modified.
+ The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
+
+ The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters,
+ which is spectrally inverted.
+
+ A Blackman Band Pass filter is an excellent frequency domain filter for passing
+ only a certain band of frequencies.
+ Large values of <span class="string">"n"</span> will result in sharp transitions at the edges of the pass band,
+ but may result in <a href="./ListOfTypes.html#long">long</a>(er) computation times.
+ On the contrary, small values of <span class="string">"n"</span> will result in less sharp transitions at the edges
+ of the pass band, but result in <a href="./ListOfTypes.html#short">short</a>(er) computation times.
+
+ Rule of thumb :
+
+ The transition bandwidth (BW) at the edges of the pass band (aka roll-off)
+ may be approximated as BW=4/n.
+
+ Notes :
+
+ 1) The returned TArrayD contains the filtered time domain data,
+    which can be directly used as input for subsequent DSP processing.
+ 2) Repeated application of this filter will further decrease the amplitudes outside the selected band.
+ 3) Actually this filter represents a convolution with a time domain filter kernel
+    that consists of a sinc pulse window of <span class="string">"n"</span> points and an area of 1.
+ 4) The performance in the time domain is very poor, since the (inverse) <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform
+    of a frequency domain rectangular pulse filter kernel results in a sinc function.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ Input arguments :
+
+ f1   : The lower bound of the frequency band expressed as a fraction of the sampling frequency
+ f2   : The upper bound of the frequency band expressed as a fraction of the sampling frequency
+        For proper functionality one should choose 0&lt;f1&lt;0.5 and 0&lt;f2&lt;0.5, because of the
+        underlying <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform.
+ n    : The number of values in the filter kernel
+        For proper functionality this must be an even integer.
+ hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+ hist : (optional) Histogram with the filtered result in the time domain
+
+ The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+ resulting filtered data array for which the filter kernel was fully immersed
+ in the input (signal) data.
+ These values i1 and i2 (if requested) are indicated by vertical
+ dashed blue lines in the time domain histogram.
+
+ The default values are hisf=0, hist=0, i1=0 and i2=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:FilterBandReject" href="src/NcDSP.cxx.html#c24bFB">FilterBandReject</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> f1, <a href="./ListOfTypes.html#Double_t">Double_t</a> f2, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
+<div class="funccomm"><pre> Perform a Band Reject filter on the loaded input data x[] in the frequency band
+ specified by <span class="string">"f1"</span> and <span class="string">"f2"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> values (see below).
+ The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
+ whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
+ The original input data x[] are not modified.
+ The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
+
+ The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters.
+
+ A Blackman Band Reject filter is an excellent frequency domain filter for suppressing
+ a certain band of frequencies.
+ Large values of <span class="string">"n"</span> will result in sharp transitions at the edges of the rejected band,
+ but may result in <a href="./ListOfTypes.html#long">long</a>(er) computation times.
+ On the contrary, small values of <span class="string">"n"</span> will result in less sharp transitions at the edges
+ of the rejected band, but result in <a href="./ListOfTypes.html#short">short</a>(er) computation times.
+
+ Rule of thumb :
+
+ The transition bandwidth (BW) at the edges of the rejected band (aka roll-off)
+ may be approximated as BW=4/n.
+
+ Notes :
+
+ 1) The returned TArrayD contains the filtered time domain data,
+    which can be directly used as input for subsequent DSP processing.
+ 2) Repeated application of this filter will further decrease the amplitudes inside the selected band.
+ 3) Actually this filter represents a convolution with a time domain filter kernel
+    that consists of a sinc pulse window of <span class="string">"n"</span> points and an area of 1.
+ 4) The performance in the time domain is very poor, since the (inverse) <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform
+    of a frequency domain rectangular pulse filter kernel results in a sinc function.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ Input arguments :
+
+ f1   : The lower bound of the frequency band expressed as a fraction of the sampling frequency
+ f2   : The upper bound of the frequency band expressed as a fraction of the sampling frequency
+        For proper functionality one should choose 0&lt;f1&lt;0.5 and 0&lt;f2&lt;0.5, because of the
+        underlying <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform.
+ n    : The number of values in the filter kernel
+        For proper functionality this must be an even integer.
+ hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+ hist : (optional) Histogram with the filtered result in the time domain
+
+ The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+ resulting filtered data array for which the filter kernel was fully immersed
+ in the input (signal) data.
+ These values i1 and i2 (if requested) are indicated by vertical
+ dashed blue lines in the time domain histogram.
+
+ The default values are hisf=0, hist=0, i1=0 and i2=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcDSP:Clone" href="src/NcDSP.cxx.html#xH8DS">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
@@ -1163,7 +1392,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Feb  8 09:15:56 2023 </em><em>&raquo; Last generated: 2023-02-08 09:15</em><br />
+<em>&raquo; Last changed: Thu Feb  9 15:51:18 2023 </em><em>&raquo; Last generated: 2023-02-09 15:51</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

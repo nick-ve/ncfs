@@ -216,7 +216,7 @@
 // hy.Draw("P");
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 8, 2023  09:06Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 9, 2023  12:48Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDSP.h"
@@ -2657,7 +2657,7 @@ TArrayD NcDSP::SampleAndSum(Int_t n,TH1* hist,Int_t jmin,Int_t jmax) const
 TArrayD NcDSP::FilterMovingAverage(Int_t n,TH1* hist,Int_t* i1,Int_t* i2)
 {
 // Perform a Moving Average filter on the loaded input data x[] with averaging over "n" samples.
-// The result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
 // without modification of the original input data x[].
 // The input data x[] have to be entered as real numbers by one of the Load() member functions.
 //
@@ -2674,11 +2674,13 @@ TArrayD NcDSP::FilterMovingAverage(Int_t n,TH1* hist,Int_t* i1,Int_t* i2)
 //
 // Notes :
 // -------
-// 1) Actually this filter represents a convolution with a filter kernel
+// 1) The returned TArrayD contains the filtered time domain data,
+//    which can be directly used as input for subsequent DSP processing.
+// 2) Actually this filter represents a convolution with a filter kernel
 //    that consists of a rectangular pulse of "n" points and an area of 1.
-// 2) The performance in the frequency domain is very poor, since the Fourier transform
+// 3) The performance in the frequency domain is very poor, since the Fourier transform
 //    of the time domain rectangular pulse filter kernel results in a sinc function.
-// 3) A Bayesian Block analysis (see the class NcBlocks) in general provides
+// 4) A Bayesian Block analysis (see the class NcBlocks) in general provides
 //    even better results by allowing "n" to vary dynamically based on the data pattern.
 //    However, the computation time involved for a Bayesian Block analysis
 //    is vastly larger than for a Moving Average filter.
@@ -2690,13 +2692,13 @@ TArrayD NcDSP::FilterMovingAverage(Int_t n,TH1* hist,Int_t* i1,Int_t* i2)
 // Input arguments :
 // -----------------
 // n    : The number of samples that will be averaged over
-// hist : (optional) Histogram with the convolution result
+// hist : (optional) Histogram with the filtered result in the time domain
 //
 // The (optional) arguments i1 and i2 provide the range [i1,i2] in the
 // resulting filtered data array for which the filter kernel was fully immersed
 // in the input (signal) data.
 // These values i1 and i2 (if requested) are indicated by vertical
-// dashed blue lines in the histogram.
+// dashed blue lines in the time domain histogram.
 //
 // The default values are hist=0, i1=0 and i2=0.
 
@@ -2739,6 +2741,728 @@ TArrayD NcDSP::FilterMovingAverage(Int_t n,TH1* hist,Int_t* i1,Int_t* i2)
   title.Form("NcDSP Moving Average Filter result averaged over %-i samples",n);
   hist->SetTitle(title);
  }
+
+ return y;
+}
+///////////////////////////////////////////////////////////////////////////
+TArrayD NcDSP::FilterLowPass(Double_t fcut,Int_t n,TH1* hisf,TH1* hist,Int_t* i1,Int_t* i2)
+{
+// Perform a Low Pass filter on the loaded input data x[] with a frequency cut-off
+// specified by "fcut" (see below) and a filter kernel consisting of "n" values (see below).
+// The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// whereas the frequency domain result is returned in the (optional) histogram "hisf".
+// The original input data x[] are not modified.
+// The input data x[] have to be entered as real numbers by one of the Load() member functions.
+//
+// The implementation here is based on the Blackman windowed-sinc filtering procedure.
+//
+// A Blackman Low Pass filter is an excellent frequency domain filter for seperating
+// one band of frequencies from another.
+// Large values of "n" will result in a sharp transition between the pass band and the stop band,
+// but may result in long(er) computation times.
+// On the contrary, small values of "n" will result in a less sharp transition between the
+// pass band and the stop band, but result in short(er) computation times.
+//
+// Rule of thumb :
+// ---------------
+// The transition bandwidth (BW) between the pass band and the stop band (aka roll-off)
+// may be approximated as BW=4/n.
+//
+// Notes :
+// -------
+// 1) The returned TArrayD contains the filtered time domain data,
+//    which can be directly used as input for subsequent DSP processing.
+// 2) Repeated application of this filter will further decrease the amplitudes in the stop band.
+// 3) Actually this filter represents a convolution with a time domain filter kernel
+//    that consists of a sinc pulse window of "n" points and an area of 1.
+// 4) The performance in the time domain is very poor, since the (inverse) Fourier transform
+//    of the frequency domain step pulse filter kernel results in a sinc function.
+//
+// For details about the procedure, please refer to the excellent textbook :
+// "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
+// which is online available at http://www.dspguide.com/pdfbook.htm
+//
+// Input arguments :
+// -----------------
+// fcut : The cut-off frequency expressed as a fraction of the sampling frequency
+//        For proper functionality one should choose 0<fcut<0.5, because of the
+//        underlying Fourier transform.
+// n    : The number of values in the filter kernel
+//        For proper functionality this must be an even integer.
+// hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+// hist : (optional) Histogram with the filtered result in the time domain
+//
+// The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+// resulting filtered data array for which the filter kernel was fully immersed
+// in the input (signal) data.
+// These values i1 and i2 (if requested) are indicated by vertical
+// dashed blue lines in the time domain histogram.
+//
+// The default values are hisf=0, hist=0, i1=0 and i2=0.
+
+ TArrayD y(0);
+ if (hisf) hisf->Reset();
+ if (hist) hist->Reset();
+ Int_t nx=fReIn.GetSize();
+
+ if (nx<1)
+ {
+  printf(" *%-s::FilterLowPass* No loaded input data present. \n",ClassName());
+  return y;
+ }
+
+ Int_t odd=n%2;
+ if (n<1 || odd || fcut<=0 || fcut>0.5)
+ {
+  printf(" *%-s::FilterLowPass* Invalid input fcut=%-g n=%-i \n",ClassName(),fcut,n);
+  return y;
+ }
+
+ // Save the current stored data
+ TArrayD xsave=fReIn;
+ TArrayD wfsave=fWaveform;
+
+ // The filter kernel
+ Double_t twopi=2.*acos(-1.);
+ TArrayD h(n);
+ Double_t rn=n;
+ Double_t ri=0;
+ Double_t sum=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  if (i==n/2)
+  {
+   h[i]=twopi*fcut;
+  }
+  else
+  {
+   ri=i;
+   h[i]=sin(twopi*fcut*double(i-n/2))*(0.42-0.5*cos(twopi*ri/rn)+0.08*cos(2.*twopi*ri/rn))/double(i-n/2);
+  }
+  sum+=h[i];
+ }
+
+ // Normalize the filter kernel to 1
+ for (Int_t i=0; i<n; i++)
+ {
+  h[i]=h[i]/sum;
+ }
+
+ SetWaveform(&h);
+ 
+ // Perform the convolution
+ y=Convolve(hist,i1,i2);
+
+ // Set title for the filtered time domain histogram
+ if (hist)
+ {
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nucut=fcut*fSample;
+   title.Form("NcDSP Low Pass Filter result with #nu-cut=%-.3g Hz and kernel size %-i",nucut,n);
+  }
+  else
+  {
+   title.Form("NcDSP Low Pass Filter result with #nu-cut/#nu-sample=%-.3g and kernel size %-i",fcut,n);
+  }
+  hist->SetTitle(title);
+ }
+
+ // Fill the filtered frequency domain histogram
+ if (hisf)
+ {
+  // Load the filtered time domain data for Fourier transformation
+  Load(&y);
+
+  // Perform the Fourier transform
+  if (fSample>0) 
+  {
+   Fourier("R2C",hisf,"AMP Hz");
+  }
+  else
+  {
+   Fourier("R2C",hisf,"AMP f");
+  }
+
+  // Set the appropriate histogram title
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nucut=fcut*fSample;
+   title.Form("NcDSP Low Pass Filter result with #nu-cut=%-.3g Hz and kernel size %-i",nucut,n);
+  }
+  else
+  {
+   title.Form("NcDSP Low Pass Filter result with #nu-cut/#nu-sample=%-.3g and kernel size %-i",fcut,n);
+  }
+  hisf->SetTitle(title);
+ }
+
+ // Restore the original data
+ Load(&xsave);
+ SetWaveform(&wfsave);
+
+ return y;
+}
+///////////////////////////////////////////////////////////////////////////
+TArrayD NcDSP::FilterHighPass(Double_t fcut,Int_t n,TH1* hisf,TH1* hist,Int_t* i1,Int_t* i2)
+{
+// Perform a High Pass filter on the loaded input data x[] with a frequency cut-off
+// specified by "fcut" (see below) and a filter kernel consisting of "n" values (see below).
+// The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// whereas the frequency domain result is returned in the (optional) histogram "hisf".
+// The original input data x[] are not modified.
+// The input data x[] have to be entered as real numbers by one of the Load() member functions.
+//
+// The implementation here is based on a spectrally inverted Blackman windowed-sinc Low Pass filter.
+//
+// A Blackman High Pass filter is an excellent frequency domain filter for seperating
+// one band of frequencies from another.
+// Large values of "n" will result in a sharp transition between the pass band and the stop band,
+// but may result in long(er) computation times.
+// On the contrary, small values of "n" will result in a less sharp transition between the
+// pass band and the stop band, but result in short(er) computation times.
+//
+// Rule of thumb :
+// ---------------
+// The transition bandwidth (BW) between the pass band and the stop band (aka roll-off)
+// may be approximated as BW=4/n.
+//
+// Notes :
+// -------
+// 1) The returned TArrayD contains the filtered time domain data,
+//    which can be directly used as input for subsequent DSP processing.
+// 2) Repeated application of this filter will further decrease the amplitudes in the stop band.
+// 3) Actually this filter represents a convolution with a time domain filter kernel
+//    that consists of a sinc pulse window of "n" points and an area of 1.
+// 4) The performance in the time domain is very poor, since the (inverse) Fourier transform
+//    of the frequency domain step pulse filter kernel results in a sinc function.
+//
+// For details about the procedure, please refer to the excellent textbook :
+// "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
+// which is online available at http://www.dspguide.com/pdfbook.htm
+//
+// Input arguments :
+// -----------------
+// fcut : The cut-off frequency expressed as a fraction of the sampling frequency
+//        For proper functionality one should choose 0<fcut<0.5, because of the
+//        underlying Fourier transform.
+// n    : The number of values in the filter kernel
+//        For proper functionality this must be an even integer.
+// hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+// hist : (optional) Histogram with the filtered result in the time domain
+//
+// The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+// resulting filtered data array for which the filter kernel was fully immersed
+// in the input (signal) data.
+// These values i1 and i2 (if requested) are indicated by vertical
+// dashed blue lines in the time domain histogram.
+//
+// The default values are hisf=0, hist=0, i1=0 and i2=0.
+
+ TArrayD y(0);
+ if (hisf) hisf->Reset();
+ if (hist) hist->Reset();
+ Int_t nx=fReIn.GetSize();
+
+ if (nx<1)
+ {
+  printf(" *%-s::FilterHighPass* No loaded input data present. \n",ClassName());
+  return y;
+ }
+
+ Int_t odd=n%2;
+ if (n<1 || odd || fcut<=0 || fcut>0.5)
+ {
+  printf(" *%-s::FilterHighPass* Invalid input fcut=%-g n=%-i \n",ClassName(),fcut,n);
+  return y;
+ }
+
+ // Save the current stored data
+ TArrayD xsave=fReIn;
+ TArrayD wfsave=fWaveform;
+
+ // The corresponding Low Pass filter kernel
+ Double_t twopi=2.*acos(-1.);
+ TArrayD h(n);
+ Double_t rn=n;
+ Double_t ri=0;
+ Double_t sum=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  if (i==n/2)
+  {
+   h[i]=twopi*fcut;
+  }
+  else
+  {
+   ri=i;
+   h[i]=sin(twopi*fcut*double(i-n/2))*(0.42-0.5*cos(twopi*ri/rn)+0.08*cos(2.*twopi*ri/rn))/double(i-n/2);
+  }
+  sum+=h[i];
+ }
+
+ // Spectrally invert and Normalize the filter kernel to 1 to obtain the High Pass kernel
+ for (Int_t i=0; i<n; i++)
+ {
+  h[i]=-h[i]/sum;
+  if (i==n/2) h[i]=h[i]+1.;
+ }
+
+ SetWaveform(&h);
+ 
+ // Perform the convolution
+ y=Convolve(hist,i1,i2);
+
+ // Set title for the filtered time domain histogram
+ if (hist)
+ {
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nucut=fcut*fSample;
+   title.Form("NcDSP High Pass Filter result with #nu-cut=%-.3g Hz and kernel size %-i",nucut,n);
+  }
+  else
+  {
+   title.Form("NcDSP High Pass Filter result with #nu-cut/#nu-sample=%-.3g and kernel size %-i",fcut,n);
+  }
+  hist->SetTitle(title);
+ }
+
+ // Fill the filtered frequency domain histogram
+ if (hisf)
+ {
+  // Load the filtered time domain data for Fourier transformation
+  Load(&y);
+
+  // Perform the Fourier transform
+  if (fSample>0) 
+  {
+   Fourier("R2C",hisf,"AMP Hz");
+  }
+  else
+  {
+   Fourier("R2C",hisf,"AMP f");
+  }
+
+  // Set the appropriate histogram title
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nucut=fcut*fSample;
+   title.Form("NcDSP High Pass Filter result with #nu-cut=%-.3g Hz and kernel size %-i",nucut,n);
+  }
+  else
+  {
+   title.Form("NcDSP High Pass Filter result with #nu-cut/#nu-sample=%-.3g and kernel size %-i",fcut,n);
+  }
+  hisf->SetTitle(title);
+ }
+
+ // Restore the original data
+ Load(&xsave);
+ SetWaveform(&wfsave);
+
+ return y;
+}
+///////////////////////////////////////////////////////////////////////////
+TArrayD NcDSP::FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf,TH1* hist,Int_t* i1,Int_t* i2)
+{
+// Perform a Band Pass filter on the loaded input data x[] in the frequency band
+// specified by "f1" and "f2" (see below) and a filter kernel consisting of "n" values (see below).
+// The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// whereas the frequency domain result is returned in the (optional) histogram "hisf".
+// The original input data x[] are not modified.
+// The input data x[] have to be entered as real numbers by one of the Load() member functions.
+//
+// The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters,
+// which is spectrally inverted.
+//
+// A Blackman Band Pass filter is an excellent frequency domain filter for passing
+// only a certain band of frequencies.
+// Large values of "n" will result in sharp transitions at the edges of the pass band,
+// but may result in long(er) computation times.
+// On the contrary, small values of "n" will result in less sharp transitions at the edges
+// of the pass band, but result in short(er) computation times.
+//
+// Rule of thumb :
+// ---------------
+// The transition bandwidth (BW) at the edges of the pass band (aka roll-off)
+// may be approximated as BW=4/n.
+//
+// Notes :
+// -------
+// 1) The returned TArrayD contains the filtered time domain data,
+//    which can be directly used as input for subsequent DSP processing.
+// 2) Repeated application of this filter will further decrease the amplitudes outside the selected band.
+// 3) Actually this filter represents a convolution with a time domain filter kernel
+//    that consists of a sinc pulse window of "n" points and an area of 1.
+// 4) The performance in the time domain is very poor, since the (inverse) Fourier transform
+//    of a frequency domain rectangular pulse filter kernel results in a sinc function.
+//
+// For details about the procedure, please refer to the excellent textbook :
+// "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
+// which is online available at http://www.dspguide.com/pdfbook.htm
+//
+// Input arguments :
+// -----------------
+// f1   : The lower bound of the frequency band expressed as a fraction of the sampling frequency
+// f2   : The upper bound of the frequency band expressed as a fraction of the sampling frequency
+//        For proper functionality one should choose 0<f1<0.5 and 0<f2<0.5, because of the
+//        underlying Fourier transform.
+// n    : The number of values in the filter kernel
+//        For proper functionality this must be an even integer.
+// hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+// hist : (optional) Histogram with the filtered result in the time domain
+//
+// The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+// resulting filtered data array for which the filter kernel was fully immersed
+// in the input (signal) data.
+// These values i1 and i2 (if requested) are indicated by vertical
+// dashed blue lines in the time domain histogram.
+//
+// The default values are hisf=0, hist=0, i1=0 and i2=0.
+
+ TArrayD y(0);
+ if (hisf) hisf->Reset();
+ if (hist) hist->Reset();
+ Int_t nx=fReIn.GetSize();
+
+ if (nx<1)
+ {
+  printf(" *%-s::FilterBandPass* No loaded input data present. \n",ClassName());
+  return y;
+ }
+
+ Int_t odd=n%2;
+ if (n<1 || odd || f1<=0 || f1>0.5 || f2<=0 || f2>0.5 || f2<=f1)
+ {
+  printf(" *%-s::FilterBandPass* Invalid input f1=%-g f2=%-g n=%-i \n",ClassName(),f1,f2,n);
+  return y;
+ }
+
+ // Save the current stored data
+ TArrayD xsave=fReIn;
+ TArrayD wfsave=fWaveform;
+
+ // The Low Pass filter kernel for f1
+ Double_t twopi=2.*acos(-1.);
+ TArrayD hlow(n);
+ Double_t rn=n;
+ Double_t ri=0;
+ Double_t sum=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  if (i==n/2)
+  {
+   hlow[i]=twopi*f1;
+  }
+  else
+  {
+   ri=i;
+   hlow[i]=sin(twopi*f1*double(i-n/2))*(0.42-0.5*cos(twopi*ri/rn)+0.08*cos(2.*twopi*ri/rn))/double(i-n/2);
+  }
+  sum+=hlow[i];
+ }
+
+ // Normalize the Low Pass filter kernel
+ for (Int_t i=0; i<n; i++)
+ {
+  hlow[i]=hlow[i]/sum;
+ }
+
+ // The High Pass filter kernel for f2
+ TArrayD hhigh(n);
+ sum=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  if (i==n/2)
+  {
+   hhigh[i]=twopi*f2;
+  }
+  else
+  {
+   ri=i;
+   hhigh[i]=sin(twopi*f2*double(i-n/2))*(0.42-0.5*cos(twopi*ri/rn)+0.08*cos(2.*twopi*ri/rn))/double(i-n/2);
+  }
+  sum+=hhigh[i];
+ }
+
+ // Spectrally invert and Normalize the filter kernel to 1
+ for (Int_t i=0; i<n; i++)
+ {
+  hhigh[i]=-hhigh[i]/sum;
+  if (i==n/2) hhigh[i]=hhigh[i]+1.;
+ }
+
+ // Add the Low Pass and High Pass kernels to obtain a Band Reject kernel
+ TArrayD h(n);
+ for (Int_t i=0; i<n; i++)
+ {
+  h[i]=hlow[i]+hhigh[i];
+ }
+
+ // Spectrally invert the filter kernel to obtain the final Band Pass kernel
+ for (Int_t i=0; i<n; i++)
+ {
+  h[i]=-h[i];
+  if (i==n/2) h[i]=h[i]+1.;
+ }
+
+ SetWaveform(&h);
+ 
+ // Perform the convolution
+ y=Convolve(hist,i1,i2);
+
+ // Set title for the filtered time domain histogram
+ if (hist)
+ {
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nu1=f1*fSample;
+   Float_t nu2=f2*fSample;
+   title.Form("NcDSP Band Pass Filter result for [%-.3g,%-.3g] Hz and kernel size %-i",nu1,nu2,n);
+  }
+  else
+  {
+   title.Form("NcDSP Band Pass Filter result for #nu/#nu-sample=[%-.3g,%-.3g] and kernel size %-i",f1,f2,n);
+  }
+  hist->SetTitle(title);
+ }
+
+ // Fill the filtered frequency domain histogram
+ if (hisf)
+ {
+  // Load the filtered time domain data for Fourier transformation
+  Load(&y);
+
+  // Perform the Fourier transform
+  if (fSample>0) 
+  {
+   Fourier("R2C",hisf,"AMP Hz");
+  }
+  else
+  {
+   Fourier("R2C",hisf,"AMP f");
+  }
+
+  // Set the appropriate histogram title
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nu1=f1*fSample;
+   Float_t nu2=f2*fSample;
+   title.Form("NcDSP Band Pass Filter result for [%-.3g,%-.3g] Hz and kernel size %-i",nu1,nu2,n);
+  }
+  else
+  {
+   title.Form("NcDSP Band Pass Filter result for #nu/#nu-sample=[%-.3g,%-.3g] and kernel size %-i",f1,f2,n);
+  }
+  hisf->SetTitle(title);
+ }
+
+ // Restore the original data
+ Load(&xsave);
+ SetWaveform(&wfsave);
+
+ return y;
+}
+///////////////////////////////////////////////////////////////////////////
+TArrayD NcDSP::FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf,TH1* hist,Int_t* i1,Int_t* i2)
+{
+// Perform a Band Reject filter on the loaded input data x[] in the frequency band
+// specified by "f1" and "f2" (see below) and a filter kernel consisting of "n" values (see below).
+// The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
+// whereas the frequency domain result is returned in the (optional) histogram "hisf".
+// The original input data x[] are not modified.
+// The input data x[] have to be entered as real numbers by one of the Load() member functions.
+//
+// The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters.
+//
+// A Blackman Band Reject filter is an excellent frequency domain filter for suppressing
+// a certain band of frequencies.
+// Large values of "n" will result in sharp transitions at the edges of the rejected band,
+// but may result in long(er) computation times.
+// On the contrary, small values of "n" will result in less sharp transitions at the edges
+// of the rejected band, but result in short(er) computation times.
+//
+// Rule of thumb :
+// ---------------
+// The transition bandwidth (BW) at the edges of the rejected band (aka roll-off)
+// may be approximated as BW=4/n.
+//
+// Notes :
+// -------
+// 1) The returned TArrayD contains the filtered time domain data,
+//    which can be directly used as input for subsequent DSP processing.
+// 2) Repeated application of this filter will further decrease the amplitudes inside the selected band.
+// 3) Actually this filter represents a convolution with a time domain filter kernel
+//    that consists of a sinc pulse window of "n" points and an area of 1.
+// 4) The performance in the time domain is very poor, since the (inverse) Fourier transform
+//    of a frequency domain rectangular pulse filter kernel results in a sinc function.
+//
+// For details about the procedure, please refer to the excellent textbook :
+// "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
+// which is online available at http://www.dspguide.com/pdfbook.htm
+//
+// Input arguments :
+// -----------------
+// f1   : The lower bound of the frequency band expressed as a fraction of the sampling frequency
+// f2   : The upper bound of the frequency band expressed as a fraction of the sampling frequency
+//        For proper functionality one should choose 0<f1<0.5 and 0<f2<0.5, because of the
+//        underlying Fourier transform.
+// n    : The number of values in the filter kernel
+//        For proper functionality this must be an even integer.
+// hisf : (optional) Histogram with the filtered result (amplitudes) in the frequency domain
+// hist : (optional) Histogram with the filtered result in the time domain
+//
+// The (optional) arguments i1 and i2 provide the range [i1,i2] in the
+// resulting filtered data array for which the filter kernel was fully immersed
+// in the input (signal) data.
+// These values i1 and i2 (if requested) are indicated by vertical
+// dashed blue lines in the time domain histogram.
+//
+// The default values are hisf=0, hist=0, i1=0 and i2=0.
+
+ TArrayD y(0);
+ if (hisf) hisf->Reset();
+ if (hist) hist->Reset();
+ Int_t nx=fReIn.GetSize();
+
+ if (nx<1)
+ {
+  printf(" *%-s::FilterBandReject* No loaded input data present. \n",ClassName());
+  return y;
+ }
+
+ Int_t odd=n%2;
+ if (n<1 || odd || f1<=0 || f1>0.5 || f2<=0 || f2>0.5 || f2<=f1)
+ {
+  printf(" *%-s::FilterBandReject* Invalid input f1=%-g f2=%-g n=%-i \n",ClassName(),f1,f2,n);
+  return y;
+ }
+
+ // Save the current stored data
+ TArrayD xsave=fReIn;
+ TArrayD wfsave=fWaveform;
+
+ // The Low Pass filter kernel for f1
+ Double_t twopi=2.*acos(-1.);
+ TArrayD hlow(n);
+ Double_t rn=n;
+ Double_t ri=0;
+ Double_t sum=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  if (i==n/2)
+  {
+   hlow[i]=twopi*f1;
+  }
+  else
+  {
+   ri=i;
+   hlow[i]=sin(twopi*f1*double(i-n/2))*(0.42-0.5*cos(twopi*ri/rn)+0.08*cos(2.*twopi*ri/rn))/double(i-n/2);
+  }
+  sum+=hlow[i];
+ }
+
+ // Normalize the Low Pass filter kernel
+ for (Int_t i=0; i<n; i++)
+ {
+  hlow[i]=hlow[i]/sum;
+ }
+
+ // The High Pass filter kernel for f2
+ TArrayD hhigh(n);
+ sum=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  if (i==n/2)
+  {
+   hhigh[i]=twopi*f2;
+  }
+  else
+  {
+   ri=i;
+   hhigh[i]=sin(twopi*f2*double(i-n/2))*(0.42-0.5*cos(twopi*ri/rn)+0.08*cos(2.*twopi*ri/rn))/double(i-n/2);
+  }
+  sum+=hhigh[i];
+ }
+
+ // Spectrally invert and Normalize the filter kernel to 1
+ for (Int_t i=0; i<n; i++)
+ {
+  hhigh[i]=-hhigh[i]/sum;
+  if (i==n/2) hhigh[i]=hhigh[i]+1.;
+ }
+
+ // Add the Low Pass and High Pass kernels to obtain the final Band Reject kernel
+ TArrayD h(n);
+ sum=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  h[i]=hlow[i]+hhigh[i];
+ }
+
+ SetWaveform(&h);
+ 
+ // Perform the convolution
+ y=Convolve(hist,i1,i2);
+
+ // Set title for the filtered time domain histogram
+ if (hist)
+ {
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nu1=f1*fSample;
+   Float_t nu2=f2*fSample;
+   title.Form("NcDSP Band Reject Filter result for [%-.3g,%-.3g] Hz and kernel size %-i",nu1,nu2,n);
+  }
+  else
+  {
+   title.Form("NcDSP Band Reject Filter result for #nu/#nu-sample=[%-.3g,%-.3g] and kernel size %-i",f1,f2,n);
+  }
+  hist->SetTitle(title);
+ }
+
+ // Fill the filtered frequency domain histogram
+ if (hisf)
+ {
+  // Load the filtered time domain data for Fourier transformation
+  Load(&y);
+
+  // Perform the Fourier transform
+  if (fSample>0) 
+  {
+   Fourier("R2C",hisf,"AMP Hz");
+  }
+  else
+  {
+   Fourier("R2C",hisf,"AMP f");
+  }
+
+  // Set the appropriate histogram title
+  TString title;
+  if (fSample>0)
+  {
+   Float_t nu1=f1*fSample;
+   Float_t nu2=f2*fSample;
+   title.Form("NcDSP Band Reject Filter result for [%-.3g,%-.3g] Hz and kernel size %-i",nu1,nu2,n);
+  }
+  else
+  {
+   title.Form("NcDSP Band Reject Filter result for #nu/#nu-sample=[%-.3g,%-.3g] and kernel size %-i",f1,f2,n);
+  }
+  hisf->SetTitle(title);
+ }
+
+ // Restore the original data
+ Load(&xsave);
+ SetWaveform(&wfsave);
 
  return y;
 }
