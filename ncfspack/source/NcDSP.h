@@ -49,6 +49,7 @@ class NcDSP : public TNamed
   TArrayD FilterHighPass(Double_t fcut,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a High Pass filter on the loaded data
   TArrayD FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a Band Pass filter on the loaded data
   TArrayD FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a Band Reject filter on the loaded data
+  TArrayD FilterMultiBand(TArray& freqs,Int_t n,TH1* hisf=0,TH1* hist=0,Int_t* i1=0,Int_t* i2=0); // Perform a Multi Band filter on the loaded data
   Int_t GetN(Int_t mode=0) const;                              // Provide the number of data elements (to be) processed.
   TArrayD GetData(TString mode) const;                         // Provide a selected set of data
 
@@ -65,7 +66,12 @@ class NcDSP : public TNamed
 
   // Internal member functions
   void Reset();      // Reset all data and the processor
+  TArrayD GetMovingAverageKernel(Int_t n);                      // Provide a tine domain Moving Average Filter kernel
+  TArrayD GetLowPassKernel(Double_t fcut,Int_t n);              // Provide a time domain Low Pass Filter kernel
+  TArrayD GetHighPassKernel(Double_t fcut,Int_t n);             // Provide a time domain High Pass Filter kernel
+  TArrayD GetBandPassKernel(Double_t f1,Double_t f2,Int_t n);   // Provide a time domain High Pass Filter kernel
+  TArrayD GetBandRejectKernel(Double_t f1,Double_t f2,Int_t n); // Provide a time domain High Pass Filter kernel
 
- ClassDef(NcDSP,3) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
+ ClassDef(NcDSP,4) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
 };
 #endif

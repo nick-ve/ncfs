@@ -1406,4 +1406,7 @@
 08-feb-2023 NvE New member function FilterMovingAverage() introduced in class NcDSP.
 09-feb-2023 NvE New member functions FilterLowPass(), FilterHighPass(), FilterBandPass() and FilterBandReject()
                 introduced in class NcDSP.
-
+14-feb-2023 NvE Determination of the filter kernels for FilterLowPass(), FilterHighPass(), FilterBandPass()
+                and FilterBandReject() performed via internal memberfunctions of class NcDSP.
+                Also new member function FilterMultiBand() introduced in class NcDSP and option "dB"
+                introduced in the member function Fourier() to enable amplitude histograms in decibel.
