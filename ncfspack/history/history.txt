@@ -1410,3 +1410,7 @@
                 and FilterBandReject() performed via internal memberfunctions of class NcDSP.
                 Also new member function FilterMultiBand() introduced in class NcDSP and option "dB"
                 introduced in the member function Fourier() to enable amplitude histograms in decibel.
+20-feb-2023 NvE All filter kernel member functions made public and option "adaptn" introduced to provide
+                an automatic procedure to obtain the optimal (i.e. odd number) of filter kernel points.
+                Also an option provided to invoke a (fast) recursive processing of a Moving Average filter.
+                The version indicator in NcVersion has been updated to 5.31.
