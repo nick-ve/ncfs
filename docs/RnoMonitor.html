@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Dec 19 09:56:20 2022            -->
+<!--   Date: Wed Mar  8 10:27:54 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -90,7 +90,7 @@ return false;}
         will not be taken into account for the monitoring.
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 18, 2022  12:59Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 8, 2023  08:57Z
 
 </pre></div>
 </div></div>
@@ -181,6 +181,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:SetActive"><span class="baseclass">TTask::</span>SetActive</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> active = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)<span class="funcprop"><abbr title="toggles a state">TOGGLE</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoMonitor:SetBandFilters">SetBandFilters</a>(TArray&amp; freqs, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#RnoMonitor:SetBaselineMode">SetBaselineMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 128, <a href="./ListOfTypes.html#Double_t">Double_t</a> nrms = 1.2, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr = 0.1)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
@@ -248,11 +249,13 @@ return false;}
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fActive"><span class="baseclass">TTask::</span>fActive</a></td><td class="datadesc">true if task is active</td></tr>
 <tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="RnoMonitor:fAvMode"></a>fAvMode</td><td class="datadesc">The sampling averaging mode</td></tr>
 <tr class="data"><td class="datatype"><a href="./NcBlocks.html">NcBlocks</a></td><td class="dataname"><a name="RnoMonitor:fBB"></a>fBB</td><td class="datadesc">The Bayesian Block facility</td></tr>
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="RnoMonitor:fBands"></a>fBands</td><td class="datadesc">The array holding the frequency specifications for the MultiBand filter</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoMonitor:fBasemode"></a>fBasemode</td><td class="datadesc">The baseline (correction) mode</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoMonitor:fBlocksize"></a>fBlocksize</td><td class="datadesc">Number of samples to form the fixed baseline blocksize</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoMonitor:fChan"></a>fChan</td><td class="datadesc">The channel number to be analysed (&lt;0 means all channels)</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcDSP.html">NcDSP</a></td><td class="dataname"><a name="RnoMonitor:fDSP"></a>fDSP</td><td class="datadesc">The Digital Signal Processing facility</td></tr>
 <tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="RnoMonitor:fDevClass"></a>fDevClass</td><td class="datadesc">The classname of the devices to be analysed</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoMonitor:fDevSample"></a>fDevSample</td><td class="datadesc">Identifier of the sample to be used from the stored device samples</td></tr>
 <tr class="data"><td class="datatype"><a href="./RnoEvent.html">RnoEvent</a>*</td><td class="dataname"><a name="RnoMonitor:fEvt"></a>fEvt</td><td class="datadesc">Pointer to the current event structure</td></tr>
@@ -265,6 +268,7 @@ return false;}
 <tr class="data"><td class="datatype">TObjArray</td><td class="dataname"><a name="RnoMonitor:fHistos"></a>fHistos</td><td class="datadesc">Storage array for the produced histograms</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoMonitor:fNbins24"></a>fNbins24</td><td class="datadesc">The number of bins for the 24 hour monitoring histograms </td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="RnoMonitor:fNkernel"></a>fNkernel</td><td class="datadesc">The number of points for each band filter kernel</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="RnoMonitor:fNrms"></a>fNrms</td><td class="datadesc">Error scale factor to tailor the fluctuation sensitivity for the Bayesian Block analysis</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="RnoMonitor:fOffset"></a>fOffset</td><td class="datadesc">The RNO-G location time offset in fractional hours w.r.t. Greenwich</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
@@ -370,7 +374,7 @@ return false;}
  1) The statistics <span class="string">"Mean"</span>, <span class="string">"Median"</span> and <span class="string">"RMS"</span> are sensitive to pedestal offsets,
     whereas all statistics are sensitive to baseline variations within the recorded time trace.
     Please refer to the member function <a href="./RnoMonitor.html#RnoMonitor:SetBaselineMode" title="void RnoMonitor::SetBaselineMode(Int_t mode,Int_t n=128,Double_t nrms=1.2,Double_t fpr=0.1)">SetBaselineMode</a>() to mitigate these effects.
- 3) For large data samples, the statistics <span class="string">"Median"</span>, <span class="string">"SpreadMean"</span> and <span class="string">"SpreadMedian"</span>
+ 2) For large data samples, the statistics <span class="string">"Median"</span>, <span class="string">"SpreadMean"</span> and <span class="string">"SpreadMedian"</span>
     may lead to <a href="./ListOfTypes.html#long">long</a>(er) CPU times.
 
  In the default constructor mode=<span class="string">"RMSdeviation"</span> is initialised.
@@ -413,6 +417,49 @@ return false;}
  At invokation of this member function, the default values are n=128, nrms=1.2 and fpr=0.1.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoMonitor:SetBandFilters" href="src/RnoMonitor.cxx.html#NNbkpB">SetBandFilters</a>(TArray&amp; freqs, <a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
+<div class="funccomm"><pre> Specify the frequency bands to be used for digital filtering the recorded waveform before extracting
+ the values of the statistic selected for monitoring, as specified by <a href="./RnoMonitor.html#RnoMonitor:DefineStatistic" title="void RnoMonitor::DefineStatistic(TString mode)">DefineStatistic</a>().
+
+ The filtering procedure is based on a convolution of the various provided Blackman
+ single Low Pass and/or High Pass and/or Band Pass and/or Band Reject filters (see below).
+
+ Large values of <span class="string">"n"</span> will result in sharp transitions at the edges of the specified bands,
+ but may result in <a href="./ListOfTypes.html#long">long</a>(er) computation times.
+ On the contrary, small values of <span class="string">"n"</span> will result in less sharp transitions at the edges
+ of the specified bands, but result in <a href="./ListOfTypes.html#short">short</a>(er) computation times.
+
+ Rule of thumb :
+
+ The transition bandwidth (BW) at the edges of the specified bands (aka roll-off)
+ may be approximated as BW=4/n, where BW is expressed as a fraction of the sampling frequency.
+
+ Notes :
+
+ 1) The size of the TArray <span class="string">"freqs"</span> must be even and at least twice the number of
+    frequency bands to be specified (see below).
+ 2) Specifying the same frequency band more than once will further suppress the unwanted frequencies.
+
+ For further details, please refer to the docs of the memberfunction FilterMultiBand() of the class <a href="./NcDSP.html">NcDSP</a>.
+
+ Input arguments :
+
+ freqs  : Array containing the lower and upper bounds of the frequency band(s) in MHz.
+          The array elements represent the various pairs [flow,fup] to define the frequency bands,
+          ordered as (f1low,f1up,f2low,f2up,...).
+          The following conventions are used :
+          flow&gt;0 and fup&gt;0 --&gt; Apply a Band Pass filter over [flow,fup]
+          flow&lt;0 and fup&lt;0 --&gt; Apply a Band Reject filter over [|flow|,|fup|]
+          flow&lt;0 and fup&gt;0 --&gt; Apply a Low Pass filter with fcut=fup
+          flow&gt;0 and fup&lt;0 --&gt; Apply a High Pass filter with fcut=flow
+          In case flow=0 or fup=0 the pair [flow,fup] is neglected.
+ n      : The number of points in the corresponding filter kernels
+          For best functionality this must be an odd integer.
+          An even value of <span class="string">"n"</span> will be increased by 1 to obtain an odd value.
+
+ In case the provided array has a length 0 or n&lt;1, all band filter settings will be removed.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="RnoMonitor:SetNbins24" href="src/RnoMonitor.cxx.html#gJ3_BB">SetNbins24</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n)</span><br />
 <div class="funccomm"><pre> Set the number of bins for the 24 hour monitoring histograms.
  In the default constructor the number of bins is set to 24,
@@ -441,7 +488,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Dec 19 09:56:20 2022 </em><em>&raquo; Last generated: 2022-12-19 09:56</em><br />
+<em>&raquo; Last changed: Wed Mar  8 10:27:54 2023 </em><em>&raquo; Last generated: 2023-03-08 10:27</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

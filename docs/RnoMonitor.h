@@ -7,6 +7,7 @@
 #include "NcJob.h"
 #include "NcAstrolab.h"
 #include "NcBlocks.h"
+#include "NcDSP.h"
 
 #include "RnoEvent.h"
 
@@ -22,6 +23,7 @@ class RnoMonitor : public TTask
   void SetSampleVariable(TString name,TString f="-"); // Specify the (function of the) sample variable to be used 
   void DefineStatistic(TString mode);                 // Select the statistic for monitoring
   void SetBaselineMode(Int_t mode,Int_t n=128,Double_t nrms=1.2,Double_t fpr=0.1); // Select the baseline (correction) mode
+  void SetBandFilters(TArray& freqs,Int_t n);         // Specify the frequency bands for digital filtering 
   void SetNbins24(Int_t n);                           // Set the number of bins for the 24 hour monitoring histograms
   void ListHistograms() const;                        // Provide a list of all the stored histograms
   void WriteHistograms(TString filename);             // Write all stored histograms to a ROOT output file
@@ -48,8 +50,11 @@ class RnoMonitor : public TTask
   TGraph fGin;        // The input graph of the time trace for Bayesian Block analysis
   TH1F fHblock;       // The produced histogram with the Bayesian Blocks of the time trace
   TGraph fGout;       // The output graph representing the Bayesian Block subtracted time trace
+  NcDSP fDSP;         // The Digital Signal Processing facility
+  TArrayD fBands;     // The array holding the frequency specifications for the MultiBand filter
+  Int_t fNkernel;     // The number of points for each band filter kernel
   Bool_t fFirst;      // Flag to indicate first pass through the processor
 
- ClassDef(RnoMonitor,3) // TTask derived class to monitor RNO-G data over certain time periods.
+ ClassDef(RnoMonitor,4) // TTask derived class to monitor RNO-G data over certain time periods.
 };
 #endif

@@ -95,9 +95,14 @@
  // Add a monitoring task
  RnoMonitor* moni=new RnoMonitor();
  moni->SetDevices("RnoULPDA"); // Only use the upward LPDAs
- moni->SetSampleVariable("ADC","0.618*x-8.133"); // Convert ADC->mV
+ moni->SetSampleVariable("ADC","x*2500./(pow(2,12)-1.)"); // Convert ADC->mV
  moni->DefineStatistic("RMSdeviation");
- moni->SetBaselineMode(0); // No baseline correction
+ moni->SetBaselineMode(2); // Baseline correction
+ TArrayF freqs(2); // Define a low pass filter with a cut-off at 110 MHz
+ freqs[0]=-1;
+ freqs[1]=110;
+ Int_t nkern=300;
+ moni->SetBandFilters(freqs,nkern);
  moni->SetNbins24(24*4);
 
  // Specify a trigger statistics task

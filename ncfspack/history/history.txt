@@ -1414,3 +1414,6 @@
                 an automatic procedure to obtain the optimal (i.e. odd number) of filter kernel points.
                 Also an option provided to invoke a (fast) recursive processing of a Moving Average filter.
                 The version indicator in NcVersion has been updated to 5.31.
+08-mar-2023 NvE New member function RnoMonitor::SetBandFilters() introduced to support selections in the
+                frequency domain.
+                The version indicator in NcVersion has been updated to 5.32.

@@ -45,7 +45,7 @@
 //        will not be taken into account for the monitoring.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 18, 2022  12:59Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 8, 2023  08:57Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoMonitor.h"
@@ -69,6 +69,7 @@ RnoMonitor::RnoMonitor(const char* name,const char* title) : TTask(name,title)
  SetDevices("RnoGANT");
  DefineStatistic("RMSdeviation");
  SetBaselineMode(0);
+ SetBandFilters(fBands,0);
 
  NcAstrolab lab;
  lab.SetExperiment("RNO-G");
@@ -184,7 +185,7 @@ void RnoMonitor::DefineStatistic(TString mode)
 // 1) The statistics "Mean", "Median" and "RMS" are sensitive to pedestal offsets,
 //    whereas all statistics are sensitive to baseline variations within the recorded time trace.
 //    Please refer to the member function SetBaselineMode() to mitigate these effects.
-// 3) For large data samples, the statistics "Median", "SpreadMean" and "SpreadMedian"
+// 2) For large data samples, the statistics "Median", "SpreadMean" and "SpreadMedian"
 //    may lead to long(er) CPU times.
 //
 // In the default constructor mode="RMSdeviation" is initialised.
@@ -261,6 +262,77 @@ void RnoMonitor::SetBaselineMode(Int_t mode,Int_t n,Double_t nrms,Double_t fpr)
  fFPR=fpr;
 }
 ///////////////////////////////////////////////////////////////////////////
+void RnoMonitor::SetBandFilters(TArray& freqs,Int_t n)
+{
+// Specify the frequency bands to be used for digital filtering the recorded waveform before extracting
+// the values of the statistic selected for monitoring, as specified by DefineStatistic().
+//
+// The filtering procedure is based on a convolution of the various provided Blackman
+// single Low Pass and/or High Pass and/or Band Pass and/or Band Reject filters (see below).
+//
+// Large values of "n" will result in sharp transitions at the edges of the specified bands,
+// but may result in long(er) computation times.
+// On the contrary, small values of "n" will result in less sharp transitions at the edges
+// of the specified bands, but result in short(er) computation times.
+//
+// Rule of thumb :
+// ---------------
+// The transition bandwidth (BW) at the edges of the specified bands (aka roll-off)
+// may be approximated as BW=4/n, where BW is expressed as a fraction of the sampling frequency.
+//
+// Notes :
+// -------
+// 1) The size of the TArray "freqs" must be even and at least twice the number of
+//    frequency bands to be specified (see below).
+// 2) Specifying the same frequency band more than once will further suppress the unwanted frequencies. 
+//
+// For further details, please refer to the docs of the memberfunction FilterMultiBand() of the class NcDSP.
+//
+// Input arguments :
+// -----------------
+// freqs  : Array containing the lower and upper bounds of the frequency band(s) in MHz.
+//          The array elements represent the various pairs [flow,fup] to define the frequency bands,
+//          ordered as (f1low,f1up,f2low,f2up,...).
+//          The following conventions are used :
+//          flow>0 and fup>0 --> Apply a Band Pass filter over [flow,fup]
+//          flow<0 and fup<0 --> Apply a Band Reject filter over [|flow|,|fup|]
+//          flow<0 and fup>0 --> Apply a Low Pass filter with fcut=fup
+//          flow>0 and fup<0 --> Apply a High Pass filter with fcut=flow
+//          In case flow=0 or fup=0 the pair [flow,fup] is neglected.
+// n      : The number of points in the corresponding filter kernels
+//          For best functionality this must be an odd integer.
+//          An even value of "n" will be increased by 1 to obtain an odd value. 
+//
+// In case the provided array has a length 0 or n<1, all band filter settings will be removed.
+
+ Int_t arrsize=freqs.GetSize();
+
+ // Removing all band filter settings
+ if (!arrsize || n<1)
+ {
+  fBands.Set(0);
+  fNkernel=0;
+  return;
+ }
+
+ Int_t oddsize=arrsize%2;
+ Int_t nbands=arrsize/2;
+ if (nbands<1 || n<1 || oddsize)
+ {
+  printf(" *%-s::SetBandFilters* Invalid input array size=%-i nbands=%-i n=%-i \n",ClassName(),arrsize,nbands,n);
+  fBands.Set(0);
+  fNkernel=0;
+  return;
+ }
+
+ fNkernel=n;
+ fBands.Set(arrsize);
+ for (Int_t i=0; i<arrsize; i++)
+ {
+  fBands[i]=freqs.GetAt(i);
+ }
+}
+///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetNbins24(Int_t n)
 {
 // Set the number of bins for the 24 hour monitoring histograms.
@@ -296,6 +368,12 @@ void RnoMonitor::Exec(Option_t* opt)
  // Do not process rejected events
  Int_t select=fEvt->GetSelectLevel();
  if (select<0) return;
+
+ // Get the sampling frequency
+ Double_t fsample=0;
+ NcDevice* daq=fEvt->GetDevice("DAQ");
+ if (daq) fsample=daq->GetSignal("Sampling-rate");
+ fDSP.SetSamplingFrequency(fsample);
 
  RnoGANT* antx=0;   // Pointer for a generic RNO antenna
  Int_t ista=0;      // Station number
@@ -360,6 +438,17 @@ void RnoMonitor::Exec(Option_t* opt)
   }
   monval+="]";
 
+  Int_t ndata=sx->GetN();
+
+  if (!ndata) continue;
+
+  // Fill the data array with the recorded samplings
+  TArrayD data(ndata);
+  for (Int_t j=0; j<ndata; j++)
+  {
+   data[j]=sx->GetEntry(j+1,fVarIndex);
+  }
+
   // Perform the (Bayesian) Block baseline correction if requested
   if (fBasemode)
   {
@@ -373,14 +462,61 @@ void RnoMonitor::Exec(Option_t* opt)
     fBB.GetBlocks(&fGin,&fHblock,fBlocksize,fBasemode-1);
    }
    fBB.Add(&fGin,&fHblock,&fGout,-1);
+
+   ndata=fGout.GetN();
+
+   if (!ndata) continue;
+
+   // Fill the data array with the modified data
+   data.Set(ndata);
+   for (Int_t j=0; j<ndata; j++)
+   {
+    fGout.GetPoint(j,x,data[j]);
+   }
+  }
+
+  // Perform the frequency band filtering if requested
+  Int_t narr=fBands.GetSize();
+  if (narr && fNkernel && fsample>0)
+  {
+   fDSP.Load(&data);
+   // Convert the filter bands from MHz to fractions of the sampling frequency
+   TArrayD bands(narr);
+   for (Int_t j=0; j<narr; j++)
+   {
+    bands[j]=fBands[j]*1.e6/fsample;
+   }
+   TH1F* hkern=(TH1F*)fHistos.FindObject("hFilterKernel");
+   if (!hkern)
+   {
+    hkern=new TH1F();
+    hkern->SetName("hFilterKernel");
+    fDSP.GetMultiBandKernel(bands,fNkernel,hkern);   
+    fHistos.Add(hkern);
+   }
+   Int_t i1=0;
+   Int_t i2=0;
+   TArrayD temp=fDSP.FilterMultiBand(bands,fNkernel,0,0,0,&i1,&i2);
+   ndata=i2-i1+1;
+
+   if (ndata<1) continue;
+
+   // Fill the data array with the modified data
+   data.Set(ndata);
+   Int_t index=0;
+   for (Int_t j=i1; j<=i2; j++)
+   {
+    if (index>=ndata) break;
+    data[index]=temp[j];
+    index++;
+   }
   }
 
   // Construct the sample with the selected statistic values 
   fValues.Reset();
-  for (Int_t ival=1; ival<=sx->GetN(); ival++)
+  for (Int_t j=0; j<ndata; j++)
   {
-   val=sx->GetEntry(ival,fVarIndex);
-   if (fBasemode) fGout.GetPoint(ival-1,x,val);
+   val=data[j];
    if (fVarFunc) val=fVarFunc->Eval(val);
    fValues.Enter(val);
   }
@@ -413,8 +549,8 @@ void RnoMonitor::Exec(Option_t* opt)
    str+=antx->GetName();
    str2=str;
    str2+=";Universal Time (hours);";
-   if (fBasemode) str2+="*";
-   str2+="Averaged ";
+   if (fBasemode || fNkernel) str2+="*";
+   str2+="Av. ";
    str2+=monval;
    hut24->SetTitle(str2);
    fHistos.Add(hut24);
@@ -441,8 +577,8 @@ void RnoMonitor::Exec(Option_t* opt)
    str+=antx->GetName();
    str2=str;
    str2+=";Summit Local Time (hours);";
-   if (fBasemode) str2+="*";
-   str2+="Averaged ";
+   if (fBasemode || fNkernel) str2+="*";
+   str2+="Av. ";
    str2+=monval;
    hlt24->SetTitle(str2);
    fHistos.Add(hlt24);
@@ -469,8 +605,8 @@ void RnoMonitor::Exec(Option_t* opt)
    str+=antx->GetName();
    str2=str;
    str2+=";Summit Mean Siderial Time (hours);";
-   if (fBasemode) str2+="*";
-   str2+="Averaged ";
+   if (fBasemode || fNkernel) str2+="*";
+   str2+="Av. ";
    str2+=monval;
    hlmst24->SetTitle(str2);
    fHistos.Add(hlmst24);
@@ -492,31 +628,31 @@ void RnoMonitor::Exec(Option_t* opt)
  if (fFirst)
  {
   TString sbase="None";
-  if (fBasemode==1) sbase="Mean of consecutive sample blocks";
-  if (fBasemode==2) sbase="Median of consecutive sample blocks";
+  if (fBasemode==1) sbase="Mean of consecutive samples per block";
+  if (fBasemode==2) sbase="Median of consecutive samples per block";
   if (fBasemode==3) sbase="Bayesian Blocks";
-  cout << endl;
-  cout << " *" << ClassName() << "::Exec* Processor parameter settings." << endl;
-  cout << " Processor name ............ : " << GetName() << endl;
-  cout << " Processor title ........... : " << GetTitle() << endl;
-  cout << " Device class .............. : " << fDevClass << endl;
-  cout << " Station number ............ : " << fSta << " (<0 means all stations)" << endl;
-  cout << " Channel number ............ : " << fChan << " (<0 means all channels)" << endl;
-  cout << " Device sample ............. : Index=" << fDevSample << " Name=" << sxname << endl; 
-  cout << " Sample variable ........... : Index=" << fVarIndex << " Name=" << varname << endl;
-  cout << " Monitor value ............. : " << monval << endl;
-  cout << " Baseline correction mode .. : " << fBasemode << " (" << sbase << ")" << endl;
+  printf("\n");
+  printf(" *%-s::Exec* Processor parameter settings. \n",ClassName());
+  printf(" Processor name ............ : %-s \n",GetName());
+  printf(" Processor title ........... : %-s \n",GetTitle());
+  printf(" Device class .............. : %-s \n",fDevClass.Data());
+  printf(" Station number ............ : %-i (<0 means all stations) \n",fSta);
+  printf(" Channel number ............ : %-i (<0 means all channels) \n",fChan);
+  printf(" Device sample ............. : Index=%-i Name=%-s \n",fDevSample,sxname.Data());
+  printf(" Sample variable ........... : Index=%-i Name=%-s \n",fVarIndex,varname.Data());
+  printf(" Monitor value ............. : %-s \n",monval.Data());
+  printf(" Baseline correction mode .. : %-i (%-s) \n",fBasemode,sbase.Data());
   if (fBasemode==1 || fBasemode==2)
   {
-   cout << " Baseline block size ....... : " << fBlocksize << " samples" << endl;
+   printf(" Baseline block size ....... : %-i samples \n",fBlocksize);
   }
   if (fBasemode==3)
   {
-   cout << " Bayesian Block nrms ....... : " << fNrms << endl;
-   cout << " Bayesian Block FPR ........ : " << fFPR << endl;
+   printf(" Bayesian Block nrms ....... : %-g \n",fNrms);
+   printf(" Bayesian Block FPR ........ : %-g \n",fFPR);
   }
-  cout << " Number of bins for 24 hours : " << fNbins24 << endl;
-
+  printf(" Band Filter kernel size ... : %-i \n",fNkernel);
+  printf(" Number of bins for 24 hours : %-i \n",fNbins24);
   fFirst=kFALSE;
  }
 }
