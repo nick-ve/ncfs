@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -62,6 +62,12 @@
 //
 // Example :
 // ---------
+// //
+// // Note : This example only serves to illustrate the use of NcTreeMaker,
+// //        since its functionality has now been implemented in NcCollider
+// //        via the NcCollider::SetOutputFile() facility.
+// //        For further details, see the documention of NcCollider.
+// // 
 // gSystem->Load("ncfspack");
 //
 // NcTreeMaker mktree;
@@ -105,7 +111,7 @@
 // mktree.CloseTree();
 //
 //--- Author: Nick van Eijndhoven 03-apr-2008 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  14:33Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 17, 2023  16:40Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcTreeMaker.h"
@@ -183,15 +189,12 @@ NcTreeMaker::~NcTreeMaker()
 {
 // Default destructor.
 
+ // Delete the output file.
+ // This will also delete the corresponding output Tree
  if (fOutfile)
  {
   delete fOutfile;
   fOutfile=0;
- }
-
- if (fOuttree)
- {
-  delete fOuttree;
   fOuttree=0;
  }
 
@@ -445,6 +448,8 @@ void NcTreeMaker::CloseTree()
 {
 // Proper writing and closing of the output tree structure(s).
 
+ if (!fOutfile) return;
+
  fOutfile->cd();
 
  Int_t ntrees=0;
@@ -456,6 +461,8 @@ void NcTreeMaker::CloseTree()
   if (tree) tree->Write();
  }
  fOuttree->Write();
+
+ gROOT->cd(); // Move from the file back to memory
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::SetTrackMaximum(Int_t n)
@@ -817,7 +824,6 @@ void NcTreeMaker::Exec(Option_t* opt)
 
   if (fTrees) delete fTrees;
   fTrees=new TObjArray();
-  fTrees->SetOwner();
 
   cout << " *NcTreeMaker* Selection parameters." << endl;
   cout << " Selection types in use :";
@@ -976,7 +982,9 @@ void NcTreeMaker::Exec(Option_t* opt)
  if (fDeviceflag) Device();   // Obtain device observables
  if (fAstrolab) AstroTrack(); // Create tracks from (astrophysical) reference objects
 
- if (fOuttree && (fEventflag || fTrackflag || fDeviceflag)) fOuttree->Fill(); 
+ if (fOuttree && (fEventflag || fTrackflag || fDeviceflag)) fOuttree->Fill();
+
+ gROOT->cd(); // Go back from file to memory
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::Track()

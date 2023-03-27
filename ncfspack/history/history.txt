@@ -1417,3 +1417,15 @@
 08-mar-2023 NvE New member function RnoMonitor::SetBandFilters() introduced to support selections in the
                 frequency domain.
                 The version indicator in NcVersion has been updated to 5.32.
+17-mar-2023 NvE Modifications made in NcTreeMaker.cxx in order to prevent double deletion of the various Trees
+                when the output file is deleted.
+27-mar-2023 NvE New member function NcAstrolab::GetCountsHistogram() introduced to support spectrum specification
+                via histogram input.
+                Functionality of NcCollider extended to support both output data in NcEvent structures
+                and also plain ROOT Tree format. This also solved the long standing file closing problem.
+                Also a facility for the modeling of (obscured) astrophysical jets introduced in NcCollider.
+                See the documentation of NcCollider for further details.
+                The version indicator in NcVersion has been updated to 5.33.
+ 
+
+

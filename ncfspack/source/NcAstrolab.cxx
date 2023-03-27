@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2023, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -164,7 +164,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, January 16, 2023  16:38Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 27, 2023  11:33Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -7808,7 +7808,12 @@ TH1F NcAstrolab::GetDifHistogram(TH1* hin,Int_t mode,TString s,TF1* f) const
  TString syout=s;
  if (syout=="")
  {
-  syout="d(";
+  if (f)
+  {
+   syout=f->GetExpFormula("p");
+   syout+="*";
+  }
+  syout+="d(";
   syout+=syin;
   syout+=")/d(";
 
@@ -7973,6 +7978,111 @@ TH1F NcAstrolab::GetCountsHistogram(TF1& spec,Int_t nbins,Double_t xmin,Double_t
  }
 
  delete [] xbins;
+
+ return hout;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1F NcAstrolab::GetCountsHistogram(TH1& hin,Int_t mode,TString s,TF1* fscale) const
+{
+// Construct the counts (N) vs. x histogram from a 1D input histogram describing a differential distribution dN/dx.
+// Such a returned histogram allows an easy way to for instance obtain a primary particle distribution N(E)
+// to be used as input for cosmic ray event generators based on a predicted differential power spectrum dN/dE.
+//
+// Input arguments :
+// -----------------
+// hin    : The input histogram describing the fscale(x)*dN/dx distribution
+// mode   : 0 ==> Histogram X-axis represents the x value
+//          1 ==> Histogram X-axis represents the Log10(x) value
+//          2 ==> Histogram X-axis represents the Ln(x) value
+// s      : Character string for the title and axes labels of the returned histogram.
+//          Example : s="Energy distribution;^{10}Log(Energy) in GeV;Counts".
+//          If string s is not provided the labels will be constructed from the
+//          labels of the input histogram "hin".
+// fscale : (Optional) scaling function that was used for the distribution in "hin".
+//          For example : In case "hin" contained E^2*dN/dE vs. E, than the user
+//          should specifiy "fscale" as the function "pow(x,2)" so that this scaling
+//          can be compensated for in constructing the N(E) vs. E output histogram.
+//          In case "hin" contains a regular dN/dx distribution, "fscale" should not
+//          be specified.
+//
+// Returned object : The 1-D histogram (TH1F) containing the expected counts N vs. x.
+//
+// The default values are s="" and fscale=0.
+
+ // Setting up the output histogram
+ TH1F hout;
+ hout.SetName("CountsHistogram");
+ Int_t nbins=hin.GetNbinsX();
+
+ if (nbins<1) return hout;
+
+ TAxis* ax=hin.GetXaxis();
+ Double_t xmin=ax->GetXmin();
+ Double_t xmax=ax->GetXmax();
+ hout.SetBins(nbins,xmin,xmax);
+
+ // Set histogram title and axes labels
+ if (s=="")
+ {
+  s=hin.GetTitle();
+  s+=";";
+  TString tx=ax->GetTitle();
+  if (tx!="")
+  {
+   s+=tx;
+  }
+  else
+  {
+   if (mode==0) s+="x";
+   if (mode==1) s+="^{10}Log(x)";
+   if (mode==2) s+="Ln(x)";
+  }
+  s+=";Counts";
+ }
+ hout.SetTitle(s);
+
+ // Filling the output histogram
+ Double_t x=0;
+ Double_t xlow=0;
+ Double_t xup=0;
+ Double_t dx=0;
+ Double_t xval=0;
+ Double_t N=0;
+ Double_t fval=0;
+ for (Int_t ibin=1; ibin<=nbins; ibin++)
+ {
+  x=hin.GetBinCenter(ibin);
+  xlow=hin.GetBinLowEdge(ibin);
+  xup=xlow+hin.GetBinWidth(ibin);
+  N=hin.GetBinContent(ibin);
+  if (!mode)
+  {
+   xval=x;
+   dx=xup-xlow;
+   N=N*dx;
+  }
+  else if (mode==1)
+  {
+   xval=pow(10.,x);
+   dx=pow(10.,xup)-pow(10.,xlow);
+   N=N*dx;
+  }
+  else if (mode==2)
+  {
+   xval=exp(x);
+   dx=exp(xup)-exp(xlow);
+   N=N*dx;
+  }
+
+  // Compensate for the Y-axis scaling if needed
+  if (fscale)
+  {
+   fval=fscale->Eval(xval);
+   if (fval) N=N/fval;
+  }
+
+  hout.Fill(x,N);
+ }
 
  return hout;
 }

@@ -1,9 +1,7 @@
 #ifndef NcCollider_h
 #define NcCollider_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcCollider.h 122 2016-05-19 18:01:23Z nickve $
 
 #include "TSystem.h"
 #include "TPythia6.h"
@@ -15,13 +13,14 @@
 #include "NcEvent.h"
 #include "NcRandom.h"
 #include "NcBoost.h"
+#include "NcTreeMaker.h"
  
 class NcCollider : public TPythia6
 {
  public:
   NcCollider();                                         // Default constructor
   virtual ~NcCollider();                                // Default destructor
-  void SetOutputFile(TString name);                     // Initialise the ROOT output data file
+  NcTreeMaker* SetOutputFile(TString fname,Int_t mode=0); // Initialise the output data file(s)
   void SetVertexMode(Int_t mode);                       // Select mode for (sec.) vertex structure creation
   Int_t GetVertexMode() const;                          // Provide vertex structure creation mode
   void SetResolution(Double_t res);                     // Set resolution (in meter) for resolving (sec.) vertices
@@ -53,6 +52,13 @@ class NcCollider : public TPythia6
   Int_t GetRandomSeed();                                // Provide the current random number sequence seed.
   Float_t GetWin() const;                               // Provide the Pythia energy indicator (in GeV) used for initialisation
 
+  // Facilities for the p+p and p+gamma modeling for the jet of (obscured) astrophysical objects
+  void SetJetProtonSpectrum(Double_t pmin,Double_t pmax=-1,TF1* fspec=0,TH1* hspec=0,Int_t mode=0); // Set the proton (beam) spectrum of the Jet
+  void SetJetGammaSpectrum(Double_t pmin,Double_t pmax=-1,TF1* fspec=0,TH1* hspec=0,Int_t mode=0);  // Set the gamma (target) spectrum of the Jet
+  TH1* GetJetProtonSpectrum(Double_t* pmin=0,Double_t* pmax=0); // Get the proton (beam) spectrum of the Jet
+  TH1* GetJetGammaSpectrum(Double_t* pmin=0,Double_t* pmax=0);  // Get the gamma (target) spectrum of the Jet
+  void ProcessJet(Double_t np,Double_t gfrac,TString flux,Double_t dthmax=0,Int_t nlist=1,Int_t ntrymax=1000,Int_t wxsec=0,Double_t finit=0,Int_t full=0); // Perform the astrophysical Jet simulation
+
  protected:
   Int_t fVertexmode;    // The vertex structure creation mode
   Double_t fResolution; // The resolution (in meter) for resolving (sec.) vertices 
@@ -82,16 +88,31 @@ class NcCollider : public TPythia6
   Int_t fWxsec;         // Flag to denote event weighting by cross section for variable energy runs
   NcBoost fLorbo;       // The Lorentz boost for the case of forced CMS processing
 
-  TFile* fOutFile;      // The user defined output data file 
-  TTree* fOutTree;      // The standard ROOT output tree
+  TFile* fOutFile;      // The user defined output file for the NcEvent data structures 
+  TTree* fOutTree;      // The ROOT output tree with the NcEvent data structures
 
   TArrayI* fSelections; // The particle KC codes for event selection
   Int_t fSelect;        // Flag to indicate whether the total event is selected (1) or not (0)
+
+  NcTreeMaker* fMktree; // The TreeMaker task processor
+  NcJob* fJob;          // The NcJob to perform all (sub)tasks
+  NcSignal fEvtuser;    // Storage for event user data
+
+  // Parameters for the astrophysical Jet modeling
+  Double_t fJetPpmin; // The Jet minimum proton (beam) momentum
+  Double_t fJetPpmax; // The Jet maximum proton (beam) momentum
+  Double_t fJetGpmin; // The Jet minimum gamma (target) momentum
+  Double_t fJetGpmax; // The Jet maximum gamma (target) momentum
+  TH1* fJetPspectrum; // The Jet proton (beam) spectrum
+  Int_t fJetPscale;   // Linear, Log10 or Ln scale indicator for fJetPspectrum X-axis
+  TH1* fJetGspectrum; // The Jet gamma (target) specrrum
+  Int_t fJetGscale;   // Linear, Log10 or Ln scale indicator for fJetGspectrum X-axis
+  NcAstrolab fLab;    // To provide facilities for the astrophysical Jet modeling
 
   Int_t IsSelected();   // Check whether (sub)event passed the selection criteria
   void GetFractions(Float_t zp,Float_t ap,Float_t zt,Float_t at); // Determine various N-N collision fractions
   TString GetPyname(Int_t kf); // Provide the correctly truncated Pythia particle name for PDG code kf  
 
- ClassDef(NcCollider,9) // Pythia based universal (astro)physics event generator
+ ClassDef(NcCollider,10) // Pythia based universal (astro)physics event generator
 };
 #endif

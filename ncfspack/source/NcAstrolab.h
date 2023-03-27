@@ -1,6 +1,6 @@
 #ifndef NcAstrolab_h
 #define NcAstrolab_h
-// Copyright(c) 1997-2023, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <math.h>
@@ -132,6 +132,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1F GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin=-1,Double_t dxmin=-1,Double_t dxmax=-1,Int_t mode=1,Double_t fact=1); // Provide dx distribution of histogram entries 
   TH1F GetDifHistogram(TH1* hin,Int_t mode,TString s="",TF1* f=0) const;  // Construct the differential dy/dx vs. x histogram from a 1D y vs. x histogram
   TH1F GetCountsHistogram(TF1& spec,Int_t nbins,Double_t xmin, Double_t xmax,Int_t mode,TString s="") const;  // Construct the counts (N) vs. x histogram from a 1D differential spectrum dN/dx
+  TH1F GetCountsHistogram(TH1& hin,Int_t mode,TString s="",TF1* fscale=0) const;  // Construct the counts (N) vs. x histogram from a 1D differential distribution dN/dx
   TH1F GetLogHistogram(TH1* hin,Int_t mode,TString s="") const; // Construct the Log10(y) or Ln(y) vs. x histogram from a 1D y vs. x histogram
   TF1 GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a background rate
   TF1 GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a source signal rate
@@ -292,6 +293,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1* GetBurstT90dist(TString name,TString type);
   TH1* GetBurstSigmaPosdist(TString name,TString type);
  
- ClassDef(NcAstrolab,38) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,39) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

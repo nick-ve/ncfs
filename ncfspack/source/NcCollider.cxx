@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -43,6 +43,12 @@
 // For further details concerning the produced output structure,
 // see the docs of the memberfunctions SetVertexMode and SetResolution.
 //
+// This NcCollider class also provides a facility to model c.q. perform the
+// analysis of particle production via a combination of p+p and p+gamma processes,
+// which for instance may be induced by the jet of a dust obscured AGN.
+// For worked out examples, please refer to the macros "agn-model.cc"
+// and "agn-analysis.cc" in the folder "/ncfs/physics/macros".
+//
 // Example job of minimum biased Pb+Pb interactions :
 // --------------------------------------------------
 // {
@@ -52,7 +58,7 @@
 //
 //  NcCollider* gen=new NcCollider();
 //
-//  gen->SetOutputFile("test.root");
+//  gen->SetOutputFile("test.ncfspack");
 //  gen->SetVertexMode(3);    
 //  gen->SetResolution(1e-6); // 1 micron vertex resolution
 //
@@ -87,6 +93,53 @@
 // }
 //
 //
+// Example job of a pbar+p collider with both full NcEvent and selected plain ROOT Tree output.
+// --------------------------------------------------------------------------------------------
+// {
+//  gSystem->Load("libEG");
+//  gSystem->Load("libEGPythia6");
+//  gSystem->Load("ncfspack");
+//
+//  NcCollider* gen=new NcCollider();
+//
+//  NcTreeMaker* mktree=0;
+//  mktree=gen->SetOutputFile("test",2);
+//
+//  if (mktree)
+//  {
+//   mktree->Select("event","jrun");
+//   mktree->Select("event","jevt");
+//   mktree->Select("event","user","BeamP");
+//   mktree->Select("event","user","BeamTheta");
+//   mktree->Select("event","user","BeamPhi");
+//   mktree->Select("event","user","TargetP");
+//   mktree->Select("event","user","TargetTheta");
+//   mktree->Select("event","user","TargetPhi");
+//
+//   mktree->Select("track","p");
+//
+//   mktree->UseTracks("e-");
+//   mktree->UseTracks("pi-");
+//  }
+//
+//  gen->SetRunNumber(1);
+//
+//  gen->Init("cms","pbar","p",2000);
+//
+//  gen->SetTitle("pbar-p collider at 2 TeV");
+//
+//  gen->SetPrintFreq(10);
+//
+//  Int_t nevents=100;
+//
+//  for (Int_t i=0; i<nevents; i++)
+//  {
+//   gen->MakeEvent();
+//  }
+//
+//  gen->EndRun();
+// }
+//
 // Example job of a cosmic nu+p atmospheric interaction.
 // -----------------------------------------------------
 // {
@@ -96,7 +149,7 @@
 //
 //  NcCollider* gen=new NcCollider();
 //
-//  gen->SetOutputFile("test.root");
+//  gen->SetOutputFile("test.ncfspack");
 //
 //  gen->SetRunNumber(1);
 //
@@ -118,9 +171,48 @@
 //  gen->EndRun();
 // }
 //
+// Example job for astrophyical (obscured) AGN Jet modeling with selected plain ROOT Tree output.
+// ----------------------------------------------------------------------------------------------
+// {
+//  gSystem->Load("libEG");
+//  gSystem->Load("libEGPythia6");
+//  gSystem->Load("ncfspack");
+//
+//  NcCollider* gen=new NcCollider();
+//  gen->SetTitle("Astrophysical (obscured) AGN Jet modeling");
+//
+//  gen->SetOutputFile("agn-jet.root",1);
+//
+//  Float_t np=1000;                 // Number of Jet (beam) protons to be simulated
+//  Float_t gfrac=0.2;               // Fraction of Jet (beam) protons used for p+gamma interactions
+//  TString flux="nu,neutron,gamma"; // The final particle species that will be recorded
+//  Float_t dthmax=-1;               // Variation in target momentum theta direction (in degrees) 
+//  Int_t nlist=1;                   // Produce an event listing of the first "nlist" events of each sample
+//
+//  Int_t mult=1;    // Flag to indicate activation of multiple partonic interactions
+//  Int_t elastic=0; // Flag to indicate activation of Low-Pt, Elastic and Diffractive interactions
+//
+//  // Specification of the proton (beam) spectrum
+//  Double_t pmin=1e5;
+//  Double_t pmax=1e7;
+//  TF1 fp("fp","pow(x,-2)");
+//  gen->SetJetProtonSpectrum(pmin,pmax,&fp);
+//
+//  // Specification of the gamma (target) spectrum
+//  pmin=1e-4;
+//  pmax=1e-3;
+//  TF1 fg("fg","pow(x,-3)");
+//  gen->SetJetGammaSpectrum(pmin,pmax,&fg);
+//
+//  gen->SetPrintFreq(50);
+//  gen->SetMultiple(mult);
+//  gen->SetElastic(elastic);
+//  gen->ProcessJet(np,gfrac,flux,dthmax,nlist);
+// }
+//
 //
 //--- Author: Nick van Eijndhoven 22-nov-2002 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  13:38Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 27, 2023  13:24Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcCollider.h"
@@ -174,9 +266,26 @@ NcCollider::NcCollider() : TPythia6()
 
  fOutFile=0;
  fOutTree=0;
+ fMktree=0;
+ fJob=0;
+ fEvtuser.AddNamedSlot("BeamP");
+ fEvtuser.AddNamedSlot("BeamTheta");
+ fEvtuser.AddNamedSlot("BeamPhi");
+ fEvtuser.AddNamedSlot("TargetP");
+ fEvtuser.AddNamedSlot("TargetTheta");
+ fEvtuser.AddNamedSlot("TargetPhi");
 
  fSelections=0;
  fSelect=0;
+
+ fJetPpmin=0;
+ fJetPpmax=0;
+ fJetGpmin=0;
+ fJetGpmax=0;
+ fJetPspectrum=0;
+ fJetPscale=0;
+ fJetGspectrum=0;
+ fJetGscale=0;
 
  TString s=GetName();
  s+=" (NcCollider)";
@@ -200,59 +309,148 @@ NcCollider::~NcCollider()
   fSelections=0;
  }
 
- // In case of output to an output file the Tree is deleted
- // at the closing of the output file.
- if (fOutTree && !fOutFile)
+ // Deletion of the NcEvent output file also deletes the corresponding Tree
+ if (fOutFile)
  {
-  delete fOutTree;
+  delete fOutFile;
+  fOutFile=0;
   fOutTree=0;
+ }
+
+ if (fJob)
+ {
+  delete fJob;
+  fJob=0;
+ }
+
+ if (fMktree)
+ {
+  delete fMktree;
+  fMktree=0;
+ }
+
+ if (fJetPspectrum)
+ {
+  delete fJetPspectrum;
+  fJetPspectrum=0;
+ }
+
+ if (fJetGspectrum)
+ {
+  delete fJetGspectrum;
+  fJetGspectrum=0;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcCollider::SetOutputFile(TString s)
+NcTreeMaker* NcCollider::SetOutputFile(TString name,Int_t mode)
 {
-// Create the output file containing all the NcEvent structures in a ROOT Tree.
+// Create the output file containing all the NcEvent structures in a ROOT Tree (mode=0)
+// or the output file containing the corresponding NcTreeMaker data (mode=1),
+// or create both output files (mode=2).
+//
+// In the case of mode>0, the return argument provides a pointer to the NcTreeMaker
+// object, such that the user may tailor the data to be stored before starting the event generation.
+// See the docs of NcTreeMaker for further details.
 //
 // Environment variables may be used as $(...) in the filenname for convenience.
-// For example "$(HOME)/my-data/sample.ncfspack".
+// For example "$(HOME)/my-data/sample.ncfspack" for full NcEvent data
+// or "$(HOME)/my-data/tracks.root" for the corresponding NcTreeMaker data.
+//
+// Note:
+// -----
+// For mode=0 and mode=1, the provided filename "name" should contain the file extension,
+// like for instance ".ncfspack" or ".root" in the example above.
+// However, for mode=2 the filename "name" should NOT contain the file extension,
+// since the file extensions ".ncfspack" and ".root" will be generated automatically
+// for the correpsonding output file.
+//
+// The default value is mode=0 for backward compatibility.
 
  // Expand the path name of the provided output filename
- s=gSystem->ExpandPathName(s.Data()); 
+ name=gSystem->ExpandPathName(name.Data());
 
- // Flush and close the current existing output file (if any)
+ // Flush and delete the current existing output file (if any) for the NcEvent data structures.
  // This will also delete the existing output tree connected to this file
  if (fOutFile)
  {
   if (fOutFile->IsOpen())
   {
    fOutFile->Write();
-   fOutFile->Close();
+   delete fOutFile;
+   fOutFile=0;
+   fOutTree=0;
   }
  }
 
- // Create a new output file
- fOutFile=new TFile(s.Data(),"RECREATE","NcCollider data");
-
- // Create a new NcEvent structure 
- if (fEvent)
+ // Close and delete the current existing output file (if any) for the plain ROOT tree data structures
+ if (fMktree)
  {
-  delete fEvent;
-  fEvent=0;
+  fMktree->CloseTree();
+  delete fMktree;
+  fMktree=0;
  }
- fEvent=new NcEvent();
- fEvent->SetOwner();
- fEvent->SetName(GetName());
- fEvent->SetTitle(GetTitle());
 
- // Create a new output Tree
- fOutTree=new TTree("T","NcCollider event data");
- Int_t bsize=32000;
- Int_t split=0;
- fOutTree->Branch("Events","NcEvent",&fEvent,bsize,split);
+ // Delete the NcJob environment
+ if (fJob)
+ {
+  delete fJob;
+  fJob=0;
+ }
 
- cout << " *NcCollider::SetOutputFile* Event data will be written to output file: " << fOutFile->GetName() << endl;
+ TString fname;
+
+ // Create the output file for the NcTreeMaker data structures
+ if (mode>0)
+ {
+  fname=name;
+  // Generate the corresponding file extension
+  if (mode==2) fname+=".root";
+
+  fMktree=new NcTreeMaker();
+  fMktree->SetOutputFile(fname,"NcCollider event/track data in plain ROOT tree format");
+
+  fJob=new NcJob("NcJob","NcCollider job (task) environment");
+  fJob->Add(fMktree);
+
+  printf(" *%-s::SetOutputFile* Plain ROOT tree event/track data will be written to output file: %-s \n",ClassName(),fname.Data());
+ }
+
+ // Create the output file for the NcEvent data structures
+ if (mode==0 || mode==2)
+ {
+  fname=name;
+  // Generate the corresponding file extension
+  if (mode==2) fname+=".ncfspack";
+
+  // Create a new NcEvent structure 
+  if (fEvent)
+  {
+   delete fEvent;
+   fEvent=0;
+  }
+  fEvent=new NcEvent();
+  fEvent->SetOwner();
+  fEvent->SetName(GetName());
+  fEvent->SetTitle(GetTitle());
+
+  // Create a new output file
+  fOutFile=new TFile(fname,"RECREATE","NcCollider NcEvent data");
+
+  // Create a new output Tree in the output file
+  fOutTree=new TTree("T","NcCollider NcEvent data");
+  Int_t bsize=32000;
+  Int_t split=0;
+  fOutTree->Branch("Events","NcEvent",&fEvent,bsize,split);
+
+  printf(" *%-s::SetOutputFile* NcEvent data structures will be written to output file: %-s \n",ClassName(),fname.Data());
+ }
+
+ gROOT->cd(); // Make sure to work in the memory
+
  cout << endl;
  cout << endl;
+
+ return fMktree;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetVertexMode(Int_t mode)
@@ -348,8 +546,9 @@ Int_t NcCollider::GetRunNumber() const
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetPrintFreq(Int_t n)
 {
-// Set the print frequency for every 'n' events.
+// Set the print frequency for every "n" events.
 // By default the printfrequency is set to 1 (i.e. every event).
+// When n=0 no printout will be performed.
  fPrintfreq=n;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -498,7 +697,7 @@ Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3
 //                            incorrect results due to accuracy issues. The more accurate NcBoost facility is used instead.
 //                            This implies that for win>=0 the Pythia event data will reflect the situation in the CM frame
 //                            and that the event data in the user frame (defined via "pbeam" and "ptarget") is only available
-//                            from the produced NcEvent structure (see memberfunction GetEvent).
+//                            from the produced NcEvent structure (see memberfunction GetEvent) or the plain ROOT tree data.
 //                            Due to internal Pythia accuracy issues it turns out that forcing the event generation
 //                            in the CMS may also result in faster processing.  
 //                            In case win<0 it is a dummy parameter of which the value is irrelevant and the cross section
@@ -777,7 +976,7 @@ Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3
  cout << " *** Target particle 3-momentum (GeV/c): px=" << fTarget.GetX(1,"car") << " py=" << fTarget.GetX(2,"car") << " pz=" << fTarget.GetX(3,"car") << endl; 
  if (fFrame!="cms") cout << " *** Total CMS energy: " << ecms << " GeV" << endl;
  if (fFrame=="free" && fWin>0) cout << " *** Forced CMS processing. Cross sections initialised for a CMS energy of " << fWin << " GeV" << endl;
- if (fOutFile) cout << " *** Event data will be written to output file: " << fOutFile->GetName() << endl;
+ if (fOutFile) cout << " *** NcEvent data structures will be written to output file: " << fOutFile->GetName() << endl;
  cout << endl;
  cout << endl;
 
@@ -812,7 +1011,7 @@ Int_t NcCollider::Init(TString frame,Int_t zp,Int_t ap,Int_t zt,Int_t at,Float_t
 //                            incorrect results due to accuracy issues. The more accurate NcBoost facility is used instead.
 //                            This implies that for win>=0 the Pythia event data will reflect the situation in the nucleon-nucleon CM frame
 //                            and that the event data in the user frame (defined via "pbeam" and "ptarget") is only available
-//                            from the produced NcEvent structure (see memberfunction GetEvent).
+//                            from the produced NcEvent structure (see memberfunction GetEvent) or the plain ROOT tree data.
 //                            Due to internal Pythia accuracy issues it turns out that forcing the event generation
 //                            in the CMS may also result in faster processing.  
 //                            In case win<0 it is a dummy parameter of which the value is irrelevant and the cross section
@@ -1199,7 +1398,7 @@ Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
  Double_t s=fBeam.GetInvariant()+fTarget.GetInvariant()+2.*fBeam.Dot(fTarget);
  Double_t ecms=sqrt(s);
 
- if (!(fEventnum%fPrintfreq))
+ if (fPrintfreq && !(fEventnum%fPrintfreq))
  {
   cout << " *NcCollider::MakeEvent* Run : " << fRunnum << " Event : " << fEventnum << endl;
   if (fFrame=="free") cout << "  Event weighting by cross section: " << sweight.Data() << endl;
@@ -1221,8 +1420,7 @@ Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
    cout << "  Total CMS energy: " << ecms << " GeV" << endl;
   }
 
-  if (ecms<fEcmsmin) cout << "  *** No event generated. Ecms is below the minimal requirement of : " << fEcmsmin << " GeV." << endl;
-  cout << endl;
+  if (ecms<fEcmsmin) printf("  *** No event generated. Ecms is below the minimal requirement of : %-g GeV. \n \n",fEcmsmin);
  }
 
  if (ecms<fEcmsmin) return 0;
@@ -1656,15 +1854,25 @@ Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
 
  if (!(fEventnum%fPrintfreq) && (mlist || fEvent))
  {
-  if (fEvent)
-  {
-   cout << " Number of tracks in the event structure : "
-        << fEvent->GetNtracks() << endl;
-  }
-  cout << endl; // Create empty output line after the event
+  if (fEvent) printf("  Number of tracks in the event structure : %-i \n",fEvent->GetNtracks());
+  printf("\n"); // Create empty output line after the event
+ }
+
+ // Record the actual beam and target momenta as user data in the event structure
+ if (fSelect)
+ {
+  fEvtuser.SetSignal(fBeam.GetX(1,"sph"),"BeamP");
+  fEvtuser.SetSignal(fBeam.GetX(2,"sph","rad"),"BeamTheta");
+  fEvtuser.SetSignal(fBeam.GetX(3,"sph","rad"),"BeamPhi");
+  fEvtuser.SetSignal(fTarget.GetX(1,"sph"),"TargetP");
+  fEvtuser.SetSignal(fTarget.GetX(2,"sph","rad"),"TargetTheta");
+  fEvtuser.SetSignal(fTarget.GetX(3,"sph","rad"),"TargetPhi");
+  fEvent->SetUserData(fEvtuser);
  }
 
  if (fOutTree && fSelect) fOutTree->Fill();
+
+ if (fJob && fSelect) fJob->ProcessObject(fEvent);
 
  return fSelect;
 }
@@ -1692,18 +1900,31 @@ NcEvent* NcCollider::GetEvent(Int_t select) const
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::EndRun()
 {
-// Properly flush last data to the output file and close it (if needed).
- // This will also delete the existing output tree connected to this file
+// Properly flush last data to the output file(s) and close them.
+
+ if (!fOutFile && !fMktree) return;
+
+ // Deleting the NcEvent output file also deletes the corresponding Tree
  if (fOutFile)
  {
   if (fOutFile->IsOpen())
   {
    fOutFile->Write();
    fOutFile->Close();
+   delete fOutFile;
+   fOutFile=0;
+   fOutTree=0;
   }
-  TString name=fOutFile->GetName();
-  cout << " *NcCollider::EndRun* Output file " << name << " correctly written and closed." << endl;
  }
+
+ if (fMktree)
+ {
+  fMktree->CloseTree();
+  delete fMktree;
+  fMktree=0;
+ }
+
+ printf(" *%-s::EndRun* Output file(s) correctly written and closed. \n",ClassName());
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetStable(Int_t id,Int_t mode,Int_t cls)
@@ -1952,5 +2173,542 @@ TString NcCollider::GetPyname(Int_t kf)
   sname=sname+name[i];
  }
  return sname;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcCollider::SetJetProtonSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1* hspec,Int_t mode)
+{
+// Set the proton (beam) spectrum of the Jet.
+// If pmax<=pmin a mono-energetic proton beam with momentum "pmin" GeV/c will be used,
+// otherwise a dN/dp spectrum will be used as described by the function "fspec"
+// or the distribution as contained in the histogram "hspec".
+// In case "fspec" or "hspec" are specified, cross section weighting will be switched on automatically.
+//
+// Input arguments :
+// -----------------
+// pmin  : The minimal momentum in GeV/c
+// pmax  : The maximal momentum in GeV/c
+// fspec : (optional) 1D function to describe dN/dp
+// hspec : (optional) 1D histogram to describe the momentum distribution (see below)
+// mode  : 0 --> X-axis of "fspec" or "hspec" is in linear scale
+// mode  : 1 --> X-axis of "fspec" or "hspec" is in Log10 scale
+// mode  : 2 --> X-axis of "fspec" or "hspec" is in Ln scale
+//
+// Note :
+// ------
+// When "hspec" is specified and "fspec=0", the contents of "hspec" are interpreted
+// as an N vs. p spectrum.
+// In case both "hspec" and "fspec" are specified, the contents of "hspec" are interpreted
+// as a dN/dp spectrum, weighted by "fspec".
+//
+// Example : When "hspec" is specified and "fspec" represents the function "pow(x,2)", then the contents of "hspec"
+//           are interpreted as "p^2*dN/dp".
+//
+// To provide a plain dN/dp spectrum via the "hspec" histogram, "fspec" should represent a constant function. 
+// 
+// The default values are pmax=-1, fspec=0, hspec=0 and mode=0.
+
+ gROOT->cd(); // Make sure to work in memory
+
+ fJetPpmin=0;
+ fJetPpmax=0;
+
+ if (fJetPspectrum)
+ {
+  delete fJetPspectrum;
+  fJetPspectrum=0;
+ }
+
+ if (pmax<=pmin && pmin<=0)
+ {
+  printf(" *%-s::SetJetProtonSpectrum* Inconsistent input pmin=%-g pmax=%-g \n",ClassName(),pmin,pmax);
+  return;
+ }
+
+ if (pmax>pmin && !fspec && !hspec)
+ {
+  printf(" *%-s::SetJetProtonSpectrum* Inconsistent input pmin=%-g pmax=%-g fspec=0 hspec=0 \n",ClassName(),pmin,pmax);
+  return;
+ }
+
+ fJetPpmin=pmin;
+ fJetPpmax=pmax;
+ if (pmax<=pmin) fJetPpmax=pmin;
+ fJetPscale=0;
+
+ // Momentum distribution specified by a histogram
+ if (hspec)
+ {
+  fJetPscale=mode;
+  if (mode==1)
+  {
+   pmin=log10(pmin);
+   pmax=log10(pmax);
+  }
+  if (mode==2)
+  {
+   pmin=log(pmin);
+   pmax=log(pmax);
+  }
+
+  if (!fspec) // Histogram contains N vs. p distribution
+  {
+   fJetPspectrum=(TH1*)hspec->Clone();
+  }
+  else // Histogram contains dN/dp distribution scaled by "fspec"
+  {
+   TH1F hpbeam=fLab.GetCountsHistogram(*hspec,mode,"",fspec);
+   fJetPspectrum=(TH1*)hpbeam.Clone();
+   fJetPspectrum->SetName("JetProton");
+  }
+
+  Int_t nbins=fJetPspectrum->GetNbinsX();
+  Int_t ibinlow=fJetPspectrum->FindFixBin(pmin);
+  Int_t ibinup=fJetPspectrum->FindFixBin(pmax);
+  // Only keep the histogram contents for the momentum range [pmin,pmax]
+  for (Int_t i=1; i<=nbins; i++)
+  {
+   if (i<ibinlow || i>ibinup) fJetPspectrum->SetBinContent(i,0);
+  }
+ }
+
+ // dN/dp spectrum specified by a function 
+ if (fspec && !hspec)
+ {
+  fJetPscale=mode;
+  TString title="Jet proton (beam) dN/dp=";
+  title+=fspec->GetExpFormula("p");
+  title.ReplaceAll("x","p");
+  title+=" spectrum";
+  if (mode==0) title+=";Momentum [GeV/c];Counts";
+  if (mode==1)
+  {
+   title+=";^{10}Log(Momentum) [GeV/c];Counts";
+   pmin=log10(pmin);
+   pmax=log10(pmax);
+  }
+  if (mode==2)
+  {
+   title+=";Ln(Momentum) [GeV/c];Counts";
+   pmin=log(pmin);
+   pmax=log(pmax);
+  }
+  TH1F hpbeam=fLab.GetCountsHistogram(*fspec,1000,pmin,pmax,mode);
+  fJetPspectrum=(TH1*)hpbeam.Clone();
+  fJetPspectrum->SetTitle(title);
+  fJetPspectrum->SetName("JetProton");
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcCollider::SetJetGammaSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1* hspec,Int_t mode)
+{
+// Set the gamma (target) spectrum of the Jet.
+// If pmax<=pmin a mono-energetic gamma target with momentum "pmin" will be used,
+// otherwise a dN/dp spectrum will be used as described by the function "fspec"
+// or the distribution as contained in the histogram "hspec".
+// In case "fspec" or "hspec" are specified, cross section weighting will be switched on automatically.
+//
+// Input arguments :
+// -----------------
+// pmin  : The minimal momentum in GeV/c
+// pmax  : The maximal momentum in GeV/c
+// fspec : (optional) 1D function to describe dN/dp
+// hspec : (optional) 1D histogram to describe the momentum distribution (see below)
+// mode  : 0 --> X-axis of "fspec" or "hspec" is in linear scale
+// mode  : 1 --> X-axis of "fspec" or "hspec" is in Log10 scale
+// mode  : 2 --> X-axis of "fspec" or "hspec" is in Ln scale
+//
+// Note :
+// ------
+// When "hspec" is specified and "fspec=0", the contents of "hspec" are interpreted
+// as an N vs. p spectrum.
+// In case both "hspec" and "fspec" are specified, the contents of "hspec" are interpreted
+// as a dN/dp spectrum, weighted by "fspec".
+//
+// Example : When "hspec" is specified and "fspec" represents the function "pow(x,2)", then the contents of "hspec"
+//           are interpreted as "p^2*dN/dp".
+//
+// To provide a plain dN/dp spectrum via the "hspec" histogram, "fspec" should represent a constant function. 
+//
+// The default values are pmax=-1, fspec=0, hspec=0 and mode=0.
+
+ gROOT->cd(); // Make sure to work in memory
+
+ fJetGpmin=0;
+ fJetGpmax=0;
+
+ if (fJetGspectrum)
+ {
+  delete fJetGspectrum;
+  fJetGspectrum=0;
+ }
+
+ if (pmax<=pmin && pmin<=0)
+ {
+  printf(" *%-s::SetJetGammaSpectrum* Inconsistent input pmin=%-g pmax=%-g \n",ClassName(),pmin,pmax);
+  return;
+ }
+
+ if (pmax>pmin && !fspec && !hspec)
+ {
+  printf(" *%-s::SetJetGammaSpectrum* Inconsistent input pmin=%-g pmax=%-g fspec=0 hspec=0 \n",ClassName(),pmin,pmax);
+  return;
+ }
+
+ fJetGpmin=pmin;
+ fJetGpmax=pmax;
+ if (pmax<=pmin) fJetGpmax=pmin;
+ fJetGscale=0;
+
+ // Momentum distribution specified by a histogram
+ if (hspec)
+ {
+  fJetGscale=mode;
+  if (mode==1)
+  {
+   pmin=log10(pmin);
+   pmax=log10(pmax);
+  }
+  if (mode==2)
+  {
+   pmin=log(pmin);
+   pmax=log(pmax);
+  }
+
+  if (!fspec) // Histogram contains N vs. p distribution
+  {
+   fJetGspectrum=(TH1*)hspec->Clone();
+  }
+  else // Histogram contains dN/dp distribution scaled by "fspec"
+  {
+   TH1F hptarget=fLab.GetCountsHistogram(*hspec,mode,"",fspec);
+   fJetGspectrum=(TH1*)hptarget.Clone();
+   fJetGspectrum->SetName("JetGamma");
+  }
+
+  Int_t nbins=fJetGspectrum->GetNbinsX();
+  Int_t ibinlow=fJetGspectrum->FindFixBin(pmin);
+  Int_t ibinup=fJetGspectrum->FindFixBin(pmax);
+  // Only keep the histogram contents for the momentum range [pmin,pmax]
+  for (Int_t i=1; i<=nbins; i++)
+  {
+   if (i<ibinlow || i>ibinup) fJetGspectrum->SetBinContent(i,0);
+  }
+ }
+
+ // dN/dp spectrum specified by a function 
+ if (fspec && !hspec)
+ {
+  fJetGscale=mode;
+  TString title="Jet gamma (target) dN/dp=";
+  title+=fspec->GetExpFormula("p");
+  title.ReplaceAll("x","p");
+  title+=" spectrum";
+  if (mode==0) title+=";Momentum [GeV/c];Counts";
+  if (mode==1)
+  {
+   title+=";^{10}Log(Momentum) [GeV/c];Counts";
+   pmin=log10(pmin);
+   pmax=log10(pmax);
+  }
+  if (mode==2)
+  {
+   title+=";Ln(Momentum) [GeV/c];Counts";
+   pmin=log(pmin);
+   pmax=log(pmax);
+  }
+  TH1F hptarget=fLab.GetCountsHistogram(*fspec,1000,pmin,pmax,0);
+  fJetGspectrum=(TH1*)hptarget.Clone();
+  fJetGspectrum->SetTitle(title);
+  fJetGspectrum->SetName("JetGamma");
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+TH1* NcCollider::GetJetProtonSpectrum(Double_t* pmin,Double_t* pmax)
+{
+// Provide the proton (beam) spectrum of the Jet.
+// The (optional) "pmin" and "pmax" will contain the momentum range in GeV/c,
+// and in case this is not a mono-energetic proton beam, the return argument
+// will contain the dN/dp spectrum in 1D histogram format.
+// In case of a mono-energetic proton beam, the return argument will be zero.
+//
+// The default arguments are pmin=0 and pmax=0.
+
+ if (pmin) *pmin=fJetPpmin;
+ if (pmax) *pmax=fJetPpmax;
+
+ return fJetPspectrum;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1* NcCollider::GetJetGammaSpectrum(Double_t* pmin,Double_t* pmax)
+{
+// Provide the gamma (target) spectrum of the Jet.
+// The (optional) "pmin" and "pmax" will contain the momentum range in GeV/c,
+// and in case this is not a mono-energetic gamma target, the return argument
+// will contain the dN/dp spectrum in 1D histogram format.
+// In case of a mono-energetic gamma target, the return argument will be zero.
+//
+// The default arguments are pmin=0 and pmax=0.
+
+ if (pmin) *pmin=fJetGpmin;
+ if (pmax) *pmax=fJetGpmax;
+
+ return fJetGspectrum;
+}
+///////////////////////////////////////////////////////////////////////////
+void NcCollider::ProcessJet(Double_t np,Double_t gfrac,TString flux,Double_t dthmax,Int_t nlist,Int_t ntrymax,Int_t wxsec,Double_t finit,Int_t full)
+{
+// Processing of a Jet simulation for an (obscured) astrophysical source.
+// Both the p+p interactions of the jet with the surrounding dust and
+// the p+gamma interactions with the ambient photon field are simulated.
+//
+// The number of events, specification of the produced particles and some
+// essential Pythia initialisation parameters are specified via the input arguments
+// as outlined below.
+//
+// Before invokation of this ProcessJet() member function, the user must
+// have invoked the member functions SetJetProtonSpectrum() and SetJetGammaSpectrum()
+// in order to have all kinematics properly initialized.
+// To obtain the data in the corresponding output file(s) also the member function
+// SetOutputFile() has to be invoked prior to this ProcessJet() member function.
+// Note : Explicit invokation of EndRun() by the user is not needed, since this is
+//        automatically performed at the end of this ProcessJet() member function.
+//
+// Further tailoring of the (physics) processing may be obtained by invoking
+// the member functions SetMultiple(), SetElastic() and SetPrintFreq()
+// before invokation of this ProcessJet() member function.
+//
+// The produced particle spectra may be obtained from the output file(s)
+// as specified via the member function SetOutputFile().
+//
+// Note :
+// ------
+// The produced (stable) secondaries are not processed for further interactions.
+// This means for instance that a secondary proton produced by a p+gamma interaction
+// will not be used anymore for a later p+p interaction in the surrounding dust.
+// As such, the produced particle (e.g. neutrino) fluxes are conservative estimates. 
+//
+// Input arguments :
+// -----------------
+// np      : The number of (beam) protons to be processed.
+// gfrac   : Fraction of the (beam) protons to be used for p+gamma interactions.
+//           The remaining protons are used for the p+p (dust) interactions.
+// flux    : Specification of the produced final particle species.
+//           This allows reduction of Pythia memory usage by declaring various particles as stable.
+//           Options for selected particle species are : "nu", "gamma", "neutron"
+//           or any combination by a comma separated list like e.g. "nu,gamma".
+// dthmax  : Maximum theta (in degrees) variation for the beam (>0) or target (<0) momentum direction.
+//           The nominal beam and target momenta are aligned with the Z-axis (i.e. theta=0 and theta=180, respectively).
+//           For variable theta, the phi angle is always randomized between [0,360] degrees. 
+// nlist   : Produce an event listing for the first "nlist" events of each sample.
+// ntrymax : Maximum number of phase-space trials per event.
+// wxsec   : Flag to apply cross section weighting (1) or not (0).
+//           Note that for varying beam/target momenta cross section weighting will always be used.
+// finit   : Factor to increase the beam (>0) or target (<0) momentum for initialisation.
+//           See the Init() member function for details.
+// full    : Include also the incoming particles, strings etc. in the event (1) or not (0).
+//
+// Notes for the plain ROOT Tree output file :
+// -------------------------------------------
+// 1) All selected final particle species appear in a separate Tree.
+//    However, the Tree called "Data" contains (links to) all
+//    the data and as such can be used for combined analyses.
+// 2) The p+p interactions have a positive run number, whereas
+//    the p+gamma interactions have a negative run number.
+//    The run number is available via the observable "evt.jrun".  
+// 3) The beam and target momenta are available via the observables
+//    "evt.BeamP", "evt.BeamTheta", "evt.BeamPhi" and
+//    "evt.TargetP", "evt.TargetTheta" and evt.TargetPhi".
+// 4) The energy spectra can be retrieved via the observables ".p".
+//    Example : "nu_mu.p" provides the nu_mu energy spectrum etc.
+//
+// Default values : dthmax=0, nlist=1, ntrymax=1000, wxsec=0, finit=0 and full=0.
+
+ if (fJetPpmax<=0 || fJetGpmax<=0 || np<1 || gfrac<0 || ntrymax<1)
+ {
+  printf(" *%-s::ProcessJet* Inconsistent intialisation. \n",ClassName());
+  printf(" Momentum range for (beam) protons : [%-g,%-g] GeV/c \n",fJetPpmin,fJetPpmax);
+  printf(" Momentum range for (target) gammas : [%-g,%-g] GeV/c \n",fJetGpmin,fJetGpmax);
+  printf(" Number of simulated (beam) protons : %-g \n",np);
+  printf(" Fraction of (beam) protons used for p+gamma interactions : %-g \n",gfrac);
+  printf(" Maximum number of phase-space trials per event : %-i \n",ntrymax);
+  return;
+ }
+
+ printf(" *%-s::ProcessJet* Parameter settings for astrophysical Jet simulation \n",ClassName());  
+ printf(" Multiple partonic interactions flag : %-i \n",GetMultiple());
+ printf(" Low-Pt, Elastic and Diffractive scattering flag : %-i \n",GetElastic());
+ printf(" Minimal CMS energy for event generation : %-g GeV \n",GetEcmsMin());
+ printf(" Number of simulated (beam) protons : %-g \n",np);
+ printf(" Fraction of (beam) protons used for p+gamma interactions : %-g \n",gfrac);
+ printf(" Maximum number of phase-space trials per event : %-i \n",ntrymax);
+ printf(" Final particle species that are recorded : %-s \n",flux.Data()); 
+ if (!fJetPspectrum)
+ {
+  printf(" Proton (beam) momenta will be mono-energetic at %-g GeV/c \n",fJetPpmax); 
+ }
+ else
+ {
+  printf(" Momentum range for (beam) protons : [%-g,%-g] GeV/c \n",fJetPpmin,fJetPpmax);
+ }
+ if (!fJetGspectrum)
+ {
+  printf(" Gamma (target) momenta will be mono-energetic at %-g GeV/c \n",fJetGpmax); 
+ }
+ else
+ {
+  printf(" Momentum range for (target) gammas : [%-g,%-g] GeV/c \n",fJetGpmin,fJetGpmax);
+ }
+
+ if (fMktree)
+ {
+  fMktree->Select("event","jrun");
+  fMktree->Select("event","jevt");
+  fMktree->Select("event","user","BeamP");
+  fMktree->Select("event","user","BeamTheta");
+  fMktree->Select("event","user","BeamPhi");
+  fMktree->Select("event","user","TargetP");
+  fMktree->Select("event","user","TargetTheta");
+  fMktree->Select("event","user","TargetPhi");
+
+  fMktree->Select("track","p");
+
+  if (flux.Contains("nu"))
+  {
+   fMktree->UseTracks("nu_mu");
+   fMktree->UseTracks("nu_mubar");
+   fMktree->UseTracks("nu_e");
+   fMktree->UseTracks("nu_ebar");
+   fMktree->UseTracks("nu_tau");
+   fMktree->UseTracks("nu_taubar");
+   fMktree->UseTracks("nu",-1,1);
+  }
+  if (flux.Contains("gamma")) fMktree->UseTracks("gamma");
+  if (flux.Contains("neutron"))
+  {
+   fMktree->UseTracks("n0");
+   fMktree->UseTracks("nbar0");
+   fMktree->UseTracks("p+");
+   fMktree->UseTracks("pbar-");
+  }
+ }
+
+ ////////////////////////////////////////////////////////////////
+ // Generate both p+p (jrun>0) and p+gamma (jrun<0) processes. //
+ ////////////////////////////////////////////////////////////////
+
+ Int_t jrun=0;
+ Nc3Vector pbeam;
+ Nc3Vector ptarget;
+ Nc3Vector pfixed;
+ pfixed.SetVector(0,0,0,"car");
+ Int_t ier=0;     // Flag to identify initialisation error
+ Int_t nevents=0; // Number of events to be generated for each process
+ Int_t igen=0;    // Flag to denote successful generation of an event
+ Int_t ievt=0;    // Counter for successfully generated events
+ Int_t ntry=0;    // Counter for phase-space trials per event
+ Float_t beamp=fJetPpmax;
+ Float_t targetp=fJetGpmax;
+
+ if (fJetPspectrum || fJetGspectrum) wxsec=1;
+
+ // Initialisation of the processes
+ for (Int_t k=0; k<2; k++)
+ {
+  pbeam.SetVector(0,0,fJetPpmax,"car");
+  ptarget.SetVector(0,0,-fJetGpmax,"car");
+
+  if (!k) // p+p process
+  {   
+   nevents=(1.-gfrac)*np;
+   jrun=1;
+   ier=Init("free","p","p",0,&pbeam,&pfixed,wxsec,finit);
+  }
+  else // p+gamma process
+  {
+   nevents=gfrac*np;
+   jrun=-1;
+   ier=Init("free","p","gamma",0,&pbeam,&ptarget,wxsec,finit);
+  }
+
+  if (ier) return;
+
+  SetRunNumber(jrun);
+
+  // Define several particles as (un)stable according to selected analysis mode
+  SetStable(0,1,4);                                                          // Declare all mesons as stable
+  if (flux.Contains("nu") || flux.Contains("gamma")) SetStable(0,0,4);       // Declare all mesons as unstable
+  if (!(flux.Contains("gamma")))  SetStable(111,1);                          // Declare pi0 as stable 
+  if (!(flux.Contains("nu")))  SetStable(211,1);                             // Declare pi+ and pi- as stable 
+  if (flux.Contains("nu")) SetStable(13,0);                                  // Declare mu+ and mu- as unstable
+  if (flux.Contains("nu") && !(flux.Contains("neutron"))) SetStable(2112,0); // Declare n and nbar as unstable
+
+  // Generation of the events for this process
+  ievt=0;
+  ntry=0;
+  while (ievt<nevents && ntry<ntrymax)
+  {
+   // Pick a proton momentum from the beam momentum distribution 
+   if (fJetPspectrum) beamp=fJetPspectrum->GetRandom();
+   // Convert to linear scale momentum value
+   if (fJetPscale==1) beamp=pow(10,beamp);
+   if (fJetPscale==2) beamp=exp(beamp);
+   pbeam.SetVector(0,0,beamp,"car");
+   SetMomentum(pbeam,1);
+
+   // Pick a photon momentum from the target momentum distribution 
+   if (fJetGspectrum) targetp=fJetGspectrum->GetRandom();
+   // Convert to linear scale momentum value
+   if (fJetGscale==1) targetp=pow(10,targetp);
+   if (fJetGscale==2) targetp=exp(targetp);
+   ptarget.SetVector(0,0,-targetp,"car");
+   SetMomentum(ptarget,2);
+ 
+   // Randomisation of the beam or target direction
+   if (dthmax>0)
+   {
+    fLab.RandomPosition(pbeam,0,dthmax,0,360);
+    SetMomentum(pbeam,1);
+   }
+   if (dthmax<0)
+   {
+    fLab.RandomPosition(ptarget,180+dthmax,180,0,360);
+    SetMomentum(ptarget,2);
+   }
+
+   // Fixed target for p+p events
+   if (!k) SetMomentum(pfixed,2);
+
+   if (nlist && ievt<nlist) // Produce Pythia listing for the first "nlist" events of each sample
+   {
+    if (!full)
+    {
+     igen=MakeEvent(0,1);
+    }
+    else
+    {
+     igen=MakeEvent(0,1,-1);
+    }
+   }
+   else // No Pythia event listing
+   {
+    igen=MakeEvent();
+   }
+
+   if (igen<0) break;   // Error
+   if (!igen) // Event did not pass selection
+   {
+    ntry++;
+    continue;
+   }
+
+   ievt++;
+   ntry=0;
+  } // End of loop over the events for this process
+
+  // Printout Pythia statistics for this event sample
+  Pystat(1);
+ } // End of loop over the processes
+
+ EndRun();
 }
 ///////////////////////////////////////////////////////////////////////////

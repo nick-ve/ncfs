@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Jan 16 17:45:38 2023            -->
+<!--   Date: Mon Mar 27 13:47:33 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -195,7 +195,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, January 16, 2023  16:38Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 27, 2023  11:33Z
 
 </pre></div>
 </div></div>
@@ -275,6 +275,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstRecoAngres">GetBurstRecoAngres</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amax = 999) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstSignalEnergy">GetBurstSignalEnergy</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetComovingDistance">GetComovingDistance</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z, TString u = <span class="string">"Mpc"</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TH1F</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetCountsHistogram@1">GetCountsHistogram</a>(TH1&amp; hin, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString s = <span class="string">""</span>, TF1* fscale = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TH1F</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetCountsHistogram">GetCountsHistogram</a>(TF1&amp; spec, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString s = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetCredibleInterval@2">GetCredibleInterval</a>(TH1* his, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; xlow, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; xup)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetCredibleInterval@3">GetCredibleInterval</a>(TH1* his, <a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; xlow, <a href="./ListOfTypes.html#Float_t">Float_t</a>&amp; xup)</td></tr>
@@ -3924,6 +3925,33 @@ return false;}
  By default s=<span class="string">""</span>.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TH1F <a class="funcname" name="NcAstrolab:GetCountsHistogram@1" href="src/NcAstrolab.cxx.html#l4oRUC">GetCountsHistogram</a>(TH1&amp; hin, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString s = <span class="string">""</span>, TF1* fscale = 0) const</span><br />
+<div class="funccomm"><pre> Construct the counts (N) vs. x histogram from a 1D input histogram describing a differential distribution dN/dx.
+ Such a returned histogram allows an easy way to for instance obtain a primary particle distribution N(E)
+ to be used as input for cosmic ray event generators based on a predicted differential power spectrum dN/dE.
+
+ Input arguments :
+
+ hin    : The input histogram describing the fscale(x)*dN/dx distribution
+ mode   : 0 ==&gt; Histogram X-axis represents the x value
+          1 ==&gt; Histogram X-axis represents the Log10(x) value
+          2 ==&gt; Histogram X-axis represents the Ln(x) value
+ s      : Character string for the title and axes labels of the returned histogram.
+          Example : s=<span class="string">"Energy distribution;^{10}Log(Energy) in GeV;Counts"</span>.
+          If string s is not provided the labels will be constructed from the
+          labels of the input histogram <span class="string">"hin"</span>.
+ fscale : (Optional) scaling function that was used for the distribution in <span class="string">"hin"</span>.
+          For example : In case <span class="string">"hin"</span> contained E^2*dN/dE vs. E, than the user
+          should specifiy <span class="string">"fscale"</span> as the function <span class="string">"pow(x,2)"</span> so that this scaling
+          can be compensated for in constructing the N(E) vs. E output histogram.
+          In case <span class="string">"hin"</span> contains a regular dN/dx distribution, <span class="string">"fscale"</span> should not
+          be specified.
+
+ Returned object : The 1-D histogram (TH1F) containing the expected counts N vs. x.
+
+ The default values are s=<span class="string">""</span> and fscale=0.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname">TH1F <a class="funcname" name="NcAstrolab:GetLogHistogram" href="src/NcAstrolab.cxx.html#ePTFSC">GetLogHistogram</a>(TH1* hin, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString s = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Construct a log10(y) or Ln(y) vs. x histogram from a 1D regular y vs. x input histogram.
  Such a returned histogram allows an easy (linear) fitting of exponential and power spectra.
@@ -5126,7 +5154,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Jan 16 17:45:40 2023 </em><em>&raquo; Last generated: 2023-01-16 17:45</em><br />
+<em>&raquo; Last changed: Mon Mar 27 13:47:35 2023 </em><em>&raquo; Last generated: 2023-03-27 13:47</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
