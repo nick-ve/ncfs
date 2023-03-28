@@ -9,4 +9,9 @@
 02-mar-2020 NvE ROOT macro burst-model.cc introduced to provide a generic tool to study (astrophysical)
                 transient phenomena using the NcAstrolab facility. The latter has recently been extended
                 to contain the functionality of the previous (and now obsolete) grbmodel.cc macro.
+28-mar-2023 NvE ROOT macro jet-gen.cc introduced to provide a tool to model particle production in
+                an (obscured) astrophysical Jet. Also the files jet-gen.sh and jet-gen.sub are added
+                to run jet-gen.cc as an HTCondor job.
+                The produced data Tree can be analysed by the ROOT macro jet-ana.cc.
+
 
