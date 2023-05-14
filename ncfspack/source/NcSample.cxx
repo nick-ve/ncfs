@@ -55,7 +55,7 @@
 // to replace the default ("X","Y","Z","T") naming.
 //
 // To develop c.q. improve a data acquisition system (DAQ), the functions
-// SampleAndHold(), SampleAndSum() and Digitize() may be used to
+// SampleAndHold(), SampleAndSum() and Transmit() may be used to
 // investigate the performance of a sampling device, like for instance
 // a Switched Capacitor Array (SCA) and an Analog to Digital Converter (ADC).  
 //
