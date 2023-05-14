@@ -1,9 +1,7 @@
 #ifndef NcMath_h
 #define NcMath_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcMath.h 107 2016-02-07 18:20:26Z nickve $
 
 #include <math.h>
  
@@ -69,6 +67,7 @@ class NcMath : public TObject
   Double_t PoissonDtPvalue(Double_t dt,Double_t r,Int_t n,Int_t sides=0,Int_t sigma=0) const; // Poisson dt P-value
   Double_t NegBinomialnPvalue(Int_t n,Int_t k,Double_t p,Int_t sides=0,Int_t sigma=0,Int_t mode=0) const; // NegBin. P-value for n trials
   Double_t NegBinomialxPvalue(Int_t x,Int_t k,Double_t p,Int_t sides=0,Int_t sigma=0,Int_t mode=0) const; // NegBin. P-value for x failures
+  Double_t Log(Double_t B,Double_t x) const;    // Compute log_B(x) with base B 
   Double_t Nfac(Int_t n,Int_t mode=0) const;    // Compute n!
   Double_t LnNfac(Int_t n,Int_t mode=2) const;  // Compute ln(n!) 
   Double_t LogNfac(Int_t n,Int_t mode=2) const; // Compute log_10(n!) 
@@ -96,7 +95,7 @@ class NcMath : public TObject
   Double_t BesselI1(Double_t x) const;          // Compute modified Bessel function I_1(x)
   Double_t BesselK1(Double_t x) const;          // Compute modified Bessel function K_1(x)
  
- ClassDef(NcMath,10) // Various mathematical tools for scientific analysis.
+ ClassDef(NcMath,11) // Various mathematical tools for scientific analysis.
  
 };
 #endif

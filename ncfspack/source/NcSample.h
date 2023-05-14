@@ -1,12 +1,13 @@
 #ifndef NcSample_h
 #define NcSample_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <math.h>
 
 #include "TNamed.h"
 #include "TArrayD.h"
+#include "TArrayL64.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TH3.h"
@@ -18,6 +19,8 @@
 #include "TMarker.h"
 #include "TCanvas.h"
 #include "TSystem.h"
+
+#include "NcMath.h"
  
 class NcSample : public TNamed
 {
@@ -121,6 +124,8 @@ class NcSample : public TNamed
   void Animation(TString nameA,TString nameB,TString nameC,Int_t mode,TString nameD,Int_t delay,TString opt="PFB"); // Animation of an (ordered) sampling of the values of variables nameA, nameB and nameC
   Double_t Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode); // Digitize the values of the i-th variable with an "nbits" ADC
   Double_t Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode); // Digitize the values of the specified variable with an "nbits" ADC
+  Long64_t Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3); // Transmit the values of the i-th variable via an "nbits" ADC-DAC chain
+  Long64_t Transmit(TString name,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3); // Transmit the values of the specified variable via an "nbits" ADC-DAC chain
   NcSample SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,Int_t loc=-1) const; // Perform a Sample-And-Hold operation on the specified function
   NcSample SampleAndSum(Int_t i,Double_t step,Int_t loc=0,Int_t j=0,Double_t vmin=0,Double_t vmax=-1); // Perform a Sample-And-Hold operation on the values of the i-th variable
   NcSample SampleAndSum(TString nameA,Double_t step,Int_t loc=0,TString nameB="-",Double_t vmin=0,Double_t vmax=-1); // Perform a Sample-And-Hold operation on the values of the variable nameA
@@ -158,7 +163,9 @@ class NcSample : public TNamed
   void Order(Int_t mode,Int_t i);     // Order the entries according to the i-th variable
   void List(Int_t i);                 // Statistics info for the i-th variable
   void List(Int_t i,Int_t j) const;   // Correlation statistics info for i-th and j-th variable
+  TArrayL64 ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Provide the quantized data of an "nbits" ADC.
+  TArrayD DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Reconstruct the analog signals from an "nbits" ADC.
 
- ClassDef(NcSample,14) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,15) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

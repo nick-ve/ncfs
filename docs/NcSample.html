@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Dec 19 09:56:18 2022            -->
+<!--   Date: Sun May 14 13:55:58 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -88,7 +88,7 @@ return false;}
  To develop c.q. improve a data acquisition system (DAQ), the functions
  <a href="./NcSample.html#NcSample:SampleAndHold" title="NcSample NcSample::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,Int_t loc=-1)">SampleAndHold</a>(), <a href="./NcSample.html#NcSample:SampleAndSum" title="NcSample NcSample::SampleAndSum(Int_t i,Double_t step,Int_t loc=0,Int_t j=0,Double_t vmin=0,Double_t vmax=-1) or overloads">SampleAndSum</a>() and <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a>() may be used to
  investigate the performance of a sampling device, like for instance
- a Switched Capacitor Array (SCA) and an Analog to Digital Converter (ADC).
+ a Switched Capacitor Array (SCA) and an Analog to Digital Converter (<a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
 
  Interfaces with various graphics facilities are provided like for instance
  <a href="./NcSample.html#NcSample:GetGraph" title="TGraph NcSample::GetGraph(Int_t i,TF1* f=0) or overloads">GetGraph</a>(), <a href="./NcSample.html#NcSample:Get1DHistogram" title="TH1D NcSample::Get1DHistogram(Int_t i,Int_t j=0,Bool_t sumw2=kFALSE,Int_t nbx=100,TF1* f=0) or overloads">Get1DHistogram</a>(), <a href="./NcSample.html#NcSample:Animation" title="void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt=&quot;AP&quot;) or overloads">Animation</a>() etc...
@@ -104,7 +104,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 8, 2022  12:55Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 14, 2023  13:38Z
 
 </pre></div>
 </div></div>
@@ -296,6 +296,8 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Long64_t">Long64_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:Transmit">Transmit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Long64_t">Long64_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:Transmit@1">Transmit</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
@@ -304,7 +306,9 @@ return false;}
 </table></div>
 <div class="access" id="funcprot"><b>protected:</b>
 <table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="func"><td class="funcret">TArrayL64</td><td class="funcname"><a class="funcname" href="#NcSample:ADC">ADC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* Vsig = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Compute">Compute</a>()</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcSample:DAC">DAC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* adcs = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:List">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:List@1">List</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
@@ -1744,22 +1748,27 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:Digitize" href="src/NcSample.cxx.html#yOZ.eE">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
-<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a> the values of the i-th variable according to an <span class="string">"nbits"</span> ADC.
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a> the values of the i-th variable according to an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+
+
+ *** This function has become obsolete and is only kept for backward compatibility. ***
+ *** Please refer to the new, more flexible memberfunction <a href="./NcSample.html#NcSample:Transmit" title="Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) or overloads">Transmit</a>().              ***
+
 
  Input arguments :
 
  i        : Digitization of the i-th variable (first is i=1) will be performed.
             In case the value of <span class="string">"i"</span> is out of range for this sample, just the specs
-            of the specified ADC performance will be printed, but no digitization is performed.
+            of the specified <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> performance will be printed, but no digitization is performed.
             This allows to test various scenarios without modifying the data.
  nbits &gt;0 : Digitization of the values will be performed using nbits.
             The digitized result (digval) will be stored to replace the original value.
        &lt;0 : Digitization of the Log10 of the values will be performed using |nbits|.
             After digitization of the Log10 value, the digitized result (digval) is
             used to store the corresponding linear value via value=pow(10,digval).
-            So, nbits&lt;0 emulates a Log10 ADC to enhance the dynamic range.
+            So, nbits&lt;0 emulates a Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> to enhance the dynamic range.
             Note : When nbits&lt;0 all values to be digitized should be positive.
- vcal     : Range calibration value of the ADC according to <span class="string">"mode"</span> as indicated below.
+ vcal     : Range calibration value of the <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> according to <span class="string">"mode"</span> as indicated below.
  mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal&lt;0).
         1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
         2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal&lt;0).
@@ -1774,10 +1783,10 @@ return false;}
 
  1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
     digitized result (digval).
-    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
- 2) In case of a Log10 ADC, the value of <span class="string">"vcal"</span> relates to the Log10 values.
-    So, for a Log10 ADC, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
-    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+    For an n-bit <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+ 2) In case of a Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the value of <span class="string">"vcal"</span> relates to the Log10 values.
+    So, for a Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
+    A step size of 0.0315 for an 8-bit Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> provides a Log10 interval of [-4,4]
     for mode=3, which corresponds to a linear value interval of [0.0001,10000].
     For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
     to a linear value interval of [1,1.0777e8].
@@ -1800,22 +1809,27 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:Digitize@1" href="src/NcSample.cxx.html#kksU5">Digitize</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
-<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a> the values of the variable with the specified name according to an <span class="string">"nbits"</span> ADC.
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Digitize" title="Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode) or overloads">Digitize</a> the values of the variable with the specified name according to an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+
+
+ *** This function has become obsolete and is only kept for backward compatibility. ***
+ *** Please refer to the new, more flexible memberfunction <a href="./NcSample.html#NcSample:Transmit" title="Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) or overloads">Transmit</a>().              ***
+
 
  Input arguments :
 
  name     : Digitization of the variable with this name will be performed.
             In case the name is non-existent for this sample, just the specs
-            of the specified ADC performance will be printed, but no digitization is performed.
+            of the specified <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> performance will be printed, but no digitization is performed.
             This allows to test various scenarios without modifying the data.
  nbits &gt;0 : Digitization of the values will be performed using nbits.
             The digitized result (digval) will be stored to replace the original value.
        &lt;0 : Digitization of the Log10 of the values will be performed using |nbits|.
             After digitization of the Log10 value, the digitized result (digval) is
             used to store the corresponding linear value via value=pow(10,digval).
-            So, nbits&lt;0 emulates a Log10 ADC to enhance the dynamic range.
+            So, nbits&lt;0 emulates a Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> to enhance the dynamic range.
             Note : When nbits&lt;0 all values to be digitized should be positive.
- vcal     : Range calibration value of the ADC according to <span class="string">"mode"</span> as indicated below.
+ vcal     : Range calibration value of the <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> according to <span class="string">"mode"</span> as indicated below.
  mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal&lt;0).
         1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
         2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal&lt;0).
@@ -1830,10 +1844,10 @@ return false;}
 
  1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
     digitized result (digval).
-    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
- 2) In case of a Log10 ADC, the value of <span class="string">"vcal"</span> relates to the Log10 values.
-    So, for a Log10 ADC, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
-    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+    For an n-bit <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+ 2) In case of a Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the value of <span class="string">"vcal"</span> relates to the Log10 values.
+    So, for a Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
+    A step size of 0.0315 for an 8-bit Log10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> provides a Log10 interval of [-4,4]
     for mode=3, which corresponds to a linear value interval of [0.0001,10000].
     For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
     to a linear value interval of [1,1.0777e8].
@@ -1855,12 +1869,323 @@ return false;}
  In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TArrayL64 <a class="funcname" name="NcSample:ADC" href="src/NcSample.cxx.html#RIXszB">ADC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* Vsig = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) const</span><br />
+<div class="funccomm"><pre> Internal member function for processing of an Analog to Digital Converter (<a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
+ Construct from analog input signals the discrete quantized data values of an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>,
+ based on the <span class="string">"range"</span> for the analog signal and a bias voltage <span class="string">"Vbias"</span> (see below).
+ The analog input signals are provided by the TArray <span class="string">"Vsig"</span>.
+ The resulting (integer) quantized <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> values are returned in a TArrayL64 object.
+
+ Note : Make sure to use the same units for <span class="string">"range"</span>, <span class="string">"Vbias"</span> and the analog input signals.
+
+ The number of available quantization levels is given by N=2^|nbits|, of which the lowest
+ level represents the value 0. This yields for the quantized values (adc) the range [0,N-1].
+ The mapping of an analog input voltage (Vin) to one of the quantization levels depends on the
+ specified <span class="string">"range"</span> and <span class="string">"Vbias"</span> and whether we have a linear or Log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below).
+
+ As outlined below, the range of the analog input voltage can be specified as the Full Scale
+ voltage range (Vfs) corresponding to adc=N-1 or as the Reference voltage (Vref) corresponding to
+ the hypothetical adc=N.
+
+ The Least Significant Bit (LSB) represents the smallest analog input voltage interval
+ that can reliably be resolved. In other words LSB=Voltage(adc=1)-Voltage(adc=0).
+ For a linear <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> we have : LSB=Vfs/(N-1) or equivalently LSB=Vref/N.
+ For a Log_B <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below) we have : LSB=Vref*pow(B,-C)*(pow(B,C/N)-1).
+
+ The formulas for the Vin-&gt;adc mapping with Vin=(Vbias+Vsig) are :
+ Linear <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> : adc=Vin/LSB.
+ Log_B <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below) : adc=(N/C)*Log_B(pow(B,C)*Vin/Vref).
+
+ Which leads to the following relations between Vref and Vfs :
+ Linear <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> : Vref=Vfs+LSB.
+ Log_B <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below) : Vfs=Vref*pow(B,-C)*pow(B,(N-1)*C/N).
+
+ The Dynamic Range (DR) is defined as the ratio of the largest and smallest input voltages
+ that can reliably be resolved.
+ Expressed in decibel we have : DR=20*log_10(Vfs/LSB) dB.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ and the publication by Y. Sundarasaradula et al. :
+ <span class="string">"A 6-bit, Two-step, Successive Approximation Logarithmic ADC for Biomedical Applications"</span>
+ which is online available at https://spiral.imperial.ac.uk/bitstream/10044/1/44156/2/2016_ICECS_LogADC_Camera.pdf.
+
+ Input arguments :
+
+ nbits    : Digital quantization of the input values will be performed using nbits.
+ range &gt;0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1.
+       &lt;0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+ Vbias    : The bias voltage that will be added to the analog input signal before digitization.
+ Vsig     : Array containing the analog input signals.
+ B     &gt;1 : Base for a Log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (e.g. B=10 emulates a Log_10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
+       =0 : The <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be linear
+       =1 : The <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be a Log_e <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Note : When B&gt;0 all (Vbias+Vsig) input values should be positive.
+ C        : Code efficiency factor for a Log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+            So, for a log_10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> with C=3, the smallest signal that can be resolved is about |range|/1000.
+            Note : It is required that C&gt;0.
+
+ Optional output arguments :
+
+ hist  : Histogram with the digitized result
+
+ Notes :
+
+ 1) In case no <span class="string">"Vsig"</span> array is provided, just the <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> specs will be printed
+    and in the TArrayL64 only the adc value corresponding to Vbias is returned.
+    This allows to quickly investigate various scenarios without any data treatment.
+ 2) Providing a <span class="string">"Vsig"</span> array with different small (random) amplitudes allows to mimic variations of the bias or
+    characteristics of the various switched capacitor array elements for the individual samplings.
+    This resembles a so called <span class="string">"pedestal run"</span> in real life <a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a> Acquisition (DAQ) applications.
+    For a linear <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the contents of the returned TArrayL64 can be used afterwards for pedestal subtraction.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ In case of inconsistent input parameters, no digitization is performed and an empty TArrayL64 is returned.
+
+ The default values are Vbias=0, Vsig=0, hist=0, B=0 and C=3.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcSample:DAC" href="src/NcSample.cxx.html#z5OMvE">DAC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* adcs = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) const</span><br />
+<div class="funccomm"><pre> Internal member function for processing of a Digital to Analog Converter (<a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>).
+ Reconstruct the analog signals based on the discrete quantized digital data from an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>,
+ based on the <span class="string">"range"</span> for the analog signal and a bias voltage <span class="string">"Vbias"</span> or array <span class="string">"peds"</span> of pedestal values (see below).
+ The digital input signals are provided by the TArray <span class="string">"adcs"</span>.
+ The resulting analog values are returned in a TArrayD object.
+
+ Note : Make sure to use the same units for <span class="string">"range"</span> and <span class="string">"Vbias"</span>.
+
+ The number of digital quantization levels is given by N=2^|nbits|, of which the lowest
+ level represents the value 0. This implies a range [0,N-1] for the various digital adc values.
+ The correspondance of an analog input voltage (Vin) to one of the quantization levels depends on the
+ specified <span class="string">"range"</span> and <span class="string">"Vbias"</span> and whether we have a linear or Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below).
+
+ As outlined below, the range of the analog input voltage can be specified as the Full Scale
+ voltage range (Vfs) corresponding to adc=N-1 or as the Reference voltage (Vref) corresponding to
+ the hypothetical adc=N.
+
+ The Least Significant Bit (LSB) represents the smallest analog input voltage interval
+ that can reliably be resolved. In other words LSB=Voltage(adc=1)-Voltage(adc=0).
+ For a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> we have : LSB=Vfs/(N-1) or equivalently LSB=Vref/N.
+ For a Log_B <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below) we have : LSB=Vref*pow(B,-C)*(pow(B,C/N)-1).
+
+ The formulas for the adc-&gt;Vin mapping with Vin=(Vbias+Vsig) are :
+ Linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> : Vin=adc*LSB.
+ Log_B <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below) : Vin=Vref*pow(B,-C)*pow(B,C*adc/N)
+
+ Which implies the following relations between Vref and Vfs :
+ Linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> : Vref=Vfs+LSB.
+ Log_B <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below) : Vfs=Vref*pow(B,-C)*pow(B,C*(N-1)/N).
+
+ The Dynamic Range (DR) is defined as the ratio of the largest and smallest analog voltages
+ that can reliably be resolved.
+ Expressed in decibel we have : DR=20*log_10(Vfs/LSB) dB.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ and the publication by Y. Sundarasaradula et al. :
+ <span class="string">"A 6-bit, Two-step, Successive Approximation Logarithmic ADC for Biomedical Applications"</span>
+ which is online available at https://spiral.imperial.ac.uk/bitstream/10044/1/44156/2/2016_ICECS_LogADC_Camera.pdf.
+
+ Input arguments :
+
+ nbits    : Digitial quantization was performed using an nbits <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+ range &gt;0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1.
+       &lt;0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+ Vbias    : The bias voltage that was added to the analog input signal before digitization.
+            If specified, the resulting analog signals will be corrected for the bias voltage.
+            For a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the correction via Vbias will only be performed if no pedestal array <span class="string">"peds"</span>
+            is specified (see below). If the array <span class="string">"peds"</span> is specified, Vbias will be ignored for a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ adcs     : Array to contain the digital input signals.
+ peds     : (Optional) array to contain the pedestal values for the individual digital input signals.
+            The array <span class="string">"peds"</span> must contain (at least) the same number of values as the number of digital input signals.
+            If the array <span class="string">"peds"</span> is specified, the pedestals will be subtracted from the corresponding digital input signals
+            before the conversion to analog signals is performed in case of a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ B     &gt;1 : Base for a Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (e.g. B=10 emulates a Log_10 <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>).
+       =0 : The <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> will be linear
+       =1 : The <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> will be a Log_e <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+ C        : Code efficiency factor that was used for a Log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+            So, for a Log_10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> with C=3, the smallest signal that can be resolved is about |range|/1000.
+            Note : It is required that C&gt;0.
+
+ Optional output arguments :
+
+ hist  : Histogram with the analog result
+
+ Notes :
+
+ 1) In case no <span class="string">"adcs"</span> array is provided, just the <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> specs will be printed
+    and in the TArrayD only the adc value corresponding to Vbias is returned.
+    This allows to quickly investigate various scenarios without any data treatment.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ In case of inconsistent input parameters, no processing is performed and an empty TArrayD is returned.
+
+ The default values are Vbias=0, adcs=0, peds=0, hist=0, B=0 and C=3.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Long64_t">Long64_t</a> <a class="funcname" name="NcSample:Transmit" href="src/NcSample.cxx.html#WwG_0D">Transmit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3)</span><br />
+<div class="funccomm"><pre> Mimic signal transmission according to an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> chain.
+ The values of the i-th variable are digitized via the discrete quantization levels of an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>,
+ based on the <span class="string">"range"</span> for the analog signal and a bias voltage <span class="string">"Vbias"</span> or array <span class="string">"peds"</span> of pedestal values (see below).
+ After digitization, the digital signals are converted into analog signals via the corresponding <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+ In this way the effect of digitization on the original input signals can be investigated, and can provide
+ a guideline in selecting the most suitable <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> system for data transmission.
+
+ Note :
+
+ The resulting analog values will replace the corresponding values of the i-th variable.
+ For investigation of the performance of various <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> scenarios without modification
+ of the current <a href="./NcSample.html">NcSample</a> data, the user can invoke the <a href="./NcSample.html#NcSample:Transmit" title="Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) or overloads">Transmit</a>() or <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>() and <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>()
+ processors of the class <a href="./NcDSP.html">NcDSP</a>.
+
+ In case the index <span class="string">"i"</span> is out of range for this sample or no data is available, just the specs
+ of the specified <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> performance will be printed and no digitization is performed, but the
+ return argument will contain the adc value corresponding to Vbias.
+ This allows to test various scenarios without modifying the data.
+ In all other cases the unphysical value -1 is returned.
+
+ Note : Make sure to use the same units for <span class="string">"range"</span> and <span class="string">"Vbias"</span> as those of the i-th variable.
+
+ For further details, please refer to the documentation of the memberfunctions <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>() and <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>() of class <a href="./NcDSP.html">NcDSP</a>.
+
+ <a href="./#TObject:Warning" title="void TObject::Warning(const char* method,const char* msgfmt)">Warning</a> :
+
+ This member function will change the contents of this sample concerning the values of the i-th variable.
+ In case access to the original values is required, one should make a copy of the original sample
+ before the digitization process or use the corresponding member function <a href="./NcSample.html#NcSample:Transmit" title="Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) or overloads">Transmit</a>() of class <a href="./NcDSP.html">NcDSP</a>.
+
+ This facility is only available if the storage mode has been activated.
+
+ In case of inconsistent input parameters, no digitization is performed.
+
+ Input arguments :
+
+ i        : Digitization of the i-th variable (first is i=1) will be performed.
+ nbits    : Digital quantization was performed using an nbits <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+ range &gt;0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1.
+       &lt;0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+ Vbias    : The bias voltage that was added to the analog input signal before digitization.
+            If specified, the resulting analog signals will be corrected for the bias voltage.
+            For a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the correction via Vbias will only be performed if no pedestal array <span class="string">"peds"</span>
+            is specified (see below). If the array <span class="string">"peds"</span> is specified, Vbias will be ignored for a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ peds     : (Optional) array to contain the pedestal values for the individual digital signals.
+            The array <span class="string">"peds"</span> must contain (at least) the same number of values as the number of analog input signals.
+            If the array <span class="string">"peds"</span> is specified, the pedestals will be subtracted from the corresponding digital signals
+            before the conversion to analog signals is performed in case of a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ B     &gt;1 : Base for a log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (e.g. B=10 emulates a Log_10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
+       =0 : The <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be linear
+       =1 : The <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be a Log_e <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Note : When B&gt;0 all (Vbias+Vsig) input values should be positive.
+ C        : Code efficiency factor that was used for a Log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+            So, for a Log_10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> with C=3, the smallest signal that can be resolved is about |range|/1000.
+            Note : It is required that C&gt;0.
+
+ Optional output arguments :
+
+ hist  : Histogram with the analog result
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning on all machines.
+
+ In case of inconsistent input parameters, no processing is performed.
+
+ The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Long64_t">Long64_t</a> <a class="funcname" name="NcSample:Transmit@1" href="src/NcSample.cxx.html#rdej8D">Transmit</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3)</span><br />
+<div class="funccomm"><pre> Mimic signal transmission according to an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> chain.
+ The values of the variable <span class="string">"name"</span> are digitized via the discrete quantization levels of an <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>,
+ based on the <span class="string">"range"</span> for the analog signal and a bias voltage <span class="string">"Vbias"</span> or array <span class="string">"peds"</span> of pedestal values (see below).
+ After digitization, the digital signals are converted into analog signals via the corresponding <span class="string">"nbits"</span> <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+ In this way the effect of digitization on the original input signals can be investigated, and can provide
+ a guideline in selecting the most suitable <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> system for data transmission.
+
+ Note :
+
+ The resulting analog values will replace the corresponding values of the variable <span class="string">"name"</span>.
+ For investigation of the performance of various <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> scenarios, the user can also
+ invoke the <a href="./NcSample.html#NcSample:Transmit" title="Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) or overloads">Transmit</a>() or <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>() and <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>() processors of the class <a href="./NcDSP.html">NcDSP</a>.
+ This will not modify the current <a href="./NcSample.html">NcSample</a> data, and actually these <a href="./NcDSP.html">NcDSP</a> processors
+ are used here to perform the various calculations.
+
+ In case the variable <span class="string">"name"</span> does not exist for this sample or no data is available, just the specs
+ of the specified <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> performance will be printed and no digitization is performed, but the
+ return argument will contain the adc value corresponding to Vbias.
+ This allows to test various scenarios without modifying the data.
+ In all other cases the unphysical value -1 is returned.
+
+ Note : Make sure to use the same units for <span class="string">"range"</span> and <span class="string">"Vbias"</span> as those of the i-th variable.
+
+ For further details, please refer to the documentation of the memberfunctions <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>() and <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>() of class <a href="./NcDSP.html">NcDSP</a>.
+
+ <a href="./#TObject:Warning" title="void TObject::Warning(const char* method,const char* msgfmt)">Warning</a> :
+
+ This member function will change the contents of this sample concerning the values of variable <span class="string">"name"</span>.
+ In case access to the original values is required, one should make a copy of the original sample
+ before the digitization process or use the corresponding member function <a href="./NcSample.html#NcSample:Transmit" title="Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) or overloads">Transmit</a>() of class <a href="./NcDSP.html">NcDSP</a>.
+
+ This facility is only available if the storage mode has been activated.
+
+ In case of inconsistent input parameters, no digitization is performed.
+
+ Input arguments :
+
+ name     : Name of the variable for which the digitization will be performed.
+ nbits    : Digital quantization was performed using an nbits <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+ range &gt;0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1.
+       &lt;0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+ Vbias    : The bias voltage that was added to the analog input signal before digitization.
+            If specified, the resulting analog signals will be corrected for the bias voltage.
+            For a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the correction via Vbias will only be performed if no pedestal array <span class="string">"peds"</span>
+            is specified (see below). If the array <span class="string">"peds"</span> is specified, Vbias will be ignored for a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ peds     : (Optional) array to contain the pedestal values for the individual digital signals.
+            The array <span class="string">"peds"</span> must contain (at least) the same number of values as the number of analog input signals.
+            If the array <span class="string">"peds"</span> is specified, the pedestals will be subtracted from the corresponding digital signals
+            before the conversion to analog signals is performed in case of a linear <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcSample.html#NcSample:DAC" title="TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ B     &gt;1 : Base for a log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (e.g. B=10 emulates a Log_10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
+       =0 : The <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be linear
+       =1 : The <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be a Log_e <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Note : When B&gt;0 all (Vbias+Vsig) input values should be positive.
+ C        : Code efficiency factor that was used for a Log <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+            So, for a Log_10 <a href="./NcSample.html#NcSample:ADC" title="TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> with C=3, the smallest signal that can be resolved is about |range|/1000.
+            Note : It is required that C&gt;0.
+
+ Optional output arguments :
+
+ hist  : Histogram with the analog result
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning on all machines.
+
+ In case of inconsistent input parameters, no processing is performed.
+
+ The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:SampleAndHold" href="src/NcSample.cxx.html#H5ws6C">SampleAndHold</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1) const</span><br />
 <div class="funccomm"><pre> Perform a Sample-And-Hold operation on the specified function <span class="string">"f"</span>
  in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+
  If <span class="string">"f"</span> can be regarded as a pulse generator in time, this mimics a
  sample and hold device with a lock time of <span class="string">"step"</span> time units,
  or equivalently a sampling frequency of 1/step.
+
  The input argument <span class="string">"loc"</span> determines whether the resulting data
  will be recorded at the start (loc&lt;0), center (loc=0) or end (loc&gt;0)
  of the sampling step size.
@@ -1873,18 +2198,22 @@ return false;}
 <div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:SampleAndSum" href="src/NcSample.cxx.html#m1rsXB">SampleAndSum</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax = -1)</span><br />
 <div class="funccomm"><pre> Perform a Sample-And-Sum operation on the values of the i-th variable
  in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+ If vmax&lt;=vmin the minimum and maximum values of the i-th variable will be used.
+
  This procedure resembles a Sample-And-Hold operation, but instead of locking
  the data recording during the stepsize <span class="string">"step"</span>, the data that appear within <span class="string">"step"</span>
  are summed.
+
  If the i-th variable can be regarded as sampling in time, this mimics a
  Switched Capacitor Array (SCA) with a time gate of <span class="string">"step"</span> time units,
  or equivalently a sampling frequency of 1/step.
+
  The input argument <span class="string">"loc"</span> determines whether the new values of the i-th variable
  will be recorded at the begin (loc&lt;0), center (loc=0) or end (loc&gt;0)
  of the sampling step size.
+
  If j&gt;0 the corresponding value of variable j will be used as a weight.
  The first variable has index 1.
- If vmax&lt;=vmin the minimum and maximum values of the i-th variable will be used.
 
  Note : This facility is only available if the storage mode has been activated.
 
@@ -1894,17 +2223,21 @@ return false;}
 <div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:SampleAndSum@1" href="src/NcSample.cxx.html#umWobC">SampleAndSum</a>(TString nameA, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = 0, TString nameB = <span class="string">"-"</span>, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax = -1)</span><br />
 <div class="funccomm"><pre> Perform a Sample-And-Sum operation on the values of the variable specified with nameA
  in the interval [vmin,vmax], using <span class="string">"step"</span> as the sampling step size.
+ If vmax&lt;=vmin the minimum and maximum values of the variable with nameA will be used.
+
  This procedure resembles a Sample-And-Hold operation, but instead of locking
  the data recording during the stepsize <span class="string">"step"</span>, the data that appear within <span class="string">"step"</span>
  are summed.
+
  If the variable with nameA can be regarded as sampling in time, this mimics a
  Switched Capacitor Array (SCA) with a time gate of <span class="string">"step"</span> time units,
  or equivalently a sampling frequency of 1/step.
+
  The input argument <span class="string">"loc"</span> determines whether the new values of the variable with nameA
  will be recorded at the begin (loc&lt;0), center (loc=0) or end (loc&gt;0)
  of the sampling step size.
+
  If nameB is valid, the corresponding value of that variable will be used as a weight.
- If vmax&lt;=vmin the minimum and maximum values of the variable with nameA will be used.
 
  Note : This facility is only available if the storage mode has been activated.
 
@@ -1924,7 +2257,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Dec 19 09:56:18 2022 </em><em>&raquo; Last generated: 2022-12-19 09:56</em><br />
+<em>&raquo; Last changed: Sun May 14 13:55:59 2023 </em><em>&raquo; Last generated: 2023-05-14 13:55</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

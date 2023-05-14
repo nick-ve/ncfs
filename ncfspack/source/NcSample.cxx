@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 8, 2022  12:55Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 14, 2023  13:38Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -4207,6 +4207,11 @@ Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode)
 {
 // Digitize the values of the i-th variable according to an "nbits" ADC.
 //
+// **************************************************************************************
+// *** This function has become obsolete and is only kept for backward compatibility. ***
+// *** Please refer to the new, more flexible memberfunction Transmit().              ***
+// **************************************************************************************
+//
 // Input arguments :
 // -----------------
 // i        : Digitization of the i-th variable (first is i=1) will be performed.
@@ -4402,6 +4407,11 @@ Double_t NcSample::Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode)
 {
 // Digitize the values of the variable with the specified name according to an "nbits" ADC.
 //
+// **************************************************************************************
+// *** This function has become obsolete and is only kept for backward compatibility. ***
+// *** Please refer to the new, more flexible memberfunction Transmit().              ***
+// **************************************************************************************
+//
 // Input arguments :
 // -----------------
 // name     : Digitization of the variable with this name will be performed.
@@ -4459,13 +4469,676 @@ Double_t NcSample::Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode)
  return Digitize(i,nbits,vcal,mode);
 }
 ///////////////////////////////////////////////////////////////////////////
+TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TH1* hist,Int_t B,Int_t C) const
+{
+// Internal member function for processing of an Analog to Digital Converter (ADC). 
+// Construct from analog input signals the discrete quantized data values of an "nbits" ADC,
+// based on the "range" for the analog signal and a bias voltage "Vbias" (see below).
+// The analog input signals are provided by the TArray "Vsig".
+// The resulting (integer) quantized ADC values are returned in a TArrayL64 object.
+//
+// Note : Make sure to use the same units for "range", "Vbias" and the analog input signals.
+//
+// The number of available quantization levels is given by N=2^|nbits|, of which the lowest
+// level represents the value 0. This yields for the quantized values (adc) the range [0,N-1].
+// The mapping of an analog input voltage (Vin) to one of the quantization levels depends on the
+// specified "range" and "Vbias" and whether we have a linear or Log ADC (see below).
+//
+// As outlined below, the range of the analog input voltage can be specified as the Full Scale
+// voltage range (Vfs) corresponding to adc=N-1 or as the Reference voltage (Vref) corresponding to
+// the hypothetical adc=N.
+// 
+// The Least Significant Bit (LSB) represents the smallest analog input voltage interval
+// that can reliably be resolved. In other words LSB=Voltage(adc=1)-Voltage(adc=0).
+// For a linear ADC we have : LSB=Vfs/(N-1) or equivalently LSB=Vref/N.
+// For a Log_B ADC (see below) we have : LSB=Vref*pow(B,-C)*(pow(B,C/N)-1).
+//
+// The formulas for the Vin->adc mapping with Vin=(Vbias+Vsig) are :
+// Linear ADC : adc=Vin/LSB.
+// Log_B ADC (see below) : adc=(N/C)*Log_B(pow(B,C)*Vin/Vref).
+//
+// Which leads to the following relations between Vref and Vfs : 
+// Linear ADC : Vref=Vfs+LSB.
+// Log_B ADC (see below) : Vfs=Vref*pow(B,-C)*pow(B,(N-1)*C/N).
+//
+// The Dynamic Range (DR) is defined as the ratio of the largest and smallest input voltages
+// that can reliably be resolved.
+// Expressed in decibel we have : DR=20*log_10(Vfs/LSB) dB.
+//
+// For details about the procedure, please refer to the excellent textbook :
+// "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
+// which is online available at http://www.dspguide.com/pdfbook.htm
+//
+// and the publication by Y. Sundarasaradula et al. :
+// "A 6-bit, Two-step, Successive Approximation Logarithmic ADC for Biomedical Applications"
+// which is online available at https://spiral.imperial.ac.uk/bitstream/10044/1/44156/2/2016_ICECS_LogADC_Camera.pdf.
+//
+// Input arguments :
+// -----------------
+// nbits    : Digital quantization of the input values will be performed using nbits.
+// range >0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1. 
+//       <0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+// Vbias    : The bias voltage that will be added to the analog input signal before digitization.
+// Vsig     : Array containing the analog input signals.
+// B     >1 : Base for a Log ADC (e.g. B=10 emulates a Log_10 ADC).
+//       =0 : The ADC will be linear
+//       =1 : The ADC will be a Log_e ADC.
+//            Note : When B>0 all (Vbias+Vsig) input values should be positive.
+// C        : Code efficiency factor for a Log ADC.
+//            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+//            So, for a log_10 ADC with C=3, the smallest signal that can be resolved is about |range|/1000.
+//            Note : It is required that C>0.
+//
+// Optional output arguments :
+// ---------------------------
+// hist  : Histogram with the digitized result
+//
+// Notes :
+// -------
+// 1) In case no "Vsig" array is provided, just the ADC specs will be printed
+//    and in the TArrayL64 only the adc value corresponding to Vbias is returned.
+//    This allows to quickly investigate various scenarios without any data treatment.
+// 2) Providing a "Vsig" array with different small (random) amplitudes allows to mimic variations of the bias or
+//    characteristics of the various switched capacitor array elements for the individual samplings.
+//    This resembles a so called "pedestal run" in real life Data Acquisition (DAQ) applications.
+//    For a linear ADC, the contents of the returned TArrayL64 can be used afterwards for pedestal subtraction.  
+//         
+// The maximum number of bits that is supported is 60 to guarantee identical functioning
+// on all machines.
+//
+// In case of inconsistent input parameters, no digitization is performed and an empty TArrayL64 is returned.
+//
+// The default values are Vbias=0, Vsig=0, hist=0, B=0 and C=3.
+
+ TArrayL64 arradc(0);
+ if (hist) hist->Reset();
+
+ Int_t nVsig=0;
+ if (Vsig) nVsig=Vsig->GetSize();
+
+ if (nbits<=0 || nbits>60 || !range || fabs(Vbias)>fabs(range) || B<0 || (B && C<1))
+ {
+  printf("\n *%-s::ADC* Inconsistent input nbits=%-i range=%-g Vbias=%-g B=%-i C=%-i \n",ClassName(),nbits,range,Vbias,B,C);
+  return arradc;
+ }
+
+ NcMath math;
+
+ Long64_t N=pow(2,nbits); // The number of quantization levels
+ Long64_t adcmin=0;
+ Long64_t adcmax=N-1;
+ Double_t Vref=0;
+ Double_t Vfs=0;
+ Double_t LSB=0;
+
+ // Floating point version of some parameters
+ Double_t rN=N;
+ Double_t rB=B;
+ if (B==1) rB=exp(1);
+ Double_t rC=C;
+ Double_t radcmax=adcmax;
+
+ if (range<0) // |range| represents Vref
+ {
+  Vref=fabs(range);
+  LSB=Vref/rN;
+  Vfs=Vref-LSB;
+ }
+ else // range represents Vfs
+ {
+  Vfs=range;
+  LSB=Vfs/radcmax;
+  Vref=Vfs+LSB;
+ }
+
+ Long64_t ped=0;
+ Double_t frac=0;
+ if (B) // Log ADC
+ {
+  if (range<0) Vfs=pow(rB,-rC)*pow(rB,radcmax*rC/rN)*Vref;
+  if (range>0) Vref=pow(rB,rC)*pow(rB,-radcmax*rC/rN)*Vfs;
+  LSB=Vref*pow(rB,-rC)*(pow(rB,rC/rN)-1.);
+  frac=Vbias/Vref;
+  ped=0;
+  if (frac>0) ped=Long64_t(rN*(math.Log(rB,frac)+rC)/rC);
+ }
+
+ if (LSB<=0 || Vfs<=0)
+ {
+  printf("\n *%-s::ADC* Inconsistent parameters : LSB=%-g Vfs=%-g \n",ClassName(),LSB,Vfs);
+  return arradc;
+ }
+
+ if (!B) ped=Vbias/LSB; // Pedestal value for a linear ADC
+
+ Double_t DR=20.*log10(Vfs/LSB);
+
+ if (!nVsig)
+ {
+  printf(" *%-s::ADC* No input data have been provided --> Only the value of adc(Vbias) is returned. \n",ClassName());
+  if (!B)
+  {
+   printf(" Parameters for a linear %-i-bits ADC with adc=[%-lli,%-lli] : \n",nbits,adcmin,adcmax);
+   printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
+  }
+  else
+  {
+   TString mode="Log_e";
+   if (B>1)
+   {
+    mode="Log_";
+    mode+=B;
+   }
+   printf(" Parameters for a %-i-bits %-s ADC with adc=[%-lli,%-lli] and a code efficiency factor of %-i: \n",nbits,mode.Data(),adcmin,adcmax,C);
+   printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
+  }
+  arradc.Set(1);
+  arradc[0]=ped;
+  return arradc;
+ }
+
+ arradc.Set(nVsig);
+
+ if (hist)
+ {
+  TString title;
+  title.Form("NcSample ADC result;Sample number;ADC counts");
+  hist->SetBins(nVsig,0,nVsig);
+  hist->SetMarkerStyle(20);
+  hist->SetTitle(title);
+ }
+
+ Double_t val=0;
+ Double_t radcval=0;
+ Long64_t adcval=0;
+ for (Int_t j=0; j<nVsig; j++)
+ {
+  val=Vbias+Vsig->GetAt(j);
+  
+  if (B) // Log ADC
+  {
+   radcval=0;
+   frac=val/Vref;
+   if (frac>0) radcval=(rN/rC)*(math.Log(rB,frac)+rC);
+  }
+  else // Linear ADC
+  {
+   radcval=val/LSB;
+  }
+
+  adcval=Long64_t(radcval);
+
+  // Check for saturation
+  if (adcval<adcmin) adcval=adcmin;
+  if (adcval>adcmax) adcval=adcmax;
+
+  arradc[j]=adcval;
+
+  if (hist) hist->SetBinContent(j+1,adcval);
+ }
+
+ return arradc;
+}
+///////////////////////////////////////////////////////////////////////////
+TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TArray* peds,TH1* hist,Int_t B,Int_t C) const
+{
+// Internal member function for processing of a Digital to Analog Converter (DAC). 
+// Reconstruct the analog signals based on the discrete quantized digital data from an "nbits" ADC,
+// based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
+// The digital input signals are provided by the TArray "adcs".
+// The resulting analog values are returned in a TArrayD object.
+//
+// Note : Make sure to use the same units for "range" and "Vbias".
+//
+// The number of digital quantization levels is given by N=2^|nbits|, of which the lowest
+// level represents the value 0. This implies a range [0,N-1] for the various digital adc values.
+// The correspondance of an analog input voltage (Vin) to one of the quantization levels depends on the
+// specified "range" and "Vbias" and whether we have a linear or Log DAC (see below).
+//
+// As outlined below, the range of the analog input voltage can be specified as the Full Scale
+// voltage range (Vfs) corresponding to adc=N-1 or as the Reference voltage (Vref) corresponding to
+// the hypothetical adc=N.
+// 
+// The Least Significant Bit (LSB) represents the smallest analog input voltage interval
+// that can reliably be resolved. In other words LSB=Voltage(adc=1)-Voltage(adc=0).
+// For a linear DAC we have : LSB=Vfs/(N-1) or equivalently LSB=Vref/N.
+// For a Log_B DAC (see below) we have : LSB=Vref*pow(B,-C)*(pow(B,C/N)-1).
+//
+// The formulas for the adc->Vin mapping with Vin=(Vbias+Vsig) are :
+// Linear DAC : Vin=adc*LSB.
+// Log_B DAC (see below) : Vin=Vref*pow(B,-C)*pow(B,C*adc/N)
+//
+// Which implies the following relations between Vref and Vfs : 
+// Linear DAC : Vref=Vfs+LSB.
+// Log_B DAC (see below) : Vfs=Vref*pow(B,-C)*pow(B,C*(N-1)/N).
+//
+// The Dynamic Range (DR) is defined as the ratio of the largest and smallest analog voltages
+// that can reliably be resolved.
+// Expressed in decibel we have : DR=20*log_10(Vfs/LSB) dB.
+//
+// For details about the procedure, please refer to the excellent textbook :
+// "The Scientist and Engineer's Guide to Digital Signal Processing" by Steven W. Smith,
+// which is online available at http://www.dspguide.com/pdfbook.htm
+//
+// and the publication by Y. Sundarasaradula et al. :
+// "A 6-bit, Two-step, Successive Approximation Logarithmic ADC for Biomedical Applications"
+// which is online available at https://spiral.imperial.ac.uk/bitstream/10044/1/44156/2/2016_ICECS_LogADC_Camera.pdf.
+//
+// Input arguments :
+// -----------------
+// nbits    : Digitial quantization was performed using an nbits ADC.
+// range >0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1. 
+//       <0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+// Vbias    : The bias voltage that was added to the analog input signal before digitization.
+//            If specified, the resulting analog signals will be corrected for the bias voltage.
+//            For a linear DAC the correction via Vbias will only be performed if no pedestal array "peds"
+//            is specified (see below). If the array "peds" is specified, Vbias will be ignored for a linear DAC.
+//            For a Log DAC the pedestal values will never be used and bias correction may only be obtained via Vbias.
+// adcs     : Array to contain the digital input signals.
+// peds     : (Optional) array to contain the pedestal values for the individual digital input signals.
+//            The array "peds" must contain (at least) the same number of values as the number of digital input signals.
+//            If the array "peds" is specified, the pedestals will be subtracted from the corresponding digital input signals
+//            before the conversion to analog signals is performed in case of a linear DAC.
+//            For a Log DAC the pedestal values will never be used and bias correction may only be obtained via Vbias.
+// B     >1 : Base for a Log DAC (e.g. B=10 emulates a Log_10 DAC).
+//       =0 : The DAC will be linear
+//       =1 : The DAC will be a Log_e DAC.
+// C        : Code efficiency factor that was used for a Log ADC.
+//            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+//            So, for a Log_10 ADC with C=3, the smallest signal that can be resolved is about |range|/1000.
+//            Note : It is required that C>0.
+//
+// Optional output arguments :
+// ---------------------------
+// hist  : Histogram with the analog result
+//
+// Notes :
+// -------
+// 1) In case no "adcs" array is provided, just the DAC specs will be printed
+//    and in the TArrayD only the adc value corresponding to Vbias is returned.
+//    This allows to quickly investigate various scenarios without any data treatment.
+//         
+// The maximum number of bits that is supported is 60 to guarantee identical functioning
+// on all machines.
+//
+// In case of inconsistent input parameters, no processing is performed and an empty TArrayD is returned.
+//
+// The default values are Vbias=0, adcs=0, peds=0, hist=0, B=0 and C=3.
+
+ TArrayD arrdac(0);
+ if (hist) hist->Reset();
+
+ Int_t nadcs=0;
+ if (adcs) nadcs=adcs->GetSize();
+
+ Int_t npeds=0;
+ if (peds) npeds=peds->GetSize();
+
+ if (nbits<=0 || nbits>60 || !range || fabs(Vbias)>fabs(range) || (peds && npeds<nadcs) || B<0 || (B && C<1))
+ {
+  printf("\n *%-s::DAC* Inconsistent input nbits=%-i range=%-g Vbias=%-g nadcs=%-i npeds=%-i B=%-i C=%-i \n",ClassName(),nbits,range,Vbias,nadcs,npeds,B,C);
+  return arrdac;
+ }
+
+ NcMath math;
+
+ Long64_t N=pow(2,nbits); // The number of quantization levels
+ Long64_t adcmin=0;
+ Long64_t adcmax=N-1;
+ Double_t Vref=0;
+ Double_t Vfs=0;
+ Double_t LSB=0;
+
+ // Floating point version of some parameters
+ Double_t rN=N;
+ Double_t rB=B;
+ if (B==1) rB=exp(1);
+ Double_t rC=C;
+ Double_t radcmax=adcmax;
+
+ if (range<0) // |range| represents Vref
+ {
+  Vref=fabs(range);
+  LSB=Vref/rN;
+  Vfs=Vref-LSB;
+ }
+ else // range represents Vfs
+ {
+  Vfs=range;
+  LSB=Vfs/radcmax;
+  Vref=Vfs+LSB;
+ }
+
+ Long64_t ped=0;
+ Double_t frac=0;
+ if (B) // Log DAC
+ {
+  if (range<0) Vfs=pow(rB,-rC)*pow(rB,radcmax*rC/rN)*Vref;
+  if (range>0) Vref=pow(rB,rC)*pow(rB,-radcmax*rC/rN)*Vfs;
+  LSB=Vref*pow(rB,-rC)*(pow(rB,rC/rN)-1.);
+  frac=Vbias/Vref;
+  ped=0;
+  if (frac>0) ped=Long64_t(rN*(math.Log(rB,frac)+rC)/rC);
+ }
+
+ if (LSB<=0 || Vfs<=0)
+ {
+  printf("\n *%-s::DAC* Inconsistent parameters : LSB=%-g Vfs=%-g \n",ClassName(),LSB,Vfs);
+  return arrdac;
+ }
+
+ if (!B) ped=Vbias/LSB; // Pedestal value for a linear DAC
+
+ Double_t DR=20.*log10(Vfs/LSB);
+
+ if (!nadcs)
+ {
+  printf(" *%-s::DAC* No input data have been provided --> Only the value of adc(Vbias) is returned. \n",ClassName());
+  if (!B)
+  {
+   printf(" Parameters for a linear %-i-bits DAC with adc=[%-lli,%-lli] : \n",nbits,adcmin,adcmax);
+   printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
+  }
+  else
+  {
+   TString mode="Log_e";
+   if (B>1)
+   {
+    mode="Log_";
+    mode+=B;
+   }
+   printf(" Parameters for a %-i-bits %-s DAC with adc=[%-lli,%-lli] and a code efficiency factor of %-i: \n",nbits,mode.Data(),adcmin,adcmax,C);
+   printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
+  }
+  arrdac.Set(1);
+  arrdac[0]=ped;
+  return arrdac;
+ }
+
+ arrdac.Set(nadcs);
+
+ if (hist)
+ {
+  TString title;
+  title.Form("%-s DAC result;Sample number;Amplitude",ClassName());
+  hist->SetBins(nadcs,0,nadcs);
+  hist->SetMarkerStyle(20);
+  hist->SetTitle(title);
+ }
+
+ Long64_t adc=0;
+ Double_t radc=0;
+ Double_t dacval=0;
+ for (Int_t j=0; j<nadcs; j++)
+ {
+  adc=adcs->GetAt(j);
+  radc=adc;
+
+  if (B) // Log DAC
+  {
+   dacval=Vref*pow(rB,-rC)*pow(rB,radc*rC/rN);
+  }
+  else // Linear DAC
+  {
+   if (peds)
+   {
+    ped=peds->GetAt(j);
+    adc=adc-ped;
+    radc=adc;
+   }
+   dacval=radc*LSB;
+  }
+
+  // Correct for bias voltage
+  if (B || (!B && !peds))
+  {
+   dacval=dacval-Vbias;
+  }
+
+  arrdac[j]=dacval;
+
+  if (hist) hist->SetBinContent(j+1,dacval);
+ }
+
+ return arrdac;
+}
+///////////////////////////////////////////////////////////////////////////
+Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias,TArray* peds,TH1* hist,Int_t B,Int_t C)
+{
+// Mimic signal transmission according to an "nbits" ADC-DAC chain.
+// The values of the i-th variable are digitized via the discrete quantization levels of an "nbits" ADC,
+// based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
+// After digitization, the digital signals are converted into analog signals via the corresponding "nbits" DAC.
+// In this way the effect of digitization on the original input signals can be investigated, and can provide
+// a guideline in selecting the most suitable ADC-DAC system for data transmission.
+//
+// Note :
+// ------
+// The resulting analog values will replace the corresponding values of the i-th variable.
+// For investigation of the performance of various ADC-DAC scenarios without modification
+// of the current NcSample data, the user can invoke the Transmit() or ADC() and DAC()
+// processors of the class NcDSP.
+//
+// In case the index "i" is out of range for this sample or no data is available, just the specs
+// of the specified ADC performance will be printed and no digitization is performed, but the
+// return argument will contain the adc value corresponding to Vbias.
+// This allows to test various scenarios without modifying the data.
+// In all other cases the unphysical value -1 is returned.
+//
+// Note : Make sure to use the same units for "range" and "Vbias" as those of the i-th variable.
+//
+// For further details, please refer to the documentation of the memberfunctions ADC() and DAC() of class NcDSP.
+//
+// Warning :
+// ---------
+// This member function will change the contents of this sample concerning the values of the i-th variable.
+// In case access to the original values is required, one should make a copy of the original sample
+// before the digitization process or use the corresponding member function Transmit() of class NcDSP.
+//
+// This facility is only available if the storage mode has been activated.
+//
+// In case of inconsistent input parameters, no digitization is performed.
+//
+// Input arguments :
+// -----------------
+// i        : Digitization of the i-th variable (first is i=1) will be performed.
+// nbits    : Digital quantization was performed using an nbits ADC.
+// range >0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1. 
+//       <0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+// Vbias    : The bias voltage that was added to the analog input signal before digitization.
+//            If specified, the resulting analog signals will be corrected for the bias voltage.
+//            For a linear DAC the correction via Vbias will only be performed if no pedestal array "peds"
+//            is specified (see below). If the array "peds" is specified, Vbias will be ignored for a linear DAC.
+//            For a Log DAC the pedestal values will never be used and bias correction may only be obtained via Vbias.
+// peds     : (Optional) array to contain the pedestal values for the individual digital signals.
+//            The array "peds" must contain (at least) the same number of values as the number of analog input signals.
+//            If the array "peds" is specified, the pedestals will be subtracted from the corresponding digital signals
+//            before the conversion to analog signals is performed in case of a linear DAC.
+//            For a Log DAC the pedestal values will never be used and bias correction may only be obtained via Vbias.
+// B     >1 : Base for a log ADC (e.g. B=10 emulates a Log_10 ADC).
+//       =0 : The ADC will be linear
+//       =1 : The ADC will be a Log_e ADC.
+//            Note : When B>0 all (Vbias+Vsig) input values should be positive.
+// C        : Code efficiency factor that was used for a Log ADC.
+//            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+//            So, for a Log_10 ADC with C=3, the smallest signal that can be resolved is about |range|/1000.
+//            Note : It is required that C>0.
+//
+// Optional output arguments :
+// ---------------------------
+// hist  : Histogram with the analog result
+//         
+// The maximum number of bits that is supported is 60 to guarantee identical functioning on all machines.
+//
+// In case of inconsistent input parameters, no processing is performed.
+//
+// The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.
+
+ TArrayL64 adcarr;
+ TArrayD dacarr;
+ if (hist) hist->Reset();
+
+ if (!fStore)
+ {
+  printf("\n *%-s::Transmit* Error : Storage mode has not been activated. \n",ClassName());
+  printf(" No digitization is performed. \n");
+  return -1;
+ }
+
+ if (i<1 || i>fDim)
+ {
+  printf("\n *%-s::Transmit* Invalid variable name or index (i=%-i) --> Only listing of ADC specs. \n",ClassName(),i);
+  adcarr=ADC(nbits,range,Vbias,0,0,B,C);
+  return adcarr[0];
+ }
+ 
+ if (!fN)
+ {
+  printf("\n *%-s::Transmit* No data available for variable %-s (index=%-i) --> Only listing of ADC specs. \n",ClassName(),fNames[i-1].Data(),i);
+  adcarr=ADC(nbits,range,Vbias,0,0,B,C);
+  return adcarr[0];
+ }
+
+ Double_t minval=GetMinimum(i);
+ Double_t Vin=minval+Vbias;
+
+ if (B && Vin<=0)
+ {
+  TString mode="Log_e";
+  if (B>1)
+  {
+   mode="Log_";
+   mode+=B;
+  }
+  printf("\n *%-s::Transmit* Non-positive input value(s) for %-s ADC --> No digitization is performed. \n",ClassName(),mode.Data());
+  printf(" Minimum+Vbias=%-g+%-g=%-g for variable with name %-s (index i=%-i). \n",minval,Vbias,Vin,fNames[i-1].Data(),i);
+  return -1;
+ }
+
+ // Get the corresponding data array
+ TArrayD* arrin=0;
+ if (i==1) arrin=fX;
+ if (i==2) arrin=fY;
+ if (i==3) arrin=fZ;
+ if (i==4) arrin=fT;
+
+ // Perform the digitization via the ADC processeor
+ adcarr=ADC(nbits,range,Vbias,arrin,0,B,C);
+
+ // Convert the digital data into analog signals via the DAC processor
+ dacarr=DAC(nbits,range,Vbias,&adcarr,peds,hist,B,C);
+
+ if (hist)
+ {
+  TString title=hist->GetTitle();
+  title.ReplaceAll("DAC","Transmit (ADC-DAC)");
+  hist->SetTitle(title);
+ }
+
+ Int_t ndac=dacarr.GetSize();
+ if (ndac<fN)
+ {
+  printf("\n *%-s::Transmit* Inconsistent number of entries : Nsamplings=%-i Ndac=%-i --> No digitization is performed. \n",ClassName(),fN,ndac);
+  return -1;
+ }
+
+ // Replace the values of the i-th variable
+ Double_t val=0;
+ for (Int_t j=0; j<fN; j++)
+ {
+  val=dacarr[j];
+  arrin->AddAt(val,j);
+ }
+
+ return -1;
+}
+///////////////////////////////////////////////////////////////////////////
+Long64_t NcSample::Transmit(TString name,Int_t nbits,Double_t range,Double_t Vbias,TArray* peds,TH1* hist,Int_t B,Int_t C)
+{
+// Mimic signal transmission according to an "nbits" ADC-DAC chain.
+// The values of the variable "name" are digitized via the discrete quantization levels of an "nbits" ADC,
+// based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
+// After digitization, the digital signals are converted into analog signals via the corresponding "nbits" DAC.
+// In this way the effect of digitization on the original input signals can be investigated, and can provide
+// a guideline in selecting the most suitable ADC-DAC system for data transmission.
+//
+// Note :
+// ------
+// The resulting analog values will replace the corresponding values of the variable "name".
+// For investigation of the performance of various ADC-DAC scenarios, the user can also   
+// invoke the Transmit() or ADC() and DAC() processors of the class NcDSP.
+// This will not modify the current NcSample data, and actually these NcDSP processors
+// are used here to perform the various calculations.
+//
+// In case the variable "name" does not exist for this sample or no data is available, just the specs
+// of the specified ADC performance will be printed and no digitization is performed, but the
+// return argument will contain the adc value corresponding to Vbias.
+// This allows to test various scenarios without modifying the data.
+// In all other cases the unphysical value -1 is returned.
+//
+// Note : Make sure to use the same units for "range" and "Vbias" as those of the i-th variable.
+//
+// For further details, please refer to the documentation of the memberfunctions ADC() and DAC() of class NcDSP.
+//
+// Warning :
+// ---------
+// This member function will change the contents of this sample concerning the values of variable "name".
+// In case access to the original values is required, one should make a copy of the original sample
+// before the digitization process or use the corresponding member function Transmit() of class NcDSP.
+//
+// This facility is only available if the storage mode has been activated.
+//
+// In case of inconsistent input parameters, no digitization is performed.
+//
+// Input arguments :
+// -----------------
+// name     : Name of the variable for which the digitization will be performed.
+// nbits    : Digital quantization was performed using an nbits ADC.
+// range >0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1. 
+//       <0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+// Vbias    : The bias voltage that was added to the analog input signal before digitization.
+//            If specified, the resulting analog signals will be corrected for the bias voltage.
+//            For a linear DAC the correction via Vbias will only be performed if no pedestal array "peds"
+//            is specified (see below). If the array "peds" is specified, Vbias will be ignored for a linear DAC.
+//            For a Log DAC the pedestal values will never be used and bias correction may only be obtained via Vbias.
+// peds     : (Optional) array to contain the pedestal values for the individual digital signals.
+//            The array "peds" must contain (at least) the same number of values as the number of analog input signals.
+//            If the array "peds" is specified, the pedestals will be subtracted from the corresponding digital signals
+//            before the conversion to analog signals is performed in case of a linear DAC.
+//            For a Log DAC the pedestal values will never be used and bias correction may only be obtained via Vbias.
+// B     >1 : Base for a log ADC (e.g. B=10 emulates a Log_10 ADC).
+//       =0 : The ADC will be linear
+//       =1 : The ADC will be a Log_e ADC.
+//            Note : When B>0 all (Vbias+Vsig) input values should be positive.
+// C        : Code efficiency factor that was used for a Log ADC.
+//            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+//            So, for a Log_10 ADC with C=3, the smallest signal that can be resolved is about |range|/1000.
+//            Note : It is required that C>0.
+//
+// Optional output arguments :
+// ---------------------------
+// hist  : Histogram with the analog result
+//         
+// The maximum number of bits that is supported is 60 to guarantee identical functioning on all machines.
+//
+// In case of inconsistent input parameters, no processing is performed.
+//
+// The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.
+
+ Int_t i=GetIndex(name);
+
+ return Transmit(i,nbits,range,Vbias,peds,hist,B,C);
+}
+///////////////////////////////////////////////////////////////////////////
 NcSample NcSample::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,Int_t loc) const
 {
 // Perform a Sample-And-Hold operation on the specified function "f"
 // in the interval [vmin,vmax], using "step" as the sampling step size.
+//
 // If "f" can be regarded as a pulse generator in time, this mimics a 
 // sample and hold device with a lock time of "step" time units,
 // or equivalently a sampling frequency of 1/step.
+//
 // The input argument "loc" determines whether the resulting data
 // will be recorded at the start (loc<0), center (loc=0) or end (loc>0)
 // of the sampling step size.
@@ -4512,18 +5185,22 @@ NcSample NcSample::SampleAndSum(Int_t i,Double_t step,Int_t loc,Int_t j,Double_t
 {
 // Perform a Sample-And-Sum operation on the values of the i-th variable
 // in the interval [vmin,vmax], using "step" as the sampling step size.
+// If vmax<=vmin the minimum and maximum values of the i-th variable will be used.
+//
 // This procedure resembles a Sample-And-Hold operation, but instead of locking
 // the data recording during the stepsize "step", the data that appear within "step"
 // are summed.
+//
 // If the i-th variable can be regarded as sampling in time, this mimics a 
 // Switched Capacitor Array (SCA) with a time gate of "step" time units,
 // or equivalently a sampling frequency of 1/step.
+//
 // The input argument "loc" determines whether the new values of the i-th variable
 // will be recorded at the begin (loc<0), center (loc=0) or end (loc>0)
 // of the sampling step size.
+//
 // If j>0 the corresponding value of variable j will be used as a weight.
 // The first variable has index 1.
-// If vmax<=vmin the minimum and maximum values of the i-th variable will be used.
 //
 // Note : This facility is only available if the storage mode has been activated.
 //
@@ -4615,17 +5292,21 @@ NcSample NcSample::SampleAndSum(TString nameA,Double_t step,Int_t loc,TString na
 {
 // Perform a Sample-And-Sum operation on the values of the variable specified with nameA
 // in the interval [vmin,vmax], using "step" as the sampling step size.
+// If vmax<=vmin the minimum and maximum values of the variable with nameA will be used.
+//
 // This procedure resembles a Sample-And-Hold operation, but instead of locking
 // the data recording during the stepsize "step", the data that appear within "step"
 // are summed.
+//
 // If the variable with nameA can be regarded as sampling in time, this mimics a 
 // Switched Capacitor Array (SCA) with a time gate of "step" time units,
 // or equivalently a sampling frequency of 1/step.
+//
 // The input argument "loc" determines whether the new values of the variable with nameA
 // will be recorded at the begin (loc<0), center (loc=0) or end (loc>0)
 // of the sampling step size.
+//
 // If nameB is valid, the corresponding value of that variable will be used as a weight.
-// If vmax<=vmin the minimum and maximum values of the variable with nameA will be used.
 //
 // Note : This facility is only available if the storage mode has been activated.
 //

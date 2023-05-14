@@ -212,7 +212,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven 22-nov-2002 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 27, 2023  13:24Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 12, 2023  12:54Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcCollider.h"
@@ -1398,29 +1398,32 @@ Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
  Double_t s=fBeam.GetInvariant()+fTarget.GetInvariant()+2.*fBeam.Dot(fTarget);
  Double_t ecms=sqrt(s);
 
- if (fPrintfreq && !(fEventnum%fPrintfreq))
+ if (fPrintfreq)
  {
-  cout << " *NcCollider::MakeEvent* Run : " << fRunnum << " Event : " << fEventnum << endl;
-  if (fFrame=="free") cout << "  Event weighting by cross section: " << sweight.Data() << endl;
-
-  if (fNucl)
+  if (!(fEventnum%fPrintfreq))
   {
-   cout << "  Beam nucleus: " << fBeam.GetName() << " Target nucleus: " << fTarget.GetName() << " Frame: " << fFrame.Data() << endl;
-   cout << "  Beam   3-momentum in GeV/c per nucleon: px=" << fBeam.GetX(1,"car") << " py=" << fBeam.GetX(2,"car") << " pz=" << fBeam.GetX(3,"car") << endl; 
-   cout << "  Target 3-momentum in GeV/c per nucleon: px=" << fTarget.GetX(1,"car") << " py=" << fTarget.GetX(2,"car") << " pz=" << fTarget.GetX(3,"car") << endl; 
-   cout << "  Total CMS energy per nucleon-nucleon collision: " << ecms << " GeV" << endl;
-   cout << "  # participants and collisions: npart=" << npt << " ncol=" << ncol 
-        << " ncolpp=" << ncols[0] << " ncolnp=" << ncols[1] << " ncolpn=" << ncols[2] << " ncolnn=" << ncols[3] << endl;
-  }
-  else
-  {
-   cout << "  Beam particle: " << fBeam.GetName() << " Target particle: " << fTarget.GetName() << " Frame: " << fFrame.Data() << endl;
-   cout << "  Beam   particle 3-momentum (GeV/c): px=" << fBeam.GetX(1,"car") << " py=" << fBeam.GetX(2,"car") << " pz=" << fBeam.GetX(3,"car") << endl; 
-   cout << "  Target particle 3-momentum (GeV/c): px=" << fTarget.GetX(1,"car") << " py=" << fTarget.GetX(2,"car") << " pz=" << fTarget.GetX(3,"car") << endl; 
-   cout << "  Total CMS energy: " << ecms << " GeV" << endl;
-  }
+   cout << " *NcCollider::MakeEvent* Run : " << fRunnum << " Event : " << fEventnum << endl;
+   if (fFrame=="free") cout << "  Event weighting by cross section: " << sweight.Data() << endl;
 
-  if (ecms<fEcmsmin) printf("  *** No event generated. Ecms is below the minimal requirement of : %-g GeV. \n \n",fEcmsmin);
+   if (fNucl)
+   {
+    cout << "  Beam nucleus: " << fBeam.GetName() << " Target nucleus: " << fTarget.GetName() << " Frame: " << fFrame.Data() << endl;
+    cout << "  Beam   3-momentum in GeV/c per nucleon: px=" << fBeam.GetX(1,"car") << " py=" << fBeam.GetX(2,"car") << " pz=" << fBeam.GetX(3,"car") << endl; 
+    cout << "  Target 3-momentum in GeV/c per nucleon: px=" << fTarget.GetX(1,"car") << " py=" << fTarget.GetX(2,"car") << " pz=" << fTarget.GetX(3,"car") << endl; 
+    cout << "  Total CMS energy per nucleon-nucleon collision: " << ecms << " GeV" << endl;
+    cout << "  # participants and collisions: npart=" << npt << " ncol=" << ncol 
+         << " ncolpp=" << ncols[0] << " ncolnp=" << ncols[1] << " ncolpn=" << ncols[2] << " ncolnn=" << ncols[3] << endl;
+   }
+   else
+   {
+    cout << "  Beam particle: " << fBeam.GetName() << " Target particle: " << fTarget.GetName() << " Frame: " << fFrame.Data() << endl;
+    cout << "  Beam   particle 3-momentum (GeV/c): px=" << fBeam.GetX(1,"car") << " py=" << fBeam.GetX(2,"car") << " pz=" << fBeam.GetX(3,"car") << endl; 
+    cout << "  Target particle 3-momentum (GeV/c): px=" << fTarget.GetX(1,"car") << " py=" << fTarget.GetX(2,"car") << " pz=" << fTarget.GetX(3,"car") << endl; 
+    cout << "  Total CMS energy: " << ecms << " GeV" << endl;
+   }
+
+   if (ecms<fEcmsmin) printf("  *** No event generated. Ecms is below the minimal requirement of : %-g GeV. \n \n",fEcmsmin);
+  }
  }
 
  if (ecms<fEcmsmin) return 0;
@@ -1852,10 +1855,13 @@ Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
   }
  }
 
- if (!(fEventnum%fPrintfreq) && (mlist || fEvent))
+ if (fPrintfreq)
  {
-  if (fEvent) printf("  Number of tracks in the event structure : %-i \n",fEvent->GetNtracks());
-  printf("\n"); // Create empty output line after the event
+  if (!(fEventnum%fPrintfreq) && (mlist || fEvent))
+  {
+   if (fEvent) printf("  Number of tracks in the event structure : %-i \n",fEvent->GetNtracks());
+   printf("\n"); // Create empty output line after the event
+  }
  }
 
  // Record the actual beam and target momenta as user data in the event structure
@@ -2272,7 +2278,7 @@ void NcCollider::SetJetProtonSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1
  }
 
  // dN/dp spectrum specified by a function 
- if (fspec && !hspec)
+ if (fspec && !hspec && pmax>pmin)
  {
   fJetPscale=mode;
   TString title="Jet proton (beam) dN/dp=";
@@ -2396,7 +2402,7 @@ void NcCollider::SetJetGammaSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1*
  }
 
  // dN/dp spectrum specified by a function 
- if (fspec && !hspec)
+ if (fspec && !hspec && pmax>pmin)
  {
   fJetGscale=mode;
   TString title="Jet gamma (target) dN/dp=";

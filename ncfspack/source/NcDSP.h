@@ -5,11 +5,13 @@
 // See cxx source for full Copyright notice.
 
 #include "TArrayD.h"
+#include "TArrayL64.h"
 #include "TVirtualFFT.h"
 #include "TList.h"
 #include "TLine.h"
 
 #include "NcSample.h"
+#include "NcMath.h"
 
 class NcDSP : public TNamed
 {
@@ -40,6 +42,10 @@ class NcDSP : public TNamed
   TArrayD Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0);       // Convolve the loaded data with the stored waveform data
   TArrayD Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0);      // Correlate the stored waveform data with the loaded data
   TArrayD Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist=0,Double_t* stp=0,Double_t* scale=0) const; // Digitize values according to an "nbits" ADC.
+  TArrayL64 ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Provide the quantized data of an "nbits" ADC.
+  TArrayD DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Reconstruct the analog signals from an "nbits" ADC.
+  TArrayD Transmit(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Transmit signals according to an "bits" ADC-DAC chain
+
   TArrayD SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1* hist=0,Int_t loc=-1) const; // Perform a Sample-And-Hold operation on function "f"
   TArrayD SampleAndHold(Int_t ns,TH1* hist=0,Int_t loc=-1,Int_t jmin=0,Int_t jmax=-1) const; // Perform a Sample-And-Hold operation on the stored waveform data
   TArrayD SampleAndSum(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1* hist=0) const;  // Perform a Sample-And-Sum operation on function "f"
@@ -74,6 +80,6 @@ class NcDSP : public TNamed
   void Reset();      // Reset all data and the processor
   void HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* hist=0); // Provide filter kernel or result histograms
 
- ClassDef(NcDSP,5) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
+ ClassDef(NcDSP,6) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
 };
 #endif

@@ -1426,6 +1426,11 @@
                 Also a facility for the modeling of (obscured) astrophysical jets introduced in NcCollider.
                 See the documentation of NcCollider for further details.
                 The version indicator in NcVersion has been updated to 5.33.
- 
-
-
+18-apr-2023 NvE New member function Log(B,x) introduced in NcMath to support base-B logarithms.
+20-apr-2023 NvE Protection introduced against using a dN/dE spectral function in case mono-energetic particles
+                were requested in the member functions SetJetProtonSpectrum() and SetJetGammaSpectrum()
+                of class NcCollider.  
+12-may-2023 NvE Bug fixed for printout in NcCollider.cxx for the case that fPrintfreq=0. 
+14-may-2023 NvE New member functions ADC(), DAC() and Transmit() introduced in classes NcDSP and NcSample.
+                The new member functions Transmit() replace the now obsolete member functions Digitize().
+                The version indicator in NcVersion has been updated to 5.34.

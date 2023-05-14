@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -43,7 +43,7 @@
 //                             // correct model
 //
 //--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 16, 2021  20:25Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, April 18, 2023  10:53Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcMath.h"
@@ -2131,6 +2131,20 @@ Double_t NcMath::NegBinomialxPvalue(Int_t x,Int_t k,Double_t p,Int_t sides,Int_t
 
  if (abs(sides)==2) val=val*2.;
 
+ return val;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcMath::Log(Double_t B,Double_t x) const
+{
+// Compute log_B(x) with base B.
+//
+// In case of inconsistent input the value 0 is returned.
+
+ Double_t val=0;
+
+ if (B<=1 || x<=0) return val;
+
+ val=log(x)/log(B);
  return val;
 }
 ///////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Mar 18 12:07:10 2021            -->
+<!--   Date: Sun May 14 13:55:58 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -74,7 +74,7 @@ return false;}
                              // correct model
 
 --- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 16, 2021  20:25Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, April 18, 2023  10:53Z
 
 </pre></div>
 </div></div>
@@ -158,6 +158,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LnGamma@1">LnGamma</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, <a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LnNfac">LnNfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LnRfac">LnRfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:Log">Log</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> B, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LogNfac">LogNfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:LogRfac">LogRfac</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ls"><span class="baseclass">TObject::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
@@ -1239,6 +1240,12 @@ return false;}
 --- NvE 24-may-2005 Utrecht University
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Log" href="src/NcMath.cxx.html#npuqrE">Log</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> B, <a href="./ListOfTypes.html#Double_t">Double_t</a> x) const</span><br />
+<div class="funccomm"><pre> Compute log_B(x) with base B.
+
+ In case of inconsistent input the value 0 is returned.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:Nfac" href="src/NcMath.cxx.html#PQ0vCC">Nfac</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0) const</span><br />
 <div class="funccomm"><pre> Compute n!.
  The algorithm can be selected by the <span class="string">"mode"</span> input argument.
@@ -1882,7 +1889,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Mar 18 12:07:10 2021 </em><em>&raquo; Last generated: 2021-03-18 12:07</em><br />
+<em>&raquo; Last changed: Sun May 14 13:55:58 2023 </em><em>&raquo; Last generated: 2023-05-14 13:55</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

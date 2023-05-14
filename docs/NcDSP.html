@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Feb 20 14:33:10 2023            -->
+<!--   Date: Sun May 14 13:55:57 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -73,7 +73,8 @@ return false;}
  the inverse transformation provides the original input spectrum.
 
  In addition to the above transformations, also convolution, correlation,
- filter and digitization processors are provided.
+ filter, Analog to Digital Converter (<a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>), Digital to Analog Converter (<a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>)
+ and <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> chain transmission processors are provided.
 
  For details about the various operations and their options, please refer
  to the documentation in the corresponding member functions.
@@ -303,7 +304,7 @@ return false;}
 
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 20, 2023  13:46Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 14, 2023  13:35Z
 
 </pre></div>
 </div></div>
@@ -316,6 +317,7 @@ return false;}
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcDSP:NcDSP">NcDSP</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcDSP:_NcDSP">~NcDSP</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TArrayL64</td><td class="funcname"><a class="funcname" href="#NcDSP:ADC">ADC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* Vsig = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Browse"><span class="baseclass">TObject::</span>Browse</a>(TBrowser* b)</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcDSP:Class">Class</a>()</td></tr>
@@ -327,6 +329,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Correlate">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Cosine">Cosine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:DAC">DAC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* adcs = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Digitize">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* stp = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* scale = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
@@ -437,6 +440,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Transmit">Transmit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* Vsig = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
@@ -1055,7 +1059,14 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Digitize" href="src/NcDSP.cxx.html#zpJppE">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* stp = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* scale = 0) const</span><br />
-<div class="funccomm"><pre> <a href="./NcDSP.html#NcDSP:Digitize" title="TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist=0,Double_t* stp=0,Double_t* scale=0)">Digitize</a> the values of the stored waveform according to an <span class="string">"nbits"</span> ADC.
+<div class="funccomm"><pre>
+ *** This function has become obsolete and is only kept for backward compatibility. ***
+ *** Please refer to the new, more flexible memberfunction <a href="./NcDSP.html#NcDSP:Transmit" title="TArrayD NcDSP::Transmit(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">Transmit</a>().              ***
+ *** The user can also invoke the <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> and <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> processors individually by means of   ***
+ *** the corresponding memberfunctions <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>() and <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>().                             ***
+
+
+ <a href="./NcDSP.html#NcDSP:Digitize" title="TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist=0,Double_t* stp=0,Double_t* scale=0)">Digitize</a> the values of the stored waveform according to an <span class="string">"nbits"</span> <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
  The resulting digitized values are returned in a TArrayD object,
  without modification of the original waveform data.
 
@@ -1069,9 +1080,9 @@ return false;}
        &lt;0 : Digitization of the Log10 of the values will be performed using |nbits|.
             After digitization of the Log10 value, the digitized result (digval) is
             used to store the corresponding linear value via value=pow(10,digval).
-            So, nbits&lt;0 emulates a Log10 ADC to enhance the dynamic range.
+            So, nbits&lt;0 emulates a Log10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> to enhance the dynamic range.
             Note : When nbits&lt;0 all values to be digitized should be positive.
- vcal     : Range calibration value of the ADC according to <span class="string">"mode"</span> as indicated below.
+ vcal     : Range calibration value of the <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> according to <span class="string">"mode"</span> as indicated below.
  mode  =0 : Range for the digitized result (digval) will be set to [0,vcal] (or [vcal,0] if vcal&lt;0).
         1 : Full scale range for the digitized result (digval) will be set to [-|vcal|,|vcal|].
         2 : A step size of |vcal| is used providing a digval interval of [0,scale] (or [-scale,0] if vcal&lt;0).
@@ -1087,16 +1098,16 @@ return false;}
 
  1) The step size corresponds closely to the Least Significant Bit (LSB) precision for the
     digitized result (digval).
-    For an n-bit ADC we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
- 2) In case of a Log10 ADC, the value of <span class="string">"vcal"</span> relates to the Log10 values.
-    So, for a Log10 ADC, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
-    A step size of 0.0315 for an 8-bit Log10 ADC provides a Log10 interval of [-4,4]
+    For an n-bit <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> we have stepsize=range/(-1+2^n), whereas LSB=1/(2^n).
+ 2) In case of a Log10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the value of <span class="string">"vcal"</span> relates to the Log10 values.
+    So, for a Log10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the <span class="string">"vcal"</span> interval [-2,2] represents linear values [0.01,100].
+    A step size of 0.0315 for an 8-bit Log10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> provides a Log10 interval of [-4,4]
     for mode=3, which corresponds to a linear value interval of [0.0001,10000].
     For mode=2 this would result in a Log10 interval of [0,8.0325], which corresponds
     to a linear value interval of [1,1.0777e8].
     A step size of 0.01 between the Log10 values corresponds to a multiplication factor
     of 10^0.01 (i.e. about 1.023) for the linear values at each step.
- 3) In case no waveform is present, just the specs of the specified ADC performance will be printed,
+ 3) In case no waveform is present, just the specs of the specified <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> performance will be printed,
     but no digitization is performed.
     This allows to quickly investigate various scenarios without any data treatment.
 
@@ -1106,6 +1117,233 @@ return false;}
  In case of inconsistent input parameters, no digitization is performed and an empty TArrayD is returned.
 
  The default values are hist=0, stp=0 and scale=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayL64 <a class="funcname" name="NcDSP:ADC" href="src/NcDSP.cxx.html#JDoIR">ADC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* Vsig = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) const</span><br />
+<div class="funccomm"><pre> Processing of an Analog to Digital Converter (<a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
+ Construct from analog input signals the discrete quantized data values of an <span class="string">"nbits"</span> <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>,
+ based on the <span class="string">"range"</span> for the analog signal and a bias voltage <span class="string">"Vbias"</span> (see below).
+ The analog input signals may be provided by the (optional) TArray <span class="string">"Vsig"</span>.
+ In case the array <span class="string">"Vsig"</span> is not provided, the stored waveform is used to provide the analog input signals.
+ The resulting (integer) quantized <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> values are returned in a TArrayL64 object,
+ without modification of the original waveform data.
+
+ Note : Make sure to use the same units for <span class="string">"range"</span>, <span class="string">"Vbias"</span> and the analog input signals.
+
+ The number of available quantization levels is given by N=2^|nbits|, of which the lowest
+ level represents the value 0. This yields for the quantized values (adc) the range [0,N-1].
+ The mapping of an analog input voltage (Vin) to one of the quantization levels depends on the
+ specified <span class="string">"range"</span> and <span class="string">"Vbias"</span> and whether we have a linear or Log <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below).
+
+ As outlined below, the range of the analog input voltage can be specified as the Full Scale
+ voltage range (Vfs) corresponding to adc=N-1 or as the Reference voltage (Vref) corresponding to
+ the hypothetical adc=N.
+
+ The Least Significant Bit (LSB) represents the smallest analog input voltage interval
+ that can reliably be resolved. In other words LSB=Voltage(adc=1)-Voltage(adc=0).
+ For a linear <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> we have : LSB=Vfs/(N-1) or equivalently LSB=Vref/N.
+ For a Log_B <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below) we have : LSB=Vref*pow(B,-C)*(pow(B,C/N)-1).
+
+ The formulas for the Vin-&gt;adc mapping with Vin=(Vbias+Vsig) are :
+ Linear <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> : adc=Vin/LSB.
+ Log_B <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below) : adc=(N/C)*Log_B(pow(B,C)*Vin/Vref).
+
+ Which leads to the following relations between Vref and Vfs :
+ Linear <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> : Vref=Vfs+LSB.
+ Log_B <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (see below) : Vfs=Vref*pow(B,-C)*pow(B,(N-1)*C/N).
+
+ The Dynamic Range (DR) is defined as the ratio of the largest and smallest input voltages
+ that can reliably be resolved.
+ Expressed in decibel we have : DR=20*log_10(Vfs/LSB) dB.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ and the publication by Y. Sundarasaradula et al. :
+ <span class="string">"A 6-bit, Two-step, Successive Approximation Logarithmic ADC for Biomedical Applications"</span>
+ which is online available at https://spiral.imperial.ac.uk/bitstream/10044/1/44156/2/2016_ICECS_LogADC_Camera.pdf.
+
+ Input arguments :
+
+ nbits    : Digital quantization of the input values will be performed using nbits.
+ range &gt;0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1.
+       &lt;0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+ Vbias    : The bias voltage that will be added to the analog input signal before digitization.
+ Vsig     : (Optional) array to contain the analog input signals.
+ B     &gt;1 : Base for a Log <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (e.g. B=10 emulates a Log_10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
+       =0 : The <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be linear
+       =1 : The <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be a Log_e <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Note : When B&gt;0 all (Vbias+Vsig) input values should be positive.
+ C        : Code efficiency factor for a Log <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+            So, for a log_10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> with C=3, the smallest signal that can be resolved is about |range|/1000.
+            Note : It is required that C&gt;0.
+
+ Optional output arguments :
+
+ hist  : Histogram with the digitized result
+
+ Notes :
+
+ 1) In case no <span class="string">"Vsig"</span> array is provided and no waveform is present, just the <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> specs will be printed
+    and in the TArrayL64 only the adc value corresponding to Vbias is returned.
+    This allows to quickly investigate various scenarios without any data treatment.
+ 2) Providing a <span class="string">"Vsig"</span> array with different small (random) amplitudes allows to mimic variations of the bias or
+    characteristics of the various switched capacitor array elements for the individual samplings.
+    This resembles a so called <span class="string">"pedestal run"</span> in real life Data Acquisition (DAQ) applications.
+    For a linear <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>, the contents of the returned TArrayL64 can be used afterwards for pedestal subtraction.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ In case of inconsistent input parameters, no digitization is performed and an empty TArrayL64 is returned.
+
+ The default values are Vbias=0, Vsig=0, hist=0, B=0 and C=3.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:DAC" href="src/NcDSP.cxx.html#uy4VWB">DAC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* adcs = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) const</span><br />
+<div class="funccomm"><pre> Processing of a Digital to Analog Converter (<a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>).
+ Reconstruct the analog signals based on the discrete quantized digital data from an <span class="string">"nbits"</span> <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>,
+ based on the <span class="string">"range"</span> for the analog signal and a bias voltage <span class="string">"Vbias"</span> or array <span class="string">"peds"</span> of pedestal values (see below).
+ The digital input signals may be provided by the (optional) TArray <span class="string">"adcs"</span>.
+ In case the array <span class="string">"adcs"</span> is not provided, the stored waveform is used to provide the digital input signals.
+ The resulting analog values are returned in a TArrayD object, without modification of the original waveform data.
+
+ Note : Make sure to use the same units for <span class="string">"range"</span> and <span class="string">"Vbias"</span>.
+
+ The number of digital quantization levels is given by N=2^|nbits|, of which the lowest
+ level represents the value 0. This implies a range [0,N-1] for the various digital adc values.
+ The correspondance of an analog input voltage (Vin) to one of the quantization levels depends on the
+ specified <span class="string">"range"</span> and <span class="string">"Vbias"</span> and whether we have a linear or Log <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below).
+
+ As outlined below, the range of the analog input voltage can be specified as the Full Scale
+ voltage range (Vfs) corresponding to adc=N-1 or as the Reference voltage (Vref) corresponding to
+ the hypothetical adc=N.
+
+ The Least Significant Bit (LSB) represents the smallest analog input voltage interval
+ that can reliably be resolved. In other words LSB=Voltage(adc=1)-Voltage(adc=0).
+ For a linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> we have : LSB=Vfs/(N-1) or equivalently LSB=Vref/N.
+ For a Log_B <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below) we have : LSB=Vref*pow(B,-C)*(pow(B,C/N)-1).
+
+ The formulas for the adc-&gt;Vin mapping with Vin=(Vbias+Vsig) are :
+ Linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> : Vin=adc*LSB.
+ Log_B <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below) : Vin=Vref*pow(B,-C)*pow(B,C*adc/N)
+
+ Which implies the following relations between Vref and Vfs :
+ Linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> : Vref=Vfs+LSB.
+ Log_B <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (see below) : Vfs=Vref*pow(B,-C)*pow(B,C*(N-1)/N).
+
+ The Dynamic Range (DR) is defined as the ratio of the largest and smallest analog voltages
+ that can reliably be resolved.
+ Expressed in decibel we have : DR=20*log_10(Vfs/LSB) dB.
+
+ For details about the procedure, please refer to the excellent textbook :
+ <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
+ which is online available at http://www.dspguide.com/pdfbook.htm
+
+ and the publication by Y. Sundarasaradula et al. :
+ <span class="string">"A 6-bit, Two-step, Successive Approximation Logarithmic ADC for Biomedical Applications"</span>
+ which is online available at https://spiral.imperial.ac.uk/bitstream/10044/1/44156/2/2016_ICECS_LogADC_Camera.pdf.
+
+ Input arguments :
+
+ nbits    : Digitial quantization was performed using an nbits <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+ range &gt;0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1.
+       &lt;0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+ Vbias    : The bias voltage that was added to the analog input signal before digitization.
+            If specified, the resulting analog signals will be corrected for the bias voltage.
+            For a linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the correction via Vbias will only be performed if no pedestal array <span class="string">"peds"</span>
+            is specified (see below). If the array <span class="string">"peds"</span> is specified, Vbias will be ignored for a linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ adcs     : (Optional) array to contain the digital input signals.
+ peds     : (Optional) array to contain the pedestal values for the individual digital input signals.
+            The array <span class="string">"peds"</span> must contain (at least) the same number of values as the number of digital input signals.
+            If the array <span class="string">"peds"</span> is specified, the pedestals will be subtracted from the corresponding digital input signals
+            before the conversion to analog signals is performed in case of a linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ B     &gt;1 : Base for a Log <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> (e.g. B=10 emulates a Log_10 <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>).
+       =0 : The <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> will be linear
+       =1 : The <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> will be a Log_e <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+ C        : Code efficiency factor that was used for a Log <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+            So, for a Log_10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> with C=3, the smallest signal that can be resolved is about |range|/1000.
+            Note : It is required that C&gt;0.
+
+ Optional output arguments :
+
+ hist  : Histogram with the analog result
+
+ Notes :
+
+ 1) In case no <span class="string">"adcs"</span> array is provided and no waveform is present, just the <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> specs will be printed
+    and in the TArrayD only the adc value corresponding to Vbias is returned.
+    This allows to quickly investigate various scenarios without any data treatment.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ In case of inconsistent input parameters, no processing is performed and an empty TArrayD is returned.
+
+ The default values are Vbias=0, adcs=0, peds=0, hist=0, B=0 and C=3.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Transmit" href="src/NcDSP.cxx.html#vRLgkB">Transmit</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* Vsig = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) const</span><br />
+<div class="funccomm"><pre> Mimic signal transmission according to an <span class="string">"nbits"</span> <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> chain.
+ Analog input signals are digitized via the discrete quantization levels of an <span class="string">"nbits"</span> <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>,
+ based on the <span class="string">"range"</span> for the analog signal and a bias voltage <span class="string">"Vbias"</span> or array <span class="string">"peds"</span> of pedestal values (see below).
+ The analog input signals may be provided by the (optional) TArray <span class="string">"Vsig"</span>.
+ In case the array <span class="string">"Vsig"</span> is not provided, the stored waveform is used to provide the analog input signals.
+ After digitization, the digital signals are converted into analog signals via the corresponding <span class="string">"nbits"</span> <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+ In this way the effect of digitization on the original input signals can be investigated, and can provide
+ a guideline in selecting the most suitable <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>-<a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> system for data transmission.
+ The resulting analog values are returned in a TArrayD object, without modification of the original waveform data.
+
+ Note : Make sure to use the same units for <span class="string">"range"</span>, <span class="string">"Vbias"</span> and the analog input signals.
+
+ For further details, please refer to the documentation of the memberfunctions <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>() and <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>().
+
+ Input arguments :
+
+ nbits    : Digital quantization was performed using an nbits <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+ range &gt;0 : The full scale voltage range (Vfs) of the analog signal that corresponds to adc=N-1.
+       &lt;0 : |range| is the reference voltage (Vref) of the analog signal that corresponds to the hypothetical adc=N.
+ Vbias    : The bias voltage that was added to the analog input signal before digitization.
+            If specified, the resulting analog signals will be corrected for the bias voltage.
+            For a linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the correction via Vbias will only be performed if no pedestal array <span class="string">"peds"</span>
+            is specified (see below). If the array <span class="string">"peds"</span> is specified, Vbias will be ignored for a linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ Vsig     : (Optional) array to contain the digital input signals.
+ peds     : (Optional) array to contain the pedestal values for the individual digital signals.
+            The array <span class="string">"peds"</span> must contain (at least) the same number of values as the number of analog input signals.
+            If the array <span class="string">"peds"</span> is specified, the pedestals will be subtracted from the corresponding digital signals
+            before the conversion to analog signals is performed in case of a linear <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>.
+            For a Log <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> the pedestal values will never be used and bias correction may only be obtained via Vbias.
+ B     &gt;1 : Base for a log <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> (e.g. B=10 emulates a Log_10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>).
+       =0 : The <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be linear
+       =1 : The <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> will be a Log_e <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Note : When B&gt;0 all (Vbias+Vsig) input values should be positive.
+ C        : Code efficiency factor that was used for a Log <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.
+            Rule of thumb : pow(B,-C) is about the smallest signal/|range| ratio that can be resolved.
+            So, for a Log_10 <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> with C=3, the smallest signal that can be resolved is about |range|/1000.
+            Note : It is required that C&gt;0.
+
+ Optional output arguments :
+
+ hist  : Histogram with the analog result
+
+ Note :
+
+ In case no <span class="string">"Vsig"</span> array is provided and no waveform is present, just the <a href="./NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a> and <a href="./NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a> specs will be printed
+ and in the TArrayD only the adc value corresponding to Vbias is returned.
+ This allows to quickly investigate various scenarios without any data treatment.
+
+ The maximum number of bits that is supported is 60 to guarantee identical functioning
+ on all machines.
+
+ In case of inconsistent input parameters, no processing is performed and an empty TArrayD is returned.
+
+ The default values are Vbias=0, Vsig=0, peds=0, hist=0, B=0 and C=3.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:SampleAndHold" href="src/NcDSP.cxx.html#mevJG">SampleAndHold</a>(TF1 f, <a href="./ListOfTypes.html#Double_t">Double_t</a> step, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmin, <a href="./ListOfTypes.html#Double_t">Double_t</a> vmax, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> loc = -1) const</span><br />
@@ -1895,7 +2133,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Feb 20 14:33:11 2023 </em><em>&raquo; Last generated: 2023-02-20 14:33</em><br />
+<em>&raquo; Last changed: Sun May 14 13:55:57 2023 </em><em>&raquo; Last generated: 2023-05-14 13:55</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
