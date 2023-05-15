@@ -273,7 +273,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 14, 2023  13:35Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 15, 2023  09:26Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDSP.h"
@@ -2579,22 +2579,24 @@ TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TH1*
 
  Double_t DR=20.*log10(Vfs/LSB);
 
+ TString mode="linear";
+ if (B==1) mode="Log_e";
+ if (B>1)
+ {
+  mode="Log_";
+  mode+=B;
+ }
+
  if (!nVsig)
  {
   printf(" *%-s::ADC* No input data have been provided --> Only the value of adc(Vbias) is returned. \n",ClassName());
   if (!B)
   {
-   printf(" Parameters for a linear %-i-bits ADC with adc=[%-lli,%-lli] : \n",nbits,adcmin,adcmax);
+   printf(" Parameters for a %-i-bits %-s ADC with adc=[%-lli,%-lli] : \n",nbits,mode.Data(),adcmin,adcmax);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
   else
   {
-   TString mode="Log_e";
-   if (B>1)
-   {
-    mode="Log_";
-    mode+=B;
-   }
    printf(" Parameters for a %-i-bits %-s ADC with adc=[%-lli,%-lli] and a code efficiency factor of %-i: \n",nbits,mode.Data(),adcmin,adcmax,C);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
@@ -2611,11 +2613,11 @@ TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TH1*
   if (fSample>0)
   {
    hist->SetBins(nVsig,0,double(nVsig)/fSample);
-   title.Form("%-s ADC result (%-g samples/sec);Time in seconds;ADC counts",ClassName(),fSample);
+   title.Form("%-s %-i-bits %-s ADC with Vfs=%-g LSB=%-g (%-g samples/sec);Time in seconds;ADC counts",ClassName(),nbits,mode.Data(),Vfs,LSB,fSample);
   }
   else
   {
-   title.Form("%-s ADC result;Sample number;ADC counts",ClassName());
+   title.Form("%-s %-i-bits %-s ADC with Vfs=%-g LSB=%-g;Sample number;ADC counts",ClassName(),nbits,mode.Data(),Vfs,LSB);
    hist->SetBins(nVsig,0,nVsig);
   }
   hist->SetMarkerStyle(20);
@@ -2808,22 +2810,24 @@ TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TArray
 
  Double_t DR=20.*log10(Vfs/LSB);
 
+ TString mode="linear";
+ if (B==1) mode="Log_e";
+ if (B>1)
+ {
+  mode="Log_";
+  mode+=B;
+ }
+
  if (!nadcs)
  {
   printf(" *%-s::DAC* No input data have been provided --> Only the value of adc(Vbias) is returned. \n",ClassName());
   if (!B)
   {
-   printf(" Parameters for a linear %-i-bits DAC with adc=[%-lli,%-lli] : \n",nbits,adcmin,adcmax);
+   printf(" Parameters for a %-i-bits %-s DAC with adc=[%-lli,%-lli] : \n",nbits,mode.Data(),adcmin,adcmax);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
   else
   {
-   TString mode="Log_e";
-   if (B>1)
-   {
-    mode="Log_";
-    mode+=B;
-   }
    printf(" Parameters for a %-i-bits %-s DAC with adc=[%-lli,%-lli] and a code efficiency factor of %-i: \n",nbits,mode.Data(),adcmin,adcmax,C);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
@@ -2840,11 +2844,11 @@ TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TArray
   if (fSample>0)
   {
    hist->SetBins(nadcs,0,double(nadcs)/fSample);
-   title.Form("%-s DAC result (%-g samples/sec);Time in seconds;Amplitude",ClassName(),fSample);
+   title.Form("%-s %-i-bits %-s DAC with Vfs=%-g LSB=%-g (%-g samples/sec);Time in seconds;Amplitude",ClassName(),nbits,mode.Data(),Vfs,LSB,fSample);
   }
   else
   {
-   title.Form("%-s DAC result;Sample number;Amplitude",ClassName());
+   title.Form("%-s %-i-bits %-s DAC with Vfs=%-g LSB=%-g;Sample number;Amplitude",ClassName(),nbits,mode.Data(),Vfs,LSB);
    hist->SetBins(nadcs,0,nadcs);
   }
   hist->SetMarkerStyle(20);
@@ -2969,7 +2973,7 @@ TArrayD NcDSP::Transmit(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,T
  if (hist)
  {
   TString title=hist->GetTitle();
-  title.ReplaceAll("DAC","Transmit (ADC-DAC)");
+  title.ReplaceAll("DAC","ADC-DAC (Transmit)");
   hist->SetTitle(title);
  }
 

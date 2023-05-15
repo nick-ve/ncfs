@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 14, 2023  13:38Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 15, 2023  09:27Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -4613,22 +4613,24 @@ TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,T
 
  Double_t DR=20.*log10(Vfs/LSB);
 
+ TString mode="linear";
+ if (B==1) mode="Log_e";
+ if (B>1)
+ {
+  mode="Log_";
+  mode+=B;
+ }
+
  if (!nVsig)
  {
   printf(" *%-s::ADC* No input data have been provided --> Only the value of adc(Vbias) is returned. \n",ClassName());
   if (!B)
   {
-   printf(" Parameters for a linear %-i-bits ADC with adc=[%-lli,%-lli] : \n",nbits,adcmin,adcmax);
+   printf(" Parameters for a %-i-bits %-s ADC with adc=[%-lli,%-lli] : \n",nbits,mode.Data(),adcmin,adcmax);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
   else
   {
-   TString mode="Log_e";
-   if (B>1)
-   {
-    mode="Log_";
-    mode+=B;
-   }
    printf(" Parameters for a %-i-bits %-s ADC with adc=[%-lli,%-lli] and a code efficiency factor of %-i: \n",nbits,mode.Data(),adcmin,adcmax,C);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
@@ -4642,7 +4644,7 @@ TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,T
  if (hist)
  {
   TString title;
-  title.Form("NcSample ADC result;Sample number;ADC counts");
+  title.Form("%-s %-i-bits %-s ADC with Vfs=%-g LSB=%-g;Sample number;ADC counts",ClassName(),nbits,mode.Data(),Vfs,LSB);
   hist->SetBins(nVsig,0,nVsig);
   hist->SetMarkerStyle(20);
   hist->SetTitle(title);
@@ -4831,22 +4833,24 @@ TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TAr
 
  Double_t DR=20.*log10(Vfs/LSB);
 
+ TString mode="linear";
+ if (B==1) mode="Log_e";
+ if (B>1)
+ {
+  mode="Log_";
+  mode+=B;
+ }
+
  if (!nadcs)
  {
   printf(" *%-s::DAC* No input data have been provided --> Only the value of adc(Vbias) is returned. \n",ClassName());
   if (!B)
   {
-   printf(" Parameters for a linear %-i-bits DAC with adc=[%-lli,%-lli] : \n",nbits,adcmin,adcmax);
+   printf(" Parameters for a %-i-bits %-s DAC with adc=[%-lli,%-lli] : \n",nbits,mode.Data(),adcmin,adcmax);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
   else
   {
-   TString mode="Log_e";
-   if (B>1)
-   {
-    mode="Log_";
-    mode+=B;
-   }
    printf(" Parameters for a %-i-bits %-s DAC with adc=[%-lli,%-lli] and a code efficiency factor of %-i: \n",nbits,mode.Data(),adcmin,adcmax,C);
    printf(" Vref=%-g Vfs=%-g LSB=%-g DR=%-g (dB) Vbias=%-g adc(Vbias)=%-lli \n",Vref,Vfs,LSB,DR,Vbias,ped);
   }
@@ -4860,7 +4864,7 @@ TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TAr
  if (hist)
  {
   TString title;
-  title.Form("%-s DAC result;Sample number;Amplitude",ClassName());
+  title.Form("%-s %-i-bits %-s DAC with Vfs=%-g LSB=%-g;Sample number;Amplitude",ClassName(),nbits,mode.Data(),Vfs,LSB);
   hist->SetBins(nadcs,0,nadcs);
   hist->SetMarkerStyle(20);
   hist->SetTitle(title);
@@ -5031,7 +5035,7 @@ Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias,TA
  if (hist)
  {
   TString title=hist->GetTitle();
-  title.ReplaceAll("DAC","Transmit (ADC-DAC)");
+  title.ReplaceAll("DAC","ADC-DAC (Transmit)");
   hist->SetTitle(title);
  }
 

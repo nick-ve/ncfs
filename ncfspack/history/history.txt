@@ -1434,3 +1434,5 @@
 14-may-2023 NvE New member functions ADC(), DAC() and Transmit() introduced in classes NcDSP and NcSample.
                 The new member functions Transmit() replace the now obsolete member functions Digitize().
                 The version indicator in NcVersion has been updated to 5.34.
+15-may-2023 NvE Cosmetics mods : Specs added to the histogram title for the memberfunctions
+                ADC(), DAC() and Transmit() of classes NcDSP and NcSample.
