@@ -45,7 +45,7 @@
 //        will not be taken into account for the monitoring.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 8, 2023  08:57Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 17, 2023  08:37Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoMonitor.h"
@@ -741,7 +741,9 @@ void RnoMonitor::WriteHistograms(TString filename)
     if (var>=0) s=sqrt(var);
 
     hx->SetBinContent(ibin,cval);
-    hx->SetBinError(ibin,s);
+    // Set the error on the mean according to a Student's t distribution
+    // (i.e. assuming an underlying Gaussian with unknown sigma)
+    hx->SetBinError(ibin,s/sqrt(nk)); 
    }
    hx->SetEntries(nen);
   }
