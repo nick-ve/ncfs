@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Mar  2 17:44:38 2020            -->
+<!--   Date: Mon Jul 17 23:23:02 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -21,10 +21,8 @@
 <div id="codeAndLineNumbers"><pre class="listing">
 <span class="cpp">#ifndef Nc3Vector_h</span>
 <span class="cpp">#define Nc3Vector_h</span>
-<span class="comment">// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.</span>
+<span class="comment">// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.</span>
 <span class="comment">// See cxx source for full Copyright notice.</span>
-
-<span class="comment">// $Id: <a href="../Nc3Vector.html">Nc3Vector</a>.h 5 2010-03-19 10:10:02Z nickve $</span>
 
 <span class="cpp">#include &lt;math.h&gt;</span>
  
@@ -73,13 +71,15 @@
   <a href="../Nc3Vector.html">Nc3Vector</a> <a href="../Nc3Vector.html#Nc3Vector:GetUnprimed" title="Nc3Vector Nc3Vector::GetUnprimed(TRotMatrix* m)">GetUnprimed</a>(TRotMatrix* m) <span class="keyword">const</span>;   <span class="comment">// Provide original vector components from a rotated one</span>
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../Nc3Vector.html#Nc3Vector:GetX" title="Double_t Nc3Vector::GetX(Int_t i,TString f,TString u=&quot;rad&quot;)">GetX</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> i,TString f,TString u=<span class="string">"rad"</span>); <span class="comment">// Provide i-th vector component in frame f in units u</span>
   <span class="keyword">virtual</span> <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../Nc3Vector.html#Nc3Vector:GetOpeningAngle" title="Double_t Nc3Vector::GetOpeningAngle(Nc3Vector&amp; q,TString u=&quot;rad&quot;)">GetOpeningAngle</a>(<a href="../Nc3Vector.html">Nc3Vector</a>&amp; q,TString u=<span class="string">"rad"</span>); <span class="comment">// Provide opening angle with q in units u</span>
+  <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../Nc3Vector.html#Nc3Vector:ConvertAngle" title="Double_t Nc3Vector::ConvertAngle(Double_t a,TString in,TString out)">ConvertAngle</a>(<a href="../ListOfTypes.html#Double_t">Double_t</a> a,TString in,TString out) <span class="keyword">const</span>; <span class="comment">// Angular format conversions</span>
+  <span class="keyword">void</span> <a href="../Nc3Vector.html#Nc3Vector:PrintAngle" title="void Nc3Vector::PrintAngle(Double_t a,TString in,TString out,Int_t ndig=1,Bool_t align=kFALSE)">PrintAngle</a>(<a href="../ListOfTypes.html#Double_t">Double_t</a> a,TString in,TString out,<a href="../ListOfTypes.html#Int_t">Int_t</a> ndig=1,<a href="../ListOfTypes.html#Bool_t">Bool_t</a> align=<a href="../ListOfTypes.html#Bool_t">kFALSE</a>) <span class="keyword">const</span>;<span class="comment">// Print angle in various formats</span>
 
  <span class="keyword">protected</span>:
   <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../Nc3Vector.html#Nc3Vector:fNv" title="Int_t Nc3Vector::fNv">fNv</a>;           <span class="comment">// The number of components of the array <a href="../Nc3Vector.html#Nc3Vector:fV" title="Double32_t* Nc3Vector::fV">fV</a></span>
   <a href="../ListOfTypes.html#Double32_t">Double32_t</a>* <a href="../Nc3Vector.html#Nc3Vector:fV" title="Double32_t* Nc3Vector::fV">fV</a>;      <span class="comment">//[<a href="../Nc3Vector.html#Nc3Vector:fNv" title="Int_t Nc3Vector::fNv">fNv</a>] Vector in spherical (and errors in Cartesian) coordinates</span>
   <a href="../ListOfTypes.html#Double32_t">Double32_t</a> <a href="../Nc3Vector.html#Nc3Vector:fDresult" title="Double32_t Nc3Vector::fDresult">fDresult</a>; <span class="comment">//! Error on scalar result (e.g. norm or dotproduct)</span>
 
- ClassDef(<a href="../Nc3Vector.html">Nc3Vector</a>,1) <span class="comment">// Handling of 3-vectors in various reference frames.</span>
+ ClassDef(<a href="../Nc3Vector.html">Nc3Vector</a>,2) <span class="comment">// Handling of 3-vectors in various reference frames.</span>
 };
 <span class="cpp">#endif</span>
 </pre>
@@ -90,7 +90,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2020-03-02 17:44 </em><em>&raquo; Last generated: 2020-03-02 17:44</em><br />
+<em>&raquo; Last changed: 2023-07-17 23:23 </em><em>&raquo; Last generated: 2023-07-17 23:23</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

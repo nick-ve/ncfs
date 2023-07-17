@@ -1440,3 +1440,12 @@
                 WriteHistograms() of class RnoMonitor.
                 This reflects the error on the mean of multiple samplings of an underlying Gaussian
                 with unkown sigma, and is obtained via a Student's t distribution.
+16-jul-2023 NvE Memberfunctions ConvertAngle() and PrintAngle() added to Nc3Vector to allow printout
+                of various data formats in Nc3Vector::Data() and derived classes.
+                The memberfunction Nc3Vector::Data() has been adopted for this.
+17-jul-2023 NvE Memberfunction SkyMapPanel() introduced in NcAstrolab to serve as a Graphical User Interface (GUI).
+                Also the functionality of NcAstrolab was extended, and NcEventSelector.cxx was slightly
+                modified to cope with the non-default parameters of NcAstrolab::SetSignal().
+                Also several #include statements introduced in makedocs.cc in order to resolve various
+                GUI header files that were contained in them in a combined fashion.
+                The version indicator in NcVersion has been updated to 5.35.

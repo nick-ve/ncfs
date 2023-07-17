@@ -17,9 +17,14 @@
 //        this macro.
 //
 //--- Author: Nick van Eijndhoven 20-oct-2005 NCFS
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  17:56Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 17, 2023  23:37Z
 ////////////////////////////////////////////////////////////////////////
 {
+ // Includes needed in view of combined GUI headers in a single file
+ #include "TGClient.h"
+ #include "TGFrame.h"
+ #include "TGButton.h"
+
  gSystem->Load("ncfspack");
  gSystem->Load("icepack");
  gSystem->Load("iceconvert");

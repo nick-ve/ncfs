@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -92,7 +92,7 @@
 // c=a*5;
 //
 //--- Author: Nick van Eijndhoven 30-mar-1999 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 26, 2020  15:26
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 16, 2023  02:29Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Nc3Vector.h"
@@ -728,14 +728,21 @@ void Nc3Vector::Data(TString f,TString u) const
 {
 // Print vector components according to reference frame f
 //
+// f = "car" : Cartesian coordinates
+//     "sph" : Spherical coordinates
+//     "cyl" : Cylindrical coordinates
+//
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
-// u = "rad" : angles provided in radians
-//     "deg" : angles provided in degrees
+//
+// u = "rad" : angle provided in radians
+//     "deg" : angle provided in degrees
+//     "dms" : angle provided in dddmmss.sss
+//     "hms" : angle provided in hhmmss.sss
 //
 // The defaults are f="car" and  u="rad".
 
- if (f=="car" || f=="sph" || f=="cyl")
+ if ((f=="car" || f=="sph" || f=="cyl") && (u=="rad" || u=="deg" || u=="dms"|| u=="hms"))
  {
   if (!fNv)
   {
@@ -744,22 +751,49 @@ void Nc3Vector::Data(TString f,TString u) const
   else
   {
    Double_t vec[3];
-   GetVector(vec,f,u);
-   cout << " Vector in " << f.Data() << " (" << u.Data() << ") coordinates : "
-        << vec[0] << " " << vec[1] << " " << vec[2] << endl;
+   GetVector(vec,f,"deg");
+   if (f=="car")
+   {
+    printf(" Vector in %-s coordinates : %.3e %.3e %.3e \n",f.Data(),vec[0],vec[1],vec[2]);
+   }
+   if (f=="sph")
+   {
+    printf(" Vector in %-s coordinates : %.3e ",f.Data(),vec[0]);
+    PrintAngle(vec[1],"deg",u,3,kTRUE); printf(" ");
+    PrintAngle(vec[2],"deg",u,3,kTRUE); printf("\n");
+   }
+   if (f=="cyl")
+   {
+    printf(" Vector in %-s coordinates : %.3e ",f.Data(),vec[0]);
+    PrintAngle(vec[1],"deg",u,3,kTRUE); printf(" ");
+    printf(" %.3e \n",vec[2]);
+   }
   }
   if (fNv==6)
   {
    Double_t err[3];
-   GetErrors(err,f,u);
-   cout << "   Err. in " << f.Data() << " (" << u.Data() << ") coordinates : "
-        << err[0] << " " << err[1] << " " << err[2] << endl; 
+   GetErrors(err,f,"deg");
+   if (f=="car")
+   {
+    printf("   Err. in %-s coordinates : %.3e %.3e %.3e \n",f.Data(),err[0],err[1],err[2]);
+   }
+   if (f=="sph")
+   {
+    printf("   Err. in %-s coordinates : %.3e ",f.Data(),err[0]);
+    PrintAngle(err[1],"deg",u,3,kTRUE); printf(" ");
+    PrintAngle(err[2],"deg",u,3,kTRUE); printf("\n");
+   }
+   if (f=="cyl")
+   {
+    printf("   Err. in %-s coordinates : %.3e ",f.Data(),err[0]);
+    PrintAngle(err[1],"deg",u,3,kTRUE); printf(" ");
+    printf(" %.3e \n",err[2]);
+   }
   }
  }
  else
  {
-  cout << " *Nc3Vector::Data* Unsupported frame : " << f.Data() << endl
-       << "  Possible frames are 'car', 'sph' and 'cyl'." << endl; 
+  printf(" *Nc3Vector::Data* Unsupported input frame=%-s format=%-s \n",f.Data(),u.Data());
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1411,5 +1445,275 @@ Double_t Nc3Vector::GetOpeningAngle(Nc3Vector& q,TString u)
  }
 
  return ang;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t Nc3Vector::ConvertAngle(Double_t a,TString in,TString out) const
+{
+// Conversion of various angular formats.
+//
+// The input argument "a" denotes the angle to be converted. 
+// The string arguments "in" and "out" specify the angular I/O formats.
+//
+// in = "rad" : input angle provided in radians
+//      "deg" : input angle provided in degrees
+//      "dms" : input angle provided in dddmmss.sss
+//      "hms" : input angle provided in hhmmss.sss
+//      "hrs" : input angle provided in fractional hours
+//
+// out = "rad" : output angle provided in radians
+//       "deg" : output angle provided in degrees
+//       "dms" : output angle provided in dddmmss.sss
+//       "hms" : output angle provided in hhmmss.sss
+//       "hrs" : output angle provided in fractional hours
+ 
+ if (in==out) return a;
+
+ // Convert input to its absolute value in (fractional) degrees. 
+ Double_t pi=acos(-1.);
+ Double_t epsilon=1.e-12; // Accuracy in (arc)seconds
+ Int_t word=0,ddd=0,hh=0,mm=0,ss=0;
+ Double_t s=0;
+
+ Double_t b=fabs(a);
+
+ if (in=="rad") b*=180./pi;
+
+ if (in=="hrs") b*=15.;
+
+ if (in=="dms")
+ {
+  word=Int_t(b);
+  ddd=word/10000;
+  word=word%10000;
+  mm=word/100;
+  ss=word%100;
+  s=b-Double_t(ddd*10000+mm*100+ss);
+  b=Double_t(ddd)+Double_t(mm)/60.+(Double_t(ss)+s)/3600.;
+ }
+
+ if (in=="hms")
+ {
+  word=Int_t(b);
+  hh=word/10000;
+  word=word%10000;
+  mm=word/100;
+  ss=word%100;
+  s=b-Double_t(hh*10000+mm*100+ss);
+  b=15.*(Double_t(hh)+Double_t(mm)/60.+(Double_t(ss)+s)/3600.);
+ }
+
+ while (b>360)
+ {
+  b-=360.;
+ }
+
+ if (out=="rad") b*=pi/180.;
+
+ if (out=="hrs") b/=15.;
+
+ if (out=="dms")
+ {
+  ddd=Int_t(b);
+  b=b-Double_t(ddd);
+  b*=60.;
+  mm=Int_t(b);
+  b=b-Double_t(mm);
+  b*=60.;
+  ss=Int_t(b);
+  s=b-Double_t(ss);
+  if (s>(1.-epsilon))
+  {
+   s=0.;
+   ss++;
+  }
+  while (ss>=60)
+  {
+   ss-=60;
+   mm++;
+  }
+  while (mm>=60)
+  {
+   mm-=60;
+   ddd++;
+  }
+  while (ddd>=360)
+  {
+   ddd-=360;
+  }
+  b=Double_t(10000*ddd+100*mm+ss)+s;
+ }
+
+ if (out=="hms")
+ {
+  b/=15.;
+  hh=Int_t(b);
+  b=b-Double_t(hh);
+  b*=60.;
+  mm=Int_t(b);
+  b=b-Double_t(mm);
+  b*=60.;
+  ss=Int_t(b);
+  s=b-Double_t(ss);
+  if (s>(1.-epsilon))
+  {
+   s=0.;
+   ss++;
+  }
+  while (ss>=60)
+  {
+   ss-=60;
+   mm++;
+  }
+  while (mm>=60)
+  {
+   mm-=60;
+   hh++;
+  }
+  while (hh>=24)
+  {
+   hh-=24;
+  }
+  b=Double_t(10000*hh+100*mm+ss)+s;
+ }
+
+ if (a<0) b=-b;
+
+ return b;
+}
+///////////////////////////////////////////////////////////////////////////
+void Nc3Vector::PrintAngle(Double_t a,TString in,TString out,Int_t ndig,Bool_t align) const
+{
+// Printing of angles in various formats.
+//
+// The input argument "a" denotes the angle to be printed. 
+// The string arguments "in" and "out" specify the angular I/O formats.
+//
+// in = "rad" : input angle provided in radians
+//      "deg" : input angle provided in degrees
+//      "dms" : input angle provided in dddmmss.sss
+//      "hms" : input angle provided in hhmmss.sss
+//
+// out = "rad" : output angle provided in radians
+//       "deg" : output angle provided in degrees
+//       "dms" : output angle provided in dddmmss.sss
+//       "hms" : output angle provided in hhmmss.sss
+//
+// The argument "ndig" specifies the number of digits for the fractional
+// part (e.g. ndig=6 for "dms" corresponds to micro-arcsecond precision).
+// Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+// will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
+// Due to computer accuracy, precision on the pico-arcsecond level may get lost.
+//
+// The argument "align", when set to kTRUE, ensures that for a certain selected
+// output format, all provided output strings will have the same length.
+// This will allow the user to provide data in an aligned tabular format.
+// When "align" is set to kFALSE, the produced output will be in the most
+// compact format.
+//
+// The defaults are ndig=1 and align=kFALSE.
+//
+// Note : The angle info is printed without additional spaces or "endline".
+//        This allows the print to be included in various composite output formats.
+
+ Double_t b=ConvertAngle(a,in,out);
+
+ if (out=="deg" || out=="rad")
+ {
+  if (align)
+  {
+   printf("%*.*f %-s",5+ndig,ndig,b,out.Data());
+  }
+  else
+  {
+   printf("%-.*f %-s",ndig,b,out.Data());
+  }
+  return; 
+ }
+
+ Double_t epsilon=1.e-12; // Accuracy in (arc)seconds
+ Int_t word=0,ddd=0,hh=0,mm=0,ss=0;
+ Double_t s;
+
+ if (out=="dms")
+ {
+  word=Int_t(b);
+  word=abs(word);
+  ddd=word/10000;
+  word=word%10000;
+  mm=word/100;
+  ss=word%100;
+  s=fabs(b)-Double_t(ddd*10000+mm*100+ss);
+  if (s>(1.-epsilon))
+  {
+   s=0.;
+   ss++;
+  }
+  while (ss>=60)
+  {
+   ss-=60;
+   mm++;
+  }
+  while (mm>=60)
+  {
+   mm-=60;
+   ddd++;
+  }
+  while (ddd>=360)
+  {
+   ddd-=360;
+  }
+  if (b<0) ddd=-ddd;
+  s+=double(ss);
+  if (align)
+  {
+   printf("%4dd %02d' %0*.*f\"",ddd,mm,3+ndig,ndig,s);
+  }
+  else
+  {
+   printf("%-dd %-d' %-.*f\"",ddd,mm,ndig,s);
+  }
+  return;
+ }
+
+ if (out=="hms")
+ {
+  word=Int_t(b);
+  word=abs(word);
+  hh=word/10000;
+  word=word%10000;
+  mm=word/100;
+  ss=word%100;
+  s=fabs(b)-Double_t(hh*10000+mm*100+ss);
+  if (s>(1.-epsilon))
+  {
+   s=0.;
+   ss++;
+  }
+  while (ss>=60)
+  {
+   ss-=60;
+   mm++;
+  }
+  while (mm>=60)
+  {
+   mm-=60;
+   hh++;
+  }
+  while (hh>=24)
+  {
+   hh-=24;
+  }
+  if (b<0) hh=-hh;
+  s+=double(ss);
+  if (align)
+  {
+   printf("%3dh %02dm %0*.*fs",hh,mm,3+ndig,ndig,s);
+  }
+  else
+  {
+   printf("%-dh %-dm %-.*fs",hh,mm,ndig,s);
+  }
+  return;
+ }
 }
 ///////////////////////////////////////////////////////////////////////////

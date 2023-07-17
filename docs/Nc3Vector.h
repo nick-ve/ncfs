@@ -1,9 +1,7 @@
 #ifndef Nc3Vector_h
 #define Nc3Vector_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: Nc3Vector.h 5 2010-03-19 10:10:02Z nickve $
 
 #include <math.h>
  
@@ -52,12 +50,14 @@ class Nc3Vector
   Nc3Vector GetUnprimed(TRotMatrix* m) const;   // Provide original vector components from a rotated one
   Double_t GetX(Int_t i,TString f,TString u="rad"); // Provide i-th vector component in frame f in units u
   virtual Double_t GetOpeningAngle(Nc3Vector& q,TString u="rad"); // Provide opening angle with q in units u
+  Double_t ConvertAngle(Double_t a,TString in,TString out) const; // Angular format conversions
+  void PrintAngle(Double_t a,TString in,TString out,Int_t ndig=1,Bool_t align=kFALSE) const;// Print angle in various formats
 
  protected:
   Int_t fNv;           // The number of components of the array fV
   Double32_t* fV;      //[fNv] Vector in spherical (and errors in Cartesian) coordinates
   Double32_t fDresult; //! Error on scalar result (e.g. norm or dotproduct)
 
- ClassDef(Nc3Vector,1) // Handling of 3-vectors in various reference frames.
+ ClassDef(Nc3Vector,2) // Handling of 3-vectors in various reference frames.
 };
 #endif

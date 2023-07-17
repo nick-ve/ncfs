@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Mar  2 17:44:38 2020            -->
+<!--   Date: Mon Jul 17 23:23:02 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -123,7 +123,7 @@ return false;}
  c=a*5;
 
 --- Author: Nick van Eijndhoven 30-mar-1999 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 26, 2020  15:26
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 16, 2023  02:29Z
 
 </pre></div>
 </div></div>
@@ -136,6 +136,7 @@ return false;}
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Nc3Vector@1">Nc3Vector</a>(<span class="keyword">const</span> <a href="./Nc3Vector.html">Nc3Vector</a>&amp; v)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#Nc3Vector:_Nc3Vector">~Nc3Vector</a>()</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#Nc3Vector:Class">Class</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:ConvertAngle">ConvertAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Cross">Cross</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Data">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:Dot">Dot</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
@@ -165,6 +166,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a></td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator/">operator/</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator/_">operator/=</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
 <tr class="func"><td class="funcret"><a href="./Nc3Vector.html">Nc3Vector</a>&amp;</td><td class="funcname"><a class="funcname" href="#Nc3Vector:operator_">operator=</a>(<span class="keyword">const</span> <a href="./Nc3Vector.html">Nc3Vector</a>&amp; q)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:PrintAngle">PrintAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetErrors">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetErrors@2">SetErrors</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* e, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#Nc3Vector:SetErrors@1">SetErrors</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e1, <a href="./ListOfTypes.html#Double_t">Double_t</a> e2, <a href="./ListOfTypes.html#Double_t">Double_t</a> e3, TString f, TString u = <span class="string">"rad"</span>)</td></tr>
@@ -408,10 +410,17 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:Data" href="src/Nc3Vector.cxx.html#fCq9WE">Data</a>(TString f = <span class="string">"car"</span>, TString u = <span class="string">"rad"</span>) const</span><br />
 <div class="funccomm"><pre> Print vector components according to reference frame f
 
+ f = <span class="string">"car"</span> : Cartesian coordinates
+     <span class="string">"sph"</span> : Spherical coordinates
+     <span class="string">"cyl"</span> : Cylindrical coordinates
+
  The string argument <span class="string">"u"</span> allows to choose between different angular units
  in case e.g. a spherical frame is selected.
- u = <span class="string">"rad"</span> : angles provided in radians
-     <span class="string">"deg"</span> : angles provided in degrees
+
+ u = <span class="string">"rad"</span> : angle provided in radians
+     <span class="string">"deg"</span> : angle provided in degrees
+     <span class="string">"dms"</span> : angle provided in dddmmss.sss
+     <span class="string">"hms"</span> : angle provided in hhmmss.sss
 
  The defaults are f=<span class="string">"car"</span> and  u=<span class="string">"rad"</span>.
 </pre></div>
@@ -544,12 +553,65 @@ return false;}
  The default is u=<span class="string">"rad"</span>.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="Nc3Vector:ConvertAngle" href="src/Nc3Vector.cxx.html#pBFXiC">ConvertAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out) const</span><br />
+<div class="funccomm"><pre> Conversion of various angular formats.
+
+ The input argument <span class="string">"a"</span> denotes the angle to be converted.
+ The string arguments <span class="string">"in"</span> and <span class="string">"out"</span> specify the angular I/O formats.
+
+ in = <span class="string">"rad"</span> : input angle provided in radians
+      <span class="string">"deg"</span> : input angle provided in degrees
+      <span class="string">"dms"</span> : input angle provided in dddmmss.sss
+      <span class="string">"hms"</span> : input angle provided in hhmmss.sss
+      <span class="string">"hrs"</span> : input angle provided in fractional hours
+
+ out = <span class="string">"rad"</span> : output angle provided in radians
+       <span class="string">"deg"</span> : output angle provided in degrees
+       <span class="string">"dms"</span> : output angle provided in dddmmss.sss
+       <span class="string">"hms"</span> : output angle provided in hhmmss.sss
+       <span class="string">"hrs"</span> : output angle provided in fractional hours
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="Nc3Vector:PrintAngle" href="src/Nc3Vector.cxx.html#LNENPC">PrintAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> align = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>) const</span><br />
+<div class="funccomm"><pre> Printing of angles in various formats.
+
+ The input argument <span class="string">"a"</span> denotes the angle to be printed.
+ The string arguments <span class="string">"in"</span> and <span class="string">"out"</span> specify the angular I/O formats.
+
+ in = <span class="string">"rad"</span> : input angle provided in radians
+      <span class="string">"deg"</span> : input angle provided in degrees
+      <span class="string">"dms"</span> : input angle provided in dddmmss.sss
+      <span class="string">"hms"</span> : input angle provided in hhmmss.sss
+
+ out = <span class="string">"rad"</span> : output angle provided in radians
+       <span class="string">"deg"</span> : output angle provided in degrees
+       <span class="string">"dms"</span> : output angle provided in dddmmss.sss
+       <span class="string">"hms"</span> : output angle provided in hhmmss.sss
+
+ The argument <span class="string">"ndig"</span> specifies the number of digits for the fractional
+ part (e.g. ndig=6 for <span class="string">"dms"</span> corresponds to micro-arcsecond precision).
+ Rounding will be performed, so an arcsecond count of 3.473 with ndig=1
+ will appear as 03.5 on the output, but with ndig=2 it will show 03.47.
+ Due to computer accuracy, precision on the pico-arcsecond level may get lost.
+
+ The argument <span class="string">"align"</span>, when set to <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, ensures that for a certain selected
+ output format, all provided output strings will have the same length.
+ This will allow the user to provide data in an aligned tabular format.
+ When <span class="string">"align"</span> is set to <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, the produced output will be in the most
+ compact format.
+
+ The defaults are ndig=1 and align=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>.
+
+ Note : The angle info is printed without additional spaces or <span class="string">"endline"</span>.
+        This allows the print to be included in various composite output formats.
+</pre></div>
+</div>
 
 <br />
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Mar  2 17:44:38 2020 </em><em>&raquo; Last generated: 2020-03-02 17:44</em><br />
+<em>&raquo; Last changed: Mon Jul 17 23:23:02 2023 </em><em>&raquo; Last generated: 2023-07-17 23:23</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Mar 27 13:47:33 2023            -->
+<!--   Date: Mon Jul 17 23:33:01 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -69,17 +69,27 @@ return false;}
  So, this <a href="./NcAstrolab.html">NcAstrolab</a> class itself does not provide any <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>
  related functionality.
 
- The lab can be given a terrestrial location via the usual longitude
- and latitude specifications.
+ The lab can be given a terrestrial location via <a href="./NcAstrolab.html#NcAstrolab:SetLabPosition" title="void NcAstrolab::SetLabPosition(Nc3Vector&amp; r) or overloads">SetLabPosition</a>()
+ using the usual longitude and latitude specifications.
  Since this class is derived from <a href="./NcTimestamp.html">NcTimestamp</a>, a lab can also be
  given a specific timestamp. Together with the terrestrial location
  this provides access to local (sidereal) times etc...
  In addition to the usual astronomical reference frames, a local
- lab reference frame can also be specified. Together with the lab's
- timestamp this uniquely defines all the coordinate transformations
- between the various reference frames.
+ lab reference frame can also be specified via <a href="./NcAstrolab.html#NcAstrolab:SetLocalFrame" title="void NcAstrolab::SetLocalFrame(Double_t t1,Double_t p1,Double_t t2,Double_t p2,Double_t t3,Double_t p3)">SetLocalFrame</a>().
+ Together with the lab's timestamp this uniquely defines all the
+ coordinate transformations between the various reference frames.
  These lab characteristics allow space and time correlations of lab
  observations with external (astrophysical) phenomena.
+
+ By default, the lab is located at the North Pole using UTC
+ and the right handed local reference frame has the following convention :
+ X-axis pointing South (=Greenwich)
+ Y-axis pointing East
+ Z-axis pointing towards Zenith
+
+ The location and local reference frame convention of several well
+ known experimental sites can be automatically obtained via
+ the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name,Int_t id=0)">SetExperiment</a>().
 
  Observations are entered as generic signals containing a position,
  reference frame specification and a timestamp (see <a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>).
@@ -114,8 +124,10 @@ return false;}
  In case the user wants to control the random sequence (e.g. to obtain reproducible results),
  the randomiser has to be explicitly initialised via the member function <a href="./NcAstrolab.html#NcAstrolab:SetRandomiser" title="void NcAstrolab::SetRandomiser(Int_t iseed,Int_t cnt1=0,Int_t cnt2=0,NcTimestamp* ts=0)">SetRandomiser</a>().
 
- Also graphical facilities (e.g. <a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>) are available to
+ Also graphical facilities (e.g. <a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1,TString name=&quot;*&quot;)">DisplaySignals</a>) are available to
  provide skymaps in various projections.
+ A Graphical User Interface (GUI) is available via the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SkyMapPanel" title="void NcAstrolab::SkyMapPanel()">SkyMapPanel</a>(),
+ which facilitates several functionalities in a user friendly graphical environment.
 
  Coding example :
 
@@ -129,7 +141,7 @@ return false;}
 
  // Note : The above lab initialisation could also have been performed as follows :
  // <a href="./NcAstrolab.html">NcAstrolab</a> lab;
- // lab.<a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name)">SetExperiment</a>(<span class="string">"IceCube"</span>); // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> more precise IceCube location and orientation
+ // lab.<a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name,Int_t id=0)">SetExperiment</a>(<span class="string">"IceCube"</span>); // <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> more precise IceCube location and orientation
 
  // <a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a> laboratory parameters
  lab.<a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a>(1,<span class="string">"dms"</span>);
@@ -166,7 +178,7 @@ return false;}
 
  // List all stored objects
  <a href="./ListOfTypes.html#ostream">cout</a> &lt;&lt; endl;
- lab.<a href="./NcAstrolab.html#NcAstrolab:ListSignals" title="void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode=&quot;T&quot;,Int_t nmax=10,Int_t j=-1,Int_t type=-1)">ListSignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,5,<span class="string">"M"</span>,-1);
+ lab.<a href="./NcAstrolab.html#NcAstrolab:ListSignals" title="void NcAstrolab::ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode=&quot;T&quot;,Int_t nmax=10,Int_t j=-1,Int_t type=-1,NcTimestamp* ts=0,TString name=&quot;*&quot;)">ListSignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,5,<span class="string">"M"</span>,-1);
 
  // Search for space and time matches between the measurements and the reference signals
  // within a cone of 20 degrees and a time window of [-60,60] seconds
@@ -192,10 +204,10 @@ return false;}
  if (sx) sx-&gt;<a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a>();
 
  // Display all stored objects in a skymap (Hammer projection)
- lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
+ lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1,TString name=&quot;*&quot;)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 27, 2023  11:33Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 17, 2023  22:06Z
 
 </pre></div>
 </div></div>
@@ -205,7 +217,7 @@ return false;}
 <div class="access" id="funcpubl"><b>public:</b>
 <table class="func" id="tabfuncpubl" cellspacing="0">
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcAstrolab:NcAstrolab@1">NcAstrolab</a>(<span class="keyword">const</span> <a href="./NcAstrolab.html">NcAstrolab</a>&amp; t)</td></tr>
-<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcAstrolab:NcAstrolab">NcAstrolab</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcAstrolab"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Generic lab"</span>)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcAstrolab:NcAstrolab">NcAstrolab</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"User"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Virtual Lab for general use"</span>)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcAstrolab:_NcAstrolab">~NcAstrolab</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
@@ -239,9 +251,9 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:Data">Data</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, TString u = <span class="string">"deg"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> utc = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:Date"><span class="baseclass">NcTimestamp::</span>Date</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 3, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignal">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, TString name = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignal">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, TString name = <span class="string">""</span>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignal@1">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString name, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignals">DisplaySignals</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:DisplaySignals">DisplaySignals</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1, TString name = <span class="string">"*"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:DistancetoPrimitive"><span class="baseclass">TObject::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Draw"><span class="baseclass">TObject::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -296,6 +308,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
 <tr class="func"><td class="funcret">TH1F</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetDxHistogram">GetDxHistogram</a>(TH1* hx, <a href="./ListOfTypes.html#Int_t">Int_t</a> nc, <a href="./ListOfTypes.html#Double_t">Double_t</a> dxbin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> dxmin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> dxmax = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 1)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetEpoch"><span class="baseclass">NcTimestamp::</span>GetEpoch</a>(TString mode)</td></tr>
+<tr class="func"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetExperiment">GetExperiment</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetGAST"><span class="baseclass">NcTimestamp::</span>GetGAST</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetGMST@1"><span class="baseclass">NcTimestamp::</span>GetGMST</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetGMST"><span class="baseclass">NcTimestamp::</span>GetGMST</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; hh, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; mm, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ss, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ns, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; ps)</td></tr>
@@ -311,6 +324,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJD"><span class="baseclass">NcTimestamp::</span>GetJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJE@1"><span class="baseclass">NcTimestamp::</span>GetJE</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetJE"><span class="baseclass">NcTimestamp::</span>GetJE</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> date, TString mode = <span class="string">"jd"</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLabDetectorId">GetLabDetectorId</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcPosition.html">NcPosition</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLabPosition">GetLabPosition</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLabPosition@1">GetLabPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; l, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; b, TString u = <span class="string">"deg"</span>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLabTimeOffset">GetLabTimeOffset</a>() <span class="keyword">const</span></td></tr>
@@ -320,6 +334,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLightTravelTime">GetLightTravelTime</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">TList*</td><td class="funcname"><a class="funcname" href="#TTask:GetListOfTasks"><span class="baseclass">TTask::</span>GetListOfTasks</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLMST">GetLMST</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLocalFrame">GetLocalFrame</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* arr)</td></tr>
 <tr class="func"><td class="funcret">TH1F</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLogHistogram">GetLogHistogram</a>(TH1* hin, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString s = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLT">GetLT</a>()</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetLuminosityDistance">GetLuminosityDistance</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> z, TString u = <span class="string">"Mpc"</span>) <span class="keyword">const</span></td></tr>
@@ -409,7 +424,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:ListBurstHistograms">ListBurstHistograms</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:ListBurstParameters">ListBurstParameters</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:ListDataNames">ListDataNames</a>()</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:ListSignals">ListSignals</a>(TString frame, TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:ListSignals">ListSignals</a>(TString frame, TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0, TString name = <span class="string">"*"</span>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:LoadInputData">LoadInputData</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> src, TString file, TString tree, <a href="./ListOfTypes.html#Int_t">Int_t</a> date1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> date2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = -1, TString type = <span class="string">"-"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">TTree*</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:LoadUTCparameterFiles"><span class="baseclass">NcTimestamp::</span>LoadUTCparameterFiles</a>(TString leapfile = <span class="string">"$(NCFS)/IERS/leap.txt"</span>, TString dutfile = <span class="string">"$(NCFS)/IERS/dut.txt"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ls"><span class="baseclass">TTask::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"*"</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -420,6 +435,49 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstSigmaPosdist">MakeBurstSigmaPosdist</a>(TString file, TString tree, TString name, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 900, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 90)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstT90dist">MakeBurstT90dist</a>(TString file, TString tree, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 50, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = -5, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 5)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstZdist">MakeBurstZdist</a>(TString file, TString tree, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 200, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmin = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmax = 20)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapCinfo">MapCinfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapClose">MapClose</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapDateTime">MapDateTime</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapDcoord">MapDcoord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapDname">MapDname</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapDoptions">MapDoptions</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapDraw">MapDraw</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapEa">MapEa</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapEb">MapEb</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapEcoord">MapEcoord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapEname">MapEname</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapEnter">MapEnter</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapEnterSolar">MapEnterSolar</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapEtype">MapEtype</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapExit">MapExit</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapExperiment">MapExperiment</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapIname">MapIname</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapInfo">MapInfo</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapLabLframeEnter">MapLabLframeEnter</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapLabTS">MapLabTS</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapList">MapList</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapLocb">MapLocb</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapLocEnter">MapLocEnter</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapLocId">MapLocId</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapLocl">MapLocl</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMarkColor">MapMarkColor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMarkSize">MapMarkSize</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMarkStyle">MapMarkStyle</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMarkType">MapMarkType</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMerC">MapMerC</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMerMode">MapMerMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMerUc">MapMerUc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapNmax">MapNmax</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapProj">MapProj</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapRemove">MapRemove</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapRemoveSolar">MapRemoveSolar</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapSolar">MapSolar</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapTimeType">MapTimeType</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapTinfo">MapTinfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapUa">MapUa</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapUb">MapUb</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapUinfo">MapUinfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapUloc">MapUloc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret">TArrayI*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchRefSignal">MatchRefSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchSignals@1">MatchSignals</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, TString name, <a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchSignals">MatchSignals</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, <a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</td></tr>
@@ -447,10 +505,11 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RandomPosition">RandomPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v, <a href="./ListOfTypes.html#Double_t">Double_t</a> thetamin, <a href="./ListOfTypes.html#Double_t">Double_t</a> thetamax, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimin, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimax)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveRefSignal">RemoveRefSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveRefSignal@1">RemoveRefSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveSignal">RemoveSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveSignal@1">RemoveSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveRefSignal">RemoveRefSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveRefSignal@1">RemoveRefSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveSignal">RemoveSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveSignal@1">RemoveSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:RemoveSignals">RemoveSignals</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
@@ -469,7 +528,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetEpoch"><span class="baseclass">NcTimestamp::</span>SetEpoch</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString mode, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetExperiment">SetExperiment</a>(TString name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetExperiment">SetExperiment</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetGPS"><span class="baseclass">NcTimestamp::</span>SetGPS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> w, <a href="./ListOfTypes.html#Int_t">Int_t</a> sow, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> icycle = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetGPS@1"><span class="baseclass">NcTimestamp::</span>SetGPS</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> w, <a href="./ListOfTypes.html#Int_t">Int_t</a> dow, <a href="./ListOfTypes.html#Int_t">Int_t</a> sod, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps, TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> icycle = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetJD@1"><span class="baseclass">NcTimestamp::</span>SetJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> jd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
@@ -483,7 +542,9 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetLT@4">SetLT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> s, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetLT@1">SetLT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetLT">SetLT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetMarkerColor">SetMarkerColor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> color, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetMarkerSize">SetMarkerSize</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> size, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetMarkerStyle">SetMarkerStyle</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> style, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetMaxDt">SetMaxDt</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> s)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetMJD@1"><span class="baseclass">NcTimestamp::</span>SetMJD</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mjd, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetMJD"><span class="baseclass">NcTimestamp::</span>SetMJD</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mjd, <a href="./ListOfTypes.html#Int_t">Int_t</a> sec, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0, TString utc = <span class="string">"U"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut = 0)</td></tr>
@@ -517,6 +578,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:ShiftPosition">ShiftPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v, <a href="./ListOfTypes.html#Double_t">Double_t</a> angle)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SkyMapPanel">SkyMapPanel</a>()</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SmearPosition">SmearPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; v, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
@@ -533,16 +595,22 @@ return false;}
 <div class="access" id="funcprot"><b>protected:</b>
 <table class="func" id="tabfuncprot" cellspacing="0">
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:BurstCompensate">BurstCompensate</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; nmugrb)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:CommandPanel">CommandPanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:EntriesPanel">EntriesPanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBackgroundRateProb">GetBackgroundRateProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* vars, <a href="./ListOfTypes.html#Double_t">Double_t</a>* pars)</td></tr>
 <tr class="func"><td class="funcret">TH1*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstSigmaPosdist">GetBurstSigmaPosdist</a>(TString name, TString type)</td></tr>
 <tr class="func"><td class="funcret">TH1*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstT90dist">GetBurstT90dist</a>(TString name, TString type)</td></tr>
 <tr class="func"><td class="funcret">TH1*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstZdist">GetBurstZdist</a>(TString name, TString type)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetDifference@2">GetDifference</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
-<tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal@6">GetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal@6">GetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalRateProb">GetSignalRateProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* vars, <a href="./ListOfTypes.html#Double_t">Double_t</a>* pars)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:InfoPanel">InfoPanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:InitBurstHistograms">InitBurstHistograms</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:LabLocalFramePanel">LabLocalFramePanel</a>(TGCompositeFrame* frame)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:LabLocationPanel">LabLocationPanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapListOptionsPanel">MapListOptionsPanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:Nutate">Nutate</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, <a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:Precess">Precess</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, <a href="./NcTimestamp.html">NcTimestamp</a>* ts1, <a href="./NcTimestamp.html">NcTimestamp</a>* ts2)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:Project">Project</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> l, <a href="./ListOfTypes.html#Double_t">Double_t</a> b, TString proj, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; x, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; y)</td></tr>
@@ -554,11 +622,13 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetEmatrix">SetEmatrix</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetGmatrix">SetGmatrix</a>(TString mode)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetHmatrix">SetHmatrix</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetMapTS">SetMapTS</a>()</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetNmatrix">SetNmatrix</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetPmatrix">SetPmatrix</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
-<tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetSignal@2">SetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>* r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, TString name = <span class="string">""</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetSignal@2">SetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>* r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetSolarSystem">SetSolarSystem</a>(TString name, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUTCparameters"><span class="baseclass">NcTimestamp::</span>SetUTCparameters</a>(TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:TimestampPanel">TimestampPanel</a>(TGCompositeFrame* frame)</td></tr>
 
 </table></div>
 </div>
@@ -592,6 +662,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fAlphaEM"></a>fAlphaEM</td><td class="datadesc">The electromagnetic fine-structure constant</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fAmu"></a>fAmu</td><td class="datadesc">The unified atomic mass unit in MeV/c^2</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fAu"></a>fAu</td><td class="datadesc">The Astronomical Unit in m</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fAxes"></a>fAxes[6]</td><td class="datadesc">Orientation angles of the local reference frame axes w.r.t. the MRS reference frame</td></tr>
 <tr class="data"><td class="datatype">TRotMatrix</td><td class="dataname"><a name="NcAstrolab:fB"></a>fB</td><td class="datadesc">! The frame bias matrix for conversion of ICRS to J2000 coordinates</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fBias"></a>fBias</td><td class="datadesc">! Initialisation flag for fB values (0=uninitialised  1=initialised)</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fBoltz"></a>fBoltz</td><td class="datadesc">The value of the Boltzmann constant (k) in J K^-1</td></tr>
@@ -609,6 +680,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fDscmin"></a>fDscmin</td><td class="datadesc">Minimal value for scrambling angular difference (in degrees) or vector length </td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fDut"><span class="baseclass">NcTimestamp::</span>fDut</a></td><td class="datadesc">The value of UT-UTC in seconds at the moment of the timestamp</td></tr>
 <tr class="data"><td class="datatype">TRotMatrix</td><td class="dataname"><a name="NcAstrolab:fE"></a>fE</td><td class="datadesc">! Matrix for conversion of equatorial to ecliptic coordinates</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fExperiment"></a>fExperiment</td><td class="datadesc">The name of the experimental site</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fFermi"></a>fFermi</td><td class="datadesc">Fermi coupling constant GF/(hbar*c)^3 in GeV^-2</td></tr>
 <tr class="data"><td class="datatype">TRotMatrix</td><td class="dataname"><a name="NcAstrolab:fG"></a>fG</td><td class="datadesc">! Matrix for conversion of equatorial to galactic coordinates</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fGal"></a>fGal</td><td class="datadesc">! Type indicator for fG values (0=uninitialised  1=B1950  2=J2000)</td></tr>
@@ -627,11 +699,55 @@ return false;}
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fJps"><span class="baseclass">NcTimestamp::</span>fJps</a></td><td class="datadesc">Remaining fractional number of nanoseconds (in picoseconds) elapsed within the MJD</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fJsec"><span class="baseclass">NcTimestamp::</span>fJsec</a></td><td class="datadesc">Number of seconds elapsed within the MJD</td></tr>
 <tr class="data"><td class="datatype">TRotMatrix</td><td class="dataname"><a name="NcAstrolab:fL"></a>fL</td><td class="datadesc">Matrix for conversion of horizontal to local-frame coordinates</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fLabId"></a>fLabId</td><td class="datadesc">The identifier of the detector element </td></tr>
 <tr class="data"><td class="datatype"><a href="./NcPosition.html">NcPosition</a></td><td class="dataname"><a name="NcAstrolab:fLabPos"></a>fLabPos</td><td class="datadesc">Position of the lab in the terrestrial longitude-latitude frame</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fLeap"><span class="baseclass">NcTimestamp::</span>fLeap</a></td><td class="datadesc">The cumulated number of leap seconds at the moment of the timestamp</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcTimestamp.html#NcTimestamp:fMJD"><span class="baseclass">NcTimestamp::</span>fMJD</a></td><td class="datadesc">Modified Julian Date</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMW"></a>fMW</td><td class="datadesc">W mass in GeV/c^2 </td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMZ"></a>fMZ</td><td class="datadesc">Z mass in GeV/c^2 </td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapCinfo"></a>fMapCinfo</td><td class="datadesc">! The GUI selected info category </td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapDate"></a>fMapDate</td><td class="datadesc">! The GUI entered date</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapDateTime"></a>fMapDateTime</td><td class="datadesc">! The GUI entered datetime </td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapDcoord"></a>fMapDcoord</td><td class="datadesc">! The GUI selected coordinate system for the Map/List</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapDmode"></a>fMapDmode</td><td class="datadesc">! The GUI selected coordinate system mode for the Map/List</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapDname"></a>fMapDname</td><td class="datadesc">! The GUI entered name pattern for entries to be shown in the Map/List</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a name="NcAstrolab:fMapDoptions"></a>fMapDoptions[5]</td><td class="datadesc">! The GUI Map/List options (histo, clr, ref, meas, refTS)</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMapEa"></a>fMapEa</td><td class="datadesc">! The GUI entered a coordinate of an entry</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMapEb"></a>fMapEb</td><td class="datadesc">! The GUI entered b coordinate of an entry</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapEcoord"></a>fMapEcoord</td><td class="datadesc">! The GUI entered coordinate system of the entry</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapEmode"></a>fMapEmode</td><td class="datadesc">! The GUI entered coordinate system mode of the entry</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapEname"></a>fMapEname</td><td class="datadesc">! The GUI entered name of the entry</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapEtype"></a>fMapEtype</td><td class="datadesc">! The GUI entered entry type</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapEua"></a>fMapEua</td><td class="datadesc">! The GUI entered angular units of a</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapEub"></a>fMapEub</td><td class="datadesc">! The GUI entered angular units of b</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapIname"></a>fMapIname</td><td class="datadesc">! The GUI selected entry name for the info</td></tr>
+<tr class="data"><td class="datatype">TGComboBox*</td><td class="dataname"><a name="NcAstrolab:fMapLabE"></a>fMapLabE</td><td class="datadesc">! The GUI Lab experiment site selection box</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapLabExpName"></a>fMapLabExpName</td><td class="datadesc">! The GUI entered Lab experimental site</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapLabId"></a>fMapLabId</td><td class="datadesc">! The GUI entered Lab detector Id</td></tr>
+<tr class="data"><td class="datatype">TGNumberEntryField*</td><td class="dataname"><a name="NcAstrolab:fMapLabLBI"></a>fMapLabLBI[3]</td><td class="datadesc">! The GUI number entries for the Lab location specification</td></tr>
+<tr class="data"><td class="datatype">TGNumberEntryField*</td><td class="dataname"><a name="NcAstrolab:fMapLabLframe"></a>fMapLabLframe[6]</td><td class="datadesc">! The GUI number entries for the local frame specification</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMapLabLocB"></a>fMapLabLocB</td><td class="datadesc">! The GUI entered Lab latitude</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMapLabLocL"></a>fMapLabLocL</td><td class="datadesc">! The GUI entered Lab longitude</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapLabLocU"></a>fMapLabLocU</td><td class="datadesc">! The GUI entered Lab location angular units</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a name="NcAstrolab:fMapLabTS"></a>fMapLabTS</td><td class="datadesc">! The GUI selection to use the Lab timestamp for the List/Map</td></tr>
+<tr class="data"><td class="datatype">TGComboBox*</td><td class="dataname"><a name="NcAstrolab:fMapLabU"></a>fMapLabU</td><td class="datadesc">! The GUI Lab location angular unit selection box</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMarkColor"></a>fMapMarkColor</td><td class="datadesc">! The GUI selected marker color for the Map</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMarkSize"></a>fMapMarkSize</td><td class="datadesc">! The GUI entered marker size for the Map</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMarkStyle"></a>fMapMarkStyle</td><td class="datadesc">! The GUI selected marker style for the Map</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMarkType"></a>fMapMarkType</td><td class="datadesc">! The GUI selected entry type to apply the marker attributes on</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMerC"></a>fMapMerC</td><td class="datadesc">! The GUI entered central meridian location for the Map</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMerMode"></a>fMapMerMode</td><td class="datadesc">! The GUI selected meridian orientation for the Map</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapMerUc"></a>fMapMerUc</td><td class="datadesc">! The GUI selected angular units for the central meridian location</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapNmax"></a>fMapNmax</td><td class="datadesc">! The GUI selected max. number of signals of each type to Map/List</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapProj"></a>fMapProj</td><td class="datadesc">! The GUI selected projection for the Map</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a name="NcAstrolab:fMapSolar"></a>fMapSolar[10]</td><td class="datadesc">! The GUI selection of solar system objects</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcTimestamp.html">NcTimestamp</a></td><td class="dataname"><a name="NcAstrolab:fMapTS"></a>fMapTS</td><td class="datadesc">! The GUI entered timestamp to be used for the List/Map</td></tr>
+<tr class="data"><td class="datatype">TGTextEntry*</td><td class="dataname"><a name="NcAstrolab:fMapTSdatetime"></a>fMapTSdatetime</td><td class="datadesc">! The GUI TS date/time specification</td></tr>
+<tr class="data"><td class="datatype">TGComboBox*</td><td class="dataname"><a name="NcAstrolab:fMapTStimetype"></a>fMapTStimetype</td><td class="datadesc">! The GUI TS time type selection box</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapTime"></a>fMapTime</td><td class="datadesc">! The GUI entered time</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapTimeType"></a>fMapTimeType</td><td class="datadesc">! The GUI entered time type</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapTinfo"></a>fMapTinfo</td><td class="datadesc">! The GUI selected mode for the timestamp info</td></tr>
+<tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapUinfo"></a>fMapUinfo</td><td class="datadesc">! The GUI selected angular units for the Lab info </td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMarkerColor"></a>fMarkerColor[4]</td><td class="datadesc">Color of the marker symbols for the skymaps and related histograms</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="NcAstrolab:fMarkerSize"></a>fMarkerSize[4]</td><td class="datadesc">Size of the marker symbols for the skymaps and related histograms</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMarkerStyle"></a>fMarkerStyle[4]</td><td class="datadesc">Style of the marker symbols for the skymaps and related histograms</td></tr>
@@ -645,6 +761,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMtau"></a>fMtau</td><td class="datadesc">Tau mass in MeV/c^2</td></tr>
 <tr class="data"><td class="datatype">TRotMatrix</td><td class="dataname"><a name="NcAstrolab:fN"></a>fN</td><td class="datadesc">! Matrix for nutation correction  </td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#ULong64_t">ULong64_t</a></td><td class="dataname"><a name="NcAstrolab:fNen"></a>fNen[2]</td><td class="datadesc">Counters to record every storage of an unnamed reference c.q. measurement signal</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fNewton"></a>fNewton</td><td class="datadesc">The value of the Newton gravitational constant in m^3 kg^-1 s^-2 </td></tr>
 <tr class="data"><td class="datatype">TF1*</td><td class="dataname"><a name="NcAstrolab:fNuAngle"></a>fNuAngle</td><td></td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fOmegaB"></a>fOmegaB</td><td class="datadesc">The value of the fractional baryon energy density</td></tr>
@@ -665,6 +782,7 @@ return false;}
 <tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcAstrolab:fRefs"></a>fRefs</td><td class="datadesc">Array holding the reference signals</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fRscmode"></a>fRscmode</td><td class="datadesc">Position scrambling mode</td></tr>
 <tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="NcAstrolab:fSigs"></a>fSigs</td><td class="datadesc">Array holding the measured signals</td></tr>
+<tr class="data"><td class="datatype">TGMainFrame*</td><td class="dataname"><a name="NcAstrolab:fSkyMapPanel"></a>fSkyMapPanel</td><td class="datadesc">! The main frame for the SkyMapPanel GUI </td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fSolUpdate"></a>fSolUpdate</td><td class="datadesc">Flag to update the position of Solar system objects for signal matching  </td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fSpeedC"></a>fSpeedC</td><td class="datadesc">Speed of light in vacuum in m/s</td></tr>
 <tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
@@ -722,7 +840,7 @@ return false;}
 </tr></table>
 </td></tr></table></td></tr></table>
 <h2>Function documentation</h2>
-<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcAstrolab:NcAstrolab" href="src/NcAstrolab.cxx.html#uJ.kt">NcAstrolab</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"NcAstrolab"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Generic lab"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="NcAstrolab:NcAstrolab" href="src/NcAstrolab.cxx.html#uJ.kt">NcAstrolab</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"User"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">"Virtual Lab for general use"</span>)</span><br />
 <div class="funccomm"><pre> Default constructor
 </pre></div>
 </div>
@@ -757,9 +875,20 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLabPosition" href="src/NcAstrolab.cxx.html#HSaviC">SetLabPosition</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the lab position in the terrestrial coordinates and its corresponding
  time offset w.r.t. UT.
- The right handed position reference frame is defined such that the North Pole
+
+ In the default constructor, the lab has been located at the North Pole using UTC
+ and the right handed local reference frame was given the following convention :
+ X-axis pointing South (=Greenwich)
+ Y-axis pointing East
+ Z-axis pointing towards Zenith
+
+ In other words :
+ The right handed position reference frame was defined such that the North Pole
  corresponds to a polar angle theta=0 and the Greenwich meridian corresponds
  to an azimuth angle phi=0, with phi increasing eastwards.
+
+ See the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name,Int_t id=0)">SetExperiment</a>() for an automatic setting of the
+ characteristics of several well known experimental sites.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLabPosition@1" href="src/NcAstrolab.cxx.html#UaebGE">SetLabPosition</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> l, <a href="./ListOfTypes.html#Double_t">Double_t</a> b, TString u = <span class="string">"deg"</span>)</span><br />
@@ -767,8 +896,22 @@ return false;}
  and its corresponding time offset w.r.t. UT.
  Positions north of the equator have b&gt;0, whereas b&lt;0 indicates
  locations south of the equator.
- Positions east of Greenwich have l&gt;0, whereas l&lt;0 indicates
- locations west of Greenwich.
+ Positions east of the Greenwich reference meridian have l&gt;0,
+ whereas l&lt;0 indicates locations west of the Greenwich reference meridian.
+
+ In the default constructor, the lab has been located at the North Pole using UTC
+ and the right handed local reference frame was given the following convention :
+ X-axis pointing South (=Greenwich)
+ Y-axis pointing East
+ Z-axis pointing towards Zenith
+
+ In other words :
+ The right handed position reference frame was defined such that the North Pole
+ corresponds to a polar angle theta=0 and the Greenwich meridian corresponds
+ to an azimuth angle phi=0, with phi increasing eastwards.
+
+ See the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name,Int_t id=0)">SetExperiment</a>() for an automatic setting of the
+ characteristics of several well known experimental sites.
 
  The string argument <span class="string">"u"</span> allows to choose between different angular units
  u = <span class="string">"rad"</span> : angles provided in radians
@@ -779,30 +922,46 @@ return false;}
  The default is u=<span class="string">"deg"</span>.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetExperiment" href="src/NcAstrolab.cxx.html#O94Y3E">SetExperiment</a>(TString name)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetExperiment" href="src/NcAstrolab.cxx.html#cb8Z5">SetExperiment</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> id = 0)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> position, local frame definition and time offset w.r.t. UT
- for the experiment as specified via the argument <span class="string">"name"</span>.
+ for a known experiment as specified via the arguments <span class="string">"name"</span> and <span class="string">"id"</span>.
+ The (optional) input argument <span class="string">"id"</span> allows to specify a particular
+ element of a larger experimental setup, like for instance a specific
+ detector station of the RNO-G radio array.
+ The value id=0 (which is the default) represents a global location,
+ like for instance the center of the experiment (like for IceCube)
+ or some generic location (like the Big House for RNO-G).
 
  Currently the supported experiment names are :
 
- Amanda  : Antarctic Muon And Neutrino Detector Array
- IceCube : The IceCube neutrino observatory at the South Pole
- WSRT    : The Westerbork Synthesis Radio Telescope in the Netherlands
- Astron  : The Netherlands Institute for Radio Astronomy in Dwingeloo
- ARA     : The Askaryan Radio Array at the South Pole
- RNO-G   : The Greenland Radio Neutrino Observatory at Summit Station
+ User      : Virtual Lab for general use
+ Greenwich : The Royal Observatory in the UK
+ Amanda    : Antarctic Muon And Neutrino Detector Array at the South Pole
+ IceCube   : The IceCube neutrino observatory at the South Pole
+ WSRT      : The Westerbork Synthesis Radio Telescope in the Netherlands
+ Astron    : The Netherlands Institute for Radio Astronomy in Dwingeloo
+ ARA       : The Askaryan Radio Array at the South Pole
+ RNO-G     : The Greenland Radio Neutrino Observatory at Summit Station
 
- Note : The name and title for the <a href="./NcAstrolab.html">NcAstrolab</a> object are updated automatically
-        according to the specified experiment name at invokation of this
-        memberfunction.
-        In case a different name and/or title is required, please use the
-        usual <a href="./#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a> facility after invokation of this memberfunction.
+ Notes :
+
+ 1) The name and title for the <a href="./NcAstrolab.html">NcAstrolab</a> object are updated automatically
+    according to the specified experiment name at invokation of this memberfunction.
+    In case a different name and/or title is required, please use the usual
+    <a href="./#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a> facility after invokation of this memberfunction.
+
+ 2) In case no detector identifiers have been defined for the specified experiment,
+    the identifier <span class="string">"id"</span> will be set to 0.
+    For the experiment <span class="string">"User"</span> the provided detector identifier (id) will always be set.
+    This allows full flexibility for a generic <span class="string">"User"</span> lab.
+
+ The default value is id=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLabTimeOffset" href="src/NcAstrolab.cxx.html#uVhIFC">SetLabTimeOffset</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> dt)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the lab time offset (dt) w.r.t. UT in (fractional) hours.
  Normally one should not use this function, but set the time offset automatically
- by invokation of the memberfunctions SetPosition() or <a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name)">SetExperiment</a>().
+ by invokation of the memberfunctions SetPosition() or <a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name,Int_t id=0)">SetExperiment</a>().
  This memberfunction is meant to investigate (systematic) effects in the case
  of possible timing problems.
 </pre></div>
@@ -828,10 +987,18 @@ return false;}
  The default is u=<span class="string">"deg"</span>.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname">TString <a class="funcname" name="NcAstrolab:GetExperiment" href="src/NcAstrolab.cxx.html#Yq5E5">GetExperiment</a>() const</span><br />
+<div class="funccomm"><pre> Provide the name of the experiment site.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAstrolab:GetLabDetectorId" href="src/NcAstrolab.cxx.html#jinI3E">GetLabDetectorId</a>() const</span><br />
+<div class="funccomm"><pre> Provide the detector identifier within the lab.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetLabTimeOffset" href="src/NcAstrolab.cxx.html#TgwWlC">GetLabTimeOffset</a>() const</span><br />
 <div class="funccomm"><pre> Provide the lab time offset (dt) w.r.t. UT in (fractional) hours.
  This time offset is automatically set by invokation of the memberfunctions
- SetPosition() or <a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name)">SetExperiment</a>().
+ SetPosition() or <a href="./NcAstrolab.html#NcAstrolab:SetExperiment" title="void NcAstrolab::SetExperiment(TString name,Int_t id=0)">SetExperiment</a>().
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetRandomiser" href="src/NcAstrolab.cxx.html#Z5fqmD">SetRandomiser</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> iseed, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> cnt2 = 0, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0)</span><br />
@@ -963,7 +1130,7 @@ return false;}
         This allows the print to be included in various composite output formats.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcAstrolab:SetSignal@2" href="src/NcAstrolab.cxx.html#dQmpHE">SetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>* r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, TString name = <span class="string">""</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcAstrolab:SetSignal@2" href="src/NcAstrolab.cxx.html#dQmpHE">SetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>* r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</span><br />
 <div class="funccomm"><pre> Internal memberfunction for generic storage of a signal as specified by the position r and the timestamp ts.
  The pointer to the stored signal is returned (0 in case of incompatible data).
  The position is stored in International Celestial Reference System (ICRS) coordinates.
@@ -1024,8 +1191,8 @@ return false;}
         The user is advised not to use this obsolete jref=0 facility anymore.
 
  Via the input argument <span class="string">"name"</span> the user can give the stored signal also a name.
-
- The default values are jref=0, name=<span class="string">""</span> and type=0 to obtain backward compatible functionality.
+ If no name is provided, a name will be generated based on the type and the storage index,
+ like for instance Meas8 or Ref5.
 
  Notes :
 
@@ -1256,7 +1423,7 @@ return false;}
  The default value is mode=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcAstrolab:GetSignal@6" href="src/NcAstrolab.cxx.html#fMzg2">GetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcAstrolab:GetSignal@6" href="src/NcAstrolab.cxx.html#fMzg2">GetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</span><br />
 <div class="funccomm"><pre> Internal memberfunction to provide the frame specific coordinates of a signal at the specified timestamp ts.
  The coordinates are returned via the vector argument <span class="string">"r"</span>.
  In addition also a pointer to the stored signal object is provided.
@@ -1309,8 +1476,6 @@ return false;}
         1 --&gt; The requested data is a measured signal
 
  The user is advised not to use the obsolete <span class="string">"jref=0"</span> functionality anymore.
-
- Default values are jref=0 and type=0 for backward compatibility.
 
  Note : In case ts=0 the current timestamp of the lab will be taken.
 </pre></div>
@@ -1637,13 +1802,14 @@ return false;}
  The default values are type=0 and ts=0 for backward compatibility.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:RemoveRefSignal" href="src/NcAstrolab.cxx.html#k8B4yE">RemoveRefSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAstrolab:RemoveRefSignal" href="src/NcAstrolab.cxx.html#Qu7NbD">RemoveRefSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
 <div class="funccomm"><pre>
  *** This memberfunction is obsolete and is only kept for backward compatibility ***
- *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:RemoveSignal" title="void NcAstrolab::RemoveSignal(Int_t j,Int_t type,Int_t compress) or overloads">RemoveSignal</a>() instead        ***
+ *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:RemoveSignal" title="Int_t NcAstrolab::RemoveSignal(Int_t j,Int_t type,Int_t compress) or overloads">RemoveSignal</a>() instead        ***
 
 
  Remove the reference signal which was stored at the j-th position (j=1 is first).
+ The return argument is the number of signals that were removed.
  Note : j=0 means that all stored reference signals will be removed.
         j&lt;0 allows array compression (see below) without removing any signals.
 
@@ -1656,13 +1822,14 @@ return false;}
         reference signals in the storage array will change.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:RemoveRefSignal@1" href="src/NcAstrolab.cxx.html#culMvC">RemoveRefSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAstrolab:RemoveRefSignal@1" href="src/NcAstrolab.cxx.html#a05uW">RemoveRefSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
 <div class="funccomm"><pre>
  *** This memberfunction is obsolete and is only kept for backward compatibility ***
- *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:RemoveSignal" title="void NcAstrolab::RemoveSignal(Int_t j,Int_t type,Int_t compress) or overloads">RemoveSignal</a>() instead        ***
+ *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:RemoveSignal" title="Int_t NcAstrolab::RemoveSignal(Int_t j,Int_t type,Int_t compress) or overloads">RemoveSignal</a>() instead        ***
 
 
  Remove the reference signal with the specified name.
+ The return argument is the number of signals that were removed.
 
  The <span class="string">"compress"</span> parameter allows compression of the ref. signal storage array.
 
@@ -1673,9 +1840,10 @@ return false;}
         reference signals in the storage array will change.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:RemoveSignal" href="src/NcAstrolab.cxx.html#iHHmDC">RemoveSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAstrolab:RemoveSignal" href="src/NcAstrolab.cxx.html#nt61S">RemoveSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
 <div class="funccomm"><pre> Remove the signal of type <span class="string">"type"</span> which was stored at the j-th position (j=1 is first).
- Note : j=0 means that all stored signals of type <span class="string">"type"</span> will be removed.
+ The return argument is the number of signals that were removed.
+ Note : j=0 means that all stored signals of type <span class="string">"type"</span> will be removed with compression.
         j&lt;0 allows array compression (see below) without removing any signals.
 
  type = 0 --&gt; Remove a reference signal
@@ -1690,8 +1858,11 @@ return false;}
         signals in that storage array will change.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:RemoveSignal@1" href="src/NcAstrolab.cxx.html#gkJ.6B">RemoveSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAstrolab:RemoveSignal@1" href="src/NcAstrolab.cxx.html#uEvkPB">RemoveSignal</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
 <div class="funccomm"><pre> Remove the signal with the specified name and type.
+ The return argument is the number of signals that were removed.
+
+ Note : name=<span class="string">"*"</span> will remove all the entries of the specified type with compression.
 
  type = 0 --&gt; Remove a reference signal
       = 1 --&gt; Remove a measured signal
@@ -1704,7 +1875,28 @@ return false;}
  Note : Compression of the storage array means that the indices of the
         signals in that storage array will change.
 
- In case no matching signal with the specified name and type is found,
+ In case name=<span class="string">""</span> or no matching signal with the specified name and type is found,
+ no action will be taken.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAstrolab:RemoveSignals" href="src/NcAstrolab.cxx.html#psMlpD">RemoveSignals</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type, <a href="./ListOfTypes.html#Int_t">Int_t</a> compress)</span><br />
+<div class="funccomm"><pre> Remove all signals that match the provided name pattern and type.
+ The return argument is the number of signals that were removed.
+
+ Note : name=<span class="string">"*"</span> will remove all the entries of the specified type with compression.
+
+ type = 0 --&gt; Remove a reference signal
+      = 1 --&gt; Remove a measured signal
+
+ The <span class="string">"compress"</span> parameter allows compression of the signal storage array of type <span class="string">"type"</span>.
+
+ compress = 1 --&gt; Array will be compressed
+            0 --&gt; Array will not be compressed
+
+ Note : Compression of the storage array means that the indices of the
+        signals in that storage array will change.
+
+ In case name=<span class="string">""</span> or no matching signal with the specified name pattern and type is found,
  no action will be taken.
 </pre></div>
 </div>
@@ -1714,7 +1906,7 @@ return false;}
  type = 0 --&gt; Provide the index of a reference signal
       = 1 --&gt; Provide the index of a measured signal
 
- In case no signal with the specified name was found, the value -1 is returned.
+ In case name=<span class="string">""</span> or no signal with the specified name was found, the value -1 is returned.
 
  The default value is type=0 for backward compatibility.
 </pre></div>
@@ -1879,14 +2071,14 @@ return false;}
  The default values are emode=<span class="string">"T"</span>, type=0 and align=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:ListSignals" href="src/NcAstrolab.cxx.html#cV9AfD">ListSignals</a>(TString frame, TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:ListSignals" href="src/NcAstrolab.cxx.html#hC1iBE">ListSignals</a>(TString frame, TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 1, TString emode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1, <a href="./NcTimestamp.html">NcTimestamp</a>* ts = 0, TString name = <span class="string">"*"</span>)</span><br />
 <div class="funccomm"><pre> List stored measurements and/or reference signals in user specified coordinates
- at a specific timestamp.
+ at a specific timestamp if their name matches the provided name pattern <span class="string">"name"</span>, where name=<span class="string">"*"</span> means all.
  Measurements are listed according to the timestamp of their actual stored recording, which may be
  a scrambled timestamp according to the invokation of the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetTimeScramble" title="void NcAstrolab::SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frndm=0)">SetTimeScramble</a>().
  For reference signals the actual timestamp of the j-th (j=1 is first) stored measurement is used.
- In case j=0 or no (timestamp of the) j-th measurement is available,
- the current timestamp of the lab will be taken.
+ In case j=0 or no (timestamp of the) j-th measurement is available, the provided timestamp will be taken,
+ where a provided ts=0 (which is the default) refers to the current timestamp of the lab.
  For j&lt;0 the timestamp of the actual recording of the reference signal will be used.
  In case no corresponding stored signal is available or one of the input arguments is
  invalid, no printout is produced.
@@ -1946,7 +2138,7 @@ return false;}
         <span class="string">"B"</span> --&gt; Time and local hour angle type determined by input argument <span class="string">"emode"</span> (<span class="string">"M"</span> or <span class="string">"T"</span>)
         <span class="string">"J"</span> --&gt; Time and local hour angle type determined by input argument <span class="string">"emode"</span> (<span class="string">"M"</span> or <span class="string">"T"</span>)
 
- The default values are ndig=1, emode=<span class="string">"T"</span>, nmax=10, j=-1 and type=-1.
+ The default values are ndig=1, emode=<span class="string">"T"</span>, nmax=10, j=-1, type=-1, ts=0 and name=<span class="string">"*"</span>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:Precess" href="src/NcAstrolab.cxx.html#gb7Ww">Precess</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, <a href="./NcTimestamp.html">NcTimestamp</a>* ts1, <a href="./NcTimestamp.html">NcTimestamp</a>* ts2)</span><br />
@@ -2043,17 +2235,36 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLocalFrame" href="src/NcAstrolab.cxx.html#x9Ds6D">SetLocalFrame</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> t1, <a href="./ListOfTypes.html#Double_t">Double_t</a> p1, <a href="./ListOfTypes.html#Double_t">Double_t</a> t2, <a href="./ListOfTypes.html#Double_t">Double_t</a> p2, <a href="./ListOfTypes.html#Double_t">Double_t</a> t3, <a href="./ListOfTypes.html#Double_t">Double_t</a> p3)</span><br />
 <div class="funccomm"><pre> Specification of the orientations of the local reference frame axes.
  The input arguments represent the angles (in degrees) of the local-frame axes
- w.r.t. a so called Master Reference Frame (MRF), with the same convention
- as the input arguments of the ROOT facility TRotMatrix::SetAngles.
+ w.r.t. a so called Master Reference Frame (MRF).
 
- The right handed Master Reference Frame is defined as follows :
+ The right handed Master Reference Frame (MRF) is defined as follows :
   Z-axis : Points to the local Zenith
   X-axis : Makes an angle of 90 degrees with the Z-axis and points South
   Y-axis : Makes an angle of 90 degrees with the Z-axis and points East
 
+ The various input arguments are defined as follows :
+ t1 : Theta (=Zenith) angle of the local X-axis in the MRF
+ p1 : Phi angle of the local X-axis in the MRF
+ t2 : Theta (=Zenith) angle of the local Y-axis in the MRF
+ p2 : Phi angle of the local Y-axis in the MRF
+ t3 : Theta (=Zenith) angle of the local Z-axis in the MRF
+ p3 : Phi angle of the local Z-axis in the MRF
+
+ Example :
+
+ The local frame is identical to the MRF when (t1,p1,t2,p2,t3,p3)=(90,0,90,90,0,0).
+
  Once the user has specified the local reference frame, any observed event
  can be related to astronomical space-time locations via the <a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>
  and <a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a> memberfunctions.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GetLocalFrame" href="src/NcAstrolab.cxx.html#v1AK.C">GetLocalFrame</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a>* arr)</span><br />
+<div class="funccomm"><pre> Provide the orientations of the local reference frame axes w.r.t.
+ the Master Reference Frame (MRF).
+ For details please refer to the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetLocalFrame" title="void NcAstrolab::SetLocalFrame(Double_t t1,Double_t p1,Double_t t2,Double_t p2,Double_t t3,Double_t p3)">SetLocalFrame</a>().
+
+ Note : The provided array must have a minimum length of 6.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:ConvertAngle" href="src/NcAstrolab.cxx.html#pVJ2qC">ConvertAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> a, TString in, TString out) const</span><br />
@@ -2121,7 +2332,7 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLT" href="src/NcAstrolab.cxx.html#cUwfhE">SetLT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Int_t">Int_t</a> ss, <a href="./ListOfTypes.html#Int_t">Int_t</a> ns = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> ps = 0)</span><br />
-<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the local date and time (LT)
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the (mean) local date and time (LT)
  in the Gregorian calendar as specified by the input arguments.
  This facility is valid for all AD dates in the Gregorian calendar.
 
@@ -2142,7 +2353,7 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLT@1" href="src/NcAstrolab.cxx.html#Twxdk">SetLT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, <a href="./ListOfTypes.html#Int_t">Int_t</a> hh, <a href="./ListOfTypes.html#Int_t">Int_t</a> mm, <a href="./ListOfTypes.html#Double_t">Double_t</a> s)</span><br />
-<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the local date and time (LT)
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the (mean) local date and time (LT)
  in the Gregorian calendar as specified by the input arguments.
  This facility is valid for all AD dates in the Gregorian calendar.
 
@@ -2161,7 +2372,7 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLT@2" href="src/NcAstrolab.cxx.html#iy5qkC">SetLT</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> y, <a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a> d, TString time)</span><br />
-<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the local date and time (LT)
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the (mean) local date and time (LT)
  in the Gregorian calendar as specified by the input arguments.
  This facility is valid for all AD dates in the Gregorian calendar.
 
@@ -2178,7 +2389,7 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetLT@3" href="src/NcAstrolab.cxx.html#ZM9loC">SetLT</a>(TString date, TString time, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
-<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the local date and time (LT)
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the <a href="./NcTimestamp.html">NcTimestamp</a> parameters corresponding to the (mean) local date and time (LT)
  in the Gregorian calendar as specified by the input arguments.
  This facility is valid for all AD dates in the Gregorian calendar.
 
@@ -2719,7 +2930,7 @@ return false;}
  mode=lab.<a href="./NcAstrolab.html#NcAstrolab:GetPositionScramble" title="Int_t NcAstrolab::GetPositionScramble(Double_t* dmin=0,Double_t* dmax=0,TF1* df=0,Double_t* thmin=0,Double_t* thmax=0,TF1* thf=0,Double_t* phimin=0,Double_t* phimax=0,TF1* phif=0)">GetPositionScramble</a>(&amp;dlow,&amp;dup,&amp;func);
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:DisplaySignal" href="src/NcAstrolab.cxx.html#V9HkuD">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = 0, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, TString name = <span class="string">""</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:DisplaySignal" href="src/NcAstrolab.cxx.html#V9HkuD">DisplaySignal</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, TString name = <span class="string">""</span>)</span><br />
 <div class="funccomm"><pre> Display a stored signal in a user specified coordinate projection
  at the specific timestamp ts.
 
@@ -2733,12 +2944,13 @@ return false;}
 
  The user is advised not to use the obsolete <span class="string">"j=0"</span> functionality anymore.
 
- Default value is j=0 for backward compatibility.
+ Default value is j=-1 for backward compatibility.
 
  Measurements are indicated as blue dots.
- Reference signals are indicated as red triangles.
- The Galactic Center is indicated as a red star.
- The size of the marker symbols may be tailored via the member function <a href="./NcAstrolab.html#NcAstrolab:SetMarkerSize" title="void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)">SetMarkerSize</a>().
+ Reference signals are indicated as red stars.
+ The Galactic Center is indicated as a black cross.
+ The attributes of the marker symbols may be tailored via the member functions
+ <a href="./NcAstrolab.html#NcAstrolab:SetMarkerSize" title="void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)">SetMarkerSize</a>(), <a href="./NcAstrolab.html#NcAstrolab:SetMarkerStyle" title="void NcAstrolab::SetMarkerStyle(Int_t style,Int_t type)">SetMarkerStyle</a>() and <a href="./NcAstrolab.html#NcAstrolab:SetMarkerColor" title="void NcAstrolab::SetMarkerColor(Int_t color,Int_t type)">SetMarkerColor</a>().
 
  In case a non-empty string for the input parameter <span class="string">"name"</span> is provided, this name will
  appear in the title text of the display. In this way the user can indicate the name
@@ -2825,9 +3037,10 @@ return false;}
         1 --&gt; Display the corresponding measurement
 
  Measurements are indicated as blue dots.
- Reference signals are indicated as red triangles.
- The Galactic Center is indicated as a red star.
- The size of the marker symbols may be tailored via the member function <a href="./NcAstrolab.html#NcAstrolab:SetMarkerSize" title="void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)">SetMarkerSize</a>().
+ Reference signals are indicated as red stars.
+ The Galactic Center is indicated as a black cross.
+ The attributes of the marker symbols may be tailored via the member functions
+ <a href="./NcAstrolab.html#NcAstrolab:SetMarkerSize" title="void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)">SetMarkerSize</a>(), <a href="./NcAstrolab.html#NcAstrolab:SetMarkerStyle" title="void NcAstrolab::SetMarkerStyle(Int_t style,Int_t type)">SetMarkerStyle</a>() and <a href="./NcAstrolab.html#NcAstrolab:SetMarkerColor" title="void NcAstrolab::SetMarkerColor(Int_t color,Int_t type)">SetMarkerColor</a>().
 
  Note : In case ts=0 the actual recorded timestamp of the signal will be taken.
         If such a recorded timestamp is absent, the current timestamp of the lab is used.
@@ -2902,8 +3115,9 @@ return false;}
  The default values are : proj=<span class="string">"ham"</span>, clr=0 and type=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:DisplaySignals" href="src/NcAstrolab.cxx.html#CHj6jC">DisplaySignals</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1)</span><br />
-<div class="funccomm"><pre> Display of stored signals in a user specified coordinate projection at the specific timestamp.
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:DisplaySignals" href="src/NcAstrolab.cxx.html#m5DWED">DisplaySignals</a>(TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString proj = <span class="string">"ham"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = -1, TString name = <span class="string">"*"</span>)</span><br />
+<div class="funccomm"><pre> Display of stored signals in a user specified coordinate projection at the specific timestamp,
+ if their name matches the provided name pattern <span class="string">"name"</span>, where name=<span class="string">"*"</span> means all.
 
  All measurements are displayed according to the timestamp of their actual stored recording,
  which may be a scrambled timestamp according to the invokation of the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetTimeScramble" title="void NcAstrolab::SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frndm=0)">SetTimeScramble</a>().
@@ -2916,9 +3130,10 @@ return false;}
  Note : ts=0 corresponds to the current timestamp of the lab.
 
  Measurements are indicated as blue dots.
- Reference signals are indicated as red triangles.
- The Galactic Center is indicated as a red star.
- The size of the marker symbols may be tailored via the member function <a href="./NcAstrolab.html#NcAstrolab:SetMarkerSize" title="void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)">SetMarkerSize</a>().
+ Reference signals are indicated as red stars.
+ The Galactic Center is indicated as a black cross.
+ The attributes of the marker symbols may be tailored via the member functions
+ <a href="./NcAstrolab.html#NcAstrolab:SetMarkerSize" title="void NcAstrolab::SetMarkerSize(Float_t size,Int_t type)">SetMarkerSize</a>(), <a href="./NcAstrolab.html#NcAstrolab:SetMarkerStyle" title="void NcAstrolab::SetMarkerStyle(Int_t style,Int_t type)">SetMarkerStyle</a>() and <a href="./NcAstrolab.html#NcAstrolab:SetMarkerColor" title="void NcAstrolab::SetMarkerColor(Int_t color,Int_t type)">SetMarkerColor</a>().
 
  In case no corresponding stored signal is available or one of the input arguments is
  invalid, no display is produced.
@@ -2990,17 +3205,37 @@ return false;}
 
  The input argument <span class="string">"clr"</span> allows to clear (1) the display before drawing or not (0).
 
- The default values are : proj=<span class="string">"ham"</span>, clr=0, nmax=-1, j=-1 and type=-1.
+ The default values are : proj=<span class="string">"ham"</span>, clr=0, nmax=-1, j=-1, type=-1 and name=<span class="string">"*"</span>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetMarkerSize" href="src/NcAstrolab.cxx.html#jrGjUD">SetMarkerSize</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> size, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</span><br />
 <div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the size of the marker symbols for skymaps and related histograms.
- By default all sizes are set to 1 in the constructor of this <a href="./NcAstrolab.html">NcAstrolab</a> class.
+ Defaults are set in the constructor of this <a href="./NcAstrolab.html">NcAstrolab</a> class.
 
- type = 0 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for reference signals
-        1 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for measurements
-        2 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for the Galactic Center
-        3 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for the skymap grid dots
+ type = 0 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for reference signals    (default=1.5)
+        1 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for measurements         (default=1.0)
+        2 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for the Galactic Center  (default=1.5)
+        3 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker size for the skymap grid dots (default=0.3)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetMarkerStyle" href="src/NcAstrolab.cxx.html#ENt.AD">SetMarkerStyle</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> style, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</span><br />
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the style of the marker symbols for skymaps and related histograms.
+ Defaults are set in the constructor of this <a href="./NcAstrolab.html">NcAstrolab</a> class.
+
+ type = 0 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker style for reference signals    (default=29 filled star)
+        1 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker style for measurements         (default=8  scalable dot)
+        2 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker style for the Galactic Center  (default=34 filled cross)
+        3 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker style for the skymap grid dots (default=8  scalable dot)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetMarkerColor" href="src/NcAstrolab.cxx.html#Wk.nkC">SetMarkerColor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> color, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</span><br />
+<div class="funccomm"><pre> <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> the color of the marker symbols for skymaps and related histograms.
+ Defaults are set in the constructor of this <a href="./NcAstrolab.html">NcAstrolab</a> class.
+
+ type = 0 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker color for reference signals    (default=kRed)
+        1 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker color for measurements         (default=kBlue)
+        2 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker color for the Galactic Center  (default=kBlack)
+        3 --&gt; <a href="./#TTimeStamp:Set" title="void TTimeStamp::Set() or overloads">Set</a> marker color for the skymap grid dots (default=kBlack)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetCentralMeridian" href="src/NcAstrolab.cxx.html#IMbDxC">SetCentralMeridian</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> phi = 0, TString u = <span class="string">"deg"</span>)</span><br />
@@ -5142,6 +5377,219 @@ return false;}
 
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SkyMapPanel" href="src/NcAstrolab.cxx.html#lYk5w">SkyMapPanel</a>()</span><br />
+<div class="funccomm"><pre> Main steering routine for the <a href="./NcAstrolab.html#NcAstrolab:SkyMapPanel" title="void NcAstrolab::SkyMapPanel()">SkyMapPanel</a> GUI.
+ Invokation of this memberfunction will open an interactive GUI
+ to provide a user friendly interface to this <a href="./NcAstrolab.html">NcAstrolab</a> instance
+ to Enter, Remove, List and Display entries and their properties.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:LabLocationPanel" href="src/NcAstrolab.cxx.html#daKHlC">LabLocationPanel</a>(TGCompositeFrame* frame)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to render the Lab location and experiment specification GUI panel.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapLocl" href="src/NcAstrolab.cxx.html#KxSOQD">MapLocl</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the lab longitude entry field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapLocb" href="src/NcAstrolab.cxx.html#WihPQD">MapLocb</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the lab latitude entry field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapUloc" href="src/NcAstrolab.cxx.html#OAv68C">MapUloc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the lab angular unit selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapExperiment" href="src/NcAstrolab.cxx.html#QJczoB">MapExperiment</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the lab experiment site box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapLocId" href="src/NcAstrolab.cxx.html#PNccoE">MapLocId</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the lab detector element Id entry field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapLocEnter" href="src/NcAstrolab.cxx.html#rPpdKD">MapLocEnter</a>()</span><br />
+<div class="funccomm"><pre> Enter the provided lab location entry
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:TimestampPanel" href="src/NcAstrolab.cxx.html#EXwVDC">TimestampPanel</a>(TGCompositeFrame* frame)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to render the Timestamp specification GUI panel.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapDateTime" href="src/NcAstrolab.cxx.html#JfuBZD">MapDateTime</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the time specification entry field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapTimeType" href="src/NcAstrolab.cxx.html#twagXC">MapTimeType</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on the time type selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapLabTS" href="src/NcAstrolab.cxx.html#ZJWyND">MapLabTS</a>()</span><br />
+<div class="funccomm"><pre> Use the current date/time selection as the Lab timestamp
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:LabLocalFramePanel" href="src/NcAstrolab.cxx.html#vWCZOC">LabLocalFramePanel</a>(TGCompositeFrame* frame)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to render the Lab local reference frame specification GUI panel.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapLabLframeEnter" href="src/NcAstrolab.cxx.html#jwwxJD">MapLabLframeEnter</a>()</span><br />
+<div class="funccomm"><pre> Enter the specified local frame parameters.
+ Note : Local frame parameters for established experimental sites
+        may NOT be modified.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:InfoPanel" href="src/NcAstrolab.cxx.html#sb5cmB">InfoPanel</a>(TGCompositeFrame* frame)</span><br />
+<div class="funccomm"><pre> The Information panel
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapCinfo" href="src/NcAstrolab.cxx.html#Pg33UD">MapCinfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> )</span><br />
+<div class="funccomm"><pre> Action on a button from the category selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapTinfo" href="src/NcAstrolab.cxx.html#v4e6UD">MapTinfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> )</span><br />
+<div class="funccomm"><pre> Action on a button from the time type selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapUinfo" href="src/NcAstrolab.cxx.html#Dvo6UD">MapUinfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> )</span><br />
+<div class="funccomm"><pre> Action on a button from the info angular format selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapIname" href="src/NcAstrolab.cxx.html#JSDV0E">MapIname</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Treating the text of the entry name for the information panel.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapInfo" href="src/NcAstrolab.cxx.html#qedA2D">MapInfo</a>()</span><br />
+<div class="funccomm"><pre> Provide the requested info
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:EntriesPanel" href="src/NcAstrolab.cxx.html#nSTVLC">EntriesPanel</a>(TGCompositeFrame* frame)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to render the GUI panel to enter c.q. remove data entries.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapEa" href="src/NcAstrolab.cxx.html#PW_QUE">MapEa</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the entries a coordinate specification field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapUa" href="src/NcAstrolab.cxx.html#qTYRiB">MapUa</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the a coordinate angular format selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapEb" href="src/NcAstrolab.cxx.html#zpqkAE">MapEb</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the entries b coordinate specification field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapUb" href="src/NcAstrolab.cxx.html#eiJQiB">MapUb</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the b coordinate angular format selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapEcoord" href="src/NcAstrolab.cxx.html#crCGz">MapEcoord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the entry coordinate frame selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapEtype" href="src/NcAstrolab.cxx.html#QRraq">MapEtype</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the entry type selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapEname" href="src/NcAstrolab.cxx.html#lvlyWE">MapEname</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the (optional) entry name selection field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapEnter" href="src/NcAstrolab.cxx.html#XhYtkC">MapEnter</a>()</span><br />
+<div class="funccomm"><pre> Enter the provided entry
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapRemove" href="src/NcAstrolab.cxx.html#pto9mE">MapRemove</a>()</span><br />
+<div class="funccomm"><pre> Remove the entry/entries specified by type and name pattern
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapListOptionsPanel" href="src/NcAstrolab.cxx.html#WsF.8B">MapListOptionsPanel</a>(TGCompositeFrame* frame)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to render the GUI panel to specify various Mapping and Listing options
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapDcoord" href="src/NcAstrolab.cxx.html#U14Fz">MapDcoord</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the coordinate system selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapProj" href="src/NcAstrolab.cxx.html#SbqN5C">MapProj</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the projection selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapMerMode" href="src/NcAstrolab.cxx.html#zm0SDE">MapMerMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the meridian ordering selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapMerC" href="src/NcAstrolab.cxx.html#OTGATD">MapMerC</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the central meridian specification field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapMerUc" href="src/NcAstrolab.cxx.html#F7cZSD">MapMerUc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the central meridian angular format selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapDoptions" href="src/NcAstrolab.cxx.html#C8J9U">MapDoptions</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on an button from the draw/list options group
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapNmax" href="src/NcAstrolab.cxx.html#eTE9UD">MapNmax</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the draw/list Nmax selection field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapDname" href="src/NcAstrolab.cxx.html#JSDVUE">MapDname</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the draw/list entry name selection field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapMarkSize" href="src/NcAstrolab.cxx.html#jB6Z4E">MapMarkSize</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the marker size selection field
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapMarkStyle" href="src/NcAstrolab.cxx.html#YgA45D">MapMarkStyle</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on the marker style selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapMarkColor" href="src/NcAstrolab.cxx.html#udp1WB">MapMarkColor</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on the marker color selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapMarkType" href="src/NcAstrolab.cxx.html#l2rW0E">MapMarkType</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on the markers entry type selection box
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapSolar" href="src/NcAstrolab.cxx.html#CPvmYD">MapSolar</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</span><br />
+<div class="funccomm"><pre> Action on a button from the Solar system selection group
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapEnterSolar" href="src/NcAstrolab.cxx.html#op.zU">MapEnterSolar</a>()</span><br />
+<div class="funccomm"><pre> Enter the seleced Solar system objects as reference object
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapRemoveSolar" href="src/NcAstrolab.cxx.html#jiEiSB">MapRemoveSolar</a>()</span><br />
+<div class="funccomm"><pre> Remove the seleced Solar system object(s) from the reference objects
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:CommandPanel" href="src/NcAstrolab.cxx.html#w6H.vB">CommandPanel</a>(TGCompositeFrame* frame)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to render the GUI panel with the various command buttons.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapList" href="src/NcAstrolab.cxx.html#BYHZLD">MapList</a>()</span><br />
+<div class="funccomm"><pre> List the entries of the skymap
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapDraw" href="src/NcAstrolab.cxx.html#Z6.70D">MapDraw</a>()</span><br />
+<div class="funccomm"><pre> <a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a> the skymap
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapClose" href="src/NcAstrolab.cxx.html#ldY8WB">MapClose</a>()</span><br />
+<div class="funccomm"><pre> Close the <a href="./NcAstrolab.html#NcAstrolab:SkyMapPanel" title="void NcAstrolab::SkyMapPanel()">SkyMapPanel</a> window but do NOT exit the current ROOT session.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapExit" href="src/NcAstrolab.cxx.html#lD2UMD">MapExit</a>()</span><br />
+<div class="funccomm"><pre> Exit this ROOT session
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetMapTS" href="src/NcAstrolab.cxx.html#hrz0eD">SetMapTS</a>()</span><br />
+<div class="funccomm"><pre> Internal memberfunction to compose the timestamp within the <a href="./NcAstrolab.html#NcAstrolab:SkyMapPanel" title="void NcAstrolab::SkyMapPanel()">SkyMapPanel</a> GUI.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* <a class="funcname" name="NcAstrolab:Clone" href="src/NcAstrolab.cxx.html#vmj_HD">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) const</span><br />
 <div class="funccomm"><pre> Make a deep copy of the current object and provide the pointer to the copy.
  This memberfunction enables automatic creation of new objects of the
@@ -5154,7 +5602,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Mar 27 13:47:35 2023 </em><em>&raquo; Last generated: 2023-03-27 13:47</em><br />
+<em>&raquo; Last changed: Mon Jul 17 23:33:03 2023 </em><em>&raquo; Last generated: 2023-07-17 23:33</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

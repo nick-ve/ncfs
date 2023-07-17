@@ -25,6 +25,12 @@
 #include "TChain.h"
 #include "TLeaf.h"
 
+#include "TApplication.h"
+#include "TGFrame.h"
+#include "TGComboBox.h"
+#include "TGNumberEntry.h"
+#include "TGButtonGroup.h"
+
 #include "NcTimestamp.h"
 #include "NcPosition.h"
 #include "NcSignal.h"
@@ -32,21 +38,23 @@
 #include "NcRandom.h"
 #include "NcMath.h"
 #include "NcSample.h"
- 
+
 class NcAstrolab : public TTask,public NcTimestamp
 {
  public:
-  NcAstrolab(const char* name="NcAstrolab",const char* title="Generic lab"); // Constructor
+  NcAstrolab(const char* name="User",const char* title="Virtual Lab for general use"); // Constructor
   virtual ~NcAstrolab();                                              // Destructor
   NcAstrolab(const NcAstrolab& t);                                    // Copy constructor
   virtual TObject* Clone(const char* name="") const;                  // Make a deep copy and provide its pointer
   void Data(Int_t mode=1,TString u="deg",Bool_t utc=kTRUE);           // Lab info in angular units u
   void SetLabPosition(Nc3Vector& r);                                  // Set lab position in terrestrial frame
   void SetLabPosition(Double_t l,Double_t b,TString u="deg");         // Set lab terrestrial position
-  void SetExperiment(TString name);                                   // Set position and local frame for the specified experiment
+  void SetExperiment(TString name,Int_t id=0);                        // Set position and local frame for the specified experiment
   void SetLabTimeOffset(Double_t dt);                                 // Set the lab time offset w.r.t. UT
   NcPosition GetLabPosition() const;                                  // Provide the lab terrestrial position 
   void GetLabPosition(Double_t& l,Double_t& b,TString u="deg") const; // Provide the lab terrestrial position
+  TString GetExperiment() const;                                      // Provide the name of the experiment site
+  Int_t GetLabDetectorId() const;                                     // Provide the detector system identifier
   Double_t GetLabTimeOffset() const;                                  // Provide the lab time offset w.r.t. UT
   void SetRandomiser(Int_t iseed,Int_t cnt1=0,Int_t cnt2=0,NcTimestamp* ts=0); // (Re)initialise the internal NcRandom randomisation facility 
   NcRandom* GetRandomiser(Int_t& iseed,Int_t& cnt1,Int_t& cnt2) const;         // Provide the current internal NcRandom randomiser parameters
@@ -75,17 +83,19 @@ class NcAstrolab : public TTask,public NcTimestamp
   NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,TString name,TString mode,Int_t type=0);// Provide signal data
   NcSignal* GetSignal(Int_t jref=0,Int_t type=0);                   // Provide pointer to a stored signal object
   NcSignal* GetSignal(TString name,Int_t type=0,NcTimestamp* ts=0); // Provide pointer to a stored signal object
-  void RemoveRefSignal(Int_t j,Int_t compress);                     // Remove a stored reference signal object
-  void RemoveRefSignal(TString name,Int_t compress);                // Remove a stored reference signal object
-  void RemoveSignal(Int_t j,Int_t type,Int_t compress);             // Remove a stored signal object
-  void RemoveSignal(TString name,Int_t type,Int_t compress);        // Remove a stored signal object
+  Int_t RemoveRefSignal(Int_t j,Int_t compress);                    // Remove a stored reference signal object
+  Int_t RemoveRefSignal(TString name,Int_t compress);               // Remove a stored reference signal object
+  Int_t RemoveSignal(Int_t j,Int_t type,Int_t compress);            // Remove the signal object stored at index j
+  Int_t RemoveSignal(TString name,Int_t type,Int_t compress);       // Remove the signal object stored with the provided name
+  Int_t RemoveSignals(TString name,Int_t type,Int_t compress);      // Remove all signal objects that match the provided name pattern
   void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,Int_t jref=0,TString emode="T",Int_t type=0,Bool_t align=kFALSE); // Print stored signal data
   void PrintSignal(TString frame,TString mode,NcTimestamp* ts,Int_t ndig,TString name,TString emode="T",Int_t type=0,Bool_t align=kFALSE); // Print stored signal data
-  void ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode="T",Int_t nmax=10,Int_t j=-1,Int_t type=-1); // List stored signals
+  void ListSignals(TString frame,TString mode,Int_t ndig=1,TString emode="T",Int_t nmax=10,Int_t j=-1,Int_t type=-1,NcTimestamp* ts=0,TString name="*"); // List stored signals
   Int_t GetSignalIndex(TString name,Int_t type=0); // Provide storage index of the signal with the specified name
   Int_t GetSignalIndex(NcSignal* s,Int_t type);    // Provide storage index of the specified signal
   Double_t GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref=0,Int_t type=0);// Provide the Local Hour Angle in degrees
   void SetLocalFrame(Double_t t1,Double_t p1,Double_t t2,Double_t p2,Double_t t3,Double_t p3); // Define local coordinate frame
+  void GetLocalFrame(Float_t arr[6]); // Provide the axes orientations of the local coordinate frame
   using NcTimestamp::GetDifference;
   Double_t GetDifference(Int_t jref,TString au,Double_t& dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0); // Provide space and time difference
   Double_t GetDifference(TString name,TString au,Double_t& dt,TString tu,Int_t mode=1);// Provide space and time difference
@@ -98,10 +108,12 @@ class NcAstrolab : public TTask,public NcTimestamp
   Int_t GetPositionScramble(Double_t* dmin=0,Double_t* dmax=0,TF1* df=0,Double_t* thmin=0,Double_t* thmax=0,TF1* thf=0,Double_t* phimin=0,Double_t* phimax=0,TF1* phif=0); // Get position scrambling parameters
   void SetMaxDt(Double_t s); // Set maximum time difference (in sec) for GetSignal 
   Double_t GetMaxDt() const; // Provide maximum time difference (in sec) for GetSignal 
-  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j=0,TString proj="ham",Int_t clr=0,TString name=""); // Display stored signal
+  void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,Int_t j=-1,TString proj="ham",Int_t clr=0,TString name=""); // Display stored signal
   void DisplaySignal(TString frame,TString mode,NcTimestamp* ts,TString name,TString proj="ham",Int_t clr=0,Int_t type=0);  // Display stored signal
-  void DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj="ham",Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1); // Display all stored signals
+  void DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj="ham",Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1,TString name="*"); // Display all stored signals
   void SetMarkerSize(Float_t size,Int_t type); // Set size for the marker symbols of the skymaps and related histograms 
+  void SetMarkerStyle(Int_t style,Int_t type); // Set style for the marker symbols of the skymaps and related histograms 
+  void SetMarkerColor(Int_t color,Int_t type); // Set color for the marker symbols of the skymaps and related histograms 
   void SetCentralMeridian(Int_t mode=0,Double_t phi=0,TString u="deg");  // Set central meridian and orientation for the sky display
   void SetPhysicalParameter(TString name,Double_t value); // Facility to modify physical parameter values
   Double_t GetPhysicalParameter(TString name) const;      // Provide the (modified) value of a physical parameter
@@ -172,12 +184,62 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetBurstLiMaSignificance() const; // Provide the transient burst Li-Ma signal significance
   void GetBurstBayesianPsiStatistics(TString type,Double_t nr=-1,Int_t ncut=10,Int_t ndt=2,Int_t mode=1,Double_t fact=1,Int_t freq=0); // Provide transient burst Bayesian Psi statistics
   void GetBurstChi2Statistics(TString type,Int_t ndt=2,Int_t mode=1,Double_t fact=1); // Provide the transient burst Chi-squared statistics
- 
+
+  // Facilities for the SkyMapPanel GUI
+  virtual void SkyMapPanel();
+  void MapLocl(const char* text);
+  void MapLocb(const char* text);
+  void MapUloc(Int_t i);
+  void MapExperiment(Int_t i);
+  void MapLocId(const char* text);
+  void MapLocEnter();
+  void MapDateTime(const char* text);
+  void MapTimeType(Int_t i);
+  void MapLabTS();
+  void MapLabLframeEnter();
+  void MapCinfo(Int_t);
+  void MapTinfo(Int_t);
+  void MapUinfo(Int_t);
+  void MapIname(const char* text);
+  void MapInfo();
+  void MapEa(const char* text);
+  void MapUa(Int_t i);
+  void MapEb(const char* text);
+  void MapUb(Int_t i);
+  void MapEcoord(Int_t i);
+  void MapEtype(Int_t i);
+  void MapEname(const char* text);
+  void MapEnter();
+  void MapRemove();
+  void MapDcoord(Int_t i);
+  void MapProj(Int_t i);
+  void MapMerMode(Int_t i);
+  void MapMerC(const char* text);
+  void MapMerUc(Int_t i);
+  void MapDoptions(Int_t i);
+  void MapNmax(const char* text);
+  void MapDname(const char* text);
+  void MapMarkSize(const char* text);
+  void MapMarkStyle(Int_t i);
+  void MapMarkColor(Int_t i);
+  void MapMarkType(Int_t i);
+  void MapSolar(Int_t i);
+  void MapEnterSolar();
+  void MapRemoveSolar();
+  void MapList();
+  void MapDraw();
+  void MapClose();
+  void MapExit();
+
  protected:
   NcPosition fLabPos;    // Position of the lab in the terrestrial longitude-latitude frame
+  TString fExperiment;   // The name of the experimental site
+  Int_t fLabId;          // The identifier of the detector element 
   Double_t fToffset;     // Lab time offset in fractional hours w.r.t. UT
+  Double_t fAxes[6];     // Orientation angles of the local reference frame axes w.r.t. the MRS reference frame
   TObjArray* fRefs;      // Array holding the reference signals
   TObjArray* fSigs;      // Array holding the measured signals
+  ULong64_t fNen[2];     // Counters to record every storage of an unnamed reference c.q. measurement signal
   TRotMatrix fB;         //! The frame bias matrix for conversion of ICRS to J2000 coordinates
   Int_t fBias;           //! Initialisation flag for fB values (0=uninitialised  1=initialised)
   TRotMatrix fP;         //! Matrix for precession correction  
@@ -204,8 +266,8 @@ class NcAstrolab : public TTask,public NcTimestamp
   TF1* fPhiscfunc;       // Randomisation function for local phi coordinate scrambling
   NcRandom* fRan;        // The randomising facility
   Double_t fMaxDt;       // Maximum time difference (in sec) for GetSignal 
-  NcSignal* SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimestamp* ts,Int_t jref=0,TString name="",Int_t type=0); // Generic signal storage
-  NcSignal* GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimestamp* ts,Int_t jref=0,Int_t type=0); // Provide stored signal data
+  NcSignal* SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimestamp* ts,Int_t jref,TString name,Int_t type); // Generic signal storage
+  NcSignal* GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimestamp* ts,Int_t jref,Int_t type); // Provide stored signal data
   void SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0); // Set c.q. update coordinates for solar system objects
   void SetBmatrix();                 // Set the frame bias matrix
   void SetPmatrix(NcTimestamp* ts);  // Set precession matrix for Julian date jd w.r.t. J2000.
@@ -235,6 +297,52 @@ class NcAstrolab : public TTask,public NcTimestamp
   void ProjectHammer(Double_t l,Double_t b,Double_t& x,Double_t& y);       // Hammer-Aitoff projection of (l,b) pair
   void ProjectAitoff(Double_t l,Double_t b,Double_t& x,Double_t& y);       // Aitoff projection of (l,b) pair
   void ProjectMercator(Double_t l,Double_t b,Double_t& x,Double_t& y);     // Mercator projection of (l,b) pair
+
+  // The variables for the various SkyMapPanel GUI facilities
+  TGMainFrame* fSkyMapPanel;            //! The main frame for the SkyMapPanel GUI 
+  TGNumberEntryField* fMapLabLBI[3];    //! The GUI number entries for the Lab location specification
+  TGComboBox* fMapLabU;                 //! The GUI Lab location angular unit selection box
+  TGComboBox* fMapLabE;                 //! The GUI Lab experiment site selection box
+  Double_t fMapLabLocL;                 //! The GUI entered Lab longitude
+  Double_t fMapLabLocB;                 //! The GUI entered Lab latitude
+  TString fMapLabLocU;                  //! The GUI entered Lab location angular units
+  TString fMapLabExpName;               //! The GUI entered Lab experimental site
+  Int_t fMapLabId;                      //! The GUI entered Lab detector Id
+  TGTextEntry* fMapTSdatetime;          //! The GUI TS date/time specification
+  TGComboBox* fMapTStimetype;           //! The GUI TS time type selection box
+  TString fMapDate;                     //! The GUI entered date
+  TString fMapTime;                     //! The GUI entered time
+  TString fMapTimeType;                 //! The GUI entered time type
+  TString fMapDateTime;                 //! The GUI entered datetime 
+  NcTimestamp fMapTS;                   //! The GUI entered timestamp to be used for the List/Map
+  Bool_t fMapLabTS;                     //! The GUI selection to use the Lab timestamp for the List/Map
+  TGNumberEntryField* fMapLabLframe[6]; //! The GUI number entries for the local frame specification
+  TString fMapCinfo;                    //! The GUI selected info category 
+  Int_t fMapTinfo;                      //! The GUI selected mode for the timestamp info
+  TString fMapUinfo;                    //! The GUI selected angular units for the Lab info 
+  TString fMapIname;                    //! The GUI selected entry name for the info
+  Double_t fMapEa;                      //! The GUI entered a coordinate of an entry
+  TString fMapEua;                      //! The GUI entered angular units of a
+  Double_t fMapEb;                      //! The GUI entered b coordinate of an entry
+  TString fMapEub;                      //! The GUI entered angular units of b
+  Int_t fMapEtype;                      //! The GUI entered entry type
+  TString fMapEcoord;                   //! The GUI entered coordinate system of the entry
+  TString fMapEmode;                    //! The GUI entered coordinate system mode of the entry
+  TString fMapEname;                    //! The GUI entered name of the entry
+  TString fMapDcoord;                   //! The GUI selected coordinate system for the Map/List
+  TString fMapProj;                     //! The GUI selected projection for the Map
+  TString fMapDmode;                    //! The GUI selected coordinate system mode for the Map/List
+  Bool_t fMapDoptions[5];               //! The GUI Map/List options (histo, clr, ref, meas, refTS)
+  Int_t fMapNmax;                       //! The GUI selected max. number of signals of each type to Map/List
+  TString fMapDname;                    //! The GUI entered name pattern for entries to be shown in the Map/List
+  Bool_t fMapSolar[10];                 //! The GUI selection of solar system objects
+  Int_t fMapMerMode;                    //! The GUI selected meridian orientation for the Map
+  Double_t fMapMerC;                    //! The GUI entered central meridian location for the Map
+  TString fMapMerUc;                    //! The GUI selected angular units for the central meridian location
+  Double_t fMapMarkSize;                //! The GUI entered marker size for the Map
+  Int_t fMapMarkStyle;                  //! The GUI selected marker style for the Map
+  Int_t fMapMarkColor;                  //! The GUI selected marker color for the Map
+  Int_t fMapMarkType;                   //! The GUI selected entry type to apply the marker attributes on
 
   // Some (astro)physical parameters
   Double_t fSpeedC;  // Speed of light in vacuum in m/s
@@ -292,7 +400,17 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1* GetBurstZdist(TString name,TString type);
   TH1* GetBurstT90dist(TString name,TString type);
   TH1* GetBurstSigmaPosdist(TString name,TString type);
+
+  // Internal functions for the composition of the various sub-panels of the SkyMapPanel GUI
+  virtual void LabLocationPanel(TGCompositeFrame* frame);
+  virtual void TimestampPanel(TGCompositeFrame* frame);
+  virtual void LabLocalFramePanel(TGCompositeFrame* frame);
+  virtual void InfoPanel(TGCompositeFrame* frame);
+  virtual void EntriesPanel(TGCompositeFrame* frame);
+  virtual void MapListOptionsPanel(TGCompositeFrame* frame);
+  virtual void CommandPanel(TGCompositeFrame* frame);
+  void SetMapTS();
  
- ClassDef(NcAstrolab,39) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,40) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

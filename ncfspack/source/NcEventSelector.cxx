@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -141,7 +141,7 @@
 // if (evtsel) evtsel->Data();
 //
 //--- Author: Nick van Eijndhoven 17-sep-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  21:56Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 16, 2023  15:04Z
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcEventSelector.h"
@@ -972,7 +972,7 @@ void NcEventSelector::Track(Int_t mode)
     ts=track->GetTimestamp();
     if (!ts) ts=(NcTimestamp*)fEvt;
 
-    SetSignal(&p,"loc","T",ts,0,"Track");
+    SetSignal(&p,"loc","T",ts,0,"Track",1);
     TArrayI* arr=MatchRefSignal(fAstroDa,"deg",fAstroDt,"s");
     if (arr)
     {
@@ -1176,7 +1176,7 @@ void NcEventSelector::Astro()
   Nc3Vector p;
   p=fEvt->Get3Momentum();
   if (fAstroDir<0) p*=-1;
-  SetSignal(&p,"loc","T",(NcTimestamp*)fEvt,0,"Event");
+  SetSignal(&p,"loc","T",(NcTimestamp*)fEvt,0,"Event",1);
   TArrayI* arr=MatchRefSignal(fAstroDa,"deg",fAstroDt,"s");
   if (arr && fLogic) fSelect=1;
   return;
@@ -1185,7 +1185,7 @@ void NcEventSelector::Astro()
  // Check event position w.r.t. external (astrophysical) objects
  if (fAstroflag==3)
  {
-  SetSignal((Nc3Vector*)fEvt,"loc","T",(NcTimestamp*)fEvt,0,"Event");
+  SetSignal((Nc3Vector*)fEvt,"loc","T",(NcTimestamp*)fEvt,0,"Event",1);
   TArrayI* arr=MatchRefSignal(fAstroDa,"deg",fAstroDt,"s");
   if (arr && fLogic) fSelect=1;
   return;
