@@ -1447,5 +1447,8 @@
                 Also the functionality of NcAstrolab was extended, and NcEventSelector.cxx was slightly
                 modified to cope with the non-default parameters of NcAstrolab::SetSignal().
                 Also several #include statements introduced in makedocs.cc in order to resolve various
-                GUI header files that were contained in them in a combined fashion.
+                GUI header files that were contained in them in a combined fashion, so that running in
+                batch mode (i.e. root -b) is possible.
+                The same had to be done in the rootlogon.cc file, of which now a copy is maintained
+                in the "ncfs" top directory.
                 The version indicator in NcVersion has been updated to 5.35.
