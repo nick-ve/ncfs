@@ -175,15 +175,10 @@ Example : To create the IceCube environment one should load the following librar
     Root> gSystem->Load("ncfspack");
     Root> gSystem->Load("icepack");
 
-Note : In view of the presence of some Graphical User Interface (GUI) facilities,
-       of which some of the standard ROOT headers were combined in a single .h file,
-       it is necessary to include the following statements either in your ROOT macro
-       or in your rootlogon.cc to enable running in batch mode (i.e. root -b) :
-
-           #include "TGClient.h"
-           #include "TGFrame.h"
-           #include "TGButton.h" 
-
+Note : Several standard ROOT libraries (e.g. Minuit, Pythia, GUI, ...) have to be loaded
+       via the corresponding gSystem->Load(....) statement.
+       The most convenient way to achieve this automatically is to perform this
+       in your rootlogon.cc macro. 
        An example of rootlogon.cc is provided in this "ncfs" top directory. 
  
  

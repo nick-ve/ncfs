@@ -20,11 +20,6 @@
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 17, 2023  23:37Z
 ////////////////////////////////////////////////////////////////////////
 {
- // Includes needed in view of combined GUI headers in a single file
- #include "TGClient.h"
- #include "TGFrame.h"
- #include "TGButton.h"
-
  gSystem->Load("ncfspack");
  gSystem->Load("icepack");
  gSystem->Load("iceconvert");

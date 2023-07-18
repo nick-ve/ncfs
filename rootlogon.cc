@@ -10,10 +10,6 @@
 
  #include <iomanip>
 
- #include "TGClient.h"
- #include "TGFrame.h"
- #include "TGButton.h"
-
  // Redefine the interactive ROOT prompt 
  ((TRint*)gROOT->GetApplication())->SetPrompt("Root> ");
 
@@ -23,7 +19,7 @@
  gStyle->SetTitleColor(10);
  gStyle->SetPadColor(10);
  gROOT->SetStyle("Plain");
-gStyle->SetPalette(1);
+ gStyle->SetPalette(1);
 
 // No canvas or pad borders in produced .eps files
  gStyle->SetCanvasBorderMode(0);
@@ -50,6 +46,7 @@ gStyle->SetPalette(1);
  gSystem->Load("libTree");
  gSystem->Load("libMinuit");
  gSystem->Load("libFITSIO");
+ gSystem->Load("libGui");
 
  TDatime session_clock;
 
