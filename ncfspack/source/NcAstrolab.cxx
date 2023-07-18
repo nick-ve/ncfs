@@ -176,7 +176,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 17, 2023  22:06Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 18, 2023  02:28Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -14212,6 +14212,12 @@ void NcAstrolab::SkyMapPanel()
 // Invokation of this memberfunction will open an interactive GUI
 // to provide a user friendly interface to this NcAstrolab instance
 // to Enter, Remove, List and Display entries and their properties.
+
+ if (gROOT->IsBatch())
+ {
+  printf("\n *%-s::SkyMapPanel* GUI is not available in batch mode. \n",ClassName());
+  return;
+ }
 
  // Select the lab timestamp as default
  fMapTS.SetMJD(fMJD,fJsec,fJns,fJps,"A");

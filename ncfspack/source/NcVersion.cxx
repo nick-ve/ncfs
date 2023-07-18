@@ -51,7 +51,7 @@
 // improvements or extensions that are fully backward compatible.
 //
 //--- Author: Nick van Eijndhoven 24-sep-2009 NCFS
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 17, 2023  22:19Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 18, 2023  02:38Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcVersion.h"
@@ -64,7 +64,7 @@ NcVersion::NcVersion() : TObject()
 // Default constructor to initialise all parameters
  fVersion="5.35";
  fRev="Branch: master";
- fDate="July 17, 2023  22:19 UTC";
+ fDate="July 18, 2023  02:38 UTC";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()

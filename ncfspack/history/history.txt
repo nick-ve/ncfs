@@ -1451,4 +1451,8 @@
                 batch mode (i.e. root -b) is possible.
                 The same had to be done in the rootlogon.cc file, of which now a copy is maintained
                 in the "ncfs" top directory.
+17-jul-2023 NvE The additional include files have again been removed from makedocs.cc and rootlogon.cc,
+                since the simple addition of gSystem->Load("libGui") in rootlogon.cc solved the problem.
+                Also a (crash) protection introduced in NcAstrolab::SkyMapPanel() when run in batch mode.
                 The version indicator in NcVersion has been updated to 5.35.
+                 
