@@ -6,7 +6,7 @@
 //        contained in RNOHeaders.h
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  16:58Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  16:58Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  11:48Z
 ///////////////////////////////////////////////////////////////////////////
  
 #ifdef __CINT__
@@ -28,5 +28,6 @@
  #pragma link C++ class RnoEvent+;
  #pragma link C++ class RnoConvert+;
  #pragma link C++ class RnoMonitor+;
+ #pragma link C++ class RnoExplorer+;
 #endif
  

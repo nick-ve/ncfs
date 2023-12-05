@@ -114,10 +114,12 @@ class NcSample : public TNamed
   TGraphQQ GetQQplot(TString nameA,TString nameB,TF1* f=0); // Provide a TGraphQQ for variables nameA and nameB or the function f replacing nameB
   void Load(TGraph* g,Int_t clr=1);                   // Load the data points of a TGraph object as 2-dimensional (x,y) data.
   void Load(TGraph2D* g,Int_t clr=1);                 // Load the data points of a TGraph2D object as 3-dimensional (x,y,z) data.
+  void Load(TH1* h,Int_t clr=1);                      // Load the data of a 1-dimensional histogram.
+  void Load(TArray* h,Int_t clr=1);                   // Load the data of a 1-dimensional data array.
   Double_t GetSNR(Int_t i,Int_t mode=2,Bool_t db=kTRUE) const; // Provide the Signal to Noise ratio for the i-th variable
   Double_t GetSNR(TString name,Int_t mode=2,Bool_t db=kTRUE) const; // Provide the Signal to Noise ratio for the variable with the specified name
-  Double_t GetCV(Int_t i,Int_t model=0) const;        // Provide the Coefficient of Variation for the i-th variable
-  Double_t GetCV(TString name,Int_t model=0) const;   // Provide the Coefficient of Variation for the variable with the specified name
+  Double_t GetCV(Int_t i,Int_t mode=1) const;        // Provide the Coefficient of Variation for the i-th variable
+  Double_t GetCV(TString name,Int_t mode=1) const;   // Provide the Coefficient of Variation for the variable with the specified name
   void Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt="AP"); // Animation of an (ordered) sampling of the values of variables i and j
   void Animation(TString nameA,TString nameB,Int_t mode,TString nameC,Int_t delay,TString opt="AP"); // Animation of an (ordered) sampling of the values of variables nameA and nameB
   void Animation(Int_t i,Int_t j,Int_t k,Int_t mode,Int_t m,Int_t delay,TString opt="PFB"); // Animation of an (ordered) sampling of the values of variables i, j and k
@@ -166,6 +168,6 @@ class NcSample : public TNamed
   TArrayL64 ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Provide the quantized data of an "nbits" ADC.
   TArrayD DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Reconstruct the analog signals from an "nbits" ADC.
 
- ClassDef(NcSample,15) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,16) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

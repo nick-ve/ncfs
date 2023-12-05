@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon May 15 09:32:30 2023            -->
+<!--   Date: Tue Dec  5 12:09:09 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -104,7 +104,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 15, 2023  09:27Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:07Z
 
 </pre></div>
 </div></div>
@@ -161,8 +161,8 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCor@1">GetCor</a>(TString nameA, TString nameB) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCov">GetCov</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCov@1">GetCov</a>(TString nameA, TString nameB) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCV">GetCV</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCV@1">GetCV</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCV">GetCV</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetCV@1">GetCV</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetDimension">GetDimension</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
@@ -245,6 +245,8 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:ListOrdered@1">ListOrdered</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString name)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load">Load</a>(TGraph* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load@1">Load</a>(TGraph2D* g, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load@2">Load</a>(TH1* h, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcSample:Load@3">Load</a>(TArray* h, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
@@ -611,7 +613,8 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSigma" href="src/NcSample.cxx.html#ZuUoWB">GetSigma</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
-<div class="funccomm"><pre> Provide the rms-deviation (model=0) or standard deviation (model=1) of the i-th variable.
+<div class="funccomm"><pre> Provide the rms-deviation (model=0) or standard deviation of the
+ underlying parent distribution (model=1) of the i-th variable.
  The first variable corresponds to i=1.
 
  The default value is model=0.
@@ -1491,57 +1494,89 @@ return false;}
  The default value is clr=1.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Load@2" href="src/NcSample.cxx.html#C2Vup">Load</a>(TH1* h, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Load" title="void NcSample::Load(TGraph* g,Int_t clr=1) or overloads">Load</a> the data of a 1-dimensional histogram.
+
+ Input arguments :
+
+ h   : Pointer to the 1-dimensional histogram.
+ clr : Flag to denote to first clear (1) the data storage or not (0).
+
+ The default value is clr=1.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcSample:Load@3" href="src/NcSample.cxx.html#tdajPB">Load</a>(TArray* h, <a href="./ListOfTypes.html#Int_t">Int_t</a> clr = 1)</span><br />
+<div class="funccomm"><pre> <a href="./NcSample.html#NcSample:Load" title="void NcSample::Load(TGraph* g,Int_t clr=1) or overloads">Load</a> the data of a 1-dimensional data array.
+
+ Input arguments :
+
+ arr : Pointer to the 1-dimensional data array.
+ clr : Flag to denote to first clear (1) the data storage or not (0).
+
+ The default value is clr=1.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSNR" href="src/NcSample.cxx.html#hjakOE">GetSNR</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> db = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>) const</span><br />
 <div class="funccomm"><pre> Provide the Signal to Noise Ratio (SNR) of the i-th variable.
  The first variable corresponds to i=1.
 
- The definition used here is SNR=(signal power)/(noise power).
- This implies that when the values of the i-th variable represent amplitudes,
- the squares of the (rms) values should be used.
+ For a transient c.q. pulse signal, the SNR is defined as the ratio between
+ the largest amplitude difference and the standard deviation of the sample.
+ This is obtained via input argument <span class="string">"mode"</span> with abs(mode)=3 or abs(mode)=4,
+ as outlined below.
+
+ For a continuous signal, the definition used here is SNR=(signal power)/(noise power).
+ This implies that when the values of the i-th variable represent amplitudes related
+ to a continuous signal, the squares of the (rms) values should be used.
  This can be specified via the input argument <span class="string">"mode"</span> where abs(mode)=2 will
  invoke a conversion of amplitudes into power, whereas abs(mode)=1 will use
  the values of the i-th variable <span class="string">"as is"</span>, i.e. reflecting a direct power measurement.
+
  Furthermore, the input argument <span class="string">"mode"</span> also provides a selection to use
- the variance of the sample or the standard deviation of the underlying parent distribution,
- as indicated below.
+ the variance of the sample (mode&gt;0) or the standard deviation, sigma, of the underlying
+ parent distribution (mode&lt;0), as indicated below.
 
  Input arguments :
 
- mode :  2 --&gt; SNR=(mean*mean)/variance
-         1 --&gt; SNR=abs(mean/rms-deviation)
-        -2 --&gt; SNR=(mean*mean)/(sigma*sigma)
-        -1 --&gt; SNR=abs(mean/sigma)
+ mode :  1 --&gt; Continuous (nearly) stable signal with data reflecting power and SNR=abs(mean/rms-deviation)
+        -1 --&gt; Continuous (nearly) stable signal with data reflecting power and SNR=abs(mean/sigma)
+         2 --&gt; Continuous (nearly) stable signal with data reflecting amplitudes and SNR=(mean*mean)/variance
+        -2 --&gt; Continuous (nearly) stable signal with data reflecting amplitudes and SNR=(mean*mean)/(sigma*sigma)
+         3 --&gt; Transient signal with data reflecting power or RMS amplitudes and SNR=(max-min)/rms-deviation
+        -3 --&gt; Transient signal with data reflecting power or RMS amplitudes and SNR=(max-min)/sigma
+         4 --&gt; Transient signal with data reflecting bipolar amplitudes and SNR=(max-min)/(2*rms-deviation)
+        -4 --&gt; Transient signal with data reflecting bipolar amplitudes and SNR=(max-min)/(2*sigma)
  dB   : <a href="./ListOfTypes.html#Bool_t">kFALSE</a> Provide the SNR as the above straight ratio
         <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  Provide the SNR in Decibel
 
- The default values are model=2 and dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+ The default values are mode=2 and dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a> for backward compatibility.
 
  In case of inconsistent data, the value -9999 is returned.
 
- Derivation of the applied formulas :
+ Derivation of the applied formulas for a continuous (nearly) stable signal :
 
- For each recorded sampling k we assume a signal contribution Sk and a noise contribution Nk.
+ For each recorded sampling k we assume an amplitude contribution Sk of the signal and Nk of the noise.
 
  This leads to the expression :
 
    SNR=(average signal power)/(average noise power)=&lt;Sk^2&gt;/&lt;Nk^2&gt;  (1)
 
- Using variance=&lt;x^2&gt;-&lt;x&gt;^2 we can express the above formula in terms of the
- signal variance (Svar), signal mean (Smu), noise variance (Nvar) and noise mean (Nmu) as follows :
+ Using variance(y)=&lt;y^2&gt;-&lt;y&gt;^2 we can express the above formula in terms of the
+ signal variance var(Sk), signal mean &lt;Sk&gt;, noise variance var(Nk) and noise mean &lt;Nk&gt; as follows :
 
-   SNR=(Svar+Smu^2)/(Nvar+Nmu^2)  (2)
+   SNR=(var(Sk)+&lt;Sk&gt;^2)/(var(Nk)+&lt;Nk&gt;^2)  (2)
 
- Furthermore, the mean of the recorded samplings Mu is given by : Mu=&lt;Sk+Nk&gt;=&lt;Sk&gt;+&lt;Nk&gt;=Smu+Nmu  (3)
+ Furthermore, the mean of all the recorded samplings Mu is given by : Mu=&lt;Sk+Nk&gt;=&lt;Sk&gt;+&lt;Nk&gt;  (3)
 
- In most cases we will have &lt;Nk&gt;=Nmu=0, which implies that Mu=Smu  (4)
+ In most cases we will have &lt;Nk&gt;=0, which implies that Mu=&lt;Sk&gt;  (4)
 
  In other words : The mean of the observed samplings is equal to the signal mean,
- which implies that we can determine Smu directly from our data.
+ which implies that we can determine &lt;Sk&gt; directly from our data.
 
- Using Eq.(4) and Nmu=0 in Eq.(2) leads us to : SNR=(Svar+Mu^2)/Nvar  (5)
+ Using Eq.(4) and &lt;Nk&gt;=0 in Eq.(2) leads us to : SNR=(var(Sk)+Mu^2)/var(Nk)  (5)
 
- In case of a (nearly) stable signal, we have approximately Svar=0,
- which implies that the total observed sampling variance S=Nvar.
+ In case of a (nearly) stable signal, we have approximately var(Sk)=0,
+ which implies that the total observed sampling variance S=var(Nk).
 
  This leads to the final expression for SNR in terms of observed sampling amplitudes :
 
@@ -1622,33 +1657,47 @@ return false;}
  In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCV" href="src/NcSample.cxx.html#EHJXOB">GetCV</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCV" href="src/NcSample.cxx.html#a33Sl">GetCV</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
 <div class="funccomm"><pre> Provide the Coefficient of Variation (CV) of the i-th variable.
  The first variable corresponds to i=1.
 
- The definition used here is CV=abs(sigma/mean).
+ As indicated below, the input argument <span class="string">"mode"</span> allows to select use of
+ the mean of the sample or the difference between the maximum and minimum value.
+ The latter is best suited for bipolar transient signals, since their mean value
+ may become (close to) zero, irrespective of the signal amplitude.
 
- Input arguments :
+ Furthermore, the input argument <span class="string">"mode"</span> also provides a selection to use
+ the RMSdeviation of the sample (mode&gt;0) or the standard deviation, sigma,
+ of the underlying parent distribution (mode&lt;0), as indicated below.
 
- model : 0 --&gt; sigma represents the rms-deviation
-         1 --&gt; sigma represents the standard deviation
+ mode :  1 --&gt; CV=abs(RMSdeviation/mean)
+        -1 --&gt; CV=abs(sigma/mean)
+         2 --&gt; CV=abs(2*RMSdeviation/(max-min))
+        -2 --&gt; CV=abs(2*sigma/(max-min))
 
- The default value is model=0.
+ The default value is mode=1 for backward compatibility.
 
  In case of inconsistent data, the value -1 is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCV@1" href="src/NcSample.cxx.html#sitfaD">GetCV</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> model = 0) const</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetCV@1" href="src/NcSample.cxx.html#ifg_fB">GetCV</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1) const</span><br />
 <div class="funccomm"><pre> Provide the Coefficient of Variation (CV) of the variable with the specified name.
 
- The definition used here is CV=abs(sigma/mean).
+ As indicated below, the input argument <span class="string">"mode"</span> allows to select use of
+ the mean of the sample or the difference between the maximum and minimum value.
+ The latter is best suited for bipolar transient signals, since their mean value
+ may become (close to) zero, irrespective of the signal amplitude.
 
- Input arguments :
+ Furthermore, the input argument <span class="string">"mode"</span> also provides a selection to use
+ the RMSdeviation of the sample (mode&gt;0) or the standard deviation, sigma,
+ of the underlying parent distribution (mode&lt;0), as indicated below.
 
- model : 0 --&gt; sigma represents the rms-deviation
-         1 --&gt; sigma represents the standard deviation
+ mode :  1 --&gt; CV=abs(RMSdeviation/mean)
+        -1 --&gt; CV=abs(sigma/mean)
+         2 --&gt; CV=abs(2*RMSdeviation/(max-min))
+        -2 --&gt; CV=abs(2*sigma/(max-min))
 
- The default value is model=0.
+ The default value is mode=1 for backward compatibility.
 
  In case of inconsistent data, the value -1 is returned.
 </pre></div>
@@ -2257,7 +2306,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon May 15 09:32:31 2023 </em><em>&raquo; Last generated: 2023-05-15 09:32</em><br />
+<em>&raquo; Last changed: Tue Dec  5 12:09:11 2023 </em><em>&raquo; Last generated: 2023-12-05 12:09</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

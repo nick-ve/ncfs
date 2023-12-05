@@ -1,7 +1,7 @@
 #ifndef NcBlocks_h
 #define NcBlocks_h
 
-// Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TGraphErrors.h"
@@ -39,6 +39,6 @@ class NcBlocks
   Double_t GetPrior(Int_t n,Double_t fpr);           // Provide the prior fitness value for each block
   Double_t GetBlockFitness(Double_t n,Double_t len); // Provide the block fitness for Data Modes 1 and 2 
 
- ClassDef(NcBlocks,6) // (Bayesian) Block treatment of sequential data
+ ClassDef(NcBlocks,7) // (Bayesian) Block treatment of sequential data
 };
 #endif

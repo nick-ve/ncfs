@@ -273,7 +273,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 15, 2023  09:26Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:26Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDSP.h"
@@ -287,6 +287,7 @@ NcDSP::NcDSP(const char* name,const char* title) : TNamed(name,title)
 
  Reset();
  fSample=0;
+ fKeepOutput=kFALSE;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDSP::~NcDSP()
@@ -312,6 +313,7 @@ NcDSP::NcDSP(const NcDSP& q) : TNamed(q)
  fReOut=q.fReOut;
  fImOut=q.fImOut;
  fSample=q.fSample;
+ fKeepOutput=q.fKeepOutput;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Reset()
@@ -323,8 +325,11 @@ void NcDSP::Reset()
  fNwf=0;
  fReIn.Set(0);
  fImIn.Set(0);
- fReOut.Set(0);
- fImOut.Set(0);
+ if (!fKeepOutput)
+ {
+  fReOut.Set(0);
+  fImOut.Set(0);
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetSamplingFrequency(Float_t f)
@@ -1990,7 +1995,7 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
  }
 }
 ///////////////////////////////////////////////////////////////////////////
-TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2)
+TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
 {
 // Convolve the loaded input data x[] with the data contained in the (system response)
 // waveform h[] and return the resulting data y[] in a TArrayD object.
@@ -2025,16 +2030,31 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2)
 // So, values of y[j] with j<i1 or j>i2 contain incomplete convolutions, and as such should not
 // be considered as reliable, especially when x[] and/or h[] contain large variations.
 //
+// The argument "shift" determines whether the Xaxis values of the (optional) result histogram
+// are shifted or that the array y[] is truncated in order to provide (a view of) the resulting array y[]
+// such that it can be directly compared to the original array x[] (see notes 2) and 3) below).
+//
+// The convention is :
+// shift = 0 --> No shift and the full array y[] is returned and shown "as is" in the (optional) histogram.
+//         1 --> The full array y[] is returned and shown in the (optional) histogram with y[i1] at the center.
+//               This mode is particulary useful for correlation studies between two distributions [see Correlate()],
+//               since it will show both negative and positive values at the Xaxis of the (optional) histogram,
+//               and the self-correlation peak coincides with the value 0 at the Xaxis.  
+//         2 --> The array y[] contains only the modified x[] elements and is shown with y[0] at the start of the (optional) histogram.
+//               This mode is particulary useful for digital filtering processes (see the various filtering member functions),
+//               since it allows to directly compare the filtered and the unfiltered x[] distribution.
+//
 // Notes :
 // -------
 // 1) The sampling (rate) of h[] has to be the same as for the input data x[].
-// 2) Array sizes of x[nx] and h[nh] will result in a convolved data array of size y[(nx+nh-1)]. 
+// 2) Array sizes of x[nx] and h[nh] will result in a convolved data array of size y[(nx+nh-1)],
+//    except for shift=2 for which the convolved data array has size y[nx]. 
 // 3) For an absolute comparison between the x[] and y[] values, one should realize that 
 //    the array sizes of x[] and y[] are different and that x[k] should be compared with y[k+i1].
 // 4) The values i1 and i2 (if requested) are indicated by vertical dashed blue lines
 //    in the time domain histogram.
 //
-// The default values are hist=0, i1=0 and i2=0.
+// The default values are hist=0, i1=0, i2=0 and shift=0.
 
  TArrayD y(0);
  if (hist) hist->Reset();
@@ -2044,6 +2064,12 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2)
  if (nh<1 || nx<1)
  {
   printf(" *%-s::Convolve* Input or Waveform data are missing. Ninput=%-i Nwaveform=%-i \n",ClassName(),nx,nh);
+  return y;
+ }
+
+ if (shift<0 || shift>2)
+ {
+  printf(" *%-s::Convolve* Invalid inout argument shift=%-i \n",ClassName(),shift);
   return y;
  }
 
@@ -2071,19 +2097,49 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2)
  if (i1) *i1=nh-1;
  if (i2) *i2=ny-nh;
 
+ Int_t ioffset=0;
+ if (shift==2)
+ {
+  ioffset=nh/2;
+  TArrayD temp(nx);
+  for (Int_t i=0; i<nx; i++)
+  {
+   temp[i]=y[i+ioffset];
+  }
+  y=temp;
+  ny=nx;
+  if (i1) *i1=*i1-ioffset;
+  if (i2) *i2=*i2-ioffset;
+ }
+
  if (hist)
  {
   TString title;
   if (fSample>0)
   {
-  title.Form("NcDSP Convolution result (%-g samples/sec);Time in seconds;Value",fSample);
-  hist->SetBins(ny,0,double(ny)/fSample);
+   title.Form("NcDSP Convolution result (%-g samples/sec);Time in seconds;Value",fSample);
+   if (shift==0 || shift==2)
+   {
+    hist->SetBins(ny,0,double(ny)/fSample);
+   }
+   else
+   {
+    hist->SetBins(ny,double(-nh+1)/fSample,double(nx)/fSample);
+   }
   }
   else
   {
-  title.Form("NcDSP Convolution result;Sample number;Value");
-  hist->SetBins(ny,0,ny);
+   title.Form("NcDSP Convolution result;Sample number;Value");
+   if (shift==0 || shift==2)
+   {
+    hist->SetBins(ny,0,ny);
+   }
+   else
+   {
+    hist->SetBins(ny,-nh+1,nx);
+   }
   }
+
   hist->SetTitle(title);
   hist->SetMarkerStyle(20);
   for (Int_t ibin=1; ibin<=ny; ibin++)
@@ -2129,7 +2185,7 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2)
  return y;
 }
 ///////////////////////////////////////////////////////////////////////////
-TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2)
+TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak)
 {
 // (Cross) Correlate the data contained in the waveform h[] with the loaded input data x[]
 // and return the resulting data y[] in a TArrayD object.
@@ -2169,9 +2225,13 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2)
 // These values i1 and i2 (if requested) are indicated by vertical
 // dashed blue lines in the histogram.
 //
+// The (optional) argument "peak" provides the location of the correlation peak, indicating
+// the shift of the h[] pattern w.r.t. the best matching pattern in x[], with the convention
+// that the autocorrelation peak falls at 0.
+//
 // Note : The sampling (rate) of h has to be the same as for the loaded input data x[].
 //
-// The default values are hist=0, i1=0 and i2=0.
+// The default values are hist=0, i1=0, i2=0 and peak=0.
 
  TArrayD y(0);
  if (hist) hist->Reset();
@@ -2193,7 +2253,27 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2)
  }
 
  fWaveform=temp;
- y=Convolve(hist,i1,i2);
+ y=Convolve(hist,i1,i2,1);
+
+ // Get the index of the maximum in the y[] array
+ Int_t ny=y.GetSize();
+ Int_t imax=0;
+ Double_t ymax=0;
+ for (Int_t i=0; i<ny; i++)
+ {
+  if (y[i]>ymax)
+  {
+   ymax=y[i];
+   imax=i;
+  }
+ }
+
+ // Convert to the index matching the x[] convention
+ Int_t idx=imax-nh+1;
+ Double_t shift=idx;
+ if (fSample>0) shift=shift/fSample;
+
+ if (peak) *peak=shift;
 
  // Put the correct histogram title
  if (hist)
@@ -2201,11 +2281,11 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2)
   TString title;
   if (fSample>0)
   {
-   title.Form("NcDSP Correlation result (%-g samples/sec)",fSample);
+   title.Form("NcDSP Correlation result with max. at %-g sec. (%-g samples/sec)",shift,fSample);
   }
   else
   {
-   title.Form("NcDSP Correlation result");
+   title.Form("NcDSP Correlation result with max. at %-i samples",idx);
   }
   hist->SetTitle(title);
  }
@@ -3310,7 +3390,7 @@ TArrayD NcDSP::FilterMovingAverage(Int_t n,TString mode,TH1* hist,Int_t* i1,Int_
 // Perform a Moving Average filter on the loaded input data x[] with averaging over "n" samples.
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist".
 // The frequency domain result is returned in the (optional) histogram "hisf", for which
-// the amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFalse).
+// the amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The original input data x[] are not modified.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions.
 //
@@ -3539,9 +3619,12 @@ TArrayD NcDSP::FilterMovingAverage(Int_t n,TString mode,TH1* hist,Int_t* i1,Int_
   hisf->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return y;
 }
@@ -3552,7 +3635,7 @@ TArrayD NcDSP::FilterLowPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist
 // specified by "fcut" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
 // whereas the frequency domain result is returned in the (optional) histogram "hisf".
-// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFalse).
+// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The original input data x[] are not modified.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions.
 //
@@ -3639,7 +3722,7 @@ TArrayD NcDSP::FilterLowPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist
  
  // Perform the convolution
  SetWaveform(&h);
- y=Convolve(hist,i1,i2);
+ y=Convolve(hist,i1,i2,2);
 
  // Set title for the filtered time domain histogram
  if (hist)
@@ -3677,9 +3760,12 @@ TArrayD NcDSP::FilterLowPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist
   hisf->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return y;
 }
@@ -3690,7 +3776,7 @@ TArrayD NcDSP::FilterHighPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* his
 // specified by "fcut" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
 // whereas the frequency domain result is returned in the (optional) histogram "hisf".
-// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFalse).
+// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The original input data x[] are not modified.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions.
 //
@@ -3777,7 +3863,7 @@ TArrayD NcDSP::FilterHighPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* his
  
  // Perform the convolution
  SetWaveform(&h);
- y=Convolve(hist,i1,i2);
+ y=Convolve(hist,i1,i2,2);
 
  // Set title for the filtered time domain histogram
  if (hist)
@@ -3815,9 +3901,12 @@ TArrayD NcDSP::FilterHighPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* his
   hisf->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return y;
 }
@@ -3828,7 +3917,7 @@ TArrayD NcDSP::FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t d
 // specified by "f1" and "f2" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
 // whereas the frequency domain result is returned in the (optional) histogram "hisf".
-// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFalse).
+// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The original input data x[] are not modified.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions.
 //
@@ -3917,7 +4006,7 @@ TArrayD NcDSP::FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t d
  
  // Perform the convolution
  SetWaveform(&h);
- y=Convolve(hist,i1,i2);
+ y=Convolve(hist,i1,i2,2);
 
  // Set title for the filtered time domain histogram
  if (hist)
@@ -3957,9 +4046,12 @@ TArrayD NcDSP::FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t d
   hisf->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return y;
 }
@@ -3970,7 +4062,7 @@ TArrayD NcDSP::FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t
 // specified by "f1" and "f2" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
 // whereas the frequency domain result is returned in the (optional) histogram "hisf".
-// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFalse).
+// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The original input data x[] are not modified.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions.
 //
@@ -4058,7 +4150,7 @@ TArrayD NcDSP::FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t
  
  // Perform the convolution
  SetWaveform(&h);
- y=Convolve(hist,i1,i2);
+ y=Convolve(hist,i1,i2,2);
 
  // Set title for the filtered time domain histogram
  if (hist)
@@ -4098,9 +4190,12 @@ TArrayD NcDSP::FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t
   hisf->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return y;
 }
@@ -4111,7 +4206,7 @@ TArrayD NcDSP::FilterMultiBand(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1* hi
 // specified by the array "freqs" (see below) and filter kernels consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
 // whereas the frequency domain result is returned in the (optional) histogram "hisf".
-// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFalse).
+// The "hisf" amplitudes may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The original input data x[] are not modified.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions.
 //
@@ -4207,7 +4302,7 @@ TArrayD NcDSP::FilterMultiBand(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1* hi
  // Convolve the composite kernel with the original time domain data
  Load(&xsave);
  SetWaveform(&h);
- y=Convolve(hist,i1,i2);
+ y=Convolve(hist,i1,i2,2);
 
  // Determine the number of actually specified bands
  Double_t flow=0;
@@ -4246,9 +4341,12 @@ TArrayD NcDSP::FilterMultiBand(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1* hi
   hisf->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return y;
 }
@@ -4257,7 +4355,7 @@ TArrayD NcDSP::GetMovingAverageKernel(Int_t n,TH1* hisf,Bool_t dB,TH1* hist)
 {
 // Provide via the returned TArrayD an n-point time domain Moving Average Filter kernel.
 // The optional argument "hisf" may be used to obtain a histogram of the frequency domain kernel
-// with the amplitude in decibel (dB=kTRUE) or linear (dB=kFalse).
+// with the amplitude in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 //
 // A Moving Average filter is the optimal time domain filter for reducing random (noise) fluctuations,
@@ -4293,7 +4391,7 @@ TArrayD NcDSP::GetMovingAverageKernel(Int_t n,TH1* hisf,Bool_t dB,TH1* hist)
 
  TArrayD h(0);
  if (hisf) hisf->Reset();
- if (hist) hisf->Reset();
+ if (hist) hist->Reset();
 
  if (n<1)
  {
@@ -4327,9 +4425,12 @@ TArrayD NcDSP::GetMovingAverageKernel(Int_t n,TH1* hisf,Bool_t dB,TH1* hist)
   hist->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
  
  return h;
 }
@@ -4339,7 +4440,7 @@ TArrayD NcDSP::GetLowPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* h
 // Provide via the returned TArrayD an n-point time domain Low Pass Filter kernel
 // with cut-off frequency "fcut" expressed as a fraction of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
-// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFalse).
+// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 //
 // The implementation here is based on the Blackman windowed-sinc filtering procedure.
@@ -4455,9 +4556,12 @@ TArrayD NcDSP::GetLowPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* h
   hist->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return h;
 }
@@ -4467,7 +4571,7 @@ TArrayD NcDSP::GetHighPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* 
 // Provide via the returned TArrayD an n-point time domain High Pass Filter kernel
 // with cut-off frequency "fcut" expressed as a fraction of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
-// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFalse).
+// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 //
 // The implementation here is based on a spectrally inverted Blackman windowed-sinc Low Pass filter.
@@ -4567,9 +4671,12 @@ TArrayD NcDSP::GetHighPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* 
   hist->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return h;
 }
@@ -4579,7 +4686,7 @@ TArrayD NcDSP::GetBandPassKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_
 // Provide via the returned TArrayD an n-point time domain Band Pass Filter kernel
 // for the frequency band [f1,f2] expressed as fractions of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
-// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFalse).
+// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 //
 // The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters,
@@ -4683,9 +4790,12 @@ TArrayD NcDSP::GetBandPassKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_
   hist->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return h;
 }
@@ -4695,7 +4805,7 @@ TArrayD NcDSP::GetBandRejectKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Boo
 // Provide via the returned TArrayD an n-point time domain Band Reject Filter kernel
 // for the frequency band [f1,f2] expressed as fractions of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
-// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFalse).
+// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 //
 // The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters.
@@ -4801,9 +4911,12 @@ TArrayD NcDSP::GetBandRejectKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Boo
   hist->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return h;
 }
@@ -4813,7 +4926,7 @@ TArrayD NcDSP::GetMultiBandKernel(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1*
 // Provide via the returned TArrayD a time domain Multi Band Filter kernel in various frequency bands
 // specified by the array "freqs" (see below) and filter kernels consisting of "n" points each (see below).
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
-// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFalse).
+// in the frequency domain with the amplitude in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 //
 // The procedure is based on a convolution of the various provided Blackman
@@ -4936,67 +5049,80 @@ TArrayD NcDSP::GetMultiBandKernel(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1*
   hist->SetTitle(title);
  }
 
- // Restore the original data
+ // Restore the original input data
  Load(&xsave);
  SetWaveform(&wfsave);
+
+ // Let user invokations of Load() reset the output data again
+ fKeepOutput=kFALSE;
 
  return h;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* hist)
 {
-// Internal member function to provide a filter kernel or result histogram in the frequency domain,
-// based on the time domain filter kernel or result data contained in "h". 
-// The amplitude may be represented in decibel (dB=kTRUE) or linear (dB=kFalse).
+// Internal member function to provide a filter kernel or filter result histogram in the frequency domain,
+// based on the time domain filter kernel or time domain filter result data contained in "h". 
+// The amplitude may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
 // In case of filter kernel data (kernel=kTRUE), the histogram will be rescaled
 // such that the maximum value is at 1 for linear amplitudes or 0 for amplitudes in dB. 
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 // However, in case kernel=kFALSE, the "hist" histogram will be left empty.
 
  if (hisf) hisf->Reset("M");
- if (hist) hisf->Reset("M");
+ if (hist) hist->Reset("M");
 
  if (!h) return;
 
  Int_t nh=h->GetSize();
 
- // Zero padded copy of the input time domain array "h"
- Int_t narr=0;
- TArrayD arr(narr);
-
+ // Create a temporary array to contain a zero padded copy
+ // of the input time domain array "h".
+ // This allows to get a better view in the time domain filter kernel
+ // and a better resolution in the DFT produced frequency spectrum.
  Int_t npad=0;   // The total number of padded zeros
  Int_t nfront=0; // The number of padded zeros at the front of the array
- Int_t istart=0; // The first position after the front padding
+ Int_t narr=0;   // The length of the zero padded array
+ TArrayD arr(narr);
 
  // The time domain kernel histogram
  if (hist && kernel)
  {
-  // The histogram will be given twice the number of bins of the length of "h"
+  // The temporary array will be made twice the length of "h"
   // and symmetrically zero padded to display the kernel in the center of the histogram
-  Int_t nbins=2*nh;
+  narr=2*nh;
   nfront=nh/2;
+  arr.Set(narr);
+  arr.Reset();
+  for (Int_t i=0; i<nh; i++)
+  {
+   arr[nfront+i]=h->GetAt(i);
+  }
 
   if (fSample>0)
   {
    hist->SetTitle("NcDSP HistogramFilterFFT time domain kernel (zero padded);Time in seconds;Value");
-   hist->SetBins(nbins,0,double(nbins)/fSample);
+   hist->SetBins(narr,0,double(narr)/fSample);
   }
   else
   {
    hist->SetTitle("NcDSP HistogramFilterFFT time domain kernel (zero padded);Sample number;Value");
-   hist->SetBins(nbins,0,nbins);
+   hist->SetBins(narr,0,narr);
   }
-  for (Int_t i=1; i<=nh; i++)
+  for (Int_t i=1; i<=narr; i++)
   {
-   hist->SetBinContent(nfront+i,h->GetAt(i-1));
+   hist->SetBinContent(i,arr[i-1]);
   }
+  hist->SetLineWidth(2);
+  hist->SetLineColor(kBlue);
  }
 
  if (!hisf) return;
 
- // The frequncy domain kernel or filter result histogram
- // Create a new zero-padded array with a length of 2^k for the FFT
- // The minimum array length will be 1024 samples
+ // The frequency domain kernel or filter result histogram.
+ // Create a temporary zero-padded time domain array with a length of narr=2^k for the FFT,
+ // such that the frequency spectrum contains (narr/2)+1 samples.
+ // The minimum array length will be 1024 samples.
  Int_t k=log(nh)/log(2);
  k++;
  if (k<10) k=10; // Minimal 1024 samples
@@ -5008,11 +5134,10 @@ void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* 
  arr.Reset();
  for (Int_t i=0; i<nh; i++)
  {
-  istart=nfront+i;
-  arr[istart]=h->GetAt(i);
+  arr[nfront+i]=h->GetAt(i);
  }
  
- // Load the zero-padded time domain kernel data for Fourier transformation
+ // Load the temporary zero-padded time domain (kernel) data for Fourier transformation
  Load(&arr);
 
  TString sel="dB";
@@ -5029,6 +5154,20 @@ void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* 
  // Perform the Fourier transform
  Fourier("R2C",hisf,sel);
 
+ // Perform the Fourier transform with the original unpadded time domain data
+ // in order to store Fourier coefficients that allow retrieving the original
+ // unpadded time domain filter result via an inverse Fourier transform from
+ // the frequency domain filter result that was produced here.
+
+ // Load the original time domain input data
+ Load(h);
+
+ // Perform the Fourier transform
+ Fourier("R2C");
+
+ // Prevent following internal Load() invokations to reset the output
+ fKeepOutput=kTRUE;
+
  if (!kernel) return;
 
  // Normalize the maximum amplitude of "hisf" to 1 (or 0 dB)
@@ -5044,6 +5183,8 @@ void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* 
    hisf->AddBinContent(i,-max);
   }
  }
+ hisf->SetLineWidth(2);
+ hisf->SetLineColor(kBlue);
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDSP::Clone(const char* name) const

@@ -377,7 +377,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 8, 2022  08:06Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, October 22, 2023  13:13Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBlocks.h"
@@ -534,7 +534,7 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  {
   fMode=2;
   TString title;
-  title.Form("Bayesian Block representation with FPR= %-.3g",fpr);
+  title.Form("Bayesian Block representation with FPR=%-.3g",fpr);
   hout->SetTitle(title);
  }
 
@@ -543,14 +543,14 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  TArrayD lengths(n); // Array with the lengths of the optimal partition blocks
  TArrayD counts(n);  // Array with the event counts of the optimal partition blocks
 
- Float_t blen=0;   // Length of a certain block
- Float_t bcount=0; // Event count in a certain block
+ Double_t blen=0;   // Length of a certain block
+ Double_t bcount=0; // Event count in a certain block
  Double_t prior=0; // Contribution of each block to the prior fitness for a certain partition
  Double_t bfit=0;  // Fitness of a certain block
  Double_t pfit=0;  // Fitness of a certain partition
 
- Float_t xlow=0;
- Float_t xup=0;
+ Double_t xlow=0;
+ Double_t xup=0;
  Int_t index=0;
 
  // Variables for measurement of an observable (i.e. Data Mode 3)
@@ -672,11 +672,11 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  // Obtain the change points and corresponding partition information
  Int_t jcp=0;
  index=ncells;
- Float_t x=0;
- Float_t y=0;
+ Double_t x=0;
+ Double_t y=0;
  ncp=0;
- TArrayF xarr(ncells+1);
- TArrayF yarr(ncells+1);
+ TArrayD xarr(ncells+1);
+ TArrayD yarr(ncells+1);
  while (index>0)
  {
   index--; // Reduce array index by 1 because of C++ array convention
@@ -835,7 +835,7 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  TString title,str;
  title="Bayesian Block representation for NcSample ";
  title+=s.GetName();
- title+=" with FPR= %-.3g";
+ title+=" with FPR=%-.3g";
  title+=";Recordings of variable ";
  title+=i;
  title+=" (";
@@ -918,7 +918,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 
  // Set the output histogram and axes titles
  TString title;
- title.Form("Bayesian Block representation for unbinned array data with FPR= %-.3g",fpr);
+ title.Form("Bayesian Block representation for unbinned array data with FPR=%-.3g",fpr);
  title+=";Recordings (e.g. time);Count rate";
  hout->SetTitle(title);
 
@@ -993,7 +993,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 
  // Set the output histogram and axes titles
  TString title;
- title.Form("Bayesian Block representation for unbinned array data with FPR= %-.3g",fpr);
+ title.Form("Bayesian Block representation for unbinned array data with FPR=%-.3g",fpr);
  title+=";Recordings (e.g. time);Count rate";
  hout->SetTitle(title);
 
@@ -1060,16 +1060,21 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
  Double_t x=0;
  Double_t y=0;
  Double_t err=0;
+ Double_t dist=0;
+ Double_t dmin=-1;
  for (Int_t i=0; i<n; i++)
  {
   gr.GetPoint(i,x,y);
   err=fabs(gr.GetErrorX(i));
   xbins[i]=x-err;
+  if (i>0)
+  {
+   dist=xbins[i]-xbins[i-1];
+   if (dmin<0 || dist<dmin) dmin=dist;
+  }
  }
  // Add an extra bin to contain the last measurement
- err=fabs(gr.GetErrorX(n-1));
- if (!err) err=fabs(1e-6*xbins[n-1]);
- xbins[n]=xbins[n-1]+2.*err;
+ xbins[n]=xbins[n-1]+dmin;
 
  TH1F hin("","",n,xbins);
  for (Int_t j=1; j<=n; j++)
@@ -1100,7 +1105,7 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
  }
  title="Bayesian Block representation for TGraphErrors ";
  title+=gr.GetName();
- title+=" with FPR= %-.3g;";
+ title+=" with FPR=%-.3g;";
  title+=xtitle;
  title+=";";
  title+=ytitle;
@@ -1164,6 +1169,14 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
 
  Double_t xtrig=GetBlocks(gre,fpr,hout,ntrig);
 
+ TString str=" and input errors : ";
+ str+=f.GetExpFormula("p");
+ str.ReplaceAll("x","y");
+
+ TString title=hout->GetTitle();
+ title+=str;
+ hout->SetTitle(title);
+
  return xtrig; 
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1221,6 +1234,14 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t nt
 
  Double_t xtrig=GetBlocks(gre,fpr,hout,ntrig);
 
+ TString str=" and input errors : ";
+ str+=func.GetExpFormula("p");
+ str.ReplaceAll("x","y");
+
+ TString title=hout->GetTitle();
+ title+=str;
+ hout->SetTitle(title);
+
  return xtrig; 
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -1277,10 +1298,18 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
 
  // Determine the error for each y-value and convert into a function format
  Double_t err=fabs(nrms*rms);
- TString f="0.*x+";
- f+=err;
+
+ TString f;
+ f.Form("%-.5g",err);
 
  Double_t xtrig=GetBlocks(gr,f,fpr,hout,ntrig);
+
+ TString str;
+ str.Form(" from nrms=%-.3g",fabs(nrms));
+
+ TString title=hout->GetTitle();
+ title+=str;
+ hout->SetTitle(title);
 
  return xtrig; 
 }
@@ -1830,24 +1859,36 @@ void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
  // Get the largest bin size of "h1"
  Double_t bwidth1=0;
  Double_t bwmax1=0;
+ Int_t imax1=0;
  for (Int_t i=1; i<=nb1; i++)
  {
   bwidth1=h1->GetBinWidth(i);
-  if (i==1 || bwidth1>bwmax1) bwmax1=bwidth1;
+  if (i==1 || bwidth1>bwmax1)
+  {
+   bwmax1=bwidth1;
+   imax1=i;
+  }
  }
 
  // Get the smallest bin size of "h2" 
  Double_t bwidth2=0;
  Double_t bwmin2=0;
+ Int_t imin2=0;
  for (Int_t i=1; i<=nb2; i++)
  {
   bwidth2=h2->GetBinWidth(i);
-  if (i==1 || bwidth2<bwmin2) bwmin2=bwidth2;
+  if (i==1 || bwidth2<bwmin2)
+  {
+   bwmin2=bwidth2;
+   imin2=i;
+  }
  }
 
- if (bwmax1>bwmin2)
+ Double_t ratio=bwmax1/bwmin2;
+ if (ratio>1.001)
  {
-  cout << " *NcBlocks::Add* Error : Larger bin size encountered in histogram " << name1 << " than in " << name2 << endl;
+  printf(" *NcBlocks::Add* Error : Larger bin size encountered in histogram %-s than in %-s \n",name1.Data(),name2.Data());
+  printf(" %-s: binsize=%-g for bin=%-i  %-s: binsize=%-g for bin=%-i \n",name1.Data(),bwmax1,imax1,name2.Data(),bwmin2,imin2);
   return;
  }
 
@@ -2102,7 +2143,6 @@ void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,D
  hout->SetTitle(title);
 
  // Check if the binning of "hout" is not coarser than that of "hin" within [xmin,xmax]
- Bool_t coarser=kFALSE;
  for (Int_t i=1; i<=nb1; i++)
  {
   bwidth1=hin->GetBinWidth(i);
@@ -2113,15 +2153,10 @@ void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,D
 
   if (bwidth1<bwidth)
   {
-   coarser=kTRUE;
-   break;
-  }
- }
-
- if (coarser)
- {
-  cout << " *NcBlocks::Rebin* Error : Input histogram had finer binning than output histogram." << endl;
+  printf(" *NcBlocks::Rebin* Error : Input histogram had finer binning than output histogram. \n");
+  printf(" Input: binwidth=%-g for bin=%-i  Output: uniform binwidth=%-g \n",bwidth1,i,bwidth);
   return;
+  }
  }
 
  // Loop over all the bins of the output histogram hout

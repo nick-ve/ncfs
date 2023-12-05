@@ -6,7 +6,7 @@
 //        contained in RNOLinkDef.h
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  16:50Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  16:56Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  11:47Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoGANT.h"
@@ -23,3 +23,4 @@
 #include "RnoEvent.h"
 #include "RnoConvert.h"
 #include "RnoMonitor.h"
+#include "RnoExplorer.h"

@@ -1455,4 +1455,20 @@
                 since the simple addition of gSystem->Load("libGui") in rootlogon.cc solved the problem.
                 Also a (crash) protection introduced in NcAstrolab::SkyMapPanel() when run in batch mode.
                 The version indicator in NcVersion has been updated to 5.35.
-                 
+31-jul-2023 NvE Information on the input error values added in the produced histogram titles of the 
+                relevant NcBlocks::GetBlocks() memberfunctions.
+22-oct-2023 NvE Various Float_t variables and TArrayF arrays replaced by Double_t and TArrayD, respectively,
+                in NcBlocks to mitigate computer accuracy issues. Also the (additional) last bin for
+                the histogram from a TGraphErrors input set to the size of the smallest distance between
+                two neighbouring points of the TGraphErrors data in NcBlocks::GetBlocks().
+                This will prevent an artificially small binsize, which would result in a smaller binsize in the
+                Bayesian block histogram than in the original input data.
+                Also a shift option introduced in NcDSP::Convolve() and providing the peak position
+                in NcDSP::Correlate().
+05-dec-2023 NvE Functionality of GetSNR(), GetCV() and Load() of class NcSample extended.
+                Functionality of NcDSP::Convolve() extended with a "shift" option, and this is now
+                used in the memberfunctions Correlate() and the various Filters.
+                Also a parameter fKeepOutput introduced in class NcDSP, in order to be able to prevent
+                internal Load() invokations to reset the output data arrays.
+                Furthermore, a new class RnoExplorer has been introduced.
+                The version indicator in NcVersion has been updated to 5.36.

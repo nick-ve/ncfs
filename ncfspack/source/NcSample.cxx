@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 15, 2023  09:27Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:07Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -1239,7 +1239,8 @@ Double_t NcSample::GetVar(TString name,Int_t model) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSigma(Int_t i,Int_t model) const
 {
-// Provide the rms-deviation (model=0) or standard deviation (model=1) of the i-th variable.
+// Provide the rms-deviation (model=0) or standard deviation of the
+// underlying parent distribution (model=1) of the i-th variable.
 // The first variable corresponds to i=1.
 //
 // The default value is model=0.
@@ -3722,15 +3723,19 @@ void NcSample::Load(TGraph* g,Int_t clr)
 //
 // The default value is clr=1.
  
+ if (!g)
+ {
+  printf(" *%-s::Load* Error : No TGraph specified ==> No action taken. \n",ClassName());
+  return;
+ }
+ 
  if (!clr && fDim!=2)
  {
-  cout << " *NcSample::Load* Error : Dimension " << fDim << " does not match a TGraph." << endl;
+  printf(" *%-s::Load* Error : Dimension %-i does not match a TGraph. \n",ClassName(),fDim);
   return;
  }
 
  if (clr) Reset();
- 
- if (!g) Reset();
 
  Int_t npoints=g->GetN();
  Double_t* x=g->GetX();
@@ -3755,16 +3760,20 @@ void NcSample::Load(TGraph2D* g,Int_t clr)
 //
 // The default value is clr=1.
  
+ if (!g)
+ {
+  printf(" *%-s::Load* Error : No TGraph2D specified ==> No action taken. \n",ClassName());
+  return;
+ }
+ 
  if (!clr && fDim!=3)
  {
-  cout << " *NcSample::Load* Error : Dimension " << fDim << " does not match a TGraph2D." << endl;
+  printf(" *%-s::Load* Error : Dimension %-i does not match a TGraph2D. \n",ClassName(),fDim);
   return;
  }
 
  if (clr) Reset();
  
- if (!g) Reset();
-
  Int_t npoints=g->GetN();
  Double_t* x=g->GetX();
  Double_t* y=g->GetY();
@@ -3778,58 +3787,146 @@ void NcSample::Load(TGraph2D* g,Int_t clr)
  }
 }
 ///////////////////////////////////////////////////////////////////////////
+void NcSample::Load(TH1* h,Int_t clr)
+{
+// Load the data of a 1-dimensional histogram.
+//
+// Input arguments :
+// -----------------
+// h   : Pointer to the 1-dimensional histogram.
+// clr : Flag to denote to first clear (1) the data storage or not (0).
+//
+// The default value is clr=1.
+ 
+ if (!h)
+ {
+  printf(" *%-s::Load* Error : No histogram specified ==> No action taken. \n",ClassName());
+  return;
+ }
+
+ Int_t hdim=h->GetDimension();
+ 
+ if (hdim!=1)
+ {
+  printf(" *%-s::Load* Error : Histograms of dimension %-i are not supported. \n",ClassName(),hdim);
+  return;
+ }
+ 
+ if (!clr && fDim!=1)
+ {
+  printf(" *%-s::Load* Error : Dimension %-i does not match a 1-dimensional histogram. \n",ClassName(),fDim);
+  return;
+ }
+
+ if (clr) Reset();
+
+ Int_t nbins=h->GetNbinsX();
+
+ Double_t val=0;
+ for (Int_t i=1; i<=nbins; i++)
+ {
+  val=h->GetBinContent(i);
+  Enter(val);
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcSample::Load(TArray* arr,Int_t clr)
+{
+// Load the data of a 1-dimensional data array.
+//
+// Input arguments :
+// -----------------
+// arr : Pointer to the 1-dimensional data array.
+// clr : Flag to denote to first clear (1) the data storage or not (0).
+//
+// The default value is clr=1.
+ 
+ if (!arr)
+ {
+  printf(" *%-s::Load* Error : No data array specified ==> No action taken. \n",ClassName());
+  return;
+ }
+ 
+ if (!clr && fDim!=1)
+ {
+  printf(" *%-s::Load* Error : Dimension %-i does not match a 1-dimensional data array. \n",ClassName(),fDim);
+  return;
+ }
+
+ if (clr) Reset();
+
+ Int_t n=arr->GetSize();
+
+ Double_t val=0;
+ for (Int_t i=0; i<n; i++)
+ {
+  val=arr->GetAt(i);
+  Enter(val);
+ }
+}
+///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSNR(Int_t i,Int_t mode,Bool_t dB) const
 {
 // Provide the Signal to Noise Ratio (SNR) of the i-th variable.
 // The first variable corresponds to i=1.
 //
-// The definition used here is SNR=(signal power)/(noise power).
-// This implies that when the values of the i-th variable represent amplitudes,
-// the squares of the (rms) values should be used.
+// For a transient c.q. pulse signal, the SNR is defined as the ratio between
+// the largest amplitude difference and the standard deviation of the sample.
+// This is obtained via input argument "mode" with abs(mode)=3 or abs(mode)=4,
+// as outlined below.
+//
+// For a continuous signal, the definition used here is SNR=(signal power)/(noise power).
+// This implies that when the values of the i-th variable represent amplitudes related
+// to a continuous signal, the squares of the (rms) values should be used.
 // This can be specified via the input argument "mode" where abs(mode)=2 will
 // invoke a conversion of amplitudes into power, whereas abs(mode)=1 will use
 // the values of the i-th variable "as is", i.e. reflecting a direct power measurement.
+//
 // Furthermore, the input argument "mode" also provides a selection to use
-// the variance of the sample or the standard deviation of the underlying parent distribution,
-// as indicated below.  
+// the variance of the sample (mode>0) or the standard deviation, sigma, of the underlying
+// parent distribution (mode<0), as indicated below.  
 //
 // Input arguments :
 // -----------------
-// mode :  2 --> SNR=(mean*mean)/variance
-//         1 --> SNR=abs(mean/rms-deviation)
-//        -2 --> SNR=(mean*mean)/(sigma*sigma)
-//        -1 --> SNR=abs(mean/sigma)
+// mode :  1 --> Continuous (nearly) stable signal with data reflecting power and SNR=abs(mean/rms-deviation)
+//        -1 --> Continuous (nearly) stable signal with data reflecting power and SNR=abs(mean/sigma)
+//         2 --> Continuous (nearly) stable signal with data reflecting amplitudes and SNR=(mean*mean)/variance
+//        -2 --> Continuous (nearly) stable signal with data reflecting amplitudes and SNR=(mean*mean)/(sigma*sigma)
+//         3 --> Transient signal with data reflecting power or RMS amplitudes and SNR=(max-min)/rms-deviation
+//        -3 --> Transient signal with data reflecting power or RMS amplitudes and SNR=(max-min)/sigma
+//         4 --> Transient signal with data reflecting bipolar amplitudes and SNR=(max-min)/(2*rms-deviation)
+//        -4 --> Transient signal with data reflecting bipolar amplitudes and SNR=(max-min)/(2*sigma)
 // dB   : kFALSE Provide the SNR as the above straight ratio
 //        kTRUE  Provide the SNR in Decibel
 //
-// The default values are model=2 and dB=kTRUE.
+// The default values are mode=2 and dB=kTRUE for backward compatibility.
 //
 // In case of inconsistent data, the value -9999 is returned.
 //
-// Derivation of the applied formulas :
-// ------------------------------------
-// For each recorded sampling k we assume a signal contribution Sk and a noise contribution Nk.
+// Derivation of the applied formulas for a continuous (nearly) stable signal :
+// ----------------------------------------------------------------------------
+// For each recorded sampling k we assume an amplitude contribution Sk of the signal and Nk of the noise.
 //
 // This leads to the expression :
 //
 //   SNR=(average signal power)/(average noise power)=<Sk^2>/<Nk^2>  (1)
 //
-// Using variance=<x^2>-<x>^2 we can express the above formula in terms of the
-// signal variance (Svar), signal mean (Smu), noise variance (Nvar) and noise mean (Nmu) as follows :
+// Using variance(y)=<y^2>-<y>^2 we can express the above formula in terms of the
+// signal variance var(Sk), signal mean <Sk>, noise variance var(Nk) and noise mean <Nk> as follows :
 //
-//   SNR=(Svar+Smu^2)/(Nvar+Nmu^2)  (2)  
+//   SNR=(var(Sk)+<Sk>^2)/(var(Nk)+<Nk>^2)  (2)  
 //
-// Furthermore, the mean of the recorded samplings Mu is given by : Mu=<Sk+Nk>=<Sk>+<Nk>=Smu+Nmu  (3)
+// Furthermore, the mean of all the recorded samplings Mu is given by : Mu=<Sk+Nk>=<Sk>+<Nk>  (3)
 //
-// In most cases we will have <Nk>=Nmu=0, which implies that Mu=Smu  (4)
+// In most cases we will have <Nk>=0, which implies that Mu=<Sk>  (4)
 //
 // In other words : The mean of the observed samplings is equal to the signal mean,
-// which implies that we can determine Smu directly from our data.
+// which implies that we can determine <Sk> directly from our data.
 //
-// Using Eq.(4) and Nmu=0 in Eq.(2) leads us to : SNR=(Svar+Mu^2)/Nvar  (5)
+// Using Eq.(4) and <Nk>=0 in Eq.(2) leads us to : SNR=(var(Sk)+Mu^2)/var(Nk)  (5)
 //
-// In case of a (nearly) stable signal, we have approximately Svar=0,
-// which implies that the total observed sampling variance S=Nvar.
+// In case of a (nearly) stable signal, we have approximately var(Sk)=0,
+// which implies that the total observed sampling variance S=var(Nk).
 //
 // This leads to the final expression for SNR in terms of observed sampling amplitudes : 
 //
@@ -3842,19 +3939,49 @@ Double_t NcSample::GetSNR(Int_t i,Int_t mode,Bool_t dB) const
 //
 //  SNR=Mu^2/(sigma^2)  (7)
 //
-// In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used. 
+// In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used.
 
- if (i<1 || i>fDim || !mode || abs(mode)>2) return -9999;
+ if (i<1 || i>fDim || !mode || abs(mode)>4) return -9999;
 
  Double_t snr=-1;
+ Double_t ymax=GetMaximum(i);
+ Double_t ymin=GetMinimum(i);
  Double_t mean=GetMean(i);
  Double_t var=GetVar(i);
+ Double_t rmsdev=sqrt(var);
  Double_t sigma=GetSigma(i,1);
+ Double_t stdev=rmsdev;
+ if (mode<0) stdev=sigma;
+
+ if (stdev<=0) return -9999;
+
+ ///////////////////////////////
+ // SNR of a transient signal //
+ ///////////////////////////////
+
+ if (abs(mode)>2)
+ {
+  if (abs(mode)==3) // Data are power or RMS amplitudes
+  {
+   snr=(ymax-ymin)/stdev;
+  }
+  if (abs(mode)==4) // Data are bipolar amplitudes
+  {
+   snr=(ymax-ymin)/(2.*stdev);
+  }
+
+  if (dB && snr>0) snr=10.*log10(snr);
+
+  return snr;
+ }
+
+ ////////////////////////////////
+ // SNR of a continuous signal //
+ ////////////////////////////////
 
  // Treat the values as observed amplitudes and work in dB scale
  Double_t psignal=mean*mean;
- Double_t pnoise=var;
- if (mode<0) pnoise=sigma*sigma;
+ Double_t pnoise=stdev*stdev;
 
  if (psignal>0 && pnoise>0)
  {
@@ -3939,50 +4066,69 @@ Double_t NcSample::GetSNR(TString name,Int_t mode,Bool_t dB) const
  return GetSNR(i,mode,dB);
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcSample::GetCV(Int_t i,Int_t model) const
+Double_t NcSample::GetCV(Int_t i,Int_t mode) const
 {
 // Provide the Coefficient of Variation (CV) of the i-th variable.
 // The first variable corresponds to i=1.
 //
-// The definition used here is CV=abs(sigma/mean).
+// As indicated below, the input argument "mode" allows to select use of
+// the mean of the sample or the difference between the maximum and minimum value.
+// The latter is best suited for bipolar transient signals, since their mean value
+// may become (close to) zero, irrespective of the signal amplitude.
 //
-// Input arguments :
-// -----------------
-// model : 0 --> sigma represents the rms-deviation
-//         1 --> sigma represents the standard deviation
+// Furthermore, the input argument "mode" also provides a selection to use
+// the RMSdeviation of the sample (mode>0) or the standard deviation, sigma,
+// of the underlying parent distribution (mode<0), as indicated below.  
 //
-// The default value is model=0.
+// mode :  1 --> CV=abs(RMSdeviation/mean)
+//        -1 --> CV=abs(sigma/mean)
+//         2 --> CV=abs(2*RMSdeviation/(max-min))
+//        -2 --> CV=abs(2*sigma/(max-min))
+//
+// The default value is mode=1 for backward compatibility.
 //
 // In case of inconsistent data, the value -1 is returned. 
 
- if (i<1 || i>fDim || model<0 || model>1) return -1;
+ if (i<1 || i>fDim || abs(mode)<1 || abs(mode)>2) return -1;
+
+ Double_t vmax=GetMaximum(i);
+ Double_t vmin=GetMinimum(i);
+ Double_t value=GetMean(i);
+ if (abs(mode)==2) value=(vmax-vmin)/2.;
+ Double_t stdev=GetSigma(i,0);
+ if (mode<0) stdev=GetSigma(i,1);
 
  Double_t cv=-1;
- Double_t mean=GetMean(i);
- Double_t sigma=GetSigma(i,model);
 
- if (mean) cv=fabs(sigma/mean);
+ if (value) cv=fabs(stdev/value);
 
  return cv;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcSample::GetCV(TString name,Int_t model) const
+Double_t NcSample::GetCV(TString name,Int_t mode) const
 {
 // Provide the Coefficient of Variation (CV) of the variable with the specified name.
 //
-// The definition used here is CV=abs(sigma/mean).
+// As indicated below, the input argument "mode" allows to select use of
+// the mean of the sample or the difference between the maximum and minimum value.
+// The latter is best suited for bipolar transient signals, since their mean value
+// may become (close to) zero, irrespective of the signal amplitude.
 //
-// Input arguments :
-// -----------------
-// model : 0 --> sigma represents the rms-deviation
-//         1 --> sigma represents the standard deviation
+// Furthermore, the input argument "mode" also provides a selection to use
+// the RMSdeviation of the sample (mode>0) or the standard deviation, sigma,
+// of the underlying parent distribution (mode<0), as indicated below.  
 //
-// The default value is model=0.
+// mode :  1 --> CV=abs(RMSdeviation/mean)
+//        -1 --> CV=abs(sigma/mean)
+//         2 --> CV=abs(2*RMSdeviation/(max-min))
+//        -2 --> CV=abs(2*sigma/(max-min))
+//
+// The default value is mode=1 for backward compatibility.
 //
 // In case of inconsistent data, the value -1 is returned.
 
  Int_t i=GetIndex(name);
- return GetCV(i,model);
+ return GetCV(i,mode);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt)

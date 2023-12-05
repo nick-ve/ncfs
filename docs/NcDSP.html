@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon May 15 09:32:30 2023            -->
+<!--   Date: Tue Dec  5 12:09:06 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -170,7 +170,7 @@ return false;}
  // Perform the Convolution
  TH1F hy;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> smin,smax;
- TArrayD y=q.<a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Convolve</a>(&amp;hy,&amp;smin,&amp;smax);
+ TArrayD y=q.<a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0)">Convolve</a>(&amp;hy,&amp;smin,&amp;smax);
 
  printf(<span class="string">" Convolution full coverage between sample numbers %-i and %-i \n"</span>,smin,smax);
 
@@ -219,7 +219,7 @@ return false;}
  // Perform the Cross-Correlation
  TH1F hy;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> smin,smax;
- TArrayD y=q.<a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Correlate</a>(&amp;hy,&amp;smin,&amp;smax);
+ TArrayD y=q.<a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a>(&amp;hy,&amp;smin,&amp;smax);
 
  printf(<span class="string">" Correlation full coverage between sample numbers %-i and %-i \n"</span>,smin,smax);
 
@@ -304,7 +304,7 @@ return false;}
 
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 15, 2023  09:26Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:26Z
 
 </pre></div>
 </div></div>
@@ -325,9 +325,9 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="func"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#NcDSP:Clone">Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Convolve">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Convolve">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> shift = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Correlate">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Correlate">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* peak = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Cosine">Cosine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
 <tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:DAC">DAC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* adcs = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -484,6 +484,7 @@ return false;}
 <table class="data" id="tabdataprot" cellspacing="0">
 <tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fImIn"></a>fImIn</td><td class="datadesc">Input array for imaginary components</td></tr>
 <tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fImOut"></a>fImOut</td><td class="datadesc">Output array for imaginary components</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a name="NcDSP:fKeepOutput"></a>fKeepOutput</td><td class="datadesc">Internal flag to enable preventing the resetting of the output data</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDSP:fN"></a>fN</td><td class="datadesc">The number of data elements to be processed as entered via Load()</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDSP:fNwf"></a>fNwf</td><td class="datadesc">The number of data elements to be processed as entered via SetWaveform();</td></tr>
@@ -968,8 +969,8 @@ return false;}
  The default values are hist=0 and sel=<span class="string">"none"</span>
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Convolve" href="src/NcDSP.cxx.html#YrxsE">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
-<div class="funccomm"><pre> <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Convolve</a> the loaded input data x[] with the data contained in the (system response)
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Convolve" href="src/NcDSP.cxx.html#AKCM1B">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> shift = 0)</span><br />
+<div class="funccomm"><pre> <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0)">Convolve</a> the loaded input data x[] with the data contained in the (system response)
  waveform h[] and return the resulting data y[] in a TArrayD object.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions,
  whereas the (system response) waveform h[] has to be specified by <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>().
@@ -1002,20 +1003,35 @@ return false;}
  So, values of y[j] with j&lt;i1 or j&gt;i2 contain incomplete convolutions, and as such should not
  be considered as reliable, especially when x[] and/or h[] contain large variations.
 
+ The argument <span class="string">"shift"</span> determines whether the Xaxis values of the (optional) result histogram
+ are shifted or that the array y[] is truncated in order to provide (a view of) the resulting array y[]
+ such that it can be directly compared to the original array x[] (see notes 2) and 3) below).
+
+ The convention is :
+ shift = 0 --&gt; No shift and the full array y[] is returned and shown <span class="string">"as is"</span> in the (optional) histogram.
+         1 --&gt; The full array y[] is returned and shown in the (optional) histogram with y[i1] at the center.
+               This mode is particulary useful for correlation studies between two distributions [see <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a>()],
+               since it will show both negative and positive values at the Xaxis of the (optional) histogram,
+               and the self-correlation peak coincides with the value 0 at the Xaxis.
+         2 --&gt; The array y[] contains only the modified x[] elements and is shown with y[0] at the start of the (optional) histogram.
+               This mode is particulary useful for digital filtering processes (see the various filtering member functions),
+               since it allows to directly compare the filtered and the unfiltered x[] distribution.
+
  Notes :
 
  1) The sampling (rate) of h[] has to be the same as for the input data x[].
- 2) Array sizes of x[nx] and h[nh] will result in a convolved data array of size y[(nx+nh-1)].
+ 2) Array sizes of x[nx] and h[nh] will result in a convolved data array of size y[(nx+nh-1)],
+    except for shift=2 for which the convolved data array has size y[nx].
  3) For an absolute comparison between the x[] and y[] values, one should realize that
     the array sizes of x[] and y[] are different and that x[k] should be compared with y[k+i1].
  4) The values i1 and i2 (if requested) are indicated by vertical dashed blue lines
     in the time domain histogram.
 
- The default values are hist=0, i1=0 and i2=0.
+ The default values are hist=0, i1=0, i2=0 and shift=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Correlate" href="src/NcDSP.cxx.html#wYx.l">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0)</span><br />
-<div class="funccomm"><pre> (Cross) <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Correlate</a> the data contained in the waveform h[] with the loaded input data x[]
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Correlate" href="src/NcDSP.cxx.html#AeWPv">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* peak = 0)</span><br />
+<div class="funccomm"><pre> (Cross) <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a> the data contained in the waveform h[] with the loaded input data x[]
  and return the resulting data y[] in a TArrayD object.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions,
  whereas the waveform h[] has to be specified by <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>().
@@ -1035,8 +1051,8 @@ return false;}
 
  In formula : Cross-correlation h[m]*x[n] is equivalent to Convolution h[-m]*x[n].
 
- This feature is used here to centralize the computation in the member function <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Convolve</a>(),
- so that also this <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Correlate</a>() processor will automatically profit from possible CPU speed
+ This feature is used here to centralize the computation in the member function <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0)">Convolve</a>(),
+ so that also this <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a>() processor will automatically profit from possible CPU speed
  improvements in the Convolution processor.
 
  For details about the procedure, please refer to the excellent textbook :
@@ -1053,9 +1069,13 @@ return false;}
  These values i1 and i2 (if requested) are indicated by vertical
  dashed blue lines in the histogram.
 
+ The (optional) argument <span class="string">"peak"</span> provides the location of the correlation peak, indicating
+ the shift of the h[] pattern w.r.t. the best matching pattern in x[], with the convention
+ that the autocorrelation peak falls at 0.
+
  Note : The sampling (rate) of h has to be the same as for the loaded input data x[].
 
- The default values are hist=0, i1=0 and i2=0.
+ The default values are hist=0, i1=0, i2=0 and peak=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Digitize" href="src/NcDSP.cxx.html#zpJppE">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* stp = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* scale = 0) const</span><br />
@@ -1426,7 +1446,7 @@ return false;}
 <div class="funccomm"><pre> Perform a Moving Average filter on the loaded input data x[] with averaging over <span class="string">"n"</span> samples.
  The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>.
  The frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>, for which
- the amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ the amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The original input data x[] are not modified.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
 
@@ -1467,7 +1487,7 @@ return false;}
  In this respect we can regard this filtering as a convolution y[]=x[]*h[] where h[]
  represents the <span class="string">"n"</span> point rectangular pulse filter kernel.
  In this mode, an array x[] with m elements, will result in an array y[] of (m+n-1) elements.
- For further details see the documentation of <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0)">Convolve</a>().
+ For further details see the documentation of <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0)">Convolve</a>().
 
  For details about the procedure, please refer to the excellent textbook :
  <span class="string">"The Scientist and Engineer's Guide to Digital Signal Processing"</span> by Steven W. Smith,
@@ -1515,7 +1535,7 @@ return false;}
  specified by <span class="string">"fcut"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> points (see below).
  The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
  whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
- The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The original input data x[] are not modified.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
 
@@ -1578,7 +1598,7 @@ return false;}
  specified by <span class="string">"fcut"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> points (see below).
  The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
  whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
- The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The original input data x[] are not modified.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
 
@@ -1641,7 +1661,7 @@ return false;}
  specified by <span class="string">"f1"</span> and <span class="string">"f2"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> points (see below).
  The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
  whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
- The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The original input data x[] are not modified.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
 
@@ -1706,7 +1726,7 @@ return false;}
  specified by <span class="string">"f1"</span> and <span class="string">"f2"</span> (see below) and a filter kernel consisting of <span class="string">"n"</span> points (see below).
  The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
  whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
- The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The original input data x[] are not modified.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
 
@@ -1770,7 +1790,7 @@ return false;}
  specified by the array <span class="string">"freqs"</span> (see below) and filter kernels consisting of <span class="string">"n"</span> points (see below).
  The time domain result is returned in a TArrayD object and (optionally) in the histogram <span class="string">"hist"</span>,
  whereas the frequency domain result is returned in the (optional) histogram <span class="string">"hisf"</span>.
- The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ The <span class="string">"hisf"</span> amplitudes may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The original input data x[] are not modified.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions.
 
@@ -1836,7 +1856,7 @@ return false;}
 <div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:GetMovingAverageKernel" href="src/NcDSP.cxx.html#ezJ12C">GetMovingAverageKernel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, TH1* hisf = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> dB = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, TH1* hist = 0)</span><br />
 <div class="funccomm"><pre> Provide via the returned TArrayD an n-point time domain Moving Average Filter kernel.
  The optional argument <span class="string">"hisf"</span> may be used to obtain a histogram of the frequency domain kernel
- with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The optional argument <span class="string">"hist"</span> may be used to obtain a (zero padded) histogram of the time domain kernel.
 
  A Moving Average filter is the optimal time domain filter for reducing random (noise) fluctuations,
@@ -1875,7 +1895,7 @@ return false;}
 <div class="funccomm"><pre> Provide via the returned TArrayD an n-point time domain Low Pass Filter kernel
  with cut-off frequency <span class="string">"fcut"</span> expressed as a fraction of the sampling frequency.
  The optional argument <span class="string">"hisf"</span> may be used to obtain a histogram of the kernel
- in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The optional argument <span class="string">"hist"</span> may be used to obtain a (zero padded) histogram of the time domain kernel.
 
  The implementation here is based on the Blackman windowed-sinc filtering procedure.
@@ -1921,7 +1941,7 @@ return false;}
 <div class="funccomm"><pre> Provide via the returned TArrayD an n-point time domain High Pass Filter kernel
  with cut-off frequency <span class="string">"fcut"</span> expressed as a fraction of the sampling frequency.
  The optional argument <span class="string">"hisf"</span> may be used to obtain a histogram of the kernel
- in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The optional argument <span class="string">"hist"</span> may be used to obtain a (zero padded) histogram of the time domain kernel.
 
  The implementation here is based on a spectrally inverted Blackman windowed-sinc Low Pass filter.
@@ -1967,7 +1987,7 @@ return false;}
 <div class="funccomm"><pre> Provide via the returned TArrayD an n-point time domain Band Pass Filter kernel
  for the frequency band [f1,f2] expressed as fractions of the sampling frequency.
  The optional argument <span class="string">"hisf"</span> may be used to obtain a histogram of the kernel
- in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The optional argument <span class="string">"hist"</span> may be used to obtain a (zero padded) histogram of the time domain kernel.
 
  The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters,
@@ -2015,7 +2035,7 @@ return false;}
 <div class="funccomm"><pre> Provide via the returned TArrayD an n-point time domain Band Reject Filter kernel
  for the frequency band [f1,f2] expressed as fractions of the sampling frequency.
  The optional argument <span class="string">"hisf"</span> may be used to obtain a histogram of the kernel
- in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The optional argument <span class="string">"hist"</span> may be used to obtain a (zero padded) histogram of the time domain kernel.
 
  The implementation here is based on a combination of Blackman windowed-sinc Low Pass and High Pass filters.
@@ -2062,7 +2082,7 @@ return false;}
 <div class="funccomm"><pre> Provide via the returned TArrayD a time domain Multi Band Filter kernel in various frequency bands
  specified by the array <span class="string">"freqs"</span> (see below) and filter kernels consisting of <span class="string">"n"</span> points each (see below).
  The optional argument <span class="string">"hisf"</span> may be used to obtain a histogram of the kernel
- in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+ in the frequency domain with the amplitude in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  The optional argument <span class="string">"hist"</span> may be used to obtain a (zero padded) histogram of the time domain kernel.
 
  The procedure is based on a convolution of the various provided Blackman
@@ -2111,9 +2131,9 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:HistogramFilterFFT" href="src/NcDSP.cxx.html#azTrWD">HistogramFilterFFT</a>(TArray* h, TH1* hisf, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> dB, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> kernel, TH1* hist = 0)</span><br />
-<div class="funccomm"><pre> Internal member function to provide a filter kernel or result histogram in the frequency domain,
- based on the time domain filter kernel or result data contained in <span class="string">"h"</span>.
- The amplitude may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=kFalse).
+<div class="funccomm"><pre> Internal member function to provide a filter kernel or filter result histogram in the frequency domain,
+ based on the time domain filter kernel or time domain filter result data contained in <span class="string">"h"</span>.
+ The amplitude may be represented in decibel (dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or linear (dB=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>).
  In case of filter kernel data (kernel=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>), the histogram will be rescaled
  such that the maximum value is at 1 for linear amplitudes or 0 for amplitudes in dB.
  The optional argument <span class="string">"hist"</span> may be used to obtain a (zero padded) histogram of the time domain kernel.
@@ -2133,7 +2153,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon May 15 09:32:30 2023 </em><em>&raquo; Last generated: 2023-05-15 09:32</em><br />
+<em>&raquo; Last changed: Tue Dec  5 12:09:08 2023 </em><em>&raquo; Last generated: 2023-12-05 12:09</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
