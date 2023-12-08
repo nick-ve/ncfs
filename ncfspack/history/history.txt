@@ -1472,3 +1472,4 @@
                 internal Load() invokations to reset the output data arrays.
                 Furthermore, a new class RnoExplorer has been introduced.
                 The version indicator in NcVersion has been updated to 5.36.
+08-dec-2023 NvE Typo corrected in the docs of NcAstrolab::SetDataNames().

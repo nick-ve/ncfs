@@ -9871,7 +9871,7 @@ void NcAstrolab::SetDataNames(TString obsname,TString varname,TString units,TStr
 // Event     : Event number
 // Eventb    : Sub-event number
 // DetId     : Detector identifier
-// Date      : The UTC observation date with as possible units "ddmmyyy", "yyyymmdd", "mmddyyyy" or "yyyyddmm"
+// Date      : The UTC observation date with as possible units "ddmmyyyy", "yyyymmdd", "mmddyyyy" or "yyyyddmm"
 // Tobs      : The UTC observation c.q. trigger timestamp with as possible units "JD", "MJD", "TJD", "hms" or "hrs"
 // Tstart    : Generic UTC start timestamp with as possible units "JD", "MJD", "TJD", "hms" or "hrs"
 // Tend      : Generic UTC end timestamp with as possible units "JD", "MJD", "TJD", "hms" or "hrs"
