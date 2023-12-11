@@ -56,6 +56,7 @@
 /*************
  // Use this code to load observed GCN data
  lab.InitDataNames(1,"equ");
+ lab.SetDataNames("Name","name");
  lab.SetDataNames("Date","date","yyyymmdd");
  lab.SetDataNames("Tobs","mjdtrig","MJD");
  lab.SetDataNames("a","ra","deg");

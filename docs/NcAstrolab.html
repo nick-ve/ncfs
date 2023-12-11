@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Fri Dec  8 11:39:22 2023            -->
+<!--   Date: Mon Dec 11 14:17:37 2023            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -207,7 +207,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1,TString name=&quot;*&quot;)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 18, 2023  02:28Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 11, 2023  13:50Z
 
 </pre></div>
 </div></div>
@@ -4651,9 +4651,11 @@ return false;}
 
  Accepted (physical) observable names are :
 
+ Name      : Name of the object or observation (e.g. GRB031025A or IC190722A)
  Run       : Run number
  Event     : Event number
  Eventb    : Sub-event number
+ VetoLevel : Veto level indicator
  DetId     : Detector identifier
  <a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>      : The UTC observation date with as possible units <span class="string">"ddmmyyyy"</span>, <span class="string">"yyyymmdd"</span>, <span class="string">"mmddyyyy"</span> or <span class="string">"yyyyddmm"</span>
  Tobs      : The UTC observation c.q. trigger timestamp with as possible units <span class="string">"JD"</span>, <span class="string">"MJD"</span>, <span class="string">"TJD"</span>, <span class="string">"hms"</span> or <span class="string">"hrs"</span>
@@ -4878,7 +4880,12 @@ return false;}
  date2 : The date (yyyymmdd) of the end of the observation period [date1,date2] (0=No restriction)
  nmax  : Maximum number of sources or events to be accepted from this input file (&lt;0 : no limitation)
  type  : Identifier of the source (c.q. burst) or observed event (alert) type (e.g. <span class="string">"GRB"</span>, <span class="string">"GW"</span>, <span class="string">"IC"</span>,...)
-         When type=<span class="string">"-"</span> the source type is set to <span class="string">"GRB"</span> and the event type is set to <span class="string">"EVT"</span>.
+         In case no <span class="string">"Name"</span> is provided as an <span class="string">"observable"</span> in the input data, the provided <span class="string">"type"</span> will
+         be combined with the Tobs data to construct names like GRB031025, IC190722 etc...
+         However, in case <span class="string">"Name"</span> is provided in the input data, the corresponding string will be
+         used as the name for the source (c.q. burst) or observed event, irrespective of the provided <span class="string">"type"</span>.
+         When type=<span class="string">"-"</span> the source type is set to <span class="string">"GRB"</span> and the event type is set to <span class="string">"EVT"</span>, in case
+         no <span class="string">"Name"</span> is provided as <span class="string">"observable"</span> in the input data.
 
  The default values are date1=0, date2=0, nmax=-1 and type=<span class="string">"-"</span>.
 
@@ -5602,7 +5609,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Fri Dec  8 11:39:42 2023 </em><em>&raquo; Last generated: 2023-12-08 11:39</em><br />
+<em>&raquo; Last changed: Mon Dec 11 14:17:45 2023 </em><em>&raquo; Last generated: 2023-12-11 14:17</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

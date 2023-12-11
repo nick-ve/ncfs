@@ -1473,3 +1473,7 @@
                 Furthermore, a new class RnoExplorer has been introduced.
                 The version indicator in NcVersion has been updated to 5.36.
 08-dec-2023 NvE Typo corrected in the docs of NcAstrolab::SetDataNames().
+11-dec-2023 NvE Functionality of SetDataNames() and LoadInputData() of class NcAstrolab extended with
+                the possibility of reading a "Name" of an object or observation as a string from an input TTree.
+                Also ROOT macro GRBweb2Root.cc introduced in /physics/macros to provide a tool to convert the
+                summary table of Paul Coppin's GRBweb facility into a plain ROOT Tree.

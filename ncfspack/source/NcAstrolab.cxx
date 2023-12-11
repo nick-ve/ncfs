@@ -176,7 +176,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, July 18, 2023  02:28Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 11, 2023  13:50Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -9867,9 +9867,11 @@ void NcAstrolab::SetDataNames(TString obsname,TString varname,TString units,TStr
 //
 // Accepted (physical) observable names are :
 // ------------------------------------------
+// Name      : Name of the object or observation (e.g. GRB031025A or IC190722A)
 // Run       : Run number
 // Event     : Event number
 // Eventb    : Sub-event number
+// VetoLevel : Veto level indicator
 // DetId     : Detector identifier
 // Date      : The UTC observation date with as possible units "ddmmyyyy", "yyyymmdd", "mmddyyyy" or "yyyyddmm"
 // Tobs      : The UTC observation c.q. trigger timestamp with as possible units "JD", "MJD", "TJD", "hms" or "hrs"
@@ -9930,8 +9932,8 @@ void NcAstrolab::SetDataNames(TString obsname,TString varname,TString units,TStr
 
  Bool_t error=kFALSE;
 
- if (obsname!="Run" && obsname!="Event" && obsname!="Eventb" && obsname!="DetId"
-     && obsname!="Date" && obsname!="Tobs" && obsname!="Tstart" && obsname!="Tend"
+ if (obsname!="Name" && obsname!="Run" && obsname!="Event" && obsname!="Eventb" && obsname!="VetoLevel"
+     && obsname!="DetId" && obsname!="Date" && obsname!="Tobs" && obsname!="Tstart" && obsname!="Tend"
      && obsname!="d" && obsname!="a" && obsname!="b" && obsname!="z"
      && obsname!="E" && obsname!="L" && obsname!="S" && obsname!="F" && obsname!="I" && obsname!="J"
      && obsname!="T90" && obsname!="T100"
@@ -10578,7 +10580,12 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
 // date2 : The date (yyyymmdd) of the end of the observation period [date1,date2] (0=No restriction)
 // nmax  : Maximum number of sources or events to be accepted from this input file (<0 : no limitation)
 // type  : Identifier of the source (c.q. burst) or observed event (alert) type (e.g. "GRB", "GW", "IC",...)
-//         When type="-" the source type is set to "GRB" and the event type is set to "EVT".         
+//         In case no "Name" is provided as an "observable" in the input data, the provided "type" will
+//         be combined with the Tobs data to construct names like GRB031025, IC190722 etc...
+//         However, in case "Name" is provided in the input data, the corresponding string will be
+//         used as the name for the source (c.q. burst) or observed event, irrespective of the provided "type". 
+//         When type="-" the source type is set to "GRB" and the event type is set to "EVT", in case
+//         no "Name" is provided as "observable" in the input data.
 //
 // The default values are date1=0, date2=0, nmax=-1 and type="-".
 //
@@ -10648,11 +10655,14 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
  TString val;
 
  // The retrieved numerical (physical) observable value from the ROOT Tree
- Double_t value;
+ Double_t value=0;
+
+ // The conversion factor depending on the units specification 
+ Double_t fact=0;
 
  // Some of the pre-defined observable values that are used for selections
  // or that need special treatment
- TString Date,Tobs,Tstart,Tend;
+ TString Name,Date,Tobs,Tstart,Tend;
  Double_t d,a,b;
  Float_t z,csigma,T90,T100,E;
 
@@ -10669,6 +10679,7 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
  NcSignal* sx=0;
  Int_t nnew=0;
  TLeaf* lx=0;
+ TLeafC* lxc=0;
  Int_t jlast=0;
 
  // Loop over the data entries in the input Tree
@@ -10682,6 +10693,7 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
 
   // Initialisation of the values that are used for selections
   // or that need special treatment
+  Name="none";
   Date="none";
   Tobs="none";
   Tstart="none";
@@ -10716,13 +10728,29 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
     continue;
    }
 
-   value=lx->GetValue();
+   if (obsname=="Name") // Character string data from the input Tree
+   {
+    value=0;
+    lxc=(TLeafC*)lx;
+    Name=lxc->GetValueString();
+   }
+   else // Numerical data from the input Tree
+   {
+    value=lx->GetValue();
+   }
 
    if (func=="Log") value=pow(value,10);
    if (func=="Ln") value=exp(value);
 
    // Convert all angular values to degrees
    if (obsname=="a" || obsname=="b" || obsname=="csigma") value=ConvertAngle(value,units,"deg");
+
+   // Convert numerical values to the standard units
+   if (units.IsFloat())
+   {
+    fact=units.Atof();
+    value*=fact;
+   }
 
    // Store the obtained value in string format
    val="";
@@ -10796,6 +10824,7 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
      Tend+=value;
     }
    }
+
    if (obsname=="d") d=value;  
    if (obsname=="a") a=value;  
    if (obsname=="b") b=value;  
@@ -10823,11 +10852,18 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
   // Obtain the date in yyyymmdd format
   tobs.GetDate(kTRUE,0,&yyyy,&mm,&dd);
   idate=dd+100*mm+10000*yyyy;
-  // Compose the name of the source c.q. burst with the common yymmdd suffix
-  jdate=idate%1000000;
-  grbname=type;
-  if (jdate<100000) grbname+="0"; // Add leading zero for the year if needed
-  grbname+=jdate;
+
+  if (Name!="none") // Set the name of the object or observation
+  {
+   grbname=Name;
+  }
+  else // Compose the name of the source c.q. burst with the common yymmdd suffix
+  {
+   jdate=idate%1000000;
+   grbname=type;
+   if (jdate<100000) grbname+="0"; // Add leading zero for the year if needed
+   grbname+=jdate;
+  }
 
   if (date1 && idate<date1) continue;
   if (date2 && idate>date2) continue;
@@ -10877,6 +10913,10 @@ void NcAstrolab::LoadInputData(Bool_t src,TString file,TString tree,Int_t date1,
   {
    obsname=((TObjString*)fDataNames.GetObject(ivar,1))->GetString();
    val=((TObjString*)fDataNames.GetObject(ivar,5))->GetString();
+
+   // The observable Name is not stored in the NcSignal slots
+   if (obsname=="Name") continue;
+
    value=val.Atof();
 
    // The values of the observables a and b depend on the reference frame

@@ -24,6 +24,7 @@
 #include "TFile.h"
 #include "TChain.h"
 #include "TLeaf.h"
+#include "TLeafC.h"
 
 #include "TApplication.h"
 #include "TGFrame.h"
@@ -411,6 +412,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   virtual void CommandPanel(TGCompositeFrame* frame);
   void SetMapTS();
  
- ClassDef(NcAstrolab,40) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,41) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif
