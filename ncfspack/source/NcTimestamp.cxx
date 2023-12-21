@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+ * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -228,7 +228,7 @@
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than JD=2440587.5 or MJD=40587 or TJD=587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08.
+// in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07.
 // However, this NcTimestamp facility provides support for the full range
 // of (M/T)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, November 25, 2022  22:35Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 21, 2023  15:03Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -600,6 +600,7 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
   // A dummy timestamp is used to obtain the TAI corresponding date indicator
   NcTimestamp tx;
   tx.SetMJD(fTmjd,fTsec,fTns,fTps);
+
   if (fTmjd>=40587 && (fTmjd<65442 || (fTmjd==65442 && fTsec<8047)))
   {
    tx.GetDate(kTRUE,0,&y,&m,&d);
@@ -1261,6 +1262,10 @@ Int_t NcTimestamp::GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TStr
  if (type=="GPS") tx.Add(0,-19,0,0);
  if (type=="TT") tx.Add(0,32,184000000,0);
 
+ // Use the UTC parameters of the actual (unmodified) timestamp
+ tx.fLeap=fLeap;
+ tx.fDut=fDut;
+
  tx.GetTAI(d,sec,nsec,psec);
 
  hh=sec/3600;
@@ -1297,7 +1302,7 @@ Double_t NcTimestamp::GetUnixTime()
 // the UTC leap second expires, i.e. the start of the new day.
 //
 // Due to a limitation on the "seconds since the EPOCH start" count,
-// the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 //
 // Due to computer accuracy the ns precision may be lost.
 // For better precision it is advised to use the other date/time Get() facilities instead.
@@ -1311,7 +1316,7 @@ Double_t NcTimestamp::GetUnixTime()
  GetMJD(mjd,secs,ns);
  Int_t ps=GetPs();
 
- // Get accurate UTC from UT via UTC=UT1-dUT
+ // Get UTC from the stored UT1 via UTC=UT1-dUT
  if (fUtc)
  {
   NcTimestamp tx;
@@ -1404,7 +1409,7 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 // Obviously this TTimeStamp implementation would prevent usage of MJD values
 // smaller than 40587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1425,17 +1430,23 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 //                Since no Leap Second info is available, the TAI related time recording is disabled
 //                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
 //        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The provided UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //                In case the corresponding UTC parameters are not found, this mode is equivalent to utc="N".
 //                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 //        "U" ==> The date/time that was specified represents UT1, and serves as the reference time.
+//                The UTC parameters will be retrieved from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
 //                The retrieved UTC parameters will serve to determine the TAI related time recording.
-//                This mode is equivalent to utc="A" apart from the fact that the reference time represents UT1.
+//                In case the corresponding UTC parameters are not found, the TAI related time recording is disabled
+//                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+//                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT1-UTC in seconds.
 //
@@ -1504,6 +1515,8 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 
  // Update the UTC parameters and corresonding TAI time recording
  SetUTCparameters(utc,leap,dut);
+
+ if (utc=="A" || utc=="M") AddSec(fDut);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
@@ -1521,7 +1534,7 @@ void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 // Obviously this TTimeStamp implementation would prevent usage of MJD values
 // smaller than 40587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1531,7 +1544,7 @@ void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 // do not match the Julian parameters of NcTimestamp.  
 //
 // Due to computer accuracy the ns precision may be lost.
-// It is advised to use the (mjd,sec,ns) setting instead.
+// It is advised to use the (mjd,sec,ns,ps) setting instead.
 //
 // The input arguments represent the following :
 // mjd  : The modified Julian date as fractional day count.
@@ -1542,17 +1555,23 @@ void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 //                Since no Leap Second info is available, the TAI related time recording is disabled
 //                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
 //        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The provided UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //                In case the corresponding UTC parameters are not found, this mode is equivalent to utc="N".
 //                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 //        "U" ==> The date/time that was specified represents UT1, and serves as the reference time.
+//                The UTC parameters will be retrieved from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
 //                The retrieved UTC parameters will serve to determine the TAI related time recording.
-//                This mode is equivalent to utc="A" apart from the fact that the reference time represents UT1.
+//                In case the corresponding UTC parameters are not found, the TAI related time recording is disabled
+//                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+//                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT1-UTC in seconds.
 //
@@ -1599,7 +1618,7 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t l
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than JD=2440587.5.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1620,17 +1639,23 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t l
 //                Since no Leap Second info is available, the TAI related time recording is disabled
 //                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
 //        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The provided UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //                In case the corresponding UTC parameters are not found, this mode is equivalent to utc="N".
 //                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 //        "U" ==> The date/time that was specified represents UT1, and serves as the reference time.
+//                The UTC parameters will be retrieved from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
 //                The retrieved UTC parameters will serve to determine the TAI related time recording.
-//                This mode is equivalent to utc="A" apart from the fact that the reference time represents UT1.
+//                In case the corresponding UTC parameters are not found, the TAI related time recording is disabled
+//                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+//                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT1-UTC in seconds.
 //
@@ -1681,7 +1706,7 @@ void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than JD=2440587.5.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (M)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1691,7 +1716,7 @@ void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 // do not match the Julian parameters of NcTimestamp.  
 //
 // Due to computer accuracy the ns precision may be lost.
-// It is advised to use the (jd,sec,ns) setting instead.
+// It is advised to use the (jd,sec,ns,ps) setting instead.
 //
 // The input arguments represent the following :
 // jd   : The Julian date as fractional day count.
@@ -1702,17 +1727,23 @@ void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 //                Since no Leap Second info is available, the TAI related time recording is disabled
 //                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
 //        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The provided UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //                In case the corresponding UTC parameters are not found, this mode is equivalent to utc="N".
 //                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 //        "U" ==> The date/time that was specified represents UT1, and serves as the reference time.
+//                The UTC parameters will be retrieved from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
 //                The retrieved UTC parameters will serve to determine the TAI related time recording.
-//                This mode is equivalent to utc="A" apart from the fact that the reference time represents UT1.
+//                In case the corresponding UTC parameters are not found, the TAI related time recording is disabled
+//                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+//                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT1-UTC in seconds.
 //
@@ -1760,7 +1791,7 @@ void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than TJD=587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (T)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1781,17 +1812,23 @@ void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 //                Since no Leap Second info is available, the TAI related time recording is disabled
 //                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
 //        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The provided UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //                In case the corresponding UTC parameters are not found, this mode is equivalent to utc="N".
 //                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 //        "U" ==> The date/time that was specified represents UT1, and serves as the reference time.
+//                The UTC parameters will be retrieved from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
 //                The retrieved UTC parameters will serve to determine the TAI related time recording.
-//                This mode is equivalent to utc="A" apart from the fact that the reference time represents UT1.
+//                In case the corresponding UTC parameters are not found, the TAI related time recording is disabled
+//                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+//                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT1-UTC in seconds.
 //
@@ -1836,7 +1873,7 @@ void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 // Obviously this TTimeStamp implementation would prevent usage of values
 // smaller than TJD=587.
 // Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-// in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 // However, this NcTimestamp facility provides support for the full range
 // of (T)JD values, but the setting of the corresponding TTimeStamp parameters
 // is restricted to the values allowed by the TTimeStamp implementation.
@@ -1846,7 +1883,7 @@ void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 // do not match the Julian parameters of NcTimestamp.  
 //
 // Due to computer accuracy the ns precision may be lost.
-// It is advised to use the (jd,sec,ns) setting instead.
+// It is advised to use the (tjd,sec,ns,ps) setting instead.
 //
 // The input arguments represent the following :
 // tjd  : The Truncated Julian date as fractional day count.
@@ -1857,17 +1894,23 @@ void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 //                Since no Leap Second info is available, the TAI related time recording is disabled
 //                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
 //        "M" ==> Manual setting of the UTC parameters as specified by "leap" and "dut".
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The provided UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //        "A" ==> Automatic setting of the UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
-//                The date/time that was specified represents UTC, and serves as the reference time.
-//                The retrieved UTC parameters will serve to determine the TAI related time recording.
+//                The date/time that was specified represents UTC, and the provided UTC parameters
+//                will be used to determine UT1, which will now become the reference time.
+//                The provided UTC parameters will also serve to determine the TAI related time recording.
 //                In case the corresponding UTC parameters are not found, this mode is equivalent to utc="N".
 //                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 //        "U" ==> The date/time that was specified represents UT1, and serves as the reference time.
+//                The UTC parameters will be retrieved from the loaded IERS data files.
+//                In this case the specified values of "leap" and "dut" are irrelevant.
 //                The retrieved UTC parameters will serve to determine the TAI related time recording.
-//                This mode is equivalent to utc="A" apart from the fact that the reference time represents UT1.
+//                In case the corresponding UTC parameters are not found, the TAI related time recording is disabled
+//                and the values of the Leap Seconds and dut=UT1-UTC will be set to zero.
+//                For further details see the memberfunctions LoadUTCparameterFiles() and GetUTCparameters().
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT1-UTC in seconds.
 //
@@ -1915,17 +1958,17 @@ void NcTimestamp::FillTAI()
   return;
  }
 
- // Use memberfunction to ensure most recent values 
+ // Use memberfunction to ensure most recent values for the stored UT1 
  GetMJD(fTmjd,fTsec,fTns);
  fTps=GetPs();
 
  // Dummy timestamp to easily obtain TAI based day etc. counts
  // It is essential not to use UTC parameters here in order to prevent an infinite loop
  NcTimestamp tx;
- tx.SetMJD(fTmjd,fTsec,fTns,fTps,"N");
+ tx.SetMJD(fTmjd,fTsec,fTns,fTps,"N"); // This stores UT1 as if it were UTC
 
+ tx.AddSecCalc(-fDut,kFALSE);    // Convert the stored UT1 into UTC via UTC=UT1-dUT
  tx.AddCalc(0,fLeap,0,0,kFALSE); // Account for the leap seconds
- tx.AddSecCalc(-fDut,kFALSE);    // Account for dUT=UT1-UTC
 
  // Retrieve the corresponding TAI day etc. count
  tx.GetMJD(fTmjd,fTsec,fTns);
@@ -2023,6 +2066,8 @@ Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t 
 {
 // Set the International Atomic Time (TAI) date and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
+// also the UT will be set.
 // The return value indicates whether the date/time and UTC parameters are actually
 // set Manually (1), Automatically (-1) or Failed (0).
 //
@@ -2073,7 +2118,7 @@ Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t 
 //    Obviously this TTimeStamp implementation would prevent usage of values
 //    smaller than TAI=4383 for tmjd=kFALSE or TAI=40587 for tmjd=kTRUE.
 //    Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-//    in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+//    in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 //    However, this NcTimestamp facility provides support for the full range
 //    of TAI values, but the setting of the corresponding TTimeStamp parameters
 //    is restricted to the values allowed by the TTimeStamp implementation.
@@ -2109,7 +2154,8 @@ Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t 
   return fUtc;
  }
 
- SetMJD(mjd,sec,ns,ps,utc,leap,dut);
+ SetMJD(mjd,sec,ns,ps);
+ SetUTCparameters(utc,leap,dut); // Update the UTC parameters and corresonding TAI time recording
  Add(0,-fLeap,0,0); // Account for the leap seconds
  AddSec(fDut);      // Account for dUT=UT1-UTC
 
@@ -2123,6 +2169,8 @@ Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_
 {
 // Set the International Atomic Time (TAI) date and time and update the TTimeStamp
 // parameters accordingly (if possible).
+// Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
+// also the UT will be set.
 // The return value indicates whether the date/time and UTC parameters are actually
 // set Manually (1), Automatically (-1) or Failed (0).
 //
@@ -2173,7 +2221,7 @@ Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_
 //    Obviously this TTimeStamp implementation would prevent usage of values
 //    smaller than TAI=4383 for tmjd=kFALSE or TAI=40587 for tmjd=kTRUE.
 //    Furthermore, due to a limitation on the "seconds since the EPOCH start" count
-//    in TTimeStamp, the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+//    in TTimeStamp, the latest accessible date/time is until 19-jan-2038 02:14:07 UT.
 //    However, this NcTimestamp facility provides support for the full range
 //    of TAI values, but the setting of the corresponding TTimeStamp parameters
 //    is restricted to the values allowed by the TTimeStamp implementation.
@@ -2195,6 +2243,8 @@ Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_
 Int_t NcTimestamp::SetGPS(Int_t w,Int_t sow,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Int_t icycle)
 {
 // Set the date and time from Global Positioning System (GPS) broadcast data.
+// Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
+// also the UT will be set.
 // The return value indicates whether the date/time and UTC parameters are actually
 // set Manually (1), Automatically (-1) or Failed (0).
 //
@@ -2268,6 +2318,8 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t sow,Int_t ns,Int_t ps,TString utc,Int_t 
 Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Int_t icycle)
 {
 // Set the date and time from Global Positioning System (GPS) broadcast data.
+// Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
+// also the UT will be set.
 // The return value indicates whether the date/time and UTC parameters are actually
 // set Manually (1), Automatically (-1) or Failed (0).
 //
@@ -2338,6 +2390,8 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString 
 Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
 {
 // Set the Unix date and time and update the TTimeStamp parameters accordingly (if possible).
+// Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
+// also the UT will be set.
 // Unix Time is also called POSIX Time or UNIX Epoch Time.
 //
 // Unix Time is closely releated to UTC and represents the (fractional) elapsed second count
@@ -2359,8 +2413,12 @@ Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
 //
 // For accurate timing the user is advised to use one of the other supported time scales. 
 //
-// Due to a limitation on the "seconds since the EPOCH start" count,
-// the latest accessible date/time is 19-jan-2038 02:14:08 UT.
+// Due to a limitation on the "seconds since the EPOCH start" count in ROOT's TTtimeStamp,
+// the latest accessible date/time indication is until 19-jan-2038 02:14:07 UT,
+// corresponding to Unix time 2147480047.
+// However, since this NcTimestamp facility is based on the Julian date system,
+// Julian, TAI etc. time keeping beyond the boundaries of the Unix time epoch is provided,
+// albeit without the date/time indication.
 //
 // The return value indicates whether the date/time and UTC parameters are actually
 // set Manually (1), Automatically (-1) or Failed (0).
@@ -2377,8 +2435,12 @@ Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
 //                the Leap Seconds and dut=UT-UTC will be set to zero.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
 //        "M" ==> Manually provided UTC parameters as specified by "leap" and "dut".
+//                The provided UTC parameters will be used to determine UT1,
+//                which will now become the reference time.
 //        "A" ==> Automatically provided UTC parameters from the loaded IERS data files.
 //                In this case the specified values of "leap" and "dut" are irrelevant.
+//                The retrieved UTC parameters will be used to determine UT1,
+//                which will now become the reference time.
 //                For further details see the memberfunction SetUTCparameters().
 // leap : The accumulated number of Leap Seconds corresponding to this date/time.
 // dut  : The monitored time difference UT-UTC in seconds.
@@ -2419,8 +2481,12 @@ Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
  iword=int(sec);
  sec=sec-double(iword);
  Int_t ps=int(sec*1000.);
+
+ // Unix time is related to UTC and not to UT1.
+ if (utc=="U") utc="A";
  
- SetMJD(40587,0,0,0,utc,leap,dut); // Start of the Unix Epoch
+ SetMJD(40587,0,0,0); // Start of the Unix Epoch
+ SetUTCparameters(utc,leap,dut); // Update the UTC parameters and corresonding TAI time recording
  Add(days,s,ns,ps);      // Add the elapsed time
  if (fUtc) AddSec(fDut); // Correct for dUT=UT1-UTC
 
@@ -3002,9 +3068,11 @@ void NcTimestamp::AddCalc(Int_t d,Int_t s,Int_t ns,Int_t ps,Bool_t utcpar)
  if (fUtc==-1) utc="A";
  if (fUtc==-2) utc="U";
  if (fUtc==-3) utc="U";
- SetMJD(days,secs,nsec,psec,utc,fLeap,fDut);
+ Int_t leap=fLeap;
+ Double_t dut=fDut;
+ SetMJD(days,secs,nsec,psec);
 
- if (utcpar) SetUTCparameters(utc,fLeap,fDut);
+ if (utcpar) SetUTCparameters(utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::AddCalc(Double_t hours,Bool_t utcpar)
@@ -3716,19 +3784,30 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t l
 //
 // The default values are utc="A", leap=0 and dut=0.
 
- Int_t iword=0;
- Double_t uttime=0;
+ Long64_t iword=0;
  Int_t hh=0;
  Int_t mm=0;
- Double_t s=0;
+ Int_t ss=0;
+ Int_t ns=0;
+ Int_t ps=0;
  time.ReplaceAll(":","");
- uttime=time.Atof();
- iword=int(uttime);
+
+ // Unpack the hhmmss integer part
+ iword=time.Atoll();
  hh=iword/10000;
  iword=iword%10000;
  mm=iword/100;
- s=uttime-double(hh*10000+mm*100);
- SetUT(y,m,d,hh,mm,s,utc,leap,dut);
+ iword=iword%100;
+ ss=iword;
+
+ // Unpack the fractional part in ns and ps
+ time.Remove(0,7); // Remove the integer part, including the decimal "."
+ Int_t length=time.Length();
+ time.Append('0',12-length); // Increase the string to represent the integer number of ns
+ iword=time.Atoll();
+ ns=iword/1000;
+ ps=iword%1000;
+ SetUT(y,m,d,hh,mm,ss,ns,ps,utc,leap,dut);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetUT(TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut)
@@ -3935,7 +4014,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,In
 
  Int_t mjd,sec,nsec;
  GetMJD(mjd,sec,nsec);
- SetMJD(mjd,0,0,0,utc,leap,dut);
+ SetMJD(mjd,0,0,0);
+ SetUTCparameters(utc,leap,dut); // Update the UTC parameters and corresonding TAI time recording
  Add(d,s,ns,ps);
 
  // Determine UT1 using dut=UT1-UTC if UTC was provided as input
@@ -5267,6 +5347,7 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
    // A dummy timestamp is used to obtain the TAI corresponding date indicator
    NcTimestamp tx;
    tx.SetMJD(fTmjd,fTsec,fTns,fTps);
+
    if (fTmjd>=40587 && (fTmjd<65442 || (fTmjd==65442 && fTsec<8047)))
    {
     tx.GetDate(kTRUE,0,&y,&m,&d);

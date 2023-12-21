@@ -1477,3 +1477,7 @@
                 the possibility of reading a "Name" of an object or observation as a string from an input TTree.
                 Also ROOT macro GRBweb2Root.cc introduced in /physics/macros to provide a tool to convert the
                 summary table of Paul Coppin's GRBweb facility into a plain ROOT Tree.
+21-dec-2023 NvE In case the UTC parameters are known in NcTimestamp, the reference time will now always be UT1.
+                The docs of NcTimestamp have been updated accordingly, and also various accuracy improvements
+                have been implemented.
+                The version indicator in NcVersion has been updated to 5.37.

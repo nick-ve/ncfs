@@ -1,6 +1,6 @@
 #ifndef NcTimestamp_h
 #define NcTimestamp_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <iostream>
@@ -129,6 +129,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,15) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,16) // Handling of timestamps for (astro)particle physics research.
 };
 #endif
