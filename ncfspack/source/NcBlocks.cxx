@@ -850,6 +850,46 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  return xtrig;
 }
 ///////////////////////////////////////////////////////////////////////////
+Double_t NcBlocks::GetBlocks(NcSample s,TString name,Double_t fpr,TH1* hout,Int_t ntrig)
+{
+// Get the Bayesian Block partitions for the (Data Mode 1) named variable of NcSample "s"
+// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+// A common case is where the NcSample contains recorded event times.
+//
+// Notes :
+// -------
+// 1) The Store Mode of the NcSample must be activated.
+// 2) "hout" must be an existing 1-dimensional histogram.
+//
+// Each new block is started at a so called Change Point, to indicate a significant change
+// in the event rate based on the recordings in the provided NcSample.
+// The various Change Points represent the start of the various (variable) sized bins
+// of the resulting histogram "hout".
+// Since the data treatment is inherently sequential, the user may use the argument "ntrig"
+// to trigger c.q. stop after the occurrence of ntrig Change Points.
+// For instance, an online trigger system may be obtained by specifying ntrig=1.
+//
+// Meaning of the input argument "ntrig" :
+// ---------------------------------------
+// ntrig >0 : Only consider Change Points indicating a rising edge
+//       <0 : Only consider Change Points indicating a falling edge
+//       =0 : No triggering c.q. early stopping of the data processing will be performed
+//
+// The default value is ntrig=0.
+//
+// The returned value is the "X-value" of the selected Change Point, e.g. trigger time.
+// In case ntrig=0 the return value corresponds to the 1st Change Point, irrespective
+// whether that represents a rising or falling edge.
+//
+// In case of inconsistent input, the value 0 is returned.
+
+ Int_t i=s.GetIndex(name);
+
+ Double_t xtrig=GetBlocks(s,i,fpr,hout,ntrig);
+
+ return xtrig;
+}
+///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t ntrig)
 {
 // Get the Bayesian Block partitions for the "n" data recordings (Data Mode 1)
@@ -1510,6 +1550,41 @@ Int_t NcBlocks::GetBlocks(NcSample s,Int_t i,TH1* hout,Int_t n,Int_t mode)
  title+=")";
  str=title.Format(title.Data(),n);
  hout->SetTitle(str.Data());
+
+ return nblocks;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::GetBlocks(NcSample s,TString name,TH1* hout,Int_t n,Int_t mode)
+{
+// Get the block partitions consisting of "n" consecutive samplings for the
+// named variable of NcSample "s", with as block height the mean, median or RMS value
+// of the contained "n" samples and provide the results in the 1-D histogram "hout".
+//
+// This facility provides an efficient way to identify pedestal variations in case these
+// might be expected to occur after recording "n" samples due to the specific DAQ design.
+//
+// mode = 0 --> Use the mean as average value
+//        1 --> Use the median as average value
+//        2 --> Use the Root Mean Square (RMS) as average value
+//              Note : This is NOT the RMS deviation defined as sqrt(variance)
+//
+// The default value is mode=0;
+//
+// Notes :
+// -------
+// 1) The Store Mode of the NcSample must be activated.
+// 2) "hout" must be an existing 1-dimensional histogram.
+// 3) The blocks represent the bins of "hout", which may have variable length
+//    in case the sampling was not continuous.
+//    As such, the structure of the output histogram is comparable to the result
+//    of a Bayesian Block analysis.  
+//
+// The returned value is the number of produced blocks. 
+// In case of inconsistent input, the value 0 is returned.
+
+ Int_t i=s.GetIndex(name);
+
+ Int_t nblocks=GetBlocks(s,i,hout,n,mode);
 
  return nblocks;
 }

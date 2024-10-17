@@ -1481,3 +1481,13 @@
                 The docs of NcTimestamp have been updated accordingly, and also various accuracy improvements
                 have been implemented.
                 The version indicator in NcVersion has been updated to 5.37.
+19-jan-2024 NvE Name of the internal UTC data Tree changed from "T" into "UTCdata" in NcTimestamp::LoadUTCparameters(),
+                in order to avoid confusion when a user wants to access this tree amongst various other data trees.
+                Also SetDirectory(0) invoked for the UTC data tree to prevent this tree to be unintentionally included
+                in a user created ROOT output file. 
+06-feb-2024 NvE Time difference variables in NcTimestamp::GetDifference() changed from Int_t to Long_t
+                to enable very large time differences in units of seconds etc.
+07-may-2024 NvE Input arguments Non and Noff in NcMath::LiMaSignificance() changed from Int_t to Double_t
+                to allow weighted event counts.
+09-may-2024 NvE New memberfunctions GetDtSample() introduced in class NcSample.
+25-sep-2024 NvE New memberfunctions GetBlocks() introduced in class NcBlocks to handle NcSample variables by name.

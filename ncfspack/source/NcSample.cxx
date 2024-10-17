@@ -73,7 +73,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:07Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 9, 2024  08:05Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
@@ -2106,6 +2106,8 @@ Double_t NcSample::GetEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 //
 // The default values are mode=0 and k=0.
 
+ TString name=GetName();
+
  if (!fStore)
  {
   cout << " *NcSample::GetEntry* Error : Storage mode not activated." << endl;
@@ -2114,19 +2116,25 @@ Double_t NcSample::GetEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 
  if (i<1 || i>fN)
  {
-  cout << " *NcSample::GetEntry* Error : Invalid index number i=" << i << endl;
+  cout << " *NcSample::GetEntry* Error : Invalid index number i=" << i;
+  if (name!="") printf(" for NcSample %-s",name.Data());
+  printf("\n");
   return 0;
  }
 
  if (j<1 || j>fDim)
  {
-  cout << " *NcSample::GetEntry* Error : Invalid variable number j=" << j << endl;
+  cout << " *NcSample::GetEntry* Error : Invalid variable number j=" << j;
+  if (name!="") printf(" for NcSample %-s",name.Data());
+  printf("\n");
   return 0;
  }
 
  if (mode && (k<1 || k>fDim))
  {
-  cout << " *NcSample::GetEntry* Error : Invalid argument k=" << k << endl;
+  cout << " *NcSample::GetEntry* Error : Invalid argument k=" << k;
+  if (name!="") printf(" for NcSample %-s",name.Data());
+  printf("\n");
   return 0;
  }
 
@@ -2230,6 +2238,145 @@ void NcSample::GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode,Int_t k
  }
 
  delete [] values;
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample NcSample::GetDtSample(Int_t i,Int_t nc,Int_t store,Int_t nmax,Int_t order)
+{
+// The i-th variable of the current sample is regarded as the recording of event times,
+// and this memberfunction samples the time intervals (dt) between a certain fixed
+// amount of time ordered consecutive entries for this i-th variable.
+//
+// Returned object : A single-variable NcSample object containing the corresponding dt values,
+//                   with "Dt" as variable name.
+//
+// For this functionality the storage mode of the current sample has to be activated.
+//
+// Input arguments :
+// -----------------
+// i         : The requested variable (1=first) of the current sample.
+// nc        : The step count to arrive at the required consecutive entry (see example below).
+// store = 0 : The resulting dt values will not be stored, but the dt statistics will be recorded.
+//         1 : In addition to recording the dt statistics, also the obtained dt values will be stored.
+// nmax  = 0 : No maximum is set for the number of stored dt entries.
+//       > 0 : The dt entries will be stored up to a maximum of "nmax" entries.
+// order > 0 : Re-order the dt entries in increasing order before removing the first (=lowest value).
+//       = 0 : Re-order the dt entries in the order they were obtained before removing the first one.
+//       < 0 : Re-order the dt entries in decreasing order before removing the first (=highest value).
+//             When nmax=0 the value of "order" is irrelevant.
+//
+// Note :
+// ------
+// Specification of order=0 results in a regular First In First Out (FIFO) buffer performance,
+// whereas for other "order" values it reflects a FIFO behaviour of removing the first entry
+// after the requested ordering.
+//
+// The default values are store=1, nmax=0 and order=0.
+//
+// Example :
+// ---------
+// Specifying "nc=1" will provide the NcSample with the dt intervals between each consecutive event,
+// i.e. the distribution of time intervals between the events (1,2), (2,3), (3,4) etc.
+// Specifying "nc=2" will provide the NcSample with the dt intervals between every 2nd consecutive event,
+// i.e. the distribution of time intervals between the events (1,3), (2,4), (3,5) etc.
+// In case the input sample contained Poissonian distributed event times, the produced dt values represent
+// so called Erlang distributions (see also class NcMath), for which each time interval contains
+// exactly "nc" events of which the last event occurs right at the end of the interval.
+//
+// Note :
+// ------
+// In the text above the values of the current sample are regarded as observed event times,
+// but actually any sampling of an observable with a well defined ordering can be used.
+
+ // Make "order" value to comply with a single variable sample
+ if (order>0) order=1;
+ if (order<0) order=-1; 
+
+ NcSample sdt;
+ sdt.SetStoreMode(store,nmax,order);
+ sdt.SetName("DtSample");
+ sdt.SetNames("Dt");
+
+ if (i<1 || i>GetDimension()) return sdt;
+
+ if (nc<1) return sdt;
+ 
+ Int_t nen=GetN();
+ if (nen<=nc) return sdt;
+
+ TString varname=GetVariableName(i);
+ TString str;
+ str.Form("Interval sampling for variable %-s between %-i consecutive entries (nc=%-i)",varname.Data(),nc+1,nc);
+ sdt.SetNameTitle("DtSample",str);
+
+ // Fill the dt sample
+ Double_t t1=0;
+ Double_t t2=0;
+ Double_t deltat=0;
+ for (Int_t ien=1; ien<=nen; ien++)
+ {
+  if (ien+nc>nen) break;
+
+  t1=GetEntry(ien,i,1,i);
+  t2=GetEntry(ien+nc,i,1,i);
+  deltat=fabs(t2-t1);
+
+  sdt.Enter(deltat);
+ }
+
+ return sdt;
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample NcSample::GetDtSample(TString name,Int_t nc,Int_t store,Int_t nmax,Int_t order)
+{
+// The variable with the specified name of the current sample is regarded as the recording of event times,
+// and this memberfunction samples the time intervals (dt) between a certain fixed amount of
+// time ordered consecutive entries for the specified variable.
+//
+// Returned object : A single-variable NcSample object containing the corresponding dt values,
+//                   with "Dt" as variable name.
+//
+// For this functionality the storage mode of the current sample has to be activated.
+//
+// Input arguments :
+// -----------------
+// name      : The name of the requested variable of the current sample.
+// nc        : The step count to arrive at the required consecutive entry (see example below).
+// store = 0 : The resulting dt values will not be stored, but the dt statistics will be recorded.
+//         1 : In addition to recording the dt statistics, also the obtained dt values will be stored.
+// nmax  = 0 : No maximum is set for the number of stored dt entries.
+//       > 0 : The dt entries will be stored up to a maximum of "nmax" entries.
+// order > 0 : Re-order the dt entries in increasing order before removing the first (=lowest value).
+//       = 0 : Re-order the dt entries in the order they were obtained before removing the first one.
+//       < 0 : Re-order the dt entries in decreasing order before removing the first (=highest value).
+//             When nmax=0 the value of "order" is irrelevant.
+//
+// Note :
+// ------
+// Specification of order=0 results in a regular First In First Out (FIFO) buffer performance,
+// whereas for other "order" values it reflects a FIFO behaviour of removing the first entry
+// after the requested ordering.
+//
+// The default values are store=1, nmax=0 and order=0.
+//
+// Example :
+// ---------
+// Specifying "nc=1" will provide the NcSample with the dt intervals between each consecutive event,
+// i.e. the distribution of time intervals between the events (1,2), (2,3), (3,4) etc.
+// Specifying "nc=2" will provide the NcSample with the dt intervals between every 2nd consecutive event,
+// i.e. the distribution of time intervals between the events (1,3), (2,4), (3,5) etc.
+// In case the input sample contained Poissonian distributed event times, the produced dt values represent
+// so called Erlang distributions (see also class NcMath), for which each time interval contains
+// exactly "nc" events of which the last event occurs right at the end of the interval.
+//
+// Note :
+// ------
+// In the text above the values of the current sample are regarded as observed event times,
+// but actually any sampling of an observable with a well defined ordering can be used.
+
+ Int_t i=GetIndex(name);
+ NcSample sdt=GetDtSample(i,nc,store,nmax,order);
+
+ return sdt;
 }
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::GetSamplingHistogram(Int_t i,TF1* f)

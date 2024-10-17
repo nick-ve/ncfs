@@ -43,7 +43,7 @@
 //                             // correct model
 //
 //--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, April 18, 2023  10:53Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, May 7, 2024  10:30Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcMath.h"
@@ -3621,7 +3621,7 @@ Double_t NcMath::MeanMu(Double_t cl,Double_t nbkg,Int_t mode,TF1* fw,TFeldmanCou
  return muav;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcMath::LiMaSignificance(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra,Double_t Re) const
+Double_t NcMath::LiMaSignificance(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra,Double_t Re) const
 {
 // Provide the significance in terms of the amount of standard deviations 
 // of a certain "on source" and "off source" observation according to the
@@ -3648,15 +3648,13 @@ Double_t NcMath::LiMaSignificance(Int_t Non,Double_t Ton,Int_t Noff,Double_t Tof
 
  Double_t s=-1;
 
- if (!Non || !Noff || Ton<=0 || Toff<=0 || Ra<=0 || Re<=0) return -1;
+ if (Non<=0 || Noff<=0 || Ton<=0 || Toff<=0 || Ra<=0 || Re<=0) return -1;
 
- Double_t Ron=Non;
- Double_t Roff=Noff;
  Double_t sum=Non+Noff;
 
  Double_t a=Ra*Re*Ton/Toff;
 
- s=2.*(Ron*log((1.+a)*Ron/(a*sum))+Roff*log((1.+a)*Roff/sum));
+ s=2.*(Non*log((1.+a)*Non/(a*sum))+Noff*log((1.+a)*Noff/sum));
  s=sqrt(s);
  return s;
 }

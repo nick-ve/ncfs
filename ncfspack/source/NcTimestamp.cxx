@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 21, 2023  15:03Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 6, 2024  15:16Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -2762,6 +2762,10 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 // leapfile="$(NCFS)/IERS/leap.txt"
 // dutfile="$(NCFS)/IERS/dut.txt"
 //
+// which represents a central location to provide (automatically) updated data files.
+// The file "iers-update.sh" in the directory "$NCFS/IERS" contains a template script
+// to obtain automatic (daily) updates of these IERS data files.
+//
 // The corresponding daily values of the accumulated Leap Seconds and dUT=UT1-UTC
 // are stored in an internal ROOT TTree.
 // The return argument provides a pointer to the corresponding TTree to enable
@@ -2884,7 +2888,10 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
  Double_t dut=0;
 
  // The produced output structure
- fUTCdata=new TTree("T","Daily UTC leap second and dUT=UT-UTC parameter data");
+ fUTCdata=new TTree("UTCdata","Daily UTC leap second and dUT=UT-UTC parameter data");
+
+ // Prevent this Tree to be automatically coupled to a user defined output file
+ fUTCdata->SetDirectory(0);
 
  // The output variables for the Tree
  fUTCdata->Branch("mjd",&mjd,"mjd/I");
@@ -3452,10 +3459,10 @@ Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode,TString 
   GetTAI(d2,s2,ns2,ps2);
  }
 
- Int_t dd=d1-d2;
- Int_t ds=s1-s2;
- Int_t dns=ns1-ns2;
- Int_t dps=ps1-ps2;
+ Long_t dd=d1-d2;
+ Long_t ds=s1-s2;
+ Long_t dns=ns1-ns2;
+ Long_t dps=ps1-ps2;
 
  // Time difference for the specified units only
  if (mode==3)

@@ -84,6 +84,8 @@ class NcSample : public TNamed
   Double_t GetEntry(Int_t i,Int_t j,Int_t mode=0,Int_t k=0); // Access the i-th (ordered) entry and provide the value of the j-th variable
   Double_t GetEntry(Int_t i,TString nameA,Int_t mode=0,TString nameB="-"); // Access the i-th (ordered) entry and provide the value of the variable with nameA
   void GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode=0,Int_t k=0); // Provide the [ifirst,ilast] (ordered) entries via NcSample "s"
+  NcSample GetDtSample(Int_t i,Int_t nc,Int_t store=1,Int_t nmax=0,Int_t order=0);      // Provide the dt interval values for the i-th variable of input sample s
+  NcSample GetDtSample(TString name,Int_t nc,Int_t store=1,Int_t nmax=0,Int_t order=0); // Provide the dt interval values for the requested named variable of input sample s
   TH1D GetSamplingHistogram(Int_t i,TF1* f=0);        // Provide a TH1D with values of (a function of) variable i vs. the sampling entry number
   TH1D GetSamplingHistogram(Int_t i,TString f);       // Provide a TH1D with values of (a function of) variable i vs. the sampling entry number
   TH1D GetSamplingHistogram(TString nameA,TF1* f=0);  // Provide a TH1D for (a function of) variable nameA vs. the sampling entry number
@@ -168,6 +170,6 @@ class NcSample : public TNamed
   TArrayL64 ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Provide the quantized data of an "nbits" ADC.
   TArrayD DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Reconstruct the analog signals from an "nbits" ADC.
 
- ClassDef(NcSample,16) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,17) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

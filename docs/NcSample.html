@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Dec  5 12:09:09 2023            -->
+<!--   Date: Thu Oct 17 15:17:09 2024            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -104,7 +104,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:07Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 9, 2024  08:05Z
 
 </pre></div>
 </div></div>
@@ -166,6 +166,8 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetDimension">GetDimension</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetDtSample">GetDtSample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> nc, <a href="./ListOfTypes.html#Int_t">Int_t</a> store = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> order = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./NcSample.html">NcSample</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetDtSample@1">GetDtSample</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nc, <a href="./ListOfTypes.html#Int_t">Int_t</a> store = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> order = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> k = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcSample:GetEntry@1">GetEntry</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TString nameA, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0, TString nameB = <span class="string">"-"</span>)</td></tr>
 <tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcSample:GetGraph">GetGraph</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TF1* f = 0)</td></tr>
@@ -987,6 +989,100 @@ return false;}
  Note : If mode=0 the value of <span class="string">"k"</span> is irrelevant.
 
  The default values are mode=0 and k=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:GetDtSample" href="src/NcSample.cxx.html#t5K.6C">GetDtSample</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> nc, <a href="./ListOfTypes.html#Int_t">Int_t</a> store = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> order = 0)</span><br />
+<div class="funccomm"><pre> The i-th variable of the current sample is regarded as the recording of event times,
+ and this memberfunction samples the time intervals (dt) between a certain fixed
+ amount of time ordered consecutive entries for this i-th variable.
+
+ Returned object : A single-variable <a href="./NcSample.html">NcSample</a> object containing the corresponding dt values,
+                   with <span class="string">"Dt"</span> as variable name.
+
+ For this functionality the storage mode of the current sample has to be activated.
+
+ Input arguments :
+
+ i         : The requested variable (1=first) of the current sample.
+ nc        : The step count to arrive at the required consecutive entry (see example below).
+ store = 0 : The resulting dt values will not be stored, but the dt statistics will be recorded.
+         1 : In addition to recording the dt statistics, also the obtained dt values will be stored.
+ nmax  = 0 : No maximum is set for the number of stored dt entries.
+       &gt; 0 : The dt entries will be stored up to a maximum of <span class="string">"nmax"</span> entries.
+ order &gt; 0 : Re-order the dt entries in increasing order before removing the first (=lowest value).
+       = 0 : Re-order the dt entries in the order they were obtained before removing the first one.
+       &lt; 0 : Re-order the dt entries in decreasing order before removing the first (=highest value).
+             When nmax=0 the value of <span class="string">"order"</span> is irrelevant.
+
+ Note :
+
+ Specification of order=0 results in a regular First In First Out (FIFO) buffer performance,
+ whereas for other <span class="string">"order"</span> values it reflects a FIFO behaviour of removing the first entry
+ after the requested ordering.
+
+ The default values are store=1, nmax=0 and order=0.
+
+ Example :
+
+ Specifying <span class="string">"nc=1"</span> will provide the <a href="./NcSample.html">NcSample</a> with the dt intervals between each consecutive event,
+ i.e. the distribution of time intervals between the events (1,2), (2,3), (3,4) etc.
+ Specifying <span class="string">"nc=2"</span> will provide the <a href="./NcSample.html">NcSample</a> with the dt intervals between every 2nd consecutive event,
+ i.e. the distribution of time intervals between the events (1,3), (2,4), (3,5) etc.
+ In case the input sample contained Poissonian distributed event times, the produced dt values represent
+ so called Erlang distributions (see also class <a href="./NcMath.html">NcMath</a>), for which each time interval contains
+ exactly <span class="string">"nc"</span> events of which the last event occurs right at the end of the interval.
+
+ Note :
+
+ In the text above the values of the current sample are regarded as observed event times,
+ but actually any sampling of an observable with a well defined ordering can be used.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./NcSample.html">NcSample</a> <a class="funcname" name="NcSample:GetDtSample@1" href="src/NcSample.cxx.html#GvI8qC">GetDtSample</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nc, <a href="./ListOfTypes.html#Int_t">Int_t</a> store = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmax = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> order = 0)</span><br />
+<div class="funccomm"><pre> The variable with the specified name of the current sample is regarded as the recording of event times,
+ and this memberfunction samples the time intervals (dt) between a certain fixed amount of
+ time ordered consecutive entries for the specified variable.
+
+ Returned object : A single-variable <a href="./NcSample.html">NcSample</a> object containing the corresponding dt values,
+                   with <span class="string">"Dt"</span> as variable name.
+
+ For this functionality the storage mode of the current sample has to be activated.
+
+ Input arguments :
+
+ name      : The name of the requested variable of the current sample.
+ nc        : The step count to arrive at the required consecutive entry (see example below).
+ store = 0 : The resulting dt values will not be stored, but the dt statistics will be recorded.
+         1 : In addition to recording the dt statistics, also the obtained dt values will be stored.
+ nmax  = 0 : No maximum is set for the number of stored dt entries.
+       &gt; 0 : The dt entries will be stored up to a maximum of <span class="string">"nmax"</span> entries.
+ order &gt; 0 : Re-order the dt entries in increasing order before removing the first (=lowest value).
+       = 0 : Re-order the dt entries in the order they were obtained before removing the first one.
+       &lt; 0 : Re-order the dt entries in decreasing order before removing the first (=highest value).
+             When nmax=0 the value of <span class="string">"order"</span> is irrelevant.
+
+ Note :
+
+ Specification of order=0 results in a regular First In First Out (FIFO) buffer performance,
+ whereas for other <span class="string">"order"</span> values it reflects a FIFO behaviour of removing the first entry
+ after the requested ordering.
+
+ The default values are store=1, nmax=0 and order=0.
+
+ Example :
+
+ Specifying <span class="string">"nc=1"</span> will provide the <a href="./NcSample.html">NcSample</a> with the dt intervals between each consecutive event,
+ i.e. the distribution of time intervals between the events (1,2), (2,3), (3,4) etc.
+ Specifying <span class="string">"nc=2"</span> will provide the <a href="./NcSample.html">NcSample</a> with the dt intervals between every 2nd consecutive event,
+ i.e. the distribution of time intervals between the events (1,3), (2,4), (3,5) etc.
+ In case the input sample contained Poissonian distributed event times, the produced dt values represent
+ so called Erlang distributions (see also class <a href="./NcMath.html">NcMath</a>), for which each time interval contains
+ exactly <span class="string">"nc"</span> events of which the last event occurs right at the end of the interval.
+
+ Note :
+
+ In the text above the values of the current sample are regarded as observed event times,
+ but actually any sampling of an observable with a well defined ordering can be used.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TH1D <a class="funcname" name="NcSample:GetSamplingHistogram" href="src/NcSample.cxx.html#qAoz">GetSamplingHistogram</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, TF1* f = 0)</span><br />
@@ -2306,7 +2402,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Tue Dec  5 12:09:11 2023 </em><em>&raquo; Last generated: 2023-12-05 12:09</em><br />
+<em>&raquo; Last changed: Thu Oct 17 15:17:11 2024 </em><em>&raquo; Last generated: 2024-10-17 15:17</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun May 14 13:55:58 2023            -->
+<!--   Date: Thu Oct 17 15:17:08 2024            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -106,7 +106,7 @@
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:Chi2Value" title="Double_t NcMath::Chi2Value(Int_t m,Int_t* n,Double_t* p=0,Int_t* ndf=0) or overloads">Chi2Value</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> m,<a href="../ListOfTypes.html#Double_t">Double_t</a>* n,<a href="../ListOfTypes.html#Double_t">Double_t</a>* p=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* ndf=0) <span class="keyword">const</span>; <span class="comment">// Frequentist Chi2 value of a counting exp. w.r.t. hypothesis</span>
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:Chi2Value" title="Double_t NcMath::Chi2Value(Int_t m,Int_t* n,Double_t* p=0,Int_t* ndf=0) or overloads">Chi2Value</a>(TH1* his,TH1* hyp=0,TF1* pdf=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* ndf=0) <span class="keyword">const</span>;    <span class="comment">// Frequentist Chi2 value of a counting exp. w.r.t. hypothesis</span>
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:MeanMu" title="Double_t NcMath::MeanMu(Double_t cl,Double_t nbkg,Int_t mode,TF1* w=0,TFeldmanCousins* f=0,Int_t nmax=0)">MeanMu</a>(<a href="../ListOfTypes.html#Double_t">Double_t</a> cl,<a href="../ListOfTypes.html#Double_t">Double_t</a> nbkg,<a href="../ListOfTypes.html#Int_t">Int_t</a> mode,TF1* w=0,TFeldmanCousins* f=0,<a href="../ListOfTypes.html#Int_t">Int_t</a> nmax=0) <span class="keyword">const</span>; <span class="comment">// Average Feldman-Cousins upper/lower limit </span>
-  <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:LiMaSignificance" title="Double_t NcMath::LiMaSignificance(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1)">LiMaSignificance</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> Non,<a href="../ListOfTypes.html#Double_t">Double_t</a> Ton,<a href="../ListOfTypes.html#Int_t">Int_t</a> Noff,<a href="../ListOfTypes.html#Double_t">Double_t</a> Toff,<a href="../ListOfTypes.html#Double_t">Double_t</a> Ra=1,<a href="../ListOfTypes.html#Double_t">Double_t</a> Re=1) <span class="keyword">const</span>; <span class="comment">// Li and Ma significance</span>
+  <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:LiMaSignificance" title="Double_t NcMath::LiMaSignificance(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1)">LiMaSignificance</a>(<a href="../ListOfTypes.html#Double_t">Double_t</a> Non,<a href="../ListOfTypes.html#Double_t">Double_t</a> Ton,<a href="../ListOfTypes.html#Double_t">Double_t</a> Noff,<a href="../ListOfTypes.html#Double_t">Double_t</a> Toff,<a href="../ListOfTypes.html#Double_t">Double_t</a> Ra=1,<a href="../ListOfTypes.html#Double_t">Double_t</a> Re=1) <span class="keyword">const</span>; <span class="comment">// Li and Ma significance</span>
 
  <span class="keyword">protected</span>:
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:GamSer" title="Double_t NcMath::GamSer(Double_t a,Double_t x)">GamSer</a>(<a href="../ListOfTypes.html#Double_t">Double_t</a> a,<a href="../ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span>; <span class="comment">// Compute P(a,x) via serial representation</span>
@@ -116,7 +116,7 @@
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:BesselI1" title="Double_t NcMath::BesselI1(Double_t x)">BesselI1</a>(<a href="../ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span>;          <span class="comment">// Compute modified Bessel function I_1(x)</span>
   <a href="../ListOfTypes.html#Double_t">Double_t</a> <a href="../NcMath.html#NcMath:BesselK1" title="Double_t NcMath::BesselK1(Double_t x)">BesselK1</a>(<a href="../ListOfTypes.html#Double_t">Double_t</a> x) <span class="keyword">const</span>;          <span class="comment">// Compute modified Bessel function K_1(x)</span>
  
- ClassDef(<a href="../NcMath.html">NcMath</a>,11) <span class="comment">// Various mathematical tools for scientific analysis.</span>
+ ClassDef(<a href="../NcMath.html">NcMath</a>,12) <span class="comment">// Various mathematical tools for scientific analysis.</span>
  
 };
 <span class="cpp">#endif</span>
@@ -128,7 +128,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2023-05-14 13:55 </em><em>&raquo; Last generated: 2023-05-14 13:55</em><br />
+<em>&raquo; Last changed: 2024-10-17 15:17 </em><em>&raquo; Last generated: 2024-10-17 15:17</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
