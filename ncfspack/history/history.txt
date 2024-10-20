@@ -1491,3 +1491,6 @@
                 to allow weighted event counts.
 09-may-2024 NvE New memberfunctions GetDtSample() introduced in class NcSample.
 25-sep-2024 NvE New memberfunctions GetBlocks() introduced in class NcBlocks to handle NcSample variables by name.
+25-sep-2024 NvE New memberfunctions GetBlocks() introduced in class NcBlocks to handle NcSample variables by name.
+20-oct-2024 NvE Date for UTC corrected in NcTimestamp::GetDayTimeString() in case the UTC time falls the day before the TAI date,
+                and also an option for different date/time return formats introduced in NcTimestamp::GetDayTimeString(). 

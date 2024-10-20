@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 6, 2024  15:16Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 20, 2024  01:54Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -5251,12 +5251,19 @@ Double_t NcTimestamp::GetEpoch(TString mode)
  return e;
 }
 ///////////////////////////////////////////////////////////////////////////
-TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TString* date,TString* time)
+TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TString* date,TString* time,Bool_t full)
 {
 // Get a string with date and time info for the date/time system specified via "mode".
 // The returned string contains both the date and time info, but via the optional arguments
 // "date" and "time" the user may also retrieve the date and time info separately, when a
 // non-zero pointer value is provided.
+//
+// The following two date/time return formats are supported which can be selected via the input argument "full" :
+//
+// Example :
+// ---------
+// full=kTRUE  --> "Sun 20-Oct-2024 09:22:38.473 UTC" with date="Sun 20-Oct-2024 UTC" and time="09:22:38.473 UTC"
+// full=kFALSE --> "20-10-2024 09:22:38.473" with date="20-10-2024" and time="09:22:38.473"
 //
 // The argument "mode" my have the values :
 // "UT", "UT1", "UTC", "GAT", "GMST", "GAST", "GPS", "TAI", "TT", "LMT", "LAT", "LMST" or "LAST"
@@ -5276,7 +5283,7 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
 // When an offset value is specified, the corresponding local times
 // LMT and LMST (or LAT and LAST) are available as well.
 //
-// The default values are ndig=0, offset=0, day=0 and time=0.
+// The default values are ndig=0, offset=0, day=0, time=0 and full=kTRUE.
 //
 // Notes :
 // -------
@@ -5357,6 +5364,9 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
 
    if (fTmjd>=40587 && (fTmjd<65442 || (fTmjd==65442 && fTsec<8047)))
    {
+    // Correct the date indicator if UTC time falls the day before the TAI date
+    if (mode=="UTC" && fTsec<fLeap) tx.AddSec(-fLeap);
+
     tx.GetDate(kTRUE,0,&y,&m,&d);
     wd=tx.GetDayOfWeek(kTRUE,0);
     bdate=kTRUE;
@@ -5407,14 +5417,14 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
  // The date string
  if (bdate)
  {
-  sdate=day[wd-1];
-  sdate+=" ";
-  if (d<10) sdate+="0";
-  sdate+=d;
-  sdate+="-";
-  sdate+=month[m-1];
-  sdate+="-";
-  sdate+=y;
+  if (full)
+  {
+   sdate.Form("%-s %02i-%-s-%-i",day[wd-1].Data(),d,month[m-1].Data(),y);
+  }
+  else
+  {
+   sdate.Form("%02i-%02i-%-i",d,m,y);
+  }
  }
 
  // The time string
@@ -5453,12 +5463,15 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
   if (!fUtc) mode="UTC";
  }
  if (sdate=="") sdate="---";
- sdate+=" ";
- sdate+=mode;
- stime+=" ";
- stime+=mode;
- daytime+=" ";
- daytime+=mode;
+ if (full)
+ {
+  sdate+=" ";
+  sdate+=mode;
+  stime+=" ";
+  stime+=mode;
+  daytime+=" ";
+  daytime+=mode;
+ }
 
  if (date) *date=sdate;
  if (time) *time=stime;
