@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 20, 2024  01:54Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 20, 2024  12:11Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -5362,11 +5362,16 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
    NcTimestamp tx;
    tx.SetMJD(fTmjd,fTsec,fTns,fTps);
 
-   if (fTmjd>=40587 && (fTmjd<65442 || (fTmjd==65442 && fTsec<8047)))
-   {
-    // Correct the date indicator if UTC time falls the day before the TAI date
-    if (mode=="UTC" && fTsec<fLeap) tx.AddSec(-fLeap);
+   // Convert to the corresponding UTC, GPS or TT timestamps
+   if (mode=="UTC") tx.AddSec(-fLeap);
+   if (mode=="GPS") tx.AddSec(-19);
+   if (mode=="TT") tx.AddSec(32.184);
 
+   Int_t tmjd,tsec,tns;
+   tx.GetMJD(tmjd,tsec,tns); 
+
+   if (tmjd>=40587 && (tmjd<65442 || (tmjd==65442 && tsec<8047)))
+   {
     tx.GetDate(kTRUE,0,&y,&m,&d);
     wd=tx.GetDayOfWeek(kTRUE,0);
     bdate=kTRUE;
