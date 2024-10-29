@@ -359,7 +359,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 20, 2024  12:11Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 29, 2024  07:15Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
@@ -4694,9 +4694,16 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
 // The user may correct the obtained ecliptic longitude for nutation by also retrieving "dpsi"
 // and adding (after conversion to degrees) this value to the obtained "el".
 //
-// In addition to the ecliptic coordinates, also some heliocentric orbital parameters of the
-// selected solar system body will be provided w.r.t. the equinox of date.
+// In addition to the ecliptic coordinates, also some heliocentric orbital parameters (see below)
+// of the selected solar system body will be provided w.r.t. the equinox of date.
 // These additional parameters are only provided for the major planets.
+//
+// In case a non-supported solar system body is specified, the unphysical values (720,720,-1) will be
+// provided for (el,eb,dr).
+// Furthermore, all heliocentric orbital angles will be set to the unphysical value of 720 degrees,
+// and the Eccentricity and Semi major axis will both be set to -1.
+// Note that for the retrieval of the Equation of Time (see below), the specification of the name
+// of the solar system body is irrelevant, so this will always contain the correct value, if requested.
 //
 // Available additional observable values :
 // ---------------------------------------- 
@@ -4757,6 +4764,25 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
  Double_t tm;      // Time difference in fractional Julian millennia w.r.t. the start of J2000.
  const Int_t nvals=11;
  Double_t val[nvals]; // Array to hold the additional (orbital) parameters
+
+ // Initialize the solar system body related values 
+ if (el) *el=720;
+ if (eb) *eb=720;
+ if (dr) *dr=-1;
+ for (Int_t i=0; i<nvals; i++)
+ {
+  val[i]=720;
+ }
+ val[0]=-1; // Semi major axis of the orbit
+ val[1]=-1; // Eccentricity of the orbit
+ val[10]=0; // Equation of Time, this will always be calculated correctly if requested
+ 
+ // Initialize the requested additional observable value
+ if (value)
+ {
+  *value=0;
+  if (j>=0 && j<nvals) *value=val[j];
+ }
  
  td=GetJD()-2451545.0;
  tc=td/36525.;
@@ -4841,6 +4867,60 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
  // Convert to seconds
  da/=15.;
 
+ //////////////////////////////////////////////////////////////////////
+ // Determination of the Equation of Time via a recursive invokation //
+ //////////////////////////////////////////////////////////////////////
+ if (j==10)
+ {
+  Double_t xdpsi,xdeps,xeps,xlambda,xbeta;
+  Almanac(&xdpsi,&xdeps,&xeps,0,"Sun",&xlambda,&xbeta);
+
+  // Convert from arcsec to degrees
+  xdpsi/=3600.;
+  xdeps/=3600.;
+  xeps/=3600.;
+
+  // Correct for nutation to get the true values
+  xeps+=xdeps;
+  xlambda+=xdpsi;
+
+  while (xlambda<0) { xlambda+=360.; }
+  while (xlambda>360) { xlambda-=360.; }
+
+  // Convert to radians for gonio
+  Double_t epsr=xeps*pi/180.;
+  Double_t lambdar=xlambda*pi/180.;
+  Double_t betar=xbeta*pi/180.;
+
+  // True Right Ascension of the Sun (see Ch.13 p.93 of J. Meeus) 
+  Double_t x=sin(lambdar)*cos(epsr)-tan(betar)*sin(epsr);
+  Double_t y=cos(lambdar);
+  Double_t alpha=0;
+  if (x || y) alpha=atan2(x,y)*180./pi;
+
+  while (alpha<0) { alpha+=360.; }
+  while (alpha>360) { alpha-=360.; }
+
+  // Mean longitude of the Sun (see Ch.28 p.183 of J. Meeus)
+  Double_t L0=280.4664567+360007.6982779*tm+0.03032028*pow(tm,2)+pow(tm,3)/49931.-pow(tm,4)/15300.-pow(tm,5)/2000000.;
+
+  while (L0<0) { L0+=360.; }
+  while (L0>360) { L0-=360.; }
+
+  // Determine the Equation of Time in degrees (see Ch.28 p.183 of J. Meeus)
+  Double_t eot=L0-0.0057183-alpha+xdpsi*cos(xeps*pi/180.);
+
+  // The Equation of Time never exceeds 20 minutes (= 5 degrees)
+  while (eot<-5) { eot+=360.; }
+  while (eot>5) { eot-=360.; }
+
+  // Convert the Equation of Time from degrees to seconds
+  eot*=240.;
+
+  val[10]=eot;
+  if (value) *value=eot;
+ }
+
  //////////////////////////////////////////////////////////////////////////////
  // Determination of the mean orbital elements and true ecliptic coordinates //
  // of a requested solar system body, for the mean equinox of the date.      //
@@ -4865,12 +4945,6 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
  // r      : Distance between the body and the sun
  // lambda : Geocentric ecliptic longitude
  // beta   : Geocentric ecliptic latitude
-
- if (value) *value=0;
- for (Int_t i=0; i<nvals; i++)
- {
-  val[i]=0;
- }
 
  Double_t a=0;
  Double_t e=0;
@@ -4977,17 +5051,17 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
                 +0.0078*cos((235.7+890534.22*tc)*pi/180.)+0.0028*cos((269.9+954397.74*tc)*pi/180.);
   r=1./sin(plax*pi/180.);
 
- // Convert r into km using an average Earth radius of 6367.45 km
- r*=6367.45;
+  // Convert r into km using an average Earth radius of 6367.45 km
+  r*=6367.45;
 
- while (lambda<0) { lambda+=360.; }
- while (lambda>360) { lambda-=360.; }
+  while (lambda<0) { lambda+=360.; }
+  while (lambda>360) { lambda-=360.; }
 
- if (el) *el=lambda;
- if (eb) *eb=beta;
- if (dr) *dr=r;
+  if (el) *el=lambda;
+  if (eb) *eb=beta;
+  if (dr) *dr=r;
 
- return da;
+  return da;
  }
 
  ////////////////////////////////////////////////////////////////////////////////
@@ -5050,57 +5124,6 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
   val[7]=m;
   val[8]=ec;
   val[9]=nu;
- }
-
- // Determination of the Equation of Time via a recursive invokation
- if (j==10)
- {
-  Double_t xdpsi,xdeps,xeps,xlambda,xbeta;
-  Almanac(&xdpsi,&xdeps,&xeps,0,"Sun",&xlambda,&xbeta);
-
-  // Convert from arcsec to degrees
-  xdpsi/=3600.;
-  xdeps/=3600.;
-  xeps/=3600.;
-
-  // Correct for nutation to get the true values
-  xeps+=xdeps;
-  xlambda+=xdpsi;
-
-  while (xlambda<0) { xlambda+=360.; }
-  while (xlambda>360) { xlambda-=360.; }
-
-  // Convert to radians for gonio
-  Double_t epsr=xeps*pi/180.;
-  Double_t lambdar=xlambda*pi/180.;
-  Double_t betar=xbeta*pi/180.;
-
-  // True Right Ascension of the Sun (see Ch.13 p.93 of J. Meeus) 
-  Double_t x=sin(lambdar)*cos(epsr)-tan(betar)*sin(epsr);
-  Double_t y=cos(lambdar);
-  Double_t alpha=0;
-  if (x || y) alpha=atan2(x,y)*180./pi;
-
-  while (alpha<0) { alpha+=360.; }
-  while (alpha>360) { alpha-=360.; }
-
-  // Mean longitude of the Sun (see Ch.28 p.183 of J. Meeus)
-  Double_t L0=280.4664567+360007.6982779*tm+0.03032028*pow(tm,2)+pow(tm,3)/49931.-pow(tm,4)/15300.-pow(tm,5)/2000000.;
-
-  while (L0<0) { L0+=360.; }
-  while (L0>360) { L0-=360.; }
-
-  // Determine the Equation of Time in degrees (see Ch.28 p.183 of J. Meeus)
-  Double_t eot=L0-0.0057183-alpha+xdpsi*cos(xeps*pi/180.);
-
-  // The Equation of Time never exceeds 20 minutes (= 5 degrees)
-  while (eot<-5) { eot+=360.; }
-  while (eot>5) { eot-=360.; }
-
-  // Convert the Equation of Time from degrees to seconds
-  eot*=240.;
-
-  val[10]=eot;
  }
  
  // Make requested value available
