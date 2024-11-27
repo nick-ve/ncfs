@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Sun Oct 20 02:42:01 2024            -->
+<!--   Date: Wed Nov 27 16:09:05 2024            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -158,7 +158,7 @@ return false;}
  q.<a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>(s,1,fpr,&amp;hblock);
 
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.Divide(1,2);
+ c.<a href="./NcBlocks.html#NcBlocks:Divide" title="void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,2);
  c.cd(1);
  TH1D hs=s.Get1DHistogram(1,0,<a href="./ListOfTypes.html#Bool_t">kFALSE</a>,1000);
  hs.Draw();
@@ -221,7 +221,7 @@ return false;}
  q.<a href="./NcBlocks.html#NcBlocks:Add" title="void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;h,&amp;hblock,&amp;hdif,0,-1);
 
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.Divide(1,3);
+ c.<a href="./NcBlocks.html#NcBlocks:Divide" title="void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,3);
  c.cd(1);
  h.SetLineWidth(2);
  h.Draw();
@@ -283,7 +283,7 @@ return false;}
  q.<a href="./NcBlocks.html#NcBlocks:Add" title="void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;gr,&amp;hblock,&amp;gdif,-1);
 
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.Divide(1,3);
+ c.<a href="./NcBlocks.html#NcBlocks:Divide" title="void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,3);
  c.cd(1);
  gr.Draw(<span class="string">"A*"</span>);
  hblock.Draw(<span class="string">"same"</span>);
@@ -408,7 +408,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, September 25, 2024  13:13Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 27, 2024  15:36
 
 </pre></div>
 </div></div>
@@ -423,6 +423,8 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add@1">Add</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcBlocks:Class">Class</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Divide@1">Divide</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Divide">Divide</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks">GetBlocks</a>(TH1* hin, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@5">GetBlocks</a>(TGraphErrors gr, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@9">GetBlocks</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
@@ -1081,6 +1083,50 @@ return false;}
  The default value is d=0.
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Divide" href="src/NcBlocks.cxx.html#u7tffC">Divide</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funccomm"><pre> Provide the 1-dimensional histogram hout=d+h1/(c*h2).
+ The output histogram <span class="string">"hout"</span> will be given the same binning as the histogram <span class="string">"h1"</span>.
+
+ Note : All histograms <span class="string">"h1"</span>, <span class="string">"h2"</span> and <span class="string">"hout"</span> must be existing 1-dimensional histograms.
+
+ This facility is mainly intended for dividing the values contained in the bins of <span class="string">"h1"</span>
+ by the corresponding variable binned Bayesian Block values contained in <span class="string">"h2"</span>.
+ However, it can be applied to other combinations of 1-dimensional histograms as well.
+
+ All provided histograms have to be 1-dimensional and histograms with
+ variable bin sizes are supported. However, all bin sizes of <span class="string">"h1"</span>
+ have to be smaller than or equal to the smallest bin size of <span class="string">"h2"</span>.
+ Obviously, this is always the case when <span class="string">"h2"</span> contains the Bayesian Block
+ partitions of <span class="string">"h1"</span>.
+
+ The input parameter <span class="string">"scale"</span> allows to scale (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not scale (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
+ the bin content of <span class="string">"h2"</span> to the corresponding bin width of <span class="string">"h1"</span>.
+
+ Note :
+
+ Since this facility is mainly intended for division by variable binned Bayesian Blocks,
+ scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
+ the use of scaling will correctly reflect the resulting (event) counts in each bin.
+
+ The default value is d=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Divide@1" href="src/NcBlocks.cxx.html#XTyB5">Divide</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funccomm"><pre> Provide the TGraph gout=d+gr/(c*h), where <span class="string">"h"</span> is a 1-dimensional histogram.
+
+ Notes :
+
+ 1) Both graphs <span class="string">"gr"</span> and <span class="string">"gout"</span> as well as histogram <span class="string">"h"</span> must be existing.
+ 2) In case both <span class="string">"gr"</span> and <span class="string">"gout"</span> are TGraphErrors objects, the errors
+    of <span class="string">"gout"</span> will be set to the values of the errors of the input graph <span class="string">"gr"</span>.
+
+ This facility is mainly intended for dividing the mode 3 data contained in the graph <span class="string">"gr"</span>
+ by the corresponding variable binned Bayesian Block values contained in <span class="string">"h"</span>.
+ However, it can be applied to any combination of input graph <span class="string">"gr"</span> and histogram <span class="string">"h"</span>.
+
+ The default value is d=0.
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Rebin" href="src/NcBlocks.cxx.html#sskJMB">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</span><br />
 <div class="funccomm"><pre> Provide the 1-dimensional histogram <span class="string">"hout"</span> as a uniformly binned version of the
  input 1-dimensional histogram <span class="string">"hin"</span> over the interval [xmin,xmax].
@@ -1117,7 +1163,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Sun Oct 20 02:42:01 2024 </em><em>&raquo; Last generated: 2024-10-20 02:42</em><br />
+<em>&raquo; Last changed: Wed Nov 27 16:09:06 2024 </em><em>&raquo; Last generated: 2024-11-27 16:09</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

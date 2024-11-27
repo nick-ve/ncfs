@@ -377,7 +377,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, September 25, 2024  13:13Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 27, 2024  15:36
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBlocks.h"
@@ -2091,6 +2091,297 @@ void NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
    ey=gre->GetErrorY(i);
    goute->SetPointError(i,ex,ey);
   }
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
+{
+// Provide the 1-dimensional histogram hout=d+h1/(c*h2).
+// The output histogram "hout" will be given the same binning as the histogram "h1".
+//
+// Note : All histograms "h1", "h2" and "hout" must be existing 1-dimensional histograms.
+//
+// This facility is mainly intended for dividing the values contained in the bins of "h1"
+// by the corresponding variable binned Bayesian Block values contained in "h2".
+// However, it can be applied to other combinations of 1-dimensional histograms as well.
+//
+// All provided histograms have to be 1-dimensional and histograms with
+// variable bin sizes are supported. However, all bin sizes of "h1"
+// have to be smaller than or equal to the smallest bin size of "h2".
+// Obviously, this is always the case when "h2" contains the Bayesian Block
+// partitions of "h1".
+//
+// The input parameter "scale" allows to scale (kTRUE) or not scale (kFALSE)
+// the bin content of "h2" to the corresponding bin width of "h1".
+//
+// Note :
+// ------
+// Since this facility is mainly intended for division by variable binned Bayesian Blocks,
+// scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
+// the use of scaling will correctly reflect the resulting (event) counts in each bin.
+//
+// The default value is d=0.
+
+ if (hout) hout->Reset();
+
+ if (!c)
+ {
+  printf(" *NcBlocks::Divide* Error : Invalid value c=0. \n");
+  return;
+ }
+
+ if (!h1 || !h2 || !hout) return;
+
+ Int_t ndim1=h1->GetDimension();
+ Int_t ndim2=h2->GetDimension();
+ Int_t ndimo=hout->GetDimension();
+
+ if (ndim1!=1 || ndim2!=1 || ndimo!=1)
+ {
+  cout << " *NcBlocks::Divide* Error : Histograms should all be 1-dimensional." << endl;
+  return;
+ }
+
+ // Make the X-axis of "hout" identical to the X-axis of "h1"
+ TString name=hout->GetName();
+ h1->Copy(*hout);
+ hout->Reset();
+
+ TString name1=h1->GetName();
+ if (name1=="") name1="h1";
+
+ TString name2=h2->GetName();
+ if (name2=="") name2="h2";
+
+ TString sc="/";
+ if (fabs(c)!=1) sc.Form("%-.3g*",fabs(c));
+
+ TString sd;
+ if (c>0)
+ {
+  sd="";
+  if (d) sd.Form("%-.3g+",d);
+ }
+ else
+ {
+  sd="-";
+  if (d) sd.Form("%-.3g-",d);
+ }
+
+ TString title="Resulting histogram of: ";
+ if (sd!="") title+=sd;
+ if (c)
+ {
+  title+=name1;
+  if (sc.Contains("*")) title+="/(";
+  title+=sc;
+  title+=name2;
+  if (sc.Contains("*")) title+=")";
+ }
+ if (scale)
+ {
+  title+=" (scaled w.r.t. bin size)"; 
+ }
+ else
+ {
+  title+=" (not scaled w.r.t. bin size)"; 
+ }
+ title+=";";
+ TAxis* axis1=h1->GetXaxis();
+ title+=axis1->GetTitle();
+ title+=";";
+ axis1=h1->GetYaxis();
+ title+=axis1->GetTitle();
+
+ hout->SetName(name);
+ hout->SetTitle(title);
+
+ Int_t nb1=h1->GetNbinsX();
+ Int_t nb2=h2->GetNbinsX();
+
+ if (!nb1 || !nb2) return;
+
+ // Get the largest bin size of "h1"
+ Double_t bwidth1=0;
+ Double_t bwmax1=0;
+ Int_t imax1=0;
+ for (Int_t i=1; i<=nb1; i++)
+ {
+  bwidth1=h1->GetBinWidth(i);
+  if (i==1 || bwidth1>bwmax1)
+  {
+   bwmax1=bwidth1;
+   imax1=i;
+  }
+ }
+
+ // Get the smallest bin size of "h2" 
+ Double_t bwidth2=0;
+ Double_t bwmin2=0;
+ Int_t imin2=0;
+ for (Int_t i=1; i<=nb2; i++)
+ {
+  bwidth2=h2->GetBinWidth(i);
+  if (i==1 || bwidth2<bwmin2)
+  {
+   bwmin2=bwidth2;
+   imin2=i;
+  }
+ }
+
+ Double_t ratio=bwmax1/bwmin2;
+ if (ratio>1.001)
+ {
+  printf(" *NcBlocks::Divide* Error : Larger bin size encountered in histogram %-s than in %-s \n",name1.Data(),name2.Data());
+  printf(" %-s: binsize=%-g for bin=%-i  %-s: binsize=%-g for bin=%-i \n",name1.Data(),bwmax1,imax1,name2.Data(),bwmin2,imin2);
+  return;
+ }
+
+ // Loop over all the bins of the input histogram h1
+ Double_t x1=0;
+ Double_t y1=0;
+ Int_t i2=0;
+ Double_t y2=0;
+ Double_t val=0;
+ Double_t ynew=0;
+ TAxis* axis2=h2->GetXaxis();
+ for (Int_t i1=1; i1<=nb1; i1++)
+ {
+  x1=h1->GetBinCenter(i1);
+  y1=h1->GetBinContent(i1);
+  bwidth1=h1->GetBinWidth(i1);
+  i2=axis2->FindFixBin(x1);
+  y2=h2->GetBinContent(i2);
+  bwidth2=h2->GetBinWidth(i2);
+
+  // Do not consider underflow or overflow bins
+  if (i2<1 || i2>nb2) continue;
+
+  val=c*y2;
+  if (!val) continue;
+
+  if (scale) y2*=bwidth1/bwidth2;
+  ynew=d+y1/val;
+  hout->SetBinContent(i1,ynew);
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
+{
+// Provide the TGraph gout=d+gr/(c*h), where "h" is a 1-dimensional histogram.
+//
+// Notes :
+// -------
+// 1) Both graphs "gr" and "gout" as well as histogram "h" must be existing.
+// 2) In case both "gr" and "gout" are TGraphErrors objects, the errors
+//    of "gout" will be set to the values of the errors of the input graph "gr".
+//
+// This facility is mainly intended for dividing the mode 3 data contained in the graph "gr"
+// by the corresponding variable binned Bayesian Block values contained in "h".
+// However, it can be applied to any combination of input graph "gr" and histogram "h".
+//
+// The default value is d=0.
+
+ if (gout) gout->Set(0);
+
+ if (!c)
+ {
+  printf(" *NcBlocks::Divide* Error : Invalid value c=0. \n");
+  return;
+ }
+
+ if (!gr || !h || !gout) return;
+
+ TString nameg=gr->GetName();
+ if (nameg=="") nameg="gr";
+
+ TString nameh=h->GetName();
+ if (nameh=="") nameh="h";
+
+ TString sc="/";
+ if (fabs(c)!=1) sc.Form("%-.3g*",fabs(c));
+
+ TString sd;
+ if (c>0)
+ {
+  sd="";
+  if (d) sd.Form("%-.3g+",d);
+ }
+ else
+ {
+  sd="-";
+  if (d) sd.Form("%-.3g-",d);
+ }
+
+ TString title="Resulting graph of: ";
+ if (sd!="") title+=sd;
+ if (c)
+ {
+  title+=nameg;
+  if (sc.Contains("*")) title+="/(";
+  title+=sc;
+  title+=nameh;
+  if (sc.Contains("*")) title+=")";
+ }
+ title+=";";
+ TAxis* axis=0;
+ axis=gr->GetXaxis();
+ title+=axis->GetTitle();
+ title+=";";
+ axis=gr->GetYaxis();
+ title+=axis->GetTitle();
+
+ gout->SetTitle(title);
+
+ Int_t ndim=h->GetDimension();
+
+ if (ndim!=1)
+ {
+  cout << " *NcBlocks::Divide* Error : Histogram " << nameh << " should be 1-dimensional." << endl;
+  return;
+ }
+
+ Int_t np=gr->GetN();
+ Int_t nb=h->GetNbinsX();
+
+ if (!np || !nb) return;
+
+ // Loop over all the points in the graph
+ Double_t x=0;
+ Double_t y=0;
+ Double_t ex=0;
+ Double_t ey=0;
+ Int_t hbin=0;
+ Double_t hval=0;
+ Double_t val=0;
+ Double_t ynew=0;
+ axis=h->GetXaxis();
+ Int_t j=0;
+ for (Int_t i=0; i<np; i++)
+ {
+  gr->GetPoint(i,x,y);
+  hbin=axis->FindFixBin(x);
+  hval=h->GetBinContent(hbin);
+
+  // Do not consider underflow or overflow bins
+  if (hbin<1 || hbin>nb) continue;
+
+  val=c*hval;
+  if (!val) continue;
+
+  ynew=d+y/val;
+  gout->SetPoint(j,x,ynew);
+
+  if (gr->InheritsFrom("TGraphErrors") && gout->InheritsFrom("TGraphErrors"))
+  {
+   TGraphErrors* gre=(TGraphErrors*)gr;
+   TGraphErrors* goute=(TGraphErrors*)gout;
+   ex=gre->GetErrorX(i);
+   ey=gre->GetErrorY(i);
+   goute->SetPointError(j,ex,ey);
+  }
+
+  j++;
  }
 }
 ///////////////////////////////////////////////////////////////////////////

@@ -1497,3 +1497,4 @@
                 Also an option for different date/time return formats introduced in NcTimestamp::GetDayTimeString(). 
 29-oct-2024 NvE Retrievable solar system body specific parameters initialized to unphysical values in NcTimestamp::Almanac(),
                 which allows easy detection of unsupported solar system bodies.
+27-nov-2024 NvE New memberfunctions Divide() introduced in class NcBlocks.

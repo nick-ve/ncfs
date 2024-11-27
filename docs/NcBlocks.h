@@ -34,6 +34,8 @@ class NcBlocks
   Int_t GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode=0); // Get block partitions of "n" consecutive samples of measurements of an observable 
   void Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0); // Provide the histogram hout=h1+c*h2+d
   void Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d=0);         // Provide the graph gout=gr+c*h+d
+  void Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0); // Provide the histogram hout=d+h1/(c*h2)
+  void Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d=0);         // Provide the graph gout=d+gr/(c*h)
   void Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins=0,Double_t xmin=0,Double_t xmax=-1); // Provide the histogram hout as an equally binned version of hin
 
  protected:
@@ -41,6 +43,6 @@ class NcBlocks
   Double_t GetPrior(Int_t n,Double_t fpr);           // Provide the prior fitness value for each block
   Double_t GetBlockFitness(Double_t n,Double_t len); // Provide the block fitness for Data Modes 1 and 2 
 
- ClassDef(NcBlocks,8) // (Bayesian) Block treatment of sequential data
+ ClassDef(NcBlocks,9) // (Bayesian) Block treatment of sequential data
 };
 #endif
