@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Nov 27 16:09:05 2024            -->
+<!--   Date: Thu Dec  5 15:03:10 2024            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -158,7 +158,7 @@ return false;}
  q.<a href="./NcBlocks.html#NcBlocks:GetBlocks" title="Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig=0) or overloads">GetBlocks</a>(s,1,fpr,&amp;hblock);
 
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.<a href="./NcBlocks.html#NcBlocks:Divide" title="void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,2);
+ c.<a href="./NcBlocks.html#NcBlocks:Divide" title="Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,2);
  c.cd(1);
  TH1D hs=s.Get1DHistogram(1,0,<a href="./ListOfTypes.html#Bool_t">kFALSE</a>,1000);
  hs.Draw();
@@ -218,10 +218,10 @@ return false;}
  // Subtract the Block values from the original histogram bin contents
  // without scaling w.r.t. the bin size
  TH1F hdif;
- q.<a href="./NcBlocks.html#NcBlocks:Add" title="void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;h,&amp;hblock,&amp;hdif,0,-1);
+ q.<a href="./NcBlocks.html#NcBlocks:Add" title="Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;h,&amp;hblock,&amp;hdif,0,-1);
 
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.<a href="./NcBlocks.html#NcBlocks:Divide" title="void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,3);
+ c.<a href="./NcBlocks.html#NcBlocks:Divide" title="Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,3);
  c.cd(1);
  h.SetLineWidth(2);
  h.Draw();
@@ -280,10 +280,10 @@ return false;}
 
  // Subtract the Block values from the original graph
  TGraphErrors gdif;
- q.<a href="./NcBlocks.html#NcBlocks:Add" title="void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;gr,&amp;hblock,&amp;gdif,-1);
+ q.<a href="./NcBlocks.html#NcBlocks:Add" title="Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Add</a>(&amp;gr,&amp;hblock,&amp;gdif,-1);
 
  TCanvas c(<span class="string">"c"</span>,<span class="string">"c"</span>);
- c.<a href="./NcBlocks.html#NcBlocks:Divide" title="void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,3);
+ c.<a href="./NcBlocks.html#NcBlocks:Divide" title="Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d=0) or overloads">Divide</a>(1,3);
  c.cd(1);
  gr.Draw(<span class="string">"A*"</span>);
  hblock.Draw(<span class="string">"same"</span>);
@@ -408,7 +408,7 @@ return false;}
  }
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 27, 2024  15:36
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2024  14:54Z
 
 </pre></div>
 </div></div>
@@ -420,11 +420,11 @@ return false;}
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcBlocks:NcBlocks">NcBlocks</a>()</td></tr>
 <tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#NcBlocks:NcBlocks@1">NcBlocks</a>(<span class="keyword">const</span> <a href="./NcBlocks.html">NcBlocks</a>&amp; q)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#NcBlocks:_NcBlocks">~NcBlocks</a>()</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add@1">Add</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add@1">Add</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:Add">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#NcBlocks:Class">Class</a>()</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Divide@1">Divide</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Divide">Divide</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:Divide@1">Divide</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:Divide">Divide</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks">GetBlocks</a>(TH1* hin, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@5">GetBlocks</a>(TGraphErrors gr, <a href="./ListOfTypes.html#Double_t">Double_t</a> fpr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> ntrig = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@9">GetBlocks</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
@@ -442,7 +442,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:GetBlocks@13">GetBlocks</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nr, <a href="./ListOfTypes.html#Float_t">Float_t</a>* arr, TH1* hout, <a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
 <tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#NcBlocks:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcBlocks.html">NcBlocks</a>&amp;</td><td class="funcname"><a class="funcname" href="#NcBlocks:operator_">operator=</a>(<span class="keyword">const</span> <a href="./NcBlocks.html">NcBlocks</a>&amp;)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Rebin">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcBlocks:Rebin">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcBlocks:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
@@ -1035,7 +1035,7 @@ return false;}
  In case of inconsistent input, the value 0 is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Add" href="src/NcBlocks.cxx.html#Y_i4SB">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:Add" href="src/NcBlocks.cxx.html#gNMq6C">Add</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
 <div class="funccomm"><pre> Provide the 1-dimensional histogram hout=h1+c*h2+d.
  So, for c=-1 and d=0, the values contained in the histogram <span class="string">"h2"</span> will be
  subtracted from the corresponding bin values of the input histogram <span class="string">"h1"</span>.
@@ -1053,6 +1053,8 @@ return false;}
  Obviously, this is always the case when <span class="string">"h2"</span> contains the Bayesian Block
  partitions of <span class="string">"h1"</span>.
 
+ The return value indicates whether an error occured (1) or not (0).
+
  The input parameter <span class="string">"scale"</span> allows to scale (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not scale (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
  the bin content of <span class="string">"h2"</span> to be <span class="string">"added"</span>, to the corresponding bin width of <span class="string">"h1"</span>.
 
@@ -1065,7 +1067,7 @@ return false;}
  The default value is d=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Add@1" href="src/NcBlocks.cxx.html#KBTKS">Add</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:Add@1" href="src/NcBlocks.cxx.html#mzuEnE">Add</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
 <div class="funccomm"><pre> Provide the TGraph gout=gr+c*h+d, where <span class="string">"h"</span> is a 1-dimensional histogram.
  So, for c=-1 and d=0, the values contained in the histogram <span class="string">"h"</span> will be
  subtracted from the corresponding values of the input graph <span class="string">"gr"</span>.
@@ -1076,6 +1078,8 @@ return false;}
  2) In case both <span class="string">"gr"</span> and <span class="string">"gout"</span> are TGraphErrors objects, the errors
     of <span class="string">"gout"</span> will be set to the values of the errors of the input graph <span class="string">"gr"</span>.
 
+ The return value indicates whether an error occured (1) or not (0).
+
  This facility is mainly intended for <span class="string">"adding"</span> the variable binned Bayesian Block values
  corresponding to the mode 3 data contained in the graph <span class="string">"gr"</span>.
  However, it can be applied to any combination of input graph <span class="string">"gr"</span> and histogram <span class="string">"h"</span>.
@@ -1083,7 +1087,7 @@ return false;}
  The default value is d=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Divide" href="src/NcBlocks.cxx.html#u7tffC">Divide</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:Divide" href="src/NcBlocks.cxx.html#iofejE">Divide</a>(TH1* h1, TH1* h2, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
 <div class="funccomm"><pre> Provide the 1-dimensional histogram hout=d+h1/(c*h2).
  The output histogram <span class="string">"hout"</span> will be given the same binning as the histogram <span class="string">"h1"</span>.
 
@@ -1099,6 +1103,8 @@ return false;}
  Obviously, this is always the case when <span class="string">"h2"</span> contains the Bayesian Block
  partitions of <span class="string">"h1"</span>.
 
+ The return value indicates whether an error occured (1) or not (0).
+
  The input parameter <span class="string">"scale"</span> allows to scale (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not scale (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
  the bin content of <span class="string">"h2"</span> to the corresponding bin width of <span class="string">"h1"</span>.
 
@@ -1111,7 +1117,7 @@ return false;}
  The default value is d=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Divide@1" href="src/NcBlocks.cxx.html#XTyB5">Divide</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:Divide@1" href="src/NcBlocks.cxx.html#BFpqW">Divide</a>(TGraph* gr, TH1* h, TGraph* gout, <a href="./ListOfTypes.html#Double_t">Double_t</a> c, <a href="./ListOfTypes.html#Double_t">Double_t</a> d = 0)</span><br />
 <div class="funccomm"><pre> Provide the TGraph gout=d+gr/(c*h), where <span class="string">"h"</span> is a 1-dimensional histogram.
 
  Notes :
@@ -1120,6 +1126,8 @@ return false;}
  2) In case both <span class="string">"gr"</span> and <span class="string">"gout"</span> are TGraphErrors objects, the errors
     of <span class="string">"gout"</span> will be set to the values of the errors of the input graph <span class="string">"gr"</span>.
 
+ The return value indicates whether an error occured (1) or not (0).
+
  This facility is mainly intended for dividing the mode 3 data contained in the graph <span class="string">"gr"</span>
  by the corresponding variable binned Bayesian Block values contained in <span class="string">"h"</span>.
  However, it can be applied to any combination of input graph <span class="string">"gr"</span> and histogram <span class="string">"h"</span>.
@@ -1127,7 +1135,7 @@ return false;}
  The default value is d=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcBlocks:Rebin" href="src/NcBlocks.cxx.html#sskJMB">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcBlocks:Rebin" href="src/NcBlocks.cxx.html#JDHc0">Rebin</a>(TH1* hin, TH1* hout, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale, <a href="./ListOfTypes.html#Int_t">Int_t</a> nbins = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> xmax = -1)</span><br />
 <div class="funccomm"><pre> Provide the 1-dimensional histogram <span class="string">"hout"</span> as a uniformly binned version of the
  input 1-dimensional histogram <span class="string">"hin"</span> over the interval [xmin,xmax].
  This will for instance allow a Fourier analysis of a Bayesian Block result in the time domain.
@@ -1155,6 +1163,8 @@ return false;}
     <span class="string">"hin"</span> that is encountered in the interval [xmin,xmax].
  3) In case xmax&lt;xmin, the xmin and xmax values of the input histogram are used.
 
+ The return value is the number of bins of the produced output histogram <span class="string">"hout"</span>.
+
  The default values are nbins=0, xmin=0 and xmax=-1.
 </pre></div>
 </div>
@@ -1163,7 +1173,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Nov 27 16:09:06 2024 </em><em>&raquo; Last generated: 2024-11-27 16:09</em><br />
+<em>&raquo; Last changed: Thu Dec  5 15:03:10 2024 </em><em>&raquo; Last generated: 2024-12-05 15:03</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

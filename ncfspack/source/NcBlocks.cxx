@@ -377,7 +377,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 27, 2024  15:36
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2024  14:54Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBlocks.h"
@@ -1834,7 +1834,7 @@ Int_t NcBlocks::GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode)
  return nblocks;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
+Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
 {
 // Provide the 1-dimensional histogram hout=h1+c*h2+d.
 // So, for c=-1 and d=0, the values contained in the histogram "h2" will be 
@@ -1853,6 +1853,8 @@ void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
 // Obviously, this is always the case when "h2" contains the Bayesian Block
 // partitions of "h1".
 //
+// The return value indicates whether an error occured (1) or not (0).
+//
 // The input parameter "scale" allows to scale (kTRUE) or not scale (kFALSE)
 // the bin content of "h2" to be "added", to the corresponding bin width of "h1".
 //
@@ -1866,7 +1868,7 @@ void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
 
  if (hout) hout->Reset();
 
- if (!h1 || !h2 || !hout) return;
+ if (!h1 || !h2 || !hout) return 1;
 
  Int_t ndim1=h1->GetDimension();
  Int_t ndim2=h2->GetDimension();
@@ -1875,7 +1877,7 @@ void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
  if (ndim1!=1 || ndim2!=1 || ndimo!=1)
  {
   cout << " *NcBlocks::Add* Error : Histograms should all be 1-dimensional." << endl;
-  return;
+  return 1;
  }
 
  // Make the X-axis of "hout" identical to the X-axis of "h1"
@@ -1929,7 +1931,7 @@ void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
  Int_t nb1=h1->GetNbinsX();
  Int_t nb2=h2->GetNbinsX();
 
- if (!nb1 || !nb2) return;
+ if (!nb1 || !nb2) return 1;
 
  // Get the largest bin size of "h1"
  Double_t bwidth1=0;
@@ -1964,7 +1966,7 @@ void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
  {
   printf(" *NcBlocks::Add* Error : Larger bin size encountered in histogram %-s than in %-s \n",name1.Data(),name2.Data());
   printf(" %-s: binsize=%-g for bin=%-i  %-s: binsize=%-g for bin=%-i \n",name1.Data(),bwmax1,imax1,name2.Data(),bwmin2,imin2);
-  return;
+  return 1;
  }
 
  // Loop over all the bins of the input histogram h1
@@ -1990,9 +1992,11 @@ void NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
   ynew=y1+c*y2+d;
   hout->SetBinContent(i1,ynew);
  }
+
+ return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
+Int_t NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 {
 // Provide the TGraph gout=gr+c*h+d, where "h" is a 1-dimensional histogram.
 // So, for c=-1 and d=0, the values contained in the histogram "h" will be 
@@ -2004,6 +2008,8 @@ void NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 // 2) In case both "gr" and "gout" are TGraphErrors objects, the errors
 //    of "gout" will be set to the values of the errors of the input graph "gr".
 //
+// The return value indicates whether an error occured (1) or not (0).
+//
 // This facility is mainly intended for "adding" the variable binned Bayesian Block values
 // corresponding to the mode 3 data contained in the graph "gr".
 // However, it can be applied to any combination of input graph "gr" and histogram "h".
@@ -2012,7 +2018,7 @@ void NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 
  if (gout) gout->Set(0);
 
- if (!gr || !h || !gout) return;
+ if (!gr || !h || !gout) return 1;
 
  TString nameg=gr->GetName();
  if (nameg=="") nameg="gr";
@@ -2054,13 +2060,13 @@ void NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
  if (ndim!=1)
  {
   cout << " *NcBlocks::Add* Error : Histogram " << nameh << " should be 1-dimensional." << endl;
-  return;
+  return 1;
  }
 
  Int_t np=gr->GetN();
  Int_t nb=h->GetNbinsX();
 
- if (!np || !nb) return;
+ if (!np || !nb) return 1;
 
  // Loop over all the points in the graph
  Double_t x=0;
@@ -2092,9 +2098,11 @@ void NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
    goute->SetPointError(i,ex,ey);
   }
  }
+
+ return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
+Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
 {
 // Provide the 1-dimensional histogram hout=d+h1/(c*h2).
 // The output histogram "hout" will be given the same binning as the histogram "h1".
@@ -2110,6 +2118,8 @@ void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t
 // have to be smaller than or equal to the smallest bin size of "h2".
 // Obviously, this is always the case when "h2" contains the Bayesian Block
 // partitions of "h1".
+//
+// The return value indicates whether an error occured (1) or not (0).
 //
 // The input parameter "scale" allows to scale (kTRUE) or not scale (kFALSE)
 // the bin content of "h2" to the corresponding bin width of "h1".
@@ -2127,10 +2137,10 @@ void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t
  if (!c)
  {
   printf(" *NcBlocks::Divide* Error : Invalid value c=0. \n");
-  return;
+  return 1;
  }
 
- if (!h1 || !h2 || !hout) return;
+ if (!h1 || !h2 || !hout) return 1;
 
  Int_t ndim1=h1->GetDimension();
  Int_t ndim2=h2->GetDimension();
@@ -2139,7 +2149,7 @@ void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t
  if (ndim1!=1 || ndim2!=1 || ndimo!=1)
  {
   cout << " *NcBlocks::Divide* Error : Histograms should all be 1-dimensional." << endl;
-  return;
+  return 1;
  }
 
  // Make the X-axis of "hout" identical to the X-axis of "h1"
@@ -2199,7 +2209,7 @@ void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t
  Int_t nb1=h1->GetNbinsX();
  Int_t nb2=h2->GetNbinsX();
 
- if (!nb1 || !nb2) return;
+ if (!nb1 || !nb2) return 1;
 
  // Get the largest bin size of "h1"
  Double_t bwidth1=0;
@@ -2234,7 +2244,7 @@ void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t
  {
   printf(" *NcBlocks::Divide* Error : Larger bin size encountered in histogram %-s than in %-s \n",name1.Data(),name2.Data());
   printf(" %-s: binsize=%-g for bin=%-i  %-s: binsize=%-g for bin=%-i \n",name1.Data(),bwmax1,imax1,name2.Data(),bwmin2,imin2);
-  return;
+  return 1;
  }
 
  // Loop over all the bins of the input histogram h1
@@ -2264,9 +2274,11 @@ void NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t
   ynew=d+y1/val;
   hout->SetBinContent(i1,ynew);
  }
+
+ return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
+Int_t NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 {
 // Provide the TGraph gout=d+gr/(c*h), where "h" is a 1-dimensional histogram.
 //
@@ -2275,6 +2287,8 @@ void NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 // 1) Both graphs "gr" and "gout" as well as histogram "h" must be existing.
 // 2) In case both "gr" and "gout" are TGraphErrors objects, the errors
 //    of "gout" will be set to the values of the errors of the input graph "gr".
+//
+// The return value indicates whether an error occured (1) or not (0).
 //
 // This facility is mainly intended for dividing the mode 3 data contained in the graph "gr"
 // by the corresponding variable binned Bayesian Block values contained in "h".
@@ -2287,10 +2301,10 @@ void NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
  if (!c)
  {
   printf(" *NcBlocks::Divide* Error : Invalid value c=0. \n");
-  return;
+  return 1;
  }
 
- if (!gr || !h || !gout) return;
+ if (!gr || !h || !gout) return 1;
 
  TString nameg=gr->GetName();
  if (nameg=="") nameg="gr";
@@ -2338,13 +2352,13 @@ void NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
  if (ndim!=1)
  {
   cout << " *NcBlocks::Divide* Error : Histogram " << nameh << " should be 1-dimensional." << endl;
-  return;
+  return 1;
  }
 
  Int_t np=gr->GetN();
  Int_t nb=h->GetNbinsX();
 
- if (!np || !nb) return;
+ if (!np || !nb) return 1;
 
  // Loop over all the points in the graph
  Double_t x=0;
@@ -2383,9 +2397,11 @@ void NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 
   j++;
  }
+
+ return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,Double_t xmax)
+Int_t NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,Double_t xmax)
 {
 // Provide the 1-dimensional histogram "hout" as a uniformly binned version of the
 // input 1-dimensional histogram "hin" over the interval [xmin,xmax].
@@ -2414,11 +2430,13 @@ void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,D
 //    "hin" that is encountered in the interval [xmin,xmax].
 // 3) In case xmax<xmin, the xmin and xmax values of the input histogram are used.
 //
+// The return value is the number of bins of the produced output histogram "hout".
+//
 // The default values are nbins=0, xmin=0 and xmax=-1.
 
  if (hout) hout->Reset();
 
- if (!hin || !hout) return;
+ if (!hin || !hout) return 0;
 
  Int_t ndimi=hin->GetDimension();
  Int_t ndimo=hout->GetDimension();
@@ -2426,12 +2444,12 @@ void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,D
  if (ndimi!=1 || ndimo!=1)
  {
   cout << " *NcBlocks::Rebin* Error : Histograms should both be 1-dimensional." << endl;
-  return;
+  return 0;
  }
 
  Int_t nb1=hin->GetNbinsX();
 
- if (!nb1) return;
+ if (!nb1) return 0;
 
  TAxis* xaxis=hin->GetXaxis();
  TAxis* yaxis=hin->GetYaxis();
@@ -2464,7 +2482,7 @@ void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,D
   if (bwmin<0)
   {
    cout << " *NcBlocks::Rebin* Error : Input histogram had no data in requested interval [xmin,xmax]." << endl;
-   return;
+   return 0;
   }
 
   Double_t rnbins=(xmax-xmin)/bwmin;
@@ -2521,7 +2539,7 @@ void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,D
   {
   printf(" *NcBlocks::Rebin* Error : Input histogram had finer binning than output histogram. \n");
   printf(" Input: binwidth=%-g for bin=%-i  Output: uniform binwidth=%-g \n",bwidth1,i,bwidth);
-  return;
+  return 0;
   }
  }
 
@@ -2542,5 +2560,7 @@ void NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,D
   if (scale) y1=y1*bwidth/bwidth1;
   hout->SetBinContent(i,y1);
  }
+
+ return nbins;
 }
 ///////////////////////////////////////////////////////////////////////////

@@ -1498,3 +1498,4 @@
 29-oct-2024 NvE Retrievable solar system body specific parameters initialized to unphysical values in NcTimestamp::Almanac(),
                 which allows easy detection of unsupported solar system bodies.
 27-nov-2024 NvE New memberfunctions Divide() introduced in class NcBlocks.
+05-dec-2024 NvE Return arguments introduced for the memberfunctions Add(), Divide() and Rebin() of class NcBlocks.
