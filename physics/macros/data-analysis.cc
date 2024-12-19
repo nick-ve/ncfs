@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////
 // ROOT macro to study the behaviour of signal detection related //
-// to (astrophysical) transient phenomena.                       //
+// to astrophysical (transient) phenomena.                       //
 // This macro makes use of the generic NcAstrolab facility       //
 // of the ROOT based NCFS-Pack framework.                        //
 // See https://nick-ve.github.io/ncfs/docs for the documentation.//
@@ -11,13 +11,13 @@
 // see https://nick-ve.github.io/ncfs                            //
 //                                                               //
 // To execute the macro, just invoke ($ = prompt)                //
-// $ root -b -q burst-model.cc                                   //
+// $ root -b -q data-analysis.cc                                 //
 //                                                               //
 // Several standard histograms, depending on the user selections,//
 // are automatically generated and may be written into a ROOT    //
 // output file for later inspection, as indicated below.         //
 //                                                               //
-//--- Nick van Eijndhoven, IIHE-VUB, Brussel, March 2, 2020      //
+//--- Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022    //
 ///////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -29,65 +29,81 @@
  NcAstrolab lab;
 
  lab.SetExperiment("IceCube");
- lab.SetUT("11-04-2020","12:00:00.0",0); // Fixed fictative analysis date
+ lab.SetUT("11-04-2020","12:00:00.0",0); // Fixed fictative analysis date to get same random seed
  lab.SetRandomiser(-1); // Use the UT timestamp to generate a seed
+
+ // Use position scrambling to obtain off-source data
+ Int_t pmode=-3;
+ Float_t dmin=0;
+ Float_t dmax=0;
+ Float_t thmin=0;
+ Float_t thmax=0;
+ Float_t phimin=30;
+ Float_t phimax=150;
+ lab.SetPositionScramble(pmode,dmin,dmax,0,thmin,thmax,0,phimin,phimax);
+
  lab.Data();
 
  Float_t pi=acos(-1.);
 
  // User defined parameter settings
  Float_t bkgrate=-0.003/(2.*pi);
+ lab.SetBurstParameter("Nbkg",2);
+ lab.SetBurstParameter("Nmaxsrc",-1);
+ lab.SetBurstParameter("Nmaxevt",1000);
+ lab.SetBurstParameter("Grbnu",0);
  lab.SetBurstParameter("Bkgrate",bkgrate);
- lab.SetBurstParameter("Declmin",5);
- lab.SetBurstParameter("Declmax",85);
- lab.SetBurstParameter("Dtnu",60);
- lab.SetBurstParameter("Datype",1);
- lab.SetBurstParameter("Dawin",2);
+ lab.SetBurstParameter("Declmin",-1);
+ lab.SetBurstParameter("Declmax",1);
+ lab.SetBurstParameter("Tunits",0);
+ lab.SetBurstParameter("Tmin",1);
+ lab.SetBurstParameter("Tmax",0);
+ lab.SetBurstParameter("Tbint90",0);
+ lab.SetBurstParameter("Tbin",1);
+ lab.SetBurstParameter("Datype",2);
+ lab.SetBurstParameter("Dawin",5);
+ lab.SetBurstParameter("Abin",0.1);
+ lab.SetBurstParameter("Sigmamax",5);
+ lab.SetBurstParameter("Angresmax",1);
+ lab.SetBurstParameter("Emin",pow(10,3.3));
 
- // Use experimental distributions instead of parametrizations
-/// lab.MakeBurstZdist("../grbweb/GRB-z-Swift.root","T","z",200,0,20);
-/// lab.MakeBurstT90dist("../grbweb/GRB-t90-Fermi.root","T","t90");
-/// lab.MakeBurstSigmaPosdist("../grbweb/GRBweb.root","T","sigmapos","deg");
-/// lab.MakeBurstEnergydist(-1,"IC86*data.root","tree","logE","dec","rad",200,1e7,1000);
-/// lab.MakeBurstRecoAngresdist("IC86*data.root","tree","logE","angErr","rad","dec","rad",200,1e7);
+ lab.ListBurstParameters();
 
- // Obtain burst locations, durations etc.
+ // Enter the source data
+ NcSignal* sx=lab.SetSignal(1,24240.771,"hms",47.84,"dms","equ",0,-1,"J","NGC1068",0);
+ sx->AddNamedSlot("z");
+ sx->AddNamedSlot("csigma");
+ sx->SetSignal(0.0038,"z");
+ sx->SetSignal(1e-3,"csigma");
 
-/*************
- // Use this code to load observed GCN data
+ // Obtain observed event data
+
  lab.InitDataNames(1,"equ");
- lab.SetDataNames("Name","name");
- lab.SetDataNames("Date","date","yyyymmdd");
- lab.SetDataNames("Tobs","mjdtrig","MJD");
- lab.SetDataNames("a","ra","deg");
- lab.SetDataNames("b","dec","deg");
- lab.SetDataNames("csigma","sigmapos","deg");
- lab.SetDataNames("T90","t90");
- lab.SetDataNames("Tstart","mjdt90start","MJD");
- lab.SetDataNames("T100","t100");
- lab.SetDataNames("S","fluence");
- lab.SetDataNames("z","z");
+ lab.SetDataNames("Run","run");
+ lab.SetDataNames("Event","event");
+ lab.SetDataNames("Tobs","time","MJD");
+ lab.SetDataNames("a","ra","rad");
+ lab.SetDataNames("b","dec","rad");
+ lab.SetDataNames("csigma","angErr","rad");
+ lab.SetDataNames("E","logE","1","Log");
 
  lab.ListDataNames();
 
- Bool_t src=kTRUE;
- lab.LoadInputData(src,"../grbweb/GRBweb.root","T");
-**************/
+ Bool_t src=kFALSE;
+ lab.LoadInputData(src,"IC86_2017_data.root","tree"); // Load from observed event data
 
- // Use this statement to generate fictative burst GCN data
- lab.GenBurstGCNdata(500,"GRB");
-
- // Provide a listing of the first 10 stored burst positions
+ // Provide a listing of the first 5 stored entries for both the sources (c.q. burst) and the observed events
  cout << endl;
- lab.ListSignals("equ","J",1,"T",10);
+ lab.ListSignals("equ","J",3,"M",5);
  cout << endl;
 
- // Generate burst signals according to the user defined parameters
- lab.GenBurstSignals();
+ // Match signals with sources
+ NcDevice matches;
+ lab.MatchBurstData(matches,"NGC1068");
 
- // Provide a listing of all relevant parameters
- cout << endl;
  lab.ListBurstParameters();
+
+ matches.Data();
 
  // Perform various statistical analyses
  Double_t rlow,rup;
@@ -108,5 +124,5 @@
  lab.GetBurstBayesianPsiStatistics("BBrat",nr,ncut,ndt,kTRUE);
 
  // Produce a ROOT output file with the produced (standard) histograms
- lab.WriteBurstHistograms("burst-model.root");
+ lab.WriteBurstHistograms("data-analysis.root");
 }

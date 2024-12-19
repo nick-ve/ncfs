@@ -1499,3 +1499,8 @@
                 which allows easy detection of unsupported solar system bodies.
 27-nov-2024 NvE New memberfunctions Divide() introduced in class NcBlocks.
 05-dec-2024 NvE Return arguments introduced for the memberfunctions Add(), Divide() and Rebin() of class NcBlocks.
+19-dec-2024 NvE Various extensions and improvements in the functionality of class NcAstrolab, especially in the treatment
+                of the (transient) event c.q. burst analysis.
+                The ROOT macro burst-model.cc in the folder physics/macros has been updated accordingly,
+                and also new (template) ROOT macros burst-analysis.cc and data-analysis.cc introduced.
+                The version indicator in NcVersion has been updated to 5.38.

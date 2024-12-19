@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Dec 11 14:17:37 2023            -->
+<!--   Date: Thu Dec 19 14:25:07 2024            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -207,7 +207,7 @@ return false;}
  lab.<a href="./NcAstrolab.html#NcAstrolab:DisplaySignals" title="void NcAstrolab::DisplaySignals(TString frame,TString mode,NcTimestamp* ts,TString proj=&quot;ham&quot;,Int_t clr=0,Int_t nmax=-1,Int_t j=-1,Int_t type=-1,TString name=&quot;*&quot;)">DisplaySignals</a>(<span class="string">"equ"</span>,<span class="string">"J"</span>,0,<span class="string">"ham"</span>,1);
 
 --- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 11, 2023  13:50Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 19, 2024  11:58Z
 
 </pre></div>
 </div></div>
@@ -271,17 +271,18 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GenBurstGCNdata">GenBurstGCNdata</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, TString name = <span class="string">"GRB"</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GenBurstGCNdata">GenBurstGCNdata</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, TString name = <span class="string">"GRB"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GenBurstSignals">GenBurstSignals</a>()</td></tr>
-<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBackgroundRatePDF">GetBackgroundRatePDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GeoToHeliocentric">GeoToHeliocentric</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; R, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; B, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; L, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString Bu = <span class="string">"deg"</span>, TString Lu = <span class="string">"deg"</span>)</td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBackgroundRatePDF">GetBackgroundRatePDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetBE@1"><span class="baseclass">NcTimestamp::</span>GetBE</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetBE"><span class="baseclass">NcTimestamp::</span>GetBE</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> date, TString mode = <span class="string">"jd"</span>) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakin"><span class="baseclass">TTask::</span>GetBreakin</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTask:GetBreakout"><span class="baseclass">TTask::</span>GetBreakout</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstBackgroundEnergy">GetBurstBackgroundEnergy</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstBayesianPsiStatistics">GetBurstBayesianPsiStatistics</a>(TString type, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> freq = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstBayesianPsiStatistics">GetBurstBayesianPsiStatistics</a>(TString type, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> zcor = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> freq = 0)</td></tr>
 <tr class="func"><td class="funcret">TH1*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstBayesianSignalRate">GetBurstBayesianSignalRate</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> p, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; rlow, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; rup, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 1000)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstChi2Statistics">GetBurstChi2Statistics</a>(TString type, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstChi2Statistics">GetBurstChi2Statistics</a>(TString type, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> zcor = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstLiMaSignificance">GetBurstLiMaSignificance</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcDevice.html">NcDevice</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstParameters">GetBurstParameters</a>()</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstRecoAngres">GetBurstRecoAngres</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Emin = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amin = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> Amax = 999) <span class="keyword">const</span></td></tr>
@@ -300,7 +301,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfWeek@1"><span class="baseclass">TTimeStamp::</span>GetDayOfWeek</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> inUTC = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> secOffset = 0) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetDayOfYear@1"><span class="baseclass">TTimeStamp::</span>GetDayOfYear</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> day, <a href="./ListOfTypes.html#Int_t">Int_t</a> month, <a href="./ListOfTypes.html#Int_t">Int_t</a> year)</td></tr>
-<tr class="funcinh"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetDayTimeString"><span class="baseclass">NcTimestamp::</span>GetDayTimeString</a>(TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0, TString* date = 0, TString* time = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">TString</td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:GetDayTimeString"><span class="baseclass">NcTimestamp::</span>GetDayTimeString</a>(TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndig = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> offset = 0, TString* date = 0, TString* time = 0, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> full = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetDifference@1">GetDifference</a>(TString name, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetDifference">GetDifference</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jref, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ia = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* it = 0)</td></tr>
 <tr class="func"><td class="funcret">TH1F</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetDifHistogram">GetDifHistogram</a>(TH1* hin, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString s = <span class="string">""</span>, TF1* f = 0) <span class="keyword">const</span></td></tr>
@@ -364,6 +365,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetRadiationLength">GetRadiationLength</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Z, <a href="./ListOfTypes.html#Double_t">Double_t</a> A, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho = -1) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcRandom.html">NcRandom</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetRandomiser">GetRandomiser</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; iseed, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; cnt1, <a href="./ListOfTypes.html#Int_t">Int_t</a>&amp; cnt2) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#time_t">time_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetSec"><span class="baseclass">TTimeStamp::</span>GetSec</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSeparation">GetSeparation</a>(TString name1, TString name2, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>* dt = 0, TString tu = <span class="string">"s"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* diftheta = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* difphi = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetShieldingThickness">GetShieldingThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetShieldingThickness@1">GetShieldingThickness</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> prob, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal@4">GetSignal</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jref = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
@@ -374,7 +376,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal@3">GetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; d, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; a, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; b, TString bu, TString frame, TString s, <a href="./ListOfTypes.html#Double_t">Double_t</a> e, TString name, TString mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalIndex">GetSignalIndex</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalIndex@1">GetSignalIndex</a>(<a href="./NcSignal.html">NcSignal</a>* s, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
-<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalRatePDF">GetSignalRatePDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Non, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ton, <a href="./ListOfTypes.html#Int_t">Int_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ra = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Re = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> smax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalRatePDF">GetSignalRatePDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Non, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ton, <a href="./ListOfTypes.html#Double_t">Double_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ra = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Re = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> smax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSolidAngle">GetSolidAngle</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> thetamin, <a href="./ListOfTypes.html#Double_t">Double_t</a> thetamax, TString tu, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimin, <a href="./ListOfTypes.html#Double_t">Double_t</a> phimax, TString pu) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSurvivalProbability">GetSurvivalProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> lambda) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSurvivalProbability@1">GetSurvivalProbability</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> x, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma, <a href="./ListOfTypes.html#Double_t">Double_t</a> rho, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode) <span class="keyword">const</span></td></tr>
@@ -404,6 +406,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TTimeStamp:GetZoneOffset"><span class="baseclass">TTimeStamp::</span>GetZoneOffset</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:HelioToGeocentric">HelioToGeocentric</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; R, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; B, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; L, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString Bu = <span class="string">"deg"</span>, TString Lu = <span class="string">"deg"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
@@ -467,6 +470,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMerC">MapMerC</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMerMode">MapMerMode</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapMerUc">MapMerUc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapNdigs">MapNdigs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapNmax">MapNmax</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapProj">MapProj</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapRemove">MapRemove</a>()</td></tr>
@@ -478,6 +482,8 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapUb">MapUb</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapUinfo">MapUinfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a>)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapUloc">MapUloc</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchBurstData@1">MatchBurstData</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchBurstData">MatchBurstData</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, <a href="./ListOfTypes.html#Int_t">Int_t</a> i1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</td></tr>
 <tr class="func"><td class="funcret">TArrayI*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchRefSignal">MatchRefSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchSignals@1">MatchSignals</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, TString name, <a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MatchSignals">MatchSignals</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, <a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</td></tr>
@@ -599,16 +605,18 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:EntriesPanel">EntriesPanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBackgroundRateProb">GetBackgroundRateProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* vars, <a href="./ListOfTypes.html#Double_t">Double_t</a>* pars)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstDtDistributions">GetBurstDtDistributions</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndt, TH1F&amp; hisdtOn, TF1&amp; pdfdtOn, TH1F&amp; hisdtOff, TF1&amp; pdfdtOff, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> zcor)</td></tr>
 <tr class="func"><td class="funcret">TH1*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstSigmaPosdist">GetBurstSigmaPosdist</a>(TString name, TString type)</td></tr>
 <tr class="func"><td class="funcret">TH1*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstT90dist">GetBurstT90dist</a>(TString name, TString type)</td></tr>
 <tr class="func"><td class="funcret">TH1*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetBurstZdist">GetBurstZdist</a>(TString name, TString type)</td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetDifference@2">GetDifference</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSeparation@1">GetSeparation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> bkgpatch, <a href="./ListOfTypes.html#Double_t">Double_t</a>* diftheta = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* difphi = 0)</td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignal@6">GetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:GetSignalRateProb">GetSignalRateProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>* vars, <a href="./ListOfTypes.html#Double_t">Double_t</a>* pars)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:InfoPanel">InfoPanel</a>(TGCompositeFrame* frame)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:InitBurstHistograms">InitBurstHistograms</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:InitBurstHistograms">InitBurstHistograms</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:LabLocalFramePanel">LabLocalFramePanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:LabLocationPanel">LabLocationPanel</a>(TGCompositeFrame* frame)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MakeBurstDataStats">MakeBurstDataStats</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmugrb = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:MapListOptionsPanel">MapListOptionsPanel</a>(TGCompositeFrame* frame)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:Nutate">Nutate</a>(<a href="./Nc3Vector.html">Nc3Vector</a>&amp; r, <a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
@@ -626,7 +634,7 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetNmatrix">SetNmatrix</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetPmatrix">SetPmatrix</a>(<a href="./NcTimestamp.html">NcTimestamp</a>* ts)</td></tr>
 <tr class="func"><td class="funcret"><a href="./NcSignal.html">NcSignal</a>*</td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetSignal@2">SetSignal</a>(<a href="./Nc3Vector.html">Nc3Vector</a>* r, TString frame, TString mode, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> type)</td></tr>
-<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetSolarSystem">SetSolarSystem</a>(TString name, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#NcAstrolab:SetSolarSystem">SetSolarSystem</a>(TString name, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="./NcTimestamp.html#NcTimestamp:SetUTCparameters"><span class="baseclass">NcTimestamp::</span>SetUTCparameters</a>(TString utc, <a href="./ListOfTypes.html#Int_t">Int_t</a> leap, <a href="./ListOfTypes.html#Double_t">Double_t</a> dut)</td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcAstrolab:TimestampPanel">TimestampPanel</a>(TGCompositeFrame* frame)</td></tr>
 
@@ -669,7 +677,13 @@ return false;}
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakin"><span class="baseclass">TTask::</span>fBreakin</a></td><td class="datadesc">=1 if a break point set at task extry</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="#TTask:fBreakout"><span class="baseclass">TTask::</span>fBreakout</a></td><td class="datadesc">=1 if a break point set at task exit</td></tr>
 <tr class="data"><td class="datatype">TObjArray</td><td class="dataname"><a name="NcAstrolab:fBurstHistos"></a>fBurstHistos</td><td class="datadesc">Storage of all the produced transient burst histograms</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcSample.html">NcSample</a></td><td class="dataname"><a name="NcAstrolab:fBurstOffMatch"></a>fBurstOffMatch</td><td class="datadesc">The Off-source matching data</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcSample.html">NcSample</a></td><td class="dataname"><a name="NcAstrolab:fBurstOffReco"></a>fBurstOffReco</td><td class="datadesc">The Off-source reconstructed track data</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcSample.html">NcSample</a></td><td class="dataname"><a name="NcAstrolab:fBurstOnMatch"></a>fBurstOnMatch</td><td class="datadesc">The On-source matching data</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcSample.html">NcSample</a></td><td class="dataname"><a name="NcAstrolab:fBurstOnReco"></a>fBurstOnReco</td><td class="datadesc">The On-source reconstructed track data</td></tr>
 <tr class="data"><td class="datatype"><a href="./NcDevice.html">NcDevice</a>*</td><td class="dataname"><a name="NcAstrolab:fBurstParameters"></a>fBurstParameters</td><td class="datadesc">Various parameters describing the transient burst</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcSample.html">NcSample</a></td><td class="dataname"><a name="NcAstrolab:fBurstSigReco"></a>fBurstSigReco</td><td class="datadesc">The simulated signal reconstructed track data</td></tr>
+<tr class="data"><td class="datatype"><a href="./NcSample.html">NcSample</a></td><td class="dataname"><a name="NcAstrolab:fBurstSignal"></a>fBurstSignal</td><td class="datadesc">The simulated signal events</td></tr>
 <tr class="data"><td class="datatype">TCanvas*</td><td class="dataname"><a name="NcAstrolab:fCanvas"></a>fCanvas</td><td class="datadesc">! The canvas for the skymap</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fDataDir"></a>fDataDir</td><td class="datadesc">Indicator for arrival (1) or moving (-1) directions</td></tr>
 <tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fDataFrame"></a>fDataFrame</td><td class="datadesc">The frame in which coordinates are provided</td></tr>
@@ -738,6 +752,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMerC"></a>fMapMerC</td><td class="datadesc">! The GUI entered central meridian location for the Map</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapMerMode"></a>fMapMerMode</td><td class="datadesc">! The GUI selected meridian orientation for the Map</td></tr>
 <tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapMerUc"></a>fMapMerUc</td><td class="datadesc">! The GUI selected angular units for the central meridian location</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapNdigs"></a>fMapNdigs</td><td class="datadesc">! The GUI selected number of digits for the List output</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcAstrolab:fMapNmax"></a>fMapNmax</td><td class="datadesc">! The GUI selected max. number of signals of each type to Map/List</td></tr>
 <tr class="data"><td class="datatype">TString</td><td class="dataname"><a name="NcAstrolab:fMapProj"></a>fMapProj</td><td class="datadesc">! The GUI selected projection for the Map</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a name="NcAstrolab:fMapSolar"></a>fMapSolar[10]</td><td class="datadesc">! The GUI selection of solar system objects</td></tr>
@@ -942,6 +957,7 @@ return false;}
  Astron    : The Netherlands Institute for Radio Astronomy in Dwingeloo
  ARA       : The Askaryan Radio Array at the South Pole
  RNO-G     : The Greenland Radio Neutrino Observatory at Summit Station
+ ARCA      : The KM3NeT ARCA detector next to Sicily
 
  Notes :
 
@@ -1192,7 +1208,7 @@ return false;}
 
  Via the input argument <span class="string">"name"</span> the user can give the stored signal also a name.
  If no name is provided, a name will be generated based on the type and the storage index,
- like for instance Meas8 or Ref5.
+ like for instance Meas8# or Ref5#.
 
  Notes :
 
@@ -1200,7 +1216,7 @@ return false;}
  2) In case scrambling has been activated, the data will be scrambled accordingly.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:SetSolarSystem" href="src/NcAstrolab.cxx.html#RccOEC">SetSolarSystem</a>(TString name, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="NcAstrolab:SetSolarSystem" href="src/NcAstrolab.cxx.html#q4erv">SetSolarSystem</a>(TString name, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</span><br />
 <div class="funccomm"><pre> Internal memberfunction to set c.q. update coordinates for solar system objects
  according to timestamp <span class="string">"ts"</span>.
  Due to the movement of the Earth around the Sun, the apparent coordinates
@@ -1213,6 +1229,8 @@ return false;}
  ts   : Timestamp used to evaluate the position of the specified object.
  type : 0 --&gt; The object data will be searched c.q. entered among the reference signals
         1 --&gt; The object data will be searched c.q. entered among the measured signals
+
+ The return argument indicates whether a solar sytem object has been set/updated (1) or not (0).
 
  All geocentric name specifications as indicated in the docs of <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:Almanac" title="Double_t NcTimestamp::Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name=&quot;&quot;,Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0)">Almanac</a>()
  are supported here.
@@ -1250,12 +1268,13 @@ return false;}
  The input parameter <span class="string">"frame"</span> allows the user to specify the frame to which
  the angular coordinates (a,b) refer. Available options are :
 
-  frame = <span class="string">"equ"</span> ==&gt; Equatorial coordinates with right ascension (a) and declination (b).
-          <span class="string">"gal"</span> ==&gt; Galactic coordinates with longitude (a) and latitude (b).
-          <span class="string">"ecl"</span> ==&gt; Geocentric ecliptic coordinates with longitude (a) and latitude (b).
-          <span class="string">"hor"</span> ==&gt; Horizontal coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with azimuth angle (a) and zenith angle (b).
-          <span class="string">"icr"</span> ==&gt; ICRS coordinates with longitude (a) and latitude (b).
-          <span class="string">"loc"</span> ==&gt; Local coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with usual spherical angles theta (a) and phi (b).
+  frame = <span class="string">"equ"</span>  ==&gt; Equatorial coordinates with right ascension (a) and declination (b).
+          <span class="string">"gal"</span>  ==&gt; Galactic coordinates with longitude (a) and latitude (b).
+          <span class="string">"ecl"</span>  ==&gt; Geocentric ecliptic coordinates with longitude (a) and latitude (b).
+          <span class="string">"hor"</span>  ==&gt; Horizontal coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with azimuth angle (a) and zenith angle (b).
+          <span class="string">"icr"</span>  ==&gt; ICRS coordinates with longitude (a) and latitude (b).
+          <span class="string">"loc"</span>  ==&gt; Local coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with usual spherical angles theta (a) and phi (b).
+          <span class="string">"pdir"</span> ==&gt; Particle momentum direction at the <a href="./NcAstrolab.html">NcAstrolab</a> location in local coordinates theta (a) and phi (b).
 
  In case the coordinates are the equatorial right ascension and declination (a,b),
  they can represent so-called <span class="string">"mean"</span>, <span class="string">"true"</span> or reference <span class="string">"epoch"</span> values.
@@ -1326,12 +1345,13 @@ return false;}
  The input parameter <span class="string">"frame"</span> allows the user to specify the frame to which
  the angular coordinates (a,b) refer. Available options are :
 
-  frame = <span class="string">"equ"</span> ==&gt; Equatorial coordinates with right ascension (a) and declination (b).
-          <span class="string">"gal"</span> ==&gt; Galactic coordinates with longitude (a) and latitude (b).
-          <span class="string">"ecl"</span> ==&gt; Geocentric ecliptic coordinates with longitude (a) and latitude (b).
-          <span class="string">"hor"</span> ==&gt; Horizontal coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with azimuth angle (a) and zenith angle (b).
-          <span class="string">"icr"</span> ==&gt; ICRS coordinates with longitude (a) and latitude (b).
-          <span class="string">"loc"</span> ==&gt; Local coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with usual spherical angles theta (a) and phi (b).
+  frame = <span class="string">"equ"</span>  ==&gt; Equatorial coordinates with right ascension (a) and declination (b).
+          <span class="string">"gal"</span>  ==&gt; Galactic coordinates with longitude (a) and latitude (b).
+          <span class="string">"ecl"</span>  ==&gt; Geocentric ecliptic coordinates with longitude (a) and latitude (b).
+          <span class="string">"hor"</span>  ==&gt; Horizontal coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with azimuth angle (a) and zenith angle (b).
+          <span class="string">"icr"</span>  ==&gt; ICRS coordinates with longitude (a) and latitude (b).
+          <span class="string">"loc"</span>  ==&gt; Local coordinates at the <a href="./NcAstrolab.html">NcAstrolab</a> location, with usual spherical angles theta (a) and phi (b).
+          <span class="string">"pdir"</span> ==&gt; Particle momentum direction at the <a href="./NcAstrolab.html">NcAstrolab</a> location in local coordinates theta (a) and phi (b).
 
  The time of the observation is specified by the following epoch input arguments :
 
@@ -1405,7 +1425,7 @@ return false;}
 <div class="funccomm"><pre> Provide the (max. index) number of stored signals of type <span class="string">"type"</span>.
 
  type = 0 --&gt; The requested number corresponds to the stored reference signals
-        1 --&gt; The requested number corresponds to the stored  measured signal
+        1 --&gt; The requested number corresponds to the stored  measured signals
 
  Note : It might be that a user may have removed a reference signal
         from the storage without compressing the storage array
@@ -1478,6 +1498,70 @@ return false;}
  The user is advised not to use the obsolete <span class="string">"jref=0"</span> functionality anymore.
 
  Note : In case ts=0 the current timestamp of the lab will be taken.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GeoToHeliocentric" href="src/NcAstrolab.cxx.html#bW.IjD">GeoToHeliocentric</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; R, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; B, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; L, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString Bu = <span class="string">"deg"</span>, TString Lu = <span class="string">"deg"</span>)</span><br />
+<div class="funccomm"><pre> <a href="./NcTimestamp.html#NcTimestamp:Convert" title="void NcTimestamp::Convert(Double_t date,Int_t&amp; days,Int_t&amp; secs,Int_t&amp; ns) or overloads">Convert</a> Geocentric ecliptic coordinates into Heliocentric ones at the provided timestamp.
+ The algorithm used here is the one outlined in Ch. 33 of the book by Jean Meeus,
+ <span class="string">"Astronomical Algorithms"</span> (2nd edition of August 2009).
+ In view of the accuracy of the current algorithm, the effects of light-time
+ and aberration are not taken into account here.
+
+ Input arguments :
+
+ R  : Geocentric distance of the object in Astronomical Units (AU)
+ B  : Geocentric ecliptic latitude
+ L  : Geocentric ecliptic longitude
+ ts : Timestamp of the (R,B,L) observation (0=The current <a href="./NcAstrolab.html">NcAstrolab</a> timestamp)
+ Bu : Angular units of B (see below)
+ Lu : Angular units of L (see below)
+
+ Angular units indicator :
+
+ <span class="string">"rad"</span> : input angle provided in radians
+ <span class="string">"deg"</span> : input angle provided in degrees
+ <span class="string">"dms"</span> : input angle provided in dddmmss.sss
+ <span class="string">"hms"</span> : input angle provided in hhmmss.sss
+ <span class="string">"hrs"</span> : input angle provided in fractional hours
+
+ After the conversion, R, B and L will be the Heliocentric values.
+
+ Note : For objects far outside the Solar System, the Geocentric and Heliocentric
+        coordinates are basically identical.
+
+ The default values are Bu=<span class="string">"deg"</span> and Lu=<span class="string">"deg"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:HelioToGeocentric" href="src/NcAstrolab.cxx.html#wdJDtD">HelioToGeocentric</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; R, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; B, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; L, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, TString Bu = <span class="string">"deg"</span>, TString Lu = <span class="string">"deg"</span>)</span><br />
+<div class="funccomm"><pre> <a href="./NcTimestamp.html#NcTimestamp:Convert" title="void NcTimestamp::Convert(Double_t date,Int_t&amp; days,Int_t&amp; secs,Int_t&amp; ns) or overloads">Convert</a> Heliocentric ecliptic coordinates into Geocentric ones at the provided timestamp.
+ The algorithm used here is the one outlined in Ch. 33 of the book by Jean Meeus,
+ <span class="string">"Astronomical Algorithms"</span> (2nd edition of August 2009).
+ In view of the accuracy of the current algorithm, the effects of light-time
+ and aberration are not taken into account here.
+
+ Input arguments :
+
+ R  : Heliocentric distance of the object in Astronomical Units (AU)
+ B  : Heliocentric ecliptic latitude
+ L  : Heliocentric ecliptic longitude
+ ts : Timestamp of the (R,B,L) observation (0=The current <a href="./NcAstrolab.html">NcAstrolab</a> timestamp)
+ Bu : Angular units of B (see below)
+ Lu : Angular units of L (see below)
+
+ Angular units indicator :
+
+ <span class="string">"rad"</span> : input angle provided in radians
+ <span class="string">"deg"</span> : input angle provided in degrees
+ <span class="string">"dms"</span> : input angle provided in dddmmss.sss
+ <span class="string">"hms"</span> : input angle provided in hhmmss.sss
+ <span class="string">"hrs"</span> : input angle provided in fractional hours
+
+ After the conversion, R, B and L will be the Geocentric values.
+
+ Note : For objects far outside the Solar System, the Geocentric and Heliocentric
+        coordinates are basically identical.
+
+ The default values are Bu=<span class="string">"deg"</span> and Lu=<span class="string">"deg"</span>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./NcSignal.html">NcSignal</a>* <a class="funcname" name="NcAstrolab:GetSignal" href="src/NcAstrolab.cxx.html#kgcx9">GetSignal</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; d, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; a, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; b, TString bu, TString frame, <a href="./NcTimestamp.html">NcTimestamp</a>* ts, <a href="./ListOfTypes.html#Int_t">Int_t</a> jref, TString mode = <span class="string">"T"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> type = 0)</span><br />
@@ -2432,8 +2516,8 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetDifference" href="src/NcAstrolab.cxx.html#IX4yH">GetDifference</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> jref, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a>* ia = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* it = 0)</span><br />
 <div class="funccomm"><pre>
- *** This memberfunction is obsolete and is only kept for backward compatibility. ***
- *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() instead.        ***
+ *** This memberfunction is obsolete and is only kept for backward compatibility.             ***
+ *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSeparation" title="Double_t NcAstrolab::GetSeparation(TString name1,TString name2,TString au,Double_t* dt=0,TString tu=&quot;s&quot;,Int_t mode=1,Double_t* diftheta=0,Double_t* difphi=0) or overloads">GetSeparation</a>() or <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() instead. ***
 
 
  Provide space and time difference between the j-th reference signal
@@ -2474,47 +2558,107 @@ return false;}
  Note : In case scrambling has been activated, the results will be scrambled accordingly.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetDifference@2" href="src/NcAstrolab.cxx.html#RNNZrE">GetDifference</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
-<div class="funccomm"><pre> Internal memberfunction to provide space and time difference between the i-th and j-th stored signal.
- This memberfunction serves the <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() facility.
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetSeparation" href="src/NcAstrolab.cxx.html#DEwodD">GetSeparation</a>(TString name1, TString name2, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>* dt = 0, TString tu = <span class="string">"s"</span>, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a>* diftheta = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* difphi = 0)</span><br />
+<div class="funccomm"><pre> Provide space (and optional time) separation between the signals stored with <span class="string">"name1"</span> and <span class="string">"name2"</span>.
+
+ Note :
+
+ In case both signals were stored as a measurement (or reference signal),
+ then the signal indicated via <span class="string">"name1"</span> will be regarded as a reference signal,
+ and the signal indicated via <span class="string">"name2"</span> will be regarded as a measurement.
+
+ In case a name specifies a solar system object supported by <a href="./NcAstrolab.html#NcAstrolab:SetSolarSystem" title="Int_t NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0)">SetSolarSystem</a>(),
+ which was not yet stored, the corresponding reference signal will be created and stored.
+ In case the solar system object was already stored as a reference object, its position and timestamp
+ will be updated according to the timestamp of the measurement to which it will be compared.
+ In case the solar system object was stored as a measurement, its position and timestamp are not modfified.
+ All geocentric name specifications for solar system objects as indicated in the
+ docs of <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:Almanac" title="Double_t NcTimestamp::Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name=&quot;&quot;,Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0)">Almanac</a>() are supported.
+
+ The return value of this memberfunction provides the positional angular
+ separation, whereas the optional output argument <span class="string">"dt"</span> provides the time difference.
+ The optional output arguments <span class="string">"diftheta"</span> and <span class="string">"difphi"</span> provide the difference
+ in theta and phi, respectively, between the signals, in which the reference signal is used as the origin.
+ The units of <span class="string">"diftheta"</span> and <span class="string">"difphi"</span> are determined by the <span class="string">"au"</span> input argument (see below).
+
+ In case of inconsistent input, the return value and the optional <span class="string">"diftheta"</span> and <span class="string">"difphi"</span>
+ will have the unphysical value of -999, whereas <span class="string">"dt"</span> will be set to 1e30.
+
+ The units of the angular separation can be specified via the <span class="string">"au"</span> input argument, where
+
+ au = <span class="string">"rad"</span> --&gt; Angular separation in (fractional) radians
+      <span class="string">"deg"</span> --&gt; Angular separation in (fractional) degrees
+
+ The units of the time difference can be specified via the <span class="string">"tu"</span> and <span class="string">"mode"</span>
+ input arguments. For details please refer to <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:GetDifference" title="Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t&amp; days,Int_t&amp; sec,Int_t&amp; ns,Int_t&amp; ps,TString type=&quot;UT&quot;) or overloads">GetDifference</a>().
+
+ For the time difference the reference signal is used as the standard.
+ This means that in case of a positive time difference, the other signal
+ occurred later than the reference one.
+
+ Note : In case scrambling has been activated, the results will be scrambled accordingly,
+        but only in case of positive values of the time c.q. position scrambling modes.
+        For details see the docs of <a href="./NcAstrolab.html#NcAstrolab:SetTimeScramble" title="void NcAstrolab::SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frndm=0)">SetTimeScramble</a>() and <a href="./NcAstrolab.html#NcAstrolab:SetPositionScramble" title="void NcAstrolab::SetPositionScramble(Int_t mode,Double_t dmin,Double_t dmax,TF1* df=0,Double_t thmin=0,Double_t thmax=0,TF1* thf=0,Double_t phimin=0,Double_t phimax=0,TF1* phif=0)">SetPositionScramble</a>().
+
+ The default values are dt=0, tu=<span class="string">"s"</span>, mode=1, diftheta=0 and difphi=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetSeparation@1" href="src/NcAstrolab.cxx.html#coaybE">GetSeparation</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i, <a href="./ListOfTypes.html#Int_t">Int_t</a> j, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> bkgpatch, <a href="./ListOfTypes.html#Double_t">Double_t</a>* diftheta = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* difphi = 0)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to provide space and time separation between the i-th and j-th stored signal.
+ This memberfunction serves the public <a href="./NcAstrolab.html#NcAstrolab:GetSeparation" title="Double_t NcAstrolab::GetSeparation(TString name1,TString name2,TString au,Double_t* dt=0,TString tu=&quot;s&quot;,Int_t mode=1,Double_t* diftheta=0,Double_t* difphi=0) or overloads">GetSeparation</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() and <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>() facilities.
 
  i &gt; 0 : Indicates a reference signal stored at index i (i=1 is the first)
  i &lt; 0 : Indicates a measurement stored at index abs(i) (i=-1 is the first)
  j &gt; 0 : Indicates a reference signal stored at index j (j=1 is the first)
  j &lt; 0 : Indicates a measurement stored at index abs(j) (j=-1 is the first)
 
+ In case both signals were stored as a measurement (or reference signal),
+ then the signal indicated via <span class="string">"i"</span> will be regarded as a reference signal,
+ and the signal indicated via <span class="string">"j"</span> will be regarded as a measurement.
+
  The return value of this memberfunction provides the positional angular
- difference, whereas the output argument <span class="string">"dt"</span> provides the time difference.
+ separation, whereas the output argument <span class="string">"dt"</span> provides the time difference.
+ The optional output arguments <span class="string">"diftheta"</span> and <span class="string">"difphi"</span> provide the difference
+ in theta and phi, respectively, between the i-th and the j-th stored signal,
+ in which the reference signal is used as the origin.
+ These optional values may be used for local zenith or azimuth band investigations.
+ The units of <span class="string">"diftheta"</span> and <span class="string">"difphi"</span> are determined by the <span class="string">"au"</span> input argument (see below).
 
- In case of inconsistent input the return value will have the unphysical value of 999.
+ In case of inconsistent input, the return value and the optional <span class="string">"diftheta"</span> and <span class="string">"difphi"</span>
+ will have the unphysical value of -999, whereas <span class="string">"dt"</span> will be set to 1e30.
 
- The units of the angular difference can be specified via the the <span class="string">"au"</span>
- input argument, where
+ The units of the angular separation can be specified via the <span class="string">"au"</span> input argument, where
 
- au = <span class="string">"rad"</span> --&gt; Angular difference in (fractional) radians
-      <span class="string">"deg"</span> --&gt; Angular difference in (fractional) degrees
+ au = <span class="string">"rad"</span> --&gt; Angular separation in (fractional) radians
+      <span class="string">"deg"</span> --&gt; Angular separation in (fractional) degrees
 
  The units of the time difference can be specified via the <span class="string">"tu"</span> and <span class="string">"mode"</span>
  input arguments. For details please refer to <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:GetDifference" title="Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t&amp; days,Int_t&amp; sec,Int_t&amp; ns,Int_t&amp; ps,TString type=&quot;UT&quot;) or overloads">GetDifference</a>().
- Also here mode=1 is the default value.
 
- For the time difference the signal indicated via <span class="string">"i"</span> is used as the standard.
- This means that in case of a positive time difference, the j-th stored
- signal occurred later than i-th one.
+ For the time difference the reference signal is used as the standard.
+ This means that in case of a positive time difference, the other signal
+ occurred later than the reference one.
 
- Note : In case scrambling has been activated, the results will be scrambled accordingly.
+ In case scrambling has been activated, the results will be scrambled accordingly.
+ The argument <span class="string">"bkgpatch"</span> indicates the background patch number for the creation of
+ the corresponding off-source (background) data, where bkgpatch=0 means on-source data.
+ Negative values for the time and position scrambling parameters are taken into account
+ only for the creation of off-source (background) data, see <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>().
+ For details see the docs of <a href="./NcAstrolab.html#NcAstrolab:SetTimeScramble" title="void NcAstrolab::SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frndm=0)">SetTimeScramble</a>() and <a href="./NcAstrolab.html#NcAstrolab:SetPositionScramble" title="void NcAstrolab::SetPositionScramble(Int_t mode,Double_t dmin,Double_t dmax,TF1* df=0,Double_t thmin=0,Double_t thmax=0,TF1* thf=0,Double_t phimin=0,Double_t phimax=0,TF1* phif=0)">SetPositionScramble</a>().
+
+ The default values are diftheta=0 and difphi=0.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcAstrolab:GetDifference@1" href="src/NcAstrolab.cxx.html#NS1ioE">GetDifference</a>(TString name, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a>&amp; dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1)</span><br />
 <div class="funccomm"><pre>
  *** This memberfunction is obsolete and is only kept for backward compatibility. ***
- *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() instead.        ***
+ *** The user is advised to use the memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSeparation" title="Double_t NcAstrolab::GetSeparation(TString name1,TString name2,TString au,Double_t* dt=0,TString tu=&quot;s&quot;,Int_t mode=1,Double_t* diftheta=0,Double_t* difphi=0) or overloads">GetSeparation</a>() instead.       ***
 
 
  Provide space and time difference between the stored reference signal
- with the specified name and the stored measurement.
+ with the specified name and the single stored measurement at storage index 1.
 
- Note : In case the name specifies a solar system object supported by <a href="./NcAstrolab.html#NcAstrolab:SetSolarSystem" title="void NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0)">SetSolarSystem</a>()
+ Note : In case the name specifies a solar system object supported by <a href="./NcAstrolab.html#NcAstrolab:SetSolarSystem" title="Int_t NcAstrolab::SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0)">SetSolarSystem</a>()
         which was not yet stored as a reference signal, the corresponding reference signal
         will be created and stored with the current timestamp of this <a href="./NcAstrolab.html">NcAstrolab</a> instance.
 
@@ -2622,17 +2766,20 @@ return false;}
  Slot 4 : <span class="string">"index2"</span> --&gt; Storage index of object2 (see memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>)
  Slot 5 : <span class="string">"psi"</span>    --&gt; Opening angle between object2 and object1 in units as specified via <span class="string">"au"</span>
  Slot 6 : <span class="string">"t2-t1"</span>  --&gt; Time offset between object2 and object1 in units as specified via <span class="string">"tu"</span> and <span class="string">"mode"</span>
+                       (t2-t1)&lt;0 in case object2 was recorded earlier than object1.
 
  The <a href="./NcDevice.html">NcDevice</a> object itself provides the data of the best encountered matchings as follows :
 
  Slot 1 : <span class="string">"psimin"</span> --&gt; Minimal encountered opening angle in units as specified via <span class="string">"au"</span>
- Slot 2 : <span class="string">"dtmin"</span>  --&gt; Minimal encountered time offset in units as specified via <span class="string">"tu"</span> and <span class="string">"mode"</span>
+ Slot 2 : <span class="string">"dtmin"</span>  --&gt; Minimal encountered time offset |t2-t1| in units as specified via <span class="string">"tu"</span> and <span class="string">"mode"</span>
  Slot 3 : <span class="string">"ipsi"</span>   --&gt; Index of the hit that corresponds to the minimal opening angle
  Slot 4 : <span class="string">"idt"</span>    --&gt; Index of the hit that corresponds to the minimal time offset
 
  A full overview of all matchings can be obtained via <a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>().
 
- Note : In case scrambling has been activated, the results reflect the scrambled measurement(s).
+ Note : In case scrambling has been activated, the results will reflect scrambled data,
+        but only in case of positive values of the time c.q. position scrambling modes.
+        For details see the docs of <a href="./NcAstrolab.html#NcAstrolab:SetTimeScramble" title="void NcAstrolab::SetTimeScramble(Int_t mode,Double_t tmin,Double_t tmax,TF1* frndm=0)">SetTimeScramble</a>() and <a href="./NcAstrolab.html#NcAstrolab:SetPositionScramble" title="void NcAstrolab::SetPositionScramble(Int_t mode,Double_t dmin,Double_t dmax,TF1* df=0,Double_t thmin=0,Double_t thmax=0,TF1* thf=0,Double_t phimin=0,Double_t phimax=0,TF1* phif=0)">SetPositionScramble</a>().
 
  Usage example :
 
@@ -2675,6 +2822,17 @@ return false;}
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MatchSignals@1" href="src/NcAstrolab.cxx.html#q.mfEE">MatchSignals</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, TString name, <a href="./ListOfTypes.html#Double_t">Double_t</a> da, TString au, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt, TString tu, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</span><br />
 <div class="funccomm"><pre> Provide information about the matching in space and time of the stored
  reference signal(s) and/or measurement(s).
+ Signals are regarded as matching if the positional angular difference
+ doesn't exceed <span class="string">"da"</span> and the absolute value of the time difference doesn't exceed <span class="string">"dt"</span>.
+
+ Notes :
+
+ In case da&lt;0 the signals will always be regarded as matching w.r.t. the positional angular difference.
+ In case dt&lt;0 the signals will always be regarded as matching w.r.t. the time difference.
+
+ So, specifying da&gt;0 and dt&lt;0 will only check on matching of the locations of the signals, irrespective
+ of the time of the various recordings. This is very convenient in the study of steady sources over
+ extended time periods.
 
  name  : The name of the object to be used for the matching with the stored signals
  itype : 0 ==&gt; The object <span class="string">"name"</span> resides among the stored reference signals
@@ -2694,8 +2852,6 @@ return false;}
         All geocentric name specifications for solar system objects as indicated in the
         docs of <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:Almanac" title="Double_t NcTimestamp::Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name=&quot;&quot;,Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0)">Almanac</a>() are supported.
 
- Signals are regarded as matching if the positional angular difference
- doesn't exceed <span class="string">"da"</span> and the absolute value of the time difference doesn't exceed <span class="string">"dt"</span>.
  The information (see below) for the observed matches is provided via the <a href="./NcDevice.html">NcDevice</a> argument <span class="string">"matches"</span>,
  where each matching pair is recorded as a <span class="string">"hit"</span> with the corresponding <a href="./NcSignal.html">NcSignal</a> data.
  Consequently, the number of matches can be obtained as the number of <span class="string">"hits"</span> in the <a href="./NcDevice.html">NcDevice</a>.
@@ -2784,24 +2940,50 @@ return false;}
  Conventions for the mode parameter :
 
  mode : 0 ==&gt; No time scrambling is performed.
-        1 ==&gt; Scrambling is only performed when obtaining time differences.
-              All time differences are randomly selected from the interval [tmin,tmax].
-              As such, this scrambling mode is very useful for scrambling entries in
-              specific time windows (see e.g. NvE, Astroparticle Physics 28 (2008) 540).
-              This time difference scrambling will only affect the outcome of the memberfunctions
-              <a href="./NcAstrolab.html#NcAstrolab:GetDifference" title="Double_t NcAstrolab::GetDifference(Int_t jref,TString au,Double_t&amp; dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0) or overloads">GetDifference</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchRefSignal" title="TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1)">MatchRefSignal</a>() and <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() of this class <a href="./NcAstrolab.html">NcAstrolab</a>.
-              So, the actual (stored) event timestamps and the <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:GetDifference" title="Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t&amp; days,Int_t&amp; sec,Int_t&amp; ns,Int_t&amp; ps,TString type=&quot;UT&quot;) or overloads">GetDifference</a>()
-              are not affected by the scrambling.
+        1 ==&gt; Scrambling is only performed after having obtained the actual time difference.
+              So, the actual (stored) timestamps, retrieved coordinates c.q. angular differences
+              and the <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:GetDifference" title="Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t&amp; days,Int_t&amp; sec,Int_t&amp; ns,Int_t&amp; ps,TString type=&quot;UT&quot;) or overloads">GetDifference</a>() are not affected by the scrambling.
               This implies that setting mode=0 will reproduce again the unscrambled values.
+              The provided time difference is randomly selected from the interval [tmin,tmax].
+              As such, this scrambling mode is very useful for scrambling entries in
+              specific time windows (see e.g. NvE, Astroparticle Physics 28 (2008) 540),
+              without modification of the event selection based on angular separation w.r.t. a source.
+              This time difference scrambling will only affect the outcome of the memberfunctions
+              <a href="./NcAstrolab.html#NcAstrolab:GetDifference" title="Double_t NcAstrolab::GetDifference(Int_t jref,TString au,Double_t&amp; dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0) or overloads">GetDifference</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchRefSignal" title="TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1)">MatchRefSignal</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() and <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>() of this class <a href="./NcAstrolab.html">NcAstrolab</a>.
               Note : Every time a time difference is requested, a new random value is produced.
                      As such, scrambled values are not reproducible on subsequent invokations.
         2 ==&gt; Time scrambling is performed before storing the measurement.
               A value is randomly selected from the interval [tmin,tmax] and added to the
               actual timestamp of the measurement.
+              The measurement will then be stored with the modified timestamp.
               As such, this scrambling is irreversible but will always provide reproducible results.
               Note : In case the measurement is entered in <a href="./NcAstrolab.html">NcAstrolab</a> specific coordinates
                      (i.e. local or horizontal position coordinates) then this mode=2 scrambling
                      will also result in a corresponding scrambling of e.g. the right ascension.
+              Possible patterns in the distribution of sources on the sky will stay intact.
+        3 ==&gt; Time scrambling is performed by using fake timestamps for the reference objects c.q. sources.
+              To create a fake timestamp, a value is randomly selected from the interval [tmin,tmax] and
+              added to the actual timestamp of the measurement.
+              This fake timestamp is then used to retrieve the local coordinates of the reference object,
+              whereas the local coordinates of the measurement are retrieved with the actual unmodified timestamp.
+              This implies that the time and local c.q. horizontal position coordinates of the measurement
+              will remain unchanged, but those of the reference object get modified.
+              These new local coordinates and time will then be used to obtain the and angular and time differences.
+              As such, this scrambling mode is very well suited to scramble both time and angular differences
+              w.r.t. sources, but keeping the local position (and consequently the reconstruction efficiency)
+              of the measurement unchanged.
+              So, the actual stored timestamps and coordinates are not affected by the scrambling.
+              This implies that setting mode=0 will reproduce again the unscrambled values.
+              This time scrambling will only affect the outcome of the memberfunctions
+              <a href="./NcAstrolab.html#NcAstrolab:GetDifference" title="Double_t NcAstrolab::GetDifference(Int_t jref,TString au,Double_t&amp; dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0) or overloads">GetDifference</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchRefSignal" title="TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1)">MatchRefSignal</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() and <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>() of this class <a href="./NcAstrolab.html">NcAstrolab</a>.
+              Note : Every time a time difference is requested, a new random value is produced.
+                     As such, scrambled values are not reproducible on subsequent invokations.
+              Possible patterns in the distribution of sources on the sky will be washed out.
+       &lt;0 ==&gt; Similar as the corresponding mode&gt;0, but the scrambling is only performed to obtain
+              the off-source background data in the memberfunction <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>().
+              So, the actual on-source recordings are not affected.
+              Furthermore, for mode=-2 the scrambled timestamps are only used after retrieving the measurement
+              data from the storage, so the actual stored measurement data are not modified.
 
  Notes :
 
@@ -2863,10 +3045,11 @@ return false;}
         1 ==&gt; Scrambling is only performed when obtaining angular differences.
               All angular differences are randomly selected from the interval [dmin,dmax].
               If for this mode dmin&lt;0 it will be set to 0 and if dmax&gt;180 it will be set to 180.
-              This scrambling mode is very useful for scrambling entries in specific
-              angular cones (see e.g. NvE, Astroparticle Physics 28 (2008) 540).
+              This scrambling mode is very useful for scrambling entries within a specific angular range
+              w.r.t. a source (see e.g. NvE, Astroparticle Physics 28 (2008) 540), without modification of
+              the event selection based on the time difference w.r.t. a transient source.
               This angular difference scrambling will only affect the outcome of the memberfunctions
-              <a href="./NcAstrolab.html#NcAstrolab:GetDifference" title="Double_t NcAstrolab::GetDifference(Int_t jref,TString au,Double_t&amp; dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0) or overloads">GetDifference</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchRefSignal" title="TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1)">MatchRefSignal</a>() and <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() of this class <a href="./NcAstrolab.html">NcAstrolab</a>.
+              <a href="./NcAstrolab.html#NcAstrolab:GetDifference" title="Double_t NcAstrolab::GetDifference(Int_t jref,TString au,Double_t&amp; dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0) or overloads">GetDifference</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchRefSignal" title="TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1)">MatchRefSignal</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() and <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>() of this class <a href="./NcAstrolab.html">NcAstrolab</a>.
               So, the actual (stored) event positions are not affected by the scrambling.
               This implies that setting mode=0 will reproduce again the unscrambled values.
               Note : Every time an angular difference is requested, a new random value is produced.
@@ -2877,8 +3060,28 @@ return false;}
               As such, this scrambling is irreversible but will always provide reproducible results.
               Notes :
               This mode=2 scrambling will also result in a corresponding scrambling of e.g. the right ascension.
-              In case the r-coordinate would become zero or negative by the scrambling, it's value will be
+              In case the r-coordinate would become zero or negative by the scrambling, its value will be
               set to a small positive value before storage, in order to keep a physical situation.
+        3 ==&gt; Position scrambling is performed by using a fake local position of the measurement.
+              To create the fake measurement position, a value is randomly selected from the intervals
+              [dmin,dmax], [thmin,thmax] and [phimin,phimax] and added to the actual local spherical coordinates
+              (r,theta,phi) of the measurement.
+              Since the timestamp of the measurement is not modified, this mode=3 scrambling will also result
+              in a corresponding scrambling of e.g. the right ascension.
+              In case the r-coordinate would become zero or negative by the scrambling, its value will be
+              set to a small positive value before storage, in order to keep a physical situation.
+              This position scrambling will only affect the outcome of the memberfunctions
+              <a href="./NcAstrolab.html#NcAstrolab:GetDifference" title="Double_t NcAstrolab::GetDifference(Int_t jref,TString au,Double_t&amp; dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0) or overloads">GetDifference</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchRefSignal" title="TArrayI* NcAstrolab::MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1)">MatchRefSignal</a>(), <a href="./NcAstrolab.html#NcAstrolab:MatchSignals" title="void NcAstrolab::MatchSignals(NcDevice&amp; matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchSignals</a>() and <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>() of this class <a href="./NcAstrolab.html">NcAstrolab</a>.
+              So, the actual (stored) event positions are not affected by the scrambling.
+              This implies that setting mode=0 will reproduce again the unscrambled values.
+              Note : Every time an angular difference is requested, a new random value is produced.
+                     As such, scrambled values are not reproducible on subsequent invokations.
+       &lt;0 ==&gt; Similar as the corresponding mode&gt;0, but the scrambling is only performed to obtain
+              the off-source background data in the memberfunction <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>().
+              So, the actual on-source recordings are not affected.
+              Furthermore, for mode=-2 the scrambled positions are only used after retrieving the measurement
+              data from the storage, so the actual stored measurement data are not modified.
+              This implies that for position scrambling mode=-2 is equivalent to mode=-3.
 
  Notes :
 
@@ -4209,7 +4412,7 @@ return false;}
 <div class="funccomm"><pre> Provide the posterior Bayesian probability for a certain background rate <span class="string">"b"</span>
  given some specified background (c.q. <span class="string">"off source"</span>) observations.
 
- *** This is an internal interface memberfunction used by <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() ***
+ *** This is an internal interface memberfunction used by <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Double_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() ***
 
  Details of the method can be found in the publication Astrop. Phys. 50-52 (2013) 57.
 
@@ -4239,14 +4442,14 @@ return false;}
 <div class="funccomm"><pre> Provide the posterior Bayesian probability for a certain source signal rate <span class="string">"s"</span>
  given some specified <span class="string">"on source"</span> and <span class="string">"off source"</span> observations.
 
- *** This is an internal interface memberfunction used by <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>() ***
+ *** This is an internal interface memberfunction used by <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>() ***
 
  Details of the method can be found in the publication Astrop. Phys. 50-52 (2013) 57.
  This implementation is based on the original code of Lionel Brayeur and Krijn de Vries.
 
  Note : It is essential that the provided Non and Noff data correspond to equal areas and
         detection efficiencies.
-        See the memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>() as an example how to handle this.
+        See the memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>() as an example how to handle this.
 
  The input arguments :
 
@@ -4276,7 +4479,7 @@ return false;}
  automatically to provide good prior coverage.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcAstrolab:GetBackgroundRatePDF" href="src/NcAstrolab.cxx.html#GnNruE">GetBackgroundRatePDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</span><br />
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcAstrolab:GetBackgroundRatePDF" href="src/NcAstrolab.cxx.html#Me5fuC">GetBackgroundRatePDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</span><br />
 <div class="funccomm"><pre> Provide the posterior Bayesian PDF for a background rate <span class="string">"b"</span>
  given the specified background (<span class="string">"off source"</span>) observations.
 
@@ -4304,7 +4507,7 @@ return false;}
  to provide good prior coverage.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcAstrolab:GetSignalRatePDF" href="src/NcAstrolab.cxx.html#sCCiYD">GetSignalRatePDF</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> Non, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ton, <a href="./ListOfTypes.html#Int_t">Int_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ra = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Re = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> smax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</span><br />
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcAstrolab:GetSignalRatePDF" href="src/NcAstrolab.cxx.html#ut64ID">GetSignalRatePDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> Non, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ton, <a href="./ListOfTypes.html#Double_t">Double_t</a> Noff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Toff, <a href="./ListOfTypes.html#Double_t">Double_t</a> Ra = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> Re = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> smax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> bmax = -1, <a href="./ListOfTypes.html#Double_t">Double_t</a> prec = 709)</span><br />
 <div class="funccomm"><pre> Provide the posterior Bayesian PDF for a source signal rate <span class="string">"s"</span>
  given the specified <span class="string">"on source"</span> and <span class="string">"off source"</span> observations.
 
@@ -4350,7 +4553,7 @@ return false;}
         For a good interpretation of the returned value, the user has to make sure
         that the range covers the full PDF.
         This range is automatically set if the PDF is the result of the
-        memberfunctions <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() or <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>().
+        memberfunctions <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Double_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() or <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>().
 
  In case of inconsistent data 0 is returned.
 </pre></div>
@@ -4372,7 +4575,7 @@ return false;}
         For a good interpretation of the returned values, the user has to make sure
         that the range covers the full PDF.
         This range is automatically set if the PDF is the result of the
-        memberfunctions <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() or <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>().
+        memberfunctions <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Double_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() or <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>().
 
  Input arguments :
 
@@ -4402,7 +4605,7 @@ return false;}
         For a good interpretation of the returned values, the user has to make sure
         that the range covers the full PDF.
         This range is automatically set if the PDF is the result of the
-        memberfunctions <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() or <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>().
+        memberfunctions <a href="./NcAstrolab.html#NcAstrolab:GetBackgroundRatePDF" title="TF1 NcAstrolab::GetBackgroundRatePDF(Double_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709)">GetBackgroundRatePDF</a>() or <a href="./NcAstrolab.html#NcAstrolab:GetSignalRatePDF" title="TF1 NcAstrolab::GetSignalRatePDF(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709)">GetSignalRatePDF</a>().
 
  Input arguments :
 
@@ -4555,7 +4758,7 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TH1F <a class="funcname" name="NcAstrolab:GetCumulHistogram" href="src/NcAstrolab.cxx.html#md3piC">GetCumulHistogram</a>(TH1* h, TString name, TString mode = <span class="string">"F"</span>) const</span><br />
-<div class="funccomm"><pre> Provide the Cumulative Distribution Hstogram from the input 1-D histogram <span class="string">"h"</span>.
+<div class="funccomm"><pre> Provide the Cumulative Distribution Histogram from the input 1-D histogram <span class="string">"h"</span>.
 
  Input arguments :
 
@@ -4741,50 +4944,56 @@ return false;}
 
  The available parameter names are :
 
- Nmaxsrc;  // Maximal number of sources c.q. bursts to be accepted for analysis (&lt;0 : no limitation)
+ Nmaxsrc;  // Maximal number of sources to be accepted for analysis (&lt;0 : no limitation)
  Nmaxevt;  // Maximal number of observed events to be accepted for analysis (&lt;0 : no limitation)
- Declmin   // Minimal declination (J2000 in degrees) for burst position acceptance
- Declmax   // Maximal declination (J2000 in degrees) for burst position acceptance
+ RAmin     // Minimal right ascension (J2000 in degrees) for source c.q. event position acceptance
+ RAmax     // Maximal right ascension (J2000 in degrees) for source c.q. event position acceptance
+ Declmin   // Minimal declination (J2000 in degrees) for source c.q. event position acceptance
+ Declmax   // Maximal declination (J2000 in degrees) for source c.q. event position acceptance
  T90min    // Minimal duration (t90 in sec) for burst acceptance (&lt;0 : [|T90min|,T90max] with random T90 when missing in loaded data)
  T90max    // Maximal duration (t90 in sec) for burst acceptance
- Zmin      // Minimal redshift for burst acceptance (&lt;0 : [|Zmin|,Zmax] with random z when missing in loaded data)
- Zmax      // Maximal redshift for burst acceptance
- Sigmamin  // Minimal position uncertainty (sigma in degrees) for burst acceptance (&lt;0 : [|Sigmamin|,Sigmamax] with random sigma when missing in loaded data)
- Sigmamax  // Maximal position uncertainty (sigma in degrees) for burst acceptance
- Grbnu     // Maximum number of detectable neutrinos per burst (&lt;0 : no statistical fluctuations)
- Avgrbz    // Average burst redshift (&lt;0 : determine from observations)
+ Zmin      // Minimal redshift for source acceptance (&lt;0 : [|Zmin|,Zmax] with random z when missing in loaded data)
+ Zmax      // Maximal redshift for source acceptance
+ Sigmamin  // Minimal position uncertainty (sigma in degrees) for source acceptance (&lt;0 : [|Sigmamin|,Sigmamax] with random sigma when missing in loaded data)
+ Sigmamax  // Maximal position uncertainty (sigma in degrees) for source acceptance
+ Grbnu     // Maximum number of detectable simulated neutrinos per source (&lt;0 : no statistical fluctuations)
+ Avgrbz    // Average source redshift (&lt;0 : determine from observations)
  Avgrbt90  // Average burst duration (T90) in seconds (&lt;0 : determine from observations)
- Inburst   // Flag to indicate that neutrinos are produced coupled (1) or not (0) to the burst duration
- Dtnu      // Mean time diff. (in sec) between gamma/GW and nu production (decoupled) or in T90 units w.r.t. trigger (coupled)
- Dtnus     // Sigma of time difference (in sec) between gamma/GW and nu production (&lt;0 is in T90 units)
+ Inburst   // Flag to indicate that the simulated neutrinos are produced coupled (1) or not (0) to the burst duration
+ Dtnu      // Mean time diff. (in sec) between gamma/GW and simulated nu production (decoupled) or in T90 units w.r.t. trigger (coupled)
+ Dtnus     // Sigma of time difference (in sec) between gamma/GW and simulated nu production (&lt;0 is in T90 units)
+ ESigmin   // Minimal event energy (in GeV) for source signal event generation
+ ESigmax   // Maximal event energy (in GeV) for source signal event generation
+ Ezcor     // Flag to activate redshift correction for the generated energy of simulated source signal events (1) or not (0)
  Emin      // Minimal event energy (in GeV) for event acceptance
  Emax      // Maximal event energy (in GeV) for event acceptance
- Alphasig  // Spectral index for a default dN/dE=E^-Alphasig burst induced signal energy spectrum within [Emin,Emax]. See also <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEnergydist" title="void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000) or overloads">MakeBurstEnergydist</a>()
+ Alphasig  // Spectral index for a default dN/dE=E^-Alphasig source induced signal energy spectrum within [ESigmin,ESigmax]. See also <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEnergydist" title="void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000) or overloads">MakeBurstEnergydist</a>()
  Alphabkg  // Spectral index for a default dN/dE=E^-Alphabkg background energy spectrum within [Emin,Emax]. See also <a href="./NcAstrolab.html#NcAstrolab:MakeBurstEnergydist" title="void NcAstrolab::MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000) or overloads">MakeBurstEnergydist</a>()
  Kinangle  // Neutrino-lepton kinematic opening angle selection for CC interactions (0=none 1=mean 2=median 3=draw from pdf)
  Angresmin // Minimal event reco angular resolution (sigma in degrees) for event acceptance
  Angresmax // Maximal event reco angular resolution (sigma in degrees) for event acceptance
  Angresfix // Fixed event reco angular resolution within [Angresmin,Angresmax] (also used when no distribution (value) is available)
  Recoangle // Reconstruction angular uncertainty selection (0=use Angresfix value  1=mean 2=median 3=draw from distribution)
- Sumsigmas // Sigma (summation) selection (-1=reco sigma only  0=burst sigma only  1=linear summation  2=quadratic summation)
+ Sumsigmas // Sigma (summation) selection (-1=reco sigma only  0=source sigma only  1=linear summation  2=quadratic summation)
  Timres    // Neutrino detector time resolution (sec)
  Sensarea  // Area (in m^2) covered c.q. overlooked by the neutrino detector sensors (&lt;=0 means not specified)
  Bkgrate   // Mean rate (in Hz) of background events for the specified [Declmin,Declmax] interval (&lt;0 : rate per steradian)
- Tmin      // Lower bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
- Tmax      // Upper bound (in sec) of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
- Dtwin     // Total search time window (in sec) centered at the burst trigger
- Dawin     // Angular search circle (&lt;0 is local zenith band) in degrees or units of sigma around (above/below) the burst position
- Datype    // Type of angular window specification (0=in degrees 1=in units of combined max. burst/track sigma 2=in units of combined actual burst/track sigma)
- Nbkg      // Mean number of counts per bin for auto-binning
- Tbint90   // Flag to indicate whether Tbin represents seconds (0) or units of average T90 (1)
- Tbin      // Time bin size (&gt;0=seconds or units of average T90  0=variable bins  &lt;0 will result in a mean Nbkg counts/bin)
- VarTbin   // Size (in sec) of the first time bin in case of variable time bins
- Abin      // Angular bin size in degrees (&lt;0 will result in a mean Nbkg counts/bin)
+ Nbkg      // The number of requested background patches per source
+ Tunits    // Time units for Tmin, Tmax, Tbin and VarTbin (0=days 1=hours 2=seconds 3=nanoseconds 4=picoseconds)
+ Tmin      // Lower bound of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
+ Tmax      // Upper bound of the search time window [Tmin,Tmax] where t=0 indicates the burst trigger
+           Note : If Tmax&lt;=Tmin the search time window is unrestricted (not applicable for simulation data)
+ Dawin     // Angular search circle (&lt;0 is local zenith band) in degrees or units of sigma around (above/below) the source position (see Datype)
+ Datype    // Type of Dawin (&lt;0=Unrestricted 0=degrees 1=units of combined max. source/event sigma 2=units of combined actual source/event sigma)
+ Tbint90   // Flag to indicate whether Tbin represents time units (0) or units of average T90 (1)
+ Tbin      // Time bin size (&gt;0=time units or units of average T90  0=variable bins  &lt;0 will result in a mean |Tbin| counts/bin)
+ VarTbin   // Size (in time units) of the first time bin in case of variable time bins
+ Abin      // Angular bin size in degrees (&lt;0 will result in a mean |Abin| counts/bin)
 
  Note :
 
  In case variable time bins are selected, the search time window [Tmin,Tmax] will be centered
- around the burst trigger time (i.e. t=0) and the first bin will have a size of VarTbin.
+ around the burst trigger time (i.e. t=0) and the first bin will have a size of VarTbin time units.
  The size of subsequent time bins is multiplied by the average redshift factor (z+1) at each step.
  This is done in order to acount for the cosmological time dilation, which stretches all time differences.
 
@@ -4792,16 +5001,19 @@ return false;}
 
  Nmaxsrc=-1
  Nmaxevt=-1
+ [RAmin,RAmax]=[0,360]
  [Declmin,Declmax]=[-90,90]
  [T90min,T90max]=[1e-5,1e5]
  [Zmin,Zmax]=[-1e-6,20]
  [Sigmamin,Sigmamax]=[0,2]
- Grbnu=-0.03
+ Grbnu=0;
  Avgrbz=-1
  Avgrbt90=-1
  Inburst=0
  Dtnu=0
  Dtnus=-0.5
+ [ESigmin,ESigmax]=[1e3,1e10]
+ Ezcor=1
  [Emin,Emax]=[200,1e7]
  Alphasig=2
  Alphabkg=3.5
@@ -4813,11 +5025,12 @@ return false;}
  Timres=1e-5
  Sensarea=1e6
  Bkgrate=-0.003/(2.*pi)
+ Nbkg=1
+ Tunits=2
  Tmin=-3600
  Tmax=3600
  Dawin=5
  Datype=0
- Nbkg=0.5
  Tbint90=1
  Tbin=1
  VarTbin=10
@@ -4889,15 +5102,25 @@ return false;}
 
  The default values are date1=0, date2=0, nmax=-1 and type=<span class="string">"-"</span>.
 
- Note : This memberfunction make be invoked several times to read different files
-        to accumulate data.
+ Notes :
+
+ 1) This memberfunction make be invoked several times to read different files to accumulate data.
+ 2) The internal storage arrays will be compressed, so that the indices of previously stored objects may change.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GenBurstGCNdata" href="src/NcAstrolab.cxx.html#EW.LDC">GenBurstGCNdata</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, TString name = <span class="string">"GRB"</span>)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GenBurstGCNdata" href="src/NcAstrolab.cxx.html#SPnD">GenBurstGCNdata</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, TString name = <span class="string">"GRB"</span>, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> scale = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</span><br />
 <div class="funccomm"><pre> Generate fictative burst GCN data for <span class="string">"n"</span> bursts of (alert) type <span class="string">"name"</span>,
  where <span class="string">"name"</span> can be <span class="string">"GRB"</span>, <span class="string">"GW"</span>, <span class="string">"IC"</span>, ....
+ <a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a> will be generated according to the parameters as specified
+ by the user via prior invokation of the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetBurstParameter" title="void NcAstrolab::SetBurstParameter(TString name,Double_t value)">SetBurstParameter</a>().
 
- The default value is name=<span class="string">"GRB"</span>.
+ Note :
+
+ The input parameter <span class="string">"scale"</span> indicates whether <span class="string">"n"</span> represents the actual number
+ of bursts in the user defined (RA,DEC) acceptance (scale=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>) or the full sky
+ number of bursts (scale=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>).
+
+ The default values are name=<span class="string">"GRB"</span> and scale=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>.
 
 
  * This is a beta test version, so currently no backward compatibility guaranteed *
@@ -4908,7 +5131,7 @@ return false;}
 <div class="funccomm"><pre> <a href="./#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> observed archival redshift data and create the corresponding distribution.
  Also the corresponding distribution of the Proper Distance at the time of
  observation (called the Physical Distance) will be created.
- If this memberfunction is invoked before LoadBurstGCNdata() or <a href="./NcAstrolab.html#NcAstrolab:GenBurstGCNdata" title="void NcAstrolab::GenBurstGCNdata(Int_t n,TString name=&quot;GRB&quot;)">GenBurstGCNdata</a>(),
+ If this memberfunction is invoked before LoadBurstGCNdata() or <a href="./NcAstrolab.html#NcAstrolab:GenBurstGCNdata" title="void NcAstrolab::GenBurstGCNdata(Int_t n,TString name=&quot;GRB&quot;,Bool_t scale=kFALSE)">GenBurstGCNdata</a>(),
  the plain observed redshift distribution will be used to draw random z values
  (if requested) for the bursts without redshift information.
 
@@ -4943,7 +5166,7 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstT90dist" href="src/NcAstrolab.cxx.html#vEt8wD">MakeBurstT90dist</a>(TString file, TString tree, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 50, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = -5, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 5)</span><br />
 <div class="funccomm"><pre> <a href="./#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> observed archival T90 data and create a log10(T90) distribution.
- If this memberfunction is invoked before LoadBurstGCNdata() or <a href="./NcAstrolab.html#NcAstrolab:GenBurstGCNdata" title="void NcAstrolab::GenBurstGCNdata(Int_t n,TString name=&quot;GRB&quot;)">GenBurstGCNdata</a>(),
+ If this memberfunction is invoked before LoadBurstGCNdata() or <a href="./NcAstrolab.html#NcAstrolab:GenBurstGCNdata" title="void NcAstrolab::GenBurstGCNdata(Int_t n,TString name=&quot;GRB&quot;,Bool_t scale=kFALSE)">GenBurstGCNdata</a>(),
  the resulting log10(T90) distribution will be used to draw random T90 values
  (if requested) for the bursts without T90 information.
 
@@ -4978,7 +5201,7 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstSigmaPosdist" href="src/NcAstrolab.cxx.html#pZcKo">MakeBurstSigmaPosdist</a>(TString file, TString tree, TString name, TString u, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 900, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = 0, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 90)</span><br />
 <div class="funccomm"><pre> <a href="./#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> observed archival 1-sigma burst position uncertainty data and create the corresponding distribution.
- If this memberfunction is invoked before LoadBurstGCNdata() or <a href="./NcAstrolab.html#NcAstrolab:GenBurstGCNdata" title="void NcAstrolab::GenBurstGCNdata(Int_t n,TString name=&quot;GRB&quot;)">GenBurstGCNdata</a>(),
+ If this memberfunction is invoked before LoadBurstGCNdata() or <a href="./NcAstrolab.html#NcAstrolab:GenBurstGCNdata" title="void NcAstrolab::GenBurstGCNdata(Int_t n,TString name=&quot;GRB&quot;,Bool_t scale=kFALSE)">GenBurstGCNdata</a>(),
  the resulting distribution will be used to draw random 1-sigma burst position uncertainty values
  (if requested) for the bursts without localisation uncertainty information.
 
@@ -5071,7 +5294,7 @@ return false;}
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstEnergydist" href="src/NcAstrolab.cxx.html#TCPjNE">MakeBurstEnergydist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TString file, TString tree, TString name1, TString name2, TString u, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emin, <a href="./ListOfTypes.html#Double_t">Double_t</a> Emax, <a href="./ListOfTypes.html#Int_t">Int_t</a> nb = 1000)</span><br />
 <div class="funccomm"><pre> Create a background (mode=1) or burst induced signal (mode=2) energy distribution
- on the interval [Emin,Emax] GeV based on archival energy data.
+ on the interval [Emin,Emax] GeV based on observed archival energy data.
  If this memberfunction is invoked before <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the resulting
  log10(E) distribution will be used to draw random energy values for either the
  generated background or burst induced signal events via the memberfunctions
@@ -5093,6 +5316,8 @@ return false;}
     read different files to accumulate data.
  2) In case a corresponding parametrized energy distribution exists,
     this will always be replaced by a new energy distribution based on data.
+ 3) In case observed archival data for burst induced signal events is loaded,
+    the redshift correction for signal events will be deactivated.
 
  Input arguments :
 
@@ -5221,15 +5446,230 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GenBurstSignals" href="src/NcAstrolab.cxx.html#Hy31TE">GenBurstSignals</a>()</span><br />
-<div class="funccomm"><pre> Generate detector signals from transient bursts.
+<div class="funccomm"><pre> Generate detector signals from transient bursts and (atmospheric) background.
+ <a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a> will be generated according to the parameters as specified
+ by the user via prior invokation of the memberfunction <a href="./NcAstrolab.html#NcAstrolab:SetBurstParameter" title="void NcAstrolab::SetBurstParameter(TString name,Double_t value)">SetBurstParameter</a>().
+
+ Since both the signal and background events are generated according to the
+ parameters specified by the user, no additional matching of the (fictative)
+ observations with the source positions is needed.
+ As such, after the invokation of this <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>(), the user may directly
+ invoke various statistical evaluations like for instance <a href="./NcAstrolab.html#NcAstrolab:GetBurstLiMaSignificance" title="Double_t NcAstrolab::GetBurstLiMaSignificance()">GetBurstLiMaSignificance</a>(),
+ <a href="./NcAstrolab.html#NcAstrolab:GetBurstBayesianSignalRate" title="TH1* NcAstrolab::GetBurstBayesianSignalRate(Double_t p,Double_t&amp; rlow,Double_t&amp; rup,Int_t n=1000)">GetBurstBayesianSignalRate</a>() etc...
 
 
  * This is a beta test version, so currently no backward compatibility guaranteed *
 
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:InitBurstHistograms" href="src/NcAstrolab.cxx.html#A5oFhC">InitBurstHistograms</a>()</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MakeBurstDataStats" href="src/NcAstrolab.cxx.html#nWgyRC">MakeBurstDataStats</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, <a href="./ListOfTypes.html#Int_t">Int_t</a> nmugrb = 0)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to determine and list the burst-data statistics.
+
+ mode : 0 --&gt; Invoked from <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>()
+        1 --&gt; Invoked from <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>()
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ Default value is nmugrb=0.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MatchBurstData" href="src/NcAstrolab.cxx.html#Is0o5D">MatchBurstData</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, <a href="./ListOfTypes.html#Int_t">Int_t</a> i1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</span><br />
+<div class="funccomm"><pre> Provide information about the matching in space and time of the stored
+ reference signal(s) and/or measurement(s).
+ Signals are regarded as matching if the positional angular difference
+ and the absolute value of the time difference don't exceed the parameters
+ as specified by <a href="./NcAstrolab.html#NcAstrolab:SetBurstParameter" title="void NcAstrolab::SetBurstParameter(TString name,Double_t value)">SetBurstParameter</a>().
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ The information (see below) for the observed matches is provided via the <a href="./NcDevice.html">NcDevice</a> argument <span class="string">"matches"</span>,
+ where each matching pair is recorded as a <span class="string">"hit"</span> with the corresponding <a href="./NcSignal.html">NcSignal</a> data.
+ Consequently, the number of matches can be obtained as the number of <span class="string">"hits"</span> in the <a href="./NcDevice.html">NcDevice</a>.
+
+ Note : This memberfunction will completely reset and re-define the <a href="./NcDevice.html">NcDevice</a> <span class="string">"matches"</span>.
+
+ It is possible to investigate only a sub-set of the stored reference signals c.q. measurements
+ via the input arguments <span class="string">"i1"</span>, <span class="string">"i2"</span>, <span class="string">"itype"</span>, <span class="string">"j1"</span> and <span class="string">"j2"</span>, <span class="string">"jtype"</span> as follows :
+
+ i1    : Start index of the stored signals to be investigated (1=first stored signal)
+ i2    : End index of the stored signals to be investigated (0=last stored signal)
+ itype : 0 ==&gt; [i1,i2] refer to stored reference signals
+         1 ==&gt; [i1,i2] refer to stored measurements
+ j1    : Start index of the stored signals to be investigated (1=first stored signal)
+ j2    : End index of the stored signals to be investigated (0=last stored signal)
+ jtype : 0 ==&gt; [j1,j2] refer to stored reference signals
+         1 ==&gt; [j1,j2] refer to stored measurements
+
+ Note : Using itype=jtype allows investigation of (self)correlations within a sample.
+        In this case the matching of a signal with itself will be skipped.
+
+ The default values are i1=1, i2=0, itype=0, j1=1, j2=0 and jtype=1.
+
+ The data for each matching signal pair provided as a <span class="string">"hit"</span> of the <a href="./NcDevice.html">NcDevice</a> object is the following :
+ Name   : Indicating the name (if any) of object1
+ Title  : Indicating the name (if any) of object2
+ Slot 1 : <span class="string">"type1"</span>  --&gt; Type of object1 (0=reference signal, 1=measurement)
+ Slot 2 : <span class="string">"index1"</span> --&gt; Storage index of object1 (see memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>)
+ Slot 3 : <span class="string">"type2"</span>  --&gt; Type of object2 (0=reference signal, 1=measurement)
+ Slot 4 : <span class="string">"index2"</span> --&gt; Storage index of object2 (see memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>)
+ Slot 5 : <span class="string">"psi"</span>    --&gt; Opening angle between object2 and object1 in units as specified via <span class="string">"au"</span>
+ Slot 6 : <span class="string">"t2-t1"</span>  --&gt; Time offset between object2 and object1 in units as specified via <span class="string">"tu"</span> and <span class="string">"mode"</span>
+                       (t2-t1)&lt;0 in case object2 was recorded earlier than object1.
+
+ The <a href="./NcDevice.html">NcDevice</a> object itself provides the data of the best encountered matchings as follows :
+
+ Slot 1 : <span class="string">"psimin"</span> --&gt; Minimal encountered opening angle in units as specified via <span class="string">"au"</span>
+ Slot 2 : <span class="string">"dtmin"</span>  --&gt; Minimal encountered time offset |t2-t1| in units as specified via <span class="string">"tu"</span> and <span class="string">"mode"</span>
+ Slot 3 : <span class="string">"ipsi"</span>   --&gt; Index of the hit that corresponds to the minimal opening angle
+ Slot 4 : <span class="string">"idt"</span>    --&gt; Index of the hit that corresponds to the minimal time offset
+
+ A full overview of all matchings can be obtained via <a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>().
+
+ Note : In case scrambling has been activated, the results reflect the scrambled measurement(s).
+
+ Usage example :
+
+ <a href="./NcAstrolab.html">NcAstrolab</a> lab;
+ // Enter various measurements and reference signals into <span class="string">"lab"</span>
+ lab.<a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(...);
+ lab.<a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(...);
+ lab.<a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(...);
+
+
+
+ // Look for matches between all measurements and reference signals
+ <a href="./NcDevice.html">NcDevice</a> matches;
+ lab.<a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>(matches);
+
+ // List all the encountered matching details
+ matches.<a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a>();
+
+ // Retrieve the minimal encountered opening angle
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> angmin=matches.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(1);
+
+ // Access the data of the matching pair (i.e. <span class="string">"hit"</span>) that yielded the minimal time offset
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> ih=matches.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"idt"</span>);
+ <a href="./NcSignal.html">NcSignal</a>* sx=matches.GetHit(ih);
+ sx-&gt;<a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a>();
+
+ // Access the originally recorded signal of object1 that yielded the minimal opening angle
+ // and retrieve its timestamp and the corresponding MJD.
+ ih=matches.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"ipsi"</span>);
+ sx=matches.GetHit(ih);
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> itype=sx-&gt;<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"type1"</span>);
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> i=sx-&gt;<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"index1"</span>);
+ sx=lab.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(i,itype);
+ <a href="./NcTimestamp.html">NcTimestamp</a>* tx=sx-&gt;GetTimestamp();
+ tx-&gt;<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> mjd1=tx-&gt;<a href="./NcTimestamp.html#NcTimestamp:GetMJD" title="Double_t NcTimestamp::GetMJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns) or overloads">GetMJD</a>();
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MatchBurstData@1" href="src/NcAstrolab.cxx.html#PKaNn">MatchBurstData</a>(<a href="./NcDevice.html">NcDevice</a>&amp; matches, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> itype = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> j1 = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> j2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> jtype = 1)</span><br />
+<div class="funccomm"><pre> Provide information about the matching in space and time of the stored
+ reference signal(s) and/or measurement(s).
+ Signals are regarded as matching if the positional angular difference
+ and the absolute value of the time difference don't exceed the parameters
+ as specified by <a href="./NcAstrolab.html#NcAstrolab:SetBurstParameter" title="void NcAstrolab::SetBurstParameter(TString name,Double_t value)">SetBurstParameter</a>().
+
+
+ * This is a beta test version, so currently no backward compatibility guaranteed *
+
+
+ The information (see below) for the observed matches is provided via the <a href="./NcDevice.html">NcDevice</a> argument <span class="string">"matches"</span>,
+ where each matching pair is recorded as a <span class="string">"hit"</span> with the corresponding <a href="./NcSignal.html">NcSignal</a> data.
+ Consequently, the number of matches can be obtained as the number of <span class="string">"hits"</span> in the <a href="./NcDevice.html">NcDevice</a>.
+
+ Note : This memberfunction will completely reset and re-define the <a href="./NcDevice.html">NcDevice</a> <span class="string">"matches"</span>.
+
+ It is possible to investigate only a sub-set of the stored reference signals c.q. measurements
+ via the input arguments <span class="string">"j1"</span> and <span class="string">"j2"</span>, <span class="string">"jtype"</span> as follows :
+
+ name  : The name of the object to be used for the matching with the stored signals
+ itype : 0 ==&gt; The object <span class="string">"name"</span> resides among the stored reference signals
+         1 ==&gt; The object <span class="string">"name"</span> resides among the stored measurements
+ j1    : Start index of the stored signals to be investigated (1=first stored signal)
+ j2    : End index of the stored signals to be investigated (0=last stored signal)
+ jtype : 0 ==&gt; [j1,j2] refer to stored reference signals
+         1 ==&gt; [j1,j2] refer to stored measurements
+
+ The default values are itype=0, j1=1, j2=0 and jtype=1.
+
+ Note : In case the name specifies a solar system object which was not yet stored,
+        the corresponding signal will be created according to <span class="string">"itype"</span> and initially
+        stored with the current timestamp of this <a href="./NcAstrolab.html">NcAstrolab</a> instance.
+        In the matching process the location of the solar system object will be updated
+        according to the timestamp of the other signal.
+        All geocentric name specifications for solar system objects as indicated in the
+        docs of <a href="./NcTimestamp.html">NcTimestamp</a>::<a href="./NcTimestamp.html#NcTimestamp:Almanac" title="Double_t NcTimestamp::Almanac(Double_t* dpsi=0,Double_t* deps=0,Double_t* eps=0,Double_t* dl=0,TString name=&quot;&quot;,Double_t* el=0,Double_t* eb=0,Double_t* dr=0,Double_t* value=0,Int_t j=0)">Almanac</a>() are supported.
+
+ The data for each matching signal pair provided as a <span class="string">"hit"</span> of the <a href="./NcDevice.html">NcDevice</a> object is the following :
+ Name   : Indicating the name (if any) of object1
+ Title  : Indicating the name (if any) of object2
+ Slot 1 : <span class="string">"type1"</span>  --&gt; Type of object1 (0=reference signal, 1=measurement)
+ Slot 2 : <span class="string">"index1"</span> --&gt; Storage index of object1 (see memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>)
+ Slot 3 : <span class="string">"type2"</span>  --&gt; Type of object2 (0=reference signal, 1=measurement)
+ Slot 4 : <span class="string">"index2"</span> --&gt; Storage index of object2 (see memberfunction <a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>)
+ Slot 5 : <span class="string">"psi"</span>    --&gt; Opening angle between object2 and object1 in units as specified via <span class="string">"au"</span>
+ Slot 6 : <span class="string">"t2-t1"</span>  --&gt; Time offset between object2 and object1 in units as specified via <span class="string">"tu"</span> and <span class="string">"mode"</span>
+                       (t2-t1)&lt;0 in case object2 was recorded earlier than object1.
+
+ The <a href="./NcDevice.html">NcDevice</a> object itself provides the data of the best encountered matchings as follows :
+
+ Slot 1 : <span class="string">"psimin"</span> --&gt; Minimal encountered opening angle in units as specified via <span class="string">"au"</span>
+ Slot 2 : <span class="string">"dtmin"</span>  --&gt; Minimal encountered time offset |t2-t1| in units as specified via <span class="string">"tu"</span> and <span class="string">"mode"</span>
+ Slot 3 : <span class="string">"ipsi"</span>   --&gt; Index of the hit that corresponds to the minimal opening angle
+ Slot 4 : <span class="string">"idt"</span>    --&gt; Index of the hit that corresponds to the minimal time offset
+
+ A full overview of all matchings can be obtained via <a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>().
+
+ Note : In case scrambling has been activated, the results reflect the scrambled measurement(s).
+
+ Usage example :
+
+ <a href="./NcAstrolab.html">NcAstrolab</a> lab;
+ // Enter various measurements and reference signals into <span class="string">"lab"</span>
+ lab.<a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(...);
+ lab.<a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(...);
+ lab.<a href="./NcAstrolab.html#NcAstrolab:SetSignal" title="NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,TString name=&quot;&quot;,Int_t type=0) or overloads">SetSignal</a>(...);
+
+
+
+ // Look for matches between all measurements and GRB190215A as reference signal
+ <a href="./NcDevice.html">NcDevice</a> matches;
+ lab.<a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>(matches,<span class="string">"GRB190215A"</span>);
+
+ // List all the encountered matching details
+ matches.<a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a>();
+
+ // Retrieve the minimal encountered opening angle
+ <a href="./ListOfTypes.html#Float_t">Float_t</a> angmin=matches.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(1);
+
+ // Access the data of the matching pair (i.e. <span class="string">"hit"</span>) that yielded the minimal time offset
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> ih=matches.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"idt"</span>);
+ <a href="./NcSignal.html">NcSignal</a>* sx=matches.GetHit(ih);
+ sx-&gt;<a href="./NcAstrolab.html#NcAstrolab:Data" title="void NcAstrolab::Data(Int_t mode=1,TString u=&quot;deg&quot;,Bool_t utc=kTRUE)">Data</a>();
+
+ // Access the originally recorded signal of object1 that yielded the minimal opening angle
+ // and retrieve its timestamp and the corresponding MJD.
+ ih=matches.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"ipsi"</span>);
+ sx=matches.GetHit(ih);
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> itype=sx-&gt;<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"type1"</span>);
+ <a href="./ListOfTypes.html#Int_t">Int_t</a> i=sx-&gt;<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(<span class="string">"index1"</span>);
+ sx=lab.<a href="./NcAstrolab.html#NcAstrolab:GetSignal" title="NcSignal* NcAstrolab::GetSignal(Double_t&amp; d,Double_t&amp; a,TString au,Double_t&amp; b,TString bu,TString frame,NcTimestamp* ts,Int_t jref,TString mode=&quot;T&quot;,Int_t type=0) or overloads">GetSignal</a>(i,itype);
+ <a href="./NcTimestamp.html">NcTimestamp</a>* tx=sx-&gt;GetTimestamp();
+ tx-&gt;<a href="./NcTimestamp.html#NcTimestamp:Date" title="void NcTimestamp::Date(Int_t mode=3,Double_t offset=0)">Date</a>();
+ <a href="./ListOfTypes.html#Double_t">Double_t</a> mjd1=tx-&gt;<a href="./NcTimestamp.html#NcTimestamp:GetMJD" title="Double_t NcTimestamp::GetMJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns) or overloads">GetMJD</a>();
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:InitBurstHistograms" href="src/NcAstrolab.cxx.html#FpwxQE">InitBurstHistograms</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode)</span><br />
 <div class="funccomm"><pre> Internal memberfunction to initialize the histograms for transient burst analyses.
+
+ mode : 0 --&gt; Invoked from <a href="./NcAstrolab.html#NcAstrolab:GenBurstSignals" title="void NcAstrolab::GenBurstSignals()">GenBurstSignals</a>()
+        1 --&gt; Invoked from <a href="./NcAstrolab.html#NcAstrolab:MatchBurstData" title="void NcAstrolab::MatchBurstData(NcDevice&amp; matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1) or overloads">MatchBurstData</a>()
 
 
  * This is a beta test version, so currently no backward compatibility guaranteed *
@@ -5275,7 +5715,7 @@ return false;}
  In case of inconsistent data the value 0 is returned.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GetBurstBayesianPsiStatistics" href="src/NcAstrolab.cxx.html#lZ77gD">GetBurstBayesianPsiStatistics</a>(TString type, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> freq = 0)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GetBurstBayesianPsiStatistics" href="src/NcAstrolab.cxx.html#mTn7_">GetBurstBayesianPsiStatistics</a>(TString type, <a href="./ListOfTypes.html#Double_t">Double_t</a> nr = -1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ncut = 10, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> zcor = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>, <a href="./ListOfTypes.html#Int_t">Int_t</a> freq = 0)</span><br />
 <div class="funccomm"><pre> Provide the transient burst Bayesian Psi statistics for the (stacked) distributions of the
  observed arrival times and opening angles w.r.t. the corresponding bursts.
 
@@ -5313,14 +5753,19 @@ return false;}
 
  Input arguments :
 
- type : <span class="string">"time"</span>  --&gt; Provide statistics for the observed arrival times
-                    This will investigate the deviation from a uniform background time spectrum
-        <span class="string">"angle"</span> --&gt; Provide statistics for the observed opening angles
-                    This will investigate the deviation from a isotropic background angular spectrum
-        <span class="string">"cosa"</span>  --&gt; Provide statistics for the cosine of the observed opening angles
-                    This will investigate the deviation from a uniform background cos(angle) spectrum
-        <span class="string">"dt"</span>    --&gt; Provide statistics for the time intervals between the observed arrival times
-                    This will investigate the deviation from dt spectrum expected from Poisson statistics
+ type : <span class="string">"time"</span>   --&gt; Provide statistics for the observed arrival times.
+                     This will investigate the deviation from a uniform background time spectrum.
+        <span class="string">"BBtime"</span> --&gt; Provide statistics for the Bayesian blocks corresponding to the observed arrival times.
+                     This will investigate the deviation from a uniform event rate.
+        <span class="string">"BBrat"</span>  --&gt; Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
+                     corresponding to the observed arrival times.
+                     This will investigate the relative deviation in event rate.
+        <span class="string">"angle"</span>  --&gt; Provide statistics for the observed opening angles.
+                     This will investigate the deviation from a isotropic background angular spectrum.
+        <span class="string">"cosa"</span>   --&gt; Provide statistics for the cosine of the observed opening angles.
+                     This will investigate the deviation from a uniform background cos(angle) spectrum.
+        <span class="string">"dt"</span>     --&gt; Provide statistics for the time intervals between the observed arrival times.
+                     This will investigate the deviation from dt spectrum expected from Poisson statistics.
  nr   : (Maximum) number of randomised configurations for psi P-value determination.
         nr&lt;0 implies that no psi P-values will be determined (saves CPU time).
         nr=0 implies the allowed maximum of 1e19 randomisations.
@@ -5332,14 +5777,13 @@ return false;}
         i.e. time intervals between the events (1,2), (2,3), (3,4) etc.
         Specifying <span class="string">"ndt=2"</span> will provide the statistics of dt intervals between every 2nd consecutive event,
         i.e. time intervals between the events (1,3), (2,4), (3,5) etc.
- mode : The <span class="string">"mode"</span> parameter as documented in the member function <a href="./NcAstrolab.html#NcAstrolab:GetDxHistogram" title="TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin=-1,Double_t dxmin=-1,Double_t dxmax=-1,Int_t mode=1,Double_t fact=1)">GetDxHistogram</a>().
- fact : The <span class="string">"fact"</span> parameter as documented in the member function <a href="./NcAstrolab.html#NcAstrolab:GetDxHistogram" title="TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin=-1,Double_t dxmin=-1,Double_t dxmax=-1,Int_t mode=1,Double_t fact=1)">GetDxHistogram</a>().
+ zcor : Use redshift corrected arrival times (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
  freq : Use frequentist's approximation (1) or exact Bayesian expression (0) for psi.
 
- The default values are nr=-1, ncut=10, ndt=2, mode=1, fact=1 and freq=0.
+ The default values are nr=-1, ncut=10, ndt=2, zcor=<a href="./ListOfTypes.html#Bool_t">kFALSE</a> and freq=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GetBurstChi2Statistics" href="src/NcAstrolab.cxx.html#bRMy3B">GetBurstChi2Statistics</a>(TString type, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 1, <a href="./ListOfTypes.html#Double_t">Double_t</a> fact = 1)</span><br />
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GetBurstChi2Statistics" href="src/NcAstrolab.cxx.html#xWyYjC">GetBurstChi2Statistics</a>(TString type, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndt = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> zcor = <a href="./ListOfTypes.html#Bool_t">kFALSE</a>)</span><br />
 <div class="funccomm"><pre> Provide the transient burst Chi-squared statistics for the (stacked) distributions
  of the observed arrival times and opening angles w.r.t. the corresponding bursts.
 
@@ -5349,23 +5793,44 @@ return false;}
 
  Input arguments :
 
- type : <span class="string">"time"</span>  --&gt; Provide statistics for the observed arrival times
-                    This will investigate the deviation from a uniform background time spectrum
-        <span class="string">"angle"</span> --&gt; Provide statistics for the observed opening angles
-                    This will investigate the deviation from a isotropic background angular spectrum
-        <span class="string">"cosa"</span>  --&gt; Provide statistics for the cosine of the observed opening angles
-                    This will investigate the deviation from a uniform background cos(angle) spectrum
-        <span class="string">"dt"</span>    --&gt; Provide statistics for the time intervals between the observed arrival times
-                    This will investigate the deviation from dt spectrum expected from Poisson statistics
+ type : <span class="string">"time"</span>   --&gt; Provide statistics for the observed arrival times
+                     This will investigate the deviation from a uniform background time spectrum
+        <span class="string">"BBtime"</span> --&gt; Provide statistics for the Bayesian blocks corresponding to the observed arrival times
+                     This will investigate the deviation from a uniform event rate
+        <span class="string">"BBrat"</span>  --&gt; Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
+                     corresponding to the observed arrival times.
+                     This will investigate the relative deviation in event rate.
+        <span class="string">"angle"</span>  --&gt; Provide statistics for the observed opening angles
+                     This will investigate the deviation from a isotropic background angular spectrum
+        <span class="string">"cosa"</span>   --&gt; Provide statistics for the cosine of the observed opening angles
+                     This will investigate the deviation from a uniform background cos(angle) spectrum
+        <span class="string">"dt"</span>     --&gt; Provide statistics for the time intervals between the observed arrival times
+                     This will investigate the deviation from dt spectrum expected from Poisson statistics
  ndt  : The step count to arrive at the required consecutive entry to perform the dt statistics.
         Specifying <span class="string">"ndt=1"</span> will provide the statistics of dt intervals between each consecutive event,
         i.e. time intervals between the events (1,2), (2,3), (3,4) etc.
         Specifying <span class="string">"ndt=2"</span> will provide the statistics of dt intervals between every 2nd consecutive event,
         i.e. time intervals between the events (1,3), (2,4), (3,5) etc.
- mode : The <span class="string">"mode"</span> parameter as documented in the member function <a href="./NcAstrolab.html#NcAstrolab:GetDxHistogram" title="TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin=-1,Double_t dxmin=-1,Double_t dxmax=-1,Int_t mode=1,Double_t fact=1)">GetDxHistogram</a>().
- fact : The <span class="string">"fact"</span> parameter as documented in the member function <a href="./NcAstrolab.html#NcAstrolab:GetDxHistogram" title="TH1F NcAstrolab::GetDxHistogram(TH1* hx,Int_t nc,Double_t dxbin=-1,Double_t dxmin=-1,Double_t dxmax=-1,Int_t mode=1,Double_t fact=1)">GetDxHistogram</a>().
+ zcor : Use redshift corrected arrival times (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
 
- The default values are ndt=2, mode=1 and fact=1.
+ The default values are ndt=2 and zcor=<a href="./ListOfTypes.html#Bool_t">kFALSE</a>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:GetBurstDtDistributions" href="src/NcAstrolab.cxx.html#MePvwC">GetBurstDtDistributions</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndt, TH1F&amp; hisdtOn, TF1&amp; pdfdtOn, TH1F&amp; hisdtOff, TF1&amp; pdfdtOff, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> zcor)</span><br />
+<div class="funccomm"><pre> Internal member function to provide the Dt distributions from the Dt NcSamples
+
+ Function arguments :
+
+ ndt      : The step count to arrive at the required consecutive entry to produce the dt distributions.
+            Specifying <span class="string">"ndt=1"</span> will provide the distributions of dt intervals between each consecutive event,
+            i.e. time intervals between the events (1,2), (2,3), (3,4) etc.
+            Specifying <span class="string">"ndt=2"</span> will provide the distributions of dt intervals between every 2nd consecutive event,
+            i.e. time intervals between the events (1,3), (2,4), (3,5) etc.
+ hisdtOn  : The resulting histogram of observed dt intervals from the on source data
+ pdfdtOn  : The Poisson dt pdf corresponding to the observed event rate from the on source data
+ hisdtOff : The resulting histogram of observed dt intervals from the off source data
+ pdfdtOff : The Poisson dt pdf corresponding to the observed event rate from the off source data
+ zcor     : Use redshift corrected arrival times (<a href="./ListOfTypes.html#Bool_t">kTRUE</a>) or not (<a href="./ListOfTypes.html#Bool_t">kFALSE</a>)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:ListBurstHistograms" href="src/NcAstrolab.cxx.html#nHsHiB">ListBurstHistograms</a>() const</span><br />
@@ -5541,6 +6006,10 @@ return false;}
 <div class="funccomm"><pre> Action on the draw/list Nmax selection field
 </pre></div>
 </div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapNdigs" href="src/NcAstrolab.cxx.html#FIdsuE">MapNdigs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
+<div class="funccomm"><pre> Action on the draw/list Ndigs selection field
+</pre></div>
+</div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcAstrolab:MapDname" href="src/NcAstrolab.cxx.html#JSDVUE">MapDname</a>(<span class="keyword">const</span> <span class="keyword">char</span>* text)</span><br />
 <div class="funccomm"><pre> Action on the draw/list entry name selection field
 </pre></div>
@@ -5609,7 +6078,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Dec 11 14:17:45 2023 </em><em>&raquo; Last generated: 2023-12-11 14:17</em><br />
+<em>&raquo; Last changed: Thu Dec 19 14:25:17 2024 </em><em>&raquo; Last generated: 2024-12-19 14:25</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

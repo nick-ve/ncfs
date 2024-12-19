@@ -11,13 +11,13 @@
 // see https://nick-ve.github.io/ncfs                            //
 //                                                               //
 // To execute the macro, just invoke ($ = prompt)                //
-// $ root -b -q burst-model.cc                                   //
+// $ root -b -q burst-analysis.cc                                //
 //                                                               //
 // Several standard histograms, depending on the user selections,//
 // are automatically generated and may be written into a ROOT    //
 // output file for later inspection, as indicated below.         //
 //                                                               //
-//--- Nick van Eijndhoven, IIHE-VUB, Brussel, March 2, 2020      //
+//--- Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022    //
 ///////////////////////////////////////////////////////////////////
 {
  gSystem->Load("ncfspack");
@@ -29,20 +29,42 @@
  NcAstrolab lab;
 
  lab.SetExperiment("IceCube");
- lab.SetUT("11-04-2020","12:00:00.0",0); // Fixed fictative analysis date
+ lab.SetUT("11-04-2020","12:00:00.0",0); // Fixed fictative analysis date to get same random seed
  lab.SetRandomiser(-1); // Use the UT timestamp to generate a seed
+
+ // Use time scrambling to obtain off-source data
+ Int_t tmode=-3;
+ Float_t tmin=-3600*12;
+ Float_t tmax=3600*12;
+ lab.SetTimeScramble(tmode,tmin,tmax);
+
  lab.Data();
 
  Float_t pi=acos(-1.);
 
  // User defined parameter settings
- Float_t bkgrate=-0.003/(2.*pi);
+ Float_t bkgrate=-1./(30.*24.*3600.*2.*pi); // On average 1 Northern track alert per month
+ lab.SetBurstParameter("Nmaxsrc",-1);
+ lab.SetBurstParameter("Nmaxevt",-1);
  lab.SetBurstParameter("Bkgrate",bkgrate);
- lab.SetBurstParameter("Declmin",5);
+ lab.SetBurstParameter("Declmin",-5);
  lab.SetBurstParameter("Declmax",85);
- lab.SetBurstParameter("Dtnu",60);
- lab.SetBurstParameter("Datype",1);
- lab.SetBurstParameter("Dawin",2);
+ lab.SetBurstParameter("Zmin",-1e-6);
+ lab.SetBurstParameter("Zmax",20);
+ lab.SetBurstParameter("Nbkg",1);
+ lab.SetBurstParameter("Tunits",0);
+ lab.SetBurstParameter("Tmin",-500);
+ lab.SetBurstParameter("Tmax",500);
+ lab.SetBurstParameter("Tbint90",0);
+ lab.SetBurstParameter("Tbin",1./24.);
+ lab.SetBurstParameter("Datype",2);
+ lab.SetBurstParameter("Dawin",3);
+ lab.SetBurstParameter("Sigmamax",0.1);
+ lab.SetBurstParameter("Angresmax",1);
+ lab.SetBurstParameter("Abin",0.1);
+ lab.SetBurstParameter("Emin",0);
+
+ lab.ListBurstParameters();
 
  // Use experimental distributions instead of parametrizations
 /// lab.MakeBurstZdist("../grbweb/GRB-z-Swift.root","T","z",200,0,20);
@@ -53,8 +75,6 @@
 
  // Obtain burst locations, durations etc.
 
-/*************
- // Use this code to load observed GCN data
  lab.InitDataNames(1,"equ");
  lab.SetDataNames("Name","name");
  lab.SetDataNames("Date","date","yyyymmdd");
@@ -71,19 +91,36 @@
  lab.ListDataNames();
 
  Bool_t src=kTRUE;
- lab.LoadInputData(src,"../grbweb/GRBweb.root","T");
-**************/
+ lab.LoadInputData(src,"../grbweb/GRBweb.root","T"); // Load from observed GCN data
 
- // Use this statement to generate fictative burst GCN data
- lab.GenBurstGCNdata(500,"GRB");
+ // Obtain observed event data
 
- // Provide a listing of the first 10 stored burst positions
+ lab.InitDataNames(1,"equ");
+ lab.SetDataNames("Name","name");
+ lab.SetDataNames("Run","run");
+ lab.SetDataNames("Event","event");
+ lab.SetDataNames("VetoLevel","crveto");
+ lab.SetDataNames("Tobs","mjd","MJD");
+ lab.SetDataNames("a","ra","deg");
+ lab.SetDataNames("b","dec","deg");
+ lab.SetDataNames("csigma","sigmapos","deg");
+ lab.SetDataNames("E","E","1e3");
+
+ lab.ListDataNames();
+
+ Bool_t src=kFALSE;
+ lab.LoadInputData(src,"IC-alerts.root","T"); // Load from observed event data
+
+ // Provide a listing of the first 5 stored entries for both the sources (c.q. burst) and the observed events
  cout << endl;
- lab.ListSignals("equ","J",1,"T",10);
+ lab.ListSignals("equ","J",3,"M",5);
  cout << endl;
 
- // Generate burst signals according to the user defined parameters
- lab.GenBurstSignals();
+ // Match signals with sources
+ NcDevice matches;
+ lab.MatchBurstData(matches); // Match all GRBs and all observed events
+
+ matches.Data();
 
  // Provide a listing of all relevant parameters
  cout << endl;
@@ -100,13 +137,11 @@
  Int_t ndt=2;
  lab.GetBurstBayesianPsiStatistics("angle",nr,ncut);
  lab.GetBurstBayesianPsiStatistics("cosa",nr,ncut);
- lab.GetBurstBayesianPsiStatistics("time",nr,ncut);
  lab.GetBurstBayesianPsiStatistics("dt",nr,ncut,ndt);
  lab.GetBurstBayesianPsiStatistics("BBrat",nr,ncut);
- lab.GetBurstBayesianPsiStatistics("time",nr,ncut,ndt,kTRUE);
  lab.GetBurstBayesianPsiStatistics("dt",nr,ncut,ndt,kTRUE);
  lab.GetBurstBayesianPsiStatistics("BBrat",nr,ncut,ndt,kTRUE);
 
  // Produce a ROOT output file with the produced (standard) histograms
- lab.WriteBurstHistograms("burst-model.root");
+ lab.WriteBurstHistograms("burst-analysis.root");
 }

@@ -39,6 +39,7 @@
 #include "NcRandom.h"
 #include "NcMath.h"
 #include "NcSample.h"
+#include "NcBlocks.h"
 
 class NcAstrolab : public TTask,public NcTimestamp
 {
@@ -95,11 +96,16 @@ class NcAstrolab : public TTask,public NcTimestamp
   Int_t GetSignalIndex(TString name,Int_t type=0); // Provide storage index of the signal with the specified name
   Int_t GetSignalIndex(NcSignal* s,Int_t type);    // Provide storage index of the specified signal
   Double_t GetHourAngle(TString mode,NcTimestamp* ts,Int_t jref=0,Int_t type=0);// Provide the Local Hour Angle in degrees
+
+  void GeoToHeliocentric(Double_t& R,Double_t& B,Double_t& L,NcTimestamp* ts,TString Bu="deg",TString Lu="deg"); // Convert Geocentric ecliptic coordinates into Heliocentric
+  void HelioToGeocentric(Double_t& R,Double_t& B,Double_t& L,NcTimestamp* ts,TString Bu="deg",TString Lu="deg"); // Convert Heliocentric ecliptic coordinates into Geocentric
+
   void SetLocalFrame(Double_t t1,Double_t p1,Double_t t2,Double_t p2,Double_t t3,Double_t p3); // Define local coordinate frame
   void GetLocalFrame(Float_t arr[6]); // Provide the axes orientations of the local coordinate frame
   using NcTimestamp::GetDifference;
   Double_t GetDifference(Int_t jref,TString au,Double_t& dt,TString tu,Int_t mode=1,Int_t* ia=0,Int_t* it=0); // Provide space and time difference
   Double_t GetDifference(TString name,TString au,Double_t& dt,TString tu,Int_t mode=1);// Provide space and time difference
+  Double_t GetSeparation(TString name1,TString name2,TString au,Double_t* dt=0,TString tu="s",Int_t mode=1,Double_t* diftheta=0,Double_t* difphi=0); // Provide space and time separation
   TArrayI* MatchRefSignal(Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1); // Provide space and time matching reference signals
   void MatchSignals(NcDevice& matches,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1); // Provide space and time matching info of signals
   void MatchSignals(NcDevice& matches,TString name,Double_t da,TString au,Double_t dt,TString tu,Int_t mode=1,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1); // Provide space and time matching info of signals
@@ -147,8 +153,8 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1F GetCountsHistogram(TF1& spec,Int_t nbins,Double_t xmin, Double_t xmax,Int_t mode,TString s="") const;  // Construct the counts (N) vs. x histogram from a 1D differential spectrum dN/dx
   TH1F GetCountsHistogram(TH1& hin,Int_t mode,TString s="",TF1* fscale=0) const;  // Construct the counts (N) vs. x histogram from a 1D differential distribution dN/dx
   TH1F GetLogHistogram(TH1* hin,Int_t mode,TString s="") const; // Construct the Log10(y) or Ln(y) vs. x histogram from a 1D y vs. x histogram
-  TF1 GetBackgroundRatePDF(Int_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a background rate
-  TF1 GetSignalRatePDF(Int_t Non,Double_t Ton,Int_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a source signal rate
+  TF1 GetBackgroundRatePDF(Double_t Noff,Double_t Toff,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a background rate
+  TF1 GetSignalRatePDF(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra=1,Double_t Re=1,Double_t smax=-1,Double_t bmax=-1,Double_t prec=709); // Posterior Bayesian PDF for a source signal rate
   Double_t GetUpperLimit(TF1 pdf,Double_t p);  // Provide the "p%" upper limit for the specified PDF
   Double_t GetUpperLimit(TH1* pdf,Double_t p); // Provide the "p%" upper limit for the specified histogram
   Double_t GetCredibleInterval(TF1 pdf,Double_t p,Double_t& xlow,Double_t& xup,Int_t n=1000); // Provide the "p%" credible interval for the specified PDF
@@ -167,8 +173,10 @@ class NcAstrolab : public TTask,public NcTimestamp
   NcDevice* GetBurstParameters();    // Provide the device containing all the burst parameter settings
   void ListBurstParameters() const;  // Listing of all the burst parameter settings
   void LoadInputData(Bool_t src,TString file,TString tree,Int_t date1=0,Int_t date2=0,Int_t nmax=-1,TString type="-");  // Load source (c.q. burst) or observed event data
-  void GenBurstGCNdata(Int_t n,TString name="GRB"); // Generate fictative burst GCN data
+  void GenBurstGCNdata(Int_t n,TString name="GRB",Bool_t scale=kFALSE); // Generate fictative burst GCN data
   void GenBurstSignals(); // Generate detector signals from the stored transient bursts
+  void MatchBurstData(NcDevice& matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1); // Provide Burst and Event data space and time matching info
+  void MatchBurstData(NcDevice& matches,TString name,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1); // Provide Burst and Event data space and time matching info
   void ListBurstHistograms() const;            // Provide a list of all the stored transient burst histograms
   void WriteBurstHistograms(TString filename); // Write all stored transient burst histograms to a ROOT output file
   void MakeBurstZdist(TString file,TString tree,TString name,Int_t nb=200,Float_t zmin=0,Float_t zmax=20); // Make transient burst observed redshift distribution
@@ -183,8 +191,8 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t GetBurstRecoAngres(Double_t Emin=-1,Double_t Emax=-1,Double_t Amin=0,Double_t Amax=999) const;
   TH1* GetBurstBayesianSignalRate(Double_t p,Double_t& rlow,Double_t& rup,Int_t n=1000); // Provide transient burst Bayesian signal rate and credible interval 
   Double_t GetBurstLiMaSignificance() const; // Provide the transient burst Li-Ma signal significance
-  void GetBurstBayesianPsiStatistics(TString type,Double_t nr=-1,Int_t ncut=10,Int_t ndt=2,Int_t mode=1,Double_t fact=1,Int_t freq=0); // Provide transient burst Bayesian Psi statistics
-  void GetBurstChi2Statistics(TString type,Int_t ndt=2,Int_t mode=1,Double_t fact=1); // Provide the transient burst Chi-squared statistics
+  void GetBurstBayesianPsiStatistics(TString type,Double_t nr=-1,Int_t ncut=10,Int_t ndt=2,Bool_t zcor=kFALSE,Int_t freq=0); // Provide transient burst Bayesian Psi statistics
+  void GetBurstChi2Statistics(TString type,Int_t ndt=2,Bool_t zcor=kFALSE); // Provide the transient burst Chi-squared statistics
 
   // Facilities for the SkyMapPanel GUI
   virtual void SkyMapPanel();
@@ -219,6 +227,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   void MapMerUc(Int_t i);
   void MapDoptions(Int_t i);
   void MapNmax(const char* text);
+  void MapNdigs(const char* text);
   void MapDname(const char* text);
   void MapMarkSize(const char* text);
   void MapMarkStyle(Int_t i);
@@ -269,7 +278,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   Double_t fMaxDt;       // Maximum time difference (in sec) for GetSignal 
   NcSignal* SetSignal(Nc3Vector* r,TString frame,TString mode,NcTimestamp* ts,Int_t jref,TString name,Int_t type); // Generic signal storage
   NcSignal* GetSignal(Nc3Vector& r,TString frame,TString mode,NcTimestamp* ts,Int_t jref,Int_t type); // Provide stored signal data
-  void SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0); // Set c.q. update coordinates for solar system objects
+  Int_t SetSolarSystem(TString name,NcTimestamp* ts,Int_t type=0); // Set c.q. update coordinates for solar system objects
   void SetBmatrix();                 // Set the frame bias matrix
   void SetPmatrix(NcTimestamp* ts);  // Set precession matrix for Julian date jd w.r.t. J2000.
   void SetNmatrix(NcTimestamp* ts);  // Set nutation matrix for Julian date jd w.r.t. J2000.
@@ -281,7 +290,7 @@ class NcAstrolab : public TTask,public NcTimestamp
 
   // Internal facility for reference signal and/or measurement matching
   Int_t fSolUpdate; // Flag to update the position of Solar system objects for signal matching  
-  Double_t GetDifference(Int_t i,Int_t j,TString au,Double_t& dt,TString tu,Int_t mode=1); // Provide space and time difference
+  Double_t GetSeparation(Int_t i,Int_t j,TString au,Double_t& dt,TString tu,Int_t mode,Int_t bkgpatch,Double_t* diftheta=0,Double_t* difphi=0); // Provide space and time separation
 
   // The skymap display facilities
   Int_t fUsMeridian;      // Flag to denote the (user) selection of the central meridian and display mode
@@ -335,6 +344,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   TString fMapDmode;                    //! The GUI selected coordinate system mode for the Map/List
   Bool_t fMapDoptions[5];               //! The GUI Map/List options (histo, clr, ref, meas, refTS)
   Int_t fMapNmax;                       //! The GUI selected max. number of signals of each type to Map/List
+  Int_t fMapNdigs;                      //! The GUI selected number of digits for the List output
   TString fMapDname;                    //! The GUI entered name pattern for entries to be shown in the Map/List
   Bool_t fMapSolar[10];                 //! The GUI selection of solar system objects
   Int_t fMapMerMode;                    //! The GUI selected meridian orientation for the Map
@@ -394,13 +404,21 @@ class NcAstrolab : public TTask,public NcTimestamp
   // Storage for transient burst investigations
   NcDevice* fBurstParameters; // Various parameters describing the transient burst
   TObjArray fBurstHistos;     // Storage of all the produced transient burst histograms
+  NcSample fBurstOnReco;      // The On-source reconstructed track data
+  NcSample fBurstOnMatch;     // The On-source matching data
+  NcSample fBurstSigReco;     // The simulated signal reconstructed track data
+  NcSample fBurstSignal;      // The simulated signal events
+  NcSample fBurstOffReco;     // The Off-source reconstructed track data
+  NcSample fBurstOffMatch;    // The Off-source matching data
 
   // Internal functions for transient burst investigations
   void BurstCompensate(Int_t& nmugrb);
-  void InitBurstHistograms();
+  void InitBurstHistograms(Int_t mode);
   TH1* GetBurstZdist(TString name,TString type);
   TH1* GetBurstT90dist(TString name,TString type);
   TH1* GetBurstSigmaPosdist(TString name,TString type);
+  void MakeBurstDataStats(Int_t mode,Int_t nmugrb=0);
+  void GetBurstDtDistributions(Int_t ndt,TH1F& hisdtOn,TF1& pdfdtOn,TH1F& hisdtOff,TF1& pdfdtOff,Bool_t zcor);
 
   // Internal functions for the composition of the various sub-panels of the SkyMapPanel GUI
   virtual void LabLocationPanel(TGCompositeFrame* frame);
@@ -412,6 +430,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   virtual void CommandPanel(TGCompositeFrame* frame);
   void SetMapTS();
  
- ClassDef(NcAstrolab,41) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,42) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

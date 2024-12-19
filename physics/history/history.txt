@@ -15,5 +15,7 @@
                 The produced data Tree can be analysed by the ROOT macro jet-ana.cc.
 11-dec-2023 NvE ROOT macro GRBweb2Root.cc introduced to provide a tool to convert the summary table
                 of Paul Coppin's GRBweb facility into a plain ROOT Tree.
+19-dec-2024 NvE ROOT macro burst-model.cc updated to match the new functionality of class NcAstrolab.
+                Also new (template) ROOT macros burst-analysis.cc and data-analysis.cc introduced.
 
 
