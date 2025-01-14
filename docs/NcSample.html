@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Oct 17 15:17:09 2024            -->
+<!--   Date: Tue Jan 14 13:13:15 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -104,7 +104,7 @@ return false;}
  All statistics of a sample are obtained via s.<a href="./NcSample.html#NcSample:Data" title="void NcSample::Data(Int_t i=0,Int_t j=0) or overloads">Data</a>().
 
 --- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 9, 2024  08:05Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 14, 2025  13:09Z
 
 </pre></div>
 </div></div>
@@ -1691,53 +1691,63 @@ return false;}
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcSample:GetSNR@1" href="src/NcSample.cxx.html#Tqj.IB">GetSNR</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 2, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> db = <a href="./ListOfTypes.html#Bool_t">kTRUE</a>) const</span><br />
 <div class="funccomm"><pre> Provide the Signal to Noise Ratio (SNR) of the variable with the specified name.
 
- The definition used here is SNR=(signal power)/(noise power).
- This implies that when the values of the specified variable represent amplitudes,
- the squares of the (rms) values should be used.
+ For a transient c.q. pulse signal, the SNR is defined as the ratio between
+ the largest amplitude difference and the standard deviation of the sample.
+ This is obtained via input argument <span class="string">"mode"</span> with abs(mode)=3 or abs(mode)=4,
+ as outlined below.
+
+ For a continuous signal, the definition used here is SNR=(signal power)/(noise power).
+ This implies that when the values of the i-th variable represent amplitudes related
+ to a continuous signal, the squares of the (rms) values should be used.
  This can be specified via the input argument <span class="string">"mode"</span> where abs(mode)=2 will
  invoke a conversion of amplitudes into power, whereas abs(mode)=1 will use
- the values of the specified variable <span class="string">"as is"</span>, i.e. reflecting a direct power measurement.
+ the values of the i-th variable <span class="string">"as is"</span>, i.e. reflecting a direct power measurement.
+
  Furthermore, the input argument <span class="string">"mode"</span> also provides a selection to use
- the variance of the sample or the standard deviation of the underlying parent distribution,
- as indicated below.
+ the variance of the sample (mode&gt;0) or the standard deviation, sigma, of the underlying
+ parent distribution (mode&lt;0), as indicated below.
 
  Input arguments :
 
- mode :  2 --&gt; SNR=(mean*mean)/variance
-         1 --&gt; SNR=abs(mean/rms-deviation)
-        -2 --&gt; SNR=(mean*mean)/(sigma*sigma)
-        -1 --&gt; SNR=abs(mean/sigma)
+ mode :  1 --&gt; Continuous (nearly) stable signal with data reflecting power and SNR=abs(mean/rms-deviation)
+        -1 --&gt; Continuous (nearly) stable signal with data reflecting power and SNR=abs(mean/sigma)
+         2 --&gt; Continuous (nearly) stable signal with data reflecting amplitudes and SNR=(mean*mean)/variance
+        -2 --&gt; Continuous (nearly) stable signal with data reflecting amplitudes and SNR=(mean*mean)/(sigma*sigma)
+         3 --&gt; Transient signal with data reflecting power or RMS amplitudes and SNR=(max-min)/rms-deviation
+        -3 --&gt; Transient signal with data reflecting power or RMS amplitudes and SNR=(max-min)/sigma
+         4 --&gt; Transient signal with data reflecting bipolar amplitudes and SNR=(max-min)/(2*rms-deviation)
+        -4 --&gt; Transient signal with data reflecting bipolar amplitudes and SNR=(max-min)/(2*sigma)
  dB   : <a href="./ListOfTypes.html#Bool_t">kFALSE</a> Provide the SNR as the above straight ratio
         <a href="./ListOfTypes.html#Bool_t">kTRUE</a>  Provide the SNR in Decibel
 
- The default values are model=2 and dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a>.
+ The default values are mode=2 and dB=<a href="./ListOfTypes.html#Bool_t">kTRUE</a> for backward compatibility.
 
  In case of inconsistent data, the value -9999 is returned.
 
- Derivation of the applied formulas :
+ Derivation of the applied formulas for a continuous (nearly) stable signal :
 
- For each recorded sampling k we assume a signal contribution Sk and a noise contribution Nk.
+ For each recorded sampling k we assume an amplitude contribution Sk of the signal and Nk of the noise.
 
  This leads to the expression :
 
    SNR=(average signal power)/(average noise power)=&lt;Sk^2&gt;/&lt;Nk^2&gt;  (1)
 
- Using variance=&lt;x^2&gt;-&lt;x&gt;^2 we can express the above formula in terms of the
- signal variance (Svar), signal mean (Smu), noise variance (Nvar) and noise mean (Nmu) as follows :
+ Using variance(y)=&lt;y^2&gt;-&lt;y&gt;^2 we can express the above formula in terms of the
+ signal variance var(Sk), signal mean &lt;Sk&gt;, noise variance var(Nk) and noise mean &lt;Nk&gt; as follows :
 
-   SNR=(Svar+Smu^2)/(Nvar+Nmu^2)  (2)
+   SNR=(var(Sk)+&lt;Sk&gt;^2)/(var(Nk)+&lt;Nk&gt;^2)  (2)
 
- Furthermore, the mean of the recorded samplings Mu is given by : Mu=&lt;Sk+Nk&gt;=&lt;Sk&gt;+&lt;Nk&gt;=Smu+Nmu  (3)
+ Furthermore, the mean of all the recorded samplings Mu is given by : Mu=&lt;Sk+Nk&gt;=&lt;Sk&gt;+&lt;Nk&gt;  (3)
 
- In most cases we will have &lt;Nk&gt;=Nmu=0, which implies that Mu=Smu  (4)
+ In most cases we will have &lt;Nk&gt;=0, which implies that Mu=&lt;Sk&gt;  (4)
 
  In other words : The mean of the observed samplings is equal to the signal mean,
- which implies that we can determine Smu directly from our data.
+ which implies that we can determine &lt;Sk&gt; directly from our data.
 
- Using Eq.(4) and Nmu=0 in Eq.(2) leads us to : SNR=(Svar+Mu^2)/Nvar  (5)
+ Using Eq.(4) and &lt;Nk&gt;=0 in Eq.(2) leads us to : SNR=(var(Sk)+Mu^2)/var(Nk)  (5)
 
- In case of a (nearly) stable signal, we have approximately Svar=0,
- which implies that the total observed sampling variance S=Nvar.
+ In case of a (nearly) stable signal, we have approximately var(Sk)=0,
+ which implies that the total observed sampling variance S=var(Nk).
 
  This leads to the final expression for SNR in terms of observed sampling amplitudes :
 
@@ -2402,7 +2412,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Oct 17 15:17:11 2024 </em><em>&raquo; Last generated: 2024-10-17 15:17</em><br />
+<em>&raquo; Last changed: Tue Jan 14 13:13:18 2025 </em><em>&raquo; Last generated: 2025-01-14 13:13</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

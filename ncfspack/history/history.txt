@@ -1504,3 +1504,4 @@
                 The ROOT macro burst-model.cc in the folder physics/macros has been updated accordingly,
                 and also new (template) ROOT macros burst-analysis.cc and data-analysis.cc introduced.
                 The version indicator in NcVersion has been updated to 5.38.
+14-jan-2025 NvE Docs of NcSample::GetSNR(name,...) updated to match the docs of NcSample::GetSNR(i,...).
