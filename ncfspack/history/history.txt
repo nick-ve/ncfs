@@ -1505,3 +1505,5 @@
                 and also new (template) ROOT macros burst-analysis.cc and data-analysis.cc introduced.
                 The version indicator in NcVersion has been updated to 5.38.
 14-jan-2025 NvE Docs of NcSample::GetSNR(name,...) updated to match the docs of NcSample::GetSNR(i,...).
+01-feb-2025 NvE Printout format corrected in NcAstrolab::PrintAngle().
+02-feb-2025 NvE New memberfunctions SetSourceAttributes() and GetSourceAttributes() introduced in class NcAstrolab.

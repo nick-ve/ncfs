@@ -176,7 +176,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 19, 2024  11:58Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 2, 2025  13:00Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAstrolab.h"
@@ -1252,11 +1252,25 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig,Bool_t 
   s+=double(ss);
   if (align)
   {
-   printf("%4dd %02d' %0*.*f\"",ddd,mm,3+ndig,ndig,s);
+   if (!ddd && b<0)
+   {
+    printf("  -0d %02i' %0*.*f\"",mm,3+ndig,ndig,s);
+   }
+   else
+   {
+    printf("%4id %02i' %0*.*f\"",ddd,mm,3+ndig,ndig,s);
+   }
   }
   else
   {
-   printf("%-dd %-d' %-.*f\"",ddd,mm,ndig,s);
+   if (!ddd && b<0)
+   {
+    printf("-0d %-i' %-.*f\"",mm,ndig,s);
+   }
+   else
+   {
+    printf("%-id %-i' %-.*f\"",ddd,mm,ndig,s);
+   }
   }
   return;
  }
@@ -1293,11 +1307,25 @@ void NcAstrolab::PrintAngle(Double_t a,TString in,TString out,Int_t ndig,Bool_t 
   s+=double(ss);
   if (align)
   {
-   printf("%3dh %02dm %0*.*fs",hh,mm,3+ndig,ndig,s);
+   if (!hh && b<0)
+   {
+    printf(" -0h %02im %0*.*fs",mm,3+ndig,ndig,s);
+   }
+   else
+   {
+    printf("%3ih %02im %0*.*fs",hh,mm,3+ndig,ndig,s);
+   }
   }
   else
   {
-   printf("%-dh %-dm %-.*fs",hh,mm,ndig,s);
+   if (!hh && b<0)
+   {
+    printf("-0h %-im %-.*fs",mm,ndig,s);
+   }
+   else
+   {
+    printf("%-ih %-im %-.*fs",hh,mm,ndig,s);
+   }
   }
   return;
  }
@@ -2018,6 +2046,90 @@ NcSignal* NcAstrolab::SetSignal(Double_t d,Double_t a,TString au,Double_t b,TStr
  
  NcSignal* sx=SetSignal(d,a,au,b,bu,frame,&tx,jref,mode,name,type);
  return sx;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcAstrolab::SetSourceAttributes(NcSignal* s,Double_t sigmapos,TString u,Double_t z,Double_t T90)
+{
+// Set various attributes for an astrophysical object that is stored with the signal pointer "s".
+// The signal pointer "s" can be obtained via the memberfunctions SetSignal() or GetSignal().
+// 
+// Input arguments :
+// -----------------
+// s        : Pointer to the signal with which the astrophysical object is stored
+// sigmapos : The 1-sigma position angular uncertainty
+// u        : The units in which sigmapos is specified (see below)
+// z        : The redshift
+// T90      : The T90 duration in seconds in case of a transient object
+//
+// u = "rad" : angular uncertainty provided in radians
+//     "deg" : angular uncertainty provided in degrees
+//     "dms" : angular uncertainty provided in dddmmss.sss
+//     "hms" : angular uncertainty provided in hhmmss.sss
+//     "hrs" : angular uncertainty provided in fractional hours
+//
+// In case a certain value is not known, a negative value should be provided.
+//
+// The return argument represents the number of attributes that were correctly set.
+//
+// The default values are z=-999 and T90=-999. 
+
+ if (!s) return 0;
+
+ Int_t n=3;
+
+ if (sigmapos<0)
+ {
+  sigmapos=-999;
+  n--;
+ }
+ if (z<0)
+ {
+  z=-999;
+  n--;
+ }
+ if (T90<0)
+ {
+  T90=-999;
+  n--;
+ }
+
+ // Convert the position uncertainty into degrees
+ Double_t sigma=ConvertAngle(sigmapos,u,"deg");
+
+ s->AddNamedSlot("csigma");
+ s->AddNamedSlot("z");
+ s->AddNamedSlot("T90");
+ s->SetSignal(sigma,"csigma");
+ s->SetSignal(z,"z");
+ s->SetSignal(T90,"T90");
+
+ return n;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetSourceAttributes(NcSignal* s,Float_t* z,Float_t* T90)
+{
+// Provide various attributes for an astrophysical object that is stored with the signal pointer "s".
+// The signal pointer "s" can be obtained via the memberfunctions SetSignal() or GetSignal().
+// 
+// Arguments :
+// -----------
+// s        : Pointer to the signal with which the astrophysical object is stored
+// z        : Optional pointer argument to provide the redshift value
+// T90      : Optional pointer argunent to provide the T90 duration in seconds in case of a transient object
+//
+// The return argument represents the 1-sigma position uncertainty in degrees.
+// In case an unphysical value is provided, this means the value is not known.
+//
+// The default values are z=0 and T90=0, which implies that by default only
+// the 1-sigma position uncertainty is provided.
+
+ if (!s) return -999;
+
+ Double_t sigma=s->GetSignal("csigma");
+ if (z) *z=s->GetSignal("z");
+ if (T90) *T90=s->GetSignal("T90");
+
+ return sigma;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAstrolab::GetNRefSignals(Int_t mode) const
@@ -11105,17 +11217,14 @@ void NcAstrolab::ListBurstParameters() const
   if (fDatype==2) printf(" Variable angular local zenith band (in combined actual source/event sigma) above/below the source position : %-g \n",fabs(fDawin));
  }
  printf(" Number of requested background patches per source : %-i \n",fNbkg);
- printf(" Duration interval (t90 in sec) for burst acceptance : [%-g,%-g] \n",fabs(fT90min),fT90max);
- if (fT90min<0) printf(" Random values taken from T90-distribution in case T90 and T100 were missing \n");
- if (fAvgrbt90>=0) printf(" User defined average burst T90 duration : %-g sec. \n",fAvgrbt90);
- if (fTmax>fTmin)
+ if (fT90max>0)
  {
-  printf(" Total search time window (in %-s) with the burst trigger at t=0 : [%-g,%-g] \n",tu.Data(),fTmin,fTmax);
+  printf(" Duration interval (t90 in sec) for burst acceptance : [%-g,%-g] \n",fabs(fT90min),fT90max);
+  if (fT90min<0) printf(" Random values taken from T90-distribution in case T90 and T100 were missing \n");
+  if (fAvgrbt90>0) printf(" User defined average burst T90 duration : %-g sec. \n",fAvgrbt90);
+  if (fTmax>fTmin) printf(" Total search time window (in %-s) with the burst trigger at t=0 : [%-g,%-g] \n",tu.Data(),fTmin,fTmax);
  }
- else
- {
-  printf(" [Tmin,Tmax]=[%-g,%-g] --> Unrestricted search time window (in %-s) with the burst trigger at t=0 \n",fTmin,fTmax,tu.Data());
- }
+ if (fTmax<=fTmin) printf(" Search will be performed with no restrictions on the time window \n");
  if (fTbin<0) printf(" Automatic time histogram binning with as mean number of bkg counts/bin : %-g \n",fabs(fTbin));
  if (!fTbin) printf(" Variable time histogram binning with as size (in %-s) for the first time : %-g \n",tu.Data(),fVarTbin);
  if (fTbin>0)
@@ -11191,20 +11300,23 @@ void NcAstrolab::ListBurstParameters() const
  printf("\n");
  printf(" Time resolution of the neutrino detector : %-g sec. \n",fTimres);
  printf(" Area covered c.q. overlooked by the neutrino detector : %-g m^2 \n",fSensarea);
- printf(" Mean rate of background events for the specified declination interval (<0 : rate per steradian) : %-g Hz \n",fBkgrate);
+ if (fBkgrate) printf(" User defined mean rate of background events for the specified declination interval (<0 : rate per steradian) : %-g Hz \n",fBkgrate);
 
  printf("\n");
  printf(" ============================== Derived parameters ==================================== \n");
  printf(" Combined source position and event reco angular uncertainty interval (sigma in degrees) : [%-g,%-g] \n",fMinsigmatot,fMaxsigmatot);
  printf(" Solid angle coverage corresponding to the selected declination band : %-g steradian \n",fOmegaDecl);
- printf(" Background event rate for the selected declination band : %-g Hz \n",fRbkgDecl);
- printf(" Mean number of background events per hour from the selected declination band : %-g \n",fNbkgHour);
- printf(" Mean number of background events in the time window from the selected declination band : %-g \n",fNbkgWin);
+ if (fBkgrate)
+ {
+  printf(" Background event rate (from user setting) for the selected declination band : %-g Hz \n",fRbkgDecl);
+  printf(" Mean number of background events (from user setting) per hour from the selected declination band : %-g \n",fNbkgHour);
+  printf(" Mean number of background events (from user setting) in the time window from the selected declination band : %-g \n",fNbkgWin);
+ }
  if (fNgrbs>0)
  {
   printf(" Number of bursts accepted for analysis : %-i \n",fNgrbs);
   printf(" Median source redshift from the data sample : %-g \n",fabs(fAvgrbz));
-  printf(" Median burst T90 duration from the data sample : %-g sec. \n",fabs(fAvgrbt90));
+  if (fAvgrbt90) printf(" Median burst T90 duration from the data sample : %-g sec. \n",fabs(fAvgrbt90));
   printf(" Median souce position uncertainty (sigma in degrees) from the data sample : %-g \n",fAvgrbsigma);
  }
  if (fNevts>0) printf(" Number of observed events accepted for analysis : %-i \n",fNevts);

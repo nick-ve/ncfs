@@ -85,6 +85,8 @@ class NcAstrolab : public TTask,public NcTimestamp
   NcSignal* GetSignal(Double_t& d,Double_t& a,TString au,Double_t& b,TString bu,TString frame,TString s,Double_t e,TString name,TString mode,Int_t type=0);// Provide signal data
   NcSignal* GetSignal(Int_t jref=0,Int_t type=0);                   // Provide pointer to a stored signal object
   NcSignal* GetSignal(TString name,Int_t type=0,NcTimestamp* ts=0); // Provide pointer to a stored signal object
+  Int_t SetSourceAttributes(NcSignal* s,Double_t sigmapos,TString u,Double_t z=-999,Double_t T90=-999);
+  Double_t GetSourceAttributes(NcSignal* s,Float_t* z=0,Float_t* T90=0);
   Int_t RemoveRefSignal(Int_t j,Int_t compress);                    // Remove a stored reference signal object
   Int_t RemoveRefSignal(TString name,Int_t compress);               // Remove a stored reference signal object
   Int_t RemoveSignal(Int_t j,Int_t type,Int_t compress);            // Remove the signal object stored at index j
@@ -430,6 +432,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   virtual void CommandPanel(TGCompositeFrame* frame);
   void SetMapTS();
  
- ClassDef(NcAstrolab,42) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,43) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif
