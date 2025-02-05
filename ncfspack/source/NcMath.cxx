@@ -43,7 +43,7 @@
 //                             // correct model
 //
 //--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, May 7, 2024  10:30Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 5, 2025  17:27Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcMath.h"
@@ -718,8 +718,6 @@ TF1 NcMath::Chi2CDF(Int_t ndf) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <chi2>=ndf  Var(chi2)=2*ndf
  
  TF1 cdf("Chi2CDF","1.-TMath::Prob(x,[0])");
  cdf.SetParName(0,"ndf");
@@ -777,8 +775,6 @@ TF1 NcMath::StudentCDF(Double_t ndf) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <T>=0  Var(T)=ndf/(ndf-2)
  
  TF1 cdf("StudentCDF","TMath::StudentI(x,[0])");
  cdf.SetParName(0,"ndf");
@@ -838,8 +834,6 @@ TF1 NcMath::FratioCDF(Int_t ndf1,Int_t ndf2) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <F>=ndf2/(ndf2-2)  Var(F)=2*ndf2*ndf2*(ndf2+ndf1-2)/(ndf1*(ndf2-1)*(ndf2-1)*(ndf2-4))
  
  TF1 cdf("FratioCDF","TMath::FDistI(x,[0],[1])");
  cdf.SetParName(0,"ndf1");
@@ -894,8 +888,6 @@ TF1 NcMath::BinomialCDF(Int_t n,Double_t p) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <k>=n*p  Var(k)=n*p*(1-p)
  
  TF1 cdf("BinomialCDF","1.-TMath::BetaIncomplete([1],(x+1.),([0]-x))");
  cdf.SetParName(0,"n");
@@ -950,8 +942,6 @@ TF1 NcMath::NegBinomialnCDF(Int_t k,Double_t p) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <n>=k/p  Var(n)=k*(1-p)/(p*p) 
  
  TF1 cdf("NegBinomialnCDF","TMath::BetaIncomplete([1],[0],x-[0]+1.)");
  cdf.SetParName(0,"k");
@@ -1010,8 +1000,6 @@ TF1 NcMath::NegBinomialxCDF(Int_t k,Double_t p) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <x>=k*(1-p)/p  Var(x)=k*(1-p)/(p*p) 
  
  TF1 cdf("NegBinomialxCDF","TMath::BetaIncomplete([1],[0],x+1.)");
  cdf.SetParName(0,"k");
@@ -1060,8 +1048,6 @@ TF1 NcMath::PoissonCDF(Double_t mu) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <n>=mu  Var(n)=mu
  
  TF1 cdf("PoissCDFmu","1.-TMath::Gamma(x,[0])");
  cdf.SetParName(0,"mu");
@@ -1109,8 +1095,6 @@ TF1 NcMath::PoissonCDF(Double_t r,Double_t dt) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <n>=rdt  Var(n)=rdt
  
  TF1 cdf("PoissCDFrdt","1.-TMath::Gamma(x,[0]*[1])");
  cdf.SetParName(0,"r");
@@ -1166,8 +1150,6 @@ TF1 NcMath::PoissonDtCDF(Double_t r,Int_t n) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <dt>=n/r  Var(dt)=n/(r*r)
  
  TF1 cdf("PoissDtCDF","TMath::Gamma([1],[0]*x)");
  cdf.SetParName(0,"r");
@@ -1248,8 +1230,6 @@ TF1 NcMath::GaussCDF(Double_t mu,Double_t sigma) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
-//
-// Note : <x>=mu  Var(x)=sigma*sigma
  
  TF1 cdf("GaussCDF","0.5*(1.+TMath::Erf((x-[0])/([1]*sqrt(2.))))");
  cdf.SetParName(0,"mu");
@@ -1263,6 +1243,206 @@ TF1 NcMath::GaussCDF(Double_t mu,Double_t sigma) const
  cdf.SetTitle(s.Data());
 
  return cdf;
+}
+///////////////////////////////////////////////////////////////////////////
+TF1 NcMath::RayleighDist(Double_t sigma) const
+{
+// Provide the Rayleigh PDF p(r|sigma).
+//
+// p(r|sigma) = pdf for obtaining a value r (r>=0) given a scale factor sigma.
+//
+// Consider two independent observables X and Y that are both Gaussian distributed
+// around 0 with a standard deviation sigma.
+// Define prob(x|sigma) as the probability to obtain an x value in the interval [x,x+dx],
+// and use a similar definition for prob(y|sigma).
+//
+// prob(x|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(x,2)/[2*pow(sigma,2)]) dx
+// prob(y|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(y,2)/[2*pow(sigma,2)]) dy
+//
+// This yields :
+// prob(x,y|sigma)=(1/[pow(sigma,2)*2*pi])*exp(-[pow(x,2)+pow(y,2)]/[2*pow(sigma,2)]) dx*dy
+//
+// In polar coordinates (r,phi) this yields :
+// prob(r,phi|sigma)=(1/[pow(sigma,2)*2*pi])*exp(-pow(r,2)/[2*pow(sigma,2)]) r*dr*dphi
+//
+// (Bayesian) marginalisation yields :
+// prob(r|sigma)=(r/pow(sigma,2))*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
+//
+// Which finally yields the Rayleigh PDF :
+// p(r|sigma)=(r/pow(sigma,2))*exp(-pow(r,2)/[2*pow(sigma,2)])
+//
+// A similar argumentation holds for the 3-dimensional case (X,Y,Z), which yields :
+// prob(r|sigma)=(2r/[pow(sigma,5/2)*sqrt(2*pi)])*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
+//
+// Since the difference between the 2-dimensional and 3-dimensional prob(r|sigma)
+// is only a constant factor, renormalisation of the integral to 1 yields the same PDF.
+//
+// Interpretations :
+// -----------------
+// 1) Consider random complex numbers z=x+iy, where x and y are uncorrelated
+//    and Gaussian distributed around 0 with standard deviation sigma.
+//    The distribution of the norm |z| will then be described by the Rayleigh PDF.
+// 2) Consider a 2-dimensional random vector r=(x,y), where x and y are uncorrelated 
+//    and Gaussian distributed around 0 with standard deviation sigma.
+//    The distribution of the norm |r| will then be described by the Rayleigh PDF.
+// 3) Consider a 3-dimensional random vector r=(x,y,z), where x,y and z are uncorrelated 
+//    and Gaussian distributed around 0 with standard deviation sigma.
+//    The distribution of the norm |r| will then be described by the Rayleigh PDF.
+// 4) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
+//    Rayleigh PDF describes the (fading of the) noise signal strength.
+//
+// Note : <x>=s*sqrt(pi/2) Median=s*sqrt(ln(4)) Var(x)=2-(pow(s,2)*pi/2)
+
+ TF1 pdf("RayleighPDF","x*exp(-pow(x,2)/(2.*pow([0],2)))/pow([0],2)");
+ pdf.SetParName(0,"sigma");
+ pdf.SetParameter(0,sigma);
+ TString title;
+ title.Form("Rayleigh PDF for sigma=%-g;r;p(r|sigma)",sigma);
+ pdf.SetTitle(title);
+
+ return pdf;
+}
+///////////////////////////////////////////////////////////////////////////
+TF1 NcMath::RayleighCDF(Double_t sigma) const
+{
+// Provide the cumulative distribution related to the Rayleigh PDF p(r|sigma).
+//
+// p(r|sigma) = pdf for obtaining a value r (r>=0) given a scale factor sigma.
+//
+// Please refer to the memberfunction RayleighDist() for further details.
+ 
+ TF1 cdf("RayleighCDF","1.-exp(-pow(x,2)/(2.*pow([0],2)))");
+ cdf.SetParName(0,"sigma");
+ cdf.SetParameter(0,sigma);
+ TString title;
+ title.Form("Rayleigh CDF for sigma=%-g;r;CDF for p(r|sigma)",sigma);
+ cdf.SetTitle(title);
+
+ return cdf;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcMath::GetStatistic(TF1 f,TString name,Int_t n,Int_t npx) const
+{
+// Provide the statistic specified by "name" for the 1-D function "f".
+// The optional parameter "n" is used for the (central)moments as outlined below.
+// The optional parameter "npx" allows to increase the number of evaluation points
+// of the function "f". A larger number of evaluation points increases the accuracy.
+//
+// Note : The statistic will be computed for the currently set range of "f".
+//        Make sure to set the proper range before invoking this memberfunction.
+//
+// Supported statistics are :
+// --------------------------
+// name = "mode"   --> Mode (=most probable value for a pdf)
+//        "mean"   --> Mean
+//        "median" --> Median
+//        "var"    --> Variance
+//        "std"    --> Standard deviation
+//        "mom"    --> n-th Moment <x^n>
+//        "cmom"   --> n-th Central Moment <(x-<x>)^n>
+//        "skew"   --> Skewness
+//        "kurt"   --> Kurtosis
+//
+// In case of unsupported c.q. inconsistent input, the value 0 is returned.
+//
+// The default values are n=0 and npx=1000.
+
+ // Set number of evaluation points to ensure accurate results
+ f.SetNpx(npx);
+
+ Double_t xmin=f.GetXmin();
+ Double_t xmax=f.GetXmax();
+
+ Double_t val=0;
+
+ if (name=="mode") val=f.GetMaximumX(xmin,xmax);
+ if (name=="mean") val=f.Mean(xmin,xmax);
+ if (name=="var")  val=f.Variance(xmin,xmax);
+ if (name=="std")
+ {
+  val=f.Variance(xmin,xmax);
+  if (val>0)
+  {
+   val=sqrt(val);
+  }
+  else
+  {
+   val=0;
+  }
+ }
+ if (name=="median")
+ {
+  Double_t p[1]={0.5};
+  Double_t q[1];
+  Int_t nq=f.GetQuantiles(1,q,p);
+  if (nq) val=q[0];
+ }
+ if (name=="mom" || name=="cmom")
+ {
+  if (n<=0)
+  {
+   printf(" *NcMath::GetStatistic* Inconsistent input n=%-i for statistic %-s. \n",n,name.Data());
+   return 0;
+  }
+  if (name=="mom") val=f.Moment(n,xmin,xmax);
+  if (name=="cmom") val=f.CentralMoment(n,xmin,xmax);
+ }
+ if (name=="skew" || name=="kurt")
+ {
+  val=f.Variance(xmin,xmax);
+  Double_t std=sqrt(val);
+  if (name=="skew") val=f.CentralMoment(3,xmin,xmax)/pow(std,3);
+  if (name=="kurt") val=-3.+f.CentralMoment(4,xmin,xmax)/pow(std,4);
+ }
+
+ return val;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcMath::GetCDF(TF1 f,Int_t npx) const
+{
+// Provide the CDF of the function "f" in the form of a TGraph.
+// The optional parameter "npx" allows to increase the number of evaluation points
+// of the function "f". A larger number of evaluation points increases the accuracy.
+//
+// Note : The CDF will be computed for the currently set range of "f".
+//        Make sure to set the proper range before invoking this memberfunction.
+//
+// The default value is npx=1000.
+
+ f.SetNpx(npx);
+
+ TGraph gr(&f,"i");
+
+ TString ftitle=f.GetTitle();
+
+ // Modify the (possible) specifications of the axis titles of "f"
+ TString saxes=";x;CDF";
+ Int_t j1=ftitle.First(';');
+ if (j1>0)
+ {
+  saxes=";CDF";
+  Int_t j2=ftitle.Last(';');
+  if (j2>j1)
+  {
+   ftitle.Insert(j2+1,"CDF for ");
+   saxes="";
+  }
+ }
+
+ TString gtitle;
+ if (ftitle !="")
+ {
+  gtitle.Form("Original function : %-s%-s",ftitle.Data(),saxes.Data());
+ }
+ else
+ {
+  gtitle.Form("Original function : f(x)=%-s%-s",(f.GetExpFormula("p")).Data(),saxes.Data());
+ }
+
+ gr.SetTitle(gtitle);
+ gr.SetDrawOption("AL");
+
+ return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::GaussProb(Double_t q,Double_t mean,Double_t sigma,Int_t isig) const

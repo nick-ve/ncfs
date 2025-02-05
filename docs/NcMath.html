@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Oct 17 15:17:07 2024            -->
+<!--   Date: Wed Feb  5 17:45:26 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -74,7 +74,7 @@ return false;}
                              // correct model
 
 --- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, May 7, 2024  10:30Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 5, 2025  17:27Z
 
 </pre></div>
 </div></div>
@@ -131,6 +131,7 @@ return false;}
 <tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:GaussDist">GaussDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GaussProb">GaussProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> q, <a href="./ListOfTypes.html#Double_t">Double_t</a> mean = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> isig = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GaussPvalue">GaussPvalue</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> q, <a href="./ListOfTypes.html#Double_t">Double_t</a> mean = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> sides = 2, <a href="./ListOfTypes.html#Int_t">Int_t</a> isig = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TGraph</td><td class="funcname"><a class="funcname" href="#NcMath:GetCDF">GetCDF</a>(TF1 f, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
@@ -138,6 +139,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GetStatistic">GetStatistic</a>(TF1 f, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetTitle"><span class="baseclass">TObject::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
@@ -202,6 +204,8 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue@1">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue@2">PsiValue</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:RayleighCDF">RayleighCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:RayleighDist">RayleighDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
@@ -518,8 +522,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;chi2&gt;=ndf  Var(chi2)=2*ndf
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:StudentDist" href="src/NcMath.cxx.html#TW7yB">StudentDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> ndf) const</span><br />
@@ -555,8 +557,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;T&gt;=0  Var(T)=ndf/(ndf-2)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:FratioDist" href="src/NcMath.cxx.html#T6_lr">FratioDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> ndf1, <a href="./ListOfTypes.html#Int_t">Int_t</a> ndf2) const</span><br />
@@ -589,8 +589,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;F&gt;=ndf2/(ndf2-2)  Var(F)=2*ndf2*ndf2*(ndf2+ndf1-2)/(ndf1*(ndf2-1)*(ndf2-1)*(ndf2-4))
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:BinomialDist" href="src/NcMath.cxx.html#r_QaV">BinomialDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
@@ -615,8 +613,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;k&gt;=n*p  Var(k)=n*p*(1-p)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:NegBinomialnDist" href="src/NcMath.cxx.html#J9pULC">NegBinomialnDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
@@ -641,8 +637,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;n&gt;=k/p  Var(n)=k*(1-p)/(p*p)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:NegBinomialxDist" href="src/NcMath.cxx.html#X9pULC">NegBinomialxDist</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> k, <a href="./ListOfTypes.html#Double_t">Double_t</a> p) const</span><br />
@@ -671,8 +665,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;x&gt;=k*(1-p)/p  Var(x)=k*(1-p)/(p*p)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonDist" href="src/NcMath.cxx.html#uDnbyB">PoissonDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> mu) const</span><br />
@@ -695,8 +687,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;n&gt;=mu  Var(n)=mu
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonDist@1" href="src/NcMath.cxx.html#fJu0.B">PoissonDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> dt) const</span><br />
@@ -719,8 +709,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;n&gt;=rdt  Var(n)=rdt
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:PoissonDtDist" href="src/NcMath.cxx.html#BOPE4B">PoissonDtDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Int_t">Int_t</a> n) const</span><br />
@@ -747,8 +735,6 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
-
- Note : &lt;dt&gt;=n/r  Var(dt)=n/(r*r)
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:GammaDtDist" href="src/NcMath.cxx.html#eDtx0D">GammaDtDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> r, <a href="./ListOfTypes.html#Double_t">Double_t</a> z) const</span><br />
@@ -786,8 +772,99 @@ return false;}
 
  Details can be found in the excellent textbook of Phil Gregory
  <span class="string">"Bayesian Logical Data Analysis for the Physical Sciences"</span>.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:RayleighDist" href="src/NcMath.cxx.html#izU16B">RayleighDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) const</span><br />
+<div class="funccomm"><pre> Provide the Rayleigh PDF p(r|sigma).
 
- Note : &lt;x&gt;=mu  Var(x)=sigma*sigma
+ p(r|sigma) = pdf for obtaining a value r (r&gt;=0) given a scale factor sigma.
+
+ Consider two independent observables X and Y that are both Gaussian distributed
+ around 0 with a standard deviation sigma.
+ Define prob(x|sigma) as the probability to obtain an x value in the interval [x,x+dx],
+ and use a similar definition for prob(y|sigma).
+
+ prob(x|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(x,2)/[2*pow(sigma,2)]) dx
+ prob(y|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(y,2)/[2*pow(sigma,2)]) dy
+
+ This yields :
+ prob(x,y|sigma)=(1/[pow(sigma,2)*2*pi])*exp(-[pow(x,2)+pow(y,2)]/[2*pow(sigma,2)]) dx*dy
+
+ In polar coordinates (r,phi) this yields :
+ prob(r,phi|sigma)=(1/[pow(sigma,2)*2*pi])*exp(-pow(r,2)/[2*pow(sigma,2)]) r*dr*dphi
+
+ (Bayesian) marginalisation yields :
+ prob(r|sigma)=(r/pow(sigma,2))*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
+
+ Which finally yields the Rayleigh PDF :
+ p(r|sigma)=(r/pow(sigma,2))*exp(-pow(r,2)/[2*pow(sigma,2)])
+
+ A similar argumentation holds for the 3-dimensional case (X,Y,Z), which yields :
+ prob(r|sigma)=(2r/[pow(sigma,5/2)*sqrt(2*pi)])*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
+
+ Since the difference between the 2-dimensional and 3-dimensional prob(r|sigma)
+ is only a constant factor, renormalisation of the integral to 1 yields the same PDF.
+
+ Interpretations :
+
+ 1) Consider random complex numbers z=x+iy, where x and y are uncorrelated
+    and Gaussian distributed around 0 with standard deviation sigma.
+    The distribution of the norm |z| will then be described by the Rayleigh PDF.
+ 2) Consider a 2-dimensional random vector r=(x,y), where x and y are uncorrelated
+    and Gaussian distributed around 0 with standard deviation sigma.
+    The distribution of the norm |r| will then be described by the Rayleigh PDF.
+ 3) Consider a 3-dimensional random vector r=(x,y,z), where x,y and z are uncorrelated
+    and Gaussian distributed around 0 with standard deviation sigma.
+    The distribution of the norm |r| will then be described by the Rayleigh PDF.
+ 4) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
+    Rayleigh PDF describes the (fading of the) noise signal strength.
+
+ Note : &lt;x&gt;=s*sqrt(pi/2) Median=s*sqrt(ln(4)) Var(x)=2-(pow(s,2)*pi/2)
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:RayleighCDF" href="src/NcMath.cxx.html#upGM9B">RayleighCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) const</span><br />
+<div class="funccomm"><pre> Provide the cumulative distribution related to the Rayleigh PDF p(r|sigma).
+
+ p(r|sigma) = pdf for obtaining a value r (r&gt;=0) given a scale factor sigma.
+
+ Please refer to the memberfunction <a href="./NcMath.html#NcMath:RayleighDist" title="TF1 NcMath::RayleighDist(Double_t sigma)">RayleighDist</a>() for further details.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GetStatistic" href="src/NcMath.cxx.html#Mqn0WE">GetStatistic</a>(TF1 f, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) const</span><br />
+<div class="funccomm"><pre> Provide the statistic specified by <span class="string">"name"</span> for the 1-D function <span class="string">"f"</span>.
+ The optional parameter <span class="string">"n"</span> is used for the (central)moments as outlined below.
+ The optional parameter <span class="string">"npx"</span> allows to increase the number of evaluation points
+ of the function <span class="string">"f"</span>. A larger number of evaluation points increases the accuracy.
+
+ Note : The statistic will be computed for the currently set range of <span class="string">"f"</span>.
+        Make sure to set the proper range before invoking this memberfunction.
+
+ Supported statistics are :
+
+ name = <span class="string">"mode"</span>   --&gt; Mode (=most probable value for a pdf)
+        <span class="string">"mean"</span>   --&gt; Mean
+        <span class="string">"median"</span> --&gt; Median
+        <span class="string">"var"</span>    --&gt; Variance
+        <span class="string">"std"</span>    --&gt; Standard deviation
+        <span class="string">"mom"</span>    --&gt; n-th Moment &lt;x^n&gt;
+        <span class="string">"cmom"</span>   --&gt; n-th Central Moment &lt;(x-&lt;x&gt;)^n&gt;
+        <span class="string">"skew"</span>   --&gt; Skewness
+        <span class="string">"kurt"</span>   --&gt; Kurtosis
+
+ In case of unsupported c.q. inconsistent input, the value 0 is returned.
+
+ The default values are n=0 and npx=1000.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcMath:GetCDF" href="src/NcMath.cxx.html#EFr6m">GetCDF</a>(TF1 f, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) const</span><br />
+<div class="funccomm"><pre> Provide the CDF of the function <span class="string">"f"</span> in the form of a TGraph.
+ The optional parameter <span class="string">"npx"</span> allows to increase the number of evaluation points
+ of the function <span class="string">"f"</span>. A larger number of evaluation points increases the accuracy.
+
+ Note : The CDF will be computed for the currently set range of <span class="string">"f"</span>.
+        Make sure to set the proper range before invoking this memberfunction.
+
+ The default value is npx=1000.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GaussProb" href="src/NcMath.cxx.html#SIQ_lD">GaussProb</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> q, <a href="./ListOfTypes.html#Double_t">Double_t</a> mean = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> sigma = 1, <a href="./ListOfTypes.html#Int_t">Int_t</a> isig = 0) const</span><br />
@@ -1889,7 +1966,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Thu Oct 17 15:17:08 2024 </em><em>&raquo; Last generated: 2024-10-17 15:17</em><br />
+<em>&raquo; Last changed: Wed Feb  5 17:45:27 2025 </em><em>&raquo; Last generated: 2025-02-05 17:45</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

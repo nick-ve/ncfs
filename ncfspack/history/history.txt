@@ -1507,3 +1507,4 @@
 14-jan-2025 NvE Docs of NcSample::GetSNR(name,...) updated to match the docs of NcSample::GetSNR(i,...).
 01-feb-2025 NvE Printout format corrected in NcAstrolab::PrintAngle().
 02-feb-2025 NvE New memberfunctions SetSourceAttributes() and GetSourceAttributes() introduced in class NcAstrolab.
+05-feb-2025 NvE New memberfunctions RayleighDist(), RayleighCDF(), GetStatistic() and GetCDF() introduced in class NcMath.
