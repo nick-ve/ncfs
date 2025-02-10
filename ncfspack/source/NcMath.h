@@ -59,7 +59,8 @@ class NcMath : public TObject
   TF1 GaussCDF(Double_t mu,Double_t sigma) const;            // Provide the Gauss p(x|mu,sigma) CDF for mean mu and std dev. sigma
   TF1 RayleighDist(Double_t sigma) const;                    // Provide the Rayleigh p(r|sigma) pdf for a scale factor sigma
   TF1 RayleighCDF(Double_t sigma) const;                     // Provide the Rayleigh p(r|sigma) CDF for a scale factor sigma
-  Double_t GetStatistic(TF1 f,TString name,Int_t n=0,Int_t npx=1000) const; // Provide statistic specified by "name" for the function "f"
+  TF1 Rayleigh3Dist(Double_t sigma) const;                   // Provide the 3-dimensional Rayleigh p(r|sigma) pdf for a scale factor sigma
+  Double_t GetStatistic(TF1 f,TString name,Int_t n=0,Double_t vref=0,Int_t npx=1000) const; // Provide statistic specified by "name" for the function "f"
   TGraph GetCDF(TF1 f,Int_t npx=1000) const;                 // Provide the CDF for the specified function "f" as a TGraph
   Double_t GaussProb(Double_t q,Double_t mean=0,Double_t sigma=1,Int_t isig=0) const; // P(|x-mean|<=|q-mean|) for Gauss pdf
   Double_t GaussPvalue(Double_t q,Double_t mean=0,Double_t sigma=1,Int_t sides=2,Int_t isig=0) const; // P-value of q for Gauss pdf
@@ -100,7 +101,7 @@ class NcMath : public TObject
   Double_t BesselI1(Double_t x) const;          // Compute modified Bessel function I_1(x)
   Double_t BesselK1(Double_t x) const;          // Compute modified Bessel function K_1(x)
  
- ClassDef(NcMath,13) // Various mathematical tools for scientific analysis.
+ ClassDef(NcMath,14) // Various mathematical tools for scientific analysis.
  
 };
 #endif

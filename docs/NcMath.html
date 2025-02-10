@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed Feb  5 17:45:26 2025            -->
+<!--   Date: Mon Feb 10 16:31:57 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -74,7 +74,7 @@ return false;}
                              // correct model
 
 --- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 5, 2025  17:27Z
+- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 10, 2025  16:22Z
 
 </pre></div>
 </div></div>
@@ -139,7 +139,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GetStatistic">GetStatistic</a>(TF1 f, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:GetStatistic">GetStatistic</a>(TF1 f, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetTitle"><span class="baseclass">TObject::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
@@ -204,6 +204,7 @@ return false;}
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Int_t">Int_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue@1">PsiValue</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> m, <a href="./ListOfTypes.html#Double_t">Double_t</a>* n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* p = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#NcMath:PsiValue@2">PsiValue</a>(TH1* his, TH1* hyp = 0, TF1* pdf = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> f = 0) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:Rayleigh3Dist">Rayleigh3Dist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:RayleighCDF">RayleighCDF</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TF1</td><td class="funcname"><a class="funcname" href="#NcMath:RayleighDist">RayleighDist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
@@ -799,12 +800,6 @@ return false;}
  Which finally yields the Rayleigh PDF :
  p(r|sigma)=(r/pow(sigma,2))*exp(-pow(r,2)/[2*pow(sigma,2)])
 
- A similar argumentation holds for the 3-dimensional case (X,Y,Z), which yields :
- prob(r|sigma)=(2r/[pow(sigma,5/2)*sqrt(2*pi)])*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
-
- Since the difference between the 2-dimensional and 3-dimensional prob(r|sigma)
- is only a constant factor, renormalisation of the integral to 1 yields the same PDF.
-
  Interpretations :
 
  1) Consider random complex numbers z=x+iy, where x and y are uncorrelated
@@ -813,10 +808,7 @@ return false;}
  2) Consider a 2-dimensional random vector r=(x,y), where x and y are uncorrelated
     and Gaussian distributed around 0 with standard deviation sigma.
     The distribution of the norm |r| will then be described by the Rayleigh PDF.
- 3) Consider a 3-dimensional random vector r=(x,y,z), where x,y and z are uncorrelated
-    and Gaussian distributed around 0 with standard deviation sigma.
-    The distribution of the norm |r| will then be described by the Rayleigh PDF.
- 4) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
+ 3) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
     Rayleigh PDF describes the (fading of the) noise signal strength.
 
  Note : &lt;x&gt;=s*sqrt(pi/2) Median=s*sqrt(ln(4)) Var(x)=2-(pow(s,2)*pi/2)
@@ -830,30 +822,72 @@ return false;}
  Please refer to the memberfunction <a href="./NcMath.html#NcMath:RayleighDist" title="TF1 NcMath::RayleighDist(Double_t sigma)">RayleighDist</a>() for further details.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GetStatistic" href="src/NcMath.cxx.html#Mqn0WE">GetStatistic</a>(TF1 f, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) const</span><br />
-<div class="funccomm"><pre> Provide the statistic specified by <span class="string">"name"</span> for the 1-D function <span class="string">"f"</span>.
- The optional parameter <span class="string">"n"</span> is used for the (central)moments as outlined below.
+<div class="funcdoc"><span class="funcname">TF1 <a class="funcname" name="NcMath:Rayleigh3Dist" href="src/NcMath.cxx.html#etRMjB">Rayleigh3Dist</a>(<a href="./ListOfTypes.html#Double_t">Double_t</a> sigma) const</span><br />
+<div class="funccomm"><pre> Provide the 3-dimensional extension of the Rayleigh PDF p(r|sigma).
+
+ p(r|sigma) = pdf for obtaining a value r (r&gt;=0) given a scale factor sigma.
+
+ Consider three independent observables X,Y and Z that are all Gaussian distributed
+ around 0 with a standard deviation sigma.
+ Define prob(x|sigma) as the probability to obtain an x value in the interval [x,x+dx],
+ and use a similar definition for prob(y|sigma) and prob(z|sigma).
+
+ prob(x|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(x,2)/[2*pow(sigma,2)]) dx
+ prob(y|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(y,2)/[2*pow(sigma,2)]) dy
+ prob(z|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(z,2)/[2*pow(sigma,2)]) dz
+
+ This yields :
+ prob(x,y,z|sigma)=(1/[pow(sigma,3)*pow(2*pi,3/2)])*exp(-[pow(x,2)+pow(y,2)+pow(z,2)]/[2*pow(sigma,2)]) dx*dy*dz
+
+ In polar coordinates (r,theta,phi) this yields :
+ prob(r,theta,phi|sigma)=(1/[pow(sigma,3)*pow(2*pi,3/2)])*exp(-pow(r,2)/[2*pow(sigma,2)]) pow(r,2)*sin(theta)*dr*dtheta*dphi
+
+ (Bayesian) marginalisation yields :
+ prob(r|sigma)=2*pow(r,2)/[pow(sigma,3)*pow(2*pi,1/2)]*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
+
+ Which finally yields the 3-dimensional extension of the Rayleigh PDF :
+ p(r|sigma)=2*pow(r,2)/[pow(sigma,3)*pow(2*pi,1/2)]*exp(-pow(r,2)/[2*pow(sigma,2)])
+
+ Interpretations :
+
+ 1) Consider a 3-dimensional random vector r=(x,y,z), where x,y and z are uncorrelated
+    and Gaussian distributed around 0 with standard deviation sigma.
+    The distribution of the norm |r| will then be described by the 3-dimensional Rayleigh PDF.
+ 2) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
+    3-dimensional Rayleigh PDF describes the (fading of the) noise signal strength.
+
+ Note : To obtain the corresponding CDF, please use the memberfunction <a href="./NcMath.html#NcMath:GetCDF" title="TGraph NcMath::GetCDF(TF1 f,Int_t npx=1000)">GetCDF</a>().
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Double_t">Double_t</a> <a class="funcname" name="NcMath:GetStatistic" href="src/NcMath.cxx.html#toAw5D">GetStatistic</a>(TF1 f, TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> n = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a> vref = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) const</span><br />
+<div class="funccomm"><pre> Provide the statistic specified by <span class="string">"name"</span> for the x variable of the 1D function <span class="string">"f"</span> (representing a PDF).
+ The 1D function <span class="string">"f"</span> does not have to be normalized.
+ The optional parameter <span class="string">"n"</span> is only used for the (central)moments and spread as outlined below.
  The optional parameter <span class="string">"npx"</span> allows to increase the number of evaluation points
  of the function <span class="string">"f"</span>. A larger number of evaluation points increases the accuracy.
 
- Note : The statistic will be computed for the currently set range of <span class="string">"f"</span>.
+ Note : The statistic will be computed for the currently set range of <span class="string">"pdf"</span>.
         Make sure to set the proper range before invoking this memberfunction.
 
  Supported statistics are :
 
  name = <span class="string">"mode"</span>   --&gt; Mode (=most probable value for a pdf)
-        <span class="string">"mean"</span>   --&gt; Mean
+        <span class="string">"mean"</span>   --&gt; Mean &lt;x&gt;
         <span class="string">"median"</span> --&gt; Median
-        <span class="string">"var"</span>    --&gt; Variance
-        <span class="string">"std"</span>    --&gt; Standard deviation
+        <span class="string">"var"</span>    --&gt; Variance &lt;(x-&lt;x&gt;)^2&gt;
+        <span class="string">"std"</span>    --&gt; Standard deviation sqrt(Variance)
+        <span class="string">"spread"</span> --&gt; &lt;|median-x|&gt; or &lt;|mean-x|&gt; or &lt;|vref-x|&gt; for n=(0,1,2) respectively
         <span class="string">"mom"</span>    --&gt; n-th Moment &lt;x^n&gt;
         <span class="string">"cmom"</span>   --&gt; n-th Central Moment &lt;(x-&lt;x&gt;)^n&gt;
         <span class="string">"skew"</span>   --&gt; Skewness
         <span class="string">"kurt"</span>   --&gt; Kurtosis
 
- In case of unsupported c.q. inconsistent input, the value 0 is returned.
+ Notes :
 
- The default values are n=0 and npx=1000.
+ 1) The value of <span class="string">"vref"</span> is only relevant if <span class="string">"spread"</span> is requested and n=2.
+ 2) In case of unsupported c.q. inconsistent input, the value 0 is returned.
+
+ The default values are n=0, vref=0 and npx=1000.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TGraph <a class="funcname" name="NcMath:GetCDF" href="src/NcMath.cxx.html#EFr6m">GetCDF</a>(TF1 f, <a href="./ListOfTypes.html#Int_t">Int_t</a> npx = 1000) const</span><br />
@@ -1966,7 +2000,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Wed Feb  5 17:45:27 2025 </em><em>&raquo; Last generated: 2025-02-05 17:45</em><br />
+<em>&raquo; Last changed: Mon Feb 10 16:31:58 2025 </em><em>&raquo; Last generated: 2025-02-10 16:31</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

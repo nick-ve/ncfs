@@ -43,7 +43,7 @@
 //                             // correct model
 //
 //--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 5, 2025  17:27Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 10, 2025  16:22Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcMath.h"
@@ -1271,12 +1271,6 @@ TF1 NcMath::RayleighDist(Double_t sigma) const
 // Which finally yields the Rayleigh PDF :
 // p(r|sigma)=(r/pow(sigma,2))*exp(-pow(r,2)/[2*pow(sigma,2)])
 //
-// A similar argumentation holds for the 3-dimensional case (X,Y,Z), which yields :
-// prob(r|sigma)=(2r/[pow(sigma,5/2)*sqrt(2*pi)])*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
-//
-// Since the difference between the 2-dimensional and 3-dimensional prob(r|sigma)
-// is only a constant factor, renormalisation of the integral to 1 yields the same PDF.
-//
 // Interpretations :
 // -----------------
 // 1) Consider random complex numbers z=x+iy, where x and y are uncorrelated
@@ -1285,10 +1279,7 @@ TF1 NcMath::RayleighDist(Double_t sigma) const
 // 2) Consider a 2-dimensional random vector r=(x,y), where x and y are uncorrelated 
 //    and Gaussian distributed around 0 with standard deviation sigma.
 //    The distribution of the norm |r| will then be described by the Rayleigh PDF.
-// 3) Consider a 3-dimensional random vector r=(x,y,z), where x,y and z are uncorrelated 
-//    and Gaussian distributed around 0 with standard deviation sigma.
-//    The distribution of the norm |r| will then be described by the Rayleigh PDF.
-// 4) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
+// 3) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
 //    Rayleigh PDF describes the (fading of the) noise signal strength.
 //
 // Note : <x>=s*sqrt(pi/2) Median=s*sqrt(ln(4)) Var(x)=2-(pow(s,2)*pi/2)
@@ -1321,31 +1312,83 @@ TF1 NcMath::RayleighCDF(Double_t sigma) const
  return cdf;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcMath::GetStatistic(TF1 f,TString name,Int_t n,Int_t npx) const
+TF1 NcMath::Rayleigh3Dist(Double_t sigma) const
 {
-// Provide the statistic specified by "name" for the 1-D function "f".
-// The optional parameter "n" is used for the (central)moments as outlined below.
+// Provide the 3-dimensional extension of the Rayleigh PDF p(r|sigma).
+//
+// p(r|sigma) = pdf for obtaining a value r (r>=0) given a scale factor sigma.
+//
+// Consider three independent observables X,Y and Z that are all Gaussian distributed
+// around 0 with a standard deviation sigma.
+// Define prob(x|sigma) as the probability to obtain an x value in the interval [x,x+dx],
+// and use a similar definition for prob(y|sigma) and prob(z|sigma).
+//
+// prob(x|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(x,2)/[2*pow(sigma,2)]) dx
+// prob(y|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(y,2)/[2*pow(sigma,2)]) dy
+// prob(z|sigma)=(1/[sigma*sqrt(2*pi)])*exp(-pow(z,2)/[2*pow(sigma,2)]) dz
+//
+// This yields :
+// prob(x,y,z|sigma)=(1/[pow(sigma,3)*pow(2*pi,3/2)])*exp(-[pow(x,2)+pow(y,2)+pow(z,2)]/[2*pow(sigma,2)]) dx*dy*dz
+//
+// In polar coordinates (r,theta,phi) this yields :
+// prob(r,theta,phi|sigma)=(1/[pow(sigma,3)*pow(2*pi,3/2)])*exp(-pow(r,2)/[2*pow(sigma,2)]) pow(r,2)*sin(theta)*dr*dtheta*dphi
+//
+// (Bayesian) marginalisation yields :
+// prob(r|sigma)=2*pow(r,2)/[pow(sigma,3)*pow(2*pi,1/2)]*exp(-pow(r,2)/[2*pow(sigma,2)]) dr
+//
+// Which finally yields the 3-dimensional extension of the Rayleigh PDF :
+// p(r|sigma)=2*pow(r,2)/[pow(sigma,3)*pow(2*pi,1/2)]*exp(-pow(r,2)/[2*pow(sigma,2)])
+//
+// Interpretations :
+// -----------------
+// 1) Consider a 3-dimensional random vector r=(x,y,z), where x,y and z are uncorrelated 
+//    and Gaussian distributed around 0 with standard deviation sigma.
+//    The distribution of the norm |r| will then be described by the 3-dimensional Rayleigh PDF.
+// 2) In case an intensity is related to |r| (e.g. |r|^2 for EM power), then the
+//    3-dimensional Rayleigh PDF describes the (fading of the) noise signal strength.
+//
+// Note : To obtain the corresponding CDF, please use the memberfunction GetCDF().
+
+ TF1 pdf("3D-RayleighPDF","2*pow(x,2)*pow(2*pi,-0.5)*exp(-pow(x,2)/(2.*pow([0],2)))/pow([0],3)");
+ pdf.SetParName(0,"sigma");
+ pdf.SetParameter(0,sigma);
+ TString title;
+ title.Form("3D-Rayleigh PDF for sigma=%-g;r;p(r|sigma)",sigma);
+ pdf.SetTitle(title);
+
+ return pdf;
+}
+///////////////////////////////////////////////////////////////////////////
+Double_t NcMath::GetStatistic(TF1 f,TString name,Int_t n,Double_t vref,Int_t npx) const
+{
+// Provide the statistic specified by "name" for the x variable of the 1D function "f" (representing a PDF).
+// The 1D function "f" does not have to be normalized.
+// The optional parameter "n" is only used for the (central)moments and spread as outlined below.
 // The optional parameter "npx" allows to increase the number of evaluation points
 // of the function "f". A larger number of evaluation points increases the accuracy.
 //
-// Note : The statistic will be computed for the currently set range of "f".
+// Note : The statistic will be computed for the currently set range of "pdf".
 //        Make sure to set the proper range before invoking this memberfunction.
 //
 // Supported statistics are :
 // --------------------------
 // name = "mode"   --> Mode (=most probable value for a pdf)
-//        "mean"   --> Mean
+//        "mean"   --> Mean <x>
 //        "median" --> Median
-//        "var"    --> Variance
-//        "std"    --> Standard deviation
+//        "var"    --> Variance <(x-<x>)^2>
+//        "std"    --> Standard deviation sqrt(Variance)
+//        "spread" --> <|median-x|> or <|mean-x|> or <|vref-x|> for n=(0,1,2) respectively
 //        "mom"    --> n-th Moment <x^n>
 //        "cmom"   --> n-th Central Moment <(x-<x>)^n>
 //        "skew"   --> Skewness
 //        "kurt"   --> Kurtosis
 //
-// In case of unsupported c.q. inconsistent input, the value 0 is returned.
+// Notes :
+//--------
+// 1) The value of "vref" is only relevant if "spread" is requested and n=2.
+// 2) In case of unsupported c.q. inconsistent input, the value 0 is returned.
 //
-// The default values are n=0 and npx=1000.
+// The default values are n=0, vref=0 and npx=1000.
 
  // Set number of evaluation points to ensure accurate results
  f.SetNpx(npx);
@@ -1389,10 +1432,32 @@ Double_t NcMath::GetStatistic(TF1 f,TString name,Int_t n,Int_t npx) const
  }
  if (name=="skew" || name=="kurt")
  {
-  val=f.Variance(xmin,xmax);
-  Double_t std=sqrt(val);
-  if (name=="skew") val=f.CentralMoment(3,xmin,xmax)/pow(std,3);
-  if (name=="kurt") val=-3.+f.CentralMoment(4,xmin,xmax)/pow(std,4);
+  Double_t std=GetStatistic(f,"std");
+  if (name=="skew" && std>0) val=f.CentralMoment(3,xmin,xmax)/pow(std,3);
+  if (name=="kurt" && std>0) val=-3.+f.CentralMoment(4,xmin,xmax)/pow(std,4);
+ }
+ if (name=="spread")
+ {
+  if (n<0 || n>2)
+  {
+   printf(" *NcMath::GetStatistic* Inconsistent input n=%-i for statistic %-s. \n",n,name.Data());
+   return 0;
+  }
+  if (n==0) vref=GetStatistic(f,"median");
+  if (n==1) vref=f.Mean(xmin,xmax);
+  Double_t step=fabs(xmax-xmin)/double(npx);
+  Double_t x=xmin;
+  Double_t weight=0;
+  Double_t wn=0;
+  val=0;
+  while (x<=xmax)
+  {
+   weight=fabs(f.Eval(x));
+   val+=weight*fabs(vref-x);
+   x+=step;
+   wn+=weight;
+  }
+  if (wn) val=val/wn;
  }
 
  return val;
