@@ -1509,3 +1509,8 @@
 02-feb-2025 NvE New memberfunctions SetSourceAttributes() and GetSourceAttributes() introduced in class NcAstrolab.
 05-feb-2025 NvE New memberfunctions RayleighDist(), RayleighCDF(), GetStatistic() and GetCDF() introduced in class NcMath.
 10-feb-2025 NvE New memberfunction Rayleigh3Dist() introduced in class NcMath and functionality of NcMath::GetStatistic() extended.
+20-mar-2025 NvE New memberfunction Hilbert() introduced in class NcDSP to perform Hilbert transformations, and all transformation plots
+                are now produced via the internal memberfunction HistogramTrafoResult().
+                Also the functionality of NcDSP::Correlate() extended to enable normalized cross-correlation values, which involved also
+                some additional coding in NcDSP::Convolve().
+                The version indicator in NcVersion has been updated to 5.39.

@@ -160,12 +160,13 @@
 // c.Divide(1,3);
 // c.cd(1);
 // hx.SetMarkerStyle(20);
-// hx.Draw("P");
+// hx.Draw("PL");
 // c.cd(2);
 // hh.SetMarkerStyle(20);
-// hh.Draw("P");
+// hh.Draw("PL");
 // c.cd(3);
-// hy.Draw("P");
+// hy.SetMarkerStyle(20);
+// hy.Draw("PL");
 //
 // Usage example for cross-correlation :
 // -------------------------------------
@@ -209,12 +210,13 @@
 // c.Divide(1,3);
 // c.cd(1);
 // hx.SetMarkerStyle(20);
-// hx.Draw("P");
+// hx.Draw("PL");
 // c.cd(2);
 // hh.SetMarkerStyle(20);
-// hh.Draw("P");
+// hh.Draw("PL");
 // c.cd(3);
-// hy.Draw("P");
+// hy.SetMarkerStyle(20);
+// hy.Draw("PL");
 //
 // Usage example for a Band Pass filter :
 // --------------------------------------
@@ -273,7 +275,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:26Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 20, 2025  12:26Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDSP.h"
@@ -285,6 +287,7 @@ NcDSP::NcDSP(const char* name,const char* title) : TNamed(name,title)
 {
 // Default constructor.
 
+ fProc=0;
  Reset();
  fSample=0;
  fKeepOutput=kFALSE;
@@ -312,6 +315,9 @@ NcDSP::NcDSP(const NcDSP& q) : TNamed(q)
  fImIn=q.fImIn;
  fReOut=q.fReOut;
  fImOut=q.fImOut;
+ fHisto=q.fHisto;
+ fWaveform=q.fWaveform;
+ fNorm=q.fNorm;
  fSample=q.fSample;
  fKeepOutput=q.fKeepOutput;
 }
@@ -320,7 +326,11 @@ void NcDSP::Reset()
 {
 // Internal member function to reset all data and the FFTW processor. 
 
- fProc=0;
+ if (fProc)
+ {
+  delete fProc;
+  fProc=0;
+ }
  fN=0;
  fNwf=0;
  fReIn.Set(0);
@@ -329,7 +339,9 @@ void NcDSP::Reset()
  {
   fReOut.Set(0);
   fImOut.Set(0);
+  fHisto.Set(0);
  }
+ fNorm=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetSamplingFrequency(Float_t f)
@@ -628,15 +640,18 @@ void NcDSP::LoadResult()
 //
 // Notes :
 // -------
-// 1) Invokation of one of the other Load() memberfunctions will reset the internal storage,
-//    by which previously obtained results will internally be lost.
+// 1) Invokation of this memberfunction will reset all output arrays, so that 
+//    previously obtained results will internally be lost.
 //    Use the GetData() memberfunction to retrieve data that might be needed later again. 
-// 2) The (optional) waveform data stored via SetWaveform() will not be modified.
+// 2) Invokation of one of the other Load() memberfunctions will also reset the input arrays.
+//    Use the GetData() memberfunction to retrieve data that might be needed later again. 
+// 3) The (optional) waveform data stored via SetWaveform() will not be modified.
 
  fReIn=fReOut;
  fImIn=fImOut;
  fReOut.Set(0);
  fImOut.Set(0);
+ fHisto.Set(0);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f)
@@ -937,6 +952,7 @@ TArrayD NcDSP::GetData(TString sel) const
 //        "PHID" --> The phases, i.e. arctan(im/re), in degrees
 //        "in"   --> The values of the input data are provided
 //        "out"  --> The values of the output data are provided
+//        "Hist" --> The contents of the selected transformation histogram (if any) are provided.
 //        "Wave" --> The values of the stored (system response) waveform data are provided
 //
 // Examples :
@@ -949,6 +965,7 @@ TArrayD NcDSP::GetData(TString sel) const
  if (sel.Contains("IM") && sel.Contains("in")) return fImIn;
  if (sel.Contains("RE") && sel.Contains("out")) return fReOut;
  if (sel.Contains("IM") && sel.Contains("out")) return fImOut;
+ if (sel.Contains("Hist")) return fHisto;
  if (sel.Contains("Wave")) return fWaveform;
 
  TArrayD data(fN);
@@ -1009,6 +1026,8 @@ void NcDSP::Fourier(TString mode,TH1* hist,TString sel)
 //        "dB"   --> Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im), in decibel
 //        "PHIR" --> Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
 //        "PHID" --> Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+//        "CPHI" --> Y-axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+//        "SPHI" --> Y-axis shows the values of sin(phase), i.e. sin(arctan(im/re))
 //        "k"    --> X-axis represents the index k in the frequency domain  
 //        "f"    --> X-axis represents the fraction f of the sampling rate in the frequency domain
 //        "Hz"   --> X-axis represents the actual frequency in Hz in the frequency domain
@@ -1025,20 +1044,16 @@ void NcDSP::Fourier(TString mode,TH1* hist,TString sel)
 // sel="dB f"   will show the (N/2)+1 amplitudes in dB as a function of the fractional sampling rate.
 // sel="RE k 2" will show all N real components as a function of the index k in the frequency domain.
 //
-// The default values are hist=0 and sel="none"
+// Note : If only the X-axis variable is specified, the Y-axis will show "RE" in the corresponding domain.
+// So, sel="t" is equivalent to sel="RE t" etc... 
+//
+// The default values are hist=0 and sel="none".
 
  fReOut.Set(0);
  fImOut.Set(0);
+ fHisto.Set(0);
 
  if (fN<1) return;
-
- Int_t n=1+fN/2;
- Float_t maxfrac=0.5;
- if (sel.Contains("n") || sel.Contains("t") || sel.Contains("2"))
- {
-  n=fN;
-  maxfrac=1;
- }
 
  // Construct the Fast Fourier Transform (FFT) processor
  TString opt=mode;
@@ -1089,204 +1104,42 @@ void NcDSP::Fourier(TString mode,TH1* hist,TString sel)
   fProc->GetPointComplex(i,re,im);
   re/=sqrt(rN);
   im/=sqrt(rN);
-  fReOut.SetAt(re,i);
-  fImOut.SetAt(im,i);
+  fReOut[i]=re;
+  fImOut[i]=im;
  }
 
- if (!hist) return;
+ Int_t imode=1;
+ if (mode=="C2R" || mode=="C2CI") imode=-1;
+ TString name;
+ name.Form("DFT (%-s)",mode.Data());
+ if (imode<0) name.Form("Inverse DFT (%-s)",mode.Data());
 
- if ((sel.Contains("Hz") || sel.Contains("t")) && fSample<=0) return;
-
- hist->Reset();
-
- // Initialize the histogram title
- TString title="";
- if (mode=="C2R" || mode=="C2CI") title+="Inverse ";
- title+="DFT (";
- title+=mode;
- title+=") ";
- 
- TString title2="";
-
- // Define and fill the requested result histogram
- if (sel.Contains("k"))
+ // Check for only domain specification specification
+ TString opts[8]={"RE","IM","AMP","dB","PHIR","PHID","CPHI","SPHI"};
+ Bool_t found=0;
+ for (Int_t i=0; i<8; i++)
  {
-  hist->SetBins(n,0,n-1);
-  title+="index frequency domain";
-  if (mode=="C2R" || mode=="C2CI")
+  if (sel.Contains(opts[i]))
   {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Index k";
-  if (sel.Contains("RE")) title+=";Re(Q[k])";
-  if (sel.Contains("IM")) title+=";Im(Q[k])";
-  if (sel.Contains("AMP")) title+=";Amplitude |Q[k]|";
-  if (sel.Contains("dB")) title+=";Amplitude |Q[k]| in dB";
-  if (sel.Contains("PHIR")) title+=";Phase #varphi[k] (rad)";
-  if (sel.Contains("PHID")) title+=";Phase #varphi[k] (deg)";
- }
- if (sel.Contains("f"))
- {
-  hist->SetBins(n,0,maxfrac);
-  title+="fractional frequency domain";
-  if (mode=="C2R" || mode=="C2CI")
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Fraction f of sampling rate";
-  if (sel.Contains("RE")) title+=";Re(Q[f])";
-  if (sel.Contains("IM")) title+=";Im(Q[f])";
-  if (sel.Contains("AMP")) title+=";Amplitude |Q[f]|";
-  if (sel.Contains("dB")) title+=";Amplitude |Q[f]| in dB";
-  if (sel.Contains("PHIR")) title+=";Phase #varphi[f] (rad)";
-  if (sel.Contains("PHID")) title+=";Phase #varphi[f] (deg)";
- }
- if (sel.Contains("Hz"))
- {
-  hist->SetBins(n,0,maxfrac*fSample);
-  title+="actual frequency domain";
-  if (mode=="C2R" || mode=="C2CI")
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Frequency #nu (Hz)";
-  if (sel.Contains("RE")) title+=";Re(Q[#nu])";
-  if (sel.Contains("IM")) title+=";Im(Q[#nu])";
-  if (sel.Contains("AMP")) title+=";Amplitude |Q[#nu]|";
-  if (sel.Contains("dB")) title+=";Amplitude |Q[#nu]| in dB";
-  if (sel.Contains("PHIR")) title+=";Phase #varphi[#nu] (rad)";
-  if (sel.Contains("PHID")) title+=";Phase #varphi[#nu] (deg)";
+   found=1;
+   break;
+  }  
  }
 
- if (sel.Contains("n"))
+ if (!found)
  {
-  hist->SetBins(fN,0,fN);
-  title+="sampling time domain";
-  if (mode=="R2C" || mode=="C2C") title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
-  title+=title2;
-  title+=";Sample number n";
-  if (mode=="R2C" || mode=="C2R")
+  if (sel.Contains("n") || sel.Contains("t")) // Time domain
   {
-   title+=";Value X[n]";
+   if (mode=="C2C" || mode=="C2CI") sel+=" RE";
   }
-  else
+  else // Frequency domain
   {
-   if (sel.Contains("RE")) title+=";Re(X[n])";
-   if (sel.Contains("IM")) title+=";Im(X[n])";
-   if (sel.Contains("AMP")) title+=";Amplitude |X[n]|";
-   if (sel.Contains("dB")) title+=";Amplitude |X[n]| in dB";
-   if (sel.Contains("PHIR")) title+=";Phase #varphi[n] (rad)";
-   if (sel.Contains("PHID")) title+=";Phase #varphi[n] (deg)";
-  }
- }
- if (sel.Contains("t"))
- {
-  hist->SetBins(fN,0,rN/fSample);
-  title+="actual time domain";
-  if (mode=="R2C" || mode=="C2C") title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
-  title+=title2;
-  title+=";Time t (seconds)";
-  if (mode=="R2C" || mode=="C2R")
-  {
-   title+=";Value X[t]";
-  }
-  else
-  {
-   if (sel.Contains("RE")) title+=";Re(X[t])";
-   if (sel.Contains("IM")) title+=";Im(X[t])";
-   if (sel.Contains("AMP")) title+=";Amplitude |X[t]|";
-   if (sel.Contains("dB")) title+=";Amplitude |X[t]| in dB";
-   if (sel.Contains("PHIR")) title+=";Phase #varphi[t] (rad)";
-   if (sel.Contains("PHID")) title+=";Phase #varphi[t] (deg)";
+   sel+=" RE";
   }
  }
 
- hist->SetTitle(title);
-
- Double_t pi=acos(-1.);
- Double_t amp=0;
- Double_t phi=0;
- re=0;
- im=0;
- for (Int_t i=0; i<n; i++)
- {
-  if (sel.Contains("n") || sel.Contains("t")) // Time domain data requested
-  {
-   if (mode=="R2C")
-   {
-    if (nReIn) hist->SetBinContent(i+1,fReIn.At(i));
-    continue;
-   }
-   if (mode=="C2R")
-   {
-    hist->SetBinContent(i+1,fReOut.At(i));
-    continue;
-   }
-   if (mode=="C2C") 
-   {
-    if (nReIn) re=fReIn.At(i);
-    if (nImIn) im=fImIn.At(i);
-   }
-   if (mode=="C2CI") 
-   {
-    re=fReOut.At(i);
-    im=fImOut.At(i);
-   }
-  }
-  else // Frequency domain data requested
-  {
-   if (mode=="C2R" || mode=="C2CI") // Inverse transformation
-   {
-    if (nReIn) re=fReIn.At(i);
-    if (nImIn) im=fImIn.At(i);
-   }
-   else // Forward transformation
-   {
-    re=fReOut.At(i);
-    im=fImOut.At(i);
-   }
-  }
-  amp=sqrt(re*re+im*im);
-  phi=0;
-  if (im || re) phi=atan2(im,re);
-
-  if (sel.Contains("RE")) hist->SetBinContent(i+1,re);
-  if (sel.Contains("IM")) hist->SetBinContent(i+1,im);
-  if (sel.Contains("AMP")) hist->SetBinContent(i+1,amp);
-  if (amp<=0) amp=hist->GetMinimum();
-  if (sel.Contains("dB"))
-  {
-   // Check for rounding errors
-   if (amp<=0)
-   {
-    amp=hist->GetMinimum();
-    hist->SetBinContent(i+1,amp);
-   }
-   else
-   {
-    hist->SetBinContent(i+1,20.*log10(amp));
-   }
-  }
-  if (sel.Contains("PHIR")) hist->SetBinContent(i+1,phi);
-  if (sel.Contains("PHID")) hist->SetBinContent(i+1,phi*180./pi);
- }
+ // Fill the requested histogram
+ HistogramTrafoResult(name,imode,hist,sel);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Hartley(Int_t mode,TH1* hist,TString sel)
@@ -1332,23 +1185,16 @@ void NcDSP::Hartley(Int_t mode,TH1* hist,TString sel)
 //
 // Examples :
 // ----------
-// sel="f" will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+// sel="f" will show the (N/2)+1 amplitudes as a function of the fractional sampling rate in the frequency domain.
 // sel="k 2" will show all N amplitudes as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
 
  fReOut.Set(0);
  fImOut.Set(0);
+ fHisto.Set(0);
 
  if (!mode || fN<1) return;
-
- Int_t n=1+fN/2;
- Float_t maxfrac=0.5;
- if (sel.Contains("n") || sel.Contains("t") || sel.Contains("2"))
- {
-  n=fN;
-  maxfrac=1;
- }
 
  // Construct the Fast Fourier Transform (FFT) processor
  if (fProc)
@@ -1379,112 +1225,11 @@ void NcDSP::Hartley(Int_t mode,TH1* hist,TString sel)
   fReOut.SetAt(re,i);
  }
 
- if (!hist) return;
+ // Fill the requested histogram
+ TString name="Discrete Hartley Transform (DHT)";
+ if (mode<0) name="Inverse Discrete Hartley Transform (IDHT)";
 
- if ((sel.Contains("Hz") || sel.Contains("t")) && fSample<=0) return;
-
- hist->Reset();
-
- // Initialize the histogram title
- TString title="";
- if (mode<0) title+="Inverse ";
- title+="DHT ";
- 
- TString title2="";
-
- // Define and fill the requested result histogram
- if (sel.Contains("k"))
- {
-  hist->SetBins(n,0,n-1);
-  title+="index frequency domain";
-  if (mode<0)
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Index k;Q[k]";
- }
- if (sel.Contains("f"))
- {
-  hist->SetBins(n,0,maxfrac);
-  title+="fractional frequency domain";
-  if (mode<0)
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Fraction f of sampling rate;Q[f]";
- }
- if (sel.Contains("Hz"))
- {
-  hist->SetBins(n,0,maxfrac*fSample);
-  title+="actual frequency domain";
-  if (mode<0)
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Frequency #nu (Hz);Q[#nu]";
- }
-
- if (sel.Contains("n"))
- {
-  hist->SetBins(fN,0,fN);
-  title+="sampling time domain";
-  if (mode>0) title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
-  title+=title2;
-  title+=";Sample number n;Value X[n]";
- }
- if (sel.Contains("t"))
- {
-  hist->SetBins(fN,0,rN/fSample);
-  title+="actual time domain";
-  if (mode>0) title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
-  title+=title2;
-  title+=";Time t (seconds);Value X[t]";
- }
-
- hist->SetTitle(title);
-
- for (Int_t i=0; i<n; i++)
- {
-  if (mode>0) // Forward transform
-  {
-   if (sel.Contains("n") || sel.Contains("t"))
-   {
-    hist->SetBinContent(i+1,fReIn.At(i));
-   }
-   else
-   {
-    hist->SetBinContent(i+1,fReOut.At(i));
-   }
-  }
-  else // Backward transform
-  {
-   if (sel.Contains("n") || sel.Contains("t"))
-   {
-    hist->SetBinContent(i+1,fReOut.At(i));
-   }
-   else
-   {
-    hist->SetBinContent(i+1,fReIn.At(i));
-   }
-  }
- }
+ HistogramTrafoResult(name,mode,hist,sel);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
@@ -1497,12 +1242,12 @@ void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
 // Conventions :
 // -------------
 // N = The number of data elements
-// Time domain array : X[]=X[0],...,X[N-1]
+// Time domain array .... : X[]=X[0],...,X[N-1]
 // Frequency domain array : Q[]=Q[0],...,Q[N-1]
 //
 // Cosine transform type 1 : Q[k]=(1/sqrt(2*(N-1)))*[X[0]+pow(-1,k)*X[N-1]+2*sum(n=1,n=N-2){X[n]*cos(pi*n*k/(N-1))}]
 //
-// Cosine transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+1)*k/N)}]
+// Cosine transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+0.5)*k/N)}]
 //
 // Cosine transform type 3 : Q[k]=(1/sqrt(2N))[X[0]+2*sum(n=0,n=N-1){X[n]*cos(pi*n*(k+0.5)/N)}]
 //
@@ -1541,6 +1286,7 @@ void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
 
  fReOut.Set(0);
  fImOut.Set(0);
+ fHisto.Set(0);
 
  if (abs(type)<1 || abs(type)>4 || fN<1 || (abs(type)==1 && fN<2)) return;
 
@@ -1549,14 +1295,6 @@ void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
  if (type==-1 || type==-4) type2=abs(type);
  if (type==-2) type2=3;
  if (type==-3) type2=2;
-
- Int_t n=1+fN/2;
- Float_t maxfrac=0.5;
- if (sel.Contains("n") || sel.Contains("t") || sel.Contains("2"))
- {
-  n=fN;
-  maxfrac=1;
- }
 
  // Comply with the TVirtualFFT conventions
  Int_t kind=type2-1;
@@ -1594,152 +1332,18 @@ void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
   {
    re/=sqrt(2.*rN);
   }
-  fReOut.SetAt(re,i);
+  fReOut[i]=re;
  }
 
- if (!hist) return;
+ TString name="Discrete Cosine Transform (DCT-";
+ if (type<0) name="Inverse Discrete Cosine Transform (IDCT-";
+ if (abs(type)==1) name+="I)";
+ if (abs(type)==2) name+="II)";
+ if (abs(type)==3) name+="III)";
+ if (abs(type)==4) name+="IV)";
 
- if ((sel.Contains("Hz") || sel.Contains("t")) && fSample<=0) return;
-
- hist->Reset();
-
- // Initialize the histogram title
- TString title="";
- if (type<0) title+="Inverse ";
- title+="DCT-";
- if (abs(type)==1) title+="I";
- if (abs(type)==2) title+="II";
- if (abs(type)==3) title+="III";
- if (abs(type)==4) title+="IV";
- title+=" ";
-
- TString title2="";
-
- // Define and fill the requested result histogram
- if (sel.Contains("k"))
- {
-  hist->SetBins(n,0,n-1);
-  title+="index frequency domain";
-  if (type<0)
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Index k;Q[k]";
- }
- if (sel.Contains("f"))
- {
-  hist->SetBins(n,0,maxfrac);
-  title+="fractional frequency domain";
-  if (type<0)
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Fraction f of sampling rate;Q[f]";
- }
- if (sel.Contains("Hz"))
- {
-  hist->SetBins(n,0,maxfrac*fSample);
-  title+="actual frequency domain";
-  if (type<0)
-  {
-   title+=" (input)";
-  }
-  else if (fSample>0)
-  {
-   title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
-   title+=title2;
-  }
-  title+=";Frequency #nu (Hz);Q[#nu]";
- }
-
- if (sel.Contains("n"))
- {
-  hist->SetBins(fN,0,fN);
-  title+="sampling time domain";
-  if (type>0) title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
-  title+=title2;
-  title+=";Sample number n;Value X[n]";
- }
- if (sel.Contains("t"))
- {
-  hist->SetBins(fN,0,rN/fSample);
-  title+="actual time domain";
-  if (type>0) title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
-  title+=title2;
-  title+=";Time t (seconds);Value X[t]";
- }
-
- hist->SetTitle(title);
-
- // Determine stepsize in fractional sampling frequency
- Double_t fstep=1./(2.*rN);
- if (type==1) fstep=1./(2.*double(fN-1));
-
- Double_t x=0;
- for (Int_t i=0; i<n; i++)
- {
-  x=i;
-  if (type2==3 || type2==4) x+=0.5;
-  x*=fstep;
-
-  if (sel.Contains("n") || sel.Contains("t"))
-  {
-   if (type>0)
-   {
-    hist->SetBinContent(i+1,fReIn.At(i));
-   }
-   else
-   {
-    hist->SetBinContent(i+1,fReOut.At(i));
-   }
-  }
-  else if (sel.Contains("k"))
-  {
-   if (type>0)
-   {
-    hist->SetBinContent(i+1,fReOut.At(i));
-   }
-   else
-   {
-    hist->SetBinContent(i+1,fReIn.At(i));
-   }
-  }
-  else if (sel.Contains("f"))
-  {
-   if (type>0)
-   {
-    hist->Fill(x,fReOut.At(i));
-   }
-   else
-   {
-    hist->Fill(x,fReIn.At(i));
-   }
-  }
-  else
-  {
-   x*=fSample;
-   if (type>0)
-   {
-    hist->Fill(x,fReOut.At(i));
-   }
-   else
-   {
-    hist->Fill(x,fReIn.At(i));
-   }
-  }
- }
+ // Fill the requested histogram
+ HistogramTrafoResult(name,type,hist,sel);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
@@ -1752,10 +1356,10 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
 // Conventions :
 // -------------
 // N = The number of data elements
-// Time domain array : X[]=X[0],...,X[N-1]
+// Time domain array .... : X[]=X[0],...,X[N-1]
 // Frequency domain array : Q[]=Q[0],...,Q[N-1]
 //
-// Sine transform type 1 : Q[k]=(1/sqrt(2N+1))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+1)*(k+1)/(N+1))}]
+// Sine transform type 1 : Q[k]=(1/sqrt(2*(N+1)))*[2*sum(n=0,n=N-1){X[n]*sin(pi*(n+1)*(k+1)/(N+1))}]
 //
 // Sine transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+0.5)*(k+1)/N)}
 //
@@ -1794,6 +1398,7 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
 
  fReOut.Set(0);
  fImOut.Set(0);
+ fHisto.Set(0);
 
  if (abs(type)<1 || abs(type)>4 || fN<1 || (abs(type)==1 && fN<2)) return;
 
@@ -1802,14 +1407,6 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
  if (type==-1 || type==-4) type2=abs(type);
  if (type==-2) type2=3;
  if (type==-3) type2=2;
-
- Int_t n=1+fN/2;
- Float_t maxfrac=0.5;
- if (sel.Contains("n") || sel.Contains("t") || sel.Contains("2"))
- {
-  n=fN;
-  maxfrac=1;
- }
 
  // Comply with the TVirtualFFT conventions
  Int_t kind=type2+3;
@@ -1847,25 +1444,272 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
   {
    re/=sqrt(2.*rN);
   }
-  fReOut.SetAt(re,i);
+  fReOut[i]=re;
  }
 
- if (!hist) return;
+ TString name="Discrete Sine Transform (DST-";
+ if (type<0) name="Inverse Discrete Sine Transform (IDST-";
+ if (abs(type)==1) name+="I)";
+ if (abs(type)==2) name+="II)";
+ if (abs(type)==3) name+="III)";
+ if (abs(type)==4) name+="IV)";
 
- if ((sel.Contains("Hz") || sel.Contains("t")) && fSample<=0) return;
+ // Fill the requested histogram
+ HistogramTrafoResult(name,type,hist,sel);
+}
+///////////////////////////////////////////////////////////////////////////
+void NcDSP::Hilbert(Int_t mode,TH1* hist,TString sel)
+{
+// Perform a 1-dimensional Discrete Hilbert Transformation (DHIT).
+// Actually, a DHIT is closely related to a Discrete Fourier Transformation (DFT)
+// with only real input values, followed by a phase shift and inverse DFT.
+// Consequently, the transformation results in a time domain array of only real values.
+//
+// Practical application :
+// -----------------------
+// Since the time domain input consists only of real values, the input signal can
+// be fully described by cos() terms only.
+// Consider in the time domain the following time series (x) that results from
+// a carrier wave that is modulated both in amplitude (A) and phase (P) :
+//
+//             x(t)=A(t)cos(P(t))
+//
+// The Hilbert transformation allows to extract A(t) and P(t) from the time series x(t)
+// via the so called complex analytic signal Z[] as outlined below.
+// The values of A(t) provide the so-called the Hilbert envelope, and will always by positive or 0.
+// The instantaneous angular frequency omega(t) is obtained via omega(t)=dP(t)/dt, whereas
+// the values of cos(P(t)) provide the so-called Temporal Fine Structure (TFS).
+//
+// Conventions :
+// -------------
+// N = The number of data elements
+// Time domain input array .............................. : X[]=X[0],...,X[N-1]
+// Fourier transform array DFT(X) in the frequency domain : Q[]=Q[0],...,Q[N-1]
+// Hilbert transform array DHIT(X) in the time domain ... : HT[]=HT[0],...,HT[N-1]
+// Analytic signal array in the time domain ............. : Z[]=Z[0],...,Z[N-1]
+//
+// In this memberfunction, the Hilbert transformation action is executed in the frequency domain,
+// after which the time domain result HT[] is obtained via an inverse Fourier transformation.
+//
+// Indicating in the frequency domain the (intermediate) DHIT data elements by H[k],
+// we have the following relations :
+//
+// H[k] = -i*Q[k] for positive frequencies (which in our convention corresponds to 1<=k<=N/2)
+//         0      for frequency 0          (which in our convention corresponds to k=0)
+//         i*Q[k] for negative frequencies (which in our convention corresponds to k>N/2)
+//
+// In other words : If Q[k] is represented as Q[k]=a+b*i then we have :
+//
+// H[k] =  b-a*i for positive frequencies
+//         0     for frequency 0
+//        -b+a*i for negative frequencies
+//
+// From this we obtain via an inverse DFT on H[k] the Hilbert transform HT[n] in the time domain.
+//
+// The instantaneous amplitude A(t) and phase P(t) can be obtained via the so-called analytic signal Z(t) :
+//
+// Z[n]=X[n]+i*HT[n] which can be represented as Z[n]=c+d*i
+//
+// where A[n]=|Z[n]|=sqrt(c*c+d*d) and P[n]=arctan(d/c).
+//
+// Inverse transformation :
+// ------------------------
+// From the above procedure it is seen that DHIT(HT[])=-X[], which is used to perform the inverse transformation HT[]->X[].
+// For the result of the inverse transformation HT[]->X[] we keep the definition Z[n]=X[n]+i*HT[n], which allows
+// to also extract the instantaneous amplitude A(t) and phase P(t) from the inverse transformation result. 
+// The inverse Hilbert transformation has been implemented for completeness, but in practice this will not be used often.
+// 
+// Input arguments :
+// -----------------
+// mode : >0      --> Perform the forward X[n]->Z[n] Hilbert transformation
+//        <0      --> Perform the backward HT[n]->X[n] Hilbert transformation
+// hist : (optional)  Histogram with selected results
+// sel  : String to specify the representation of the result histogram
+//        "X"     --> Y-axis shows the values of the real X[] components
+//        "HT"    --> Y-axis shows the values of the real HT[] components
+//        "AMP"   --> Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+//        "dB"    --> Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im), in decibel
+//        "PHIR"  --> Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+//        "PHID"  --> Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+//        "CPHI"  --> Y axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+//                    This is also called the Temporal Fine Structure (TFS).   
+//        "OMEGA" --> Y axis shows the values of angular frequency in rad/sec, i.e. d(arctan(im/re))/dt
+//        "n"     --> X-axis represents the index n in the time domain  
+//        "t"     --> X-axis represents the actual time in seconds in the time domain
+//
+// Note : The option "t" can only be used if the actual data acquisition sampling rate
+//        has been provided via the Load() memberfunction.
+//
+// Examples :
+// ----------
+// sel="AMP t" will show the amplitudes as a function of the actual time in seconds.
+// sel="PHID n" will show the phases in degrees as a function of the index n in the time domain.
+// sel="HT n" will show the values of HT[] as a function of the index n in the time domain.
+//
+// Note :
+// ------
+// sel="t" for the forward transformation is equivalent to sel="HT t"
+// sel="t" for the inverse transformation is equivalent to sel="X t"
+// sel="n" for the forward transformation is equivalent to sel="HT n"
+// sel="n" for the inverse transformation is equivalent to sel="X n"
+//
+// The default values are hist=0 and sel="none"
+
+ fReOut.Set(0);
+ fImOut.Set(0);
+ fHisto.Set(0);
+
+ if (!mode || fN<1) return;
+
+ // Save the original input array
+ TArrayD temp=fReIn;
+
+ // Perform the DFT on X[] to obtain Q[]
+ Fourier("R2C");
+
+ // Perform the Hilbert transformation in the frequency domain
+ Double_t a=0;
+ Double_t b=0;
+ Double_t re=0;
+ Double_t im=0;
+ for (Int_t k=0; k<fN; k++)
+ {
+  a=fReOut[k];
+  b=fImOut[k];
+  re=0;
+  im=0;
+  if (k && k<=fN/2)
+  {
+   re=b;
+   im=-a;
+  }
+  if (k>fN/2)
+  {
+   re=-b;
+   im=a;
+  }
+  fReOut[k]=re;
+  fImOut[k]=im;
+ }
+
+ // Perform the inverse DFT on H[k] to obtain HT[n]
+ TArrayD ReZ=fReIn;  // The real part of the analytic signal
+ LoadResult();
+ Fourier("C2R");
+ TArrayD ImZ=fReOut; // The imaginary part of the analytic signal
+
+ // Provide the analytic signal Z[n]=X[n]+i*HT[n] as intermediate output result
+ if (mode>0) // Forward transformation
+ {
+  fReOut=ReZ;
+  fImOut=ImZ;
+ }
+ else // Backward transformation
+ {
+  fImOut=ReZ;
+  for (Int_t n=0; n<fN; n++)
+  {
+   fReOut[n]=-ImZ[n];
+  } 
+ }
+
+ // Restore the original input array
+ fReIn=temp;   
+
+ // Check for only "n" or "t" specification
+ TString opts[8]={"X","HT","AMP","dB","PHIR","PHID","CPHI","OMEGA"};
+ Bool_t found=0;
+ for (Int_t i=0; i<8; i++)
+ {
+  if (sel.Contains(opts[i]))
+  {
+   found=1;
+   break;
+  }  
+ }
+
+ if (!found)
+ {
+  if (mode>0) // Forward transformation
+  {
+   sel+=" HT";
+  }
+  else // Inverse transformation
+  {
+   sel+=" X";
+  }
+ }
+
+ // Convert the "X"and "HT" selections to the corresponding "RE" and "IM'.
+ sel.ReplaceAll("X","RE");
+ sel.ReplaceAll("HT","IM");
+
+ // Fill the requested histogram
+ TString name="Discrete Hilbert Transform (DHIT)";
+ if (mode<0) name="Inverse Discrete Hilbert Transform (IDHIT)";
+
+ HistogramTrafoResult(name,mode,hist,sel);
+
+ // Store the correct data array as real output
+ if (mode>0) fReOut=ImZ; // Forward transformation
+}
+///////////////////////////////////////////////////////////////////////////
+void NcDSP::HistogramTrafoResult(TString name,Int_t mode,TH1* hist,TString sel)
+{
+// Internal memberfunction to provide a histogram with the requested transformation result.
+// The histogram contents are stored in the fHisto array, which can be accessed via GetData().
+// 
+// Input arguments :
+// -----------------
+// mode : >0      --> Result of a forward transformation
+//        <0      --> Result of a backward transformation
+// hist :             Histogram with selected results
+// sel  : String to specify the representation of the result histogram
+//        "RE"    --> Y-axis shows the values of the real (re) components
+//        "IM"    --> Y-axis shows the values of the imaginary (im) components
+//        "AMP"   --> Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+//        "dB"    --> Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im), in decibel
+//        "PHIR"  --> Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+//        "PHID"  --> Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+//        "CPHI"  --> Y axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+//        "SPHI"  --> Y axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+//        "OMEGA" --> Y axis shows the values of the angular frequency in rad/sec, i.e. d(arctan(im/re))/dt
+//        "k"     --> X-axis represents the index k in the frequency domain  
+//        "f"     --> X-axis represents the fraction f of the sampling rate in the frequency domain
+//        "Hz"    --> X-axis represents the actual frequency in Hz in the frequency domain
+//        "n"     --> X-axis represents the index n in the time domain  
+//        "t"     --> X-axis represents the actual time in seconds in the time domain
+//
+// Note : The options "Hz", "t" and "OMEGA" can only be used if the actual data acquisition sampling rate
+//        has been provided via the Load() memberfunction.
+//
+// Examples :
+// ----------
+// sel="AMP t" will show the amplitudes as a function of the actual time in seconds.
+// sel="PHID n" will show the phases in degrees as a function of the index n in the time domain.
+
+ fHisto.Set(0);
+
+ if (!mode || fN<1 || !hist) return;
+
+ Int_t n=1+fN/2;
+ Float_t maxfrac=0.5;
+ if (sel.Contains("n") || sel.Contains("t") || sel.Contains("2"))
+ {
+  n=fN;
+  maxfrac=1;
+ }
+
+ if ((sel.Contains("Hz") || sel.Contains("t") || sel.Contains("OMEGA")) && fSample<=0) return;
+
+ if (sel.Contains("OMEGA") && !(sel.Contains("n")) && !(sel.Contains("t"))) return; 
 
  hist->Reset();
 
  // Initialize the histogram title
- TString title="";
- if (type<0) title+="Inverse ";
- title+="DST-";
- if (abs(type)==1) title+="I";
- if (abs(type)==2) title+="II";
- if (abs(type)==3) title+="III";
- if (abs(type)==4) title+="IV";
+ TString title=name;
  title+=" ";
-
+ 
  TString title2="";
 
  // Define and fill the requested result histogram
@@ -1873,7 +1717,7 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
  {
   hist->SetBins(n,0,n-1);
   title+="index frequency domain";
-  if (type<0)
+  if (mode<0)
   {
    title+=" (input)";
   }
@@ -1882,13 +1726,26 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
    title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
    title+=title2;
   }
-  title+=";Index k;Q[k]";
+  title+=";Index k";
+  if (sel.Contains("RE")) title+=";Re(Q[k])";
+  if (sel.Contains("IM")) title+=";Im(Q[k])";
+  if (sel.Contains("AMP")) title+=";Amplitude |Q[k]|";
+  if (sel.Contains("dB")) title+=";Amplitude |Q[k]| in dB";
+  if (sel.Contains("PHIR")) title+=";Phase #varphi[k] (rad)";
+  if (sel.Contains("PHID")) title+=";Phase #varphi[k] (deg)";
+  if (sel.Contains("CPHI")) title+=";cos(#varphi[k])";
+  if (sel.Contains("SPHI")) title+=";sin(#varphi[k])";
+  if (!(title.Contains("[k]")))
+  {
+   sel+=" RE";
+   title+=";Value Q[k]";
+  }
  }
  if (sel.Contains("f"))
  {
   hist->SetBins(n,0,maxfrac);
   title+="fractional frequency domain";
-  if (type<0)
+  if (mode<0)
   {
    title+=" (input)";
   }
@@ -1897,13 +1754,26 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
    title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
    title+=title2;
   }
-  title+=";Fraction f of sampling rate;Q[f]";
+  title+=";Fraction f of sampling rate";
+  if (sel.Contains("RE")) title+=";Re(Q[f])";
+  if (sel.Contains("IM")) title+=";Im(Q[f])";
+  if (sel.Contains("AMP")) title+=";Amplitude |Q[f]|";
+  if (sel.Contains("dB")) title+=";Amplitude |Q[f]| in dB";
+  if (sel.Contains("PHIR")) title+=";Phase #varphi[f] (rad)";
+  if (sel.Contains("PHID")) title+=";Phase #varphi[f] (deg)";
+  if (sel.Contains("CPHI")) title+=";cos(#varphi[f])";
+  if (sel.Contains("SPHI")) title+=";sin(#varphi[f])";
+  if (!(title.Contains("[f]")))
+  {
+   sel+=" RE";
+   title+=";Value Q[f]";
+  }
  }
  if (sel.Contains("Hz"))
  {
   hist->SetBins(n,0,maxfrac*fSample);
   title+="actual frequency domain";
-  if (type<0)
+  if (mode<0)
   {
    title+=" (input)";
   }
@@ -1912,86 +1782,229 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
    title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
    title+=title2;
   }
-  title+=";Frequency #nu (Hz);Q[#nu]";
+  title+=";Frequency #nu (Hz)";
+  if (sel.Contains("RE")) title+=";Re(Q[#nu])";
+  if (sel.Contains("IM")) title+=";Im(Q[#nu])";
+  if (sel.Contains("AMP")) title+=";Amplitude |Q[#nu]|";
+  if (sel.Contains("dB")) title+=";Amplitude |Q[#nu]| in dB";
+  if (sel.Contains("PHIR")) title+=";Phase #varphi[#nu] (rad)";
+  if (sel.Contains("PHID")) title+=";Phase #varphi[#nu] (deg)";
+  if (sel.Contains("CPHI")) title+=";cos(#varphi[#nu])";
+  if (sel.Contains("SPHI")) title+=";sin(#varphi[#nu])";
+  if (!(title.Contains("[#nu]")))
+  {
+   sel+=" RE";
+   title+=";Value Q[#nu]";
+  }
  }
 
  if (sel.Contains("n"))
  {
   hist->SetBins(fN,0,fN);
   title+="sampling time domain";
-  if (type>0) title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
+  if (mode>0 && !(name.Contains("Hilbert"))) title+=" input";
+  if (fSample>0) title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
   title+=title2;
-  title+=";Sample number n;Value X[n]";
+  title+=";Sample number n";
+  if (name.Contains("Hilbert"))
+  {
+   if (sel.Contains("RE")) title+=";Value X[n]";
+   if (sel.Contains("IM")) title+=";Value HT[n]";
+   if (sel.Contains("AMP")) title+=";Amplitude |Z[n]|";
+   if (sel.Contains("dB")) title+=";Amplitude |Z[n]| in dB";
+  }
+  else
+  {
+   if (sel.Contains("RE")) title+=";Re(X[n])";
+   if (sel.Contains("IM")) title+=";Im(X[n])";
+   if (sel.Contains("AMP")) title+=";Amplitude |X[n]|";
+   if (sel.Contains("dB")) title+=";Amplitude |X[n]| in dB";
+  }
+  if (sel.Contains("PHIR")) title+=";Phase #varphi[n] (rad)";
+  if (sel.Contains("PHID")) title+=";Phase #varphi[n] (deg)";
+  if (sel.Contains("CPHI")) title+=";cos(#varphi[n])";
+  if (sel.Contains("SPHI")) title+=";sin(#varphi[n])";
+  if (sel.Contains("OMEGA")) title+=";#omega[n] (rad/s)";
+  if (!(title.Contains("[n]")))
+  {
+   sel+=" RE";
+   title+=";Value X[n]";
+  }
  }
  if (sel.Contains("t"))
  {
-  hist->SetBins(fN,0,rN/fSample);
+  hist->SetBins(fN,0,double(fN)/fSample);
   title+="actual time domain";
-  if (type>0) title+=" input";
-  if (fSample>0) title2.Form(" (%-.3g samples/sec)",fSample);
+  if (mode>0 && !(name.Contains("Hilbert"))) title+=" input";
+  if (fSample>0) title2.Form(" (DAQ: %-.3g samples/sec)",fSample);
   title+=title2;
-  title+=";Time t (seconds);Value X[t]";
+  title+=";Time t (seconds)";
+  if (name.Contains("Hilbert"))
+  {
+   if (sel.Contains("RE")) title+=";Value X[t]";
+   if (sel.Contains("IM")) title+=";Value HT[t]";
+   if (sel.Contains("AMP")) title+=";Amplitude |Z[t]|";
+   if (sel.Contains("dB")) title+=";Amplitude |Z[t]| in dB";
+  }
+  else
+  {
+   if (sel.Contains("RE")) title+=";Re(X[t])";
+   if (sel.Contains("IM")) title+=";Im(X[t])";
+   if (sel.Contains("AMP")) title+=";Amplitude |X[t]|";
+   if (sel.Contains("dB")) title+=";Amplitude |X[t]| in dB";
+  }
+  if (sel.Contains("PHIR")) title+=";Phase #varphi[t] (rad)";
+  if (sel.Contains("PHID")) title+=";Phase #varphi[t] (deg)";
+  if (sel.Contains("CPHI")) title+=";cos(#varphi[t])";
+  if (sel.Contains("SPHI")) title+=";sin(#varphi[t])";
+  if (sel.Contains("OMEGA")) title+=";#omega[t] (rad/s)";
+  if (!(title.Contains("[t]")))
+  {
+   sel+=" RE";
+   title+=";Value X[t]";
+  }
  }
 
  hist->SetTitle(title);
 
- // Determine stepsize in fractional sampling frequency
- Double_t fstep=1./(2.*rN);
- if (type==1) fstep=1./(2.*double(fN+1));
+ Int_t nReIn=fReIn.GetSize();
+ Int_t nImIn=fImIn.GetSize();
+ Int_t nReOut=fReOut.GetSize();
+ Int_t nImOut=fImOut.GetSize();
+ Double_t pi=acos(-1.);
+ Double_t amp=0;
+ Double_t phi=0;
+ Double_t cphi=0;
+ Double_t sphi=0;
+ Double_t omega=0;
+ Double_t re=0;
+ Double_t im=0;
+ Double_t re2=0;
+ Double_t im2=0;
+ Double_t phi2=0;
+ fHisto.Set(n);
 
- Double_t x=0;
+ // Determine stepsize in fractional sampling frequency for the Cosine and Sine transformation
+ Double_t fstep=1./(2.*double(fN));
+ if (name.Contains("DCT-I") && fN>1) fstep=1./(2.*double(fN-1));
+ if (name.Contains("DST-I")) fstep=1./(2.*double(fN+1));
+
+ Double_t x=-1;
  for (Int_t i=0; i<n; i++)
  {
-  x=i+1;
-  if (type2==3 || type2==4) x-=0.5;
+  if (name.Contains("DCT-"))
+  {
+   x=i;
+   if (mode==3 || mode==-2 || abs(mode)==4) x+=0.5;
+  }
+  if (name.Contains("DST-"))
+  {
+   x=i+1;
+   if (mode==3 || mode==-2 || abs(mode)==4) x-=0.5;
+  }
   x*=fstep;
+  if (sel.Contains("Hz")) x*=fSample;
 
-  if (sel.Contains("n") || sel.Contains("t"))
+  if (sel.Contains("n") || sel.Contains("t")) // Time domain data requested
   {
-   if (type>0)
+   if (mode>0) // Forward transformation
    {
-    hist->SetBinContent(i+1,fReIn.At(i));
+    if (name.Contains("Hilbert"))
+    {
+     if (nReOut)
+     {
+      re=fReOut[i];
+      if (i<n-1) re2=fReOut[i+1];
+     }
+     if (nImOut)
+     {
+      im=fImOut[i];
+      if (i<n-1) im2=fImOut[i+1];
+     }
+    }
+    else
+    {
+     if (nReIn) re=fReIn[i];
+     if (nImIn) im=fImIn[i];
+    }
    }
-   else
+   if (mode<0) // Inverse transformation
    {
-    hist->SetBinContent(i+1,fReOut.At(i));
+    if (nReOut) re=fReOut[i];
+    if (nImOut) im=fImOut[i];
+    if (name.Contains("Hilbert") && i<n-1)
+    {
+     if (nReOut) re2=fReOut[i+1];
+     if (nImOut) im2=fImOut[i+1];
+    }
    }
   }
-  else if (sel.Contains("k"))
+  else // Frequency domain data requested
   {
-   if (type>0)
+   if (mode<0) // Inverse transformation
    {
-    hist->SetBinContent(i+1,fReOut.At(i));
+    if (nReIn) re=fReIn[i];
+    if (nImIn) im=fImIn[i];
    }
-   else
+   else // Forward transformation
    {
-    hist->SetBinContent(i+1,fReIn.At(i));
+    if (nReOut) re=fReOut[i];
+    if (nImOut) im=fImOut[i];
    }
   }
-  else if (sel.Contains("f"))
+  if (name.Contains("DCT-") || name.Contains("DST-"))
   {
-   if (type>0)
+   if (sel.Contains("f") || sel.Contains("Hz"))
    {
-    hist->Fill(x,fReOut.At(i));
+    hist->Fill(x,re);
    }
    else
    {
-    hist->Fill(x,fReIn.At(i));
+    hist->SetBinContent(i+1,re);
    }
   }
   else
   {
-   x*=fSample;
-   if (type>0)
+   amp=sqrt(re*re+im*im);
+   phi=0;
+   if (im || re) phi=atan2(im,re);
+   cphi=cos(phi);
+   sphi=sin(phi);
+   phi2=0;
+   if (fSample>0 && i<n-1 && (im2 || re2))
    {
-    hist->Fill(x,fReOut.At(i));
+    phi2=atan2(im2,re2);
+    if ((phi2*phi)>=0) omega=fabs(phi2-phi)*fSample;
    }
-   else
+   if (sel.Contains("RE")) hist->SetBinContent(i+1,re);
+   if (sel.Contains("IM")) hist->SetBinContent(i+1,im);
+   if (sel.Contains("AMP")) hist->SetBinContent(i+1,amp);
+   if (amp<=0) amp=hist->GetMinimum();
+   if (sel.Contains("dB"))
    {
-    hist->Fill(x,fReIn.At(i));
+    // Check for rounding errors
+    if (amp<=0)
+    {
+     amp=hist->GetMinimum();
+     hist->SetBinContent(i+1,amp);
+    }
+    else
+    {
+     hist->SetBinContent(i+1,20.*log10(amp));
+    }
    }
+   if (sel.Contains("PHIR")) hist->SetBinContent(i+1,phi);
+   if (sel.Contains("PHID")) hist->SetBinContent(i+1,phi*180./pi);
+   if (sel.Contains("CPHI")) hist->SetBinContent(i+1,cphi);
+   if (sel.Contains("SPHI")) hist->SetBinContent(i+1,sphi);
+   if (sel.Contains("OMEGA")) hist->SetBinContent(i+1,omega);
   }
+ }
+
+ // Fill the fHisto array with the histogram contents
+ for (Int_t i=0; i<n; i++)
+ {
+  fHisto[i]=hist->GetBinContent(i+1);
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -2058,8 +2071,11 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
 
  TArrayD y(0);
  if (hist) hist->Reset();
- Int_t nx=fReIn.GetSize();
- Int_t nh=fWaveform.GetSize();
+
+ TArrayD x=fReIn;
+ TArrayD h=fWaveform;
+ Int_t nx=x.GetSize();
+ Int_t nh=h.GetSize();
 
  if (nh<1 || nx<1)
  {
@@ -2069,33 +2085,109 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
 
  if (shift<0 || shift>2)
  {
-  printf(" *%-s::Convolve* Invalid inout argument shift=%-i \n",ClassName(),shift);
+  printf(" *%-s::Convolve* Invalid input argument shift=%-i \n",ClassName(),shift);
   return y;
  }
 
  Int_t ny=nx+nh-1;
  y.Set(ny);
- y.Reset();
 
- for (Int_t i=0; i<ny; i++)
- {
-  y[i]=0;
- }
-
- Double_t* x=fReIn.GetArray();
- Double_t* h=fWaveform.GetArray();
+ // The normalization data for correlation studies
+ TArrayD x1(ny);
+ TArrayD x2(ny);
+ TArrayD h1(ny);
+ TArrayD h2(ny);
+ TArrayI ns(ny);
 
  // Convolution from the input signal viewpoint
  for (Int_t ix=0; ix<nx; ix++)
  {
   for (Int_t ih=0; ih<nh; ih++)
   {
+   // Perform the unnormalized convolution
    y[ix+ih]=y[ix+ih]+x[ix]*h[ih];
+
+   if (fNorm<=0) continue;
+
+   // Gather the normalization data for cross-correlation studies
+   x1[ix+ih]+=x[ix];
+   x2[ix+ih]+=pow(x[ix],2);
+   h1[ix+ih]+=h[ih];
+   h2[ix+ih]+=pow(h[ih],2);
+   ns[ix+ih]+=1;
   }
  }
 
- if (i1) *i1=nh-1;
- if (i2) *i2=ny-nh;
+ // Normalize values for cross-correlation studies if requested
+ if (fNorm)
+ {
+  Double_t val=0;
+  if (fNorm==-1) // Overall vector length normalization
+  {
+   Double_t xnorm=0;
+   Double_t hnorm=0;
+   for (Int_t i=0; i<nx; i++)
+   {
+    xnorm+=pow(x[i],2);
+   }
+   for (Int_t i=0; i<nh; i++)
+   {
+    hnorm+=pow(h[i],2);
+   }
+   xnorm=sqrt(xnorm);
+   hnorm=sqrt(hnorm);
+   for (Int_t i=0; i<ny; i++)
+   {
+    val=xnorm*hnorm;
+    if (val>0) y[i]=y[i]/val;
+   }
+  }
+  else if (fNorm==1) // NCC normalization
+  {
+   for (Int_t i=0; i<ny; i++)
+   {
+    val=sqrt(x2[i]*h2[i]);
+    if (val>0) y[i]=y[i]/val;
+   }
+  }
+  else // ZNCC normalization
+  {
+   y.Reset();
+   Double_t x1mean=0;
+   Double_t h1mean=0;
+   Double_t x2mean=0;
+   Double_t h2mean=0;
+   Double_t rn=0;
+   Double_t sx=0;
+   Double_t sh=0;
+   Double_t sxsh=0;
+   Int_t iy=0;
+   for (Int_t ix=0; ix<nx; ix++)
+   {
+    for (Int_t ih=0; ih<nh; ih++)
+    { 
+     iy=ix+ih;
+
+     if (!ns[iy]) continue;
+
+     rn=ns[iy];
+     x1mean=x1[iy]/rn;
+     x2mean=x2[iy]/rn;
+     h1mean=h1[iy]/rn;
+     h2mean=h2[iy]/rn;
+     sx=sqrt(x2mean-pow(x1mean,2));
+     sh=sqrt(h2mean-pow(h1mean,2));
+     sxsh=sx*sh;
+     val=0;
+     if (sxsh>0) val=(x[ix]-x1mean)*(h[ih]-h1mean)/(rn*sxsh);
+     y[iy]+=val;
+    }
+   }
+  }
+ }
+
+ Int_t ilow=nh-1;
+ Int_t iup=ny-nh;
 
  Int_t ioffset=0;
  if (shift==2)
@@ -2108,9 +2200,12 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
   }
   y=temp;
   ny=nx;
-  if (i1) *i1=*i1-ioffset;
-  if (i2) *i2=*i2-ioffset;
+  ilow=ilow-ioffset;
+  iup=iup-ioffset;
  }
+
+ if (i1) *i1=ilow;
+ if (i2) *i2=iup;
 
  if (hist)
  {
@@ -2152,10 +2247,10 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
 
   Double_t xlow=0;
   Double_t xup=0;
-  if (i1)  xlow=hist->GetBinLowEdge(*i1+1);
+  if (i1)  xlow=hist->GetBinLowEdge(ilow+1);
   if (i2)
   {
-   xup=hist->GetBinLowEdge(*i2+1);
+   xup=hist->GetBinLowEdge(iup+1);
    xup+=hist->GetBinWidth(1);
   }
 
@@ -2185,7 +2280,7 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
  return y;
 }
 ///////////////////////////////////////////////////////////////////////////
-TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak)
+TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,Int_t norm)
 {
 // (Cross) Correlate the data contained in the waveform h[] with the loaded input data x[]
 // and return the resulting data y[] in a TArrayD object.
@@ -2226,12 +2321,22 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak)
 // dashed blue lines in the histogram.
 //
 // The (optional) argument "peak" provides the location of the correlation peak, indicating
-// the shift of the h[] pattern w.r.t. the best matching pattern in x[], with the convention
+// the shift (aka lag) of the h[] pattern w.r.t. the best matching pattern in x[], with the convention
 // that the autocorrelation peak falls at 0.
+//
+// The (optional) argument "norm" allows to obtain the normalized correlation values.
+// When normalized, the resulting correlation values will be in the interval [-1,1],
+// which facilitates an interpretation of the amount of correlation.
+// Furthermore, normalization will provide consistent results for different amplitudes of x[] and/or h[].
+//
+// norm = 0 --> No normalization
+//       -1 --> Same as norm=0 but the resulting correlation values will be divided by (|h|*|x|) of the total vectors h[] and [x] 
+//        1 --> NCC  normalization (i.e. Sum{h[i]*x[i]/(|h|*|x|)}, where |h| and |x| are the vector lengths of the overlapping parts
+//        2 --> ZNCC normalization )i.e. (1/N)*Sum{(h[i]-hmean)*(x[i]-xmean)/(sx*sh)}, where sx and sh are the STDs of the overlapping parts
 //
 // Note : The sampling (rate) of h has to be the same as for the loaded input data x[].
 //
-// The default values are hist=0, i1=0, i2=0 and peak=0.
+// The default values are hist=0, i1=0, i2=0, peak=0 and norm=2.
 
  TArrayD y(0);
  if (hist) hist->Reset();
@@ -2244,6 +2349,12 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak)
   return y;
  }
 
+ if (norm<-1 || norm>2)
+ {
+  printf(" *%-s::Correlate* Unsupported normalization mode : norm=%-i \n",ClassName(),norm);
+  return y;
+ }
+
  // The temporary "flipped" waveform
  TArrayD store=fWaveform;
  TArrayD temp(nh);
@@ -2253,13 +2364,16 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak)
  }
 
  fWaveform=temp;
+ fNorm=norm; // Normalize the correlation values if requested
  y=Convolve(hist,i1,i2,1);
+ fNorm=0; // Reset the normalization flag for convolution studies
 
  // Get the index of the maximum in the y[] array
- Int_t ny=y.GetSize();
  Int_t imax=0;
  Double_t ymax=0;
- for (Int_t i=0; i<ny; i++)
+ Int_t ny=y.GetSize();
+ if (ny) ymax=y[0];
+ for (Int_t i=1; i<ny; i++)
  {
   if (y[i]>ymax)
   {
@@ -2270,10 +2384,10 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak)
 
  // Convert to the index matching the x[] convention
  Int_t idx=imax-nh+1;
- Double_t shift=idx;
- if (fSample>0) shift=shift/fSample;
+ Double_t xpeak=idx;
+ if (fSample>0) xpeak=xpeak/fSample;
 
- if (peak) *peak=shift;
+ if (peak) *peak=xpeak;
 
  // Put the correct histogram title
  if (hist)
@@ -2281,11 +2395,43 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak)
   TString title;
   if (fSample>0)
   {
-   title.Form("NcDSP Correlation result with max. at %-g sec. (%-g samples/sec)",shift,fSample);
+   if (norm==1)
+   {
+    title.Form("%-s Normalized Cross-Correlation (NCC): max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
+   }
+   else if (norm==2)
+   {
+    title.Form("%-s Normalized Cross-Correlation (ZNCC): max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
+   }
+   else if (norm==-1)
+   {
+    title.Form("%-s Overall normalized Cross-Correlation : max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
+   }
+   else
+   {
+    title.Form("%-s Unnormalized Cross-Correlation: max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
+   }
+   title+=";Time lag in seconds;Cross-Correlation value";
   }
   else
   {
-   title.Form("NcDSP Correlation result with max. at %-i samples",idx);
+   if (norm==1)
+   {
+    title.Form("%-s Normalized Cross-Correlation (NCC): max. at lag=%-i samplings",ClassName(),idx);
+   }
+   else if (norm==2)
+   {
+    title.Form("%-s Normalized Cross-Correlation (ZNCC): max. at lag=%-i samplings",ClassName(),idx);
+   }
+   else if (norm==-1)
+   {
+    title.Form("%-s Overall normalized Cross-Correlation : max. at lag=%-i samplings",ClassName(),idx);
+   }
+   else
+   {
+    title.Form("%-s Unnormalized Cross-Correlation: max. at lag=%-i samplings",ClassName(),idx);
+   }
+   title+=";Lag in samplings;Cross-Correlation value";
   }
   hist->SetTitle(title);
  }

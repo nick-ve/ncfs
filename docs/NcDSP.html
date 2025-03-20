@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Tue Dec  5 12:09:06 2023            -->
+<!--   Date: Thu Mar 20 13:36:03 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -191,12 +191,13 @@ return false;}
  c.Divide(1,3);
  c.cd(1);
  hx.SetMarkerStyle(20);
- hx.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ hx.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"PL"</span>);
  c.cd(2);
  hh.SetMarkerStyle(20);
- hh.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ hh.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"PL"</span>);
  c.cd(3);
- hy.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ hy.SetMarkerStyle(20);
+ hy.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"PL"</span>);
 
  Usage example for cross-correlation :
 
@@ -219,7 +220,7 @@ return false;}
  // Perform the Cross-Correlation
  TH1F hy;
  <a href="./ListOfTypes.html#Int_t">Int_t</a> smin,smax;
- TArrayD y=q.<a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a>(&amp;hy,&amp;smin,&amp;smax);
+ TArrayD y=q.<a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,Int_t norm=2)">Correlate</a>(&amp;hy,&amp;smin,&amp;smax);
 
  printf(<span class="string">" Correlation full coverage between sample numbers %-i and %-i \n"</span>,smin,smax);
 
@@ -240,12 +241,13 @@ return false;}
  c.Divide(1,3);
  c.cd(1);
  hx.SetMarkerStyle(20);
- hx.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ hx.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"PL"</span>);
  c.cd(2);
  hh.SetMarkerStyle(20);
- hh.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ hh.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"PL"</span>);
  c.cd(3);
- hy.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"P"</span>);
+ hy.SetMarkerStyle(20);
+ hy.<a href="./#TObject:Draw" title="void TObject::Draw(Option_t* option=&quot;&quot;)">Draw</a>(<span class="string">"PL"</span>);
 
  Usage example for a Band Pass filter :
 
@@ -304,7 +306,7 @@ return false;}
 
 
 --- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2023  09:26Z
+- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 20, 2025  12:26Z
 
 </pre></div>
 </div></div>
@@ -327,7 +329,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Convolve">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> shift = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
-<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Correlate">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* peak = 0)</td></tr>
+<tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:Correlate">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* peak = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> norm = 2)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Cosine">Cosine</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> type, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
 <tr class="func"><td class="funcret">TArrayD</td><td class="funcname"><a class="funcname" href="#NcDSP:DAC">DAC</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> range, <a href="./ListOfTypes.html#Double_t">Double_t</a> Vbias = 0, TArray* adcs = 0, TArray* peds = 0, TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> B = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> C = 3) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -373,6 +375,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Hartley">Hartley</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Hilbert">Hilbert</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
@@ -451,6 +454,7 @@ return false;}
 <table class="func" id="tabfuncprot" cellspacing="0">
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:HistogramFilterFFT">HistogramFilterFFT</a>(TArray* h, TH1* hisf, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> dB, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> kernel, TH1* hist = 0)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:HistogramTrafoResult">HistogramTrafoResult</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist, TString sel)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#NcDSP:Reset">Reset</a>()</td></tr>
 
@@ -482,11 +486,13 @@ return false;}
 </table></div>
 <div class="access" id="dataprot"><b>protected:</b>
 <table class="data" id="tabdataprot" cellspacing="0">
+<tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fHisto"></a>fHisto</td><td class="datadesc">Array containing the contents of the selected transformation histogram</td></tr>
 <tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fImIn"></a>fImIn</td><td class="datadesc">Input array for imaginary components</td></tr>
 <tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fImOut"></a>fImOut</td><td class="datadesc">Output array for imaginary components</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a name="NcDSP:fKeepOutput"></a>fKeepOutput</td><td class="datadesc">Internal flag to enable preventing the resetting of the output data</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDSP:fN"></a>fN</td><td class="datadesc">The number of data elements to be processed as entered via Load()</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDSP:fNorm"></a>fNorm</td><td class="datadesc">Parameter to invoke normalization in the convolution for correlation studies</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="NcDSP:fNwf"></a>fNwf</td><td class="datadesc">The number of data elements to be processed as entered via SetWaveform();</td></tr>
 <tr class="data"><td class="datatype">TVirtualFFT*</td><td class="dataname"><a name="NcDSP:fProc"></a>fProc</td><td class="datadesc">The FFTW processor</td></tr>
 <tr class="data"><td class="datatype">TArrayD</td><td class="dataname"><a name="NcDSP:fReIn"></a>fReIn</td><td class="datadesc">Input array for real components</td></tr>
@@ -643,10 +649,12 @@ return false;}
 
  Notes :
 
- 1) Invokation of one of the other <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunctions will reset the internal storage,
-    by which previously obtained results will internally be lost.
+ 1) Invokation of this memberfunction will reset all output arrays, so that
+    previously obtained results will internally be lost.
     Use the <a href="./NcDSP.html#NcDSP:GetData" title="TArrayD NcDSP::GetData(TString mode)">GetData</a>() memberfunction to retrieve data that might be needed later again.
- 2) The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
+ 2) Invokation of one of the other <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunctions will also reset the input arrays.
+    Use the <a href="./NcDSP.html#NcDSP:GetData" title="TArrayD NcDSP::GetData(TString mode)">GetData</a>() memberfunction to retrieve data that might be needed later again.
+ 3) The (optional) waveform data stored via <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>() will not be modified.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:SetWaveform" href="src/NcDSP.cxx.html#Asm1MB">SetWaveform</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> n, <a href="./ListOfTypes.html#Double_t">Double_t</a>* h, <a href="./ListOfTypes.html#Float_t">Float_t</a> f = -1)</span><br />
@@ -764,6 +772,7 @@ return false;}
         <span class="string">"PHID"</span> --&gt; The phases, i.e. arctan(im/re), in degrees
         <span class="string">"in"</span>   --&gt; The values of the input data are provided
         <span class="string">"out"</span>  --&gt; The values of the output data are provided
+        <span class="string">"Hist"</span> --&gt; The contents of the selected transformation histogram (if any) are provided.
         <span class="string">"Wave"</span> --&gt; The values of the stored (system response) waveform data are provided
 
  Examples :
@@ -800,6 +809,8 @@ return false;}
         <span class="string">"dB"</span>   --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im), in decibel
         <span class="string">"PHIR"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
         <span class="string">"PHID"</span> --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+        <span class="string">"CPHI"</span> --&gt; Y-axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+        <span class="string">"SPHI"</span> --&gt; Y-axis shows the values of sin(phase), i.e. sin(arctan(im/re))
         <span class="string">"k"</span>    --&gt; X-axis represents the index k in the frequency domain
         <span class="string">"f"</span>    --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
         <span class="string">"Hz"</span>   --&gt; X-axis represents the actual frequency in Hz in the frequency domain
@@ -816,7 +827,10 @@ return false;}
  sel=<span class="string">"dB f"</span>   will show the (N/2)+1 amplitudes in dB as a function of the fractional sampling rate.
  sel=<span class="string">"RE k 2"</span> will show all N real components as a function of the index k in the frequency domain.
 
- The default values are hist=0 and sel=<span class="string">"none"</span>
+ Note : If only the X-axis variable is specified, the Y-axis will show <span class="string">"RE"</span> in the corresponding domain.
+ So, sel=<span class="string">"t"</span> is equivalent to sel=<span class="string">"RE t"</span> etc...
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Hartley" href="src/NcDSP.cxx.html#Jm6K.D">Hartley</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
@@ -861,7 +875,7 @@ return false;}
 
  Examples :
 
- sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate.
+ sel=<span class="string">"f"</span> will show the (N/2)+1 amplitudes as a function of the fractional sampling rate in the frequency domain.
  sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
 
  The default values are hist=0 and sel=<span class="string">"none"</span>
@@ -876,12 +890,12 @@ return false;}
  Conventions :
 
  N = The number of data elements
- Time domain array : X[]=X[0],...,X[N-1]
+ Time domain array .... : X[]=X[0],...,X[N-1]
  Frequency domain array : Q[]=Q[0],...,Q[N-1]
 
  <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 1 : Q[k]=(1/sqrt(2*(N-1)))*[X[0]+pow(-1,k)*X[N-1]+2*sum(n=1,n=N-2){X[n]*cos(pi*n*k/(N-1))}]
 
- <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+1)*k/N)}]
+ <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*cos(pi*(n+0.5)*k/N)}]
 
  <a href="./NcDSP.html#NcDSP:Cosine" title="void NcDSP::Cosine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Cosine</a> transform type 3 : Q[k]=(1/sqrt(2N))[X[0]+2*sum(n=0,n=N-1){X[n]*cos(pi*n*(k+0.5)/N)}]
 
@@ -928,10 +942,10 @@ return false;}
  Conventions :
 
  N = The number of data elements
- Time domain array : X[]=X[0],...,X[N-1]
+ Time domain array .... : X[]=X[0],...,X[N-1]
  Frequency domain array : Q[]=Q[0],...,Q[N-1]
 
- <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 1 : Q[k]=(1/sqrt(2N+1))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+1)*(k+1)/(N+1))}]
+ <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 1 : Q[k]=(1/sqrt(2*(N+1)))*[2*sum(n=0,n=N-1){X[n]*sin(pi*(n+1)*(k+1)/(N+1))}]
 
  <a href="./NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> transform type 2 : Q[k]=(1/sqrt(2N))*2*sum(n=0,n=N-1){X[n]*sin(pi*(n+0.5)*(k+1)/N)}
 
@@ -967,6 +981,137 @@ return false;}
  sel=<span class="string">"k 2"</span> will show all N amplitudes as a function of the index k in the frequency domain.
 
  The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:Hilbert" href="src/NcDSP.cxx.html#YIAofB">Hilbert</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, TString sel = <span class="string">"none"</span>)</span><br />
+<div class="funccomm"><pre> Perform a 1-dimensional Discrete <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> Transformation (DHIT).
+ Actually, a DHIT is closely related to a Discrete <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> Transformation (DFT)
+ with only real input values, followed by a phase shift and inverse DFT.
+ Consequently, the transformation results in a time domain array of only real values.
+
+ Practical application :
+
+ Since the time domain input consists only of real values, the input signal can
+ be fully described by cos() terms only.
+ Consider in the time domain the following time series (x) that results from
+ a carrier wave that is modulated both in amplitude (A) and phase (P) :
+
+             x(t)=A(t)cos(P(t))
+
+ The <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> transformation allows to extract A(t) and P(t) from the time series x(t)
+ via the so called complex analytic signal Z[] as outlined below.
+ The values of A(t) provide the so-called the <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> envelope, and will always by positive or 0.
+ The instantaneous angular frequency omega(t) is obtained via omega(t)=dP(t)/dt, whereas
+ the values of cos(P(t)) provide the so-called Temporal Fine Structure (TFS).
+
+ Conventions :
+
+ N = The number of data elements
+ Time domain input array .............................. : X[]=X[0],...,X[N-1]
+ <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transform array DFT(X) in the frequency domain : Q[]=Q[0],...,Q[N-1]
+ <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> transform array DHIT(X) in the time domain ... : HT[]=HT[0],...,HT[N-1]
+ Analytic signal array in the time domain ............. : Z[]=Z[0],...,Z[N-1]
+
+ In this memberfunction, the <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> transformation action is executed in the frequency domain,
+ after which the time domain result HT[] is obtained via an inverse <a href="./NcDSP.html#NcDSP:Fourier" title="void NcDSP::Fourier(TString mode,TH1* hist=0,TString sel=&quot;none&quot;)">Fourier</a> transformation.
+
+ Indicating in the frequency domain the (intermediate) DHIT data elements by H[k],
+ we have the following relations :
+
+ H[k] = -i*Q[k] for positive frequencies (which in our convention corresponds to 1&lt;=k&lt;=N/2)
+         0      for frequency 0          (which in our convention corresponds to k=0)
+         i*Q[k] for negative frequencies (which in our convention corresponds to k&gt;N/2)
+
+ In other words : If Q[k] is represented as Q[k]=a+b*i then we have :
+
+ H[k] =  b-a*i for positive frequencies
+         0     for frequency 0
+        -b+a*i for negative frequencies
+
+ From this we obtain via an inverse DFT on H[k] the <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> transform HT[n] in the time domain.
+
+ The instantaneous amplitude A(t) and phase P(t) can be obtained via the so-called analytic signal Z(t) :
+
+ Z[n]=X[n]+i*HT[n] which can be represented as Z[n]=c+d*i
+
+ where A[n]=|Z[n]|=sqrt(c*c+d*d) and P[n]=arctan(d/c).
+
+ Inverse transformation :
+
+ From the above procedure it is seen that DHIT(HT[])=-X[], which is used to perform the inverse transformation HT[]-&gt;X[].
+ For the result of the inverse transformation HT[]-&gt;X[] we keep the definition Z[n]=X[n]+i*HT[n], which allows
+ to also extract the instantaneous amplitude A(t) and phase P(t) from the inverse transformation result.
+ The inverse <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> transformation has been implemented for completeness, but in practice this will not be used often.
+
+ Input arguments :
+
+ mode : &gt;0      --&gt; Perform the forward X[n]-&gt;Z[n] <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> transformation
+        &lt;0      --&gt; Perform the backward HT[n]-&gt;X[n] <a href="./NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> transformation
+ hist : (optional)  Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"X"</span>     --&gt; Y-axis shows the values of the real X[] components
+        <span class="string">"HT"</span>    --&gt; Y-axis shows the values of the real HT[] components
+        <span class="string">"AMP"</span>   --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+        <span class="string">"dB"</span>    --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im), in decibel
+        <span class="string">"PHIR"</span>  --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+        <span class="string">"PHID"</span>  --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+        <span class="string">"CPHI"</span>  --&gt; Y axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+                    This is also called the Temporal Fine Structure (TFS).
+        <span class="string">"OMEGA"</span> --&gt; Y axis shows the values of angular frequency in rad/sec, i.e. d(arctan(im/re))/dt
+        <span class="string">"n"</span>     --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>     --&gt; X-axis represents the actual time in seconds in the time domain
+
+ Note : The option <span class="string">"t"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"AMP t"</span> will show the amplitudes as a function of the actual time in seconds.
+ sel=<span class="string">"PHID n"</span> will show the phases in degrees as a function of the index n in the time domain.
+ sel=<span class="string">"HT n"</span> will show the values of HT[] as a function of the index n in the time domain.
+
+ Note :
+
+ sel=<span class="string">"t"</span> for the forward transformation is equivalent to sel=<span class="string">"HT t"</span>
+ sel=<span class="string">"t"</span> for the inverse transformation is equivalent to sel=<span class="string">"X t"</span>
+ sel=<span class="string">"n"</span> for the forward transformation is equivalent to sel=<span class="string">"HT n"</span>
+ sel=<span class="string">"n"</span> for the inverse transformation is equivalent to sel=<span class="string">"X n"</span>
+
+ The default values are hist=0 and sel=<span class="string">"none"</span>
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="NcDSP:HistogramTrafoResult" href="src/NcDSP.cxx.html#bL_AGD">HistogramTrafoResult</a>(TString name, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist, TString sel)</span><br />
+<div class="funccomm"><pre> Internal memberfunction to provide a histogram with the requested transformation result.
+ The histogram contents are stored in the <a href="./NcDSP.html#NcDSP:fHisto" title="TArrayD NcDSP::fHisto">fHisto</a> array, which can be accessed via <a href="./NcDSP.html#NcDSP:GetData" title="TArrayD NcDSP::GetData(TString mode)">GetData</a>().
+
+ Input arguments :
+
+ mode : &gt;0      --&gt; Result of a forward transformation
+        &lt;0      --&gt; Result of a backward transformation
+ hist :             Histogram with selected results
+ sel  : String to specify the representation of the result histogram
+        <span class="string">"RE"</span>    --&gt; Y-axis shows the values of the real (re) components
+        <span class="string">"IM"</span>    --&gt; Y-axis shows the values of the imaginary (im) components
+        <span class="string">"AMP"</span>   --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im)
+        <span class="string">"dB"</span>    --&gt; Y-axis shows the values of the amplitudes, i.e. sqrt(re*re+im*im), in decibel
+        <span class="string">"PHIR"</span>  --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in radians
+        <span class="string">"PHID"</span>  --&gt; Y-axis shows the values of the phases, i.e. arctan(im/re), in degrees
+        <span class="string">"CPHI"</span>  --&gt; Y axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+        <span class="string">"SPHI"</span>  --&gt; Y axis shows the values of cos(phase), i.e. cos(arctan(im/re))
+        <span class="string">"OMEGA"</span> --&gt; Y axis shows the values of the angular frequency in rad/sec, i.e. d(arctan(im/re))/dt
+        <span class="string">"k"</span>     --&gt; X-axis represents the index k in the frequency domain
+        <span class="string">"f"</span>     --&gt; X-axis represents the fraction f of the sampling rate in the frequency domain
+        <span class="string">"Hz"</span>    --&gt; X-axis represents the actual frequency in Hz in the frequency domain
+        <span class="string">"n"</span>     --&gt; X-axis represents the index n in the time domain
+        <span class="string">"t"</span>     --&gt; X-axis represents the actual time in seconds in the time domain
+
+ Note : The options <span class="string">"Hz"</span>, <span class="string">"t"</span> and <span class="string">"OMEGA"</span> can only be used if the actual data acquisition sampling rate
+        has been provided via the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() memberfunction.
+
+ Examples :
+
+ sel=<span class="string">"AMP t"</span> will show the amplitudes as a function of the actual time in seconds.
+ sel=<span class="string">"PHID n"</span> will show the phases in degrees as a function of the index n in the time domain.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Convolve" href="src/NcDSP.cxx.html#AKCM1B">Convolve</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> shift = 0)</span><br />
@@ -1010,7 +1155,7 @@ return false;}
  The convention is :
  shift = 0 --&gt; No shift and the full array y[] is returned and shown <span class="string">"as is"</span> in the (optional) histogram.
          1 --&gt; The full array y[] is returned and shown in the (optional) histogram with y[i1] at the center.
-               This mode is particulary useful for correlation studies between two distributions [see <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a>()],
+               This mode is particulary useful for correlation studies between two distributions [see <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,Int_t norm=2)">Correlate</a>()],
                since it will show both negative and positive values at the Xaxis of the (optional) histogram,
                and the self-correlation peak coincides with the value 0 at the Xaxis.
          2 --&gt; The array y[] contains only the modified x[] elements and is shown with y[0] at the start of the (optional) histogram.
@@ -1030,8 +1175,8 @@ return false;}
  The default values are hist=0, i1=0, i2=0 and shift=0.
 </pre></div>
 </div>
-<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Correlate" href="src/NcDSP.cxx.html#AeWPv">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* peak = 0)</span><br />
-<div class="funccomm"><pre> (Cross) <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a> the data contained in the waveform h[] with the loaded input data x[]
+<div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Correlate" href="src/NcDSP.cxx.html#hkwX5">Correlate</a>(TH1* hist = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i1 = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a>* i2 = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* peak = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> norm = 2)</span><br />
+<div class="funccomm"><pre> (Cross) <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,Int_t norm=2)">Correlate</a> the data contained in the waveform h[] with the loaded input data x[]
  and return the resulting data y[] in a TArrayD object.
  The input data x[] have to be entered as real numbers by one of the <a href="./NcDSP.html#NcDSP:Load" title="void NcDSP::Load(Int_t n,Double_t* re,Double_t* im=0,Float_t f=-1) or overloads">Load</a>() member functions,
  whereas the waveform h[] has to be specified by <a href="./NcDSP.html#NcDSP:SetWaveform" title="void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f=-1) or overloads">SetWaveform</a>().
@@ -1052,7 +1197,7 @@ return false;}
  In formula : Cross-correlation h[m]*x[n] is equivalent to Convolution h[-m]*x[n].
 
  This feature is used here to centralize the computation in the member function <a href="./NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0)">Convolve</a>(),
- so that also this <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0)">Correlate</a>() processor will automatically profit from possible CPU speed
+ so that also this <a href="./NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,Int_t norm=2)">Correlate</a>() processor will automatically profit from possible CPU speed
  improvements in the Convolution processor.
 
  For details about the procedure, please refer to the excellent textbook :
@@ -1070,12 +1215,22 @@ return false;}
  dashed blue lines in the histogram.
 
  The (optional) argument <span class="string">"peak"</span> provides the location of the correlation peak, indicating
- the shift of the h[] pattern w.r.t. the best matching pattern in x[], with the convention
+ the shift (aka lag) of the h[] pattern w.r.t. the best matching pattern in x[], with the convention
  that the autocorrelation peak falls at 0.
+
+ The (optional) argument <span class="string">"norm"</span> allows to obtain the normalized correlation values.
+ When normalized, the resulting correlation values will be in the interval [-1,1],
+ which facilitates an interpretation of the amount of correlation.
+ Furthermore, normalization will provide consistent results for different amplitudes of x[] and/or h[].
+
+ norm = 0 --&gt; No normalization
+       -1 --&gt; Same as norm=0 but the resulting correlation values will be divided by (|h|*|x|) of the total vectors h[] and [x]
+        1 --&gt; NCC  normalization (i.e. Sum{h[i]*x[i]/(|h|*|x|)}, where |h| and |x| are the vector lengths of the overlapping parts
+        2 --&gt; ZNCC normalization )i.e. (1/N)*Sum{(h[i]-hmean)*(x[i]-xmean)/(sx*sh)}, where sx and sh are the STDs of the overlapping parts
 
  Note : The sampling (rate) of h has to be the same as for the loaded input data x[].
 
- The default values are hist=0, i1=0, i2=0 and peak=0.
+ The default values are hist=0, i1=0, i2=0, peak=0 and norm=2.
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname">TArrayD <a class="funcname" name="NcDSP:Digitize" href="src/NcDSP.cxx.html#zpJppE">Digitize</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> nbits, <a href="./ListOfTypes.html#Double_t">Double_t</a> vcal, <a href="./ListOfTypes.html#Int_t">Int_t</a> mode, TH1* hist = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* stp = 0, <a href="./ListOfTypes.html#Double_t">Double_t</a>* scale = 0) const</span><br />
@@ -2153,7 +2308,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Tue Dec  5 12:09:08 2023 </em><em>&raquo; Last generated: 2023-12-05 12:09</em><br />
+<em>&raquo; Last changed: Thu Mar 20 13:36:06 2025 </em><em>&raquo; Last generated: 2025-03-20 13:36</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>
