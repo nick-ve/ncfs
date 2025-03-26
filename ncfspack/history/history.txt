@@ -1514,3 +1514,10 @@
                 Also the functionality of NcDSP::Correlate() extended to enable normalized cross-correlation values, which involved also
                 some additional coding in NcDSP::Convolve().
                 The version indicator in NcVersion has been updated to 5.39.
+26-mar-2025 NvE The normalization argument of NcDSP::Correlate() was changed from Int_t to TString for more clarity (also for the RnoExplorer GUI),
+                and the default has been changed to "no normalization". The coding in NcDSP::Convolve() has been adapted accordingly,
+                and the functionality of the class RnoExplorer has been extended to use these new features for cross-correlation studies.
+                Note: The normalization argument of NcDSP::Correlate() in version 5.39 is not compatible with the one of version 5.40
+                      (and following versions). So, the user is advised to not use the version 5.39 release.  
+                Also the script amdgcclibs.sh introduced in the /ncfs top directory to create the shared libs of all the various packages at once. 
+                The version indicator in NcVersion has been updated to 5.40.

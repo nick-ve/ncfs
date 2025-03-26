@@ -275,7 +275,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 20, 2025  12:26Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 25, 2025  11:47Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDSP.h"
@@ -341,7 +341,7 @@ void NcDSP::Reset()
   fImOut.Set(0);
   fHisto.Set(0);
  }
- fNorm=0;
+ fNorm="NONE";
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetSamplingFrequency(Float_t f)
@@ -2107,9 +2107,9 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
    // Perform the unnormalized convolution
    y[ix+ih]=y[ix+ih]+x[ix]*h[ih];
 
-   if (fNorm<=0) continue;
+   if (fNorm=="NONE" || fNorm=="GNCC") continue;
 
-   // Gather the normalization data for cross-correlation studies
+   // Gather the normalization data for the "NCC" and "ZNCC" cross-correlation studies
    x1[ix+ih]+=x[ix];
    x2[ix+ih]+=pow(x[ix],2);
    h1[ix+ih]+=h[ih];
@@ -2119,10 +2119,10 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
  }
 
  // Normalize values for cross-correlation studies if requested
- if (fNorm)
+ if (fNorm!="NONE")
  {
   Double_t val=0;
-  if (fNorm==-1) // Overall vector length normalization
+  if (fNorm=="GNCC") // Global vector length normalization
   {
    Double_t xnorm=0;
    Double_t hnorm=0;
@@ -2142,7 +2142,7 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
     if (val>0) y[i]=y[i]/val;
    }
   }
-  else if (fNorm==1) // NCC normalization
+  else if (fNorm=="NCC") // NCC normalization
   {
    for (Int_t i=0; i<ny; i++)
    {
@@ -2280,7 +2280,7 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
  return y;
 }
 ///////////////////////////////////////////////////////////////////////////
-TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,Int_t norm)
+TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,TString norm)
 {
 // (Cross) Correlate the data contained in the waveform h[] with the loaded input data x[]
 // and return the resulting data y[] in a TArrayD object.
@@ -2327,16 +2327,24 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,Int_t norm
 // The (optional) argument "norm" allows to obtain the normalized correlation values.
 // When normalized, the resulting correlation values will be in the interval [-1,1],
 // which facilitates an interpretation of the amount of correlation.
-// Furthermore, normalization will provide consistent results for different amplitudes of x[] and/or h[].
+// However, it should be realized that different normalizations may result in different cross-correlation profiles,
+// as outlined below.
 //
-// norm = 0 --> No normalization
-//       -1 --> Same as norm=0 but the resulting correlation values will be divided by (|h|*|x|) of the total vectors h[] and [x] 
-//        1 --> NCC  normalization (i.e. Sum{h[i]*x[i]/(|h|*|x|)}, where |h| and |x| are the vector lengths of the overlapping parts
-//        2 --> ZNCC normalization )i.e. (1/N)*Sum{(h[i]-hmean)*(x[i]-xmean)/(sx*sh)}, where sx and sh are the STDs of the overlapping parts
+// norm = "NONE" --> No normalization
+//        "GNCC" --> Same as norm="NONE" but the resulting correlation values will be divided by (|h|*|x|) of the total vectors h[] and [x] 
+//        "NCC"  --> NCC  normalization, i.e. Sum{h[i]*x[i]/(|h|*|x|)}, where |h| and |x| are the vector lengths of the overlapping parts
+//        "ZNCC" --> ZNCC normalization, i.e. (1/N)*Sum{(h[i]-hmean)*(x[i]-xmean)/(sx*sh)}, where sx and sh are the STDs of the overlapping parts
+//
+// The "NCC" and "ZNCC" normalizations are preferred when looking for pattern matches, irrespective of the amplitudes.
+// This will provide consistent results for different amplitudes of x[] and/or h[], but may yield incorrect results when
+// looking for a (time) lag between two pulses on top of some background noise.
+// The "GNCC" normalization is preferred in case amplitude matches, next to pattern matches, are also relevant.
+// This is the preferred method when looking for a (time) lag between two pulses on top of some background noise,
+// but in case of a bad SNR, the results may become unreliable.
 //
 // Note : The sampling (rate) of h has to be the same as for the loaded input data x[].
 //
-// The default values are hist=0, i1=0, i2=0, peak=0 and norm=2.
+// The default values are hist=0, i1=0, i2=0, peak=0 and norm="NONE".
 
  TArrayD y(0);
  if (hist) hist->Reset();
@@ -2349,9 +2357,10 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,Int_t norm
   return y;
  }
 
- if (norm<-1 || norm>2)
+ norm.ToUpper(); // Convert norm to uppercase characters
+ if (norm!="NONE" && norm!="GNCC" && norm!="NCC" && norm!="ZNCC")
  {
-  printf(" *%-s::Correlate* Unsupported normalization mode : norm=%-i \n",ClassName(),norm);
+  printf(" *%-s::Correlate* Unsupported normalization mode : norm=%-s \n",ClassName(),norm.Data());
   return y;
  }
 
@@ -2366,7 +2375,7 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,Int_t norm
  fWaveform=temp;
  fNorm=norm; // Normalize the correlation values if requested
  y=Convolve(hist,i1,i2,1);
- fNorm=0; // Reset the normalization flag for convolution studies
+ fNorm="NONE"; // Reset the normalization indicator for convolution studies
 
  // Get the index of the maximum in the y[] array
  Int_t imax=0;
@@ -2395,17 +2404,17 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,Int_t norm
   TString title;
   if (fSample>0)
   {
-   if (norm==1)
+   if (norm=="NCC")
    {
     title.Form("%-s Normalized Cross-Correlation (NCC): max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
    }
-   else if (norm==2)
+   else if (norm=="ZNCC")
    {
-    title.Form("%-s Normalized Cross-Correlation (ZNCC): max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
+    title.Form("%-s Zero-Normalized Cross-Correlation (ZNCC): max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
    }
-   else if (norm==-1)
+   else if (norm=="GNCC")
    {
-    title.Form("%-s Overall normalized Cross-Correlation : max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
+    title.Form("%-s Globally Normalized Cross-Correlation (GNCC): max. at lag=%-g sec. (%-g samples/sec)",ClassName(),xpeak,fSample);
    }
    else
    {
@@ -2415,17 +2424,17 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,Int_t norm
   }
   else
   {
-   if (norm==1)
+   if (norm=="NCC")
    {
     title.Form("%-s Normalized Cross-Correlation (NCC): max. at lag=%-i samplings",ClassName(),idx);
    }
-   else if (norm==2)
+   else if (norm=="ZNCC")
    {
-    title.Form("%-s Normalized Cross-Correlation (ZNCC): max. at lag=%-i samplings",ClassName(),idx);
+    title.Form("%-s Zero-Normalized Cross-Correlation (ZNCC): max. at lag=%-i samplings",ClassName(),idx);
    }
-   else if (norm==-1)
+   else if (norm=="GNCC")
    {
-    title.Form("%-s Overall normalized Cross-Correlation : max. at lag=%-i samplings",ClassName(),idx);
+    title.Form("%-s Gobally Normalized Cross-Correlation (GNCC): max. at lag=%-i samplings",ClassName(),idx);
    }
    else
    {

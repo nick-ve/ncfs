@@ -20,7 +20,7 @@
 // This class is derived from TChain to directly access the data (files).
 //
 //--- Author: Nick van Eijndhoven 19-jul-2023 IIHE-VUB Brussel.
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, December 5, 2023  11:04Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 25, 2025  13:23Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoExplorer.h"
@@ -565,16 +565,18 @@ void RnoExplorer::ExpOpsMode(Int_t i)
  {
   fOpsPars[0]="0";
   fOpsPars[1]="Store2";
-  fParams[0]->SetToolTipText("Channel number (0-23)");
-  fParams[1]->SetToolTipText("Storage to retreive the spectrum from");
+  fParams[0]->SetToolTipText("Channel number (0-23) for the spectrum to be subtracted");
+  fParams[1]->SetToolTipText("Storage to retrieve the spectrum to be subtracted");
  }
 
  if (fOpsMode=="Corr") // Correlation of spectra
  {
   fOpsPars[0]="0";
   fOpsPars[1]="Store2";
-  fParams[0]->SetToolTipText("Channel number (0-23)");
-  fParams[1]->SetToolTipText("Storage to retreive the correlation pattern from");
+  fOpsPars[2]="GNCC";
+  fParams[0]->SetToolTipText("Channel number (0-23) for the reference spectrum");
+  fParams[1]->SetToolTipText("Storage to retrieve the reference spectrum for correlation");
+  fParams[2]->SetToolTipText("Normalization mode : NONE, GNCC, NCC, ZNCC");
  }
 
  if (fOpsMode=="SNR") // Get the SNR of the distribution
@@ -1050,7 +1052,7 @@ void RnoExplorer::GetHistograms(Int_t jstore)
    // Ensure identical binning for the data and the search pattern
    fBB.Rebin(&fHistos[StoreIn2-1][jch2],&htemp,kFALSE);
    fDSP.SetWaveform((TH1*)&htemp);
-   fDSP.Correlate(&Hout);
+   fDSP.Correlate(&Hout,0,0,0,fOpsPars[2]);
   }
 
   if (fOpsMode=="SNR") // Provide the SNR of the distribution(s)

@@ -14,6 +14,8 @@ lib=ncfspack.so
 ### dropped to avoid many warnings from the rootcint generated code ***
 gccroot="-fPIC -shared -g0 -ansi -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$CFITSIO -o $lib"
 #
+echo ' '
+echo '*** Creation of the ncfspack shared library for generic functionality of the framework ***' 
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
 echo "NCFS = " $NCFS
@@ -37,5 +39,4 @@ mv -f $lib $ROOTSYS/lib
 ### Return to the scripts directory
 cd ../scripts
 #
-echo ' ' 
-echo '*** gcclib done. Result in ' $lib 
+echo '*** amdgcclib done. Result in ' $lib 

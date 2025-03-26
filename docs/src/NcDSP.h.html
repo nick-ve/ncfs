@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Thu Mar 20 13:36:06 2025            -->
+<!--   Date: Wed Mar 26 08:40:31 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -62,7 +62,7 @@
   <span class="keyword">void</span> <a href="../NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> type,TH1* hist=0,TString sel=<span class="string">"none"</span>);        <span class="comment">// Perform a 1-dimensional Discrete <a href="../NcDSP.html#NcDSP:Sine" title="void NcDSP::Sine(Int_t type,TH1* hist=0,TString sel=&quot;none&quot;)">Sine</a> Transform (DST)</span>
   <span class="keyword">void</span> <a href="../NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> mode,TH1* hist=0,TString sel=<span class="string">"none"</span>);     <span class="comment">// Perform a 1-dimensional Discrete <a href="../NcDSP.html#NcDSP:Hilbert" title="void NcDSP::Hilbert(Int_t mode,TH1* hist=0,TString sel=&quot;none&quot;)">Hilbert</a> Transform (HT)</span>
   TArrayD <a href="../NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0)">Convolve</a>(TH1* hist=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* i1=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* i2=0,<a href="../ListOfTypes.html#Int_t">Int_t</a> shift=0); <span class="comment">// <a href="../NcDSP.html#NcDSP:Convolve" title="TArrayD NcDSP::Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0)">Convolve</a> the loaded data with the stored waveform data</span>
-  TArrayD <a href="../NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,Int_t norm=2)">Correlate</a>(TH1* hist=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* i1=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* i2=0,<a href="../ListOfTypes.html#Double_t">Double_t</a>* peak=0,<a href="../ListOfTypes.html#Int_t">Int_t</a> norm=2); <span class="comment">// <a href="../NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,Int_t norm=2)">Correlate</a> the stored waveform data with the loaded data</span>
+  TArrayD <a href="../NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,TString norm=&quot;NONE&quot;)">Correlate</a>(TH1* hist=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* i1=0,<a href="../ListOfTypes.html#Int_t">Int_t</a>* i2=0,<a href="../ListOfTypes.html#Double_t">Double_t</a>* peak=0,TString norm=<span class="string">"NONE"</span>); <span class="comment">// <a href="../NcDSP.html#NcDSP:Correlate" title="TArrayD NcDSP::Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,TString norm=&quot;NONE&quot;)">Correlate</a> the stored waveform data with the loaded data</span>
   TArrayD <a href="../NcDSP.html#NcDSP:Digitize" title="TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist=0,Double_t* stp=0,Double_t* scale=0)">Digitize</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> nbits,<a href="../ListOfTypes.html#Double_t">Double_t</a> vcal,<a href="../ListOfTypes.html#Int_t">Int_t</a> mode,TH1* hist=0,<a href="../ListOfTypes.html#Double_t">Double_t</a>* stp=0,<a href="../ListOfTypes.html#Double_t">Double_t</a>* scale=0) <span class="keyword">const</span>; <span class="comment">// <a href="../NcDSP.html#NcDSP:Digitize" title="TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist=0,Double_t* stp=0,Double_t* scale=0)">Digitize</a> values according to an <span class="string">"nbits"</span> <a href="../NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.</span>
   TArrayL64 <a href="../NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> nbits,<a href="../ListOfTypes.html#Double_t">Double_t</a> range,<a href="../ListOfTypes.html#Double_t">Double_t</a> Vbias=0,TArray* Vsig=0,TH1* hist=0,<a href="../ListOfTypes.html#Int_t">Int_t</a> B=0,<a href="../ListOfTypes.html#Int_t">Int_t</a> C=3) <span class="keyword">const</span>; <span class="comment">// Provide the quantized data of an <span class="string">"nbits"</span> <a href="../NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.</span>
   TArrayD <a href="../NcDSP.html#NcDSP:DAC" title="TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3)">DAC</a>(<a href="../ListOfTypes.html#Int_t">Int_t</a> nbits,<a href="../ListOfTypes.html#Double_t">Double_t</a> range,<a href="../ListOfTypes.html#Double_t">Double_t</a> Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,<a href="../ListOfTypes.html#Int_t">Int_t</a> B=0,<a href="../ListOfTypes.html#Int_t">Int_t</a> C=3) <span class="keyword">const</span>; <span class="comment">// Reconstruct the analog signals from an <span class="string">"nbits"</span> <a href="../NcDSP.html#NcDSP:ADC" title="TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3)">ADC</a>.</span>
@@ -97,7 +97,7 @@
   TArrayD <a href="../NcDSP.html#NcDSP:fImOut" title="TArrayD NcDSP::fImOut">fImOut</a>;     <span class="comment">// Output array for imaginary components</span>
   TArrayD <a href="../NcDSP.html#NcDSP:fHisto" title="TArrayD NcDSP::fHisto">fHisto</a>;     <span class="comment">// Array containing the contents of the selected transformation histogram</span>
   TArrayD <a href="../NcDSP.html#NcDSP:fWaveform" title="TArrayD NcDSP::fWaveform">fWaveform</a>;  <span class="comment">// (System response) waveform for Convolution, Correlation etc.</span>
-  <a href="../ListOfTypes.html#Int_t">Int_t</a> <a href="../NcDSP.html#NcDSP:fNorm" title="Int_t NcDSP::fNorm">fNorm</a>;        <span class="comment">// Parameter to invoke normalization in the convolution for correlation studies</span>
+  TString <a href="../NcDSP.html#NcDSP:fNorm" title="TString NcDSP::fNorm">fNorm</a>;      <span class="comment">// Parameter to invoke normalization in the convolution for correlation studies</span>
   <a href="../ListOfTypes.html#Float_t">Float_t</a> <a href="../NcDSP.html#NcDSP:fSample" title="Float_t NcDSP::fSample">fSample</a>;    <span class="comment">// The actual data acquisition sampling frequency in Hz</span>
   <a href="../ListOfTypes.html#Bool_t">Bool_t</a> <a href="../NcDSP.html#NcDSP:fKeepOutput" title="Bool_t NcDSP::fKeepOutput">fKeepOutput</a>; <span class="comment">// Internal flag to enable preventing the resetting of the output data</span>
 
@@ -106,7 +106,7 @@
   <span class="keyword">void</span> <a href="../NcDSP.html#NcDSP:HistogramFilterFFT" title="void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* hist=0)">HistogramFilterFFT</a>(TArray* h,TH1* hisf,<a href="../ListOfTypes.html#Bool_t">Bool_t</a> dB,<a href="../ListOfTypes.html#Bool_t">Bool_t</a> kernel,TH1* hist=0); <span class="comment">// Provide filter kernel or result histograms</span>
   <span class="keyword">void</span> <a href="../NcDSP.html#NcDSP:HistogramTrafoResult" title="void NcDSP::HistogramTrafoResult(TString name,Int_t mode,TH1* hist,TString sel)">HistogramTrafoResult</a>(TString name,<a href="../ListOfTypes.html#Int_t">Int_t</a> mode,TH1* hist,TString sel); <span class="comment">// Provide a histogram of the requested transformation result</span>
 
- ClassDef(<a href="../NcDSP.html">NcDSP</a>,9) <span class="comment">// Various Digital Signal Processing (DSP) operations for (sequential) data samples</span>
+ ClassDef(<a href="../NcDSP.html">NcDSP</a>,10) <span class="comment">// Various Digital Signal Processing (DSP) operations for (sequential) data samples</span>
 };
 <span class="cpp">#endif</span>
 </pre>
@@ -117,7 +117,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2025-03-20 13:36 </em><em>&raquo; Last generated: 2025-03-20 13:36</em><br />
+<em>&raquo; Last changed: 2025-03-26 08:40 </em><em>&raquo; Last generated: 2025-03-26 08:40</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

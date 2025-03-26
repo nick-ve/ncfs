@@ -15,6 +15,8 @@ lib=rnopack.so
 ### dropped to avoid many warnings from the rootcint generated code ***
 gccroot="-fPIC -shared -g0 -ansi -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$NCFS/ncfspack/source -o $lib"
 #
+echo ' '
+echo '*** Creation of the rnopack shared library for RNO-G analyses ***' 
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
 echo "NCFS = " $NCFS
@@ -38,5 +40,4 @@ mv -f $lib $ROOTSYS/lib
 ### Return to the scripts directory
 cd ../scripts
 #
-echo ' ' 
-echo '*** gcclib done. Result in ' $lib 
+echo '*** amdgcclib done. Result in ' $lib 

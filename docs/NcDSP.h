@@ -41,7 +41,7 @@ class NcDSP : public TNamed
   void Sine(Int_t type,TH1* hist=0,TString sel="none");        // Perform a 1-dimensional Discrete Sine Transform (DST)
   void Hilbert(Int_t mode,TH1* hist=0,TString sel="none");     // Perform a 1-dimensional Discrete Hilbert Transform (HT)
   TArrayD Convolve(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Int_t shift=0); // Convolve the loaded data with the stored waveform data
-  TArrayD Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,Int_t norm=2); // Correlate the stored waveform data with the loaded data
+  TArrayD Correlate(TH1* hist=0,Int_t* i1=0,Int_t* i2=0,Double_t* peak=0,TString norm="NONE"); // Correlate the stored waveform data with the loaded data
   TArrayD Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist=0,Double_t* stp=0,Double_t* scale=0) const; // Digitize values according to an "nbits" ADC.
   TArrayL64 ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Provide the quantized data of an "nbits" ADC.
   TArrayD DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Reconstruct the analog signals from an "nbits" ADC.
@@ -76,7 +76,7 @@ class NcDSP : public TNamed
   TArrayD fImOut;     // Output array for imaginary components
   TArrayD fHisto;     // Array containing the contents of the selected transformation histogram
   TArrayD fWaveform;  // (System response) waveform for Convolution, Correlation etc.
-  Int_t fNorm;        // Parameter to invoke normalization in the convolution for correlation studies
+  TString fNorm;      // Parameter to invoke normalization in the convolution for correlation studies
   Float_t fSample;    // The actual data acquisition sampling frequency in Hz
   Bool_t fKeepOutput; // Internal flag to enable preventing the resetting of the output data
 
@@ -85,6 +85,6 @@ class NcDSP : public TNamed
   void HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* hist=0); // Provide filter kernel or result histograms
   void HistogramTrafoResult(TString name,Int_t mode,TH1* hist,TString sel); // Provide a histogram of the requested transformation result
 
- ClassDef(NcDSP,9) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
+ ClassDef(NcDSP,10) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
 };
 #endif
