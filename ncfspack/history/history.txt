@@ -1521,3 +1521,8 @@
                       (and following versions). So, the user is advised to not use the version 5.39 release.  
                 Also the script amdgcclibs.sh introduced in the /ncfs top directory to create the shared libs of all the various packages at once. 
                 The version indicator in NcVersion has been updated to 5.40.
+02-apr-2025 NvE Introduced the scripts SL6.sh, SL7.sh and SL8.sh in the /ncfs top directory, to enable the creation
+                of the Scientific Linux 6, 7 or 8 environments, respectively, via CVMFS.
+                Also the script python.sh was introduced to create a Python 3 or Python 2 environment via CVMFS,
+                and the script ncfs.sh was updated to reflect the latest IIHE computer cluster configuration.
+                For completeness, also the generic rootlogoff.cc file was introduced.

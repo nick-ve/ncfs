@@ -1,30 +1,30 @@
-### Set links to the ROOT stuff for processing on the IIHE computer cluster ###
-### On other systems, just specify the corresponding paths ###
-### In addition also a handy "unzipping" facility is provided ###
-###
-### Nick van Eijndhoven, IIHE-VUB, Brussel, Belgium
+################################################################################
+### Set links to the ROOT stuff for processing on the IIHE computer cluster. ###
+### On other systems, just specify the corresponding paths.                  ###
+### In addition also a handy "unzipping" facility is provided.               ###
+###                                                                          ###
+### Nick van Eijndhoven, IIHE-VUB, Brussel, Belgium                          ###
+################################################################################
 #
 ### Set environment variables to run the ROOT package ###
-export ROOTSYS=/ice3/software/root_v5.34.38
+export ROOTSYS=/software/icecube/root_v5.34.38
 export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
 #
-### Additional libraries like for instance Pythia
-export MYLIBS=/ice3/software/pythia-6.4.28
+### My private root loadable library area
+export MYLIBS=/software/icecube/pythia-6.4.28
 #
-### Directory where the CFITSIO header files reside
-# export CFITSIO=standard ### Use this when the header files are in the standard system include path
+### Directory where the CFITSIO header files reside (if not in the standard system include path)
 export CFITSIO=/usr/include/cfitsio
 #
 ### Pointer to the NCFS top directory
-export NCFS=/ice3/software/ncfs
+export NCFS=/software/icecube/nick/ncfs
 #
 ### Set prompt to ncfs>
 export PS1="ncfs>"
 #
-export PATH=$ROOTSYS/bin:/ice3/software/firefox:$PATH
+export PATH=$ROOTSYS/bin:/software/icecube/firefox:$PATH
 #
 echo " NCFS environment set: ROOTSYS="${ROOTSYS} " NCFS="${NCFS} " CFITSIO="${CFITSIO}
-#
 #
 ### Define the "extractx" facility to "unzip" various file types
 extractx () {
