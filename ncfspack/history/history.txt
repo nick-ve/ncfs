@@ -1526,3 +1526,5 @@
                 Also the script python.sh was introduced to create a Python 3 or Python 2 environment via CVMFS,
                 and the script ncfs.sh was updated to reflect the latest IIHE computer cluster configuration.
                 For completeness, also the generic rootlogoff.cc file was introduced.
+09-apr-2025 NvE Introduced the script SL9.sh in the /ncfs top directory, and updated ncfs.sh to set the
+                command prompt to "ncfs>" also for any SLx environment.

@@ -19,8 +19,11 @@ export CFITSIO=/usr/include/cfitsio
 ### Pointer to the NCFS top directory
 export NCFS=/software/icecube/nick/ncfs
 #
-### Set prompt to ncfs>
+### Set the regular bash prompt to ncfs>
 export PS1="ncfs>"
+#
+### Set the prompt for any SLx environment to ncfs>
+export APPTAINERENV_PS1="ncfs>"
 #
 export PATH=$ROOTSYS/bin:/software/icecube/firefox:$PATH
 #
