@@ -54,3 +54,4 @@
 #include "NcTaggingStats.h"
 #include "NcTaggingSelector.h"
 #include "NcDSP.h"
+#include "NcSpectrum.h"

@@ -1528,3 +1528,18 @@
                 For completeness, also the generic rootlogoff.cc file was introduced.
 09-apr-2025 NvE Introduced the script SL9.sh in the /ncfs top directory, and updated ncfs.sh to set the
                 command prompt to "ncfs>" also for any SLx environment.
+07-may-2025 NvE New class NcSpectrum introduced and the files NCFSHeaders.h and NCFSLinkDef.h updated accordingly.
+                This class NcSpectrum serves as a replacement of TSpectrum in order to provide compatible functionality
+                within all ROOT versions, such that all the NCFS (based) code can remain unchanged, and as such 100% backward
+                (and forward) compatible.
+                NcSpectrum actually is the code of TSpectrum as it was present in ROOT 5.34/38.
+                The incompatibility that was introduced starting from ROOT6, consisted of the fact that the Float_t* return arguments
+                were changed into Double_t*. The only memberfunction that was affected was IceEvent::GetTriggerTime(), and as such
+                the files IceEvent.h and IceEvent.cxx were also updated accordingly.
+                Also a private copy of the header file Riostream.h has been introduced, in which the statement "using namespace std;"
+                has been added to provide again the full functionality of "cout" and "cin" commands within ROOT6.
+                The memberfunction GetVersion() has been introduced in class NcVersion.
+                The version indicator in NcVersion has been updated to 5.41.
+                *** Note : In view of the above, NCFS versions up to 5.41 (incl.) will NOT be compatible with ROOT6 ***
+                
+                

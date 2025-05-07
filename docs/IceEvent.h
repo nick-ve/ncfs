@@ -4,13 +4,14 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceEvent.h 130 2016-08-24 11:11:33Z nickve $
-
-#include "TSpectrum.h"
+// Commented out by Nick van Eijndhoven, VUB-IIHE, Brussels, May 7, 2025  07:46Z
+//@@@ #include "TSpectrum.h"
 #include "TError.h"
 
 #include "NcEvent.h"
 #include "NcSample.h"
+// Next line added by Nick van Eijndhoven, VUB-IIHE, Brussels, May 7, 2025  07:46Z
+#include "NcSpectrum.h"
 #include "IceGOM.h"
 
 class IceEvent : public NcEvent
@@ -32,6 +33,6 @@ class IceEvent : public NcEvent
  protected:
   TArrayI* fStrings; //! Temp. array to hold the string ids of fired modules
 
- ClassDef(IceEvent,8) // Handling of IceCube event data.
+ ClassDef(IceEvent,9) // Handling of IceCube event data.
 };
 #endif

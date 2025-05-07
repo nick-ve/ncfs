@@ -59,5 +59,6 @@
  #pragma link C++ class NcTaggingStats+;
  #pragma link C++ class NcTaggingSelector+;
  #pragma link C++ class NcDSP+;
+ #pragma link C++ class NcSpectrum+;
 #endif
  

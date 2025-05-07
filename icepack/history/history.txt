@@ -229,5 +229,11 @@
 19-mar-2021 NvE Compiler option -Wall replaced by -Wunused in the amdgcclib.sh compilation script
                 to prevent excessive warnings with the new(er) gcc versions.
 20-jun-2021 NvE Unused variable "twrdaq" removed from IceXtalk::Exec() to prevent compiler warning.
-
-
+07-may-2025 NvE An incompatibility was introduced starting from ROOT6, consisting of the fact that the Float_t* return arguments
+                were changed into Double_t* in class TSpectrum.
+                To resolve this issue, a class NcSpectrum was introduced, which actually is the code of TSpectrum as it
+                was present in ROOT 5.34/38.
+                The only memberfunction that was affected was IceEvent::GetTriggerTime(), and as such the files IceEvent.h and IceEvent.cxx
+                were updated accordingly.
+                The version indicator in NcVersion has been updated to 5.41.
+                *** Note : In view of the above, NCFS versions up to 5.41 (incl.) will NOT be compatible with ROOT6 ***

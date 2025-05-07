@@ -51,7 +51,7 @@
 // improvements or extensions that are fully backward compatible.
 //
 //--- Author: Nick van Eijndhoven 24-sep-2009 NCFS
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 26, 2025  07:35Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, May 7, 2025  10:26Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcVersion.h"
@@ -62,9 +62,9 @@ ClassImp(NcVersion) // Class implementation to enable ROOT I/O
 NcVersion::NcVersion() : TObject()
 {
 // Default constructor to initialise all parameters
- fVersion="5.40";
+ fVersion="5.41";
  fRev="Branch: master";
- fDate="March 26, 2025  07:36 UTC";
+ fDate="May 7, 2025  10:26 UTC";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()
@@ -98,5 +98,11 @@ void NcVersion::Data() const
  cout << " NCFS-Pack version : " << fVersion << " corresponding to GIT " << fRev << endl;
  cout << " Created at " << fDate << endl;
  cout << endl;
+}
+///////////////////////////////////////////////////////////////////////////
+TString NcVersion::GetVersion() const
+{
+// Provide the version string.
+ return fVersion;
 }
 ///////////////////////////////////////////////////////////////////////////

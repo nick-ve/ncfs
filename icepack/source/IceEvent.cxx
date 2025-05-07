@@ -13,8 +13,6 @@
  * any purpose. It is provided "as is" without express or implied warranty.
  *******************************************************************************/
 
-// $Id: IceEvent.cxx 130 2016-08-24 11:11:33Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
 // Class IceEvent
 // Handling of IceCube event data.
@@ -273,7 +271,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
-//- Modified: NvE $Date: 2016-08-24 13:11:33 +0200 (Wed, 24 Aug 2016) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 7, 2025  07:29Z
 ///////////////////////////////////////////////////////////////////////////
 
 #include "IceEvent.h"
@@ -708,10 +706,12 @@ Float_t IceEvent::GetTriggerTime(TString trigname,TObjArray* arr,Int_t slc,TArra
    time=times.GetEntry(it,1);
    thist.Fill(time);
   }
-  TSpectrum spec;
+// Next line modified because of an incompatible change in ROOT6
+//@@@  TSpectrum spec;
+  NcSpectrum spec;
   spec.SetDeconIterations(100);
   Int_t oldlevel=gErrorIgnoreLevel;
-  gErrorIgnoreLevel=kFatal; // Suppress all (TSpectrum) error and warning messages
+  gErrorIgnoreLevel=kFatal; // Suppress all (TSpectrum c.q. NcSpectrum) error and warning messages
   Int_t npeaks=spec.Search(&thist,1,"goff",0.3);
   gErrorIgnoreLevel=oldlevel; // Re-activate previous info level
   if (npeaks)
