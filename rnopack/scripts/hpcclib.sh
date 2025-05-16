@@ -12,8 +12,8 @@ lib=rnopack.sl
 ### The option strings for HP-CC shared lib compilation and linking ***
 ### For the HP-CC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-hpcomp="-c -s -z +z +a1 +w +DAportable -I$ROOTSYS/include -I$NCFS/ncfspack/source"
-hproot="-c -s -z +z +a1 +DAportable -I$ROOTSYS/include -I$NCFS/ncfspack/source"
+hpcomp="-c -s -z +z +a1 +w +DAportable -I$NCFS/ncfspack/source -I$ROOTSYS/include"
+hproot="-c -s -z +z +a1 +DAportable -I$NCFS/ncfspack/source -I$ROOTSYS/include"
 hplink="-L$ROOTSYS/lib/ -l*.sl -lm"
 #
 echo "lib = " $lib
@@ -25,18 +25,18 @@ echo "hproot = " $hproot
 cd $NCFS/rnopack/source
 #
 ### Create the dictionary files
-rootcint -f zzzrnopackdict.cxx -c -I$NCFS/ncfspack/source RNOHeaders.h RNOLinkDef.h
+rootcint -f rnopackdict.cxx -c -I$NCFS/ncfspack/source RNOHeaders.h RNOLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 CC $hproot *.cxx   
 #
 CC -b -o rnopack.sl *.o
 #
-rm zzzrnopackdict.*
-rm *.o
+rm -f *.o
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f rnopackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts

@@ -1540,6 +1540,21 @@
                 has been added to provide again the full functionality of "cout" and "cin" commands within ROOT6.
                 The memberfunction GetVersion() has been introduced in class NcVersion.
                 The version indicator in NcVersion has been updated to 5.41.
+                Starting from ROOT6, the ROOT distributions don't contain the full support for TPythia6 anymore.
+                It is left to the user the introduce event generators as additional packages.
+                This will be done in a following NCFS release (tag v6.0), since the class NcCollider is based on TPythia6.
                 *** Note : In view of the above, NCFS versions up to 5.41 (incl.) will NOT be compatible with ROOT6 ***
-                
+15-may-2025 NvE New folder ncfs/Pythia6 introduced to contain the code and installation scripts to create the
+                libPythia6 shared library. The produced libPythia6 shared library will be located in ncfs/Pythia6.
+                Also the TPythia6 related .h and .cxx files from ROOT 5.34/38 introduced in ncfs/ncfspack/source
+                and the files NCFSHeaders.h and NCFSLinkDef.h updated accordingly.
+                In this way, all TPythia6 code is locally available to successfully compile NcCollider.
+                In the same spirit, all NCFS related libraries (except libPythia6) will now reside in a new folder
+                ncfs/libs. This will allow to use pre-compiled ROOT releases, like for instance via cvmfs.
+                All the library creation scripts and the file ncfs/.rootrc have been updated accordingly.
+                Furthermore, because of a (slightly) different behaviour of Cling w.r.t. CINT, the file ncfs/rootlogon.cc
+                has been modified to load all the NCFS related libraries, next to the libPythia6 and necessary ROOT libraries.
+                Note however, that old ROOT macros containing "gSystem->Load(...)" statements will still work as usual.
+                This new release is fully backward compatible and also compatible with ROOT6.                
+                As such, the version indicator in NcVersion has been updated to 6.0.
                 

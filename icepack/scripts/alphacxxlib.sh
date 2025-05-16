@@ -12,7 +12,7 @@ lib=icepack.so
 ### The option string for ALPHA-CXX shared lib compilation and linking ***
 ### For the ALPHA-CXX ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-alpharoot="-x cxx -g0 -shared -w1 -I$ROOTSYS/include -I$NCFS/ncfspack/source -o $lib"
+alpharoot="-x cxx -g0 -shared -w1 -I$NCFS/ncfspack/source -I$ROOTSYS/include -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
@@ -23,17 +23,17 @@ echo "alpharoot = " $alpharoot
 cd $NCFS/icepack/source
 #
 ### Create the dictionary files
-rootcint -f zzzicepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
+rootcint -f icepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 cxx $alpharoot *.cxx   
 #
-rm zzzicepackdict.*
-rm *.o
-rm so_locations
+rm -f *.o
+rm -f so_locations
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f icepackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts

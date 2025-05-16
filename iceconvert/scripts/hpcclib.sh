@@ -12,8 +12,8 @@ lib=iceconvert.sl
 ### The option strings for HP-CC shared lib compilation and linking ***
 ### For the HP-CC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-hpcomp="-c -s -z +z +a1 +w +DAportable -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source"
-hproot="-c -s -z +z +a1 +DAportable -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source"
+hpcomp="-c -s -z +z +a1 +w +DAportable -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
+hproot="-c -s -z +z +a1 +DAportable -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
 hplink="-L$ROOTSYS/lib/ -l*.sl -lm"
 #
 echo "lib = " $lib
@@ -26,18 +26,18 @@ echo "hproot = " $hproot
 cd $NCFS/iceconvert/source
 #
 ### Create the dictionary files
-rootcint -f zzziceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
+rootcint -f iceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 CC $hpcomp *.c   
 CC $hproot *.cxx   
 CC -b -o iceconvert.sl *.o
 #
-rm zzziceconvertdict.*
-rm *.o
+rm -f *.o
 #
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f iceconvertdict* $NCFS/libs
 #
 ### Return to the scripts directory
 cd ../scripts

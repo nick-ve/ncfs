@@ -1,0 +1,63 @@
+#################################################################
+# Global .rootrc for ROOT sessions/jobs.
+# More specific functionality can be obtained by providing a
+# customized file ".rootrc" in the working directory.
+#
+# --- Nick van Eijndhoven 09-oct-1997 UU-SAP Utrecht
+# Modified : Nick van Eijndhoven, IIHE-VUB, Brussels, May 12, 2025  17:38Z
+#################################################################
+
+### Set search paths
+Unix.*.Root.DynamicPath: .:$(NCFS)/libs:$(NCFS)/Pythia6:$(ROOTSYS)/bin
+Unix.*.Root.MacroPath:   .:$(HOME):$(NCFS)
+
+### Prompt colors
+# Whether to use default colors for light-on-dark (i.e. reverse) color scheme:
+Rint.ReverseColor:       no
+# Prompt colors: #rgb or #rrggbb or color names:
+#  "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"
+#  "default" will keep the current terminal color.
+# can be combined with string containing "under" and "bold".
+Rint.TypeColor:          default
+Rint.BracketColor:       default
+Rint.BadBracketColor:    default
+Rint.PromptColor:        default
+Rint.TabComColor:        default
+
+### Identify logon etc... files
+Rint.Load:   rootalias.cc
+Rint.Logon:  rootlogon.cc
+Rint.Logoff: rootlogoff.cc
+Rint.History: $(HOME)/root_hist.C
+
+### Default 3d Viewer.
+# By default 3-D views are shown in the pad,
+# if the next line is activated, the default viewer will be OpenGL.
+Viewer3D.DefaultDrawOption:   ogl
+ 
+### (De)Activate memory statistics
+Rint.Root.MemStat: 0
+
+### Set tags for documentation generation
+Root.Html.Author: //--- Author:
+Root.Html.LastUpdate: //- Modified:
+### Root.Html.Copyright: // Copyright
+#
+### Browser Options (plugins)
+Browser.Name:                TRootBrowser
+# Items to display in toolbar
+# F: File browser E: Text Editor H: HTML browser 
+# C: Canvas I: I/O redirection P: Proof G: GL viewer
+Browser.Options:             FECI
+# Browser Icon settings can be either small, big, list, details
+Browser.IconStyle:           small
+# Item sorting can be either name, type, size, date
+Browser.SortBy:              name
+Browser.GroupView:           10000
+Browser.ShowHidden:          no
+Browser.AutoThumbnail:       yes
+# Start URL for the TRootBrowser embedded HTML renderer
+Browser.StartUrl:            http://root.cern.ch/root/html/ClassIndex.html
+#
+### ACLiC customization.
+ACLiC.IncludePaths: -I$(NCFS)/ncfspack/source -I$(NCFS)/icepack/source -I$(NCFS)/iceconvert/source -I$(NCFS)/rnopack/source -I$(CFITSIO)

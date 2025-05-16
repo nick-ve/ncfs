@@ -35,7 +35,7 @@ void rdmc_cp_mevt_nuses(mevt_uses_t *out, mevt_uses_t *in, int nuses){
 }
   
 
-/* sorts the uses array for a) uses id and the hit_id */
+/* sorts the uses Array for a) uses id and the hit_id */
 void rdmc_sort_uses(mevt_uses_t *use, int nuse){
   qsort(use,nuse,sizeof(mevt_uses_t),comp_uses);
 }
@@ -96,7 +96,7 @@ int rdmc_create_trig_uses(mevt *e, int itrig){
 
 
  /* count the number of channels which are used by fit or trigger i*/
-int rdmc_count_fit_nch_uses(mevt *e, array *a, int ifit){
+int rdmc_count_fit_nch_uses(mevt *e, Array *a, int ifit){
   int nch=0;
   static int *ich=NULL;
   int iuse;
@@ -116,7 +116,7 @@ int rdmc_count_fit_nch_uses(mevt *e, array *a, int ifit){
   iuse=0;
 #endif
 
-  /* get temporary array for the number of channels and init to 0*/
+  /* get temporary Array for the number of channels and init to 0*/
   ich = alloca(a->nch*sizeof(int));
   memset(ich,0,a->nch*sizeof(int));
 

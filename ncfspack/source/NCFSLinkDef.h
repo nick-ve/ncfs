@@ -60,5 +60,8 @@
  #pragma link C++ class NcTaggingSelector+;
  #pragma link C++ class NcDSP+;
  #pragma link C++ class NcSpectrum+;
+ #pragma link C++ class TPythia6+;
+ #pragma link C++ class TPythia6Decayer+;
+ #pragma link C++ class TMCParticle+;
 #endif
  

@@ -56,7 +56,7 @@ enum F2K_TAG_SEARCH_T {COMP_STRINGWISE=1, /* stringwise comp */
 /************** functions to actually parse the lines ****/
 
 
-typedef int (f2k_parser_fun_t)(mcfile *fp, array *a, 
+typedef int (f2k_parser_fun_t)(mcfile *fp, Array *a, 
 			       mevt *e, void *misc);
 /* the void pointer misc is a trick to pass anny target to fill */
 
@@ -72,8 +72,8 @@ typedef struct  {
 /*** Definitions of f2k blocks                     ***/
 /******************************************************/
 
-typedef int (f2k_event_reader_fun_t)(mcfile *fp, array *a, mevt *e);
-typedef int (f2k_event_writer_fun_t)(const mcfile *fp, const array *a, const mevt *e);
+typedef int (f2k_event_reader_fun_t)(mcfile *fp, Array *a, mevt *e);
+typedef int (f2k_event_writer_fun_t)(const mcfile *fp, const Array *a, const mevt *e);
 
 typedef struct{
   enum RDMC_EVENT_T id;
@@ -101,7 +101,7 @@ typedef struct rdmc_f2k_buffer_s { /* a structure to keep track of raw lines */
   unsigned long int lines;   /* number of gathered lines in buff */ 
   unsigned long int lines_tot;   /* number of allocated lines in buff */ 
   unsigned long int iline;    /* the current line under investigation */
-  const f2000_line_t **type_def;  /* pointer to the global array definition */
+  const f2000_line_t **type_def;  /* pointer to the global Array definition */
   char **line_pt;               /* pointer to each line in buffer */
 } rdmc_f2k_buffer_t; 
 /* the last element of line_pt is always set to NULL */

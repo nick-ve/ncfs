@@ -11,11 +11,17 @@ echo '************************************************************'
 echo '*** Going to create the shared libraries of all packages ***'
 echo '************************************************************'
 # 
+### Create the Pythia6 library
+source $NCFS/Pythia6/amdgcclib.sh
+# 
 ### Create the ncfspack library
 source $NCFS/ncfspack/scripts/amdgcclib.sh
 #
 ### Create the icepack library
 source $NCFS/icepack/scripts/amdgcclib.sh
+#
+### Create the iceconvert library
+source $NCFS/iceconvert/scripts/amdgcclib.sh
 #
 ### Create the rnopack library
 source $NCFS/rnopack/scripts/amdgcclib.sh

@@ -12,7 +12,7 @@ lib=ncfspack.so
 ### The option string for ALPHA-CXX shared lib compilation and linking ***
 ### For the ALPHA-CXX ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-alpharoot="-x cxx -g0 -shared -w1 -I$ROOTSYS/include -I$CFITSIO -o $lib"
+alpharoot="-x cxx -g0 -shared -w1 -I$CFITSIO -I$ROOTSYS/include -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
@@ -23,17 +23,17 @@ echo "alpharoot = " $alpharoot
 cd $NCFS/ncfspack/source
 #
 ### Create the dictionary files
-rootcint -f zzzncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
+rootcint -f ncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 cxx $alpharoot *.cxx   
 # 
-rm zzzncfspackdict.*
-rm *.o
-rm so_locations
+rm -f *.o
+rm -f so_locations
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f ncfspackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts

@@ -43,7 +43,7 @@ whereas also the ROOT tree output format provides a completely machine
 independent data format providing efficient and easy to use data access
 capable to cope with the most complex data analyses programs.
  
-Only the C++ ANSI standard is used in the source code and as such the package
+Only the C++ ANSI/ISO standard is used in the source code and as such the package
 is fully compatible with all standard C++ compilers as well as with
 the ROOT/CINT interpreting system.
  
@@ -60,7 +60,7 @@ and (future) packages of other experiments, a few rules concerning names
 of classes, (member)functions and variables have to be obeyed.   
 The rules are the following :  
  
- 1) Only ANSI standard C++ is allowed, with an even stricter
+ 1) Only ANSI/ISO standard C++ is allowed, with an even stricter
     requirement that the code should compile without any warnings
     under the GNU g++, msvc++ and the native C++ compilers of HP,
     Mac, AMD and DECAlpha machines.   
@@ -137,6 +137,13 @@ Installation :
 --------------
 The various shared libraries may be automatically installed using the provided shell
 scripts in the "scripts" directory of the various packages.
+For Linux systems, a file "amdgcclibs.sh" is provided in this "ncfs" top directory,
+which will create the libraries of all NCFS related packages.
+
+For NCFS versions before release tag v6.0 :
+-------------------------------------------
+These versions are based on a local installation of ROOT and are compatible
+with ROOT versions before ROOT6.
 It is essential that one first installs ROOT with the pythia6 and cfitsio packages,
 in view of the NcCollider physics event generator and the NcFITSIO facility.
 Before installing ROOT one should make sure that the pythia6 and cfitsio packages
@@ -145,8 +152,33 @@ An example script for a proper ROOT installation is provided in this "ncfs" top 
 
     install-root.sh : Installation script for ROOT.
 
+or the user may refer to the newer ROOT local installation method on https://root.cern/install.
+
 Once ROOT has been properly installed, one should run the provided installation scripts
-within the proper "NCFS environment".   
+within the proper "NCFS environment" (see below) to create the shared libraries of the
+various NCFS related packages.
+The structure of these releases is such that the produced shared libraries are copied
+into the $ROOTSYS/lib directory, and as such can be considered as a part of the ROOT system.
+This implies that these releases are NOT compatible with ROOT releases via cvmfs.
+
+For NCFS versions starting from release tag v6.0 :
+--------------------------------------------------
+These versions are compatible with both local installations and cvmfs releases of ROOT.
+Furthermore, they are compatible with all currently available ROOT versions, including ROOT6.
+The only requirement is that the cfitsio package should be available on your computing system,
+which is needed for the NcFITSIO facility.
+The Pythia6 source code and various installation scripts are located in the folder ncfs/Pythia6,
+where also the produced libPythia6 shared library will reside.
+Furthermore, the TPythia6 specific code, which is needed for the NcCollider event generator,
+has been copied from ROOT 5.34/38 and introduced in the ncfs/ncfspack/source folder, so that
+there is no need anymore to have a ROOT version which includes TPythia6.
+
+Once a ROOT version is available, one should run the provided installation scripts
+within the proper "NCFS environment" (see below) to create the shared libraries of the
+various NCFS related packages.
+The structure of these releases is such that the produced shared libraries reside
+in the ncfs/libs directory, which implies that these releases are compatible with ROOT releases via cvmfs.
+   
 The proper "NCFS environment" may be obtained automatically by invoking the following
 scripts which are provided in this "ncfs" top directory :
 
@@ -161,8 +193,9 @@ scripts which are provided in this "ncfs" top directory :
 Note that after invokation of one of the above "environment setting scripts", the
 command prompt should be "ncfs>" to indicate that the environment has been set correctly.
 
-Once ROOT is installed and the "NCFS environment" is set correctly, the first shared library
-to be created is "ncfspack", after which all the detector specific shared libraries can be created.
+Once ROOT is available and the "NCFS environment" is set correctly, the first shared libraries
+to be created are Pythia6 and "ncfspack", after which all the detector specific shared libraries
+can be created in arbitrary order.
  
 Invoking the various tools :
 ----------------------------
@@ -175,11 +208,29 @@ Example : To create the IceCube environment one should load the following librar
     Root> gSystem->Load("ncfspack");
     Root> gSystem->Load("icepack");
 
-Note : Several standard ROOT libraries (e.g. Minuit, Pythia, GUI, ...) have to be loaded
-       via the corresponding gSystem->Load(....) statement.
-       The most convenient way to achieve this automatically is to perform this
-       in your rootlogon.cc macro. 
-       An example of rootlogon.cc is provided in this "ncfs" top directory. 
+Notes :
+-------
+1) Several standard ROOT libraries (e.g. Minuit, Pythia, GUI, ...) have to be loaded
+   via the corresponding gSystem->Load(....) statement.
+   The most convenient way to achieve this automatically is to perform this
+   in your rootlogon.cc macro. 
+   An example of rootlogon.cc is provided in this "ncfs" top directory.
+2) For NCFS versions starting from release tag v6.0, the libraries of all the
+   NCFS related packages are already automatically loaded in the provided rootlogon.cc macro.
+3) Due to a (slight) difference between the new ROOT/Cling interpreter w.r.t. ROOT/CINT,
+   statements like 'gSystem->Load("ncfspack");' don't work anymore in general in ROOT macros
+   (apart from the rootlogon.cc macro).
+   This is the reason that starting from NCFS release tag v6.0, all libraries are loaded
+   in the provided rootlogon.cc macro.
+   However, old ROOT macros that still contain these statements, will continue to work as usual.
+4) Similar to 3), statements like 'gROOT->LoadMacro("myclass.cxx+");' don't work anymore
+   in general ROOT macros.
+   To overcome this issue, one can invoke this on the ROOT command line like for instance
+
+     $root -b -q -e 'gROOT->LoadMacro("myclass.cxx+");' test.cc >test.log
+
+   which first creates a shared library object of "myclass" and then executes the
+   ROOT macro test.cc (in which "myclass" can be used) with the output stored in the file test.log.
  
  
  

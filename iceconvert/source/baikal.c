@@ -42,14 +42,14 @@ char *baikal_rdmc_cvsid =
 
 
 
-static void  rdmc_add_fitdef_baikal(array *ar);
+static void  rdmc_add_fitdef_baikal(Array *ar);
 
 
 /****************************************************************************/
 /* The function rarr_mc() reads the header of a baikal like file            */
 /****************************************************************************/
 
-int rdmc_rarr_baikal_mc(mcfile *fp, array *ar)
+int rdmc_rarr_baikal_mc(mcfile *fp, Array *ar)
 {
   
   int nw;                                       /* number of words to read */
@@ -57,9 +57,9 @@ int rdmc_rarr_baikal_mc(mcfile *fp, array *ar)
   int i,j;                                               /* loop variables */
   int *iclust;              /* pointer to current channel number in string */
   
-  rdmc_init_array(ar);                                  /* reset the array */
+  rdmc_init_array(ar);                                  /* reset the Array */
 
-/**************************** the array info *******************************/
+/**************************** the Array info *******************************/
   ar->nrun=fp->info.bai.nrun;
 
   ptr = 0;
@@ -68,7 +68,7 @@ int rdmc_rarr_baikal_mc(mcfile *fp, array *ar)
   nw = rdmc_mcgeti(fp);                                /* 1: number of words    */
 
   if (nw <= 2) {             /* too less words: nonreconstructed data file */
-    ar->id = NT_36;                               /* default: baikal array */
+    ar->id = NT_36;                               /* default: baikal Array */
     ar->nch = 0;                              /* no telescope info aviable */
     ar->nstr = 0;
     rdmc_mcseek(fp, nw - ptr);                        /* read the unused fields */
@@ -100,7 +100,7 @@ int rdmc_rarr_baikal_mc(mcfile *fp, array *ar)
   if (ar->nstr <= 0) return ERRLINE;
 
   iclust = (int *)calloc(ar->nstr,sizeof(int)); 
-                                         /* alloc mem for channel nr array */
+                                         /* alloc mem for channel nr Array */
 
 /*************************** Channel position and parameters ***************/
 
@@ -116,7 +116,7 @@ int rdmc_rarr_baikal_mc(mcfile *fp, array *ar)
   ptr += 5 * ar->nch;
   ar->is_calib.geo=1;
 
-  free (iclust);                       /* free the mem for the ch nr array */
+  free (iclust);                       /* free the mem for the ch nr Array */
 
 /****************************** Pmt parameters *****************************/
 
@@ -146,7 +146,7 @@ int rdmc_rarr_baikal_mc(mcfile *fp, array *ar)
 /****************************************************************************/
 /* revt_baikal() tries to read the different BAIKAL dialects                */
 /****************************************************************************/
-int rdmc_revt_baikal(mcfile *fp, mevt *ev, const array *ar)
+int rdmc_revt_baikal(mcfile *fp, mevt *ev, const Array *ar)
 {
   long filepos;                         /* shows the current file position */
   int r;
@@ -196,7 +196,7 @@ int rdmc_revt_baikal(mcfile *fp, mevt *ev, const array *ar)
 /* it is just a switch to the correct routines (moscow/zeuthen format)      */
 /****************************************************************************/
 
-int rdmc_revt_baikal_mc(mcfile *fp, mevt *ev, const array *ar)
+int rdmc_revt_baikal_mc(mcfile *fp, mevt *ev, const Array *ar)
 {
   switch(fp->fmajor) {
   case BAIKAL_OLD:
@@ -214,7 +214,7 @@ int rdmc_revt_baikal_mc(mcfile *fp, mevt *ev, const array *ar)
 /* revt_zeu() reads the zeuthen formats (BAIKAL_OLD,BAIKAL_NEW)             */
 /****************************************************************************/
 
-int rdmc_revt_baikal_zeu(mcfile *fp, mevt *ev, const array *ar)
+int rdmc_revt_baikal_zeu(mcfile *fp, mevt *ev, const Array *ar)
 {
 
   int nw;                                       /* number of words to read */
@@ -376,7 +376,7 @@ int rdmc_revt_baikal_zeu(mcfile *fp, mevt *ev, const array *ar)
 /* revt_mos() reads the next moscow format event (BAIKAL_MOS)               */
 /****************************************************************************/
 
-int rdmc_revt_baikal_mos(mcfile *fp, mevt *ev, const array *ar)
+int rdmc_revt_baikal_mos(mcfile *fp, mevt *ev, const Array *ar)
 {
 
   int nw;                                       /* number of words to read */
@@ -504,7 +504,7 @@ int rdmc_revt_baikal_mos(mcfile *fp, mevt *ev, const array *ar)
 /* revt_data() reads the next *data* event                                  */
 /****************************************************************************/
 
-int rdmc_revt_baikal_data(mcfile *fp, mevt *ev, const array *ar)
+int rdmc_revt_baikal_data(mcfile *fp, mevt *ev, const Array *ar)
 {
 
   int nw;                                       /* number of words to read */
@@ -613,10 +613,10 @@ int rdmc_revt_baikal_data(mcfile *fp, mevt *ev, const array *ar)
 } /* function revt_data() */
 
 /****************************************************************************/
-/* warr_mc() writes the array info to the baikal-like file                  */
+/* warr_mc() writes the Array info to the baikal-like file                  */
 /****************************************************************************/
 
-int rdmc_warr_baikal_mc(mcfile *fp, const array *ar)
+int rdmc_warr_baikal_mc(mcfile *fp, const Array *ar)
 {
   int nw;
   int i,j;
@@ -688,7 +688,7 @@ int rdmc_warr_baikal_mc(mcfile *fp, const array *ar)
 /* function wevt_mc() writes an event to  file                              */
 /****************************************************************************/
 
-int rdmc_wevt_baikal_mc(mcfile *fp, const mevt *ev, const array *ar)
+int rdmc_wevt_baikal_mc(mcfile *fp, const mevt *ev, const Array *ar)
 {
   int nw;                                                /* number of words */
   int i;                                                   /* loop variable */
@@ -796,7 +796,7 @@ int rdmc_wevt_baikal_mc(mcfile *fp, const mevt *ev, const array *ar)
 /* function wevt_data() writes an event to file                             */
 /****************************************************************************/
 
-int rdmc_wevt_baikal_data(mcfile *fp, const mevt *ev, const array *ar)
+int rdmc_wevt_baikal_data(mcfile *fp, const mevt *ev, const Array *ar)
 {
 
   return rdmc_wevt_baikal_mc(fp,ev,ar);         /* we use mc format instead of data format */
@@ -1041,7 +1041,7 @@ long rdmc_swap(long i)
 
 } /* function swap() */
 
-static void  rdmc_add_fitdef_baikal(array *ar){
+static void  rdmc_add_fitdef_baikal(Array *ar){
 
   array_hdef_t def_fit;
 

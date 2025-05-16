@@ -41,7 +41,7 @@ const f2000_event_t  * f2000_events_1x2[]
   };
 
 
-int rdmc_amanda_HT_1x2( mcfile *fp , array *a, 
+int rdmc_amanda_HT_1x2( mcfile *fp , Array *a, 
 			mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -84,7 +84,7 @@ int rdmc_amanda_HT_1x2( mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_HT() */
 
-int rdmc_amanda_WF_1x2( mcfile *fp , array *a, mevt *e, void *tmp)
+int rdmc_amanda_WF_1x2( mcfile *fp , Array *a, mevt *e, void *tmp)
 {
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];

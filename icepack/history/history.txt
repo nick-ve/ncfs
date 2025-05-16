@@ -234,6 +234,6 @@
                 To resolve this issue, a class NcSpectrum was introduced, which actually is the code of TSpectrum as it
                 was present in ROOT 5.34/38.
                 The only memberfunction that was affected was IceEvent::GetTriggerTime(), and as such the files IceEvent.h and IceEvent.cxx
-                were updated accordingly.
+                were updated accordingly. This makes this icepack version both backward compatible and forward compatible with ROOT6. 
                 The version indicator in NcVersion has been updated to 5.41.
-                *** Note : In view of the above, NCFS versions up to 5.41 (incl.) will NOT be compatible with ROOT6 ***
+                *** Note : NCFS versions up to 5.41 (incl.) will NOT yet be compatible with ROOT6 because of lacking Pythia6 support ***

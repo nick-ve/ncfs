@@ -55,3 +55,8 @@
 #include "NcTaggingSelector.h"
 #include "NcDSP.h"
 #include "NcSpectrum.h"
+#include "TPythia6.h"
+#include "TPythia6Calls.h"
+#include "TPythia6Decayer.h"
+#include "TMCParticle.h"
+

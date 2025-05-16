@@ -1,7 +1,7 @@
 ### Script to initialise the NCFS analysis environment in a Windows (Ubuntu) powershell.
 ### This will provide a transparent interface to create and use the NCFS libraries 
-### in the ROOTSYS directory of the Linux (Ubuntu) environment of the Windows powershell,
-### while accessing the NCFS source code from a folder of the standard Windows file system.
+### in the Linux (Ubuntu) environment of the Windows powershell, while accessing the
+### NCFS source code and libraries from a folder of the standard Windows file system.
 ### This will allow a single location for the source code (and docs) management.
 ### In addition also a handy "unzipping" facility (called "extractx") is provided.
 ###
@@ -26,6 +26,10 @@
 ###    the external drive will be set to the same drive
 ###    as provided in the first argument.
 ### 2) In case no arguments are provided, both will be set to c.
+### 3) This script also updates the astronomical time parameters
+###    in the folder $NCFS/IERS.
+###    Please refer to the corresponding ncfsx or ncfs.sh script
+###    to omit the updating of the astronomical time parameters
 ###
 ### The environment variables that will be set in the above example are :
 ### ---------------------------------------------------------------------
@@ -49,19 +53,35 @@ then
  export EXTDRIVE=/mnt/$2
 fi 
 #
-### Set environment variables to run the ROOT package ###
-export ROOTSYS=${HOME}/software/root_v5.34.38/build
-export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
+### Pointer to the NCFS top directory
+export NCFS=${SRCDRIVE}/nick/cxx/source/ncfs
 #
-### Additional libraries like for instance Pythia
-export MYLIBS=${HOME}/software/pythia-6.4.28
+########################################################################
+### Set environment variables to run ROOT and the NCFS-Pack packages ###
+########################################################################
+#
+### Use the line below in case you use a cvmfs distribution of ROOT
+### source /cvmfs/sft.cern.ch/lcg/views/LCG_107/x86_64-el9-gcc11-opt/setup.sh
+#
+### Use the line below in case you use a privately (pre)compiled copy of ROOT
+export ROOTSYS=${HOME}/software/root_v6.24.08
+#
+### Additional libraries like for instance HDF5
+export XTRALIBS=/usr/lib/x86_64-linux-gnu/hdf5/serial
+#
+### Set the library path
+export LD_LIBRARY_PATH=$NCFS/libs:$NCFS/Pythia6:$ROOTSYS/lib:$XTRALIBS:$LD_LIBRARY_PATH
+#
+### Suppress warnings from Cling
+export CLING_STANDARD_PCH=none
 #
 ### Directory where the CFITSIO header files reside
 export CFITSIO=standard ### Use this when the header files are in the standard system include path
 ###export CFITSIO=/usr/include/cfitsio
 #
-### Pointer to the NCFS top directory
-export NCFS=${SRCDRIVE}/nick/cxx/source/ncfs
+### Directory where the HDF5 header files reside
+###export HDF5=standard ### Use this when the header files are in the standard system include path
+export HDF5=/usr/include/hdf5/serial
 #
 ### Set prompt to ncfs>
 export PS1="ncfs>"
@@ -69,8 +89,17 @@ export PS1="ncfs>"
 export PATH=$ROOTSYS/bin:$PATH
 #
 echo " NCFS environment set :"
-echo " ROOTSYS="${ROOTSYS} " NCFS="${NCFS} " CFITSIO="${CFITSIO} " EXTDRIVE="${EXTDRIVE}
+echo " ROOTSYS="${ROOTSYS} 
+echo " NCFS="${NCFS} 
+echo " CFITSIO="${CFITSIO}
+echo " HDF5="${HDF5} 
+echo " EXTDRIVE="${EXTDRIVE}
 #
+### Update the astronomical time parameters
+source $NCFS/IERS/iers-update.sh
+#
+### Start in the Ubuntu HOME directory
+cd $HOME
 #
 ### Define the "extractx" facility to "unzip" various file types
 extractx () {

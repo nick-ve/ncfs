@@ -2,7 +2,7 @@
  * Read/write files in the oncoming Standard AMANDA format - "format 2000"
  */
 #if 0 /******* TODO *********/
-/* skip event gets array as parameter   */
+/* skip event gets Array as parameter   */
 /* level 4 event types in mevt  */
 /*   end of file, tend          */
 /******************************/        
@@ -129,7 +129,7 @@ int rdmc_rhd_amanda(mcfile *fp){
 }
 
 
-int rdmc_rarr_amanda(mcfile *fp, array *ar)
+int rdmc_rarr_amanda(mcfile *fp, Array *ar)
 { 
   const  f2000_event_t *ev_def;
   int ret;
@@ -154,7 +154,7 @@ int rdmc_rarr_amanda(mcfile *fp, array *ar)
 
 }
 
-int rdmc_revt_amanda(mcfile *fp, mevt *ev, array *ar){ 
+int rdmc_revt_amanda(mcfile *fp, mevt *ev, Array *ar){ 
   const  f2000_event_t **ev_def,*foot_def;
 
   int ret = RDMC_ILF;
@@ -210,7 +210,7 @@ int rdmc_skipevt_amanda(mcfile *fp)
 { 
   int ret;
 #if 0
-  array ar;
+  Array ar;
 #endif
   mevt ev;
 #if 0 /* this is the proper, presently slow version */
@@ -221,7 +221,7 @@ int rdmc_skipevt_amanda(mcfile *fp)
   fp->info.f2000.nolex=0;
   rdmc_clear_array(&ar);
   rdmc_clear_mevt(&ev);
-#else /* presently no array is needed -> dirty patch ! */
+#else /* presently no Array is needed -> dirty patch ! */
   rdmc_init_mevt(&ev);
   fp->info.f2000.nolex=1;
   ret = rdmc_revt_amanda(fp, &ev, NULL);
@@ -536,14 +536,14 @@ int rdmc_wrend_amanda(const mcfile *fp)
 } /* wrend_amanda() */
 
 /****************************************************************************
- * function warr_amanda() writes the array info to a amanda-like file
+ * function warr_amanda() writes the Array info to a amanda-like file
  * This function writes out the head of a AMANDA ascii file
  * opposite to reading the input file it writes not only
  * the Geometry banks ('G', 'P') , but also the ('V' and 'M' flags)
  * so the function whd_amanda does not exist
  ****************************************************************************/
 
-int rdmc_warr_amanda(const mcfile *fp,const array *geo)
+int rdmc_warr_amanda(const mcfile *fp,const Array *geo)
 {
   const  f2000_event_t *ev_def;
 
@@ -562,20 +562,20 @@ int rdmc_warr_amanda(const mcfile *fp,const array *geo)
  * function wevt_amanda() writes an event to a amanda-like file
  ****************************************************************************/
 
-int rdmc_wevt_amanda(const mcfile *fp,const mevt *event, const array *ar)
+int rdmc_wevt_amanda(const mcfile *fp,const mevt *event, const Array *ar)
 {
   const  f2000_event_t *ev_def;
 
   /* get the config def for the right format*/
   switch( 100*fp->fmajor + fp->fminor ){
   case 101:
-    ev_def=f2000_events_1x1[0]; /* take first array element */
+    ev_def=f2000_events_1x1[0]; /* take first Array element */
     break;
   case 102:
-    ev_def=f2000_events_1x2[0]; /* take first array element */
+    ev_def=f2000_events_1x2[0]; /* take first Array element */
     break;
   case 200401:
-    ev_def=f2000_events_2004x1[0]; /* take first array element */
+    ev_def=f2000_events_2004x1[0]; /* take first Array element */
     break;
   default:
     return RDMC_UNKNOWN_FORMAT_VERSION;

@@ -17,11 +17,11 @@ static int rdmc_f2k_strcleancpy(char *dest, char *src);
 
 
 /****************************************************************************/
-int rdmc_f2k_dummy_parser(mcfile *fp, array *a, mevt *e, void *misc){ 
+int rdmc_f2k_dummy_parser(mcfile *fp, Array *a, mevt *e, void *misc){ 
   return RDMC_IO_OK;
 }
 /****************************************************************************/
-int rdmc_f2k_dummy_event_writer(const mcfile *fp, const array *a, const mevt *e){ 
+int rdmc_f2k_dummy_event_writer(const mcfile *fp, const Array *a, const mevt *e){ 
   return RDMC_IO_OK;
 }
 /****************************************************************************/
@@ -842,7 +842,7 @@ char * rdmc_amanda_uses_to_str(int n_uses, mevt_uses_t *uses, int id){
 	
     } else if ( uses[i_uses].useid > id ){
 #if 1
-      break; /* break to improve speed  since the uses array is sorted */
+      break; /* break to improve speed  since the uses Array is sorted */
 #endif
     }
   }

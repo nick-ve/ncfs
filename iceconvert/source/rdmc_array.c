@@ -1,6 +1,6 @@
 
 /*
- *  functions for the array structure 
+ *  functions for the Array structure 
  */
 #include <math.h>
 #include <stdlib.h>
@@ -15,10 +15,10 @@
 
 
 /****************************************************************************/
-/* The function rarr() reads the array info of a file                       */
+/* The function rarr() reads the Array info of a file                       */
 /****************************************************************************/
 
-int rdmc_rarr(mcfile *fp, array *ar)
+int rdmc_rarr(mcfile *fp, Array *ar)
 {
   int r;
   
@@ -59,10 +59,10 @@ int rdmc_rarr(mcfile *fp, array *ar)
 } /* funtion rarr() */
 
 /****************************************************************************/
-/* warr() writes the array info to a file                                   */
+/* warr() writes the Array info to a file                                   */
 /****************************************************************************/
 
-int rdmc_warr(mcfile *fp, const array *ar)
+int rdmc_warr(mcfile *fp, const Array *ar)
 {
   int r;
 
@@ -100,12 +100,12 @@ int rdmc_warr(mcfile *fp, const array *ar)
 /* init_array() resets the event values to start values                     */
 /****************************************************************************/
 
-void rdmc_init_array(array *ar)
+void rdmc_init_array(Array *ar)
 {
 
   int i;
 
-  /* init the generic array structure */
+  /* init the generic Array structure */
   ar->id = AMANDA;
   ar->nch = 0;
   ar->nstr = 0;
@@ -167,44 +167,44 @@ void rdmc_init_array(array *ar)
 /****************************************************/
 /* add specific header_def elements to ar */
 
-int rdmc_add_user_def(array *ar, array_hdef_t *user, int iuse){
+int rdmc_add_user_def(Array *ar, array_hdef_t *user, int iuse){
  return rdmc_add_array_hdef( &(ar->def_user), 
 				    &(ar->n_user),
 				    user,
 				    iuse);
 }
-int rdmc_del_user_def(array *ar , int iuse){
+int rdmc_del_user_def(Array *ar , int iuse){
   return  rdmc_del_array_hdef(
 			      &(ar->def_user),
 			      &(ar->n_user),
 			      iuse);
 }
-int rdmc_add_stat_def(array *ar, array_hdef_t *stat, int istat){
+int rdmc_add_stat_def(Array *ar, array_hdef_t *stat, int istat){
   return rdmc_add_array_hdef( &(ar->def_stat), 
 				    &(ar->n_stat),
 				    stat,
 				    istat);
 }
-int rdmc_del_stat_def(array *ar , int istat){
+int rdmc_del_stat_def(Array *ar , int istat){
   return  rdmc_del_array_hdef(
 			      &(ar->def_stat),
 			      &(ar->n_stat),
 			      istat);
 }
-int rdmc_add_fit_def(array *ar, array_hdef_t *fit, int ifit){
+int rdmc_add_fit_def(Array *ar, array_hdef_t *fit, int ifit){
   return rdmc_add_array_hdef( &(ar->def_fit), 
 				    &(ar->n_fit),
 				    fit,
 				    ifit);
 }
-int rdmc_del_fit_def(array *ar , int ifit){
+int rdmc_del_fit_def(Array *ar , int ifit){
   return  rdmc_del_array_hdef(
 			      &(ar->def_fit),
 			      &(ar->n_fit),
 			      ifit);
 }
-int rdmc_add_trigger_def(array *ar, array_hdef_t *trig, int itrig){
-  /* trig_def is a static array -> workaround */
+int rdmc_add_trigger_def(Array *ar, array_hdef_t *trig, int itrig){
+  /* trig_def is a static Array -> workaround */
   return rdmc_add_array_hdef( &(ar->def_trig), 
 			      &(ar->n_trigger),
 			      trig,
@@ -212,7 +212,7 @@ int rdmc_add_trigger_def(array *ar, array_hdef_t *trig, int itrig){
 }
 
 
-int rdmc_del_trig_def(array *ar , int itrig){
+int rdmc_del_trig_def(Array *ar , int itrig){
   return  rdmc_del_array_hdef(
 			      &(ar->def_trig),
 			      &(ar->n_trigger),
@@ -220,18 +220,18 @@ int rdmc_del_trig_def(array *ar , int itrig){
 }
 
 
-void rdmc_clear_array(array *ar){
+void rdmc_clear_array(Array *ar){
   unsigned long int array_id;
   /* Free all the dynamically allocated memory you can in the structure ar. */
   rdmc_free_array(ar);
 
   array_id=ar->array_id;                         /* save the id */
-  rdmc_init_array(ar); /* Reset the array structure to initializarion values */
+  rdmc_init_array(ar); /* Reset the Array structure to initializarion values */
   ar->array_id =  array_id + 1;
 
 }/* function rdmc_clear_array() */
 
-void rdmc_free_array(array *ar){
+void rdmc_free_array(Array *ar){
   int i;
   /* Free all the dynamically allocated memory you can in the structure ar. */
   
@@ -291,11 +291,11 @@ void rdmc_free_array(array *ar){
 }/* function rdmc_free_array() */
                    
 
-void rdmc_cp_array(array *out, const array *in){/* copies two geometries */
+void rdmc_cp_array(Array *out, const Array *in){/* copies two geometries */
   int i;
 
   /* just cp everything and cleanup later */
-  memcpy(out,in,sizeof(array));
+  memcpy(out,in,sizeof(Array));
 
   if(out->comment != NULL){
     out->comment = malloc(strlen(in->comment)*sizeof(char));
@@ -339,13 +339,13 @@ void rdmc_cp_array(array *out, const array *in){/* copies two geometries */
 }
 
 /****************************************************************************/
-/* comp_array() compares two array for geometry etc                         */
+/* comp_array() compares two Array for geometry etc                         */
 /*     returns 0 if they are equal, and 1 if not                            */
 /* it looks only for: number of channels, of strings, of the string number  */
 /* and the coordinates of each pmt, not for id or sensitivity etc           */
 /****************************************************************************/
 
-int rdmc_comp_array(const array *a1, const array *a2)
+int rdmc_comp_array(const Array *a1, const Array *a2)
 {
 
   int i;                                                   /* loop variable */
@@ -465,10 +465,10 @@ int rdmc_comp_array(const array *a1, const array *a2)
 
 /*************************************************************************/
 /* Copies the values for OM:                                             */
-/* in_i from arry in into position out_i in array out                    */
+/* in_i from arry in into position out_i in Array out                    */
 /*************************************************************************/
 
-void rdmc_channel_cp(array  *out,int out_i, const array *in ,int in_i)
+void rdmc_channel_cp(Array  *out,int out_i, const Array *in ,int in_i)
 { 
   out->str[out_i] = in->str[in_i];
   out->clust[out_i] = in->clust[in_i];
@@ -490,15 +490,15 @@ void rdmc_channel_cp(array  *out,int out_i, const array *in ,int in_i)
 /* in order to create objects one needs unique id's*/
 /* these functions return them */
 
-int rdmc_unique_trigger_id(char *tag, const array *ar,const  char *tag_root){
+int rdmc_unique_trigger_id(char *tag, const Array *ar,const  char *tag_root){
   rdmc_unique_hdef_tag(tag, ar->def_trig, ar->n_trigger, tag_root);
   return rdmc_unique_hdef_id(ar->def_trig, ar->n_trigger);
 }
-int rdmc_unique_status_id(char *tag, const array *ar, const char *tag_root){
+int rdmc_unique_status_id(char *tag, const Array *ar, const char *tag_root){
   rdmc_unique_hdef_tag(tag, ar->def_stat, ar->n_stat, tag_root);
   return rdmc_unique_hdef_id(ar->def_stat, ar->n_stat);
 }
-int rdmc_unique_user_id(char *tag, const array *ar, const char *tag_root){
+int rdmc_unique_user_id(char *tag, const Array *ar, const char *tag_root){
   rdmc_unique_hdef_tag(tag, ar->def_user, ar->n_user, tag_root);
   return rdmc_unique_hdef_id(ar->def_user, ar->n_user);
 }

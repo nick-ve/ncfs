@@ -13,7 +13,7 @@ lib=icepack.so
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -ansi -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$NCFS/ncfspack/source -o $lib"
+gccroot="-fPIC -shared -g0 -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$NCFS/ncfspack/source -I$ROOTSYS/include -o $lib"
 #
 echo ' '
 echo '*** Creation of the icepack shared library for IceCube analyses ***' 
@@ -26,16 +26,16 @@ echo "gccroot = " $gccroot
 cd $NCFS/icepack/source
 #
 ### Create the dictionary files
-rootcint -f zzzicepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
+rootcint -f icepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 g++ $gccroot *.cxx   
 # 
-rm -f zzzicepackdict.*
 rm -f *.o
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv -f $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f icepackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts

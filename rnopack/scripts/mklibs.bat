@@ -36,8 +36,8 @@ rem --- Set the IcePack source directory as working directory
 cd ..\source
 
 rem --- The option strings for MSVC++ DLL compilation and linking ---
-set mscomp=/nologo /c /TP /Ze /MD /GR /GX /I%ROOTSYS%\include /I%NCFS%\ncfspack\source
-set msdll=/nologo /TP /Ze /MD /LD /GD /GR /GX /I%ROOTSYS%\include /I%NCFS%\ncfspack\source
+set mscomp=/nologo /c /TP /Ze /MD /GR /GX /I%NCFS%\ncfspack\source /I%ROOTSYS%\include
+set msdll=/nologo /TP /Ze /MD /LD /GD /GR /GX /I%NCFS%\ncfspack\source /I%ROOTSYS%\include
 set mslink=/ENTRY:_DllMainCRTStartup@12 %ROOTSYS%\lib\*.lib
 
 if "%1" == "" goto export
@@ -76,7 +76,7 @@ goto end
 echo *** Creation of ROOT loadable export libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint zzzrnopackdict.cxx -c -I%NCFS%\ncfspack\source ICEHeaders.h ICELinkDef.h
+rootcint rnopackdict.cxx -c -I%NCFS%\ncfspack\source ICEHeaders.h ICELinkDef.h
 rem --- Compilation step ---
 cl %mscomp% *.cxx
 rem --- Creation of the export LIB ---
@@ -85,8 +85,9 @@ lib /nologo /machine:IX86 *.obj /def:rnopack.def /out:rnopack.lib
 rem --- Creation of the DLL ---
 link /nologo /machine:IX86 /DLL *.obj rnopack.exp %mslink% /OUT:rnopack.dll
 rem --- Move the created libs to the corresponding ROOT subdirectories
-move rnopack.lib %ROOTSYS%\lib
-move rnopack.dll %ROOTSYS%\bin
+move rnopack.lib %NCFS%\libs
+move rnopack.dll %NCFS%\libs
+move rnopackdict* %NCFS%\libs
 rem --- Delete intermediate files
 del rnopack.def
 del rnopack.exp
@@ -96,22 +97,21 @@ goto root_clean
 echo *** Creation of ROOT loadable full version libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint zzzrnopackdict.cxx -c -I%NCFS%\ncfspack\source RNOHeaders.h RNOLinkDef.h
+rootcint rnopackdict.cxx -c -I%NCFS%\ncfspack\source RNOHeaders.h RNOLinkDef.h
 rem --- Creation of the DLL ---
 cl %msdll% *.cxx /link %mslink% /OUT:rnopack.dll
 rem --- Creation of the full version LIB ---
 lib /nologo /machine:IX86 *.obj /out:rnopack.lib
 rem --- Move the created libs to the corresponding ROOT subdirectories
-move rnopack.lib %ROOTSYS%\lib
-move rnopack.dll %ROOTSYS%\bin
+move rnopack.lib %NCFS%\libs
+move rnopack.dll %NCFS%\libs
+move rnopackdict* %NCFS%\libs
 rem --- Delete intermediate files
 goto root_clean
 
 :root_clean
 rem --- Delete all intermediate files --- 
 del .def
-del zzzrnopackdict.h
-del zzzrnopackdict.cxx
 del *.obj
 echo.
 echo *** mklibs done.

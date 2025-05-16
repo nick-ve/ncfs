@@ -177,4 +177,7 @@
 19-mar-2021 NvE Compiler option -Wall replaced by -Wunused in the amdgcclib.sh compilation script
                 to prevent excessive warnings with the new(er) gcc versions.
 06-apr-2021 NvE isnan() arguments cast to float in f2k_utl.c to satisfy newer gcc compiler versions.
+14-may-2025 NvE Struct "array" renamed to "Array" in rdmc.h in order to prevent compiler issues
+                w.r.t. the std::array template.
+                All related files have been modified accordingly.
 

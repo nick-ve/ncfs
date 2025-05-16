@@ -23,16 +23,16 @@ echo "gccroot = " $gccroot
 cd $NCFS/ncfspack/source
 #
 ### Create the dictionary files
-rootcint -f zzzncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
+rootcint -f ncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 g++ $gccroot *.cxx   
 # 
-rm zzzncfspackdict.*
-rm *.o
+rm -f *.o
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f ncfspackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts

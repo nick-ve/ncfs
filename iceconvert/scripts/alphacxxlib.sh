@@ -12,12 +12,12 @@ lib=iceconvert.so
 ### The option string for ALPHA-CXX compilation of the .c code ***
 ### For the ALPHA-CXX ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-alphacomp="-c -g0 -w1 -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source"
+alphacomp="-c -g0 -w1 -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS\include"
 #
 ### The option string for ALPHA-CXX shared lib compilation and linking ***
 ### For the ALPHA-CXX ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-alpharoot="-x cxx -g0 -shared -w1 -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source -o $lib"
+alpharoot="-x cxx -g0 -shared -w1 -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
@@ -29,18 +29,18 @@ echo "alpharoot = " $alpharoot
 cd $NCFS/iceconvert/source
 #
 ### Create the dictionary files
-rootcint -f zzziceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
+rootcint -f iceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 cxx $alphacomp *.c   
 cxx $alpharoot *.cxx *.o   
 #
-rm zzziceconvertdict.*
-rm *.o
-rm so_locations
+rm -f *.o
+rm -f so_locations
 #
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f iceconvertdict* $NCFS/libs
 #
 ### Return to the scripts directory
 cd ../scripts

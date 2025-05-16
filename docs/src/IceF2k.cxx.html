@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Apr  5 23:39:08 2021            -->
+<!--   Date: Fri May 16 13:06:30 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="../ROOT.js"></script>
 </head>
 <body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
-<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<div id="root_header"></div>
 <div id="codeAndLineNumbers"><pre class="listing">
 <span class="comment">/*******************************************************************************
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
@@ -100,7 +100,7 @@
 <span class="comment">// // Limit the number of entries for testing</span>
 <span class="comment">// q.<a href="../IceF2k.html#IceF2k:SetMaxEvents" title="void IceF2k::SetMaxEvents(Int_t n)">SetMaxEvents</a>(10);</span>
 <span class="comment">//</span>
-<span class="comment">// // <a href="../#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a> frequency to produce a <a href="../ListOfTypes.html#short">short</a> summary print every printfreq events</span>
+<span class="comment">// // <a href="../#TNamed:Print" title="void TNamed::Print(Option_t* option = &quot;&quot;) const">Print</a> frequency to produce a <a href="../ListOfTypes.html#short">short</a> summary print every printfreq events</span>
 <span class="comment">// q.<a href="../IceF2k.html#IceF2k:SetPrintFreq" title="void IceF2k::SetPrintFreq(Int_t f)">SetPrintFreq</a>(1);</span>
 <span class="comment">//</span>
 <span class="comment">// // Split level for the output structures</span>
@@ -132,7 +132,7 @@
 <span class="comment">//</span>
 <span class="comment">// // Perform the conversion and execute subtasks (if any)</span>
 <span class="comment">// // on an event-by-event basis</span>
-<span class="comment">// q.<a href="../NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>();</span>
+<span class="comment">// q.<a href="../NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode = 0)">ExecuteJob</a>();</span>
 <span class="comment">//</span>
 <span class="comment">// // Select various objects to be added to the output file</span>
 <span class="comment">//</span>
@@ -143,19 +143,19 @@
 <span class="comment">//  ofile-&gt;cd(); // Switch to the output file directory</span>
 <span class="comment">//</span>
 <span class="comment">//  <a href="../NcObjMatrix.html">NcObjMatrix</a>* omdb=q.<a href="../IceF2k.html#IceF2k:GetOMdbase" title="NcObjMatrix* IceF2k::GetOMdbase()">GetOMdbase</a>();</span>
-<span class="comment">//  if (omdb) omdb-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();</span>
+<span class="comment">//  if (omdb) omdb-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();</span>
 <span class="comment">//</span>
 <span class="comment">//  <a href="../NcDevice.html">NcDevice</a>* fitdefs=q.<a href="../IceF2k.html#IceF2k:GetFitdefs" title="NcDevice* IceF2k::GetFitdefs()">GetFitdefs</a>();</span>
-<span class="comment">//  if (fitdefs) fitdefs-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();</span>
+<span class="comment">//  if (fitdefs) fitdefs-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();</span>
 <span class="comment">//</span>
 <span class="comment">//  TDatabasePDG* pdg=q.<a href="../IceF2k.html#IceF2k:GetPDG" title="TDatabasePDG* IceF2k::GetPDG()">GetPDG</a>();</span>
-<span class="comment">//  if (pdg) pdg-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();</span>
+<span class="comment">//  if (pdg) pdg-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();</span>
 <span class="comment">//</span>
 <span class="comment">//  // Flush additional objects to the output file.</span>
 <span class="comment">//  // The output file is not explicitly closed here</span>
 <span class="comment">//  // to allow interactive investigation of the data tree</span>
 <span class="comment">//  // when this macro is run in an interactive ROOT/CINT session.</span>
-<span class="comment">//  ofile-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();</span>
+<span class="comment">//  ofile-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();</span>
 <span class="comment">// }</span>
 <span class="comment">//</span>
 <span class="comment">//--- Author: Nick van Eijndhoven 11-mar-2005 Utrecht University</span>
@@ -163,11 +163,11 @@
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
  
 <span class="cpp">#include "<a href="../IceF2k.h">IceF2k.h</a>"</span>
-<span class="cpp">#include "Riostream.h"</span>
+<span class="cpp">#include "<a href="../Riostream.h">Riostream.h</a>"</span>
 
 ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="../IceF2k.html#IceF2k:Class" title="TClass* IceF2k::Class()">Class</a> implementation to enable ROOT I/O</span>
 
-<a name="KGt21"></a><a href="../IceF2k.html">IceF2k</a>::<a href="../IceF2k.html#IceF2k:IceF2k" title="IceF2k IceF2k::IceF2k(const char* name=&quot;IceF2k&quot;,const char* title=&quot;&quot;) or overloads">IceF2k</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name,<span class="keyword">const</span> <span class="keyword">char</span>* title) : <a href="../NcJob.html">NcJob</a>(name,title)
+<a name="KGt21"></a><a href="../IceF2k.html">IceF2k</a>::<a href="../IceF2k.html#IceF2k:IceF2k" title="IceF2k IceF2k::IceF2k(const char* name = &quot;IceF2k&quot;, const char* title = &quot;&quot;) or overloads">IceF2k</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name,<span class="keyword">const</span> <span class="keyword">char</span>* title) : <a href="../NcJob.html">NcJob</a>(name,title)
 {
 <span class="comment">// Default constructor.</span>
 <span class="comment">// By default maxevent=-1, split=0, bsize=32000, printfreq=1.</span>
@@ -389,14 +389,14 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fInfiles" title="TObjArray* IceF2k::fInfiles">fInfiles</a>)
  {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceF2k Exec* No data input file(s) specified."</span> &lt;&lt; endl;
+  cout &lt;&lt; <span class="string">" *IceF2k Exec* No data input file(s) specified."</span> &lt;&lt; endl;
   <span class="keyword">return</span>;
  }
 
  <a href="../ListOfTypes.html#Int_t">Int_t</a> ninfiles=<a href="../IceF2k.html#IceF2k:fInfiles" title="TObjArray* IceF2k::fInfiles">fInfiles</a>-&gt;GetEntries();
  <span class="keyword">if</span> (!ninfiles)
  {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceF2k Exec* No data input file(s) specified."</span> &lt;&lt; endl;
+  cout &lt;&lt; <span class="string">" *IceF2k Exec* No data input file(s) specified."</span> &lt;&lt; endl;
   <span class="keyword">return</span>;
  }
 
@@ -431,7 +431,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
  <span class="comment">// Storage of the used parameters in the <a href="../IceF2k.html">IceF2k</a> device</span>
  <a href="../NcDevice.html">NcDevice</a> params;
- params.<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"IceF2k"</span>,<span class="string">"IceF2k processor parameters"</span>);
+ params.<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name, const char* title)">SetNameTitle</a>(<span class="string">"IceF2k"</span>,<span class="string">"IceF2k processor parameters"</span>);
  params.SetSlotName(<span class="string">"Toffset"</span>,1);
  params.SetSlotName(<span class="string">"Mctoffset"</span>,2);
  params.SetSlotName(<span class="string">"Mctracks"</span>,3);
@@ -446,24 +446,24 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
  TString inputfile;
 
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *** Start processing of job "</span> &lt;&lt; <a href="../#TNamed:GetName" title="const char* TNamed::GetName()">GetName</a>() &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
+ cout &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
+ cout &lt;&lt; <span class="string">" *** Start processing of job "</span> &lt;&lt; <a href="../#TNamed:GetName" title="const char* TNamed::GetName() const">GetName</a>() &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
+ cout &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
  <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;ninfiles; i++)
  {
   TObjString* sx=(TObjString*)<a href="../IceF2k.html#IceF2k:fInfiles" title="TObjArray* IceF2k::fInfiles">fInfiles</a>-&gt;At(i);
   <span class="keyword">if</span> (!sx) <span class="keyword">continue</span>;
   inputfile=sx-&gt;GetString(); 
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" F2K input file : "</span> &lt;&lt; inputfile.Data() &lt;&lt; endl;
+  cout &lt;&lt; <span class="string">" F2K input file : "</span> &lt;&lt; inputfile.Data() &lt;&lt; endl;
  }
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" Maximum number of events to be processed : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fMaxevt" title="Int_t IceF2k::fMaxevt">fMaxevt</a> &lt;&lt; endl;
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" Print frequency : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fPrintfreq" title="Int_t IceF2k::fPrintfreq">fPrintfreq</a> &lt;&lt; endl;
+ cout &lt;&lt; <span class="string">" Maximum number of events to be processed : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fMaxevt" title="Int_t IceF2k::fMaxevt">fMaxevt</a> &lt;&lt; endl;
+ cout &lt;&lt; <span class="string">" Print frequency : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fPrintfreq" title="Int_t IceF2k::fPrintfreq">fPrintfreq</a> &lt;&lt; endl;
  <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOutfile" title="TFile* IceF2k::fOutfile">fOutfile</a>)
  {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ROOT output file : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fOutfile" title="TFile* IceF2k::fOutfile">fOutfile</a>-&gt;<a href="../#TNamed:GetName" title="const char* TNamed::GetName()">GetName</a>() &lt;&lt; endl;
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" Output characteristics : splitlevel = "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fSplit" title="Int_t IceF2k::fSplit">fSplit</a> &lt;&lt; <span class="string">" buffersize = "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fBsize" title="Int_t IceF2k::fBsize">fBsize</a> &lt;&lt; endl;
+  cout &lt;&lt; <span class="string">" ROOT output file : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fOutfile" title="TFile* IceF2k::fOutfile">fOutfile</a>-&gt;<a href="../#TNamed:GetName" title="const char* TNamed::GetName() const">GetName</a>() &lt;&lt; endl;
+  cout &lt;&lt; <span class="string">" Output characteristics : splitlevel = "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fSplit" title="Int_t IceF2k::fSplit">fSplit</a> &lt;&lt; <span class="string">" buffersize = "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fBsize" title="Int_t IceF2k::fBsize">fBsize</a> &lt;&lt; endl;
  }
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" TWR input compression level : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fCompTWR" title="Int_t IceF2k::fCompTWR">fCompTWR</a> &lt;&lt; endl;
+ cout &lt;&lt; <span class="string">" TWR input compression level : "</span> &lt;&lt; <a href="../IceF2k.html#IceF2k:fCompTWR" title="Int_t IceF2k::fCompTWR">fCompTWR</a> &lt;&lt; endl;
 
  <a href="../NcJob.html#NcJob:ListEnvironment" title="void NcJob::ListEnvironment()">ListEnvironment</a>();
 
@@ -488,7 +488,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
   <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fInput" title="mcfile* IceF2k::fInput">fInput</a>)
   {
-   <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceF2k Exec* No input file found with name : "</span> &lt;&lt; inputfile.Data() &lt;&lt; endl;
+   cout &lt;&lt; <span class="string">" *IceF2k Exec* No input file found with name : "</span> &lt;&lt; inputfile.Data() &lt;&lt; endl;
    <span class="keyword">continue</span>;
   }
 
@@ -496,7 +496,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   rdmc_init_mevt(&amp;<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>);
 
   <span class="comment">// <a href="../#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> the file header information</span>
-  rdmc_rarr(<a href="../IceF2k.html#IceF2k:fInput" title="mcfile* IceF2k::fInput">fInput</a>,&amp;<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>);
+  rdmc_rarr(<a href="../IceF2k.html#IceF2k:fInput" title="mcfile* IceF2k::fInput">fInput</a>,&amp;<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>);
 
   <span class="comment">// Fill the database with geometry, calib. etc... parameters</span>
   <span class="comment">// for all the devices</span>
@@ -508,7 +508,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   <span class="comment">// Set the trigger definitions according to the F2000 header info</span>
   <a href="../IceF2k.html#IceF2k:SetTrigdefs" title="void IceF2k::SetTrigdefs()">SetTrigdefs</a>();
  
-  <span class="keyword">while</span> (!rdmc_revt(<a href="../IceF2k.html#IceF2k:fInput" title="mcfile* IceF2k::fInput">fInput</a>,&amp;<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>,&amp;<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>))
+  <span class="keyword">while</span> (!rdmc_revt(<a href="../IceF2k.html#IceF2k:fInput" title="mcfile* IceF2k::fInput">fInput</a>,&amp;<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>,&amp;<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>))
   {
    <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fMaxevt" title="Int_t IceF2k::fMaxevt">fMaxevt</a>&gt;-1 &amp;&amp; nevt&gt;=<a href="../IceF2k.html#IceF2k:fMaxevt" title="Int_t IceF2k::fMaxevt">fMaxevt</a>) <span class="keyword">break</span>;
 
@@ -549,7 +549,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
     <span class="keyword">if</span> (!(nevt%<a href="../IceF2k.html#IceF2k:fPrintfreq" title="Int_t IceF2k::fPrintfreq">fPrintfreq</a>)) evt-&gt;HeaderData();
    }
 
-   <span class="comment">// <a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a> the complete structure to the output Tree for accepted events</span>
+   <span class="comment">// <a href="../#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a> the complete structure to the output Tree for accepted events</span>
    evtsel=1;
    <a href="../NcDevice.html">NcDevice</a>* seldev=(<a href="../NcDevice.html">NcDevice</a>*)evt-&gt;GetDevice(<span class="string">"NcEventSelector"</span>);
    <span class="keyword">if</span> (seldev)
@@ -565,7 +565,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
  }
 
  <span class="comment">// Flush possible memory resident data to the output file</span>
- <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOutfile" title="TFile* IceF2k::fOutfile">fOutfile</a>) <a href="../IceF2k.html#IceF2k:fOutfile" title="TFile* IceF2k::fOutfile">fOutfile</a>-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
+ <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOutfile" title="TFile* IceF2k::fOutfile">fOutfile</a>) <a href="../IceF2k.html#IceF2k:fOutfile" title="TFile* IceF2k::fOutfile">fOutfile</a>-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();
 
  <span class="comment">// Remove the <a href="../IceEvent.html">IceEvent</a> object from the environment</span>
  <span class="comment">// and delete it as well</span>
@@ -581,7 +581,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">// Fill the database with geometry, calib. etc... parameters </span>
 <span class="comment">// for all the devices.</span>
 
- <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.nch&lt;=0)
+ <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.nch&lt;=0)
  {
   <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>)
   {
@@ -591,9 +591,9 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   <span class="keyword">return</span>;
  }
 
- <a href="../ListOfTypes.html#Int_t">Int_t</a> adccal=<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.is_calib.adc;
- <a href="../ListOfTypes.html#Int_t">Int_t</a> tdccal=<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.is_calib.tdc;
- <a href="../ListOfTypes.html#Int_t">Int_t</a> totcal=<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.is_calib.tot;
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> adccal=<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.is_calib.adc;
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> tdccal=<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.is_calib.tdc;
+ <a href="../ListOfTypes.html#Int_t">Int_t</a> totcal=<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.is_calib.tot;
 
  TF1 fadccal(<span class="string">"fadccal"</span>,<span class="string">"(x-[1])*[0]"</span>);
  TF1 fadcdecal(<span class="string">"fadcdecal"</span>,<span class="string">"(x/[0])+[1]"</span>);
@@ -625,13 +625,13 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
  <span class="keyword">else</span>
  {
   <a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>=<span class="keyword">new</span> <a href="../NcObjMatrix.html">NcObjMatrix</a>();
-  <a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"OMDBASE"</span>,<span class="string">"The OM geometry, calib. etc... database"</span>);
-  <a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:SetOwner" title="void NcObjMatrix::SetOwner(Int_t own=1)">SetOwner</a>();
+  <a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name, const char* title)">SetNameTitle</a>(<span class="string">"OMDBASE"</span>,<span class="string">"The OM geometry, calib. etc... database"</span>);
+  <a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:SetOwner" title="void NcObjMatrix::SetOwner(Int_t own = 1)">SetOwner</a>();
  }
 
  <a href="../IceAOM.html">IceAOM</a>* dev=0;
  <a href="../ListOfTypes.html#Double_t">Double_t</a> pos[3]={0,0,0};
- <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.nch; i++)
+ <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.nch; i++)
  {
   dev=<span class="keyword">new</span> <a href="../IceAOM.html">IceAOM</a>();
   dev-&gt;<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(i+1);
@@ -646,30 +646,30 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   dev-&gt;SetSlotName(<span class="string">"SENSIT"</span>,7);
   dev-&gt;SetSlotName(<span class="string">"READOUT"</span>,8); <span class="comment">// 0=unknown 1=electrical 2=optical 3=digital</span>
 
-  pos[0]=<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.x[i];
-  pos[1]=<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.y[i];
-  pos[2]=<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.z[i];
+  pos[0]=<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.x[i];
+  pos[1]=<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.y[i];
+  pos[2]=<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.z[i];
   dev-&gt;SetPosition(pos,<span class="string">"car"</span>);
 
-  fadccal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_a);
-  fadccal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].ped);
-  fadcdecal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_a);
-  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_a) fadcdecal.SetParameter(0,1);
-  fadcdecal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].ped);
+  fadccal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_a);
+  fadccal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].ped);
+  fadcdecal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_a);
+  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_a) fadcdecal.SetParameter(0,1);
+  fadcdecal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].ped);
 
-  ftdccal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_t);
-  ftdccal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].t_0);
-  ftdccal.SetParameter(2,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].alpha_t);
+  ftdccal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_t);
+  ftdccal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].t_0);
+  ftdccal.SetParameter(2,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].alpha_t);
   ftdccal.SetParameter(3,1.e20);
-  ftdcdecal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_t);
-  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_t) ftdcdecal.SetParameter(0,1);
-  ftdcdecal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].t_0);
-  ftdcdecal.SetParameter(2,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].alpha_t);
+  ftdcdecal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_t);
+  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_t) ftdcdecal.SetParameter(0,1);
+  ftdcdecal.SetParameter(1,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].t_0);
+  ftdcdecal.SetParameter(2,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].alpha_t);
   ftdcdecal.SetParameter(3,1.e20);
 
-  ftotcal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_tot);
-  ftotdecal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_tot);
-  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.cal[i].beta_tot) ftotdecal.SetParameter(0,1);
+  ftotcal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_tot);
+  ftotdecal.SetParameter(0,<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_tot);
+  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.cal[i].beta_tot) ftotdecal.SetParameter(0,1);
 
   <span class="keyword">if</span> (adccal)
   {
@@ -698,13 +698,13 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
    dev-&gt;SetCalFunction(&amp;ftotcal,3);
   }
 
-  dev-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.type[i],4);
-  dev-&gt;SetSignal((<a href="../ListOfTypes.html#Float_t">Float_t</a>)<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.costh[i],5);
-  dev-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.thresh[i],6);
-  dev-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.sensit[i],7);
+  dev-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.type[i],4);
+  dev-&gt;SetSignal((<a href="../ListOfTypes.html#Float_t">Float_t</a>)<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.costh[i],5);
+  dev-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.thresh[i],6);
+  dev-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.sensit[i],7);
   dev-&gt;SetSignal(0.,8);
 
-  <a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)">EnterObject</a>(i+1,1,dev);
+  <a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row, Int_t col, TObject* obj)">EnterObject</a>(i+1,1,dev);
  }
 }
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
@@ -717,13 +717,13 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">// Via the <a href="../IceF2k.html#IceF2k:GetFitdefs" title="NcDevice* IceF2k::GetFitdefs()">GetFitdefs</a>() memberfunction this <a href="../NcDevice.html">NcDevice</a> object can be</span>
 <span class="comment">// retrieved and stored in the ROOT output file if wanted.</span>
 <span class="comment">// The name of the object is FitDefinitions and the stored data can be</span>
-<span class="comment">// inspected via the <a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>() memberfunction and looks as follows :</span>
+<span class="comment">// inspected via the <a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>() memberfunction and looks as follows :</span>
 <span class="comment">//</span>
-<span class="comment">//  *<a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id :0 Name : FitDefinitions</span>
+<span class="comment">//  *<a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id :0 Name : FitDefinitions</span>
 <span class="comment">//    Position Vector in car coordinates : 0 0 0</span>
 <span class="comment">//    Err. in car coordinates : 0 0 0</span>
 <span class="comment">//  The following 8 hits are registered :</span>
-<span class="comment">//  *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id :0</span>
+<span class="comment">//  *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id :0</span>
 <span class="comment">//    Position Vector in car coordinates : 0 0 0</span>
 <span class="comment">//    Err. in car coordinates : 0 0 0</span>
 <span class="comment">//    Owned by device : <a href="../NcDevice.html">NcDevice</a> Name : FitDefinitions</span>
@@ -735,7 +735,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">//    Slot : 6 Signal value : 0 name : covmax</span>
 <span class="comment">//    Slot : 7 Signal value : 0 name : cutflag</span>
 <span class="comment">//    Slot : 8 Signal value : 0 name : chi2</span>
-<span class="comment">//  *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id :1</span>
+<span class="comment">//  *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id :1</span>
 <span class="comment">//    Position Vector in car coordinates : 0 0 0</span>
 <span class="comment">//    Err. in car coordinates : 0 0 0</span>
 <span class="comment">//    Owned by device : <a href="../NcDevice.html">NcDevice</a> Name : FitDefinitions</span>
@@ -746,7 +746,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">//</span>
 <span class="comment">// This memberfunction is based on the original idea/code by Adam Bouchta.</span>
 
- <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.n_fit&lt;=0)
+ <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.n_fit&lt;=0)
  {
   <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fFitdefs" title="NcDevice* IceF2k::fFitdefs">fFitdefs</a>)
   {
@@ -758,7 +758,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
  <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fFitdefs" title="NcDevice* IceF2k::fFitdefs">fFitdefs</a>)
  {
-  <a href="../IceF2k.html#IceF2k:fFitdefs" title="NcDevice* IceF2k::fFitdefs">fFitdefs</a>-><a href="../NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>(1);
+  <a href="../IceF2k.html#IceF2k:fFitdefs" title="NcDevice* IceF2k::fFitdefs">fFitdefs</a>-><a href="../NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode = 0)">Reset</a>(1);
  }
  <span class="keyword">else</span>
  {
@@ -771,14 +771,14 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
  <a href="../NcSignal.html">NcSignal</a> s;
  s.Reset();
 
- <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.n_fit; i++)
+ <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.n_fit; i++)
  {
-  s.<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_fit[i].id);
-  s.<a href="../#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_fit[i].tag));
+  s.<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_fit[i].id);
+  s.<a href="../#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_fit[i].tag));
 
-  <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> j=0; j&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_fit[i].nwords; j++)
+  <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> j=0; j&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_fit[i].nwords; j++)
   {
-   s.SetSlotName(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_fit[i].words[j]),j+1);
+   s.SetSlotName(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_fit[i].words[j]),j+1);
    s.SetSignal(0,j+1);
   }
 
@@ -796,27 +796,27 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">// Via the <a href="../IceF2k.html#IceF2k:GetFitdefs" title="NcDevice* IceF2k::GetFitdefs()">GetFitdefs</a>() memberfunction this <a href="../NcDevice.html">NcDevice</a> object can be</span>
 <span class="comment">// retrieved and stored in the ROOT output file if wanted.</span>
 <span class="comment">// The name of the object is TrigDefinitions and the stored data can be</span>
-<span class="comment">// inspected via the <a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>() memberfunction and looks as follows :</span>
+<span class="comment">// inspected via the <a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>() memberfunction and looks as follows :</span>
 <span class="comment">//</span>
-<span class="comment">//  *<a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 0 Name : TrigDefinitions</span>
+<span class="comment">//  *<a href="../NcDevice.html">NcDevice</a>::<a href="../NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 0 Name : TrigDefinitions</span>
 <span class="comment">//    Position Vector in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//    Err. in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//  The following 9 hits are registered : </span>
-<span class="comment">//  *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 1 Name : main</span>
+<span class="comment">//  *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 1 Name : main</span>
 <span class="comment">//    Position Vector in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//    Err. in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//    Owned by device : <a href="../NcDevice.html">NcDevice</a> Id : 0 Name : TrigDefinitions</span>
 <span class="comment">//     Slot : 1 Signal value : 0 name : trig_pulse_le</span>
 <span class="comment">//     Slot : 2 Signal value : 0 name : trig_pulse_tot</span>
 <span class="comment">//     Slot : 3 Signal value : 0 name : regi_flag</span>
-<span class="comment">//   *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 2 Name : amaa</span>
+<span class="comment">//   *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 2 Name : amaa</span>
 <span class="comment">//     Position Vector in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//     Err. in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//     Owned by device : <a href="../NcDevice.html">NcDevice</a> Id : 0 Name : TrigDefinitions</span>
 <span class="comment">//     Slot : 1 Signal value : 0 name : trig_pulse_le</span>
 <span class="comment">//     Slot : 2 Signal value : 0 name : trig_pulse_tot</span>
 <span class="comment">//     Slot : 3 Signal value : 0 name : regi_flag</span>
-<span class="comment">//   *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 3 Name : amab10</span>
+<span class="comment">//   *<a href="../NcSignal.html">NcSignal</a>::<a href="../NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 3 Name : amab10</span>
 <span class="comment">//     Position Vector in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//     Err. in car (rad) coordinates : 0 0 0</span>
 <span class="comment">//     Owned by device : <a href="../NcDevice.html">NcDevice</a> Id : 0 Name : TrigDefinitions</span>
@@ -825,7 +825,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">//     Slot : 3 Signal value : 0 name : regi_flag</span>
 <span class="comment">// etc....  </span>
 
- <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.n_trigger&lt;=0)
+ <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.n_trigger&lt;=0)
  {
   <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fTrigdefs" title="NcDevice* IceF2k::fTrigdefs">fTrigdefs</a>)
   {
@@ -837,7 +837,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
  <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fTrigdefs" title="NcDevice* IceF2k::fTrigdefs">fTrigdefs</a>)
  {
-  <a href="../IceF2k.html#IceF2k:fTrigdefs" title="NcDevice* IceF2k::fTrigdefs">fTrigdefs</a>-><a href="../NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode=0)">Reset</a>(1);
+  <a href="../IceF2k.html#IceF2k:fTrigdefs" title="NcDevice* IceF2k::fTrigdefs">fTrigdefs</a>-><a href="../NcDevice.html#NcDevice:Reset" title="void NcDevice::Reset(Int_t mode = 0)">Reset</a>(1);
  }
  <span class="keyword">else</span>
  {
@@ -850,14 +850,14 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
  <a href="../NcSignal.html">NcSignal</a> s;
  s.Reset();
 
- <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.n_trigger; i++)
+ <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> i=0; i&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.n_trigger; i++)
  {
-  s.<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_trig[i].id);
-  s.<a href="../#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_trig[i].tag));
+  s.<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_trig[i].id);
+  s.<a href="../#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_trig[i].tag));
 
-  <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> j=0; j&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_trig[i].nwords; j++)
+  <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> j=0; j&lt;<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_trig[i].nwords; j++)
   {
-   s.SetSlotName(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.def_trig[i].words[j]),j+1);
+   s.SetSlotName(TString(<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.def_trig[i].words[j]),j+1);
    s.SetSignal(0,j+1);
   }
 
@@ -872,7 +872,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">// Note : MC tracks are given negative track id's in the event structure.</span>
 <span class="comment">// This memberfunction is based on the original code by Adam Bouchta.</span>
 
- <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject()">GetMainObject</a>();
+ <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject() const">GetMainObject</a>();
  <span class="keyword">if</span> (!evt || <a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.ntrack&lt;=0) <span class="keyword">return</span>;
 
  <span class="comment">// User defined trigger offset in case of simulated data.</span>
@@ -951,8 +951,8 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   }
 
   t.SetParticleCode(idpdg);
-  t.<a href="../#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<a href="../IceF2k.html#IceF2k:fPdg" title="TDatabasePDG* IceF2k::fPdg">fPdg</a>-&gt;GetParticle(idpdg)-&gt;<a href="../#TNamed:GetName" title="const char* TNamed::GetName()">GetName</a>());
-  t.<a href="../#TNamed:SetTitle" title="void TNamed::SetTitle(const char* title=&quot;&quot;)">SetTitle</a>(<span class="string">"MC track"</span>);
+  t.<a href="../#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(<a href="../IceF2k.html#IceF2k:fPdg" title="TDatabasePDG* IceF2k::fPdg">fPdg</a>-&gt;GetParticle(idpdg)-&gt;<a href="../#TNamed:GetName" title="const char* TNamed::GetName() const">GetName</a>());
+  t.<a href="../#TNamed:SetTitle" title="void TNamed::SetTitle(const char* title = &quot;&quot;)">SetTitle</a>(<span class="string">"MC track"</span>);
   t.SetMass(<a href="../IceF2k.html#IceF2k:fPdg" title="TDatabasePDG* IceF2k::fPdg">fPdg</a>-&gt;GetParticle(idpdg)-&gt;Mass());
   t.SetCharge(<a href="../IceF2k.html#IceF2k:fPdg" title="TDatabasePDG* IceF2k::fPdg">fPdg</a>-&gt;GetParticle(idpdg)-&gt;Charge()/3.);
 
@@ -993,7 +993,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">// Note : Reco tracks are given positive track id's in the event structure.</span>
 <span class="comment">// This memberfunction is based on the original code by Adam Bouchta.</span>
 
- <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject()">GetMainObject</a>();
+ <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject() const">GetMainObject</a>();
  <span class="keyword">if</span> (!evt || <a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.nfit&lt;=0) <span class="keyword">return</span>;
 
  <span class="comment">// Loop over all the tracks and add them to the current event</span>
@@ -1063,12 +1063,12 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   }
 
   t.SetParticleCode(idpdg);
-  t.<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"Sieglinde"</span>,<span class="string">"RECO track"</span>);
+  t.<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name, const char* title)">SetNameTitle</a>(<span class="string">"Sieglinde"</span>,<span class="string">"RECO track"</span>);
   t.SetMass(<a href="../IceF2k.html#IceF2k:fPdg" title="TDatabasePDG* IceF2k::fPdg">fPdg</a>-&gt;GetParticle(idpdg)-&gt;Mass());
   t.SetCharge(<a href="../IceF2k.html#IceF2k:fPdg" title="TDatabasePDG* IceF2k::fPdg">fPdg</a>-&gt;GetParticle(idpdg)-&gt;Charge()/3.);
 
   <span class="comment">// Retrieve the various fit parameters for this track</span>
-  <a href="../NcSignal.html">NcSignal</a>* fitdata=<a href="../IceF2k.html#IceF2k:fFitdefs" title="NcDevice* IceF2k::fFitdefs">fFitdefs</a>-><a href="../NcDevice.html#NcDevice:GetIdHit" title="NcSignal* NcDevice::GetIdHit(Int_t id)">GetIdHit</a>(i);
+  <a href="../NcSignal.html">NcSignal</a>* fitdata=<a href="../IceF2k.html#IceF2k:fFitdefs" title="NcDevice* IceF2k::fFitdefs">fFitdefs</a>-><a href="../NcDevice.html#NcDevice:GetIdHit" title="NcSignal* NcDevice::GetIdHit(Int_t id) const">GetIdHit</a>(i);
   <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> jval=0; jval&lt;<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.fresult[i].nval; jval++)
   {
    fitdata-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.fresult[i].val[jval],jval+1);
@@ -1095,10 +1095,10 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
 <a name="AKmCAD"></a><span class="keyword">void</span> <a href="../IceF2k.html">IceF2k</a>::<a href="../IceF2k.html#IceF2k:PutHits" title="void IceF2k::PutHits()">PutHits</a>()
 {
-<span class="comment">// Get the hit and waveform info from the F2000 file into the IcePack structure.</span>
+<span class="comment">// Get the hit and <a href="../ListOfTypes.html#waveform">waveform</a> info from the F2000 file into the IcePack structure.</span>
 <span class="comment">// This memberfunction is based on the original code by Adam Bouchta.</span>
 
- <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject()">GetMainObject</a>();
+ <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject() const">GetMainObject</a>();
  <span class="keyword">if</span> (!evt) <span class="keyword">return</span>;
 
  <span class="comment">// Loop over all the hits and add them to the current event</span>
@@ -1109,7 +1109,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
  s.SetSlotName(<span class="string">"TOT"</span>,3);
  <a href="../ListOfTypes.html#Int_t">Int_t</a> chan=0;
  <a href="../ListOfTypes.html#Int_t">Int_t</a> maxchan=800;
- <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>) maxchan=<a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>.nch;
+ <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>) maxchan=<a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>.nch;
  <a href="../IceAOM.html">IceAOM</a>* omx=0;
  <a href="../NcSignal.html">NcSignal</a>* sx=0;
  <a href="../ListOfTypes.html#Int_t">Int_t</a> tid=0;
@@ -1127,7 +1127,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   {
    <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>)
    {
-    omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) or overloads">GetObject</a>(chan,1);
+    omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row, Int_t col) const or overloads">GetObject</a>(chan,1);
     evt-&gt;AddDevice(omx);
    }
    <span class="keyword">else</span>
@@ -1195,8 +1195,8 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   }
   <span class="keyword">else</span>
   {
-   <span class="keyword">if</span> (tid == -2) sx-&gt;<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"N"</span>,<span class="string">"Noise"</span>);
-   <span class="keyword">if</span> (tid == -3) sx-&gt;<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"A"</span>,<span class="string">"Afterpulse"</span>);
+   <span class="keyword">if</span> (tid == -2) sx-&gt;<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name, const char* title)">SetNameTitle</a>(<span class="string">"N"</span>,<span class="string">"Noise"</span>);
+   <span class="keyword">if</span> (tid == -3) sx-&gt;<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name, const char* title)">SetNameTitle</a>(<span class="string">"A"</span>,<span class="string">"Afterpulse"</span>);
   }
  }
 
@@ -1218,7 +1218,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   {
    <span class="keyword">if</span> (<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>)
    {
-    omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) or overloads">GetObject</a>(chan,1);
+    omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceF2k.html#IceF2k:fOmdb" title="NcObjMatrix* IceF2k::fOmdb">fOmdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row, Int_t col) const or overloads">GetObject</a>(chan,1);
     evt-&gt;AddDevice(omx);
    }
    <span class="keyword">else</span>
@@ -1237,7 +1237,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   omx-&gt;AddNamedSlot(hname);
   omx-&gt;SetSignal(<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.wf[iwf].baseline,hname);
 
-  <span class="comment">// Fill the waveform histogram</span>
+  <span class="comment">// Fill the <a href="../ListOfTypes.html#waveform">waveform</a> histogram</span>
   hname=<span class="string">"OM"</span>;
   hname+=chan;
   hname+=<span class="string">"-WF"</span>;
@@ -1252,11 +1252,11 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
   <span class="keyword">for</span> (<a href="../ListOfTypes.html#Int_t">Int_t</a> jbin=1; jbin&lt;=<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.wf[iwf].ndigi; jbin++)
   {
-   <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fCompTWR" title="Int_t IceF2k::fCompTWR">fCompTWR</a>) <span class="comment">// Uncompressed waveform input</span>
+   <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fCompTWR" title="Int_t IceF2k::fCompTWR">fCompTWR</a>) <span class="comment">// Uncompressed <a href="../ListOfTypes.html#waveform">waveform</a> input</span>
    {
     histo.SetBinContent(jbin,<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.wf[iwf].baseline-<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.wf[iwf].digi[jbin-1]);
    }
-   <span class="keyword">else</span> <span class="comment">// Compressed waveform input</span>
+   <span class="keyword">else</span> <span class="comment">// Compressed <a href="../ListOfTypes.html#waveform">waveform</a> input</span>
    {
     <span class="keyword">if</span> (jbin==1) amp=<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.wf[iwf].digi[0];
     <span class="keyword">if</span> (jbin==2) amp=<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.wf[iwf].digi[1]-histo.GetBinContent(1);
@@ -1300,11 +1300,11 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 
  <span class="keyword">if</span> (!<a href="../IceF2k.html#IceF2k:fTrigdefs" title="NcDevice* IceF2k::fTrigdefs">fTrigdefs</a>) <span class="keyword">return</span>;
 
- <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject()">GetMainObject</a>();
+ <a href="../IceEvent.html">IceEvent</a>* evt=(<a href="../IceEvent.html">IceEvent</a>*)<a href="../NcJob.html#NcJob:GetMainObject" title="TObject* NcJob::GetMainObject() const">GetMainObject</a>();
  <span class="keyword">if</span> (!evt || <a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.ntrig&lt;=0) <span class="keyword">return</span>;
 
  <a href="../NcDevice.html">NcDevice</a> trig;
- trig.<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"Trigger"</span>,<span class="string">"Amanda/IceCube event triggers"</span>);
+ trig.<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name, const char* title)">SetNameTitle</a>(<span class="string">"Trigger"</span>,<span class="string">"Amanda/IceCube event triggers"</span>);
  <a href="../NcSignal.html">NcSignal</a> s;
  TString trigname;
  TString slotname;
@@ -1315,9 +1315,9 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
   id=<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.ptrig[i].id;
   nval=<a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>.ptrig[i].nval;
   <span class="keyword">if</span> (!nval) <span class="keyword">continue</span>;
-  <a href="../NcSignal.html">NcSignal</a>* tdef=<a href="../IceF2k.html#IceF2k:fTrigdefs" title="NcDevice* IceF2k::fTrigdefs">fTrigdefs</a>-><a href="../NcDevice.html#NcDevice:GetIdHit" title="NcSignal* NcDevice::GetIdHit(Int_t id)">GetIdHit</a>(id+1);
+  <a href="../NcSignal.html">NcSignal</a>* tdef=<a href="../IceF2k.html#IceF2k:fTrigdefs" title="NcDevice* IceF2k::fTrigdefs">fTrigdefs</a>-><a href="../NcDevice.html#NcDevice:GetIdHit" title="NcSignal* NcDevice::GetIdHit(Int_t id) const">GetIdHit</a>(id+1);
   <span class="keyword">if</span> (!tdef) <span class="keyword">continue</span>;
-  trigname=tdef-&gt;<a href="../#TNamed:GetName" title="const char* TNamed::GetName()">GetName</a>();
+  trigname=tdef-&gt;<a href="../#TNamed:GetName" title="const char* TNamed::GetName() const">GetName</a>();
   s.Reset(1);
   s.<a href="../#TNamed:SetName" title="void TNamed::SetName(const char* name)">SetName</a>(trigname);
   s.<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(id+1);
@@ -1342,7 +1342,7 @@ ClassImp(<a href="../IceF2k.html">IceF2k</a>) <span class="comment">// <a href="
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-04-05 23:39 </em><em>&raquo; Last generated: 2021-04-05 23:39</em><br />
+<em>&raquo; Last changed: 2025-05-16 13:06 </em><em>&raquo; Last generated: 2025-05-16 13:06</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

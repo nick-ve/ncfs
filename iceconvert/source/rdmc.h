@@ -149,7 +149,7 @@ enum RDMC_GEO_ID_T {
  AMANDA_KM3 = 2099,
  JULIA = 6091,
  BAIKAL = 1000,
- NT_36 = 1003 ,                    /* array id for the baikal = telescope */
+ NT_36 = 1003 ,                    /* Array id for the baikal = telescope */
  NT_36s = 1004,
  NT_72 = 1005,
  NT_96 = 1006,
@@ -396,19 +396,19 @@ typedef struct {
   /* trigger */
   array_hdef_t *def_trig;
   /* user */
-  array_hdef_t  *def_user;     /* NULL or an array of user line defs */
+  array_hdef_t  *def_user;     /* NULL or an Array of user line defs */
   /* fits */
-  array_hdef_t  *def_fit;        /* NULL or an array of fit line defs */
+  array_hdef_t  *def_fit;        /* NULL or an Array of fit line defs */
   /* status ==  housekeeping */
   array_hdef_t *def_stat;           /* see above */
   /* mcinfo, still a dummy */
   array_hdef_t *def_mcinfo;   /* mcinfos types */
- /* uniqe array id attached by init and clear */
+ /* uniqe Array id attached by init and clear */
   unsigned long int array_id; 
   /* comments */
   char *comment;          /* comment line: a '\0' terminated string or NULL */
   void *tmp;             /* a stack to hold anything */
-} array;               /* geometric and technic array info of the telescope */
+} Array;               /* geometric and technic Array info of the telescope */
 
 #if NEW_MHEAD
   /* now the new arry structure */
@@ -436,7 +436,7 @@ typedef struct {
 } mom_def_t;
 
 typedef struct {
-  unsigned long int array_id;   /* uniqe array id created by init and clear */
+  unsigned long int array_id;   /* uniqe Array id created by init and clear */
   int id;                                                    /* geometry id */
   float longitude;                /* detector location longitude, [degrees] */
   float lattitude;                /* detector location lattitude, [degrees] */
@@ -697,19 +697,19 @@ void rdmc_free_array_calib_utc(array_calib_utc_t *cu);
 /**** in array2mhead.c *****/
 /*###########################################*/
 /* target has to be allocated and initilized/cleared (freed memory) */ 
-int rdmc_array2mhead(const array *ar, mhead_t *mh);
-int rdmc_mhead2array(const mhead_t *mh, array *ar);
+int rdmc_array2mhead(const Array *ar, mhead_t *mh);
+int rdmc_mhead2array(const mhead_t *mh, Array *ar);
 
 
 /*###########################################*/
 /**** in rdmc_array.c *****/
 /*###########################################*/
-void rdmc_init_array(array *ar);                               /* structures */
-void rdmc_free_array(array *ar);
-void rdmc_clear_array(array *ar);               /* clear the array structure */
-int rdmc_rarr(mcfile *fp, array *ar);  /* read the array info from the begin */
-int rdmc_warr(mcfile *fp, const array *ar);     /* writes array info to file */
-int rdmc_comp_array(const array *a1, const array *a2);/* compares two geometries */
+void rdmc_init_array(Array *ar);                               /* structures */
+void rdmc_free_array(Array *ar);
+void rdmc_clear_array(Array *ar);               /* clear the Array structure */
+int rdmc_rarr(mcfile *fp, Array *ar);  /* read the Array info from the begin */
+int rdmc_warr(mcfile *fp, const Array *ar);     /* writes Array info to file */
+int rdmc_comp_array(const Array *a1, const Array *a2);/* compares two geometries */
 /* returns 0 if they are equal */
 /* else it returns the ored result of: */
 #define RDMC_ARRAY_COMP_OK 0x0000            /* all OK*/
@@ -723,23 +723,23 @@ int rdmc_comp_array(const array *a1, const array *a2);/* compares two geometries
 #define RDMC_ARRAY_COMP_STATUS 0x80
 #define RDMC_ARRAY_COMP_MC 0x100
 
-void rdmc_cp_array(array *out, const array *in);/* copies two geometries */
+void rdmc_cp_array(Array *out, const Array *in);/* copies two geometries */
 
 /***** now function for the header_def and header_def_par */
 /* functions return 0 on success,  1 else */
-int rdmc_array_add_user_def(array *ar, array_hdef_t *user, int iuse);
-int rdmc_array_del_user_def(array *ar , int iuse);
-int rdmc_array_add_stat_def(array *ar, array_hdef_t *sta, int ista);
-int rdmc_array_del_stat_def(array *ar, int ista);
-int rdmc_array_add_fit_def(array *ar, array_hdef_t *fd, int ifd);
-int rdmc_array_del_fit_def(array *ar, int ifd);
-int rdmc_array_add_mcinfo_def(array *ar, array_hdef_t *mc, int imc);
-int rdmc_array_del_mcinfo_def(array *ar, int imc);
-int rdmc_array_add_trigger_def(array *ar, array_hdef_t *t, int it);
-int rdmc_array_del_trigger_def(array *ar, int it);
+int rdmc_array_add_user_def(Array *ar, array_hdef_t *user, int iuse);
+int rdmc_array_del_user_def(Array *ar , int iuse);
+int rdmc_array_add_stat_def(Array *ar, array_hdef_t *sta, int ista);
+int rdmc_array_del_stat_def(Array *ar, int ista);
+int rdmc_array_add_fit_def(Array *ar, array_hdef_t *fd, int ifd);
+int rdmc_array_del_fit_def(Array *ar, int ifd);
+int rdmc_array_add_mcinfo_def(Array *ar, array_hdef_t *mc, int imc);
+int rdmc_array_del_mcinfo_def(Array *ar, int imc);
+int rdmc_array_add_trigger_def(Array *ar, array_hdef_t *t, int it);
+int rdmc_array_del_trigger_def(Array *ar, int it);
 
 
-  /* temporary until array is really nuked */
+  /* temporary until Array is really nuked */
 #define rdmc_add_user_def rdmc_array_add_user_def
 #define rdmc_del_user_def rdmc_array_del_user_def
 #define rdmc_add_stat_def rdmc_array_add_stat_def
@@ -754,7 +754,7 @@ int rdmc_array_del_trigger_def(array *ar, int it);
 
 /* copies all information for channel in_i from geometry *in  */
 /* to channel out_i into geometry *out  */
-void rdmc_channel_cp(array  *out,int out_i,const array *in ,int in_i); 
+void rdmc_channel_cp(Array  *out,int out_i,const Array *in ,int in_i); 
 
 /* in order to create objects one needs unique id's*/
 /* these functions return them */
@@ -766,9 +766,9 @@ void rdmc_channel_cp(array  *out,int out_i,const array *in ,int in_i);
 /* e.g. if there are too many triggers defined */
 /* the tag usually contains the tag_root appended by a number */
 /* here the trigger number */
-int rdmc_unique_trigger_id(char *tag, const array *ar, const char *tag_root);
-int rdmc_unique_user_id(char *tag, const array *ar, const char *tag_root);
-int rdmc_unique_stat_id(char *tag, const array *ar, const char *tag_root);
+int rdmc_unique_trigger_id(char *tag, const Array *ar, const char *tag_root);
+int rdmc_unique_user_id(char *tag, const Array *ar, const char *tag_root);
+int rdmc_unique_stat_id(char *tag, const Array *ar, const char *tag_root);
 
 
 /*###########################################*/
@@ -795,7 +795,7 @@ void  rdmc_free_array_hdef(array_hdef_t *def);
    number of differences */
 int rdmc_comp_array_hdef(const array_hdef_t *d1, 
 			  const array_hdef_t *d2);
-/* search an array of ndef array_hdef_t elements */
+/* search an Array of ndef array_hdef_t elements */
 /* find the number of a header definition */
 /* returns the number  0..(ndef-1) or RDMC_NA */
 int rdmc_get_hdef_tag(const array_hdef_t *hd, int ndef, const char *tag); /*according to the tag */
@@ -816,9 +816,9 @@ int rdmc_token_in_hdef(const array_hdef_t *p, const char *token);
 /*###########################################*/
 /*********** in rdmc_mevt.c **************/
 /*###########################################*/
-int rdmc_revt(mcfile *fp, array *ar, mevt *ev);          /* reads an event */
+int rdmc_revt(mcfile *fp, Array *ar, mevt *ev);          /* reads an event */
 int rdmc_skipevt(mcfile *fp);                /* skips over the next event record */
-int rdmc_wevt(mcfile *fp, const mevt *ev, const array *ar);   /* writes an event */
+int rdmc_wevt(mcfile *fp, const mevt *ev, const Array *ar);   /* writes an event */
 
 /**** init =  set to default values ****/
 /***  clear = free also memory    *****/
@@ -833,7 +833,7 @@ int rdmc_count_nch(const mevt *e);
 /* returns number of hit strings */
 int rdmc_count_nstr(const mevt *e);
 /* fill the string number into mhit */
-int rdmc_fill_mhit_str(mevt *ev, const array *ar);
+int rdmc_fill_mhit_str(mevt *ev, const Array *ar);
 /* ( rdmc_fill_mhit_str rdmc_count_nstr, replace the old function ns_evt) */
 
 
@@ -930,7 +930,7 @@ void rdmc_free_mevt_uses(mevt_uses_t *u);
 /* copies nuses uses_t words from in to the previously allocated out */
 void rdmc_cp_mevt_nuses(mevt_uses_t *out, mevt_uses_t *in, int nuses);
 
-/* sorts the uses array for a) uses id and the hit_id */
+/* sorts the uses Array for a) uses id and the hit_id */
 void rdmc_sort_uses(mevt_uses_t *use, int nuse);
 
 /* store all currently used hits as uses block as the given fit/trig num */
@@ -938,7 +938,7 @@ int rdmc_create_fit_uses(mevt *e, int ifit);
 int rdmc_create_trig_uses(mevt *e, int itrig);
 
   /* count the number of channels which are used by fit or trigger i*/
-int rdmc_count_fit_nch_uses(mevt *e, array *a, int i);
+int rdmc_count_fit_nch_uses(mevt *e, Array *a, int i);
 
 
 /*###########################################*/
@@ -1028,14 +1028,14 @@ void rdmc_jk_to_fitdef(array_hdef_t *jk_def, int id);
 void rdmc_init_fit_jk(mevt_special_t *result,int id);
 
 /* checks if fresult ifit is a rdmc-jk fresult returns 1 if yes else 0*/
-int rdmc_is_fresult_jk(const array *ar, const mevt *ev, int ifit);
+int rdmc_is_fresult_jk(const Array *ar, const mevt *ev, int ifit);
 
 /* checks if special fresult is defined as rdmc-jk  returns 1 if yes 
    else 0*/
 int rdmc_is_this_jk(const array_hdef_t *jk_def, const mevt_special_t *result);
 
 /* returns 1 if fitdef idef (0..ar->n_fit-1) is of jk type */
-int rdmc_is_fitdef_jk(const array *ar,int idef);
+int rdmc_is_fitdef_jk(const Array *ar,int idef);
 
 #if 1
 extern const array_hdef_t rdmc_jk_fit_def;
@@ -1175,13 +1175,13 @@ int rdmc_deltaang(double theta1, double phi1, double theta2,
 double rdmc_art_xyz(const mtrack *tr, double x, double y, double z); 
                                           /* Cerenkov light arrival to point */
 
-double rdmc_art(const array *ar, const mtrack *tr, int i); 
+double rdmc_art(const Array *ar, const mtrack *tr, int i); 
                                        /* Cerenkov light arrival to i-th pmt */
 
-double rdmc_pnt_art(const array *ar, const mtrack *tr, int i);
+double rdmc_pnt_art(const Array *ar, const mtrack *tr, int i);
                                          /* arrival time from a point source */
 
-double rdmc_om_dist(const array *a, int ich1, int ich2); /* distance between */
+double rdmc_om_dist(const Array *a, int ich1, int ich2); /* distance between */
 	                                                 /* 2 channels */
 
 double rdmc_dist(double x1, double y1, double z1,        /* distance between */
@@ -1193,19 +1193,19 @@ double rdmc_angtr(const mtrack *t1, const mtrack *t2);
 
 double rdmc_tdist_xyz(const mtrack *it, double x, double y, double z);
                            /* calcs the min distance from a track to a point */
-double rdmc_tdist(const array *ar, const mtrack *it, int iom);
+double rdmc_tdist(const Array *ar, const mtrack *it, int iom);
                          /* calcs the min distance between a track and an om */
 double rdmc_tdist_orig(const mtrack *it); 
             /* calcs the min distance between a track and the origin (0,0,0) */
 
-double rdmc_vdist(const array *ar, const mtrack *it, int iom);
+double rdmc_vdist(const Array *ar, const mtrack *it, int iom);
 /* calcs the distance between a the vertex of track and a pmt       */
 
-void rdmc_tang(const array *ar, const mtrack *it, int iom, 
+void rdmc_tang(const Array *ar, const mtrack *it, int iom, 
 	    double *dist, double *csang);
 
 
-void rdmc_vang(const array *ar, const mtrack *it, int iom, 
+void rdmc_vang(const Array *ar, const mtrack *it, int iom, 
 	    double *dist, double *csaxis, double *csang);
 
 /*calculates the perpendicular distance, direction angle and  cos(angle) */
@@ -1223,7 +1223,7 @@ void rdmc_add_timeoffset(mevt *e, float offset);
 
 /* sort hits in a event by a call to quicksort either by time */
 /*  or by channel number */
-int rdmc_sort_hits(mevt *ev, const array *ar, enum RDMC_SORT_T method);
+int rdmc_sort_hits(mevt *ev, const Array *ar, enum RDMC_SORT_T method);
 
 /* remove fit no ifit (counting is: 0..nfit-1) from event */
 /* including all associated information, like fit_uses */
@@ -1257,32 +1257,32 @@ int rdmc_is_track_like(const mtrack *t);
 /* checks if this hit is a  ifold  [scip] coincident hit                   */
 /* returns 1 if yes, 0if no                                                 */
 /****************************************************************************/
-int rdmc_is_coinc(mevt *e, const array *ar, int ihit, 
+int rdmc_is_coinc(mevt *e, const Array *ar, int ihit, 
 			 int fold, float twin);
-int rdmc_is_scoinc(mevt *e, const array *ar, int ihit, 
+int rdmc_is_scoinc(mevt *e, const Array *ar, int ihit, 
 			 int fold, float twin);
 
 /* calculates the number of neighbouring hits */
 /* which are coincident in the time window twin */
 /* and are within the radius */
 /* returns -1 on error */
-int rdmc_neighbours(array *a, mevt *e, int ihit, double radius, double twin);
+int rdmc_neighbours(Array *a, mevt *e, int ihit, double radius, double twin);
 
 
-int rdmc_count_geo(const array *a);
-/* counts number of strings in an geometry-array *a and returns that number */
+int rdmc_count_geo(const Array *a);
+/* counts number of strings in an geometry-Array *a and returns that number */
 
-void rdmc_make_str(array *a);   
+void rdmc_make_str(Array *a);   
 /* cleans up the geometry data structure *a */
 /* the number of strings (a->nstr) is recalculated */
 /* and the string number for each chanel (a->str[i]) are  recalculated */
 
-void rdmc_make_clust(array *a); 
+void rdmc_make_clust(Array *a); 
 /* calculates the iclust number for each channel in the data structure *a */
 /* the old value a->clust[i] is deleted  (Baikal specific) */
 
-int rdmc_give_clust(const array *a,int ich);
-/* this function calculates the value iclust for channel ich in array *a */
+int rdmc_give_clust(const Array *a,int ich);
+/* this function calculates the value iclust for channel ich in Array *a */
 /* the function returns the result iclust or -1 on error */
 /*  (Baikal specific) */
 
@@ -1293,7 +1293,7 @@ int rdmc_omhit(float *pesum, int iom, const mevt *event);
 /* calculates the sum of PE in OM iom ([0..nom-1]) */
 /* return 0 if the om was not hit else 1 */
 
-double rdmc_count_ompe(const mevt *e,const array *a
+double rdmc_count_ompe(const mevt *e,const Array *a
 		       ,float pe_oms[],int hit_oms[]);
 /* calculates for each om if it was hit, */
 /* and how many PE (ADCs summed over all hits) this are */
@@ -1305,7 +1305,7 @@ double rdmc_count_ompe(const mevt *e,const array *a
 /* the function can be called with pe_oms or hit_oms set to NULL */
 /* then the corresponding values are not calculated (efficiency) */
 
-int rdmc_centre(const mevt *ev, const array *geom, double rc[3]
+int rdmc_centre(const mevt *ev, const Array *geom, double rc[3]
 		, double amp_pwr);
 /* calculate the vector rc to the centre of gravity of the event */
 /* amp_pwr is the power by which the amplitude is to be weighted */
@@ -1431,7 +1431,7 @@ void ps_print_sel_opt(const char *progname
 //                              +--------------------------------+
 //                              | do hit cleaning                |
 //                              +--------------------------------+
-int ps_exec_cleaning(mevt *e, array *a, rdmc_clean_hit_ps* phit_options);
+int ps_exec_cleaning(mevt *e, Array *a, rdmc_clean_hit_ps* phit_options);
 
 
 void rdmc_usage_cleaning(void); /* print all cleaning options == help */
@@ -1445,99 +1445,99 @@ int rdmc_clean_backup_hits(mevt *e);
 int rdmc_clean_restore_hits(mevt *e);
 
 /* function does recalculate mevt.nch and mevt.nstr */
-int rdmc_exec_cleaning(mevt *e, array *a);    /* delete hits to be cleaned */
+int rdmc_exec_cleaning(mevt *e, Array *a);    /* delete hits to be cleaned */
 
 /* clear the internal list -> experts use only */
 void rdmc_clear_cleaning_list(void); /* reset/clean cleaning list */
 
 /* rountines do not recalculate mevt.nch and mevt.nstr */
-int rdmc_rm_h(array *a, mevt *e, int hit_nr,int nhits);   /* remove one hit */
+int rdmc_rm_h(Array *a, mevt *e, int hit_nr,int nhits);   /* remove one hit */
                                                     /* hit_nr: 0..(nhit-1) */
-int rdmc_rm_rnd_h(array *a, mevt *e);             /* remove one random hit */
+int rdmc_rm_rnd_h(Array *a, mevt *e);             /* remove one random hit */
                                                     /* returns ihit*/
-int rdmc_rm_rnd_nh(array *a, mevt *e, int n);        /* remove n random hits */
+int rdmc_rm_rnd_nh(Array *a, mevt *e, int n);        /* remove n random hits */
                                                     /* returns number of hits*/
-int rdmc_rm_earliest_h(array *a, mevt *e,int num); 
+int rdmc_rm_earliest_h(Array *a, mevt *e,int num); 
                                            /* remove num earliest hit*/
                                            /* return number of removed hits */ 
-int rdmc_rm_latest_h(array *a, mevt *e,int num);
+int rdmc_rm_latest_h(Array *a, mevt *e,int num);
                                            /* remove num latest hit */
                                            /* return number of removed hits */ 
-int rdmc_rm_interval_h(array *a, mevt *e,float before, float after);
+int rdmc_rm_interval_h(Array *a, mevt *e,float before, float after);
                                            /* remove outside time window */
                                            /* return number of removed hits */
-int rdmc_rm_amp_h(array *a, mevt *e,float amp_low, float amp_high, 
+int rdmc_rm_amp_h(Array *a, mevt *e,float amp_low, float amp_high, 
 		  int low_channel, int high_channel);
                                      /*remove hits amp_low > amp > amp_high */
                                            /* return number of removed hits */
-int rdmc_rm_tot_h(array *a, mevt *e,float tot_low, float tot_high,
+int rdmc_rm_tot_h(Array *a, mevt *e,float tot_low, float tot_high,
 		  int low_channel, int high_channel);
                                      /*remove hits tot_low > tot > tot_high */
                                            /* return number of removed hits */
-int rdmc_rm_nocoinc_h(array *a, mevt *e
+int rdmc_rm_nocoinc_h(Array *a, mevt *e
 		      , int coinc, float twin); 
                                          /*remove  coinc-fold  hits*/
                                         /* the time window twin is aplied */
                                         /* return number of removed hits */ 
-int rdmc_rm_snocoinc_h(array *a, mevt *e
+int rdmc_rm_snocoinc_h(Array *a, mevt *e
 		       , int coinc, float twin); 
                                          /*remove SKIP coinc-fold  hits*/
                                         /* the time window twin is aplied */
                                         /* return number of removed hits */ 
-int rdmc_rm_isolate_h(array *a, mevt *e,float window);
+int rdmc_rm_isolate_h(Array *a, mevt *e,float window);
                                              /*time separated hits by window*/
                                            /* return number of removed hits */ 
-int rdmc_rm_coinc_h(array *a, mevt *e,float window);
+int rdmc_rm_coinc_h(Array *a, mevt *e,float window);
                                              /*time coincident hits in window*/
                                            /* return number of removed hits */ 
-int rdmc_rm_xtalk_h(array *a, mevt *e, float window, float adc_min, 
+int rdmc_rm_xtalk_h(Array *a, mevt *e, float window, float adc_min, 
 		    float ratio);
   /* remove LE-coincident cross-talk */
-int rdmc_rm_xtalk_map_h(array *a, mevt *e, float adc_min, float ratio);
+int rdmc_rm_xtalk_map_h(Array *a, mevt *e, float adc_min, float ratio);
   /* remove x-talk using Klug & Hanson channel maps, Klug's time windows */
                                            /* return number of removed hits */ 
-int rdmc_rm_local_h(array *a, mevt *e, double radius, double twin, int nhits);
+int rdmc_rm_local_h(Array *a, mevt *e, double radius, double twin, int nhits);
                           /* local space and time isolated hits are removed */
                               /* at least nhits within radius and time twin */
-int rdmc_rm_additional_h(array *a, mevt *e,int from);
+int rdmc_rm_additional_h(Array *a, mevt *e,int from);
                                            /* remove additional hits in 
 					     each channel*/
                                            /* return number of removed hits */ 
-int rdmc_rm_channel_h(array *a, mevt *e,int ich);
+int rdmc_rm_channel_h(Array *a, mevt *e,int ich);
                             /* OBSOLETE remove all hits in channel ich*/
-int rdmc_rm_channels_h(array *a, mevt *e,int ich1, int ich2);
+int rdmc_rm_channels_h(Array *a, mevt *e,int ich1, int ich2);
                           /*remove all hits from channel ich1 to ich2*/
-int rdmc_rm_string_h(array *a, mevt *e,int istr);
+int rdmc_rm_string_h(Array *a, mevt *e,int istr);
                                            /*remove all hits in string istr*/
-int rdmc_rm_uses_h(array *a, mevt *e,int itrig);
+int rdmc_rm_uses_h(Array *a, mevt *e,int itrig);
                                            /* remove hits not used by trigger 
 					     itrig*/
                                            /* return number of removed hits */ 
-int rdmc_rm_fuses_h(array *a, mevt *e,int ifit);
+int rdmc_rm_fuses_h(Array *a, mevt *e,int ifit);
                                            /* remove hits not used by fit 
 					     ifit*/
                                            /* return number of removed hits */ 
-int rdmc_rm_imhoff_h (array *a, mevt *e, int n);
+int rdmc_rm_imhoff_h (Array *a, mevt *e, int n);
 					   /* remove the hits with highest/lowest */
 					   /* (t-t_bar)*(z-z_bar) */
-int rdmc_rm_imhoff_s_h (array *a, mevt *e, double r, int s);
+int rdmc_rm_imhoff_s_h (Array *a, mevt *e, double r, int s);
                                            /* remove the hits with a */
                                            /* (t-t_bar)*(z-z_bar)  */
                                            /*  above/above and  below/below*/
                                            /* r*sigma of the (t)(z) */
                                            /* if s>/=/<0 */
-int rdmc_rm_early_amp_h(array *a, mevt *e,int num, float amp_high);
+int rdmc_rm_early_amp_h(Array *a, mevt *e,int num, float amp_high);
                                      /* within first num hits, hits with */
                                    /* amplitude larger than amp are removed */ 
-int rdmc_rm_amp_early_h(array *a, mevt *e,int num, float amp_high);
+int rdmc_rm_amp_early_h(Array *a, mevt *e,int num, float amp_high);
                                      /* within first num hits, hits with */
                                    /* amplitude larger than amp are removed */ 
-int rdmc_rm_dt_rho_h(array *a, mevt *e, int ifit, float rho, float tmin, float tmax);                              /* removes  (truncates) hits with */
+int rdmc_rm_dt_rho_h(Array *a, mevt *e, int ifit, float rho, float tmin, float tmax);                              /* removes  (truncates) hits with */
               /*distance rho and outside time-window tmin,tmax from fit */
 
-int rdmc_rm_inrho_h(array *a, mevt *e, int ifit, float rho);                              /* removes  (truncates) hits with radius smaller than rho from fit */
-int  rdmc_rm_tunnel_h(array *a, mevt *e, int mode);
-int rdmc_rm_split_h (array *a, mevt *e, int splitorder, int splitmode);
+int rdmc_rm_inrho_h(Array *a, mevt *e, int ifit, float rho);                              /* removes  (truncates) hits with radius smaller than rho from fit */
+int  rdmc_rm_tunnel_h(Array *a, mevt *e, int mode);
+int rdmc_rm_split_h (Array *a, mevt *e, int splitorder, int splitmode);
 
 /*###########################################*/
 /* routines in pandel_track.c and pandel_point.c      */
@@ -1708,7 +1708,7 @@ double rdmc_pp_pnh(double perp_dist, double cs_axis, double energy, double sensi
 /*	    ,&nearly,&ndir,&nsdir,&nlate);*/
 /* the function returns gdir */
 /****************************************************************************/
-double rdmc_get_direct_hits(const array *a, const mtrack *tr, mevt *e
+double rdmc_get_direct_hits(const Array *a, const mtrack *tr, mevt *e
 			    , const char *fmt, ...);
 
 /*###########################################*/

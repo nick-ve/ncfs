@@ -2,21 +2,21 @@
 #ifndef _RDMC_BAIKAL_H
 #define _RDMC_BAIKAL_H
 
-int rdmc_rarr_baikal_mc(mcfile *fp,array *ar);         /* (baikal mc/data file) */
+int rdmc_rarr_baikal_mc(mcfile *fp,Array *ar);         /* (baikal mc/data file) */
 
-int rdmc_revt_baikal(mcfile *fp, mevt *ev, const array *ar);        /* (baikal) */
-int rdmc_revt_baikal_mc(mcfile *fp, mevt *ev, const array *ar);  /* (baikal mc) */
-int rdmc_revt_baikal_data(mcfile *fp, mevt *ev, const array *ar);/* (baikal data)*/
-int rdmc_revt_baikal_zeu(mcfile *fp, mevt *ev, const array *ar);/* (zeuthen format) */
-int rdmc_revt_baikal_mos(mcfile *fp, mevt *ev, const array *ar); /* (moscow format) */
+int rdmc_revt_baikal(mcfile *fp, mevt *ev, const Array *ar);        /* (baikal) */
+int rdmc_revt_baikal_mc(mcfile *fp, mevt *ev, const Array *ar);  /* (baikal mc) */
+int rdmc_revt_baikal_data(mcfile *fp, mevt *ev, const Array *ar);/* (baikal data)*/
+int rdmc_revt_baikal_zeu(mcfile *fp, mevt *ev, const Array *ar);/* (zeuthen format) */
+int rdmc_revt_baikal_mos(mcfile *fp, mevt *ev, const Array *ar); /* (moscow format) */
 
 int rdmc_skipevt_baikal_mc(mcfile *fp);                             /* (baikal mc/data) */
 
-int rdmc_warr_baikal_mc(mcfile *fp, const array *ar);               /* (baikal mc/data) */
+int rdmc_warr_baikal_mc(mcfile *fp, const Array *ar);               /* (baikal mc/data) */
 
-int rdmc_wevt_baikal_mc(mcfile *fp, const mevt *ev, const array *ar);   /* (baikal mc) */
-int rdmc_wevt_baikal_data(mcfile *fp, const mevt *ev, const array *ar);  /* (baikal data) */
-int rdmc_wevt_baikal_mos(mcfile *fp, const mevt *ev, const array *ar);  /* (moscow format) */
+int rdmc_wevt_baikal_mc(mcfile *fp, const mevt *ev, const Array *ar);   /* (baikal mc) */
+int rdmc_wevt_baikal_data(mcfile *fp, const mevt *ev, const Array *ar);  /* (baikal data) */
+int rdmc_wevt_baikal_mos(mcfile *fp, const mevt *ev, const Array *ar);  /* (moscow format) */
 
 int rdmc_wrcomment_baikal_mc(const mcfile *fp, const char *s); /* (baikal, just a dummy) */
 

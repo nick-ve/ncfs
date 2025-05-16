@@ -51,10 +51,10 @@ char *dumand_rdmc_cvsid =
 #define PID180 (M_PI/180.)
 
 static int rdmc_a_M(const char *s, mcfile *fp);                /* read the several */
-static int rdmc_a_G(const char *s, array *ar);               /* from a dumand-like */
-static int rdmc_a_P(const char *s, array *ar);                           /* format */
-static int rdmc_a_K(const char *s, array *ar);
-static int rdmc_a_Q(const char *s, array *ar);
+static int rdmc_a_G(const char *s, Array *ar);               /* from a dumand-like */
+static int rdmc_a_P(const char *s, Array *ar);                           /* format */
+static int rdmc_a_K(const char *s, Array *ar);
+static int rdmc_a_Q(const char *s, Array *ar);
 static int rdmc_a_E(const char *s, mevt *ev);
 static int rdmc_a_H(const char *s, mhit *h); 
 static int rdmc_a_T(const char *s, mtrack *t);
@@ -64,16 +64,16 @@ static int rdmc_a_C(const char *s, char **comment);
 #if 0
 static int a_skip_C(mcfile *fp);                     /* skip comment lines */
 #endif
-static int parse_fit_def_ascii(array *ar, const char *s);   
+static int parse_fit_def_ascii(Array *ar, const char *s);   
 /* parse the fit definitions */
-static int  declare_rdmc_dumand_user(array *ar); 
+static int  declare_rdmc_dumand_user(Array *ar); 
 
 
 /****************************************************************************/
 /* The function rarr_ascii() reads the header of a dumand like file         */
 /****************************************************************************/
 
-int rdmc_rarr_ascii(mcfile *fp, array *ar)
+int rdmc_rarr_ascii(mcfile *fp, Array *ar)
 {
   char s[RDMC_MAXLINE];                                /* input line */
   int c;                                        /* first char of input line */
@@ -81,7 +81,7 @@ int rdmc_rarr_ascii(mcfile *fp, array *ar)
   int *iclust;               /* pointer to current channel number in string */
   int retval;                                                /* returnvalue */
 
-  rdmc_init_array(ar);                                      /* reset the array */
+  rdmc_init_array(ar);                                      /* reset the Array */
   ar->nrun=fp->info.dum.nrun;
   for (*s=c=getc(fp->fp); strchr("CGQ", *s) && (c != EOF); *s=c=getc(fp->fp)) {
     if (fgets(s+1, RDMC_MAXLINE-1, fp->fp) == NULL)
@@ -98,7 +98,7 @@ int rdmc_rarr_ascii(mcfile *fp, array *ar)
 	return retval;
       break;
     case 'G':
-      if ((retval = rdmc_a_G(s, ar)))                 /* read array info */
+      if ((retval = rdmc_a_G(s, ar)))                 /* read Array info */
 	return retval;
       break;
     } /* switch *s */
@@ -108,7 +108,7 @@ int rdmc_rarr_ascii(mcfile *fp, array *ar)
   
   if (ar->nstr == 0) ar->nstr = 1;                    /* minimal one string */
 
-  iclust = calloc(ar->nstr,sizeof(int));  /* alloc mem for channel nr array */
+  iclust = calloc(ar->nstr,sizeof(int));  /* alloc mem for channel nr Array */
 
   for (*s = c = getc(fp->fp); (*s != 'E') && (c != EOF); *s=c=getc(fp->fp)) {
                                   /* for all lines *not* beginning with 'E' */
@@ -164,7 +164,7 @@ int rdmc_rarr_ascii(mcfile *fp, array *ar)
 
   } /* for ich */
 
-  free (iclust);                        /* free the mem for the ch nr array */
+  free (iclust);                        /* free the mem for the ch nr Array */
 
   /* this is a dirty patch */
   /* at the time of reading a header in dumand format we do not know */
@@ -187,7 +187,7 @@ int rdmc_rarr_ascii(mcfile *fp, array *ar)
 /* revt_ascii() reads the next dumand-like event                            */
 /****************************************************************************/
 
-int rdmc_revt_ascii(mcfile *fp, mevt *ev, const array *ar)
+int rdmc_revt_ascii(mcfile *fp, mevt *ev, const Array *ar)
 {
 
   char s[RDMC_MAXLINE];                                            /* input line */
@@ -317,14 +317,14 @@ int rdmc_revt_ascii(mcfile *fp, mevt *ev, const array *ar)
 } /* function revt_ascii() */
 
 /****************************************************************************/
-/* function warr_ascii() writes the array info to a dumand-like file        */
+/* function warr_ascii() writes the Array info to a dumand-like file        */
 /* This function writes out the head of a DUMAND ascii file                 */
 /* opposite to reading the input file it writes not only                    */
 /* the Geometry banks ('G', 'P') , but also the ('V' and 'M' flags)         */
 /* so the function whd_ascii does not exist                                 */
 /****************************************************************************/
 
-int rdmc_warr_ascii(const mcfile *fp,const array *geo)
+int rdmc_warr_ascii(const mcfile *fp,const Array *geo)
 {
   int iom;                                              /* om index in loop */
   int itrigger;                                    /* trigger index in loop */
@@ -407,7 +407,7 @@ int rdmc_warr_ascii(const mcfile *fp,const array *geo)
 /* function wevt_ascii() writes an event to a dumand-like file              */
 /****************************************************************************/
 
-int rdmc_wevt_ascii(const mcfile *fp,const mevt *event, const array *ar)
+int rdmc_wevt_ascii(const mcfile *fp,const mevt *event, const Array *ar)
 {
   int itra,ifit,ihit;                           /* MC-track looop varialble */
   int iuser;                                 /* loop over user-def'd fields */
@@ -672,7 +672,7 @@ static int rdmc_a_C(const char *s, char **comment) /* read comment line */
 
 /****************************************************************************/
 
-static int rdmc_a_G(const char *s, array *ar) /* scans the G line  */
+static int rdmc_a_G(const char *s, Array *ar) /* scans the G line  */
 { 
 
   int form;
@@ -760,7 +760,7 @@ static int rdmc_a_M(const char *s, mcfile *fp)
 
 /****************************************************************************/
 
-static int rdmc_a_P(const char *s, array *ar)
+static int rdmc_a_P(const char *s, Array *ar)
 {
 
   int form;
@@ -819,7 +819,7 @@ static int rdmc_a_P(const char *s, array *ar)
 
 /****************************************************************************/
 
-static int rdmc_a_K(const char *s, array *ar)
+static int rdmc_a_K(const char *s, Array *ar)
 {
 
   int form;
@@ -858,7 +858,7 @@ static int rdmc_a_K(const char *s, array *ar)
 
 /****************************************************************************/
 
-static int rdmc_a_Q(const char *s, array *ar)
+static int rdmc_a_Q(const char *s, Array *ar)
 {
   int form;
   array_hdef_t trig;
@@ -1185,7 +1185,7 @@ static int a_skip_C(mcfile *fp)
 /* declare_rdmc_user() declares a default user tag               */
 /****************************************************************************/
 
-static int  declare_rdmc_dumand_user(array *ar){
+static int  declare_rdmc_dumand_user(Array *ar){
   array_hdef_t dumand_user_def;
   int i;
   int r=0;
@@ -1219,7 +1219,7 @@ static int  declare_rdmc_dumand_user(array *ar){
 /* parse_fit_def_ascii() parses the creator line for "recoos"               */
 /****************************************************************************/
 
-static int parse_fit_def_ascii(array *ar, const char *s)
+static int parse_fit_def_ascii(Array *ar, const char *s)
 {
   char *line=NULL;                  /* temporary copy of the string */
   char *reco;                            /* reco pointer  */

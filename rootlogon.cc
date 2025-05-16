@@ -5,7 +5,7 @@
  // customized file "rootlogon.cc" in the working directory.
  //
  // --- NvE 09-oct-1997 UU-SAP Utrecht
- // --- Modified Nick van Eijndhoven, IIHE-VUB, Brussel, July 17, 2023  23:55Z
+ // --- Modified Nick van Eijndhoven, IIHE-VUB, Brussel, May 12, 2025  17:50Z
  ///////////////////////////////////////////////////////////////////////////
 
  #include <iomanip>
@@ -36,8 +36,11 @@
  gROOT->ForceStyle();
 
  gSystem->Load("libPythia6");
- gSystem->Load("libEG");
- gSystem->Load("libEGPythia6");
+
+ gSystem->Load("ncfspack");
+ gSystem->Load("icepack");
+ gSystem->Load("iceconvert");
+ gSystem->Load("rnopack");
 
  gSystem->Load("libGraf3d");
  gSystem->Load("libMathMore");
@@ -54,7 +57,7 @@
  cout << endl;
  cout << " --- Welcome to the ROOT general session --- " << endl;
  cout << endl;
- cout << " === All needed standard ROOT libraries loaded by default on this Unix system === " << endl;
+ cout << " === All NCFS-Pack related packages are loaded by default on this Unix system === " << endl;
  cout << endl;
  cout << " *** Start at " << session_clock.AsString() << " ***" << endl;
  cout << endl;

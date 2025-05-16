@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Apr  5 23:39:08 2021            -->
+<!--   Date: Fri May 16 13:06:30 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="ROOT.js"></script>
 </head>
 <body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
-<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<div id="root_header"></div>
 <a name="TopOfPage"></a>
 <script type="text/javascript">WriteFollowPageBox('class IceF2k','','IceF2k.h');</script>
 <div id="toplinks">
@@ -122,7 +122,7 @@ return false;}
  // Limit the number of entries for testing
  q.<a href="./IceF2k.html#IceF2k:SetMaxEvents" title="void IceF2k::SetMaxEvents(Int_t n)">SetMaxEvents</a>(10);
 
- // <a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a> frequency to produce a <a href="./ListOfTypes.html#short">short</a> summary print every printfreq events
+ // <a href="./#TNamed:Print" title="void TNamed::Print(Option_t* option = &quot;&quot;) const">Print</a> frequency to produce a <a href="./ListOfTypes.html#short">short</a> summary print every printfreq events
  q.<a href="./IceF2k.html#IceF2k:SetPrintFreq" title="void IceF2k::SetPrintFreq(Int_t f)">SetPrintFreq</a>(1);
 
  // Split level for the output structures
@@ -154,7 +154,7 @@ return false;}
 
  // Perform the conversion and execute subtasks (if any)
  // on an event-by-event basis
- q.<a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>();
+ q.<a href="./NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode = 0)">ExecuteJob</a>();
 
  // Select various objects to be added to the output file
 
@@ -165,19 +165,19 @@ return false;}
   ofile-&gt;cd(); // Switch to the output file directory
 
   <a href="./NcObjMatrix.html">NcObjMatrix</a>* omdb=q.<a href="./IceF2k.html#IceF2k:GetOMdbase" title="NcObjMatrix* IceF2k::GetOMdbase()">GetOMdbase</a>();
-  if (omdb) omdb-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
+  if (omdb) omdb-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();
 
   <a href="./NcDevice.html">NcDevice</a>* fitdefs=q.<a href="./IceF2k.html#IceF2k:GetFitdefs" title="NcDevice* IceF2k::GetFitdefs()">GetFitdefs</a>();
-  if (fitdefs) fitdefs-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
+  if (fitdefs) fitdefs-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();
 
   TDatabasePDG* pdg=q.<a href="./IceF2k.html#IceF2k:GetPDG" title="TDatabasePDG* IceF2k::GetPDG()">GetPDG</a>();
-  if (pdg) pdg-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
+  if (pdg) pdg-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();
 
   // Flush additional objects to the output file.
   // The output file is not explicitly closed here
   // to allow interactive investigation of the data tree
   // when this macro is run in an interactive ROOT/CINT session.
-  ofile-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
+  ofile-&gt;<a href="./#TObject:Write" title="Int_t TObject::Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) or overloads">Write</a>();
  }
 
 --- Author: Nick van Eijndhoven 11-mar-2005 Utrecht University
@@ -190,8 +190,6 @@ return false;}
 <h2><a id="IceF2k:Function_Members"></a>Function Members (Methods)</h2>
 <div class="access" id="funcpubl"><b>public:</b>
 <table class="func" id="tabfuncpubl" cellspacing="0">
-<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceF2k:IceF2k@1">IceF2k</a>(<span class="keyword">const</span> <a href="./IceF2k.html">IceF2k</a>&amp;)</td></tr>
-<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceF2k:IceF2k">IceF2k</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceF2k"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
 <tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#IceF2k:_IceF2k">~IceF2k</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Abort"><span class="baseclass">TTask::</span>Abort</a>()<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
@@ -201,6 +199,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:AddObjects"><span class="baseclass">NcJob::</span>AddObjects</a>(TObjArray* arr)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:Browse"><span class="baseclass">TTask::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TObject:CheckedHash"><span class="baseclass">TObject::</span>CheckedHash</a>()</td></tr>
 <tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#IceF2k:Class">Class</a>()</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:CleanTasks"><span class="baseclass">TTask::</span>CleanTasks</a>()</td></tr>
@@ -215,7 +214,7 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
-<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:Exec">Exec</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* opt)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
@@ -223,7 +222,7 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="./NcJob.html#NcJob:ExecuteJob"><span class="baseclass">NcJob::</span>ExecuteJob</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> mode = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTask"><span class="baseclass">TTask::</span>ExecuteTask</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">"0"</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TTask:ExecuteTasks"><span class="baseclass">TTask::</span>ExecuteTasks</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option)</td></tr>
-<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
@@ -252,7 +251,10 @@ return false;}
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
-<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HasInconsistentHash"><span class="baseclass">TObject::</span>HasInconsistentHash</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceF2k:IceF2k@1">IceF2k</a>(<span class="keyword">const</span> <a href="./IceF2k.html">IceF2k</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#IceF2k:IceF2k">IceF2k</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = <span class="string">"IceF2k"</span>, <span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
@@ -270,10 +272,10 @@ return false;}
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
-<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
-<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
-<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
-<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
@@ -312,22 +314,22 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:SetSplitLevel">SetSplitLevel</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> split)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
-<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:ShowMembers">ShowMembers</a>(TMemberInspector&amp;)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:ShowMembers">ShowMembers</a>(TMemberInspector&amp; insp) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
-<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
-<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
 <tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
 
 </table></div>
 <div class="access" id="funcprot"><b>protected:</b>
 <table class="func" id="tabfuncprot" cellspacing="0">
-<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, va_list va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, <a href="./ListOfTypes.html#va_list">va_list</a> va) <span class="keyword">const</span></td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:FillOMdbase">FillOMdbase</a>()</td></tr>
 <tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:PutHits">PutHits</a>()</td></tr>
@@ -339,29 +341,33 @@ return false;}
 <tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#IceF2k:SetTrigdefs">SetTrigdefs</a>()</td></tr>
 
 </table></div>
+<div class="access" id="funcpriv"><b>private:</b>
+<table class="func" id="tabfuncpriv" cellspacing="0">
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#IceF2k:CheckTObjectHashConsistency">CheckTObjectHashConsistency</a>() <span class="keyword">const</span></td></tr>
+
+</table></div>
 </div>
 
 <div id="datamembers">
 <h2><a name="IceF2k:Data_Members"></a>Data Members</h2>
-<div class="access" id="enumpubl"><b>public:</b>
-<table class="data" id="tabenumpubl" cellspacing="0">
-<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span>EStatusBits { </td><td class="dataname"><a href="#TObject:kCanDelete">kCanDelete</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kMustCleanup">kMustCleanup</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kObjInCanvas">kObjInCanvas</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kIsReferenced">kIsReferenced</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kHasUUID">kHasUUID</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kCannotPick">kCannotPick</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNoContextMenu">kNoContextMenu</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kInvalidObject">kInvalidObject</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
-<tr class="datainh"><td class="datatype">enum <span class="baseclass">TObject::</span><i>[unnamed]</i> { </td><td class="dataname"><a href="#TObject:kIsOnHeap">kIsOnHeap</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kNotDeleted">kNotDeleted</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kZombie">kZombie</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kBitMask">kBitMask</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kSingleKey">kSingleKey</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kOverwrite">kOverwrite</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype"></td><td class="dataname"><a href="#TObject:kWriteDelete">kWriteDelete</a></td><td></td></tr>
-<tr class="datainh"><td class="datatype">};</td><td></td><td></td></tr>
+<div class="access" id="datapubl"><b>public:</b>
+<table class="data" id="tabdatapubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kBitMask"><span class="baseclass">TObject::</span>kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kCanDelete"><span class="baseclass">TObject::</span>kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kCannotPick"><span class="baseclass">TObject::</span>kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kHasUUID"><span class="baseclass">TObject::</span>kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kInconsistent"><span class="baseclass">TObject::</span>kInconsistent</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kInvalidObject"><span class="baseclass">TObject::</span>kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kIsOnHeap"><span class="baseclass">TObject::</span>kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kIsReferenced"><span class="baseclass">TObject::</span>kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kMustCleanup"><span class="baseclass">TObject::</span>kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kNoContextMenu"><span class="baseclass">TObject::</span>kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kNotDeleted"><span class="baseclass">TObject::</span>kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EDeprecatedStatusBits</td><td class="dataname"><a href="#TObject:kObjInCanvas"><span class="baseclass">TObject::</span>kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kOverwrite"><span class="baseclass">TObject::</span>kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kSingleKey"><span class="baseclass">TObject::</span>kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kWriteDelete"><span class="baseclass">TObject::</span>kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kZombie"><span class="baseclass">TObject::</span>kZombie</a></td><td></td></tr>
 
 </table></div>
 <div class="access" id="dataprot"><b>protected:</b>
@@ -375,22 +381,22 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./NcDevice.html">NcDevice</a>*</td><td class="dataname"><a name="IceF2k:fFitdefs"></a>fFitdefs</td><td class="datadesc">Fit definitions as indicated in the header of the F2000 input file</td></tr>
 <tr class="datainh"><td class="datatype">TFolder*</td><td class="dataname"><a href="./NcJob.html#NcJob:fFolder"><span class="baseclass">NcJob::</span>fFolder</a></td><td class="datadesc">Pointer to the folder which serves as the job's whiteboard</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TTask:fHasExecuted"><span class="baseclass">TTask::</span>fHasExecuted</a></td><td class="datadesc">True if task has executed</td></tr>
-<tr class="data"><td class="datatype">array</td><td class="dataname"><a name="IceF2k:fHeader"></a>fHeader</td><td class="datadesc">! Structure holding the file header info</td></tr>
+<tr class="data"><td class="datatype">Array</td><td class="dataname"><a name="IceF2k:fHeader"></a>fHeader</td><td class="datadesc">! Structure holding the file header info</td></tr>
 <tr class="data"><td class="datatype">TObjArray*</td><td class="dataname"><a name="IceF2k:fInfiles"></a>fInfiles</td><td class="datadesc">Names of all the F2K input files</td></tr>
-<tr class="data"><td class="datatype">mcfile*</td><td class="dataname"><a name="IceF2k:fInput"></a>fInput</td><td class="datadesc">! Structure holding the input file characteristics</td></tr>
+<tr class="data"><td class="datatype"><a href="./ListOfTypes.html#mcfile">mcfile</a>*</td><td class="dataname"><a name="IceF2k:fInput"></a>fInput</td><td class="datadesc">! Structure holding the input file characteristics</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="dataname"><a href="./NcJob.html#NcJob:fMainObject"><span class="baseclass">NcJob::</span>fMainObject</a></td><td class="datadesc">Pointer to the main processing object structure within the job</td></tr>
 <tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a href="./NcJob.html#NcJob:fMakefolder"><span class="baseclass">NcJob::</span>fMakefolder</a></td><td class="datadesc">Flag to indicate creation of the folder structure</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceF2k:fMaxevt"></a>fMaxevt</td><td class="datadesc">The maximum number of events to be processed</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a name="IceF2k:fMctoffset"></a>fMctoffset</td><td class="datadesc">Trigger time offset which might have been introduced during MC generation</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceF2k:fMctracks"></a>fMctracks</td><td class="datadesc">MC tracks selection flag</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
-<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fObjects"><span class="baseclass">NcJob::</span>fObjects</a></td><td class="datadesc">Pointers to the various user-added objects </td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fObjects"><span class="baseclass">NcJob::</span>fObjects</a></td><td class="datadesc">Pointers to the various user-added objects</td></tr>
 <tr class="data"><td class="datatype"><a href="./NcObjMatrix.html">NcObjMatrix</a>*</td><td class="dataname"><a name="IceF2k:fOmdb"></a>fOmdb</td><td class="datadesc">Database of all OM devices with their geometry, calib. etc... data</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TTask:fOption"><span class="baseclass">TTask::</span>fOption</a></td><td class="datadesc">Option specified in ExecuteTask</td></tr>
 <tr class="data"><td class="datatype">TFile*</td><td class="dataname"><a name="IceF2k:fOutfile"></a>fOutfile</td><td class="datadesc">The ROOT output file</td></tr>
 <tr class="data"><td class="datatype">TDatabasePDG*</td><td class="dataname"><a name="IceF2k:fPdg"></a>fPdg</td><td class="datadesc">Database with PDG information</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceF2k:fPrintfreq"></a>fPrintfreq</td><td class="datadesc">The event info printing frequency</td></tr>
-<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fSelect"><span class="baseclass">NcJob::</span>fSelect</a></td><td class="datadesc">! Temp. array of pointers to user-selected stored objects </td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="./NcJob.html#NcJob:fSelect"><span class="baseclass">NcJob::</span>fSelect</a></td><td class="datadesc">! Temp. array of pointers to user-selected stored objects</td></tr>
 <tr class="data"><td class="datatype"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="dataname"><a name="IceF2k:fSplit"></a>fSplit</td><td class="datadesc">The split level of the produced ROOT data file</td></tr>
 <tr class="datainh"><td class="datatype">TList*</td><td class="dataname"><a href="#TTask:fTasks"><span class="baseclass">TTask::</span>fTasks</a></td><td class="datadesc">List of Tasks</td></tr>
 <tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
@@ -398,6 +404,7 @@ return false;}
 <tr class="data"><td class="datatype"><a href="./NcDevice.html">NcDevice</a>*</td><td class="dataname"><a name="IceF2k:fTrigdefs"></a>fTrigdefs</td><td class="datadesc">Trigger definitions as indicated in the header of the F2000 input file</td></tr>
 <tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBeginTask"><span class="baseclass">TTask::</span>fgBeginTask</a></td><td class="datadesc">pointer to task initiator</td></tr>
 <tr class="datainh"><td class="datatype">static <a href="./#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>*</td><td class="dataname"><a href="#TTask:fgBreakPoint"><span class="baseclass">TTask::</span>fgBreakPoint</a></td><td class="datadesc">pointer to current break point</td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kOnlyPrepStep"><span class="baseclass">TObject::</span>kOnlyPrepStep</a></td><td></td></tr>
 
 </table></div>
 </div>
@@ -556,13 +563,13 @@ return false;}
  Via the <a href="./IceF2k.html#IceF2k:GetFitdefs" title="NcDevice* IceF2k::GetFitdefs()">GetFitdefs</a>() memberfunction this <a href="./NcDevice.html">NcDevice</a> object can be
  retrieved and stored in the ROOT output file if wanted.
  The name of the object is FitDefinitions and the stored data can be
- inspected via the <a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>() memberfunction and looks as follows :
+ inspected via the <a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>() memberfunction and looks as follows :
 
-  *<a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id :0 Name : FitDefinitions
+  *<a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id :0 Name : FitDefinitions
     Position Vector in car coordinates : 0 0 0
     Err. in car coordinates : 0 0 0
   The following 8 hits are registered :
-  *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id :0
+  *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id :0
     Position Vector in car coordinates : 0 0 0
     Err. in car coordinates : 0 0 0
     Owned by device : <a href="./NcDevice.html">NcDevice</a> Name : FitDefinitions
@@ -574,7 +581,7 @@ return false;}
     Slot : 6 Signal value : 0 name : covmax
     Slot : 7 Signal value : 0 name : cutflag
     Slot : 8 Signal value : 0 name : chi2
-  *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id :1
+  *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id :1
     Position Vector in car coordinates : 0 0 0
     Err. in car coordinates : 0 0 0
     Owned by device : <a href="./NcDevice.html">NcDevice</a> Name : FitDefinitions
@@ -594,27 +601,27 @@ return false;}
  Via the <a href="./IceF2k.html#IceF2k:GetFitdefs" title="NcDevice* IceF2k::GetFitdefs()">GetFitdefs</a>() memberfunction this <a href="./NcDevice.html">NcDevice</a> object can be
  retrieved and stored in the ROOT output file if wanted.
  The name of the object is TrigDefinitions and the stored data can be
- inspected via the <a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>() memberfunction and looks as follows :
+ inspected via the <a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>() memberfunction and looks as follows :
 
-  *<a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 0 Name : TrigDefinitions
+  *<a href="./NcDevice.html">NcDevice</a>::<a href="./NcDevice.html#NcDevice:Data" title="void NcDevice::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 0 Name : TrigDefinitions
     Position Vector in car (rad) coordinates : 0 0 0
     Err. in car (rad) coordinates : 0 0 0
   The following 9 hits are registered : 
-  *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 1 Name : main
+  *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 1 Name : main
     Position Vector in car (rad) coordinates : 0 0 0
     Err. in car (rad) coordinates : 0 0 0
     Owned by device : <a href="./NcDevice.html">NcDevice</a> Id : 0 Name : TrigDefinitions
      Slot : 1 Signal value : 0 name : trig_pulse_le
      Slot : 2 Signal value : 0 name : trig_pulse_tot
      Slot : 3 Signal value : 0 name : regi_flag
-   *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 2 Name : amaa
+   *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 2 Name : amaa
      Position Vector in car (rad) coordinates : 0 0 0
      Err. in car (rad) coordinates : 0 0 0
      Owned by device : <a href="./NcDevice.html">NcDevice</a> Id : 0 Name : TrigDefinitions
      Slot : 1 Signal value : 0 name : trig_pulse_le
      Slot : 2 Signal value : 0 name : trig_pulse_tot
      Slot : 3 Signal value : 0 name : regi_flag
-   *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f=&quot;car&quot;,TString u=&quot;rad&quot;)">Data</a>* Id : 3 Name : amab10
+   *<a href="./NcSignal.html">NcSignal</a>::<a href="./NcSignal.html#NcSignal:Data" title="void NcSignal::Data(TString f = &quot;car&quot;, TString u = &quot;rad&quot;) const">Data</a>* Id : 3 Name : amab10
      Position Vector in car (rad) coordinates : 0 0 0
      Err. in car (rad) coordinates : 0 0 0
      Owned by device : <a href="./NcDevice.html">NcDevice</a> Id : 0 Name : TrigDefinitions
@@ -637,7 +644,7 @@ return false;}
 </pre></div>
 </div>
 <div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="IceF2k:PutHits" href="src/IceF2k.cxx.html#AKmCAD">PutHits</a>()</span><br />
-<div class="funccomm"><pre> Get the hit and waveform info from the F2000 file into the IcePack structure.
+<div class="funccomm"><pre> Get the hit and <a href="./ListOfTypes.html#waveform">waveform</a> info from the F2000 file into the IcePack structure.
  This memberfunction is based on the original code by Adam Bouchta.
 </pre></div>
 </div>
@@ -652,7 +659,7 @@ return false;}
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: Mon Apr  5 23:39:08 2021 </em><em>&raquo; Last generated: 2021-04-05 23:39</em><br />
+<em>&raquo; Last changed: Fri May 16 13:06:33 2025 </em><em>&raquo; Last generated: 2025-05-16 13:06</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

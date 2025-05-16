@@ -12,7 +12,7 @@ lib=ncfspack.so
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -ansi -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$CFITSIO -o $lib"
+gccroot="-fPIC -shared -g0 -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$ROOTSYS/include -I$CFITSIO -o $lib"
 #
 echo ' '
 echo '*** Creation of the ncfspack shared library for generic functionality of the framework ***' 
@@ -25,16 +25,16 @@ echo "gccroot = " $gccroot
 cd $NCFS/ncfspack/source
 #
 ### Create the dictionary files
-rootcint -f zzzncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
+rootcint -f ncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 g++ $gccroot *.cxx   
 # 
-rm -f zzzncfspackdict.*
 rm -f *.o
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv -f $lib $ROOTSYS/lib
+mv -f $lib $NCFS/libs
+mv -f ncfspackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts

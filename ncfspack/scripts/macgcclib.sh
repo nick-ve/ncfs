@@ -29,7 +29,7 @@ echo "gccroot = " $gccroot
 cd $NCFS/ncfspack/source
 #
 ### Create the dictionary files
-rootcint -f zzzncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
+rootcint -f ncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
 # 
 # 
 ### Compile and create the ROOT loadable shared library
@@ -45,12 +45,12 @@ g++ -v -dynamiclib -undefined dynamic_lookup -single_module -o $lib2 *.o
 ### On some systems the following extra "-read_only_relocs" flag might be needed
 # g++ -v -dynamiclib -undefined dynamic_lookup -single_module -read_only_relocs -o $lib2 *.o
 # 
-rm zzzncfspackdict.*
-rm *.o
+rm -f *.o
 # 
 ### Move the created libs to the corresponding ROOT subdirectory
-mv $lib1 $ROOTSYS/lib
-mv $lib2 $ROOTSYS/lib
+mv -f $lib1 $NCFS/libs
+mv -f $lib2 $NCFS/libs
+mv -f ncfspackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts

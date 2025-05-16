@@ -4,7 +4,7 @@
 //--- Author : Nick van Eijndhoven 03-dec-2008 NCFS
 ////////////////////////////////////////////////////////////////////////////////
 {
- gSystem->Load("ncfs");
+ gSystem->Load("ncfspack");
 
  gEnv->SetValue("Root.Html.Description","///////////");
 

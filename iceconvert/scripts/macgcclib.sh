@@ -17,8 +17,8 @@ unset LD_PREBIND
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gcccomp="-c -g0 -Wall -Wno-long-long -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source"
-gccroot="-c -g0 -ansi -pedantic -Wall -Wno-long-long -I$ROOTSYS/include -I$NCFS/ncfspack/source -I$NCFS/icepack/source"
+gcccomp="-c -g0 -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
+gccroot="-c -g0 -ansi -pedantic -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
 #
 echo "lib1 = " $lib1
 echo "lib2 = " $lib2
@@ -31,7 +31,7 @@ echo "gccroot = " $gccroot
 cd $NCFS/iceconvert/source
 #
 ### Create the dictionary files
-rootcint -f zzziceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
+rootcint -f iceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 #
@@ -47,12 +47,12 @@ g++ -v -dynamiclib -undefined dynamic_lookup -single_module -o $lib2 *.o
 ### On some systems the following extra "-read_only_relocs" flag might be needed
 # g++ -v -dynamiclib -undefined dynamic_lookup -single_module -read_only_relocs -o $lib2 *.o
 #
-rm zzziceconvertdict.*
-rm *.o
+rm -f *.o
 # 
 ### Move the created libs to the corresponding ROOT subdirectory
-mv $lib1 $ROOTSYS/lib
-mv $lib2 $ROOTSYS/lib
+mv -f $lib1 $NCFS/libs
+mv -f $lib2 $NCFS/libs
+mv -f iceconvertdict* $NCFS/lib
 #
 ### Return to the scripts directory
 cd ../scripts

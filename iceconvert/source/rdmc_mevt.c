@@ -21,7 +21,7 @@ static int  rdmc_del_mevt_WF(waveform **list, int *count, int ipos);
 /*     if it was not successfull, try to skip to the next event             */
 /****************************************************************************/
 
-int rdmc_revt(mcfile *fp, array *ar, mevt *ev)
+int rdmc_revt(mcfile *fp, Array *ar, mevt *ev)
 {
 
   int r;                                                   /* return value */
@@ -120,7 +120,7 @@ int rdmc_skipevt(mcfile *fp)
 /* The function wevt() writes an event of a mc file                         */
 /****************************************************************************/
 
-int rdmc_wevt(mcfile *fp, const mevt *ev, const array *ar)
+int rdmc_wevt(mcfile *fp, const mevt *ev, const Array *ar)
 {
   int r;
 
@@ -412,12 +412,12 @@ int rdmc_count_nch(const mevt *ev)
 /*         it also fills the string number into the h[].str fields          */
 /****************************************************************************/
 
-int rdmc_fill_mhit_str(mevt *ev, const array *ar)
+int rdmc_fill_mhit_str(mevt *ev, const Array *ar)
 {
 
   int i;
   int error_flag = 0;                                 /* indicates an error */
-  int geocal;                          /* flag if array is a valid geometry */
+  int geocal;                          /* flag if Array is a valid geometry */
 
   if (ev->nch >= RDMC_MAXCHANNELS) return RDMC_INCONSISTENT_GEOMETRY;
                                           /* if there are too much channels */

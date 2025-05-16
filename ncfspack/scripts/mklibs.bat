@@ -78,7 +78,7 @@ goto end
 echo *** Creation of ROOT loadable export libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint zzzncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
+rootcint ncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
 rem --- Compilation step ---
 cl %mscomp% *.cxx
 rem --- Creation of the export LIB ---
@@ -87,14 +87,13 @@ lib /nologo /machine:IX86 *.obj /def:ncfspack.def /out:ncfspack.lib
 rem --- Creation of the DLL ---
 link /nologo /machine:IX86 /DLL *.obj ncfspack.exp %mslink% /OUT:ncfspack.dll
 rem --- Move the created libs to the corresponding ROOT subdirectory
-move ncfspack.lib %ROOTSYS%\lib
-move ncfspack.dll %ROOTSYS%\bin
+move ncfspack.lib %NCFS%\libs
+move ncfspack.dll %NCFS%\libs
+move ncfspackdict* %NCFS%\libs
 rem --- Delete all intermediate files --- 
 del .def
 del ncfspack.def
 del ncfspack.exp
-del zzzncfspackdict.h
-del zzzncfspackdict.cxx
 del *.obj
 echo.
 echo *** mklibs done.
@@ -104,18 +103,17 @@ goto end
 echo *** Creation of ROOT loadable full version libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint zzzncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
+rootcint ncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
 rem --- Creation of the DLL ---
 cl %msdll% *.cxx /link %mslink% /OUT:ncfspack.dll
 rem --- Creation of the full version LIB ---
 lib /nologo /machine:IX86 *.obj /out:ncfspack.lib
 rem --- Move the created libs to the corresponding ROOT subdirectory
-move ncfs.lib %ROOTSYS\lib
-move ncfs.dll %ROOTSYS\bin
+move ncfspack.lib %NCFS%\libs
+move ncfspack.dll %NCFS%\libs
+move ncfspackdict* %NCFS%\libs
 rem --- Delete all intermediate files --- 
 del .def
-del zzzncfspackdict.h
-del zzzncfspackdict.cxx
 del *.obj
 echo.
 echo *** mklibs done.

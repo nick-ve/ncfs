@@ -40,7 +40,7 @@ const f2000_event_t  * f2000_events_2004x1[]
   };
 
 
-int rdmc_amanda_WF_2004x1( mcfile *fp , array *a, mevt *e, void *tmp)
+int rdmc_amanda_WF_2004x1( mcfile *fp , Array *a, mevt *e, void *tmp)
 {
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];

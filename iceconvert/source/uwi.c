@@ -52,7 +52,7 @@ int uwi_rd_SP(char *s, mtrack **fitr, mevt_special_t **fitres, int *nfit);
 /****************************************************************************/
 /* The function rarr_uwi() reads the geometry of a UWI like file            */
 /****************************************************************************/
-int rdmc_rarr_uwi(char *geofile, array *ar)
+int rdmc_rarr_uwi(char *geofile, Array *ar)
 {
   FILE *fp;
   char s[RDMC_MAXLINE];
@@ -64,7 +64,7 @@ int rdmc_rarr_uwi(char *geofile, array *ar)
   float x, y, z;
   int nchstr;          /* temp. x, y, z coor, number of channels per string */
 
-  rdmc_init_array(ar);                               /* reset the array */
+  rdmc_init_array(ar);                               /* reset the Array */
 
   if (geofile == NULL)      /* use the default file (environement variable) */
     geofile = getenv(DEFAULT_UWI_GEO_FILE_ENV);
@@ -130,7 +130,7 @@ int rdmc_rarr_uwi(char *geofile, array *ar)
   } /* for ich */
   } /* for istr */
   
-  ar->id = AMANDA_B_4;                             /* default: amanda array */
+  ar->id = AMANDA_B_4;                             /* default: amanda Array */
   ar->longitude = -90.0;                  /* geographic longitude of AMANDA */
   ar->lattitude = 0.0;                              /* geographic lattitude */
 
@@ -196,7 +196,7 @@ int rdmc_rarr_uwi(char *geofile, array *ar)
 /* revt_uwi() reads the next UWI format event                               */
 /****************************************************************************/
 
-int rdmc_revt_uwi(mcfile *fp, mevt *ev, const array *ar)
+int rdmc_revt_uwi(mcfile *fp, mevt *ev, const Array *ar)
 {
 
   char s[RDMC_MAXLINE];                                            /* input line */
@@ -300,10 +300,10 @@ int rdmc_skipevt_uwi(mcfile *fp)
 /*  only if there is no geometry file, we will write it.                    */
 /****************************************************************************/
 
-int rdmc_warr_uwi(char *geofile,const array *geo)
+int rdmc_warr_uwi(char *geofile,const Array *geo)
 {
   FILE *fp;
-  array stored_array;
+  Array stored_array;
   int r;
   int istr, ich, nchstr;
   float xstr, ystr;
@@ -385,7 +385,7 @@ int rdmc_whd_uwi(const mcfile *fp)
 /* function wevt_uwi() writes an event to an UWI file                       */
 /****************************************************************************/
 
-int rdmc_wevt_uwi(const mcfile *fp,const mevt *event, const array *ar)
+int rdmc_wevt_uwi(const mcfile *fp,const mevt *event, const Array *ar)
 {
   int nmuon = 0;
   int nshower = 0;

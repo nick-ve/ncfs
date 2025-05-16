@@ -36,7 +36,7 @@ void rdmc_init_fit_jk(mevt_special_t *r,int id){
 
 }
 
-int rdmc_is_fresult_jk(const array *ar,const mevt *ev, int ifit){
+int rdmc_is_fresult_jk(const Array *ar,const mevt *ev, int ifit){
   int idef;
   if ((ifit >= ev->nfit)
       || (ifit < 0))
@@ -59,7 +59,7 @@ int rdmc_is_this_jk(const array_hdef_t *rd,const mevt_special_t *res){
       
 }
 
-int rdmc_is_fitdef_jk(const array *ar,int idef){
+int rdmc_is_fitdef_jk(const Array *ar,int idef){
   int ret = 0;
   if ( (idef<0) || (idef>= ar->n_fit) )
     ret=0;

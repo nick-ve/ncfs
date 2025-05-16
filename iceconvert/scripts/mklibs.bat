@@ -14,8 +14,8 @@ rem *    via 'double clicking'.
 rem *
 rem * 2) Providing unsupported options results in displaying the help info.  
 rem *
-rem * 3) An environment variable RALICE has to be set, pointing to the
-rem *    location where the ralice source code is residing.  
+rem * 3) An environment variable NCFS has to be set, pointing to the
+rem *    location where the NCFS source code is residing.  
 rem *
 rem * This script creates iceconvert.lib and iceconvert.dll from all .h, .c
 rem * and .cxx files in the source directory.
@@ -37,8 +37,8 @@ cd ..\source
 
 rem --- The option strings for MSVC++ DLL compilation and linking ---
 set msc=/nologo /c /Ze /MD /GR /GX
-set mscomp=/nologo /c /TP /Ze /MD /GR /GX /I%ROOTSYS%\include /I%NCFS%\ncfspack\source /I%NCFS%\icepack\source
-set msdll=/nologo /Ze /MD /LD /GD /GR /GX /I%ROOTSYS%\include /I%NCFS%\ncfspack\source /I%NCFS%\icepack\source
+set mscomp=/nologo /c /TP /Ze /MD /GR /GX /I%NCFS%\ncfspack\source /I%NCFS%\icepack\source /I%ROOTSYS%\include
+set msdll=/nologo /Ze /MD /LD /GD /GR /GX /I%NCFS%\ncfspack\source /I%NCFS%\icepack\source /I%ROOTSYS%\include
 set mslink=/ENTRY:_DllMainCRTStartup@12 %ROOTSYS%\lib\*.lib
 
 if "%1" == "" goto export
@@ -59,8 +59,8 @@ echo * -------
 echo * 1) "mklibs export" is the default, enabling ROOT loadable library creation
 echo *    via 'double clicking'.
 echo * 2) Providing unsupported options results in displaying the help info.  
-echo * 3) An environment variable RALICE has to be set, pointing to the
-echo *    location where the ralice source code is residing.  
+echo * 3) An environment variable NCFS has to be set, pointing to the
+echo *    location where the NCFS source code is residing.  
 echo *
 echo * This script creates iceconvert.lib and iceconvert.dll from all .h, .c
 echo * and .cxx files in the source directory.
@@ -78,7 +78,7 @@ echo *** Creation of ROOT loadable export libraries
 echo.
 cl %msc% *.c
 rem --- Creation of ROOT dictionary ---
-rootcint zzziceconvertdict.cxx -c -p -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
+rootcint iceconvertdict.cxx -c -p -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
 rem --- Compilation step ---
 cl %mscomp% *.cxx
 rem --- Creation of the export LIB ---
@@ -87,8 +87,9 @@ lib /nologo /machine:IX86 *.obj /def:iceconvert.def /out:iceconvert.lib
 rem --- Creation of the DLL ---
 link /nologo /machine:IX86 /DLL *.obj iceconvert.exp %mslink% /OUT:iceconvert.dll
 rem --- Move the created libs to the corresponding ROOT subdirectories
-move iceconvert.lib %ROOTSYS%\lib
-move iceconvert.dll %ROOTSYS%\bin
+move iceconvert.lib %NCFS%\libs
+move iceconvert.dll %NCFS%\libs
+move iceconvertdict* %NCFS%\libs
 rem --- Delete intermediate files
 del iceconvert.def
 del iceconvert.exp
@@ -98,22 +99,21 @@ goto root_clean
 echo *** Creation of ROOT loadable full version libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint zzziceconvertdict.cxx -c -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
+rootcint iceconvertdict.cxx -c -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
 rem --- Creation of the DLL ---
 cl %msdll% *.c *.cxx /link %mslink% /OUT:iceconvert.dll
 rem --- Creation of the full version LIB ---
 lib /nologo /machine:IX86 *.obj /out:iceconvert.lib
 rem --- Move the created libs to the corresponding ROOT subdirectories
-move iceconvert.lib %ROOTSYS%\lib
-move iceconvert.dll %ROOTSYS%\bin
+move iceconvert.lib %NCFS%\libs
+move iceconvert.dll %NCFS%\libs
+move iceconvertdict* %NCFS%\libs
 rem --- Delete intermediate files
 goto root_clean
 
 :root_clean
 rem --- Delete all intermediate files --- 
 del .def
-del zzziceconvertdict.h
-del zzziceconvertdict.cxx
 del *.obj
 echo.
 echo *** mklibs done.

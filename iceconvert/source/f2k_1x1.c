@@ -174,7 +174,7 @@ const f2000_event_t  * f2000_events_1x1[]
  * rhd_amanda() reads the format relevant informations for amanda-like
  *          formats - just the Comments and history lines. 
  ****************************************************************************/
-int rdmc_rhd_f2k_1x1(mcfile *fp, array *a, mevt *e){
+int rdmc_rhd_f2k_1x1(mcfile *fp, Array *a, mevt *e){
   int r=RDMC_IO_OK;
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   while( f2k_buff->iline <   f2k_buff->lines ){
@@ -200,11 +200,11 @@ int rdmc_rhd_f2k_1x1(mcfile *fp, array *a, mevt *e){
 /****************************************************************************
  * The function mhead reads the header of a amanda like file
  ****************************************************************************/
-int rdmc_mhead_f2k_1x1(mcfile *fp, array *ar, mevt *e){
+int rdmc_mhead_f2k_1x1(mcfile *fp, Array *ar, mevt *e){
   int ret=RDMC_IO_OK;  /* the return value */
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
 
-  rdmc_init_array(ar);                           /* reset the array */
+  rdmc_init_array(ar);                           /* reset the Array */
 
   while (f2k_buff->iline < f2k_buff->lines){
     switch(f2k_buff->type_def[f2k_buff->iline]->line_id){
@@ -227,7 +227,7 @@ int rdmc_mhead_f2k_1x1(mcfile *fp, array *ar, mevt *e){
 /****************************************************************************
  * The function mhead reads the header of a amanda like file
  ****************************************************************************/
-int rdmc_mevt_f2k_1x1(mcfile *fp, array *ar, mevt *e){
+int rdmc_mevt_f2k_1x1(mcfile *fp, Array *ar, mevt *e){
   int ret=RDMC_IO_OK;  /* the return value */
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
 
@@ -264,7 +264,7 @@ int rdmc_mevt_f2k_1x1(mcfile *fp, array *ar, mevt *e){
 /****************************************************************************
  * The function mhead reads the header of a amanda like file
  ****************************************************************************/
-int rdmc_mfoot_f2k_1x1(mcfile *fp, array *ar, mevt *e){
+int rdmc_mfoot_f2k_1x1(mcfile *fp, Array *ar, mevt *e){
   int ret=RDMC_IO_OK;  /* the return value */
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
 
@@ -293,7 +293,7 @@ int rdmc_mfoot_f2k_1x1(mcfile *fp, array *ar, mevt *e){
 /****************************************************************************
  * Read a history line
  ****************************************************************************/
-int rdmc_amanda_HI_1x1( mcfile *fp , array *a, 
+int rdmc_amanda_HI_1x1( mcfile *fp , Array *a, 
 			       mevt *e, void *tmp)
 {
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
@@ -315,7 +315,7 @@ int rdmc_amanda_HI_1x1( mcfile *fp , array *a,
  * read the various lines
  ***************************************************************************/
 
-int rdmc_amanda_ARRAY_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_ARRAY_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -340,7 +340,7 @@ int rdmc_amanda_ARRAY_1x1(  mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_ARRAY() */
 
-int rdmc_amanda_TRIG_DEF_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_TRIG_DEF_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -376,7 +376,7 @@ int rdmc_amanda_TRIG_DEF_1x1(  mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_TRIG_DEF() */
 
-int rdmc_amanda_TRIG_PAR_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_TRIG_PAR_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -412,7 +412,7 @@ int rdmc_amanda_TRIG_PAR_1x1(  mcfile *fp , array *a,
 } /* rdmc_amanda_TRIG_PAR() */
 
 
-int rdmc_amanda_FIT_DEF_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_FIT_DEF_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -447,7 +447,7 @@ int rdmc_amanda_FIT_DEF_1x1(  mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_FIT_DEF() */
 
-int rdmc_amanda_STAT_DEF_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_STAT_DEF_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -483,7 +483,7 @@ int rdmc_amanda_STAT_DEF_1x1(  mcfile *fp , array *a,
 } /* rdmc_amanda_STAT_DEF() */
 
 
-int rdmc_amanda_USER_DEF_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_USER_DEF_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -517,7 +517,7 @@ int rdmc_amanda_USER_DEF_1x1(  mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_USER_DEF() */
 
-int rdmc_amanda_KH_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_KH_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
 
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
@@ -557,7 +557,7 @@ int rdmc_amanda_KH_1x1(  mcfile *fp , array *a,
 } /* rdmc_amanda_KH() */
 
 
-int rdmc_amanda_OM_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_OM_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
 
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
@@ -604,7 +604,7 @@ int rdmc_amanda_OM_1x1(  mcfile *fp , array *a,
 /****************************************************************************
  * read the ADC calibration (only nr ped beta lin)
  ****************************************************************************/
-int rdmc_amanda_KADC_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_KADC_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -634,7 +634,7 @@ int rdmc_amanda_KADC_1x1(  mcfile *fp , array *a,
 /****************************************************************************
  * Read the TDC calibration (only nr beta shift alpha now)
  ****************************************************************************/
-int rdmc_amanda_KTDC_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_KTDC_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -658,7 +658,7 @@ int rdmc_amanda_KTDC_1x1(  mcfile *fp , array *a,
 /****************************************************************************
  * Read the UTC calibration (only nr beta shift alpha now)
  ****************************************************************************/
-int rdmc_amanda_KUTC_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_KUTC_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
 
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
@@ -688,7 +688,7 @@ int rdmc_amanda_KUTC_1x1(  mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_UTC() */
 
-int rdmc_amanda_KTOT_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_KTOT_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -716,7 +716,7 @@ int rdmc_amanda_KTOT_1x1(  mcfile *fp , array *a,
   return 0;
 } /* rdmc_amanda_KTOT() */
 
-int rdmc_amanda_TBEGIN_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_TBEGIN_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -779,7 +779,7 @@ int rdmc_amanda_TBEGIN_1x1(  mcfile *fp , array *a,
  * read an Event header line
  ****************************************************************************/
 
-int rdmc_amanda_EM_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_EM_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -847,7 +847,7 @@ int rdmc_amanda_EM_1x1(  mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_EM() */
 
-int rdmc_amanda_TR_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_TR_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -894,7 +894,7 @@ int rdmc_amanda_TR_1x1(  mcfile *fp , array *a,
   return RDMC_IO_OK;
 } /* rdmc_amanda_TR() */
 
-int rdmc_amanda_CH_1x1(  mcfile *fp , array *a, 
+int rdmc_amanda_CH_1x1(  mcfile *fp , Array *a, 
 			       mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -943,7 +943,7 @@ int rdmc_amanda_CH_1x1(  mcfile *fp , array *a,
 } /* rdmc_amanda_CH() */
 
 
-int rdmc_amanda_HT_1x1( mcfile *fp , array *a, 
+int rdmc_amanda_HT_1x1( mcfile *fp , Array *a, 
 			mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -976,7 +976,7 @@ int rdmc_amanda_HT_1x1( mcfile *fp , array *a,
 
 
 
-int rdmc_amanda_trigblock_1x1( mcfile *fp, array *ar, 
+int rdmc_amanda_trigblock_1x1( mcfile *fp, Array *ar, 
 				     mevt *e, void *tmp){
   int r,i; /*ret value */
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
@@ -1028,7 +1028,7 @@ int rdmc_amanda_trigblock_1x1( mcfile *fp, array *ar,
 }
 
 
-int rdmc_amanda_TRIG_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
+int rdmc_amanda_TRIG_1x1(mcfile *fp, Array *a, mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   mevt_special_t *trig = tmp;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -1074,7 +1074,7 @@ int rdmc_amanda_TRIG_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
 }
 
 
-int rdmc_amanda_fitblock_1x1( mcfile *fp, array *ar, 
+int rdmc_amanda_fitblock_1x1( mcfile *fp, Array *ar, 
 				     mevt *e, void *tmp){
   int i,r; /*ret value */
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
@@ -1134,7 +1134,7 @@ int rdmc_amanda_fitblock_1x1( mcfile *fp, array *ar,
 }
 
 
-int rdmc_amanda_US_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
+int rdmc_amanda_US_1x1(mcfile *fp, Array *a, mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
   char **args=NULL;
@@ -1177,7 +1177,7 @@ int rdmc_amanda_US_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
   rdmc_clear_mevt_special(&us,0);
   return RDMC_IO_OK;
 }
-int rdmc_amanda_STATUS_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
+int rdmc_amanda_STATUS_1x1(mcfile *fp, Array *a, mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
   char **args=NULL;
@@ -1220,7 +1220,7 @@ int rdmc_amanda_STATUS_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
   return RDMC_IO_OK;
 }
 
-int rdmc_amanda_FIT_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
+int rdmc_amanda_FIT_1x1(mcfile *fp, Array *a, mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   mtrack *fit = tmp;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -1270,7 +1270,7 @@ int rdmc_amanda_FIT_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
   return RDMC_IO_OK;
 }
 
-int rdmc_amanda_FRESULT_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
+int rdmc_amanda_FRESULT_1x1(mcfile *fp, Array *a, mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   mevt_special_t *fresult = tmp;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
@@ -1309,7 +1309,7 @@ int rdmc_amanda_FRESULT_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
   return RDMC_IO_OK;
 }
 
-int rdmc_amanda_USES_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
+int rdmc_amanda_USES_1x1(mcfile *fp, Array *a, mevt *e, void *tmp){
   rdmc_f2k_buffer_t *f2k_buff = fp->info.f2000.f2k_buffer;
   char *s=f2k_buff->line_pt[f2k_buff->iline];
   char **args=NULL;
@@ -1368,7 +1368,7 @@ int rdmc_amanda_USES_1x1(mcfile *fp, array *a, mevt *e, void *tmp){
 /*************************************************/
 
 
-int rdmc_wfoot_f2k_1x1_2(const mcfile *fp,const array *a, const mevt *e){
+int rdmc_wfoot_f2k_1x1_2(const mcfile *fp,const Array *a, const mevt *e){
   /* now write the dummy tend line */
   fputs("TEND ? ? ?\n",fp->fp); 
   fputs("END\n",fp->fp); 
@@ -1490,13 +1490,13 @@ int rdmc_wrcomment_f2k_1x1(const mcfile *fp, const char *s)
 } /* wrcomment_amanda() */
 
 
-int rdmc_whead_f2k_1x1_2(const mcfile *fp,const array *geo, const mevt *e)
+int rdmc_whead_f2k_1x1_2(const mcfile *fp,const Array *geo, const mevt *e)
 {
   int iom;                                              /* om index in loop */
   int itrigger;                                    /* trigger index in loop */
   int istat;
   int ifit,iuser;
-  int array_defined=0;  /* is the array line to be written) */
+  int array_defined=0;  /* is the Array line to be written) */
 
   fprintf(fp->fp, "V 2000.%i.%i\n",                     /* write the V flag */
 	  AMANDA_ASCII_VERSION, AMANDA_ASCII_MINOR);       /* version number */
@@ -1509,7 +1509,7 @@ int rdmc_whead_f2k_1x1_2(const mcfile *fp,const array *geo, const mevt *e)
   if (geo->comment != NULL)                 /* if there is a common comment */
     rdmc_wrcomment_f2k_1x1(fp, geo->comment);
 
-  /* thest if array is to be written */
+  /* thest if Array is to be written */
   if ((geo->is_calib.geo)
       || ( geo->is_calib.tdc)
       || (geo->is_calib.adc)
@@ -1690,7 +1690,7 @@ int rdmc_whead_f2k_1x1_2(const mcfile *fp,const array *geo, const mevt *e)
  * function wevt_amanda() writes an event to a amanda-like file
  ****************************************************************************/
 
-int rdmc_wevt_f2k_1x1_2(const mcfile *fp,const array *ar, const mevt *event)
+int rdmc_wevt_f2k_1x1_2(const mcfile *fp,const Array *ar, const mevt *event)
 {
   int itok, i;
   char *upt;

@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Wed May  7 11:23:50 2025            -->
+<!--   Date: Fri May 16 13:06:39 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="../ROOT.js"></script>
 </head>
 <body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
-<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<div id="root_header"></div>
 <div id="codeAndLineNumbers"><pre class="listing">
 <span class="cpp">#ifndef NcVersion_h</span>
 <span class="cpp">#define NcVersion_h</span>
@@ -32,10 +32,10 @@
  <span class="keyword">public</span>:
   <a href="../NcVersion.html">NcVersion</a>();                                  <span class="comment">// Default constructor</span>
   <span class="keyword">virtual</span> <a href="../NcVersion.html#NcVersion:_NcVersion" title="void NcVersion::~NcVersion()">~NcVersion</a>();                         <span class="comment">// Destructor</span>
-  <a href="../NcVersion.html">NcVersion</a>(<span class="keyword">const</span> <a href="../NcVersion.html">NcVersion</a>&amp; v);                <span class="comment">// <a href="../#TObject:Copy" title="void TObject::Copy(TObject&amp; object)">Copy</a> constructor</span>
+  <a href="../NcVersion.html">NcVersion</a>(<span class="keyword">const</span> <a href="../NcVersion.html">NcVersion</a>&amp; v);                <span class="comment">// <a href="../#TObject:Copy" title="void TObject::Copy(TObject&amp; object) const">Copy</a> constructor</span>
   <a href="../NcVersion.html">NcVersion</a>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <a href="../NcVersion.html">NcVersion</a>&amp; q);     <span class="comment">// Set equal to another <a href="../NcVersion.html">NcVersion</a> instance</span>
-  <span class="keyword">virtual</span> <span class="keyword">void</span> <a href="../NcVersion.html#NcVersion:Data" title="void NcVersion::Data()">Data</a>() <span class="keyword">const</span>;                    <span class="comment">// Provide version information</span>
-  TString <a href="../NcVersion.html#NcVersion:GetVersion" title="TString NcVersion::GetVersion()">GetVersion</a>() <span class="keyword">const</span>;                   <span class="comment">// Provide the version string</span>
+  <span class="keyword">virtual</span> <span class="keyword">void</span> <a href="../NcVersion.html#NcVersion:Data" title="void NcVersion::Data() const">Data</a>() <span class="keyword">const</span>;                    <span class="comment">// Provide version information</span>
+  TString <a href="../NcVersion.html#NcVersion:GetVersion" title="TString NcVersion::GetVersion() const">GetVersion</a>() <span class="keyword">const</span>;                   <span class="comment">// Provide the version string</span>
 
  <span class="keyword">protected</span>:
   TString <a href="../NcVersion.html#NcVersion:fVersion" title="TString NcVersion::fVersion">fVersion</a>; <span class="comment">// The actual version number of this release</span>
@@ -53,7 +53,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2025-05-07 11:23 </em><em>&raquo; Last generated: 2025-05-07 11:23</em><br />
+<em>&raquo; Last changed: 2025-05-16 13:06 </em><em>&raquo; Last generated: 2025-05-16 13:06</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

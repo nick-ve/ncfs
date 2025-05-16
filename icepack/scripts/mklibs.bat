@@ -36,8 +36,8 @@ rem --- Set the IcePack source directory as working directory
 cd ..\source
 
 rem --- The option strings for MSVC++ DLL compilation and linking ---
-set mscomp=/nologo /c /TP /Ze /MD /GR /GX /I%ROOTSYS%\include /I%NCFS%\ncfspack\source
-set msdll=/nologo /TP /Ze /MD /LD /GD /GR /GX /I%ROOTSYS%\include /I%NCFS%\ncfspack\source
+set mscomp=/nologo /c /TP /Ze /MD /GR /GX /I%NCFS%\ncfspack\source /%ROOTSYS%\include
+set msdll=/nologo /TP /Ze /MD /LD /GD /GR /GX /I%NCFS%\ncfspack\source /I%ROOTSYS%\include
 set mslink=/ENTRY:_DllMainCRTStartup@12 %ROOTSYS%\lib\*.lib
 
 if "%1" == "" goto export
@@ -59,7 +59,7 @@ echo * 1) "mklibs export" is the default, enabling ROOT loadable library creatio
 echo *    via 'double clicking'.
 echo * 2) Providing unsupported options results in displaying the help info.  
 echo * 3) An environment variable NCFS has to be set, pointing to the
-echo *    location where the ralice source code is residing.  
+echo *    location where the NCFS source code is residing.  
 echo *
 echo * This script creates icepack.lib and icepack.dll from all .h and .cxx files
 echo * in the current directory.
@@ -85,8 +85,9 @@ lib /nologo /machine:IX86 *.obj /def:icepack.def /out:icepack.lib
 rem --- Creation of the DLL ---
 link /nologo /machine:IX86 /DLL *.obj icepack.exp %mslink% /OUT:icepack.dll
 rem --- Move the created libs to the corresponding ROOT subdirectories
-move icepack.lib %ROOTSYS%\lib
-move icepack.dll %ROOTSYS%\bin
+move icepack.lib %NCFS%\libs
+move icepack.dll %NCFS%\libs
+move icepackdict* %NCFS%\libs
 rem --- Delete intermediate files
 del icepack.def
 del icepack.exp
@@ -102,16 +103,15 @@ cl %msdll% *.cxx /link %mslink% /OUT:icepack.dll
 rem --- Creation of the full version LIB ---
 lib /nologo /machine:IX86 *.obj /out:icepack.lib
 rem --- Move the created libs to the corresponding ROOT subdirectories
-move icepack.lib %ROOTSYS%\lib
-move icepack.dll %ROOTSYS%\bin
+move icepack.lib %NCFS%\libs
+move icepack.dll %NCFS%\libs
+move icepackdict* %NCFS%\libs
 rem --- Delete intermediate files
 goto root_clean
 
 :root_clean
 rem --- Delete all intermediate files --- 
 del .def
-del zzzicepackdict.h
-del zzzicepackdict.cxx
 del *.obj
 echo.
 echo *** mklibs done.

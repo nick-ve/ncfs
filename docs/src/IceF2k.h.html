@@ -4,7 +4,7 @@
 <!--                                             -->
 <!-- Author: ROOT team (rootdev@cern.ch)         -->
 <!--                                             -->
-<!--   Date: Mon Apr  5 23:39:08 2021            -->
+<!--   Date: Fri May 16 13:06:33 2025            -->
 <!--                                             -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="../ROOT.js"></script>
 </head>
 <body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
-<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
+<div id="root_header"></div>
 <div id="codeAndLineNumbers"><pre class="listing">
 <span class="cpp">#ifndef IceF2k_h</span>
 <span class="cpp">#define IceF2k_h</span>
@@ -90,11 +90,11 @@
   <span class="keyword">void</span> <a href="../IceF2k.html#IceF2k:PutHits" title="void IceF2k::PutHits()">PutHits</a>();       <span class="comment">// Put the hits and waveforms from the F2000 file into the IcePack structure</span>
   <span class="keyword">void</span> <a href="../IceF2k.html#IceF2k:PutTrigger" title="void IceF2k::PutTrigger()">PutTrigger</a>();    <span class="comment">// Put the trigger information from the F2000 file into the IcePack structure</span>
 
-  mcfile* <a href="../IceF2k.html#IceF2k:fInput" title="mcfile* IceF2k::fInput">fInput</a>;  <span class="comment">//! Structure holding the input file characteristics</span>
-  array   <a href="../IceF2k.html#IceF2k:fHeader" title="array IceF2k::fHeader">fHeader</a>; <span class="comment">//! Structure holding the file header info</span>
+  <a href="../ListOfTypes.html#mcfile">mcfile</a>* <a href="../IceF2k.html#IceF2k:fInput" title="mcfile* IceF2k::fInput">fInput</a>;  <span class="comment">//! Structure holding the input file characteristics</span>
+  Array   <a href="../IceF2k.html#IceF2k:fHeader" title="Array IceF2k::fHeader">fHeader</a>; <span class="comment">//! Structure holding the file header info</span>
   mevt    <a href="../IceF2k.html#IceF2k:fEvent" title="mevt IceF2k::fEvent">fEvent</a>;  <span class="comment">//! Structure holding the actual event data (hits, tracks, etc...)</span>
 
- ClassDef(<a href="../IceF2k.html">IceF2k</a>,8) <span class="comment">// Job for conversion of F2K data into <a href="../IceEvent.html">IceEvent</a> physics event structures.</span>
+ ClassDef(<a href="../IceF2k.html">IceF2k</a>,9) <span class="comment">// Job for conversion of F2K data into <a href="../IceEvent.html">IceEvent</a> physics event structures.</span>
 };
 <span class="cpp">#endif</span>
 </pre>
@@ -105,7 +105,7 @@
 <!--SIGNATURE-->
 <div id="footer">
 
-<em>&raquo; Last changed: 2021-04-05 23:39 </em><em>&raquo; Last generated: 2021-04-05 23:39</em><br />
+<em>&raquo; Last changed: 2025-05-16 13:06 </em><em>&raquo; Last generated: 2025-05-16 13:06</em><br />
 <em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
 </div>
 </div>

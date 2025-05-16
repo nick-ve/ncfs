@@ -17,7 +17,7 @@ unset LD_PREBIND
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-c -g0 -ansi -pedantic -Wall -Wno-long-long -I$ROOTSYS/include -I$NCFS/ncfspack/source"
+gccroot="-c -g0 -ansi -pedantic -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$ROOTSYS/include"
 #
 echo "lib1 = " $lib1
 echo "lib2 = " $lib2
@@ -29,7 +29,7 @@ echo "gccroot = " $gccroot
 cd $NCFS/icepack/source
 #
 ### Create the dictionary files
-rootcint -f zzzicepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
+rootcint -f icepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 #
@@ -44,12 +44,12 @@ g++ -v -dynamiclib -undefined dynamic_lookup -single_module -o $lib2 *.o
 ### On some systems the following extra "-read_only_relocs" flag might be needed
 # g++ -v -dynamiclib -undefined dynamic_lookup -single_module -read_only_relocs -o $lib2 *.o
 #
-rm zzzicepackdict.*
-rm *.o
+rm -f *.o
 # 
 ### Move the created lib to the corresponding ROOT subdirectory
-mv $lib1 $ROOTSYS/lib
-mv $lib2 $ROOTSYS/lib
+mv -f $lib1 $NCFS/libs
+mv -f $lib2 $NCFS/libs
+mv -f icepackdict* $NCFS/libs
 
 ### Return to the scripts directory
 cd ../scripts
