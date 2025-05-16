@@ -330,7 +330,7 @@ public:
    void             Pyupda(int mupda, int lun);
    void             SetupTest();
 
-   ClassDef(TPythia6,0)  //Interface to Pythia6.4.28 Event Generator
+   ClassDef(TPythia6,0)  //Interface to Pythia6.1 Event Generator
 };
 
 #endif

@@ -1,0 +1,1189 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--                                             -->
+<!-- Author: ROOT team (rootdev@cern.ch)         -->
+<!--                                             -->
+<!--   Date: Fri May 16 13:20:58 2025            -->
+<!--                                             -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>TPythia6</title>
+<meta name="rating" content="General" />
+<meta name="objecttype" content="Manual" />
+<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
+<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
+<link rel="stylesheet" type="text/css" href="ROOT.css" id="ROOTstyle" />
+<script type="text/javascript" src="ROOT.js"></script>
+</head>
+<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
+<div id="root_header"></div>
+<a name="TopOfPage"></a>
+<script type="text/javascript">WriteFollowPageBox('class TPythia6','','TPythia6.h');</script>
+<div id="toplinks">
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Quick Links:</span>
+<a class="descrheadentry" href="http://root.cern.ch">ROOT Homepage</a>
+<a class="descrheadentry" href="./ClassIndex.html">Class Index</a>
+<a class="descrheadentry" href="./ClassHierarchy.html">Class Hierarchy</a></div>
+<script type="text/javascript">
+function onSearch() {
+var s='http://www.google.com/search?q=%s+site%3A%u+-site%3A%u%2Fsrc%2F+-site%3A%u%2Fexamples%2F';
+var ref=String(document.location.href).replace(/https?:\/\//,'').replace(/\/[^\/]*$/,'').replace(/\//g,'%2F');
+window.location.href=s.replace(/%u/ig,ref).replace(/%s/ig,escape(document.searchform.t.value));
+return false;}
+</script>
+<form id="searchform" name="searchform" onsubmit="return onSearch()" action="javascript:onSearch();" method="post">
+<input name="t" size="30" value="Search documentation..." onfocus="if (document.searchform.t.value=='Search documentation...') document.searchform.t.value='';"></input>
+<a id="searchlink"  title="www.google.com"  href="javascript:onSearch();" onclick="return onSearch()">Search</a></form>
+</div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Source:</span>
+<a class="descrheadentry" href="src/TPythia6.h.html">header file</a>
+<a class="descrheadentry" href="src/TPythia6.cxx.html">source file</a>
+<a class="descrheadentry" href="TPythia6_Tree.pdf">inheritance tree (.pdf)</a> 
+</div></div>
+<div class="descrhead"><div class="descrheadcontent">
+<span class="descrtitle">Sections:</span>
+<a class="descrheadentry" href="#TPythia6:description">class description</a> 
+<a class="descrheadentry" href="#TPythia6:Function_Members">function members</a>
+<a class="descrheadentry" href="#TPythia6:Data_Members">data members</a>
+<a class="descrheadentry" href="#TPythia6:Class_Charts">class charts</a>
+</div></div>
+</div>
+<div class="location">
+<a class="locationlevel" href="index.html">NCFS</a>
+ &#187; <a class="locationlevel" href="./SOURCE_Index.html">SOURCE</a>
+ &#187; <a class="locationlevel" href="#TopOfPage">TPythia6</a>
+</div>
+<div class="dropshadow"><div class="withshadow"><h1><a name="TPythia6:description"></a>class TPythia6: public TGenerator</h1>
+<div class="classdescr">
+<pre>
+                                                                            //
+ <a href="./TPythia6.html">TPythia6</a>                                                                   //
+                                                                            //
+ TPythia is an interface class to F77 version of Pythia 6.4.28              //
+ To use this class you must install a version of pythia6.                   //
+   see the installation instructions at                                     //
+       http://root.cern.ch/root/Install.html                                //
+                                                                            // 
+ CERNLIB event generators, written by T.Sjostrand.                          //
+ For the details about these generators look at Pythia/Jetset manual:       //
+                                                                            //
+******************************************************************************
+**                                                                          **
+**                                                                          **
+**  PPP  Y   Y TTTTT H   H III   A        JJJJ EEEE TTTTT  SSS  EEEE TTTTT  **
+**  P  P  Y Y    T   H   H  I   A A          J E      T   S     E      T    **
+**  PPP    Y     T   HHHHH  I  AAAAA         J EEE    T    SSS  EEE    T    **
+**  P      Y     T   H   H  I  A   A      J  J E      T       S E      T    **
+**  P      Y     T   H   H III A   A       JJ  EEEE   T    SSS  EEEE   T    **
+**                                                                          **
+**                                                                          **
+**              *......*                  Welcome to the Lund Monte Carlo!  **
+**         *:::!!:::::::::::*                                               **
+**      *::::::!!::::::::::::::*            This is PYTHIA version 5.720    **
+**    *::::::::!!::::::::::::::::*        Last date of change: 29 Nov 1995  **
+**   *:::::::::!!:::::::::::::::::*                                         **
+**   *:::::::::!!:::::::::::::::::*         This is JETSET version 7.408    **
+**    *::::::::!!::::::::::::::::*!       Last date of change: 23 Aug 1995  **
+**      *::::::!!::::::::::::::* !!                                         **
+**      !! *:::!!:::::::::::*    !!                 Main author:            **
+**      !!     !* -&gt;&lt;- *         !!              Torbjorn Sjostrand         **
+**      !!     !!                !!        Dept. of theoretical physics 2   **
+**      !!     !!                !!              University of Lund         **
+**      !!                       !!                Solvegatan 14A           **
+**      !!        ep             !!             S-223 62 Lund, Sweden       **
+**      !!                       !!          phone: +46 - 46 - 222 48 16    **
+**      !!                 pp    !!          E-mail: torbjorn@thep.lu.se    **
+**      !!   e+e-                !!                                         **
+**      !!                       !!         Copyright Torbjorn Sjostrand    **
+**      !!                                     and CERN, Geneva 1993        **
+**                                                                          **
+**                                                                          **
+** The latest program versions and documentation is found on WWW address    **
+** http://thep.lu.se/tf2/staff/torbjorn/Welcome.html                        **
+**                                                                          **
+** When you cite these programs, priority should always be given to the     **
+** latest published description. Currently this is                          **
+** T. Sjostrand, Computer Physics Commun. 82 (1994) 74.                     **
+** The most recent <a href="./ListOfTypes.html#long">long</a> description (unpublished) is                        **
+** T. Sjostrand, LU TP 95-20 and CERN-TH.7112/93 (revised August 1995).     **
+** Also remember that the programs, to a large extent, represent original   **
+** physics research. Other publications of special relevance to your        **
+** studies may therefore deserve separate mention.                          **
+**                                                                          **
+**                                                                          **
+******************************************************************************
+</pre></div>
+</div></div>
+
+<div id="functions">
+<h2><a id="TPythia6:Function_Members"></a>Function Members (Methods)</h2>
+<div class="access" id="funcpubl"><b>public:</b>
+<table class="func" id="tabfuncpubl" cellspacing="0">
+<tr class="func"><td class="funcret"> virtual</td><td class="funcname"><a class="funcname" href="#TPythia6:_TPythia6">~TPythia6</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AbstractMethod"><span class="baseclass">TObject::</span>AbstractMethod</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:AppendPad"><span class="baseclass">TObject::</span>AppendPad</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:Browse"><span class="baseclass">TGenerator::</span>Browse</a>(TBrowser* b)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TObject:CheckedHash"><span class="baseclass">TObject::</span>CheckedHash</a>()</td></tr>
+<tr class="func"><td class="funcret">static TClass*</td><td class="funcname"><a class="funcname" href="#TPythia6:Class">Class</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:ClassName"><span class="baseclass">TObject::</span>ClassName</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Clear"><span class="baseclass">TNamed::</span>Clear</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TNamed:Clone"><span class="baseclass">TNamed::</span>Clone</a>(<span class="keyword">const</span> <span class="keyword">char</span>* newname = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:CloseFortranFile">CloseFortranFile</a>(<span class="keyword">int</span> lun)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Compare"><span class="baseclass">TNamed::</span>Compare</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Copy"><span class="baseclass">TNamed::</span>Copy</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>&amp; named) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Delete"><span class="baseclass">TObject::</span>Delete</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:DistancetoPrimitive"><span class="baseclass">TGenerator::</span>DistancetoPrimitive</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:Draw"><span class="baseclass">TGenerator::</span>Draw</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DrawClass"><span class="baseclass">TObject::</span>DrawClass</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:DrawClone"><span class="baseclass">TObject::</span>DrawClone</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Dump"><span class="baseclass">TObject::</span>Dump</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Error"><span class="baseclass">TObject::</span>Error</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute"><span class="baseclass">TObject::</span>Execute</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Execute@1"><span class="baseclass">TObject::</span>Execute</a>(TMethod* method, TObjArray* params, <a href="./ListOfTypes.html#Int_t">Int_t</a>* error = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:ExecuteEvent"><span class="baseclass">TGenerator::</span>ExecuteEvent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> event, <a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Fatal"><span class="baseclass">TObject::</span>Fatal</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:FillBuffer"><span class="baseclass">TNamed::</span>FillBuffer</a>(<span class="keyword">char</span>*&amp; buffer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>*</td><td class="funcname"><a class="funcname" href="#TObject:FindObject@1"><span class="baseclass">TObject::</span>FindObject</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GenerateEvent">GenerateEvent</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetBRAT">GetBRAT</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetCKIN">GetCKIN</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetDrawOption"><span class="baseclass">TObject::</span>GetDrawOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Long_t">Long_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetDtorOnly"><span class="baseclass">TObject::</span>GetDtorOnly</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetIconName"><span class="baseclass">TObject::</span>GetIconName</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetIMSS">GetIMSS</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetK">GetK</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetKCHG">GetKCHG</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetKFDP">GetKFDP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPythia6:GetKFIN">GetKFIN</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual TObjArray*</td><td class="funcname"><a class="funcname" href="#TGenerator:GetListOfParticles"><span class="baseclass">TGenerator::</span>GetListOfParticles</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMDCY">GetMDCY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMDME">GetMDME</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMINT">GetMINT</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMRPY">GetMRPY</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSEL">GetMSEL</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSELPD">GetMSELPD</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTI">GetMSTI</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTJ">GetMSTJ</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTP">GetMSTP</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSTU">GetMSTU</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMSUB">GetMSUB</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetMWID">GetMWID</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetN">GetN</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetName"><span class="baseclass">TNamed::</span>GetName</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetNGENPD">GetNGENPD</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetNPAD">GetNPAD</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:GetNumberOfParticles"><span class="baseclass">TGenerator::</span>GetNumberOfParticles</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TObject:GetObjectInfo"><span class="baseclass">TObject::</span>GetObjectInfo</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> px, <a href="./ListOfTypes.html#Int_t">Int_t</a> py) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">static <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetObjectStat"><span class="baseclass">TObject::</span>GetObjectStat</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Option_t">Option_t</a>*</td><td class="funcname"><a class="funcname" href="#TObject:GetOption"><span class="baseclass">TObject::</span>GetOption</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetP">GetP</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Double_t">Double_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:GetParameter"><span class="baseclass">TGenerator::</span>GetParameter</a>(<span class="keyword">const</span> <span class="keyword">char</span>*) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARF">GetPARF</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARI">GetPARI</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARJ">GetPARJ</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARP">GetPARP</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual TParticle*</td><td class="funcname"><a class="funcname" href="#TGenerator:GetParticle"><span class="baseclass">TGenerator::</span>GetParticle</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> i) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPARU">GetPARU</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetPMAS">GetPMAS</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual TObjArray*</td><td class="funcname"><a class="funcname" href="#TGenerator:GetPrimaries"><span class="baseclass">TGenerator::</span>GetPrimaries</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPROC">GetPROC</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="funcname"><a class="funcname" href="#TGenerator:GetPtCut"><span class="baseclass">TGenerator::</span>GetPtCut</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">Pybins_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPybins">GetPybins</a>()</td></tr>
+<tr class="func"><td class="funcret">Pydat1_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat1">GetPydat1</a>()</td></tr>
+<tr class="func"><td class="funcret">Pydat2_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat2">GetPydat2</a>()</td></tr>
+<tr class="func"><td class="funcret">Pydat3_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat3">GetPydat3</a>()</td></tr>
+<tr class="func"><td class="funcret">Pydat4_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydat4">GetPydat4</a>()</td></tr>
+<tr class="func"><td class="funcret">Pydatr_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPydatr">GetPydatr</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint1_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint1">GetPyint1</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint2_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint2">GetPyint2</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint3_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint3">GetPyint3</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint4_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint4">GetPyint4</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint5_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint5">GetPyint5</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint6_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint6">GetPyint6</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint7_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint7">GetPyint7</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint8_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint8">GetPyint8</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyint9_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyint9">GetPyint9</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyints_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyints">GetPyints</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyjets_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyjets">GetPyjets</a>()</td></tr>
+<tr class="func"><td class="funcret">Pymssm_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPymssm">GetPymssm</a>()</td></tr>
+<tr class="func"><td class="funcret">Pypars_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPypars">GetPypars</a>()</td></tr>
+<tr class="func"><td class="funcret">Pyssmt_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPyssmt">GetPyssmt</a>()</td></tr>
+<tr class="func"><td class="funcret">Pysubs_t*</td><td class="funcname"><a class="funcname" href="#TPythia6:GetPysubs">GetPysubs</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetRMSS">GetRMSS</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetRRPY">GetRRPY</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetSMW">GetSMW</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetSMZ">GetSMZ</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">const</span> <span class="keyword">char</span>*</td><td class="funcname"><a class="funcname" href="#TNamed:GetTitle"><span class="baseclass">TNamed::</span>GetTitle</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetUMIX">GetUMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#UInt_t">UInt_t</a></td><td class="funcname"><a class="funcname" href="#TObject:GetUniqueID"><span class="baseclass">TObject::</span>GetUniqueID</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetV">GetV</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetVCKM">GetVCKM</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetVINT">GetVINT</a>(<span class="keyword">int</span> i)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetVMIX">GetVMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetWIDS">GetWIDS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:GetZMIX">GetZMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HandleTimer"><span class="baseclass">TObject::</span>HandleTimer</a>(TTimer* timer)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#ULong_t">ULong_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Hash"><span class="baseclass">TNamed::</span>Hash</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:HasInconsistentHash"><span class="baseclass">TObject::</span>HasInconsistentHash</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual TObjArray*</td><td class="funcname"><a class="funcname" href="#TPythia6:ImportParticles@1">ImportParticles</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TPythia6:ImportParticles">ImportParticles</a>(TClonesArray* particles, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Info"><span class="baseclass">TObject::</span>Info</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> <span class="keyword">char</span>* classname) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:InheritsFrom@1"><span class="baseclass">TObject::</span>InheritsFrom</a>(<span class="keyword">const</span> TClass* cl) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Initialize">Initialize</a>(<span class="keyword">const</span> <span class="keyword">char</span>* frame, <span class="keyword">const</span> <span class="keyword">char</span>* beam, <span class="keyword">const</span> <span class="keyword">char</span>* target, <span class="keyword">float</span> win)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Inspect"><span class="baseclass">TObject::</span>Inspect</a>() <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret">static <a href="./TPythia6.html">TPythia6</a>*</td><td class="funcname"><a class="funcname" href="#TPythia6:Instance">Instance</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:InvertBit"><span class="baseclass">TObject::</span>InvertBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="func"><td class="funcret">virtual TClass*</td><td class="funcname"><a class="funcname" href="#TPythia6:IsA">IsA</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsEqual"><span class="baseclass">TObject::</span>IsEqual</a>(<span class="keyword">const</span> <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsFolder"><span class="baseclass">TObject::</span>IsFolder</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsOnHeap"><span class="baseclass">TObject::</span>IsOnHeap</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:IsSortable"><span class="baseclass">TNamed::</span>IsSortable</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:IsZombie"><span class="baseclass">TObject::</span>IsZombie</a>() <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:ls"><span class="baseclass">TNamed::</span>ls</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MayNotUse"><span class="baseclass">TObject::</span>MayNotUse</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Notify"><span class="baseclass">TObject::</span>Notify</a>()</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Obsolete"><span class="baseclass">TObject::</span>Obsolete</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* asOfVers, <span class="keyword">const</span> <span class="keyword">char</span>* removedFromVers) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:OpenFortranFile">OpenFortranFile</a>(<span class="keyword">int</span> lun, <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete@1"><span class="baseclass">TObject::</span>operator delete</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:operator_delete[]@1"><span class="baseclass">TObject::</span>operator delete[]</a>(<span class="keyword">void</span>* ptr, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new@1"><span class="baseclass">TObject::</span>operator new</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span>*</td><td class="funcname"><a class="funcname" href="#TObject:operator_new[]@1"><span class="baseclass">TObject::</span>operator new[]</a>(<a href="./ListOfTypes.html#size_t">size_t</a> sz, <span class="keyword">void</span>* vp)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:Paint"><span class="baseclass">TGenerator::</span>Paint</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Pop"><span class="baseclass">TObject::</span>Pop</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:Print"><span class="baseclass">TNamed::</span>Print</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Py1ent">Py1ent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> line, <a href="./ListOfTypes.html#Int_t">Int_t</a> kf, <a href="./ListOfTypes.html#Double_t">Double_t</a> pe, <a href="./ListOfTypes.html#Double_t">Double_t</a> theta, <a href="./ListOfTypes.html#Double_t">Double_t</a> phi)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pychge">Pychge</a>(<span class="keyword">int</span> kf)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">int</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pycomp">Pycomp</a>(<span class="keyword">int</span> kf)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pydiff">Pydiff</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyedit">Pyedit</a>(<span class="keyword">int</span> medit)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyevnt">Pyevnt</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyexec">Pyexec</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pygive">Pygive</a>(<span class="keyword">const</span> <span class="keyword">char</span>* param)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyhepc">Pyhepc</a>(<span class="keyword">int</span> mconv)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyinit">Pyinit</a>(<span class="keyword">char</span>* frame, <span class="keyword">char</span>* beam, <span class="keyword">char</span>* target, <span class="keyword">double</span> wint)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pylist">Pylist</a>(<span class="keyword">int</span> flag)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pymass">Pymass</a>(<span class="keyword">int</span> kf)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyname">Pyname</a>(<span class="keyword">int</span> kf, <span class="keyword">char</span>* name)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">double</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyr">Pyr</a>(<span class="keyword">int</span> idummy)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyrget">Pyrget</a>(<span class="keyword">int</span> lun, <span class="keyword">int</span> move)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyrset">Pyrset</a>(<span class="keyword">int</span> lun, <span class="keyword">int</span> move)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pystat">Pystat</a>(<span class="keyword">int</span> flag)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pytest">Pytest</a>(<span class="keyword">int</span> flag)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pytune">Pytune</a>(<span class="keyword">int</span> itune)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Pyupda">Pyupda</a>(<span class="keyword">int</span> mupda, <span class="keyword">int</span> lun)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Read"><span class="baseclass">TObject::</span>Read</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:RecursiveRemove"><span class="baseclass">TObject::</span>RecursiveRemove</a>(<a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>* obj)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:ResetBit"><span class="baseclass">TObject::</span>ResetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SaveAs"><span class="baseclass">TObject::</span>SaveAs</a>(<span class="keyword">const</span> <span class="keyword">char</span>* filename = <span class="string">""</span>, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>) <span class="keyword">const</span><span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SavePrimitive"><span class="baseclass">TObject::</span>SavePrimitive</a>(<a href="./ListOfTypes.html#ostream">ostream</a>&amp; out, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit@1"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f)</td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetBit"><span class="baseclass">TObject::</span>SetBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f, <a href="./ListOfTypes.html#Bool_t">Bool_t</a> set)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetBRAT">SetBRAT</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> b)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetCKIN">SetCKIN</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> c)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDrawOption"><span class="baseclass">TObject::</span>SetDrawOption</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetDtorOnly"><span class="baseclass">TObject::</span>SetDtorOnly</a>(<span class="keyword">void</span>* obj)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetIMSS">SetIMSS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetK">SetK</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">int</span> k)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetKCHG">SetKCHG</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">int</span> k)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetKFDP">SetKFDP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> k)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetKFIN">SetKFIN</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> kfin = 1)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMDCY">SetMDCY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMDME">SetMDME</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMINT">SetMINT</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMRPY">SetMRPY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSEL">SetMSEL</a>(<span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSELPD">SetMSELPD</a>(<span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTI">SetMSTI</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTJ">SetMSTJ</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTP">SetMSTP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSTU">SetMSTU</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMSUB">SetMSUB</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetMWID">SetMWID</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetN">SetN</a>(<span class="keyword">int</span> n)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetName"><span class="baseclass">TNamed::</span>SetName</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetNameTitle"><span class="baseclass">TNamed::</span>SetNameTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* title)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetNGENPD">SetNGENPD</a>(<span class="keyword">int</span> n)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetNPAD">SetNPAD</a>(<span class="keyword">int</span> n)</td></tr>
+<tr class="funcinh"><td class="funcret">static <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetObjectStat"><span class="baseclass">TObject::</span>SetObjectStat</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> stat)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetP">SetP</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetParameter"><span class="baseclass">TGenerator::</span>SetParameter</a>(<span class="keyword">const</span> <span class="keyword">char</span>*, <a href="./ListOfTypes.html#Double_t">Double_t</a>)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARF">SetPARF</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARI">SetPARI</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARJ">SetPARJ</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARP">SetPARP</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPARU">SetPARU</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetPMAS">SetPMAS</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> m)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetPtCut"><span class="baseclass">TGenerator::</span>SetPtCut</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> ptcut = 0)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetRMSS">SetRMSS</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> r)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetRRPY">SetRRPY</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> r)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetSMW">SetSMW</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> s)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetSMZ">SetSMZ</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> s)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TNamed:SetTitle"><span class="baseclass">TNamed::</span>SetTitle</a>(<span class="keyword">const</span> <span class="keyword">char</span>* title = <span class="string">""</span>)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetUMIX">SetUMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> u)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SetUniqueID"><span class="baseclass">TObject::</span>SetUniqueID</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> uid)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetupTest">SetupTest</a>()</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetV">SetV</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> v)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetVCKM">SetVCKM</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> v)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetViewRadius"><span class="baseclass">TGenerator::</span>SetViewRadius</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> rbox = 1000)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:SetViewRange"><span class="baseclass">TGenerator::</span>SetViewRange</a>(<a href="./ListOfTypes.html#Float_t">Float_t</a> xmin = -10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> ymin = -10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmin = -10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> xmax = 10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> ymax = 10000, <a href="./ListOfTypes.html#Float_t">Float_t</a> zmax = 10000)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetVINT">SetVINT</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> v)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetWIDS">SetWIDS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> w)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:SetZMIX">SetZMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> z)</td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:ShowMembers">ShowMembers</a>(TMemberInspector&amp; insp) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TGenerator:ShowNeutrons"><span class="baseclass">TGenerator::</span>ShowNeutrons</a>(<a href="./ListOfTypes.html#Bool_t">Bool_t</a> show = 1)<span class="funcprop"><abbr title="has a popup menu entry">MENU</abbr> </span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TNamed:Sizeof"><span class="baseclass">TNamed::</span>Sizeof</a>() <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:Streamer">Streamer</a>(TBuffer&amp;)</td></tr>
+<tr class="func"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TPythia6:StreamerNVirtual">StreamerNVirtual</a>(TBuffer&amp; ClassDef_StreamerNVirtual_b)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:SysError"><span class="baseclass">TObject::</span>SysError</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBit"><span class="baseclass">TObject::</span>TestBit</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:TestBits"><span class="baseclass">TObject::</span>TestBits</a>(<a href="./ListOfTypes.html#UInt_t">UInt_t</a> f) <span class="keyword">const</span></td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#TPythia6:TPythia6@1">TPythia6</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:UseCurrentStyle"><span class="baseclass">TObject::</span>UseCurrentStyle</a>()</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:Warning"><span class="baseclass">TObject::</span>Warning</a>(<span class="keyword">const</span> <span class="keyword">char</span>* method, <span class="keyword">const</span> <span class="keyword">char</span>* msgfmt,...) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0)</td></tr>
+<tr class="funcinh"><td class="funcret">virtual <a href="./ListOfTypes.html#Int_t">Int_t</a></td><td class="funcname"><a class="funcname" href="#TObject:Write@1"><span class="baseclass">TObject::</span>Write</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> option = 0, <a href="./ListOfTypes.html#Int_t">Int_t</a> bufsize = 0) <span class="keyword">const</span></td></tr>
+
+</table></div>
+<div class="access" id="funcprot"><b>protected:</b>
+<table class="func" id="tabfuncprot" cellspacing="0">
+<tr class="funcinh"><td class="funcret">virtual <span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:DoError"><span class="baseclass">TObject::</span>DoError</a>(<span class="keyword">int</span> level, <span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* fmt, <a href="./ListOfTypes.html#va_list">va_list</a> va) <span class="keyword">const</span></td></tr>
+<tr class="funcinh"><td class="funcret"><span class="keyword">void</span></td><td class="funcname"><a class="funcname" href="#TObject:MakeZombie"><span class="baseclass">TObject::</span>MakeZombie</a>()</td></tr>
+<tr class="func"><td class="funcret"><a href="./TPythia6.html">TPythia6</a>&amp;</td><td class="funcname"><a class="funcname" href="#TPythia6:operator_">operator=</a>(<span class="keyword">const</span> <a href="./TPythia6.html">TPythia6</a>&amp;)</td></tr>
+<tr class="func"><td class="funcret"></td><td class="funcname"><a class="funcname" href="#TPythia6:TPythia6">TPythia6</a>(<span class="keyword">const</span> <a href="./TPythia6.html">TPythia6</a>&amp;)</td></tr>
+
+</table></div>
+<div class="access" id="funcpriv"><b>private:</b>
+<table class="func" id="tabfuncpriv" cellspacing="0">
+<tr class="func"><td class="funcret">virtual <a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="funcname"><a class="funcname" href="#TPythia6:CheckTObjectHashConsistency">CheckTObjectHashConsistency</a>() <span class="keyword">const</span></td></tr>
+
+</table></div>
+</div>
+
+<div id="datamembers">
+<h2><a name="TPythia6:Data_Members"></a>Data Members</h2>
+<div class="access" id="datapubl"><b>public:</b>
+<table class="data" id="tabdatapubl" cellspacing="0">
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kBitMask"><span class="baseclass">TObject::</span>kBitMask</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kCanDelete"><span class="baseclass">TObject::</span>kCanDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kCannotPick"><span class="baseclass">TObject::</span>kCannotPick</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kHasUUID"><span class="baseclass">TObject::</span>kHasUUID</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kInconsistent"><span class="baseclass">TObject::</span>kInconsistent</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kInvalidObject"><span class="baseclass">TObject::</span>kInvalidObject</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kIsOnHeap"><span class="baseclass">TObject::</span>kIsOnHeap</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kIsReferenced"><span class="baseclass">TObject::</span>kIsReferenced</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kMustCleanup"><span class="baseclass">TObject::</span>kMustCleanup</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EStatusBits</td><td class="dataname"><a href="#TObject:kNoContextMenu"><span class="baseclass">TObject::</span>kNoContextMenu</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kNotDeleted"><span class="baseclass">TObject::</span>kNotDeleted</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::EDeprecatedStatusBits</td><td class="dataname"><a href="#TObject:kObjInCanvas"><span class="baseclass">TObject::</span>kObjInCanvas</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kOverwrite"><span class="baseclass">TObject::</span>kOverwrite</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kSingleKey"><span class="baseclass">TObject::</span>kSingleKey</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kWriteDelete"><span class="baseclass">TObject::</span>kWriteDelete</a></td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kZombie"><span class="baseclass">TObject::</span>kZombie</a></td><td></td></tr>
+
+</table></div>
+<div class="access" id="dataprot"><b>protected:</b>
+<table class="data" id="tabdataprot" cellspacing="0">
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fName"><span class="baseclass">TNamed::</span>fName</a></td><td class="datadesc">object identifier</td></tr>
+<tr class="datainh"><td class="datatype">TObjArray*</td><td class="dataname"><a href="#TGenerator:fParticles"><span class="baseclass">TGenerator::</span>fParticles</a></td><td class="datadesc">-&gt;static container of the primary particles</td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Float_t">Float_t</a></td><td class="dataname"><a href="#TGenerator:fPtCut"><span class="baseclass">TGenerator::</span>fPtCut</a></td><td class="datadesc">!Pt cut. Do not show primaries below</td></tr>
+<tr class="data"><td class="datatype">Pybins_t*</td><td class="dataname"><a name="TPythia6:fPybins"></a>fPybins</td><td></td></tr>
+<tr class="data"><td class="datatype">Pydat1_t*</td><td class="dataname"><a name="TPythia6:fPydat1"></a>fPydat1</td><td></td></tr>
+<tr class="data"><td class="datatype">Pydat2_t*</td><td class="dataname"><a name="TPythia6:fPydat2"></a>fPydat2</td><td></td></tr>
+<tr class="data"><td class="datatype">Pydat3_t*</td><td class="dataname"><a name="TPythia6:fPydat3"></a>fPydat3</td><td></td></tr>
+<tr class="data"><td class="datatype">Pydat4_t*</td><td class="dataname"><a name="TPythia6:fPydat4"></a>fPydat4</td><td></td></tr>
+<tr class="data"><td class="datatype">Pydatr_t*</td><td class="dataname"><a name="TPythia6:fPydatr"></a>fPydatr</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint1_t*</td><td class="dataname"><a name="TPythia6:fPyint1"></a>fPyint1</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint2_t*</td><td class="dataname"><a name="TPythia6:fPyint2"></a>fPyint2</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint3_t*</td><td class="dataname"><a name="TPythia6:fPyint3"></a>fPyint3</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint4_t*</td><td class="dataname"><a name="TPythia6:fPyint4"></a>fPyint4</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint5_t*</td><td class="dataname"><a name="TPythia6:fPyint5"></a>fPyint5</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint6_t*</td><td class="dataname"><a name="TPythia6:fPyint6"></a>fPyint6</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint7_t*</td><td class="dataname"><a name="TPythia6:fPyint7"></a>fPyint7</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint8_t*</td><td class="dataname"><a name="TPythia6:fPyint8"></a>fPyint8</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyint9_t*</td><td class="dataname"><a name="TPythia6:fPyint9"></a>fPyint9</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyints_t*</td><td class="dataname"><a name="TPythia6:fPyints"></a>fPyints</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyjets_t*</td><td class="dataname"><a name="TPythia6:fPyjets"></a>fPyjets</td><td></td></tr>
+<tr class="data"><td class="datatype">Pymssm_t*</td><td class="dataname"><a name="TPythia6:fPymssm"></a>fPymssm</td><td></td></tr>
+<tr class="data"><td class="datatype">Pypars_t*</td><td class="dataname"><a name="TPythia6:fPypars"></a>fPypars</td><td></td></tr>
+<tr class="data"><td class="datatype">Pyssmt_t*</td><td class="dataname"><a name="TPythia6:fPyssmt"></a>fPyssmt</td><td></td></tr>
+<tr class="data"><td class="datatype">Pysubs_t*</td><td class="dataname"><a name="TPythia6:fPysubs"></a>fPysubs</td><td></td></tr>
+<tr class="datainh"><td class="datatype"><a href="./ListOfTypes.html#Bool_t">Bool_t</a></td><td class="dataname"><a href="#TGenerator:fShowNeutrons"><span class="baseclass">TGenerator::</span>fShowNeutrons</a></td><td class="datadesc">!display neutrons if true</td></tr>
+<tr class="datainh"><td class="datatype">TString</td><td class="dataname"><a href="#TNamed:fTitle"><span class="baseclass">TNamed::</span>fTitle</a></td><td class="datadesc">object title</td></tr>
+<tr class="data"><td class="datatype">static <a href="./TPythia6.html">TPythia6</a>*</td><td class="dataname"><a name="TPythia6:fgInstance"></a>fgInstance</td><td></td></tr>
+<tr class="datainh"><td class="datatype">static <a href="./#TObject:TObject" title="TObject TObject::TObject() or overloads">TObject</a>::(anonymous)</td><td class="dataname"><a href="#TObject:kOnlyPrepStep"><span class="baseclass">TObject::</span>kOnlyPrepStep</a></td><td></td></tr>
+
+</table></div>
+</div>
+<h2><a id="TPythia6:Class_Charts"></a>Class Charts</h2>
+<!--INHERITANCE TREE-->
+<table><tr><td width="10%"></td><td width="70%"><a href="ClassHierarchy.html">Inheritance Chart</a>:</td></tr><tr class="inhtree"><td width="10%"></td><td width="70%"><table class="inhtree"><tr><td>
+<table width="100%" border="0" cellpadding ="0" cellspacing="2"><tr>
+<td><table><tr>
+<td bgcolor="#f7f7f7" align="right">
+<tt>TGenerator</tt></td>
+</tr></table></td>
+<td>&larr;</td><td>
+<center><big><b><tt><a name="TPythia6" href="./TPythia6.html">TPythia6</a></tt></b></big></center>
+</td>
+<td><table><tr>
+<td>&larr;</td><td><table><tr>
+<td bgcolor="#f7f7f7"><table><tr><td>
+<center><tt><a name="NcCollider" href="./NcCollider.html">NcCollider</a></tt></center></td>
+<td></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table></td>
+</tr></table>
+</td></tr></table></td></tr></table>
+<h2>Function documentation</h2>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="TPythia6:TPythia6@1" href="src/TPythia6.cxx.html#FNr06C">TPythia6</a>()</span><br />
+<div class="funccomm"><pre> <a href="./TPythia6.html">TPythia6</a> constructor: creates a TClonesArray in which it will store all
+ particles. Note that there may be only one functional <a href="./TPythia6.html">TPythia6</a> object
+ at a time, so it's not use to create more than one instance of it.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="TPythia6:TPythia6" href="src/TPythia6.cxx.html#RLxuDE">TPythia6</a>(<span class="keyword">const</span> <a href="./TPythia6.html">TPythia6</a>&amp; )</span><br />
+
+<div class="code"><code class="inlinecode">{ }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"> <a class="funcname" name="TPythia6:_TPythia6" href="src/TPythia6.cxx.html#N2wOPC">~TPythia6</a>()</span><br />
+<div class="funccomm"><pre> Destroys the object, deletes and disposes all TMCParticles currently on list.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./TPythia6.html">TPythia6</a>* <a class="funcname" name="TPythia6:Instance" href="src/TPythia6.cxx.html#imzP2C">Instance</a>()</span><br />
+<div class="funccomm"><pre> model of automatic memory cleanup suggested by Jim Kowalkovski:
+ destructor for local static variable `cleaner' is  always called in the end
+ of the job thus deleting the only <a href="./TPythia6.html">TPythia6</a> instance
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:GenerateEvent" href="src/TPythia6.cxx.html#BGg0qB">GenerateEvent</a>()</span><br />
+<div class="funccomm"><pre>  generate event and copy the information from /HEPEVT/ to fPrimaries
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:OpenFortranFile" href="src/TPythia6.cxx.html#b58D1D">OpenFortranFile</a>(<span class="keyword">int</span> lun, <span class="keyword">char</span>* name)</span><br />
+<div class="funccomm"><pre>interface with fortran i/o
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:CloseFortranFile" href="src/TPythia6.cxx.html#sunug">CloseFortranFile</a>(<span class="keyword">int</span> lun)</span><br />
+<div class="funccomm"><pre>interface with fortran i/o
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname">TObjArray * <a class="funcname" name="TPythia6:ImportParticles@1" href="src/TPythia6.cxx.html#J7DWgD">ImportParticles</a>(<a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre> Fills TObjArray fParticles list with particles from common LUJETS
+ Old contents of a list are cleared. This function should be called after
+ any change in common LUJETS, however GetParticles() method  calls it
+ automatically - user don't need to care about it. In case you make a call
+ to LuExec() you must call this method yourself to transfer new data from
+ common LUJETS to the fParticles list.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="TPythia6:ImportParticles" href="src/TPythia6.cxx.html#vS9vcB">ImportParticles</a>(TClonesArray* particles, <a href="./ListOfTypes.html#Option_t">Option_t</a>* option = <span class="string">""</span>)</span><br />
+<div class="funccomm"><pre>  Default primary creation method. It reads the /HEPEVT/ common block which
+  has been filled by the <a href="./TPythia6.html#TPythia6:GenerateEvent" title="void TPythia6::GenerateEvent()">GenerateEvent</a> method. If the event generator does
+  not use the HEPEVT common block, This routine has to be overloaded by
+  the subclasses.
+  The function loops on the generated particles and store them in
+  the TClonesArray pointed by the argument particles.
+  The default action is to store only the stable particles (ISTHEP = 1)
+  This can be demanded explicitly by setting the option = <span class="string">"Final"</span>
+  If the option = <span class="string">"All"</span>, all the particles are stored.
+
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Initialize" href="src/TPythia6.cxx.html#Mjne7B">Initialize</a>(<span class="keyword">const</span> <span class="keyword">char</span>* frame, <span class="keyword">const</span> <span class="keyword">char</span>* beam, <span class="keyword">const</span> <span class="keyword">char</span>* target, <span class="keyword">float</span> win)</span><br />
+<div class="funccomm"><pre> Calls PyInit with the same parameters after performing some checking,
+ sets correct title. This method should preferably be called instead of PyInit.
+ PURPOSE: to initialize the generation procedure.
+ ARGUMENTS: See documentation for details.
+    frame:  - specifies the frame of the experiment:
+                <span class="string">"CMS"</span>,<span class="string">"FIXT"</span>,<span class="string">"USER"</span>,<span class="string">"FOUR"</span>,<span class="string">"FIVE"</span>,<span class="string">"NONE"</span>
+    beam,
+    target: - beam and target particles (with additionaly charges, tildes or <span class="string">"bar"</span>:
+              e,nu_e,mu,nu_mu,tau,nu_tau,gamma,pi,n,p,Lambda,Sigma,Xi,Omega,
+              pomeron,reggeon
+    win:    - related to energy system:
+              for frame==<span class="string">"CMS"</span> - total energy of system
+              for frame==<span class="string">"FIXT"</span> - momentum of beam particle
+              for frame==<span class="string">"USER"</span> - dummy - see documentation.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyinit" href="src/TPythia6.cxx.html#RSXOME">Pyinit</a>(<span class="keyword">char</span>* frame, <span class="keyword">char</span>* beam, <span class="keyword">char</span>* target, <span class="keyword">double</span> wint)</span><br />
+<div class="funccomm"><pre> Calls <a href="./TPythia6.html#TPythia6:Pyinit" title="void TPythia6::Pyinit(char* frame, char* beam, char* target, double wint)">Pyinit</a> with the same parameters after performing some checking,
+ sets correct title. This method should preferably be called instead of PyInit.
+ PURPOSE: to initialize the generation procedure.
+ ARGUMENTS: See documentation for details.
+    frame:  - specifies the frame of the experiment:
+                <span class="string">"CMS"</span>,<span class="string">"FIXT"</span>,<span class="string">"USER"</span>,<span class="string">"FOUR"</span>,<span class="string">"FIVE"</span>,<span class="string">"NONE"</span>
+    beam,
+    target: - beam and target particles (with additionaly charges,
+              tildes or <span class="string">"bar"</span>:
+              e,nu_e,mu,nu_mu,tau,nu_tau,gamma,pi,n,p,Lambda,Sigma,Xi,Omega,
+              pomeron,reggeon
+    win:    - related to energy system:
+              for frame==<span class="string">"CMS"</span> - total energy of system
+              for frame==<span class="string">"FIXT"</span> - momentum of beam particle
+              for frame==<span class="string">"USER"</span> - dummy - see documentation.
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:Pycomp" href="src/TPythia6.cxx.html#Opl6hB">Pycomp</a>(<span class="keyword">int</span> kf)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pycomp
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyedit" href="src/TPythia6.cxx.html#lLsevC">Pyedit</a>(<span class="keyword">int</span> medit)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyedit
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pydiff" href="src/TPythia6.cxx.html#izBZXE">Pydiff</a>()</span><br />
+<div class="funccomm"><pre>interface with fortran routine pydiff
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyevnt" href="src/TPythia6.cxx.html#us8tDD">Pyevnt</a>()</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyevnt
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyexec" href="src/TPythia6.cxx.html#SwGkND">Pyexec</a>()</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyexec
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pygive" href="src/TPythia6.cxx.html#MzUHcD">Pygive</a>(<span class="keyword">const</span> <span class="keyword">char</span>* param)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pygive
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyhepc" href="src/TPythia6.cxx.html#JALv0B">Pyhepc</a>(<span class="keyword">int</span> mconv)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyhepc
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pylist" href="src/TPythia6.cxx.html#ceY3e">Pylist</a>(<span class="keyword">int</span> flag)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pylist
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyname" href="src/TPythia6.cxx.html#IHIYWB">Pyname</a>(<span class="keyword">int</span> kf, <span class="keyword">char</span>* name)</span><br />
+<div class="funccomm"><pre>Note that the array name must be dimensioned in the calling program
+to at least name[16]
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:Pyr" href="src/TPythia6.cxx.html#xeVI4C">Pyr</a>(<span class="keyword">int</span> idummy)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyr
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyrget" href="src/TPythia6.cxx.html#M0GYYB">Pyrget</a>(<span class="keyword">int</span> lun, <span class="keyword">int</span> move)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyrget
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyrset" href="src/TPythia6.cxx.html#QvLXYB">Pyrset</a>(<span class="keyword">int</span> lun, <span class="keyword">int</span> move)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyrset
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pystat" href="src/TPythia6.cxx.html#BdC3eE">Pystat</a>(<span class="keyword">int</span> flag)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pystat
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pytest" href="src/TPythia6.cxx.html#lE2Z8C">Pytest</a>(<span class="keyword">int</span> flag)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pytest
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pytune" href="src/TPythia6.cxx.html#QFcNtC">Pytune</a>(<span class="keyword">int</span> itune)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pytune
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Pyupda" href="src/TPythia6.cxx.html#FQG5j">Pyupda</a>(<span class="keyword">int</span> mupda, <span class="keyword">int</span> lun)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pyupda
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:Pymass" href="src/TPythia6.cxx.html#Swv7MC">Pymass</a>(<span class="keyword">int</span> kf)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pymass
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:Pychge" href="src/TPythia6.cxx.html#f64mdB">Pychge</a>(<span class="keyword">int</span> kf)</span><br />
+<div class="funccomm"><pre>interface with fortran routine pychge
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:Py1ent" href="src/TPythia6.cxx.html#Zn9RqC">Py1ent</a>(<a href="./ListOfTypes.html#Int_t">Int_t</a> line, <a href="./ListOfTypes.html#Int_t">Int_t</a> kf, <a href="./ListOfTypes.html#Double_t">Double_t</a> pe, <a href="./ListOfTypes.html#Double_t">Double_t</a> theta, <a href="./ListOfTypes.html#Double_t">Double_t</a> phi)</span><br />
+<div class="funccomm"><pre> Add one entry to the event record, i.e. either a parton or a
+ particle. 
+
+  IP:   normally line number for the parton/particle. There are two
+        exceptions:
+ 
+        If IP = 0: line number 1 is used and PYEXEC is called. 
+        If IP &lt; 0: line -IP is used, with status code K(-IP,2)=2
+                   rather than 1; thus a parton system may be built
+                   up by filling all but the last parton of the
+                   system with IP &lt; 0.   
+  KF:   parton/particle flavour code (PDG code)
+  PE:   parton/particle energy. If PE is smaller than the mass,
+        the parton/particle is taken to be at rest.  
+  THETA:
+  PHI:  polar and azimuthal angle for the momentum vector of the
+        parton/particle. 
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetupTest" href="src/TPythia6.cxx.html#c6jsd">SetupTest</a>()</span><br />
+<div class="funccomm"><pre> Exemplary setup of Pythia parameters:
+ Switches on processes 102,123,124 (Higgs generation) and switches off
+ interactions, fragmentation, ISR, FSR...
+</pre></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./TPythia6.html">TPythia6</a>&amp; <a class="funcname" name="TPythia6:operator_" href="src/TPythia6.h.html#yrFfy">operator=</a>(<span class="keyword">const</span> <a href="./TPythia6.html">TPythia6</a>&amp; )</span><br />
+</div>
+<div class="funcdoc"><span class="funcname">Pyjets_t* <a class="funcname" name="TPythia6:GetPyjets" href="src/TPythia6.h.html#QZKq_B">GetPyjets</a>()</span><br />
+<div class="funccomm"><pre> ****** accessors
+ FORTRAN indexing in accessing the arrays,
+ indices start from 1 !!!!!
+ ****** access to PYTHIA6 common-blocks
+ ****** /PYJETS/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetN" href="src/TPythia6.h.html#eskTTB">GetN</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;N; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetNPAD" href="src/TPythia6.h.html#gK9C5B">GetNPAD</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;NPAD; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetK" href="src/TPythia6.h.html#E8G6zD">GetK</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;K[i-1][ip-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetP" href="src/TPythia6.h.html#QEWlvB">GetP</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;P[i-1][ip-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetV" href="src/TPythia6.h.html#QwplvB">GetV</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;V[i-1][ip-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetN" href="src/TPythia6.h.html#AQvIPD">SetN</a>(<span class="keyword">int</span> n)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;N = n;    }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetNPAD" href="src/TPythia6.h.html#FlATj">SetNPAD</a>(<span class="keyword">int</span> n)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;NPAD = n;    }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetK" href="src/TPythia6.h.html#v1gbmB">SetK</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">int</span> k)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;K[i-1][ip-1] = k; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetP" href="src/TPythia6.h.html#x3zsOC">SetP</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> p)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;P[i-1][ip-1] = p;    }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetV" href="src/TPythia6.h.html#B4zsOC">SetV</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> v)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyjets" title="Pyjets_t* TPythia6::fPyjets">fPyjets</a>-&gt;V[i-1][ip-1] = v;    }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pydat1_t* <a class="funcname" name="TPythia6:GetPydat1" href="src/TPythia6.h.html#Ephk9D">GetPydat1</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYDAT1/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMSTU" href="src/TPythia6.h.html#EgVf8B">GetMSTU</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;MSTU[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetPARU" href="src/TPythia6.h.html#RBR3rE">GetPARU</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;PARU[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMSTJ" href="src/TPythia6.h.html#kJSf8B">GetMSTJ</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;MSTJ[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetPARJ" href="src/TPythia6.h.html#tPW3rE">GetPARJ</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;PARJ[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMSTU" href="src/TPythia6.h.html#Z9sKZC">SetMSTU</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;MSTU[i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetPARU" href="src/TPythia6.h.html#p.GtrB">SetPARU</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;PARU[i-1] = p; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMSTJ" href="src/TPythia6.h.html#Z9sKZC">SetMSTJ</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;MSTJ[i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetPARJ" href="src/TPythia6.h.html#p.GtrB">SetPARJ</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat1" title="Pydat1_t* TPythia6::fPydat1">fPydat1</a>-&gt;PARJ[i-1] = p; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pydat2_t* <a class="funcname" name="TPythia6:GetPydat2" href="src/TPythia6.h.html#qgwF3D">GetPydat2</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYDAT2/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetKCHG" href="src/TPythia6.h.html#nlPoqD">GetKCHG</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;KCHG[i-1][ip-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetPMAS" href="src/TPythia6.h.html#EHjtRD">GetPMAS</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;PMAS[i-1][ip-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetPARF" href="src/TPythia6.h.html#abC6nC">GetPARF</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;PARF[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetVCKM" href="src/TPythia6.h.html#sPtHDB">GetVCKM</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;VCKM[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetKCHG" href="src/TPythia6.h.html#RsNmnB">SetKCHG</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">int</span> k)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;KCHG[i-1][ip-1] = k; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetPMAS" href="src/TPythia6.h.html#IZ1L_B">SetPMAS</a>(<span class="keyword">int</span> ip, <span class="keyword">int</span> i, <span class="keyword">double</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;PMAS[i-1][ip-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetPARF" href="src/TPythia6.h.html#Y_aDp">SetPARF</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;PARF[i-1]       = p; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetVCKM" href="src/TPythia6.h.html#lYv5IB">SetVCKM</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> v)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat2" title="Pydat2_t* TPythia6::fPydat2">fPydat2</a>-&gt;VCKM[j-1][i-1]  = v; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pydat3_t* <a class="funcname" name="TPythia6:GetPydat3" href="src/TPythia6.h.html#xTNZ0C">GetPydat3</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYDAT3/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMDCY" href="src/TPythia6.h.html#aa75O">GetMDCY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;MDCY[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMDME" href="src/TPythia6.h.html#WHz8O">GetMDME</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;MDME[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetBRAT" href="src/TPythia6.h.html#HBqT_">GetBRAT</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;BRAT[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetKFDP" href="src/TPythia6.h.html#rnaOUD">GetKFDP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;KFDP[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMDCY" href="src/TPythia6.h.html#p3ODpD">SetMDCY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;MDCY[j-1][i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMDME" href="src/TPythia6.h.html#RV9YlD">SetMDME</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;MDME[j-1][i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetBRAT" href="src/TPythia6.h.html#EjzCQ">SetBRAT</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> b)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;BRAT[i-1]      = b; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetKFDP" href="src/TPythia6.h.html#d1ZlNC">SetKFDP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> k)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydat3" title="Pydat3_t* TPythia6::fPydat3">fPydat3</a>-&gt;KFDP[j-1][i-1] = k; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pydat4_t* <a class="funcname" name="TPythia6:GetPydat4" href="src/TPythia6.h.html#JFcKZC">GetPydat4</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYDAT4/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydat4" title="Pydat4_t* TPythia6::fPydat4">fPydat4</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pydatr_t* <a class="funcname" name="TPythia6:GetPydatr" href="src/TPythia6.h.html#d3SzM">GetPydatr</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYDATR/ - random number generator info
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydatr" title="Pydatr_t* TPythia6::fPydatr">fPydatr</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMRPY" href="src/TPythia6.h.html#su4stE">GetMRPY</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydatr" title="Pydatr_t* TPythia6::fPydatr">fPydatr</a>-&gt;MRPY[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetRRPY" href="src/TPythia6.h.html#g3RTXC">GetRRPY</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPydatr" title="Pydatr_t* TPythia6::fPydatr">fPydatr</a>-&gt;RRPY[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMRPY" href="src/TPythia6.h.html#OdsKZC">SetMRPY</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydatr" title="Pydatr_t* TPythia6::fPydatr">fPydatr</a>-&gt;MRPY[i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetRRPY" href="src/TPythia6.h.html#PtVekB">SetRRPY</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> r)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPydatr" title="Pydatr_t* TPythia6::fPydatr">fPydatr</a>-&gt;RRPY[i-1] = r; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pysubs_t* <a class="funcname" name="TPythia6:GetPysubs" href="src/TPythia6.h.html#Ca7vID">GetPysubs</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYSUBS/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMSEL" href="src/TPythia6.h.html#PESQRE">GetMSEL</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;MSEL; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMSELPD" href="src/TPythia6.h.html#R9z42B">GetMSELPD</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;MSELPD; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMSUB" href="src/TPythia6.h.html#O3IITC">GetMSUB</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;MSUB[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetCKIN" href="src/TPythia6.h.html#aSCTiD">GetCKIN</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;CKIN[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><a href="./ListOfTypes.html#Int_t">Int_t</a> <a class="funcname" name="TPythia6:GetKFIN" href="src/TPythia6.h.html#wPsMRB">GetKFIN</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{<span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;KFIN[j+40][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMSEL" href="src/TPythia6.h.html#tgR2JE">SetMSEL</a>(<span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;MSEL      = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMSELPD" href="src/TPythia6.h.html#RD3sjE">SetMSELPD</a>(<span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;MSELPD    = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMSUB" href="src/TPythia6.h.html#OU.tyE">SetMSUB</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;MSUB[i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetCKIN" href="src/TPythia6.h.html#JX3iM">SetCKIN</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> c)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;CKIN[i-1] = c; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetKFIN" href="src/TPythia6.h.html#EFA2o">SetKFIN</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <a href="./ListOfTypes.html#Int_t">Int_t</a> kfin = 1)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPysubs" title="Pysubs_t* TPythia6::fPysubs">fPysubs</a>-&gt;KFIN[j+40][i-1] = kfin; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pypars_t* <a class="funcname" name="TPythia6:GetPypars" href="src/TPythia6.h.html#xNIPi">GetPypars</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYPARS/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMSTP" href="src/TPythia6.h.html#wgFOG">GetMSTP</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;MSTP[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetPARP" href="src/TPythia6.h.html#JCBm1C">GetPARP</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;PARP[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMSTI" href="src/TPythia6.h.html#UwCOG">GetMSTI</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;MSTI[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetPARI" href="src/TPythia6.h.html#RFIm1C">GetPARI</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;PARI[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMSTP" href="src/TPythia6.h.html#IAzmeD">SetMSTP</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;MSTP[i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetPARP" href="src/TPythia6.h.html#S7qoVE">SetPARP</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;PARP[i-1] = p; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMSTI" href="src/TPythia6.h.html#QxxEBB">SetMSTI</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;MSTI[i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetPARI" href="src/TPythia6.h.html#uJsG4B">SetPARI</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> p)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPypars" title="Pypars_t* TPythia6::fPypars">fPypars</a>-&gt;PARI[i-1] = p; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint1_t* <a class="funcname" name="TPythia6:GetPyint1" href="src/TPythia6.h.html#BO1ZIE">GetPyint1</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYINT1/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint1" title="Pyint1_t* TPythia6::fPyint1">fPyint1</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMINT" href="src/TPythia6.h.html#BvpzQ">GetMINT</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint1" title="Pyint1_t* TPythia6::fPyint1">fPyint1</a>-&gt;MINT[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetVINT" href="src/TPythia6.h.html#pjQDeC">GetVINT</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint1" title="Pyint1_t* TPythia6::fPyint1">fPyint1</a>-&gt;VINT[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMINT" href="src/TPythia6.h.html#FWUKdC">SetMINT</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyint1" title="Pyint1_t* TPythia6::fPyint1">fPyint1</a>-&gt;MINT[i-1] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetVINT" href="src/TPythia6.h.html#lUu2zB">SetVINT</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> v)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyint1" title="Pyint1_t* TPythia6::fPyint1">fPyint1</a>-&gt;VINT[i-1] = v; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint2_t* <a class="funcname" name="TPythia6:GetPyint2" href="src/TPythia6.h.html#xSweZD">GetPyint2</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYINT2/ and /PYINT3/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint2" title="Pyint2_t* TPythia6::fPyint2">fPyint2</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint3_t* <a class="funcname" name="TPythia6:GetPyint3" href="src/TPythia6.h.html#BO1Z0C">GetPyint3</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint3" title="Pyint3_t* TPythia6::fPyint3">fPyint3</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint4_t* <a class="funcname" name="TPythia6:GetPyint4" href="src/TPythia6.h.html#N.DLZC">GetPyint4</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYINT4/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint4" title="Pyint4_t* TPythia6::fPyint4">fPyint4</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetMWID" href="src/TPythia6.h.html#lTgfDE">GetMWID</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint4" title="Pyint4_t* TPythia6::fPyint4">fPyint4</a>-&gt;MWID[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetWIDS" href="src/TPythia6.h.html#MvSWGB">GetWIDS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint4" title="Pyint4_t* TPythia6::fPyint4">fPyint4</a>-&gt;WIDS[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetMWID" href="src/TPythia6.h.html#VY3DND">SetMWID</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyint4" title="Pyint4_t* TPythia6::fPyint4">fPyint4</a>-&gt;MWID[i-1]      = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetWIDS" href="src/TPythia6.h.html#h2Y5GD">SetWIDS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> w)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyint4" title="Pyint4_t* TPythia6::fPyint4">fPyint4</a>-&gt;WIDS[j-1][i-1] = w; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint5_t* <a class="funcname" name="TPythia6:GetPyint5" href="src/TPythia6.h.html#R6IG0B">GetPyint5</a>()</span><br />
+<div class="funccomm"><pre> ****** / PYINT5/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint5" title="Pyint5_t* TPythia6::fPyint5">fPyint5</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetNGENPD" href="src/TPythia6.h.html#TpsDg">GetNGENPD</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint5" title="Pyint5_t* TPythia6::fPyint5">fPyint5</a>-&gt;NGENPD; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetNGENPD" href="src/TPythia6.h.html#v89OIC">SetNGENPD</a>(<span class="keyword">int</span> n)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyint5" title="Pyint5_t* TPythia6::fPyint5">fPyint5</a>-&gt;NGENPD = n; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint6_t* <a class="funcname" name="TPythia6:GetPyint6" href="src/TPythia6.h.html#NAC5W">GetPyint6</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYINT6/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint6" title="Pyint6_t* TPythia6::fPyint6">fPyint6</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">char</span>* <a class="funcname" name="TPythia6:GetPROC" href="src/TPythia6.h.html#OiRLiE">GetPROC</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyint6" title="Pyint6_t* TPythia6::fPyint6">fPyint6</a>-&gt;PROC[i][27]=0; <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint6" title="Pyint6_t* TPythia6::fPyint6">fPyint6</a>-&gt;PROC[i]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint7_t* <a class="funcname" name="TPythia6:GetPyint7" href="src/TPythia6.h.html#R6IGg">GetPyint7</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint7" title="Pyint7_t* TPythia6::fPyint7">fPyint7</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint8_t* <a class="funcname" name="TPythia6:GetPyint8" href="src/TPythia6.h.html#U1NBbE">GetPyint8</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint8" title="Pyint8_t* TPythia6::fPyint8">fPyint8</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyint9_t* <a class="funcname" name="TPythia6:GetPyint9" href="src/TPythia6.h.html#YwS81D">GetPyint9</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyint9" title="Pyint9_t* TPythia6::fPyint9">fPyint9</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pymssm_t* <a class="funcname" name="TPythia6:GetPymssm" href="src/TPythia6.h.html#o0LPBD">GetPymssm</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYMSSM/ - indexing in FORTRAN starts
+ from 0!
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPymssm" title="Pymssm_t* TPythia6::fPymssm">fPymssm</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">int</span> <a class="funcname" name="TPythia6:GetIMSS" href="src/TPythia6.h.html#uxeGQE">GetIMSS</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPymssm" title="Pymssm_t* TPythia6::fPymssm">fPymssm</a>-&gt;IMSS[i]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetRMSS" href="src/TPythia6.h.html#M4r58C">GetRMSS</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPymssm" title="Pymssm_t* TPythia6::fPymssm">fPymssm</a>-&gt;RMSS[i]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetIMSS" href="src/TPythia6.h.html#Noet5C">SetIMSS</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> m)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPymssm" title="Pymssm_t* TPythia6::fPymssm">fPymssm</a>-&gt;IMSS[i] = m; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetRMSS" href="src/TPythia6.h.html#FdjuHE">SetRMSS</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> r)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPymssm" title="Pymssm_t* TPythia6::fPymssm">fPymssm</a>-&gt;RMSS[i] = r; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyssmt_t* <a class="funcname" name="TPythia6:GetPyssmt" href="src/TPythia6.h.html#qygGa">GetPyssmt</a>()</span><br />
+<div class="funccomm"><pre> ****** /PYSSMT/
+</pre></div>
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetZMIX" href="src/TPythia6.h.html#npYiS">GetZMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;ZMIX[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetUMIX" href="src/TPythia6.h.html#MH7..D">GetUMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;UMIX[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetVMIX" href="src/TPythia6.h.html#okddT">GetVMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;VMIX[j-1][i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetSMZ" href="src/TPythia6.h.html#npJZhC">GetSMZ</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;SMZ[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">double</span> <a class="funcname" name="TPythia6:GetSMW" href="src/TPythia6.h.html#RHs2DB">GetSMW</a>(<span class="keyword">int</span> i)</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;SMW[i-1]; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetZMIX" href="src/TPythia6.h.html#j0b0JB">SetZMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> z)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;ZMIX[j-1][i-1] = z; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetUMIX" href="src/TPythia6.h.html#fBDNHB">SetUMIX</a>(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">double</span> u)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;UMIX[j-1][i-1] = u; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetSMZ" href="src/TPythia6.h.html#l3I23C">SetSMZ</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> s)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;SMZ[i-1]       = s; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname"><span class="keyword">void</span> <a class="funcname" name="TPythia6:SetSMW" href="src/TPythia6.h.html#PL1p3C">SetSMW</a>(<span class="keyword">int</span> i, <span class="keyword">double</span> s)</span><br />
+
+<div class="code"><code class="inlinecode">{ <a href="./TPythia6.html#TPythia6:fPyssmt" title="Pyssmt_t* TPythia6::fPyssmt">fPyssmt</a>-&gt;SMW[i-1]       = s; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pyints_t* <a class="funcname" name="TPythia6:GetPyints" href="src/TPythia6.h.html#dhhtg">GetPyints</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPyints" title="Pyints_t* TPythia6::fPyints">fPyints</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+<div class="funcdoc"><span class="funcname">Pybins_t* <a class="funcname" name="TPythia6:GetPybins" href="src/TPythia6.h.html#pB8im">GetPybins</a>()</span><br />
+
+<div class="code"><code class="inlinecode">{ <span class="keyword">return</span> <a href="./TPythia6.html#TPythia6:fPybins" title="Pybins_t* TPythia6::fPybins">fPybins</a>; }</code></div>
+<div style="clear:both;"></div>
+</div>
+
+<br />
+<!--SIGNATURE-->
+<div id="footer">
+
+<em>&raquo; Last changed: Fri May 16 13:20:59 2025 </em><em>&raquo; Last generated: 2025-05-16 13:20</em><br />
+<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
+</div>
+</div>
+</body>
+</html>
