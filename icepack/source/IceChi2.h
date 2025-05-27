@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceChi2.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "TROOT.h"
 #include "TTask.h"
 #include "TString.h"
@@ -18,6 +16,8 @@
 #include "NcSample.h"
 #include "IceEvent.h"
 #include "IceGOM.h"
+
+/** TTask derived class to perform Chi-squared track fitting. **/
 
 class IceChi2 : public TTask
 {

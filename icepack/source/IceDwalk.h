@@ -4,13 +4,13 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceDwalk.h 77 2013-01-24 10:33:57Z nickve $
-
 #include "TArrayI.h"
 
 #include "NcSample.h"
 
 #include "IceRecoBase.h"
+
+/** IceRecoBase derived TTask processor to perform (improved) direct walk reconstruction. **/
 
 class IceDwalk : public IceRecoBase
 {

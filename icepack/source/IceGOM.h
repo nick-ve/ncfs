@@ -4,9 +4,9 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceGOM.h 63 2012-07-13 14:17:43Z nickve $
-
 #include "NcEvent.h"
+
+/** Signal (Hit) handling of a generic IceCube Optical Module (GOM). **/
 
 class IceGOM : public NcDevice
 {

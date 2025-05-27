@@ -4,13 +4,13 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceDwalkx.h 63 2012-07-13 14:17:43Z nickve $
-
 #include "TArrayI.h"
 
 #include "NcSample.h"
 
 #include "IceLinefit.h"
+
+/** TTask derived class to perform (improved) direct walk reconstruction. **/
 
 class IceDwalkx : public IceLinefit
 {

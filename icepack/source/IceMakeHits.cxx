@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceMakeHits.cxx 57 2012-02-07 10:05:54Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceMakeHits
+~~~
 // Class IceMakeHits
 // TTask derived class to perform hit extraction from waveforms.
 //
@@ -97,6 +99,8 @@
 //
 //--- Author: Nick van Eijndhoven and Garmt de Vries-Uiterweerd 15-jan-2007 Utrecht University
 //- Modified: NvE $Date: 2012-02-07 11:05:54 +0100 (Tue, 07 Feb 2012) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceMakeHits.h"
@@ -108,7 +112,12 @@ ClassImp(IceMakeHits) // Class implementation to enable ROOT I/O
 
 IceMakeHits::IceMakeHits(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fEvt=0;
  // Parameters for Amanda TWR hit extraction
  fBasefracA=0.5;
@@ -128,7 +137,12 @@ IceMakeHits::IceMakeHits(const char* name,const char* title) : TTask(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceMakeHits::~IceMakeHits()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if (fUseNamesI)
  {
   delete fUseNamesI;
@@ -138,89 +152,146 @@ IceMakeHits::~IceMakeHits()
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetBasefracA(Float_t val)
 {
+/**
+~~~
 // Set baseline fractional update for Amanda TWR extraction.
 // The default as set in the constructor of this class is 0.5.
+~~~
+**/
+
  fBasefracA=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetSigmaA(Float_t val)
 {
+/**
+~~~
 // Set clipping window width for Amanda TWR extraction.
 // The default as set in the constructor of this class is 1.5.
+~~~
+**/
+
  fSigmaA=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetMaxPeaksA(Int_t val)
 {
+/**
+~~~
 // Set maximum number of peaks in a waveform for Amanda TWR extraction.
 // The default as set in the constructor of this class is 10.
+~~~
+**/
+
  fMaxPeaksA=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetMinPulseHeightA(Float_t val)
 {
+/**
+~~~
 // Set minimum required pulse height for Amanda TWR extraction.
 // This is used only for narrow pulses that cannot be handled with TSpectrum.
 // The default as set in the constructor of this class is 50.
+~~~
+**/
+
  fMinPulseHeightA=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetThresholdA(Float_t val)
 {
+/**
+~~~
 // Set threshold for use in analysis of narrow pulses for Amanda TWR extraction.
 // A peak is assumed to start when the signal rises above threshold*maxval,
 // where maxval is the maximum value found in the waveform.
 // The default as set in the constructor of this class is 0.2.
+~~~
+**/
+
  fThresholdA=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetBasefracI(Float_t val)
 {
+/**
+~~~
 // Set baseline fractional update for IceCube waveform hit extraction.
 // The default as set in the constructor of this class is 0.5.
+~~~
+**/
+
  fBasefracI=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetSigmaI(Float_t val)
 {
+/**
+~~~
 // Set clipping window width for IceCube waveform hit extraction.
 // The default as set in the constructor of this class is 2.
+~~~
+**/
+
  fSigmaI=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetMaxPeaksI(Int_t val)
 {
+/**
+~~~
 // Set maximum number of peaks in a waveform for IceCube hit extraction.
 // The default as set in the constructor of this class is 10.
+~~~
+**/
+
  fMaxPeaksI=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetPeakAcceptanceLevelI(Float_t val)
 {
+/**
+~~~
 // Set the IceCube minimum height of a peak above the baseline, in terms of baseline spread.
 // The default as set in the constructor of this class is 5.
+~~~
+**/
+
  fPeakAcceptanceLevelI=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetMinPulseHeightI(Float_t val)
 {
+/**
+~~~
 // Set minimum required pulse height for IceCube waveform hit extraction.
 // This is used only for narrow pulses that cannot be handled with TSpectrum.
 // The default as set in the constructor of this class is 0.
+~~~
+**/
+
  fMinPulseHeightI=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetThresholdI(Float_t val)
 {
+/**
+~~~
 // Set threshold for use in analysis of narrow pulses for IceCube waveform hit extraction.
 // A peak is assumed to start when the signal rises above threshold*maxval,
 // where maxval is the maximum value found in the waveform.
 // The default as set in the constructor of this class is 0.2.
+~~~
+**/
+
  fThresholdI=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::SetWaveformNameI(const char* name)
 {
+/**
+~~~
 // Set the name of a specific IceCube waveform to be analysed.
 //
 // Notes :
@@ -233,6 +304,8 @@ void IceMakeHits::SetWaveformNameI(const char* name)
 // 3) The search for the corresponding waveform will be performed on basis of
 //    a pattern name matching, so the functionality is like searching with "wildcards".
 //    However, the pattern needs to match exactly, i.e. the search is case sensitive.
+~~~
+**/
 
  if (fUseNamesI)
  {
@@ -246,6 +319,8 @@ void IceMakeHits::SetWaveformNameI(const char* name)
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::UseWaveformNameI(TString name)
 {
+/**
+~~~
 // Specification of the name(s) of the IceCube waveforms to be analysed.
 //
 // Consecutive invokations of this memberfunction with different names
@@ -267,6 +342,8 @@ void IceMakeHits::UseWaveformNameI(TString name)
 // For example, UseWaveformNameI("ATWD") will select all the waveforms which have the
 // pattern "ATWD" in their name.
 // However, the pattern needs to match exactly, i.e. the search is case sensitive.
+~~~
+**/
 
  if (!fUseNamesI)
  {
@@ -308,7 +385,11 @@ void IceMakeHits::UseWaveformNameI(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::PrintWaveformNamesI() const
 {
+/**
+~~~
 // Print the name (pattern) of all the InIce waveforms which will be analysed.
+~~~
+**/
 
  cout << " *IceMakeHits::PrintWaveformNamesI* InIce waveform names (or patterns) that will be analysed." << endl;
  if (!fUseNamesI)
@@ -331,7 +412,11 @@ void IceMakeHits::PrintWaveformNamesI() const
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the feature extraction.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));
@@ -393,7 +478,11 @@ void IceMakeHits::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::Amanda()
 {
+/**
+~~~
 // Hit extraction from the Amanda TWR data.
+~~~
+**/
 
  // All Amanda OMs with a signal
  TObjArray* aoms=fEvt->GetDevices("IceAOM");
@@ -442,7 +531,7 @@ void IceMakeHits::Amanda()
   omx->SetDecalFunction(0,"LE");
   omx->SetDecalFunction(0,"TOT");
   // Should we skip OMs that we know from the dbase to have problems ?
-////  if (omx->GetDeadValue("ADC") || omx->GetDeadValue("LE") || omx->GetDeadValue("TOT")) continue;
+//@@  if (omx->GetDeadValue("ADC") || omx->GetDeadValue("LE") || omx->GetDeadValue("TOT")) continue;
 
   // Investigate all waveforms for this OM
   for (Int_t iwf=1; iwf<=omx->GetNwaveforms(); iwf++)
@@ -644,7 +733,11 @@ void IceMakeHits::Amanda()
 ///////////////////////////////////////////////////////////////////////////
 void IceMakeHits::IceCube()
 {
+/**
+~~~
 // Hit extraction from all IceCube (incl. IceTop) waveform (ATWD and/or FADC) data.
+~~~
+**/
 
  // All IceCube (incl. IceTop)  DOMs with a signal
  TObjArray* idoms=fEvt->GetDevices("IceDOM");
@@ -720,7 +813,7 @@ void IceMakeHits::IceCube()
   omx->SetDecalFunction(0,"TOT");
 
   // Should we skip OMs that we know from the dbase to have problems ?
-////  if (omx->GetDeadValue("ADC") || omx->GetDeadValue("LE") || omx->GetDeadValue("TOT")) continue;
+//@@  if (omx->GetDeadValue("ADC") || omx->GetDeadValue("LE") || omx->GetDeadValue("TOT")) continue;
 
   // Investigate all requested waveforms for this OM
   nwf=omx->GetNwaveforms();

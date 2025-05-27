@@ -14,6 +14,8 @@
 #include "IceEvent.h"
 #include "IceAOM.h"
 
+/** TTask derived class to perform cross talk hit correction. **/
+
 class IceXtalk : public TTask
 {
  public :

@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceGOM.cxx 63 2012-07-13 14:17:43Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceGOM
+~~~
 // Class IceGOM
 // Signal/Hit handling of a generic IceCube Optical Module (GOM).
 // Basically this class provides an IceCube tailored user interface
@@ -108,6 +110,8 @@
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
 //- Modified: NvE $Date: 2012-07-13 16:17:43 +0200 (Fri, 13 Jul 2012) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "IceGOM.h"
@@ -117,21 +121,35 @@ ClassImp(IceGOM) // Class implementation to enable ROOT I/O
  
 IceGOM::IceGOM() : NcDevice()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 IceGOM::~IceGOM()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 IceGOM::IceGOM(const IceGOM& m) : NcDevice(m)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceGOM::GetString(Int_t id) const
 {
+/**
+~~~
 // Provide the corresponding string number for this module.
 // Note : Amanda string numbers will have negative values.
 //
@@ -142,6 +160,8 @@ Int_t IceGOM::GetString(Int_t id) const
 // module will be returned.
 //
 // The default value is id=0;
+~~~
+**/
 
  Int_t omid=GetUniqueID();
  if (id>0) omid=id;
@@ -184,6 +204,8 @@ Int_t IceGOM::GetString(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceGOM::GetLevel(Int_t id) const
 {
+/**
+~~~
 // Provide the corresponding level on the string for this module.
 // Level=j indicates the j-th module on the string, where j=1
 // corresponds to the module at the top of the string.
@@ -196,6 +218,8 @@ Int_t IceGOM::GetLevel(Int_t id) const
 // The default value is id=0;
 //              
 // Note : level 61,62,63,64 indicates IceTop DOM's.
+~~~
+**/
 
  Int_t omid=GetUniqueID();
  if (id>0) omid=id;
@@ -240,9 +264,13 @@ Int_t IceGOM::GetLevel(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceGOM::GetOMId(Int_t string,Int_t level) const
 {
+/**
+~~~
 // Provide OM identifier based on the string and level indicators.
 // This memberfunction makes use of the inheritance info, which means
 // that for Amanda OM's one may either use negative or positive string numbers.
+~~~
+**/
 
  Int_t omid=0;
  Int_t s=0,l=0;
@@ -265,6 +293,8 @@ Int_t IceGOM::GetOMId(Int_t string,Int_t level) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t IceGOM::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString name,Int_t mode,Int_t vgroup) const
 {
+/**
+~~~
 // Provide the time residual (in nanoseconds) of a recorded signal w.r.t. a track.
 //
 // Input arguments :
@@ -288,6 +318,8 @@ Double_t IceGOM::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString nam
 //
 // For further details concerning the definition and calculation of the
 // time residual please refer to Astroparticle Physics 28 (2007) 456.
+~~~
+**/
 
  Double_t tres=-99999;
 
@@ -338,6 +370,8 @@ Double_t IceGOM::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString nam
 ///////////////////////////////////////////////////////////////////////////
 Double_t IceGOM::GetTimeResidual(NcEvent* evt,NcTrack* t,Int_t j,TString name,Int_t mode,Int_t vgroup) const
 {
+/**
+~~~
 // Provide the time residual (in nanoseconds) of the j-th hit (first hit is at j=1) w.r.t. a track.
 //
 // Input arguments :
@@ -361,6 +395,8 @@ Double_t IceGOM::GetTimeResidual(NcEvent* evt,NcTrack* t,Int_t j,TString name,In
 //
 // For further details concerning the definition and calculation of the
 // time residual please refer to Astroparticle Physics 28 (2007) 456.
+~~~
+**/
 
  NcSignal* s=GetHit(j);
  Double_t tres=GetTimeResidual(evt,t,s,name,mode,vgroup);
@@ -369,6 +405,8 @@ Double_t IceGOM::GetTimeResidual(NcEvent* evt,NcTrack* t,Int_t j,TString name,In
 ///////////////////////////////////////////////////////////////////////////
 TObject* IceGOM::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -377,6 +415,8 @@ TObject* IceGOM::Clone(const char* name) const
 // to store either IceGOM objects or objects derived from IceGOM
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  IceGOM* m=new IceGOM(*this);
  if (name)

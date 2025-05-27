@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceMakeHits.h 14 2010-07-20 11:42:33Z nickve $
-
 #include "TROOT.h"
 #include "TTask.h"
 #include "TString.h"
@@ -20,6 +18,8 @@
 #include "IceAOM.h"
 #include "IceIDOM.h"
 #include "IceTDOM.h"
+
+/** TTask derived class to perform hit extraction from waveforms. **/
 
 class IceMakeHits : public TTask
 {

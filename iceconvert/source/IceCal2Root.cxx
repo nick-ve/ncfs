@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceCal2Root.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceCal2Root
+~~~
 // Class IceCal2Root
 // Conversion of Amanda (ascii) calibration data into a NcObjMatrix objects
 // containing the complete OM position, calibration, Xtalk etc... database.
@@ -164,6 +166,8 @@
 //
 //--- Author: Nick van Eijndhoven 09-aug-2005 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceCal2Root.h"
@@ -173,7 +177,11 @@ ClassImp(IceCal2Root) // Class implementation to enable ROOT I/O
 
 IceCal2Root::IceCal2Root(const char* name,const char* title) : NcJob(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
  fAmacalFileName="";
  fTWRDaqFileName="";
  fRootFileName="";
@@ -186,7 +194,11 @@ IceCal2Root::IceCal2Root(const char* name,const char* title) : NcJob(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceCal2Root::~IceCal2Root()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fPdg)
  {
@@ -209,33 +221,53 @@ IceCal2Root::~IceCal2Root()
 ///////////////////////////////////////////////////////////////////////////
 void IceCal2Root::SetAmacalibFile(TString name)
 {
+/**
+~~~
 // Set the name of the Amacalib MuDaq input file.
+~~~
+**/
  fAmacalFileName=name;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceCal2Root::SetTWRDaqFile(TString name)
 {
+/**
+~~~
 // Set the name of the TWRDaq calibration input file.
+~~~
+**/
  fTWRDaqFileName=name;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceCal2Root::SetOutputFile(TString name)
 {
+/**
+~~~
 // Set the name of the ROOT output file.
+~~~
+**/
  fRootFileName=name;
 }
 ///////////////////////////////////////////////////////////////////////////
 TDatabasePDG* IceCal2Root::GetPDG()
 {
+/**
+~~~
 // Provide pointer to the PDG database
+~~~
+**/
  return fPdg;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcObjMatrix* IceCal2Root::GetOMdbase(TString name)
 {
+/**
+~~~
 // Provide pointer to the requested OM geometry, calib. etc... database.
 // Options for the "name" specification are : MuDaq, TWRDaq.
 // For backward compatibility the default is name="MuDaq".
+~~~
+**/
 
  if (name=="MuDaq") return fMuDaqdb;
  if (name=="TWRDaq") return fTWRDaqdb;
@@ -244,6 +276,8 @@ NcObjMatrix* IceCal2Root::GetOMdbase(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceCal2Root::Exec(Option_t* opt)
 {
+/**
+~~~
 // Job to convert the (ascii) database info into the IcePack structure.
 //
 // Notes :
@@ -258,6 +292,8 @@ void IceCal2Root::Exec(Option_t* opt)
 // 2) Creation of a TFolder via the argument of the ExecuteJob statement
 //    makes all created database objects accessible to subsequent tasks
 //    via the TFolder::FindObject facility.
+~~~
+**/
 
  if (fOutfile)
  {
@@ -324,7 +360,11 @@ void IceCal2Root::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceCal2Root::GetMuDaqData()
 {
+/**
+~~~
 // Obtain all the MuDaq geometry, calibration and Xtalk data.
+~~~
+**/
 
  if (fAmacalFileName=="")
  {
@@ -394,9 +434,9 @@ void IceCal2Root::GetMuDaqData()
  // Slots with hardware parameters
  om.AddNamedSlot("TYPE");
  om.AddNamedSlot("ORIENT");
-/// om.AddNamedSlot("THRESH");
-/// om.AddNamedSlot("SENSIT");
-/// om.AddNamedSlot("READOUT"); // 0=unknown 1=electrical 2=optical 3=digital
+//@@@ om.AddNamedSlot("THRESH");
+//@@@ om.AddNamedSlot("SENSIT");
+//@@@ om.AddNamedSlot("READOUT"); // 0=unknown 1=electrical 2=optical 3=digital
 
  fInput.seekg(0); // Position at beginning of file
  fInput >> dec;   // Make sure all integers starting with 0 are taken in decimal format
@@ -404,9 +444,9 @@ void IceCal2Root::GetMuDaqData()
  TString s;
  Int_t jmod,type,serial,string,ix,iy,iz,ori;
  Float_t costh=0;
-/// Float_t thresh=0;
-/// Float_t sensit=1;
-/// Float_t readout=0;
+//@@@ Float_t thresh=0;
+//@@@ Float_t sensit=1;
+//@@@ Float_t readout=0;
  Double_t pos[3]={0,0,0};
  Float_t ped,beta,alpha;
  Int_t pol;
@@ -436,9 +476,9 @@ void IceCal2Root::GetMuDaqData()
    if (ori==2) costh=-1;
    omx->SetSignal(type,"TYPE");
    omx->SetSignal(costh,"ORIENT");
-///   omx->SetSignal(thresh,"THRESH");
-///   omx->SetSignal(sensit,"SENSIT");
-///   omx->SetSignal(readout,"READOUT");
+//@@@   omx->SetSignal(thresh,"THRESH");
+//@@@   omx->SetSignal(sensit,"SENSIT");
+//@@@   omx->SetSignal(readout,"READOUT");
   }
   else if (s == "T") // Read the Time calibration constants
   {
@@ -574,7 +614,11 @@ void IceCal2Root::GetMuDaqData()
 ///////////////////////////////////////////////////////////////////////////
 void IceCal2Root::GetTWRDaqData()
 {
+/**
+~~~
 // Obtain all the TWRDaq geometry and calibration data.
+~~~
+**/
 
  if (fTWRDaqFileName=="")
  {

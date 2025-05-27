@@ -4,9 +4,9 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceDCDOM.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "IceIDOM.h"
+
+/** Signal (Hit) handling of an In-Ice DeepCore Digital Optical Module (DCDOM). **/
 
 class IceDCDOM : public IceIDOM
 {

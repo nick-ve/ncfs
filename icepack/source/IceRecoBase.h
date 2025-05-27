@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceRecoBase.h 83 2013-03-15 15:22:45Z nickve $
-
 #include "TROOT.h"
 #include "TTask.h"
 #include "TString.h"
@@ -14,6 +12,8 @@
 #include "NcJob.h"
 #include "IceEvent.h"
 #include "IceGOM.h"
+
+/** TTask derived base class for the various IceCube reconstruction tasks. **/
 
 class IceRecoBase : public TTask
 {

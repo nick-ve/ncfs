@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceChi2.cxx 55 2012-01-03 13:30:57Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceChi2
+~~~
 // Class IceChi2
 // TTask derived class to perform track fitting via chi-squared minimisation.
 //
@@ -144,6 +146,8 @@
 //
 //--- Author: Nick van Eijndhoven 16-may-2006 Utrecht University
 //- Modified: NvE $Date: 2012-01-03 14:30:57 +0100 (Tue, 03 Jan 2012) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceChi2.h"
@@ -162,7 +166,12 @@ ClassImp(IceChi2) // Class implementation to enable ROOT I/O
 
 IceChi2::IceChi2(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fFirst=1;
  fPrint=-2;
  fSelhits=2;
@@ -184,7 +193,12 @@ IceChi2::IceChi2(const char* name,const char* title) : TTask(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceChi2::~IceChi2()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if (fUseNames)
  {
   delete fUseNames;
@@ -219,7 +233,11 @@ IceChi2::~IceChi2()
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the hit fitting procedure.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));
@@ -524,18 +542,24 @@ void IceChi2::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::SetPrintLevel(Int_t level)
 {
+/**
+~~~
 // Set the fitter (Minuit) print level.
 // See the TFitter and TMinuit docs for details.
 //
 // Note : level=-2 suppresses also all fit processor warnings.
 //        
 // The default in the constructor is level=-2. 
+~~~
+**/
 
  fPrint=level;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::UseTracks(TString classname,Int_t n)
 {
+/**
+~~~
 // Specification of the first guess tracks to be used.
 //
 // classname : Specifies the first guess algorithm (e.g. "IceDwalk");
@@ -556,6 +580,8 @@ void IceChi2::UseTracks(TString classname,Int_t n)
 //
 // This will use the first 5 IceDwalk, the first 2 IceLinefit and all the
 // IceJams tracks which are encountered in the event structure.
+~~~
+**/
 
  if (!fUseNames)
  {
@@ -588,6 +614,8 @@ void IceChi2::UseTracks(TString classname,Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::SelectHits(Int_t mode)
 {
+/**
+~~~
 // Specification of the hits to be used in the minimisation.
 //
 // mode = 0 : All hit cleaning survived hits of the complete event are used
@@ -596,12 +624,16 @@ void IceChi2::SelectHits(Int_t mode)
 //            (e.g. Amanda, InIce) that were used to construct the first guess track.
 //
 // By default mode=2 is set in the constructor of this class.
+~~~
+**/
 
  if (mode>=0 && mode<=2) fSelhits=mode;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::SetVgroupUsage(Int_t flag)
 {
+/**
+~~~
 // (De)activate the distinction between v_phase and v_group of the Cherenkov light.
 //
 // flag = 0 : No distinction between v_phase and v_group
@@ -609,41 +641,63 @@ void IceChi2::SetVgroupUsage(Int_t flag)
 //
 // By default the distinction between v_phase and v_group is activated
 // in the constructor of this class.
+~~~
+**/
+
  fVgroup=flag;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::SetTrackName(TString s)
 {
+/**
+~~~
 // Set (alternative) name identifier for the produced tracks.
 // This allows unique identification of (newly) produced pandel tracks
 // in case of re-processing of existing data with different criteria.
 // By default the produced tracks have the name "IceChi2" which is
 // set in the constructor of this class.
+~~~
+**/
+
  fTrackname=s;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::SetCharge(Float_t charge)
 {
+/**
+~~~
 // Set user defined charge for the produced tracks.
 // This allows identification of these tracks on color displays.
 // By default the produced tracks have charge=0 which is set in the
 // constructor of this class.
+~~~
+**/
+
  fCharge=charge;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::SetPenalty(Float_t val)
 {
+/**
+~~~
 // Set user defined psi penalty value (in dB) for distance-time points that
 // fall outside the validity rectangle.
 // This allows investigation/tuning of the sensitivity to hits with
 // extreme distance and/or time residual values.
 // By default the penalty val=0 is set in the constructor of this class.
+~~~
+**/
+
  fPenalty=val;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceChi2::FitFCN(Int_t&,Double_t*,Double_t& f,Double_t* x,Int_t)
 {
+/**
+~~~
 // The chi-squared function used for the minimisation process.
+~~~
+**/
 
  const Float_t c=0.299792458;        // Light speed in vacuum in meters per ns
  const Float_t npice=1.31768387;     // Phase refractive index (c/v_phase) of ice
@@ -709,11 +763,15 @@ void IceChi2::FitFCN(Int_t&,Double_t*,Double_t& f,Double_t* x,Int_t)
 ///////////////////////////////////////////////////////////////////////////
 Double_t IceChi2::GetPsi(NcTrack* t)
 {
+/**
+~~~
 // Provide Bayesian psi value for a track w.r.t. a Convoluted Pandel PDF.
 // The Baysian psi value is defined as -loglikelihood in a decibel scale.
 // This implies psi=-10*log10(L) where L=p(D|HI) being the likelihood of
 // the data D under the hypothesis H and prior information I.
 // In case of error or incomplete information a psi value of -1 is returned.
+~~~
+**/
 
  const Float_t c=0.299792458;        // Light speed in vacuum in meters per ns
  const Float_t npice=1.31768387;     // Phase refractive index (c/v_phase) of ice

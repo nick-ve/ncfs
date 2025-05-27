@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceXtalk
+~~~
 // Class IceXtalk
 // TTask derived class to perform cross talk hit correction.
 //
@@ -75,6 +79,8 @@
 //
 //--- Author: Nick van Eijndhoven 11-aug-2005 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  15:16Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceXtalk.h"
@@ -84,7 +90,12 @@ ClassImp(IceXtalk) // Class implementation to enable ROOT I/O
 
 IceXtalk::IceXtalk(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fCalfile=0;
  fOmdb=0;
  fPmin=0.5;
@@ -93,7 +104,12 @@ IceXtalk::IceXtalk(const char* name,const char* title) : TTask(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceXtalk::~IceXtalk()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if (fCalfile)
  {
   delete fCalfile;
@@ -103,18 +119,27 @@ IceXtalk::~IceXtalk()
 ///////////////////////////////////////////////////////////////////////////
 void IceXtalk::SetOMdbase(NcObjMatrix* omdb)
 {
+/**
+~~~
 // Set the pointer to the OM database.
 // Note : this will overrule a previously attached database. 
+~~~
+**/
+
  fOmdb=omdb;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceXtalk::SetCalibFile(TString name)
 {
+/**
+~~~
 // Set the calibration ROOT file as created with IceCal2Root.
 // Note : this will overrule a previously attached database.
 //
 // Environment variables may be used as $(...) in the filenname for convenience.
 // For example "$(HOME)/my-data/calibrations.root".
+~~~
+**/
 
  // Expand the path name of the provided input file
  name=gSystem->ExpandPathName(name.Data());
@@ -130,19 +155,33 @@ void IceXtalk::SetCalibFile(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceXtalk::SetMinProb(Float_t pmin)
 {
+/**
+~~~
 // Set the minimal probability for cross talk induction.
+~~~
+**/
+
  fPmin=pmin;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceXtalk::SetXtalkPE(Float_t pe)
 {
+/**
+~~~
 // Set the nominal Xtalk signal in photo-electron equivalent.
+~~~
+**/
+
  fPe=pe;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceXtalk::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of cross talk hit correction.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));

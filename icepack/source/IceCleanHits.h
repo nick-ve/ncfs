@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceCleanHits.h 57 2012-02-07 10:05:54Z nickve $
-
 #include "TROOT.h"
 #include "TTask.h"
 #include "TString.h"
@@ -16,6 +14,8 @@
 #include "IceTDOM.h"
 #include "IceICDOM.h"
 #include "IceDCDOM.h"
+
+/** TTask derived class to perform hit cleaning. **/
 
 class IceCleanHits : public TTask
 {

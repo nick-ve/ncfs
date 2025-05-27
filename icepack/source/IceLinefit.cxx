@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceLinefit.cxx 72 2013-01-21 13:13:40Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceLinefit
+~~~
 // Class IceLinefit
 // IceRecoBase derived TTask processor to perform a linefit track reconstruction.
 //
@@ -125,6 +127,8 @@
 //
 //--- Author: Nick van Eijndhoven 10-mar-2006 Utrecht University
 //- Modified: NvE $Date: 2013-01-21 14:13:40 +0100 (Mon, 21 Jan 2013) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceLinefit.h"
@@ -134,7 +138,11 @@ ClassImp(IceLinefit) // Class implementation to enable ROOT I/O
 
 IceLinefit::IceLinefit(const char* name,const char* title) : IceRecoBase(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  SetCleaned(0,"A");
  SetCleaned(0,"I");
@@ -175,12 +183,20 @@ IceLinefit::IceLinefit(const char* name,const char* title) : IceRecoBase(name,ti
 ///////////////////////////////////////////////////////////////////////////
 IceLinefit::~IceLinefit()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceLinefit::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the linefit reconstruction.
+~~~
+**/
 
  // Obtain a pointer to the parent NcJob of this reconstruction task
  TString name=opt;
@@ -251,8 +267,12 @@ void IceLinefit::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceLinefit::Amanda()
 {
+/**
+~~~
 // Performing the linefit complete event reconstruction for Amanda OMs.
 // The return argument indicates whether (1) or not (0) a track has been found
+~~~
+**/
 
  if (fMaxhitsA<0) return 0;
 
@@ -277,8 +297,12 @@ Int_t IceLinefit::Amanda()
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceLinefit::InIce()
 {
+/**
+~~~
 // Performing the linefit complete event reconstruction for all InIce DOMs.
 // The return argument indicates whether (1) or not (0) a track has been found
+~~~
+**/
 
  if (fMaxhitsI<0) return 0;
 
@@ -303,8 +327,12 @@ Int_t IceLinefit::InIce()
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceLinefit::IceCube()
 {
+/**
+~~~
 // Performing the linefit complete event reconstruction for standard IceCube InIce DOMs.
 // The return argument indicates whether (1) or not (0) a track has been found
+~~~
+**/
 
  if (fMaxhitsIC<0) return 0;
 
@@ -329,8 +357,12 @@ Int_t IceLinefit::IceCube()
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceLinefit::DeepCore()
 {
+/**
+~~~
 // Performing the linefit complete event reconstruction for DeepCore DOMs.
 // The return argument indicates whether (1) or not (0) a track has been found
+~~~
+**/
 
  if (fMaxhitsDC<0) return 0;
 
@@ -355,8 +387,12 @@ Int_t IceLinefit::DeepCore()
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceLinefit::Tracks()
 {
+/**
+~~~
 // Performing the linefit track based associated hit reconstruction.
 // The return argument indicates whether (1) or not (0) a track has been found
+~~~
+**/
 
  if (!fUseNames) return 0;
 
@@ -426,7 +462,11 @@ Int_t IceLinefit::Tracks()
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* IceLinefit::Reconstruct(TObjArray* arr,Int_t cln,Int_t minmod,Int_t maxmod,Int_t maxhits,Int_t minahits,Int_t minamods,Int_t slc)
 {
+/**
+~~~
 // Implementation of the linefit reconstruction algorithm.
+~~~
+**/
 
  if (maxhits<0) return 0;
 

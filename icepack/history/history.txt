@@ -237,3 +237,4 @@
                 were updated accordingly. This makes this icepack version both backward compatible and forward compatible with ROOT6. 
                 The version indicator in NcVersion has been updated to 5.41.
                 *** Note : NCFS versions up to 5.41 (incl.) will NOT yet be compatible with ROOT6 because of lacking Pythia6 support ***
+27-may-2025 NvE The docs sections in the .h and .cxx files modified, such that they satisfy both the THtml and Doxygen format. 

@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceF2k.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "TFile.h"
 #include "TTree.h"
 #include "TString.h"
@@ -20,6 +18,8 @@
 #include "IceEvent.h"
 
 #include "rdmc.h"
+
+/** Job for conversion of F2K data into IceEvent physics event structures. **/
 
 class IceF2k : public NcJob
 {

@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceF2k.cxx 127 2016-05-27 09:04:55Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceF2k
+~~~
 // Class IceF2k
 // Conversion of Amanda F2K data into IceEvent physics event structures.
 // This class is derived from NcJob providing a task-based processing
@@ -139,6 +141,8 @@
 //
 //--- Author: Nick van Eijndhoven 11-mar-2005 Utrecht University
 //- Modified: NvE $Date: 2016-05-27 11:04:55 +0200 (Fri, 27 May 2016) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceF2k.h"
@@ -148,8 +152,12 @@ ClassImp(IceF2k) // Class implementation to enable ROOT I/O
 
 IceF2k::IceF2k(const char* name,const char* title) : NcJob(name,title)
 {
+/**
+~~~
 // Default constructor.
 // By default maxevent=-1, split=0, bsize=32000, printfreq=1.
+~~~
+**/
 
  fSplit=0;
  fBsize=32000;
@@ -170,7 +178,11 @@ IceF2k::IceF2k(const char* name,const char* title) : NcJob(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceF2k::~IceF2k()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fInfiles)
  {
@@ -205,43 +217,70 @@ IceF2k::~IceF2k()
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetMaxEvents(Int_t n)
 {
+/**
+~~~
 // Set the maximum number of events to be processed.
 // n=-1 implies processing of the complete input file, which is the default
 // initialisation in the constructor.
+~~~
+**/
+
  fMaxevt=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetPrintFreq(Int_t f)
 {
+/**
+~~~
 // Set the printfrequency to produce info every f events.
 // f=1 is the default initialisation in the constructor.
+~~~
+**/
+
  if (f>=0) fPrintfreq=f;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetSplitLevel(Int_t split)
 {
+/**
+~~~
 // Set the split level for the ROOT data file.
 // split=0 is the default initialisation in the constructor.
+~~~
+**/
+
  if (split>=0) fSplit=split;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetBufferSize(Int_t bsize)
 {
+/**
+~~~
 // Set the buffer size for the ROOT data file.
 // bsize=32000 is the default initialisation in the constructor.
+~~~
+**/
+
  if (bsize>=0) fBsize=bsize;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetMcToffset(Float_t toffset)
 {
+/**
+~~~
 // Set a user defined time offset for Monte Carlo data.
 // A very frequently (but not always) used value is -19000.
 // See the introductory docs of this class for further details.
+~~~
+**/
+
  fMctoffset=toffset;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SelectMcTracks(Int_t mode)
 {
+/**
+~~~
 // User selection of MC tracks to be stored in the event structure.
 //
 // mode = 0 : No MC tracks are stored
@@ -250,6 +289,8 @@ void IceF2k::SelectMcTracks(Int_t mode)
 //        3 : All MC tracks (incl. brems, pairprod etc...) are stored
 //
 // By default mode=3 is set in the constructor of this class.
+~~~
+**/
 
  if (mode<0 || mode >3) return;
  fMctracks=mode;
@@ -257,12 +298,16 @@ void IceF2k::SelectMcTracks(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetCompressedTWR(Int_t mode)
 {
+/**
+~~~
 // Set flag to denote compression level of TWR input data.
 //
 // mode = 0 : Uncompressed TWR input data
 //        1 : Compressed TWR input data
 //
 // By default mode=0 is set in the constructor of this class.
+~~~
+**/
 
  if (mode<0 || mode >1) return;
  fCompTWR=mode;
@@ -270,6 +315,8 @@ void IceF2k::SetCompressedTWR(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetInputFile(TString name)
 {
+/**
+~~~
 // Set the name of the F2K input file.
 // This function has become obsolete but is kept for backward compatibility.
 // The user is advised to use AddInputFile() instead, which allows processing
@@ -277,6 +324,8 @@ void IceF2k::SetInputFile(TString name)
 // This function will reset the list of all F2K input files and put the specified
 // filename at the first position.
 // Additional F2K input files can be specified via AddInputFile().
+~~~
+**/
 
  if (fInfiles) delete fInfiles;
 
@@ -290,7 +339,11 @@ void IceF2k::SetInputFile(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::AddInputFile(TString name)
 {
+/**
+~~~
 // Add the name of this F2K input file to the list to be processed.
+~~~
+**/
 
  if (!fInfiles)
  {
@@ -305,50 +358,87 @@ void IceF2k::AddInputFile(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetOutputFile(TFile* ofile)
 {
+/**
+~~~
 // Set the output file for the ROOT data.
+~~~
+**/
+
  if (fOutfile) delete fOutfile;
  fOutfile=ofile;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetOutputFile(TString name)
 {
+/**
+~~~
 // Create the output file for the ROOT data.
+~~~
+**/
+
  if (fOutfile) delete fOutfile;
  fOutfile=new TFile(name.Data(),"RECREATE","F2K data in IceEvent structure");
 }
 ///////////////////////////////////////////////////////////////////////////
 TFile* IceF2k::GetOutputFile()
 {
+/**
+~~~
 // Provide pointer to the ROOT output file.
+~~~
+**/
+
  return fOutfile;
 }
 ///////////////////////////////////////////////////////////////////////////
 TDatabasePDG* IceF2k::GetPDG()
 {
+/**
+~~~
 // Provide pointer to the PDG database
+~~~
+**/
+
  return fPdg;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcObjMatrix* IceF2k::GetOMdbase()
 {
+/**
+~~~
 // Provide pointer to the OM geometry, calib. etc... database
+~~~
+**/
+
  return fOmdb;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* IceF2k::GetFitdefs()
 {
+/**
+~~~
 // Provide pointer to the fit definitions
+~~~
+**/
+
  return fFitdefs;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* IceF2k::GetTrigdefs()
 {
+/**
+~~~
 // Provide pointer to the trigger definitions
+~~~
+**/
+
  return fTrigdefs;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::Exec(Option_t* opt)
 {
+/**
+~~~
 // Job to loop over the specified number of events and convert the 
 // F2K data into the IceEvent structure.
 // If maxevents<0 (default) all the entries of the input file
@@ -365,6 +455,8 @@ void IceF2k::Exec(Option_t* opt)
 //    This provides an event-by-event (sub)task processing before the
 //    final data structures are written out.
 // 2) The main object in this job environment is an IceEvent* pointer.
+~~~
+**/
 
  if (!fInfiles)
  {
@@ -557,8 +649,12 @@ void IceF2k::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::FillOMdbase()
 {
+/**
+~~~
 // Fill the database with geometry, calib. etc... parameters 
 // for all the devices.
+~~~
+**/
 
  if (fHeader.nch<=0)
  {
@@ -689,6 +785,8 @@ void IceF2k::FillOMdbase()
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetFitdefs()
 {
+/**
+~~~
 // Obtain the names of the variables for each fit procedure from the
 // f2000 header. Each different fit procedure is then stored as a separate
 // "hit" of an NcDevice object and the various fit variables are stored
@@ -724,6 +822,8 @@ void IceF2k::SetFitdefs()
 // etc....  
 //
 // This memberfunction is based on the original idea/code by Adam Bouchta.
+~~~
+**/
 
  if (fHeader.n_fit<=0)
  {
@@ -768,6 +868,8 @@ void IceF2k::SetFitdefs()
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::SetTrigdefs()
 {
+/**
+~~~
 // Obtain the names of the variables for each trigger procedure from the
 // f2000 header. Each different trigger procedure is then stored as a separate
 // "hit" of an NcDevice object and the various trigger variables are stored
@@ -803,6 +905,8 @@ void IceF2k::SetTrigdefs()
 //     Slot : 2 Signal value : 0 name : trig_pulse_tot
 //     Slot : 3 Signal value : 0 name : regi_flag
 // etc....  
+~~~
+**/
 
  if (fHeader.n_trigger<=0)
  {
@@ -847,9 +951,13 @@ void IceF2k::SetTrigdefs()
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::PutMcTracks()
 {
+/**
+~~~
 // Get the MC tracks from the F2000 file into the IcePack structure.
 // Note : MC tracks are given negative track id's in the event structure.
 // This memberfunction is based on the original code by Adam Bouchta.
+~~~
+**/
 
  IceEvent* evt=(IceEvent*)GetMainObject();
  if (!evt || fEvent.ntrack<=0) return;
@@ -968,9 +1076,13 @@ void IceF2k::PutMcTracks()
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::PutRecoTracks()
 {
+/**
+~~~
 // Get the reconstructed tracks from the F2000 file into the IcePack structure.
 // Note : Reco tracks are given positive track id's in the event structure.
 // This memberfunction is based on the original code by Adam Bouchta.
+~~~
+**/
 
  IceEvent* evt=(IceEvent*)GetMainObject();
  if (!evt || fEvent.nfit<=0) return;
@@ -1074,8 +1186,12 @@ void IceF2k::PutRecoTracks()
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::PutHits()
 {
+/**
+~~~
 // Get the hit and waveform info from the F2000 file into the IcePack structure.
 // This memberfunction is based on the original code by Adam Bouchta.
+~~~
+**/
 
  IceEvent* evt=(IceEvent*)GetMainObject();
  if (!evt) return;
@@ -1275,7 +1391,11 @@ void IceF2k::PutHits()
 ///////////////////////////////////////////////////////////////////////////
 void IceF2k::PutTrigger()
 {
+/**
+~~~
 // Get the trigger info from the F2000 file into the IcePack structure.
+~~~
+**/
 
  if (!fTrigdefs) return;
 

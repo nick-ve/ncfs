@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceCleanHits.cxx 57 2012-02-07 10:05:54Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceCleanHits
+~~~
 // Class IceCleanHits
 // TTask derived class to perform hit cleaning.
 //
@@ -101,6 +103,8 @@
 //
 //--- Author: Nick van Eijndhoven 13-oct-2005 Utrecht University
 //- Modified: NvE $Date: 2012-02-07 11:05:54 +0100 (Tue, 07 Feb 2012) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceCleanHits.h"
@@ -110,7 +114,12 @@ ClassImp(IceCleanHits) // Class implementation to enable ROOT I/O
 
 IceCleanHits::IceCleanHits(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fEvt=0;
  fAdcminAM=0.3;
  fAdcmaxAM=999999;
@@ -169,11 +178,17 @@ IceCleanHits::IceCleanHits(const char* name,const char* title) : TTask(name,titl
 ///////////////////////////////////////////////////////////////////////////
 IceCleanHits::~IceCleanHits()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::SetAdcRange(Float_t min,Float_t max,TString s)
 {
+/**
+~~~
 // Set ADC range in PE.
 //
 // The argument "s" specifies the sensor system as follows :
@@ -183,6 +198,8 @@ void IceCleanHits::SetAdcRange(Float_t min,Float_t max,TString s)
 //     "TDOM"   ==> IceTop DOMs
 //     "ICDOM"  ==> Standard IceCube InIce DOMs
 //     "DCDOM"  ==> DeepCore DOMs
+~~~
+**/
 
  if (s=="MuDaq")
  {
@@ -213,6 +230,8 @@ void IceCleanHits::SetAdcRange(Float_t min,Float_t max,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::SetTotRange(Float_t min,Float_t max,TString s)
 {
+/**
+~~~
 // Set TOT range in ns.
 //
 // The argument "s" specifies the sensor system as follows :
@@ -224,6 +243,8 @@ void IceCleanHits::SetTotRange(Float_t min,Float_t max,TString s)
 //     "TDOM    ==> IceTop DOMs
 //     "ICDOM"  ==> Standard IceCube InIce DOMs
 //     "DCDOM"  ==> DeepCore DOMs
+~~~
+**/
 
  if (s=="AEM")
  {
@@ -264,6 +285,8 @@ void IceCleanHits::SetTotRange(Float_t min,Float_t max,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::SetIsolation(Float_t rmax,Float_t dtmax,TString s)
 {
+/**
+~~~
 // Set maximum hit isolation radius (in m) and time difference (in ns).
 //
 // The argument "s" specifies the sensor system as follows :
@@ -275,6 +298,8 @@ void IceCleanHits::SetIsolation(Float_t rmax,Float_t dtmax,TString s)
 //
 // Note : In case one of the arguments "rmax" or "dtmax" is negative,
 //        the corresponding value will not be modified.
+~~~
+**/
 
  if (s=="AOM")
  {
@@ -300,6 +325,8 @@ void IceCleanHits::SetIsolation(Float_t rmax,Float_t dtmax,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::SetTwindow(Float_t dtmax,TString s)
 {
+/**
+~~~
 // Set the maximal time window around the trigger time.
 // Only hits which occur in [T-dtmax,T+dtmax] will be kept,
 // where T indicates the trigger time.
@@ -314,6 +341,8 @@ void IceCleanHits::SetTwindow(Float_t dtmax,TString s)
 //     "TDOM"   ==> IceTop DOMs
 //     "ICDOM"  ==> Standard IceCube InIce DOMs
 //     "DCDOM"  ==> DeepCore DOMs
+~~~
+**/
 
  if (s=="MuDaq") fTwinAM=dtmax;
  if (s=="TWRDaq") fTwinAT=dtmax;
@@ -324,6 +353,8 @@ void IceCleanHits::SetTwindow(Float_t dtmax,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::SetTname(TString name,TString s)
 {
+/**
+~~~
 // Specify the trigger name to be used to derive the trigger time for the
 // time cleaning of a certain class of sensors.
 //
@@ -347,6 +378,8 @@ void IceCleanHits::SetTname(TString name,TString s)
 // Note : The user can also impose a certain trigger time without using any
 //        trigger information.
 //        This is achieved by invoking the memberfunction SetTtime.
+~~~
+**/
 
  if (s=="MuDaq")
  {
@@ -382,6 +415,8 @@ void IceCleanHits::SetTname(TString name,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::SetTtime(Float_t t,TString s,Int_t slc,Int_t mult)
 {
+/**
+~~~
 // Set the trigger time(s) for a certain class of sensors.
 // For the Amanda MuDaq hardware, the times are all in TDC counts,
 // where 1 TDC corresponds to about 1.04 ns. 
@@ -423,6 +458,8 @@ void IceCleanHits::SetTtime(Float_t t,TString s,Int_t slc,Int_t mult)
 // 1) The arguments "slc" and "mult" are only used for IceCube hits, not for Amanda.
 // 2) In the constructor of this class the defaults have been set to always perform
 //    automatic trigger time determination with slc=0 and mult=1.
+~~~
+**/
 
  if (s=="MuDaq")
  {
@@ -459,7 +496,11 @@ void IceCleanHits::SetTtime(Float_t t,TString s,Int_t slc,Int_t mult)
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the hit cleaning procedures.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));
@@ -587,7 +628,11 @@ void IceCleanHits::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::Amanda()
 {
+/**
+~~~
 // Hit cleaning for Amanda modules.
+~~~
+**/
 
  NcDevice* daq=(NcDevice*)fEvt->GetDevice("Daq");
  if (!daq) return;
@@ -598,7 +643,11 @@ void IceCleanHits::Amanda()
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::MuDaq()
 {
+/**
+~~~
 // Hit cleaning for Amanda MuDaq data.
+~~~
+**/
 
  // All Amanda OMs with a signal
  TObjArray* aoms=fEvt->GetDevices("IceAOM");
@@ -752,7 +801,11 @@ void IceCleanHits::MuDaq()
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::TWRDaq()
 {
+/**
+~~~
 // Hit cleaning for Amanda TWRDaq data.
+~~~
+**/
 
  // All Amanda OMs with a signal
  TObjArray* aoms=fEvt->GetDevices("IceAOM");
@@ -906,7 +959,11 @@ void IceCleanHits::TWRDaq()
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::IceTop()
 {
+/**
+~~~
 // Hit cleaning for IceTop DOMs.
+~~~
+**/
 
  // All IceTop DOMs with a signal
  TObjArray* doms=fEvt->GetDevices("IceTDOM");
@@ -969,7 +1026,11 @@ void IceCleanHits::IceTop()
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::ICdoms()
 {
+/**
+~~~
 // Hit cleaning for the standard IceCube InIce DOMs.
+~~~
+**/
 
  // All standard IceCube DOMs with a signal
  TObjArray* doms=fEvt->GetDevices("IceICDOM");
@@ -1032,7 +1093,11 @@ void IceCleanHits::ICdoms()
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::DCdoms()
 {
+/**
+~~~
 // Hit cleaning for the DeepCore DOMs.
+~~~
+**/
 
  // All DeepCore DOMs with a signal
  TObjArray* doms=fEvt->GetDevices("IceDCDOM");
@@ -1095,7 +1160,11 @@ void IceCleanHits::DCdoms()
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::Amplitude(TObjArray& hits,Float_t adcmin,Float_t adcmax,Float_t totmin,Float_t totmax) const
 {
+/**
+~~~
 // Perform hit cleaning based on amplitude (ADC) and duration (TOT).
+~~~
+**/
 
  NcSignal* sx=0;
  Float_t adc,tot;
@@ -1116,9 +1185,13 @@ void IceCleanHits::Amplitude(TObjArray& hits,Float_t adcmin,Float_t adcmax,Float
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::Isolation(TObjArray& hits,Float_t dtmax,Float_t rmax) const
 {
+/**
+~~~
 // Perform hit cleaning based on isolation criteria.
 // Only retain hits that have at least one hit of another OM within a certain
 // radius and within a certain time window
+~~~
+**/
 
  NcSignal* sx1=0;
  NcSignal* sx2=0;
@@ -1173,7 +1246,11 @@ void IceCleanHits::Isolation(TObjArray& hits,Float_t dtmax,Float_t rmax) const
 ///////////////////////////////////////////////////////////////////////////
 void IceCleanHits::TimeWindow(TObjArray& hits,Float_t ttrig,Float_t twin,TArrayF* peaks) const
 {
+/**
+~~~
 // Perform hit cleaning based on a time window around a trigger time.
+~~~
+**/
 
  NcSignal* sx=0;
  Float_t le;

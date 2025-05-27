@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceRootx.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceRootx
+~~~
 // Class IceRootx
 // Conversion of simple Root data into IceEvent data structures.
 // This class reads data from the simple Root files as output by the
@@ -79,6 +81,8 @@
 //
 //--- Author: Garmt de Vries-Uiterweerd 13-Mar-2007 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceRootx.h"
@@ -88,8 +92,12 @@ ClassImp(IceRootx) // Class implementation to enable ROOT I/O
 
 IceRootx::IceRootx(const char* name,const char* title) : NcJob(name,title)
 {
+/**
+~~~
 // Default constructor.
 // By default maxevent=-1, split=0, bsize=32000, printfreq=1.
+~~~
+**/
 
  fSplit=0;
  fBsize=32000;
@@ -101,7 +109,11 @@ IceRootx::IceRootx(const char* name,const char* title) : NcJob(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceRootx::~IceRootx()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fInfiles)
  {
@@ -112,36 +124,60 @@ IceRootx::~IceRootx()
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::SetMaxEvents(Int_t n)
 {
+/**
+~~~
 // Set the maximum number of events to be processed.
 // n=-1 implies processing of the complete input file, which is the default
 // initialisation in the constructor.
+~~~
+**/
+
  fMaxevt=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::SetPrintFreq(Int_t f)
 {
+/**
+~~~
 // Set the printfrequency to produce info every f events.
 // f=1 is the default initialisation in the constructor.
+~~~
+**/
+
  if (f>=0) fPrintfreq=f;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::SetSplitLevel(Int_t split)
 {
+/**
+~~~
 // Set the split level for the ROOT data file.
 // split=0 is the default initialisation in the constructor.
+~~~
+**/
+
  if (split>=0) fSplit=split;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::SetBufferSize(Int_t bsize)
 {
+/**
+~~~
 // Set the buffer size for the ROOT data file.
 // bsize=32000 is the default initialisation in the constructor.
+~~~
+**/
+
  if (bsize>=0) fBsize=bsize;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::AddInputFile(TString name)
 {
+/**
+~~~
 // Add the name of this simple Root data input file to the list to be processed.
+~~~
+**/
 
  if (!fInfiles)
  {
@@ -156,26 +192,43 @@ void IceRootx::AddInputFile(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::SetOutputFile(TFile* ofile)
 {
+/**
+~~~
 // Set the output file for the ROOT data.
+~~~
+**/
+
  if (fOutfile) delete fOutfile;
  fOutfile=ofile;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::SetOutputFile(TString name)
 {
+/**
+~~~
 // Create the output file for the ROOT data.
+~~~
+**/
+
  if (fOutfile) delete fOutfile;
  fOutfile=new TFile(name.Data(),"RECREATE","Simple Root data in IceEvent structure");
 }
 ///////////////////////////////////////////////////////////////////////////
 TFile* IceRootx::GetOutputFile()
 {
+/**
+~~~
 // Provide pointer to the ROOT output file.
+~~~
+**/
+
  return fOutfile;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRootx::Exec(Option_t* opt)
 {
+/**
+~~~
 // Job to loop over the specified number of events and convert the 
 // simple Root data into the IceEvent structure.
 // If maxevents<0 (default) all the entries of the input file
@@ -192,6 +245,8 @@ void IceRootx::Exec(Option_t* opt)
 //    This provides an event-by-event (sub)task processing before the
 //    final data structures are written out.
 // 2) The main object in this job environment is an IceEvent* pointer.
+~~~
+**/
 
  if (!fInfiles)
  {

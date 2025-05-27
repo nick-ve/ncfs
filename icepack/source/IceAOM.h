@@ -4,9 +4,9 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceAOM.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "IceGOM.h"
+
+/** Signal (Hit) handling of a generic Amanda Optical Module (AOM). **/
 
 class IceAOM : public IceGOM
 {

@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceCalibrate
+~~~
 // Class IceCalibrate
 // TTask derived class to perform the various calibrations.
 //
@@ -49,6 +53,8 @@
 //
 //--- Author: Nick van Eijndhoven 18-sep-2005 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 15, 2022  15:05Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceCalibrate.h"
@@ -58,7 +64,12 @@ ClassImp(IceCalibrate) // Class implementation to enable ROOT I/O
 
 IceCalibrate::IceCalibrate(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fCalfile=0;
  fMuDaqDB=0;
  fTWRDaqDB=0;
@@ -68,7 +79,12 @@ IceCalibrate::IceCalibrate(const char* name,const char* title) : TTask(name,titl
 ///////////////////////////////////////////////////////////////////////////
 IceCalibrate::~IceCalibrate()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if (fCalfile)
  {
   delete fCalfile;
@@ -78,9 +94,14 @@ IceCalibrate::~IceCalibrate()
 ///////////////////////////////////////////////////////////////////////////
 void IceCalibrate::SetOMdbase(NcObjMatrix* omdb, TString name)
 {
+/**
+~~~
 // Set the pointer to the OM database.
 // The following names can be used: MuDaq, TWRDaq, JEBTDaq and JEBADaq.
 // Note : this will overrule a previously attached database. 
+~~~
+**/
+
  if(name=="MuDaq") fMuDaqDB=omdb;
  else if(name=="TWRDaq") fTWRDaqDB=omdb;
  else if(name=="JEBTDaq") fJEBTDaqDB=omdb;
@@ -90,11 +111,15 @@ void IceCalibrate::SetOMdbase(NcObjMatrix* omdb, TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceCalibrate::SetCalibFile(TString name)
 {
+/**
+~~~
 // Set the calibration ROOT file as created with IceCal2Root.
 // Note : this will overrule a previously attached database.
 //
 // Environment variables may be used as $(...) in the filenname for convenience.
 // For example "$(HOME)/my-data/calibrations.root".
+~~~
+**/
 
  // Expand the path name of the provided input file
  name=gSystem->ExpandPathName(name.Data());
@@ -114,7 +139,11 @@ void IceCalibrate::SetCalibFile(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceCalibrate::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the various calibration procedures.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));

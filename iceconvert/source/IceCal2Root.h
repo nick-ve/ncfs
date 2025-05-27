@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceCal2Root.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "TFile.h"
 #include "TString.h"
 #include "TDatabasePDG.h"
@@ -16,6 +14,8 @@
 #include "IceAOM.h"
 
 #include "Riostream.h"
+
+/** Job for conversion of (ascii) calibration data into an NcObjMatrix OM dbase. **/
 
 class IceCal2Root : public NcJob
 {

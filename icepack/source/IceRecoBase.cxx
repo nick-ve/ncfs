@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceRecoBase.cxx 83 2013-03-15 15:22:45Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceRecoBase
+~~~
 // Class IceRecoBase
 // TTask derived base class for the various IceCube reconstruction tasks.
 //
@@ -55,6 +57,8 @@
 //
 //--- Author: Nick van Eijndhoven 18-jan-2013 IIHE-VUB, Brussels
 //- Modified: NvE $Date: 2013-03-15 16:22:45 +0100 (Fri, 15 Mar 2013) $ IIHE-VUB
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceRecoBase.h"
@@ -64,7 +68,12 @@ ClassImp(IceRecoBase) // Class implementation to enable ROOT I/O
 
 IceRecoBase::IceRecoBase(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fFirst=1;
  fEvt=0;
  fCleanA=0;
@@ -119,7 +128,11 @@ IceRecoBase::IceRecoBase(const char* name,const char* title) : TTask(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceRecoBase::~IceRecoBase()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fUseNames)
  {
@@ -135,6 +148,8 @@ IceRecoBase::~IceRecoBase()
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetCleaned(Int_t flag,TString s)
 {
+/**
+~~~
 // Set flag to select usage of only cleaned hits or all hits.
 //
 // flag = 0 : All hits are used
@@ -148,6 +163,8 @@ void IceRecoBase::SetCleaned(Int_t flag,TString s)
 //     "I"  --> Hybrid InIce reconstruction
 //     "IC" --> Standard IceCube reconstruction
 //     "DC" --> DeepCore reconstruction
+~~~
+**/
 
  if (s=="A")
  {
@@ -177,6 +194,8 @@ void IceRecoBase::SetCleaned(Int_t flag,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetMaxMod(Int_t nmax,TString s)
 {
+/**
+~~~
 // Set the maximum number of good (D)OMs that may have fired
 // in order to process this event.
 // This allows suppression of processing (high-energy) cascade events
@@ -192,6 +211,8 @@ void IceRecoBase::SetMaxMod(Int_t nmax,TString s)
 //     "I"  --> InIce DOMs
 //     "IC" --> Standard IceCube InIce DOMs
 //     "DC" --> DeepCore DOMs
+~~~
+**/
 
  if (s=="A")
  {
@@ -221,6 +242,8 @@ void IceRecoBase::SetMaxMod(Int_t nmax,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetMinMod(Int_t nmin,TString s)
 {
+/**
+~~~
 // Set the minimum number of good (D)OMs that must have fired
 // in order to process this event.
 // This allows selection of a minimal multiplicity for events to be processed.
@@ -233,6 +256,8 @@ void IceRecoBase::SetMinMod(Int_t nmin,TString s)
 //     "I"  --> InIce DOMs
 //     "IC" --> Standard IceCube InIce DOMs
 //     "DC" --> DeepCore DOMs
+~~~
+**/
 
  if (s=="A")
  {
@@ -262,6 +287,8 @@ void IceRecoBase::SetMinMod(Int_t nmin,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetMaxHits(Int_t nmax,TString s)
 {
+/**
+~~~
 // Set the maximum number of good hits per (D)OM to be processed.
 //
 // Special values :
@@ -280,6 +307,8 @@ void IceRecoBase::SetMaxHits(Int_t nmax,TString s)
 //     "I"  --> InIce DOMs
 //     "IC" --> Standard IceCube InIce DOMs
 //     "DC" --> DeepCore DOMs
+~~~
+**/
 
  if (s=="A")
  {
@@ -309,6 +338,8 @@ void IceRecoBase::SetMaxHits(Int_t nmax,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetSingleHit(Int_t ndoms,TString s,Int_t ndoms1)
 {
+/**
+~~~
 // Set minimum number of good firing (D)OMs at which only the first hits
 // (for instance after ordering the hits per (D)OM w.r.t. decreasing amplitude)
 // will be used for reconstruction.
@@ -328,6 +359,8 @@ void IceRecoBase::SetSingleHit(Int_t ndoms,TString s,Int_t ndoms1)
 // Note : Setting ndoms=0 and ndoms1=0 implies no automatic switching to single hit processing.
 //
 // The default is ndoms1=0 for backward compatibility.
+~~~
+**/
 
  if (s=="A")
  {
@@ -393,6 +426,8 @@ void IceRecoBase::SetSingleHit(Int_t ndoms,TString s,Int_t ndoms1)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetMinAhits(Int_t nmin,TString s)
 {
+/**
+~~~
 // Set the minimum number of associated hits to produce a reconstruction result 
 // like for instance a reconstructed track.
 //
@@ -404,6 +439,8 @@ void IceRecoBase::SetMinAhits(Int_t nmin,TString s)
 //     "I"  --> Hybrid InIce reconstruction
 //     "IC" --> Standard IceCube reconstruction
 //     "DC" --> DeepCore reconstruction
+~~~
+**/
 
  if (s=="A")
  {
@@ -433,6 +470,8 @@ void IceRecoBase::SetMinAhits(Int_t nmin,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetMinAmods(Int_t nmin,TString s)
 {
+/**
+~~~
 // Set the minimum number of associated (D)OMs to produce a reconstruction result
 // like for instance a reconstructed track.
 //
@@ -444,6 +483,8 @@ void IceRecoBase::SetMinAmods(Int_t nmin,TString s)
 //     "I"  --> Hybrid InIce reconstruction
 //     "IC" --> Standard IceCube reconstruction
 //     "DC" --> DeepCore reconstruction
+~~~
+**/
 
  if (s=="A")
  {
@@ -473,6 +514,8 @@ void IceRecoBase::SetMinAmods(Int_t nmin,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetSLChitUsage(Int_t flag,TString s)
 {
+/**
+~~~
 // (De)activate the usage of Soft Local Coincidence hits for reconstruction.
 //
 // flag = 0 : SLC hits are not used for reconstruction
@@ -485,6 +528,8 @@ void IceRecoBase::SetSLChitUsage(Int_t flag,TString s)
 //     "DC" --> DeepCore DOMs
 //
 // For default values please refer to the general documentation of this class.
+~~~
+**/
 
  if (s=="I")
  {
@@ -508,6 +553,8 @@ void IceRecoBase::SetSLChitUsage(Int_t flag,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetFlipAngles(Float_t thetatrk,Float_t thetahits)
 {
+/**
+~~~
 // Set the angular thresholds (in degrees) for the track (thetatrk) and
 // hit path (thetahits) polar angles for the track direction flipping.
 // The polar angle (theta) is defined such that theta=0 corresponds to
@@ -523,6 +570,8 @@ void IceRecoBase::SetFlipAngles(Float_t thetatrk,Float_t thetahits)
 //        setting thetatrk<0 and/or thetahits>180.
 //
 // For default values please refer to the general documentation of this class.
+~~~
+**/
 
  fThetatrk=thetatrk;
  fThetahits=thetahits;
@@ -535,6 +584,8 @@ void IceRecoBase::SetFlipAngles(Float_t thetatrk,Float_t thetahits)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetScatteringLength(Float_t lambda,TString s)
 {
+/** 
+~~~
 // Set average photon scattering length in meter.
 // For default values please refer to the general documentation of this class.
 //
@@ -544,6 +595,8 @@ void IceRecoBase::SetScatteringLength(Float_t lambda,TString s)
 //     "UD" --> InIce DOMs in the Upper Detector above the dust layer
 //     "DL" --> InIce DOMs in the Dust Layer
 //     "LD" --> InIce DOMs in the Lower Detector below the dust layer
+~~~
+**/
 
  if (s=="A")
  {
@@ -573,6 +626,8 @@ void IceRecoBase::SetScatteringLength(Float_t lambda,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetAbsorptionLength(Float_t lambda,TString s)
 {
+/**
+~~~
 // Set average photon absorption length in meter.
 // For default values please refer to the general documentation of this class.
 //
@@ -582,6 +637,8 @@ void IceRecoBase::SetAbsorptionLength(Float_t lambda,TString s)
 //     "UD" --> InIce DOMs in the Upper Detector above the dust layer
 //     "DL" --> InIce DOMs in the Dust Layer
 //     "LD" --> InIce DOMs in the Lower Detector below the dust layer
+~~~
+**/
 
  if (s=="A")
  {
@@ -611,6 +668,8 @@ void IceRecoBase::SetAbsorptionLength(Float_t lambda,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetTimeJitter(Float_t sigma,TString s)
 {
+/**
+~~~
 // Set the time jitter of the various PMTs.
 // The input argument "sigma" represents the standard deviation in ns.
 //
@@ -619,7 +678,8 @@ void IceRecoBase::SetTimeJitter(Float_t sigma,TString s)
 // s = "A"  --> Amanda OMs
 //     "IC" --> Standard IceCube DOMs
 //     "DC" --> DeepCore DOMs
-//
+~~~
+**/
 
  if (s=="A")
  {
@@ -643,6 +703,8 @@ void IceRecoBase::SetTimeJitter(Float_t sigma,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetVgroupUsage(Int_t flag,TString s)
 {
+/**
+~~~
 // (De)activate the distinction between v_phase and v_group of the Cherenkov light.
 //
 // flag = 0 : No distinction between v_phase and v_group
@@ -657,6 +719,8 @@ void IceRecoBase::SetVgroupUsage(Int_t flag,TString s)
 //
 // By default the distinction between v_phase and v_group is activated
 // in the constructor of this class.
+~~~
+**/
 
  if (s=="A")
  {
@@ -686,11 +750,15 @@ void IceRecoBase::SetVgroupUsage(Int_t flag,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetTrackName(TString s)
 {
+/**
+~~~
 // Set (alternative) name identifier for the produced reconstructed tracks.
 // This allows unique identification of (newly) produced reco tracks
 // in case of re-processing of existing data with different criteria.
 // By default the produced reco tracks have the name of the class
 // by which they were produced.
+~~~
+**/
 
  fTrackname=s;
 
@@ -700,16 +768,22 @@ void IceRecoBase::SetTrackName(TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::SetCharge(Float_t charge)
 {
+/**
+~~~
 // Set user defined charge for the produced reconstructed tracks.
 // This allows identification of these tracks on color displays.
 // By default the produced reco tracks have charge=0
 // which is set in the constructor of this class.
+~~~
+**/
 
  fCharge=charge;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::UseTracks(TString classname,Int_t n)
 {
+/**
+~~~
 // Specification of the input tracks to be used in a track based reconstruction.
 //
 // classname : Specifies the input track trackname (e.g. "IceDwalkIC").
@@ -730,6 +804,8 @@ void IceRecoBase::UseTracks(TString classname,Int_t n)
 //
 // This will use the first 5 IceDwalkIC, the first 2 IceLinefit and all the
 // IceDwalkDC tracks which are encountered in the event structure.
+~~~
+**/
 
  if (!fUseNames)
  {
@@ -765,9 +841,13 @@ void IceRecoBase::UseTracks(TString classname,Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::Exec(Option_t* opt)
 {
+/**
+~~~
 ////////////////////////////////////////////////////////////////////
 // Template for the implementation of a reconstruction processor. //
 ////////////////////////////////////////////////////////////////////
+~~~
+**/
 
  // Obtain a pointer to the parent NcJob of this reconstruction task
  TString name=opt;
@@ -829,6 +909,8 @@ void IceRecoBase::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceRecoBase::FlipTrack(NcTrack* t) const
 {
+/**
+~~~
 // Reverse the direction of the track "t" in case a the track has a polar angle
 // theta<thetatrk and the (time ordered) hit pattern reflects a direction with
 // polar angle theta>thetahits.
@@ -841,6 +923,8 @@ void IceRecoBase::FlipTrack(NcTrack* t) const
 //
 // Note : The flipping of the track direction may be de-activated by
 //        setting thetatrk<0 and/or thetahits>180.
+~~~
+**/
  
  if (!t || fThetatrk<0 || fThetahits>180) return;
 

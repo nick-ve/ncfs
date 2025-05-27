@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceDB2Root.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceDB2Root
+~~~
 // Class IceDB2Root
 // Extraction of Amanda and IceCube calibration data from the IceCube database.
 // Calibration data are stored into an NcObjMatrix containing the complete OM 
@@ -153,6 +155,8 @@
 //
 //--- Author: Garmt de Vries-Uiterweerd 06-jun-2007 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceDB2Root.h"
@@ -162,7 +166,12 @@ ClassImp(IceDB2Root) // Class implementation to enable ROOT I/O
 
 IceDB2Root::IceDB2Root(const char* name,const char* title) : NcJob(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fDBName="mysql://icedb.umh.ac.be/I3OmDb";
  fUser="www";
  fPassword="";
@@ -178,7 +187,11 @@ IceDB2Root::IceDB2Root(const char* name,const char* title) : NcJob(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceDB2Root::~IceDB2Root()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fPdg)
  {
@@ -213,7 +226,12 @@ IceDB2Root::~IceDB2Root()
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::SetDatabase(TString name, TString user, TString password)
 {
+/**
+~~~
 // Set the name of the database, and username/password needed to access it.
+~~~
+**/
+
  fDBName=name;
  fUser=user;
  fPassword=password;
@@ -221,34 +239,58 @@ void IceDB2Root::SetDatabase(TString name, TString user, TString password)
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::SetOutputFile(TString name)
 {
+/**
+~~~
 // Set the name of the ROOT output file.
+~~~
+**/
+
  fRootFileName=name;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp IceDB2Root::GetTime()
 {
+/**
+~~~
 // Return time for which the calibration is done.
+~~~
+**/
+
  return fTime;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::SetUT(Int_t y, Int_t m, Int_t d, Int_t hh, Int_t mm, Int_t ss)
 {
+/**
+~~~
 // Set time for which calibration is done. Input parameters are the same as 
 // for NcTimestamp::SetUT. Default value for hh, mm and ss is 0.
+~~~
+**/
+
  fTime.SetUT(y,m,d,hh,mm,ss);
 }
 ///////////////////////////////////////////////////////////////////////////
 TDatabasePDG* IceDB2Root::GetPDG()
 {
+/**
+~~~
 // Provide pointer to the PDG database
+~~~
+**/
+
  return fPdg;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcObjMatrix* IceDB2Root::GetOMdbase(TString name)
 {
+/**
+~~~
 // Provide pointer to the requested OM geometry, calib. etc... database.
 // Options for the "name" specification are : MuDaq, TWRDaq, JEBTDaq, JEBADaq.
 // For backward compatibility the default is name="MuDaq".
+~~~
+**/
 
  if (name=="MuDaq") return fMuDaqdb;
  if (name=="TWRDaq") return fTWRDaqdb;
@@ -259,6 +301,8 @@ NcObjMatrix* IceDB2Root::GetOMdbase(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::Exec(Option_t* opt)
 {
+/**
+~~~
 // Job to extract calibration data from database into the IcePack structure.
 //
 // Notes :
@@ -273,6 +317,8 @@ void IceDB2Root::Exec(Option_t* opt)
 // 2) Creation of a TFolder via the argument of the ExecuteJob statement
 //    makes all created database objects accessible to subsequent tasks
 //    via the TFolder::FindObject facility.
+~~~
+**/
 
  if (fOutfile)
  {
@@ -347,7 +393,11 @@ void IceDB2Root::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::GetMuDaqData()
 {
+/**
+~~~
 // Obtain all the MuDaq geometry, calibration and Xtalk data.
+~~~
+**/
 
  // Connect to the DB server
  TSQLServer* server=TSQLServer::Connect(fDBName.Data(),fUser.Data(),fPassword.Data()); 
@@ -783,7 +833,11 @@ void IceDB2Root::GetMuDaqData()
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::GetTWRDaqData()
 {
+/**
+~~~
 // Obtain all the TWRDaq geometry, calibration and Xtalk data.
+~~~
+**/
 
  // Connect to the DB server
  TSQLServer* server=TSQLServer::Connect(fDBName.Data(),fUser.Data(),fPassword.Data()); 
@@ -1197,7 +1251,11 @@ void IceDB2Root::GetTWRDaqData()
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::GetJEBTDaqData()
 {
+/**
+~~~
 // Obtain all the JEB TWRDaq geometry, calibration and Xtalk data.
+~~~
+**/
 
  // Connect to the DB server
  TSQLServer* server=TSQLServer::Connect(fDBName.Data(),fUser.Data(),fPassword.Data()); 
@@ -1633,7 +1691,11 @@ void IceDB2Root::GetJEBTDaqData()
 ///////////////////////////////////////////////////////////////////////////
 void IceDB2Root::GetJEBADaqData()
 {
+/**
+~~~
 // Obtain all the JEB ATWDDaq geometry, calibration.
+~~~
+**/
 
  // Connect to the DB server
  TSQLServer* server=TSQLServer::Connect(fDBName.Data(),fUser.Data(),fPassword.Data()); 
@@ -1686,7 +1748,7 @@ void IceDB2Root::GetJEBADaqData()
  IceDOM* omx=0;
  Int_t omid;
  Double_t pos[3]={0,0,0};
-////TODO: declare these variables once amplitude calibration becomes available
+//@@@ TODO: declare these variables once amplitude calibration becomes available
 // Float_t peArea;
 // TF1* fcal=0;
 // TF1* fdecal=0;
@@ -1751,7 +1813,7 @@ void IceDB2Root::GetJEBADaqData()
  }
 
  // Get JEBADaq amplitude calibration constants
- //// TODO: Insert correct table and field names and use correct calibration type
+ //@@@ TODO: Insert correct table and field names and use correct calibration type
  /*
  for(omid=0; omid<=maxomid; omid++) revision[omid]=0;
  st=server->Statement("SELECT ValidityStartDate, ValidityEndDate, RevisionId, StringId, TubeId, XXXpeArea FROM XXXampl INNER JOIN CalibrationDetail WHERE StringId>0 AND XXXampl.CaId=CalibrationDetail.CaId AND CalibrationDetail.TypeId=XXX;");
@@ -1785,7 +1847,7 @@ void IceDB2Root::GetJEBADaqData()
     // Get calibration values
     peArea=(Float_t)st->GetDouble(5);
     // Flag amplitude slots of bad OMs as dead and don't provide amplitude (de)calib functions
-    //// TODO: Set correct conditions
+    //@@@ TODO: Set correct conditions
     if (peArea<=0)
     {
      omx->SetDead(1);
@@ -1811,7 +1873,7 @@ void IceDB2Root::GetJEBADaqData()
 
  /*
  // Flag OMs in bad OM list as dead
- //// TODO: Insert correct table and field names and use correct calibration type
+ //@@@ TODO: Insert correct table and field names and use correct calibration type
  for(omid=0; omid<=maxomid; omid++) revision[omid]=0;
  st=server->Statement("SELECT ValidityStartDate, ValidityEndDate, RevisionId, StringId, TubeId FROM XXXBadOm INNER JOIN CalibrationDetail WHERE StringId>0 AND XXXBadOm.CaId=CalibrationDetail.CaId AND CalibrationDetail.TypeId=XXX;");
  if (!st)

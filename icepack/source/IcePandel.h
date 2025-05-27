@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IcePandel.h 72 2013-01-21 13:13:40Z nickve $
-
 #include "TFitter.h"
 #include "TMath.h"
 #include "Math/SpecFunc.h"
@@ -13,6 +11,8 @@
 #include "IceRecoBase.h"
 
 #include "NcSample.h"
+
+/** IceRecoBase derived TTask processor to perform Convoluted Pandel fitting. **/
 
 class IcePandel : public IceRecoBase
 {

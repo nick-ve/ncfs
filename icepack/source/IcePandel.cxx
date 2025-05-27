@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IcePandel.cxx 78 2013-02-27 22:43:36Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IcePandel
+~~~
 // Class IcePandel
 // IceRecoBase derived TTask processor to perform track fitting via minimisation
 // of a Gauss convoluted Pandel pdf.
@@ -151,6 +153,8 @@
 //
 //--- Author: Nick van Eijndhoven 09-feb-2006 Utrecht University
 //- Modified: NvE $Date: 2013-02-27 23:43:36 +0100 (Wed, 27 Feb 2013) $ IIHE-VUB, Brussels
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IcePandel.h"
@@ -169,7 +173,12 @@ ClassImp(IcePandel) // Class implementation to enable ROOT I/O
 
 IcePandel::IcePandel(const char* name,const char* title) : IceRecoBase(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fPrint=-2;
  fHits=0;
  fFitter=0;
@@ -219,7 +228,12 @@ IcePandel::IcePandel(const char* name,const char* title) : IceRecoBase(name,titl
 ///////////////////////////////////////////////////////////////////////////
 IcePandel::~IcePandel()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if (fHits)
  {
   delete fHits;
@@ -244,18 +258,24 @@ IcePandel::~IcePandel()
 ///////////////////////////////////////////////////////////////////////////
 void IcePandel::SetPrintLevel(Int_t level)
 {
+/**
+~~~
 // Set the fitter (Minuit) print level.
 // See the TFitter and TMinuit docs for details.
 //
 // Note : level=-2 suppresses also all fit processor warnings.
 //        
 // The default in the constructor is level=-2. 
+~~~
+**/
 
  fPrint=level;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IcePandel::SelectHits(Int_t mode)
 {
+/**
+~~~
 // Specification of the hits to be used in the minimisation.
 //
 // mode = 0 : All hits (except IceTop) of the complete event are used.
@@ -267,6 +287,8 @@ void IcePandel::SelectHits(Int_t mode)
 //        via the SetClean() memberfunction.
 //
 // For the default value please refer to the default constructor of this class.
+~~~
+**/
 
  if (mode>=0 && mode<=2)
  {
@@ -278,11 +300,15 @@ void IcePandel::SelectHits(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void IcePandel::SetPenalty(Float_t val)
 {
+/**
+~~~
 // Set user defined psi penalty value (in dB) in the minimiser for
 // distance-time points that fall outside the validity rectangle.
 // This allows investigation/tuning of the sensitivity to hits with
 // extreme distance and/or time residual values.
 // For the default value please refer to the default constructor of this class.
+~~~
+**/
 
  fPenalty=val;
  fParams.AddNamedSlot("Penalty");
@@ -291,7 +317,11 @@ void IcePandel::SetPenalty(Float_t val)
 ///////////////////////////////////////////////////////////////////////////
 void IcePandel::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the Convoluted Pandel hit fitting procedure.
+~~~
+**/
 
  // Obtain a pointer to the parent NcJob of this reconstruction task
  TString name=opt;
@@ -692,10 +722,14 @@ void IcePandel::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IcePandel::FitFCN(Int_t&,Double_t*,Double_t& f,Double_t* x,Int_t)
 {
+/**
+~~~
 // Minimisation of the Bayesian psi value for a track w.r.t. a Convoluted Pandel PDF.
 // The Baysian psi value is defined as -loglikelihood in a decibel scale.
 // This implies psi=-10*log10(L) where L=p(D|HI) being the likelihood of
 // the data D under the hypothesis H and prior information I.
+~~~
+**/
 
  const Float_t c=0.299792458;        // Light speed in vacuum in meters per ns
  const Float_t npice=1.31768387;     // Phase refractive index (c/v_phase) of ice

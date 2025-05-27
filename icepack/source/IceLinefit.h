@@ -4,9 +4,9 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceLinefit.h 72 2013-01-21 13:13:40Z nickve $
-
 #include "IceRecoBase.h"
+
+/** IceRecoBase derived TTask processor to perform linefit reconstruction. **/
 
 class IceLinefit : public IceRecoBase
 {

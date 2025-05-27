@@ -17,5 +17,6 @@
                 of Paul Coppin's GRBweb facility into a plain ROOT Tree.
 19-dec-2024 NvE ROOT macro burst-model.cc updated to match the new functionality of class NcAstrolab.
                 Also new (template) ROOT macros burst-analysis.cc and data-analysis.cc introduced.
+21-may-2025 NvE ROOT macro burst-analysis.cc updated to satisfy the new, more strict, Cling interpreter.
 
 

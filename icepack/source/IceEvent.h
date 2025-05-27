@@ -14,6 +14,8 @@
 #include "NcSpectrum.h"
 #include "IceGOM.h"
 
+/** Handling of IceCube event data. **/
+
 class IceEvent : public NcEvent
 {
  public:

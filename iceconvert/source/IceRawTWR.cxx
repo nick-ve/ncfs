@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceRawTWR.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceRawTWR
+~~~
 // Class IceRawTWR
 // Conversion of Amanda raw TWR data into IceEvent data structures.
 // The code to actually read the TWR raw data structures is an Ralice/IcePack
@@ -85,6 +87,8 @@
 //
 //--- Author: Nick van Eijndhoven 12-dec-2006 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceRawTWR.h"
@@ -94,8 +98,12 @@ ClassImp(IceRawTWR) // Class implementation to enable ROOT I/O
 
 IceRawTWR::IceRawTWR(const char* name,const char* title) : NcJob(name,title)
 {
+/**
+~~~
 // Default constructor.
 // By default maxevent=-1, split=0, bsize=32000, printfreq=1.
+~~~
+**/
 
  fSplit=0;
  fBsize=32000;
@@ -107,7 +115,11 @@ IceRawTWR::IceRawTWR(const char* name,const char* title) : NcJob(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceRawTWR::~IceRawTWR()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fInfiles)
  {
@@ -118,36 +130,60 @@ IceRawTWR::~IceRawTWR()
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::SetMaxEvents(Int_t n)
 {
+/**
+~~~
 // Set the maximum number of events to be processed.
 // n=-1 implies processing of the complete input file, which is the default
 // initialisation in the constructor.
+~~~
+**/
+
  fMaxevt=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::SetPrintFreq(Int_t f)
 {
+/**
+~~~
 // Set the printfrequency to produce info every f events.
 // f=1 is the default initialisation in the constructor.
+~~~
+**/
+
  if (f>=0) fPrintfreq=f;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::SetSplitLevel(Int_t split)
 {
+/**
+~~~
 // Set the split level for the ROOT data file.
 // split=0 is the default initialisation in the constructor.
+~~~
+**/
+
  if (split>=0) fSplit=split;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::SetBufferSize(Int_t bsize)
 {
+/**
+~~~
 // Set the buffer size for the ROOT data file.
 // bsize=32000 is the default initialisation in the constructor.
+~~~
+**/
+
  if (bsize>=0) fBsize=bsize;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::AddInputFile(TString name)
 {
+/**
+~~~
 // Add the name of this TWR raw data input file to the list to be processed.
+~~~
+**/
 
  if (!fInfiles)
  {
@@ -162,26 +198,43 @@ void IceRawTWR::AddInputFile(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::SetOutputFile(TFile* ofile)
 {
+/**
+~~~
 // Set the output file for the ROOT data.
+~~~
+**/
+
  if (fOutfile) delete fOutfile;
  fOutfile=ofile;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::SetOutputFile(TString name)
 {
+/**
+~~~
 // Create the output file for the ROOT data.
+~~~
+**/
+
  if (fOutfile) delete fOutfile;
  fOutfile=new TFile(name.Data(),"RECREATE","TWR raw data in IceEvent structure");
 }
 ///////////////////////////////////////////////////////////////////////////
 TFile* IceRawTWR::GetOutputFile()
 {
+/**
+~~~
 // Provide pointer to the ROOT output file.
+~~~
+**/
+
  return fOutfile;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::Exec(Option_t* opt)
 {
+/**
+~~~
 // Job to loop over the specified number of events and convert the 
 // TWR raw data into the IceEvent structure.
 // If maxevents<0 (default) all the entries of the input file
@@ -198,6 +251,8 @@ void IceRawTWR::Exec(Option_t* opt)
 //    This provides an event-by-event (sub)task processing before the
 //    final data structures are written out.
 // 2) The main object in this job environment is an IceEvent* pointer.
+~~~
+**/
 
  if (!fInfiles)
  {
@@ -433,7 +488,11 @@ void IceRawTWR::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::PutWaveforms(Int_t year)
 {
+/**
+~~~
 // Get the waveform info from the raw data event into the IcePack structure.
+~~~
+**/
 
  IceEvent* evt=(IceEvent*)GetMainObject();
  if (!evt) return;
@@ -540,6 +599,8 @@ void IceRawTWR::PutWaveforms(Int_t year)
 ///////////////////////////////////////////////////////////////////////////
 void IceRawTWR::PutTrigger(Int_t year)
 {
+/**
+~~~
 // Get the trigger info from the raw data event into the IcePack structure.
 // Currently only the trigger settings for the years 2005 and 2006 have been
 // implemented.
@@ -554,6 +615,8 @@ void IceRawTWR::PutTrigger(Int_t year)
 // trigger pulse available, the "main" trigger time is set to 0.
 // For other years, only the artificial "main" trigger with a trigger time
 // set to 0 will be stored in the IceEvent structure.
+~~~
+**/
 
  // Fill the trigger structure
  Int_t error=retrigger(&fEvent,&fTrigger);
@@ -708,7 +771,11 @@ Int_t IceRawTWR::extract_info_from_filename(char* fname,twr_raw_data_file_t* twr
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceRawTWR::clear_system(sys_config_t* sys)
 {
+/**
+~~~
 // Deletion of the file header structure.
+~~~
+**/
 
  if (!sys) return 0;
 
@@ -1049,7 +1116,11 @@ Int_t IceRawTWR::read_event(FILE* fin,sys_config_t* sys,event_t* event_ptr)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceRawTWR::retrigger(event_t* ev,trigger_hits_t* trig)
 {
-// Returns the active trigger(s)
+/**
+~~~
+// Obtain the active trigger(s)
+~~~
+**/
 
  // Initialise the trigger_hits_t structure with zeroes
  memset(trig, 0, sizeof(trigger_hits_t) );

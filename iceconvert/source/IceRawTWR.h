@@ -4,8 +4,6 @@
 // Copyright(c) 2003, IceCube Experiment at the South Pole, All rights reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: IceRawTWR.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "TFile.h"
 #include "TTree.h"
 #include "TString.h"
@@ -20,6 +18,8 @@
 #include "IceEvent.h"
 
 #include "twr_reader.h"
+
+/** Job for conversion of TWR raw data into IceEvent data structures. **/
 
 class IceRawTWR : public NcJob
 {

@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceEvent
+~~~
 // Class IceEvent
 // Handling of IceCube event data.
 // Basically this class provides an IceCube tailored user interface
@@ -272,6 +276,8 @@
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 7, 2025  07:29Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "IceEvent.h"
@@ -281,14 +287,22 @@ ClassImp(IceEvent) // Class implementation to enable ROOT I/O
  
 IceEvent::IceEvent() : NcEvent()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fStrings=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 IceEvent::~IceEvent()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fStrings)
  {
@@ -299,14 +313,22 @@ IceEvent::~IceEvent()
 ///////////////////////////////////////////////////////////////////////////
 IceEvent::IceEvent(const IceEvent& evt) : NcEvent(evt)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fStrings=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceEvent::Reset()
 {
+/**
+~~~
 // Reset all values.
+~~~
+**/
 
  NcEvent::Reset();
 
@@ -319,7 +341,11 @@ void IceEvent::Reset()
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceEvent::GetNstrings(TString classname)
 {
+/**
+~~~
 // Provide the number of fired strings of good modules of the specified classname for this event.
+~~~
+**/
 
  // Fetch all fired modules of the specified class for this event
  TObjArray* mods=GetDevices(classname);
@@ -364,8 +390,12 @@ Int_t IceEvent::GetNstrings(TString classname)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceEvent::GetNstrings(NcTrack& t,TString classname)
 {
+/**
+~~~
 // Provide the number of fired strings of modules of the specified classname,
 // associated with the specified track.
+~~~
+**/
 
  // Fetch all associated signals for this track
  Int_t nh=t.GetNsignals();
@@ -411,8 +441,12 @@ Int_t IceEvent::GetNstrings(NcTrack& t,TString classname)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceEvent::GetNstrings(NcJet& j,TString classname)
 {
+/**
+~~~
 // Provide the number of fired strings of modules of the specified classname,
 // associated with the specified jet.
+~~~
+**/
 
  Int_t ntk=j.GetNtracks();
  if (!ntk) return 0;
@@ -468,8 +502,12 @@ Int_t IceEvent::GetNstrings(NcJet& j,TString classname)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceEvent::GetNmodules(NcTrack& t,TString classname)
 {
+/**
+~~~
 // Provide the number of fired (D)OMs of the specified classname,
 // associated with the specified track.
+~~~
+**/
 
  TObjArray* hits=t.GetSignals(classname,1);
  if (!hits) return 0;
@@ -480,8 +518,12 @@ Int_t IceEvent::GetNmodules(NcTrack& t,TString classname)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceEvent::GetNmodules(NcJet& j,TString classname)
 {
+/**
+~~~
 // Provide the number of fired (D)OMs of the specified classname,
 // associated with the specified track.
+~~~
+**/
 
  TObjArray* hits=j.GetSignals(classname,1);
  if (!hits) return 0;
@@ -492,6 +534,8 @@ Int_t IceEvent::GetNmodules(NcJet& j,TString classname)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceEvent::GetStringMax(TString classname,Int_t* id,Float_t* x,Float_t* y)
 {
+/**
+~~~
 // Provide the max. number of fired good (D)OMs of the specified classname at a single string.
 // In case the arguments "id", "x" or "y" are specified, the following information
 // is returned via the corresponding pointer :
@@ -501,6 +545,8 @@ Int_t IceEvent::GetStringMax(TString classname,Int_t* id,Float_t* x,Float_t* y)
 // y  : The Y coordinate (in m) of the string that had the maximum number of firing good (D)OMs
 //
 // By default id=0, x=0 and y=0 which implies that no info is returned.
+~~~
+**/
 
  // Reset the values of the return arguments
  if (id) *id=0;
@@ -555,6 +601,8 @@ Int_t IceEvent::GetStringMax(TString classname,Int_t* id,Float_t* x,Float_t* y)
 ///////////////////////////////////////////////////////////////////////////
 Float_t IceEvent::GetTriggerTime(TString trigname,TObjArray* arr,Int_t slc,TArrayF* peaks) const
 {
+/**
+~~~
 // Determination of the requested trigger time.
 //
 // Input arguments :
@@ -580,6 +628,8 @@ Float_t IceEvent::GetTriggerTime(TString trigname,TObjArray* arr,Int_t slc,TArra
 // Default : arr=0, slc=0 and peaks=0.
 //
 // In case of missing information a trigger time value of 0 will be returned.
+~~~
+**/
 
  NcSample times;
  times.SetStoreMode(1);
@@ -730,6 +780,8 @@ Float_t IceEvent::GetTriggerTime(TString trigname,TObjArray* arr,Int_t slc,TArra
 ///////////////////////////////////////////////////////////////////////////
 TObject* IceEvent::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -738,6 +790,8 @@ TObject* IceEvent::Clone(const char* name) const
 // to store either IceEvent objects or objects derived from IceEvent
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  IceEvent* evt=new IceEvent(*this);
  if (name)

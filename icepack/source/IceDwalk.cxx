@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceDwalk.cxx 83 2013-03-15 15:22:45Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceDwalk
+~~~
 // Class IceDwalk
 // IceRecoBase derived TTask processor to perform direct walk track reconstruction.
 //
@@ -340,6 +342,8 @@
 //
 //--- Author: Nick van Eijndhoven 07-oct-2005 Utrecht University
 //- Modified: NvE $Date: 2013-03-15 16:22:45 +0100 (Fri, 15 Mar 2013) $ IIHE-VUB, Brussels
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "IceDwalk.h"
@@ -349,11 +353,15 @@ ClassImp(IceDwalk) // Class implementation to enable ROOT I/O
 
 IceDwalk::IceDwalk(const char* name,const char* title) : IceRecoBase(name,title)
 {
+/**
+~~~
 // Default constructor.
 // The various reconstruction parameters are initialised to the values
 // as mentioned in the general documentation of this class.
 // The angular separation parameter for jet merging is initialised as half
 // the value of the angular separation parameter for track candidate clustering.    
+~~~
+**/
 
  SetCleaned(1,"A");
  SetCleaned(0,"I");
@@ -460,11 +468,17 @@ IceDwalk::IceDwalk(const char* name,const char* title) : IceRecoBase(name,title)
 ///////////////////////////////////////////////////////////////////////////
 IceDwalk::~IceDwalk()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetDmin(Float_t d,TString s)
 {
+/**
+~~~
 // Set minimum hit distance (in m) to form a track element.
 // For default values please refer to the default constructor of this class.
 // The input argument "s" allows for detector specification.
@@ -473,6 +487,8 @@ void IceDwalk::SetDmin(Float_t d,TString s)
 //     "IC" --> Standard IceCube optimised reconstruction
 //     "DC" --> DeepCore optimised reconstruction
 //     "I"  --> InIce (IC+DC hybrid) optimised reconstruction
+~~~
+**/
  
  if (s=="A")
  {
@@ -502,6 +518,8 @@ void IceDwalk::SetDmin(Float_t d,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetDtmarg(Int_t dt,TString s)
 {
+/**
+~~~
 // Set maximum hit time residual margin (in ns) for track elements w.r.t.
 // the expected hit time difference based on a particle traveling at c between
 // the two corresponding DOMs. This will guarantee causality for the track elements.
@@ -514,6 +532,8 @@ void IceDwalk::SetDtmarg(Int_t dt,TString s)
 //     "IC" --> Standard IceCube optimised reconstruction
 //     "DC" --> DeepCore optimised reconstruction
 //     "I"  --> InIce (IC+DC hybrid) optimised reconstruction
+~~~
+**/
 
  if (s=="A")
  {
@@ -543,6 +563,8 @@ void IceDwalk::SetDtmarg(Int_t dt,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetMaxDhit(Float_t d,TString s)
 {
+/**
+~~~
 // Set maximum distance (in scattering length) for a hit to get associated.
 // For default values please refer to the default constructor of this class.
 // The input argument "s" allows for detector specification.
@@ -551,6 +573,8 @@ void IceDwalk::SetMaxDhit(Float_t d,TString s)
 //     "IC" --> Standard IceCube optimised reconstruction
 //     "DC" --> DeepCore optimised reconstruction
 //     "I"  --> InIce (IC+DC hybrid) optimised reconstruction
+~~~
+**/
 
  if (s=="A")
  {
@@ -580,6 +604,8 @@ void IceDwalk::SetMaxDhit(Float_t d,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetDthit(Float_t dtmin,Float_t dtmax,TString s)
 {
+/**
+~~~
 // Set time interval [dtmin,dtmax] (in ns) around the expected hit time (t=0)
 // for a hit to get associated.
 // By the definition of t=0 for the expected hit time, this just means that
@@ -595,6 +621,8 @@ void IceDwalk::SetDthit(Float_t dtmin,Float_t dtmax,TString s)
 //     "IC" --> Standard IceCube optimised reconstruction
 //     "DC" --> DeepCore optimised reconstruction
 //     "I"  --> InIce (IC+DC hybrid) optimised reconstruction
+~~~
+**/
 
  if (s=="A")
  {
@@ -639,6 +667,8 @@ void IceDwalk::SetDthit(Float_t dtmin,Float_t dtmax,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetTangmax(Float_t ang,TString s)
 {
+/**
+~~~
 // Set maximum angular separation (in deg) for track candidate clustering into jets.
 // For the default value please refer to the default constructor of this class.
 //
@@ -653,6 +683,8 @@ void IceDwalk::SetTangmax(Float_t ang,TString s)
 //        angular separation for jet merging into 1 single track to ang/2.
 //        In order to specify a different max. jet merging separation angle,
 //        one has to invoke the memberfunction SetJangmax afterwards.
+~~~
+**/
  
  if (s=="A")
  {
@@ -697,6 +729,8 @@ void IceDwalk::SetTangmax(Float_t ang,TString s)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetTdistmax(Float_t d,TString s,Int_t invol)
 {
+/**
+~~~
 // Set maximum distance (in m) of the two track candidates in the track
 // clustering process.
 // The input argument "s" allows for detector specification.
@@ -715,6 +749,8 @@ void IceDwalk::SetTdistmax(Float_t d,TString s,Int_t invol)
 // very different locations. 
 // At invokation of this memberfunction the default is invol=1.
 // For default values please refer to the default constructor of this class.
+~~~
+**/
  
  if (s=="A")
  {
@@ -759,6 +795,8 @@ void IceDwalk::SetTdistmax(Float_t d,TString s,Int_t invol)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetJangmax(Float_t ang,TString s,Int_t iter)
 {
+/**
+~~~
 // Set angular separation (in deg) within which jets are merged into 1 single track.
 // The input argument "s" allows for detector specification.
 //
@@ -787,6 +825,8 @@ void IceDwalk::SetJangmax(Float_t ang,TString s,Int_t iter)
 //     appear as a track in the reconstruction result.
 //     This situation resembles the standard Sieglinde direct walk processing
 //     and as such can be used to perform comparison studies.
+~~~
+**/
 
  if (s=="A")
  {
@@ -831,6 +871,8 @@ void IceDwalk::SetJangmax(Float_t ang,TString s,Int_t iter)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetJdistmax(Float_t d,TString s,Int_t invol)
 {
+/**
+~~~
 // Set maximum distance (in m) of the two jets in the jet merging process.
 // The input argument "s" allows for detector specification.
 //
@@ -848,6 +890,8 @@ void IceDwalk::SetJdistmax(Float_t d,TString s,Int_t invol)
 // very different locations. 
 // At invokation of this memberfunction the default is invol=1.
 // For default values please refer to the default constructor of this class.
+~~~
+**/
  
  if (s=="A")
  {
@@ -892,6 +936,8 @@ void IceDwalk::SetJdistmax(Float_t d,TString s,Int_t invol)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetAsType(Int_t flag,TString s,Float_t w)
 {
+/**
+~~~
 // Select number of associated hits and/or strings as quality indicator
 // for each Track Candidate (TC).
 //
@@ -924,6 +970,8 @@ void IceDwalk::SetAsType(Int_t flag,TString s,Float_t w)
 // be modified. 
 //
 // For default values please refer to the default constructor of this class.
+~~~
+**/
 
  if (s=="A")
  {
@@ -968,6 +1016,8 @@ void IceDwalk::SetAsType(Int_t flag,TString s,Float_t w)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetHitWeight(Float_t w)
 {
+/**
+~~~
 // Set weight for associated hit counting.
 // Every associated hit will contribute to the quality of a track candidate as :
 //
@@ -987,6 +1037,8 @@ void IceDwalk::SetHitWeight(Float_t w)
 // 3) Setting w=-2 will result in value=amp*lambda/dist, where "amp" is the hit amplitude in npe
 //
 // For default values please refer to the default constructor of this class.
+~~~
+**/
 
  fHitweight=w;  
 
@@ -996,6 +1048,8 @@ void IceDwalk::SetHitWeight(Float_t w)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetConditionalReco(Int_t flag)
 {
+/**
+~~~
 // Set flag for conditional reconstruction of the various detector combinations.
 // This will allow to save considerably on cpu time, especially for large events.
 //
@@ -1033,6 +1087,8 @@ void IceDwalk::SetConditionalReco(Int_t flag)
 // 3) Invokation of the SetMaxHits memberfunction with a negative number will de-activate
 //    the "IC", "I" or "DC" detector configuration for reconstruction if flag<=2, but for flag>=3
 //    it will only de-activate the "IC", "I" or "DC" selection criteria while keeping all InIce hits.
+~~~
+**/
 
  if (flag>=0 && flag<=8) fConditional=flag;
 
@@ -1042,10 +1098,14 @@ void IceDwalk::SetConditionalReco(Int_t flag)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SetQvalueCut(Float_t qcut)
 {
+/**
+~~~
 // Set threshold for final track Qvalue selection.
 // Tracks with Qvalue<qcut*qmax will not be kept.
 //
 // For the default value please refer to the default constructor of this class.
+~~~
+**/
 
  fQcut=qcut;
 
@@ -1055,7 +1115,11 @@ void IceDwalk::SetQvalueCut(Float_t qcut)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the direct walk track reconstruction.
+~~~
+**/
 
  // Obtain a pointer to the parent NcJob of this reconstruction task
  TString name=opt;
@@ -1099,7 +1163,11 @@ void IceDwalk::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceDwalk::Amanda()
 {
+/**
+~~~
 // The direct walk track reconstruction for Amanda OM signals.
+~~~
+**/
 
  if (fMaxhitsA<0) return 0;
 
@@ -1317,6 +1385,8 @@ Int_t IceDwalk::Amanda()
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceDwalk::IceCube(TObjArray& hits)
 {
+/**
+~~~
 // The direct walk track reconstruction for the standard IceCube InIce DOM signals c.q. criteria.
 // The procedure here is optimised to provide a direct walk track with better than average
 // pointing accuracy (i.e. slightly higher energy threshold) on the expense of sometimes
@@ -1325,6 +1395,8 @@ Int_t IceDwalk::IceCube(TObjArray& hits)
 // (un)conditional processing.
 //
 // The return argument indicates whether or not a track has been found
+~~~
+**/
 
  // Determination and storage of track elements.
  TObjArray tes;
@@ -1376,6 +1448,8 @@ Int_t IceDwalk::IceCube(TObjArray& hits)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceDwalk::InIce(TObjArray& hits)
 {
+/**
+~~~
 // The direct walk track reconstruction for all InIce DOM signals c.q. criteria.
 // The procedure here is optimised to provide at least one direct walk track
 // in most of the events (i.e. opt for somewhat lower energy threshold) at the
@@ -1384,6 +1458,8 @@ Int_t IceDwalk::InIce(TObjArray& hits)
 // (un)conditional processing.
 //
 // The return argument indicates whether or not a track has been found
+~~~
+**/
 
  // Determination and storage of track elements.
  TObjArray tes;
@@ -1434,6 +1510,8 @@ Int_t IceDwalk::InIce(TObjArray& hits)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceDwalk::DeepCore(TObjArray& hits)
 {
+/**
+~~~
 // The direct walk track reconstruction for the DeepCore DOM signals c.q. criteria.
 // The procedure here is optimised to provide a direct walk track with the
 // lowest possible energy threshold at the expense of having a worse than average
@@ -1442,6 +1520,8 @@ Int_t IceDwalk::DeepCore(TObjArray& hits)
 // (un)conditional processing.
 //
 // The return argument indicates whether or not a track has been found
+~~~
+**/
 
  // Determination and storage of track elements.
  TObjArray tes;
@@ -1497,6 +1577,8 @@ Int_t IceDwalk::DeepCore(TObjArray& hits)
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceDwalk::MakeTEs(Int_t cln,Int_t maxhits,Float_t dmin,Float_t dtmarg,Float_t dtmin,Float_t dtmax,TString domclass,TObjArray& tes,TObjArray& hits,Int_t gethits)
 {
+/**
+~~~
 // Creation of Track Elements (TEs) which (via hit association) may form track candidates (TCs).
 // The TE selection criteria (reflecting IC, I or DC parameters) are steered via "maxhits", "dmin", "dtmarg",
 // "dtmin" and "dtmax", whereas the DOMs to be used are specified independently via "domclass". 
@@ -1507,6 +1589,8 @@ Int_t IceDwalk::MakeTEs(Int_t cln,Int_t maxhits,Float_t dmin,Float_t dtmarg,Floa
 // However, when gethits=0, the existing hits in the array "hits" will be used.
 // The latter case allows to remove hits from the existing list in subsequent processing steps
 // (e.g. remove hits which were already associated to tracks reconstructed previously with other criteria).
+~~~
+**/
 
  if (fConditional<=2 && maxhits<0) return 0;
 
@@ -1759,7 +1843,11 @@ Int_t IceDwalk::MakeTEs(Int_t cln,Int_t maxhits,Float_t dmin,Float_t dtmarg,Floa
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::AssociateHits(TObjArray& tes,TObjArray& hits,Int_t astype,Float_t ws,Float_t dtmin,Float_t dtmax,Float_t maxdhit,Int_t vgroup,Int_t cln,Int_t slc,Float_t& qmax)
 {
- // Association of hits to the various track elements.
+/**
+~~~
+// Association of hits to the various track elements.
+~~~
+**/
 
  const Float_t pi=acos(-1.);
  const Float_t c=0.299792458;         // Light speed in vacuum in meters per ns
@@ -2003,7 +2091,11 @@ void IceDwalk::AssociateHits(TObjArray& tes,TObjArray& hits,Int_t astype,Float_t
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::SelectQvalue(TObjArray& tes,Float_t qmax)
 {
- // Perform selection on Q value in case of multiple track candidates
+/**
+~~~
+// Perform selection on Q value in case of multiple track candidates
+~~~
+**/
 
  Int_t nte=tes.GetEntries();
  Float_t qtc=0;
@@ -2042,13 +2134,17 @@ void IceDwalk::SelectQvalue(TObjArray& tes,Float_t qmax)
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::ClusterTracks(TObjArray& tes,TObjArray& jets,Float_t tangmax,Int_t tinvol,Float_t tdistmax,Float_t qmax)
 {
- // Cluster track candidates within a certain opening angle into jets.
- // Also the track should be within a certain maximum distance of the
- // starting track in order to get clustered.
- // The latter prevents clustering of (nearly) parallel track candidates
- // crossing the detector a very different locations (e.g. muon bundles).
- // The average r0 and t0 of the constituent tracks will be taken as the
- // jet reference point. 
+/**
+~~~
+// Cluster track candidates within a certain opening angle into jets.
+// Also the track should be within a certain maximum distance of the
+// starting track in order to get clustered.
+// The latter prevents clustering of (nearly) parallel track candidates
+// crossing the detector a very different locations (e.g. muon bundles).
+// The average r0 and t0 of the constituent tracks will be taken as the
+// jet reference point. 
+~~~
+**/
 
  NcSignal usd; // Storage of total Q value etc... in a jet via user data
  usd.AddNamedSlot("Qvalue");
@@ -2269,13 +2365,17 @@ void IceDwalk::ClusterTracks(TObjArray& tes,TObjArray& jets,Float_t tangmax,Int_
 ///////////////////////////////////////////////////////////////////////////
 void IceDwalk::MergeJets(TObjArray& jets2,Float_t jangmax,Float_t jdistmax,Int_t jinvol,Int_t jiterate,Float_t qmax)
 {
- // Merge jets within a certain opening to provide the final track(s).
- // Also the jet should be within a certain maximum distance of the
- // starting jet in order to get merged.
- // The latter prevents merging of (nearly) parallel jets/tracks
- // crossing the detector a very different locations (e.g. muon bundles).
- // The average r0 and t0 of the constituent jets will be taken as the
- // final reference point. 
+/**
+~~~
+// Merge jets within a certain opening to provide the final track(s).
+// Also the jet should be within a certain maximum distance of the
+// starting jet in order to get merged.
+// The latter prevents merging of (nearly) parallel jets/tracks
+// crossing the detector a very different locations (e.g. muon bundles).
+// The average r0 and t0 of the constituent jets will be taken as the
+// final reference point. 
+~~~
+**/
 
  NcSignal usd; // Storage of average Q value etc... in a jet via user data
  usd.AddNamedSlot("Qvalue");
@@ -2472,17 +2572,21 @@ void IceDwalk::MergeJets(TObjArray& jets2,Float_t jangmax,Float_t jdistmax,Int_t
 ///////////////////////////////////////////////////////////////////////////
 Int_t IceDwalk::StoreTracks(TObjArray& jets2,Int_t minahits,Int_t minamods,Float_t jangmax,TString name,TString title,TObjArray& hits)
 {
- // Store every jet as a reconstructed track in the event structure,
- // provided it has sufficient associated hits.
- // The jet 3-momentum (normalised to 1) and reference point
- // (i.e.the average r0 and t0 of the constituent tracks) will make up
- // the final track parameters.
- // All the associated hits of all the constituent tracks of the jet
- // will be associated to the final track.
- // In case the jet angular separation was set <0, only the jet with
- // the maximum number of tracks (i.e. the first one in the array)
- // will be used to form a track. This will allow comparison with
- // the standard Sieglinde processing.
+/**
+~~~
+// Store every jet as a reconstructed track in the event structure,
+// provided it has sufficient associated hits.
+// The jet 3-momentum (normalised to 1) and reference point
+// (i.e.the average r0 and t0 of the constituent tracks) will make up
+// the final track parameters.
+// All the associated hits of all the constituent tracks of the jet
+// will be associated to the final track.
+// In case the jet angular separation was set <0, only the jet with
+// the maximum number of tracks (i.e. the first one in the array)
+// will be used to form a track. This will allow comparison with
+// the standard Sieglinde processing.
+~~~
+**/
 
  Int_t njets=jets2.GetEntries();
  NcTrack t; 

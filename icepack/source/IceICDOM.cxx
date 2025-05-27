@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
  *
  * Author: The IceCube NCFS-based Offline Project.
@@ -11,11 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
-// $Id: IceICDOM.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class IceICDOM
+~~~
 // Class IceICDOM
 // Signal/Hit handling of an In-Ice main IceCube Digital Optical Module (ICDOM).
 // Basically this class provides an IceCube tailored user interface
@@ -26,6 +28,8 @@
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "IceICDOM.h"
@@ -35,21 +39,35 @@ ClassImp(IceICDOM) // Class implementation to enable ROOT I/O
  
 IceICDOM::IceICDOM() : IceIDOM()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 IceICDOM::~IceICDOM()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 IceICDOM::IceICDOM(const IceICDOM& m) : IceIDOM(m)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* IceICDOM::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -58,6 +76,8 @@ TObject* IceICDOM::Clone(const char* name) const
 // to store either IceICDOM objects or objects derived from IceICDOM
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  IceICDOM* m=new IceICDOM(*this);
  if (name)

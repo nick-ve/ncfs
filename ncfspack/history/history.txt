@@ -1556,5 +1556,11 @@
                 has been modified to load all the NCFS related libraries, next to the libPythia6 and necessary ROOT libraries.
                 Note however, that old ROOT macros containing "gSystem->Load(...)" statements will still work as usual.
                 This new release is fully backward compatible and also compatible with ROOT6.                
-                As such, the version indicator in NcVersion has been updated to 6.0.
-                
+                As such, the version indicator in NcVersion has been updated to 6.0.          
+27-may-2025 NvE The docs sections in the .h and .cxx files of IceCal2Root, IceDB2Root, IceF2k, IceRawTWR, IceRoot and IceRootx
+                in the folder /iceconvert modified, such that they satisfy both the THtml and Doxygen format.
+                The docs sections in the .h and .cxx files in the folder /iceconvert modified, such that they satisfy
+                both the THtml and Doxygen format.
+                To prepare for Doxygen documentation generation, the files Doxyfile, doxygen.xml and ncfslogo.jpg
+                have been introduced to the /ncfs top directory, in order to provide the standard settings for Doxygen runs.
+                Also the folder /icepackbase marked for deletion from the repository.

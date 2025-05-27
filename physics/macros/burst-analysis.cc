@@ -108,7 +108,7 @@
 
  lab.ListDataNames();
 
- Bool_t src=kFALSE;
+ src=kFALSE;
  lab.LoadInputData(src,"IC-alerts.root","T"); // Load from observed event data
 
  // Provide a listing of the first 5 stored entries for both the sources (c.q. burst) and the observed events

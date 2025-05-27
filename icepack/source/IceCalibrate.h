@@ -14,6 +14,8 @@
 #include "IceEvent.h"
 #include "IceGOM.h"
 
+/** TTask derived class to perform the various calibrations. **/
+
 class IceCalibrate : public TTask
 {
  public :
