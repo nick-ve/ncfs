@@ -1561,6 +1561,9 @@
                 in the folder /iceconvert modified, such that they satisfy both the THtml and Doxygen format.
                 The docs sections in the .h and .cxx files in the folder /iceconvert modified, such that they satisfy
                 both the THtml and Doxygen format.
-                To prepare for Doxygen documentation generation, the files Doxyfile, doxygen.xml and ncfslogo.jpg
+                To prepare for Doxygen documentation generation, the files Doxyfile.txt, doxygen.xml and ncfslogo.jpg
                 have been introduced to the /ncfs top directory, in order to provide the standard settings for Doxygen runs.
-                Also the folder /icepackbase marked for deletion from the repository.
+                Also the folder /icepackbase marked for deletion from the repository, which contained a stripped down
+                selection of classes to allow inclusion in the IceTray software framework of IceCube.
+                Since starting from NCFS release 6.0 the package is fully standalone and can function with any ROOT release,
+                there is no need anymore to provide a stripped down version.  

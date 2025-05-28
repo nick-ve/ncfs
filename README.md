@@ -37,7 +37,7 @@ The complete package can be compiled on all platforms which support ROOT,
 using for instance the GNU G++ compiler.
 Being embedded within the ROOT framework provides sophisticated analysis
 capabilities (e.g. histogramming, fitting, graphics etc...).
-In addition, the high level of interactivity of the ROOT/CINT system allows
+In addition, the high level of interactivity of the ROOT system allows
 program development without the time consuming compile/link/load/execute cycle,
 whereas also the ROOT tree output format provides a completely machine
 independent data format providing efficient and easy to use data access
@@ -45,13 +45,21 @@ capable to cope with the most complex data analyses programs.
  
 Only the C++ ANSI/ISO standard is used in the source code and as such the package
 is fully compatible with all standard C++ compilers as well as with
-the ROOT/CINT interpreting system.
+the ROOT interpreting system.
  
 The comments in the source code are placed in the locations proposed
 in the ROOT manual pages such that the automatic source code
-documentation system of ROOT can be used directly from the source code.
+documentation system of ROOT (THtml) can be used directly from the source code.
 This has turned out to be very convenient (time saving) and guarantees
 always updated documentation compatible with the current source code.
+It should be noted that for NCFS versions starting from release tag v6.1
+the format of the documentation sections has been modified in order to
+comply with both the ROOT THtml and Doxygen documentation tools.
+Furthermore, starting from NCFS release tag v6.1, the Doxygen documentation
+system has been used, since THtml is not available anymore for ROOT versions
+6.34 and later.
+The files Doxyfile.txt and doxygen.xml in the top directory /ncfs
+contain the Doxygen settings that produced the corresponding Doxygen documentation. 
  
 Coding conventions :
 --------------------
@@ -208,29 +216,30 @@ Example : To create the IceCube environment one should load the following librar
     Root> gSystem->Load("ncfspack");
     Root> gSystem->Load("icepack");
 
-Notes :
--------
-1) Several standard ROOT libraries (e.g. Minuit, Pythia, GUI, ...) have to be loaded
-   via the corresponding gSystem->Load(....) statement.
-   The most convenient way to achieve this automatically is to perform this
-   in your rootlogon.cc macro. 
-   An example of rootlogon.cc is provided in this "ncfs" top directory.
-2) For NCFS versions starting from release tag v6.0, the libraries of all the
-   NCFS related packages are already automatically loaded in the provided rootlogon.cc macro.
-3) Due to a (slight) difference between the new ROOT/Cling interpreter w.r.t. ROOT/CINT,
-   statements like 'gSystem->Load("ncfspack");' don't work anymore in general in ROOT macros
-   (apart from the rootlogon.cc macro).
-   This is the reason that starting from NCFS release tag v6.0, all libraries are loaded
-   in the provided rootlogon.cc macro.
-   However, old ROOT macros that still contain these statements, will continue to work as usual.
-4) Similar to 3), statements like 'gROOT->LoadMacro("myclass.cxx+");' don't work anymore
-   in general ROOT macros.
-   To overcome this issue, one can invoke this on the ROOT command line like for instance
+Some final remarks :
+--------------------
 
-     $root -b -q -e 'gROOT->LoadMacro("myclass.cxx+");' test.cc >test.log
+ 1) Several standard ROOT libraries (e.g. Minuit, Pythia, GUI, ...) have to be loaded
+    via the corresponding gSystem->Load(....) statement.    
+    The most convenient way to achieve this automatically is to perform this
+    in your rootlogon.cc macro.     
+    An example of rootlogon.cc is provided in this "ncfs" top directory.    
+ 2) For NCFS versions starting from release tag v6.0, the libraries of all the
+    NCFS related packages are already automatically loaded in the provided rootlogon.cc macro.    
+ 3) Due to a (slight) difference between the new ROOT/Cling interpreter w.r.t. ROOT/CINT,
+    statements like 'gSystem->Load("ncfspack");' don't work anymore in general in ROOT macros
+    (apart from the rootlogon.cc macro).    
+    This is the reason that starting from NCFS release tag v6.0, all libraries are loaded
+    in the provided rootlogon.cc macro.
+    However, old ROOT macros that still contain these statements, will continue to work as usual.    
+ 4) Similar to 3), statements like 'gROOT->LoadMacro("myclass.cxx+");' don't work anymore
+    in general ROOT macros.    
+    To overcome this issue, one can invoke this on the ROOT command line like for instance
 
-   which first creates a shared library object of "myclass" and then executes the
-   ROOT macro test.cc (in which "myclass" can be used) with the output stored in the file test.log.
+         $root -b -q -e 'gROOT->LoadMacro("myclass.cxx+");' test.cc >test.log
+
+    which first creates a shared library object of "myclass" and then executes the
+    ROOT macro test.cc (in which "myclass" can be used) with the output stored in the file test.log.
  
  
  
