@@ -162,7 +162,7 @@
 #include "IceDB2Root.h"
 #include "Riostream.h"
 
-ClassImp(IceDB2Root) // Class implementation to enable ROOT I/O
+ClassImp(IceDB2Root); // Class implementation to enable ROOT I/O
 
 IceDB2Root::IceDB2Root(const char* name,const char* title) : NcJob(name,title)
 {

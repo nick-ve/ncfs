@@ -134,8 +134,9 @@
 #include "IceLinefit.h"
 #include "Riostream.h"
 
-ClassImp(IceLinefit) // Class implementation to enable ROOT I/O
+ClassImp(IceLinefit); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceLinefit::IceLinefit(const char* name,const char* title) : IceRecoBase(name,title)
 {
 /**

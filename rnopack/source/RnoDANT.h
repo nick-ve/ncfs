@@ -6,6 +6,8 @@
 
 #include "RnoGANT.h"
 
+/** Signal (Hit) handling of an RNO-G Deep Antenna (DANT). **/
+
 class RnoDANT : public RnoGANT
 {
  public:

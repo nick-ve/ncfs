@@ -32,11 +32,11 @@
 // Procedure applied for Amanda TWR data :
 // ---------------------------------------
 //
-// 1) The waveform is fed to a TSpectrum object, and the peak locations 
-//    are determined with the TSpectrum::Search() function.
+// 1) The waveform is fed to a NcSpectrum object, and the peak locations 
+//    are determined with the NcSpectrum::Search() function.
 //
 // 2) The waveform is divided into regions corresponding to the peaks found by 
-//    TSpectrum. The region boundary between two peaks is at the location of 
+//    NcSpectrum. The region boundary between two peaks is at the location of 
 //    the minimum between the two peaks. 
 //
 // 3) For each region the "effective baseline" (used in e.g. the
@@ -72,7 +72,7 @@
 // 8) Each pulse is checked for saturation and discarded if necessary.
 //    Note : For IceCube only the RAW waveforms are checked for saturation.
 //
-// 9) TSpectrum needs a minimum number of bins for its Search function, otherwise
+// 9) NcSpectrum needs a minimum number of bins for its Search function, otherwise
 //    the clipping window is too large, which causes an error. If a waveform does
 //    not contain enough bins, the following alternative approach is used : 
 //    - A loop over all bins is performed.
@@ -98,7 +98,7 @@
 // structure itself via the device named "IceMakeHits".
 //
 //--- Author: Nick van Eijndhoven and Garmt de Vries-Uiterweerd 15-jan-2007 Utrecht University
-//- Modified: NvE $Date: 2012-02-07 11:05:54 +0100 (Tue, 07 Feb 2012) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 29, 2025  08:41Z
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -108,8 +108,9 @@
 
 #include "TCanvas.h"
 
-ClassImp(IceMakeHits) // Class implementation to enable ROOT I/O
+ClassImp(IceMakeHits); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceMakeHits::IceMakeHits(const char* name,const char* title) : TTask(name,title)
 {
 /**
@@ -191,7 +192,7 @@ void IceMakeHits::SetMinPulseHeightA(Float_t val)
 /**
 ~~~
 // Set minimum required pulse height for Amanda TWR extraction.
-// This is used only for narrow pulses that cannot be handled with TSpectrum.
+// This is used only for narrow pulses that cannot be handled with NcSpectrum.
 // The default as set in the constructor of this class is 50.
 ~~~
 **/
@@ -266,7 +267,7 @@ void IceMakeHits::SetMinPulseHeightI(Float_t val)
 /**
 ~~~
 // Set minimum required pulse height for IceCube waveform hit extraction.
-// This is used only for narrow pulses that cannot be handled with TSpectrum.
+// This is used only for narrow pulses that cannot be handled with NcSpectrum.
 // The default as set in the constructor of this class is 0.
 ~~~
 **/
@@ -464,7 +465,7 @@ void IceMakeHits::Exec(Option_t* opt)
  fEvt->AddDevice(params);
 
  Int_t oldlevel=gErrorIgnoreLevel;
- gErrorIgnoreLevel=kFatal; // Suppress all (TSpectrum) error and warning messages
+ gErrorIgnoreLevel=kFatal; // Suppress all (NcSpectrum) error and warning messages
 
  Amanda();
  IceCube();
@@ -501,8 +502,8 @@ void IceMakeHits::Amanda()
 
  // Some objects and variables we will need
  TH1F htemp, diff;
- TSpectrum spec(fMaxPeaksA);
- Int_t nrIterations=(Int_t)(7*fSigmaA+0.5); // Number of iterations used in TSpectrum::SearchHighRes()
+ NcSpectrum spec(fMaxPeaksA);
+ Int_t nrIterations=(Int_t)(7*fSigmaA+0.5); // Number of iterations used in NcSpectrum::SearchHighRes()
  Int_t npeaks=0, ibin=0, lookforsteepestuntilbin=0, steep=0;
  Float_t maxval=0, rise=0, rc=0, yyy=0;
  Bool_t pulsegoingon=false;
@@ -542,7 +543,7 @@ void IceMakeHits::Amanda()
    // Check if clipping window is not too large
    if(wf->GetNbinsX() > 2*nrIterations+1)
    {
-    // Find peaks with TSpectrum
+    // Find peaks with NcSpectrum
     npeaks=spec.Search(wf,fSigmaA,"goff");
     // Discard waveform if no or too many peaks found
     if(npeaks<1 || npeaks>fMaxPeaksA) continue;
@@ -764,9 +765,9 @@ void IceMakeHits::IceCube()
 
  // Some objects and variables we will need
  TH1F htemp, diff;
- TSpectrum spec(fMaxPeaksI);
+ NcSpectrum spec(fMaxPeaksI);
  spec.SetDeconIterations(50);
- Int_t nrIterations=(Int_t)(7*fSigmaI+0.5); // Number of iterations used in TSpectrum::SearchHighRes()
+ Int_t nrIterations=(Int_t)(7*fSigmaI+0.5); // Number of iterations used in NcSpectrum::SearchHighRes()
  Int_t npeaks=0, ibin=0, lookforsteepestuntilbin=0, steep=0;
  Float_t maxval=0, base1=0, rise=0, rc=0, yyy=0;
  Bool_t pulsegoingon=false;
@@ -897,7 +898,7 @@ void IceMakeHits::IceCube()
    // Check if clipping window is not too large
    if(nbinswf > 2*nrIterations+1)
    {
-    // Find peaks with TSpectrum
+    // Find peaks with NcSpectrum
     if ((cutlevel-basemedian) && (maxval-basemedian))
     {
      npeaks=spec.Search(wf,fSigmaI,"goff",fabs((cutlevel-basemedian)/(maxval-basemedian)));

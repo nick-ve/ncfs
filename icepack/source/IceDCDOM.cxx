@@ -35,8 +35,9 @@
 #include "IceDCDOM.h"
 #include "Riostream.h"
  
-ClassImp(IceDCDOM) // Class implementation to enable ROOT I/O
+ClassImp(IceDCDOM); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 IceDCDOM::IceDCDOM() : IceIDOM()
 {
 /**

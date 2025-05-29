@@ -6,6 +6,8 @@
 
 #include "RnoDANT.h"
 
+/** Signal (Hit) handling of an RNO-G deep Vertical Polarisation antenna (VPOL). **/
+
 class RnoVPOL : public RnoDANT
 {
  public:

@@ -110,8 +110,9 @@
 #include "IceCleanHits.h"
 #include "Riostream.h"
 
-ClassImp(IceCleanHits) // Class implementation to enable ROOT I/O
+ClassImp(IceCleanHits); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceCleanHits::IceCleanHits(const char* name,const char* title) : TTask(name,title)
 {
 /**

@@ -169,8 +169,9 @@
   if (gIcePandel) gIcePandel->FitFCN(npar,gin,f,u,flag);
  }
 
-ClassImp(IcePandel) // Class implementation to enable ROOT I/O
+ClassImp(IcePandel); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IcePandel::IcePandel(const char* name,const char* title) : IceRecoBase(name,title)
 {
 /**

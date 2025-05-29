@@ -173,7 +173,7 @@
 #include "IceCal2Root.h"
 #include "Rstrstream.h"
 
-ClassImp(IceCal2Root) // Class implementation to enable ROOT I/O
+ClassImp(IceCal2Root); // Class implementation to enable ROOT I/O
 
 IceCal2Root::IceCal2Root(const char* name,const char* title) : NcJob(name,title)
 {

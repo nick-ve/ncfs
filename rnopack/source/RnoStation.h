@@ -13,6 +13,8 @@
 #include "RnoULPDA.h"
 #include "RnoDLPDA.h"
 
+/** Handling of RNO-G event data. **/
+
 class RnoStation : public NcDetectorUnit
 {
  public:

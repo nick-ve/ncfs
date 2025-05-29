@@ -6,6 +6,8 @@
 
 #include "RnoSANT.h"
 
+/** Signal (Hit) handling of an RNO-G surface LogPeriodic Dipole Antenna (LPDA). **/
+
 class RnoLPDA : public RnoSANT
 {
  public:

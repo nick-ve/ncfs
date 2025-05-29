@@ -148,7 +148,7 @@
 #include "IceF2k.h"
 #include "Riostream.h"
 
-ClassImp(IceF2k) // Class implementation to enable ROOT I/O
+ClassImp(IceF2k); // Class implementation to enable ROOT I/O
 
 IceF2k::IceF2k(const char* name,const char* title) : NcJob(name,title)
 {

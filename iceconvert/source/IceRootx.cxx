@@ -88,7 +88,7 @@
 #include "IceRootx.h"
 #include "Riostream.h"
 
-ClassImp(IceRootx) // Class implementation to enable ROOT I/O
+ClassImp(IceRootx); // Class implementation to enable ROOT I/O
 
 IceRootx::IceRootx(const char* name,const char* title) : NcJob(name,title)
 {

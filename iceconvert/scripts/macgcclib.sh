@@ -18,7 +18,7 @@ unset LD_PREBIND
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
 gcccomp="-c -g0 -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
-gccroot="-c -g0 -ansi -pedantic -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
+gccroot="-c -g0 -ansi -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
 #
 echo "lib1 = " $lib1
 echo "lib2 = " $lib2

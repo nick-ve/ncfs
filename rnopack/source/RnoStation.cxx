@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2021, RNO-G Experiment at Summit Station. All rights reserved.
  *
  * Author: The RNO-G NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class RnoStation
+~~~
 // Class RnoStation
 // Handling of RNO-G event data.
 // Basically this class provides an RNO-G tailored user interface
@@ -31,23 +35,34 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, February 3, 2023  16:30Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoStation.h"
 #include "Riostream.h"
  
-ClassImp(RnoStation) // Class implementation to enable ROOT I/O
+ClassImp(RnoStation); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 RnoStation::RnoStation(const char* name,const char* title) : NcDetectorUnit(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fCanvas=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoStation::~RnoStation()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fCanvas)
  {
@@ -58,13 +73,19 @@ RnoStation::~RnoStation()
 ///////////////////////////////////////////////////////////////////////////
 RnoStation::RnoStation(const RnoStation& q) : NcDetectorUnit(q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fCanvas=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)
 {
+/**
+~~~
 // Display the sampling of the j-th sampled observable (1=first) for the selected channel number "ich".
 // The graph will display the values of the j-th observable versus the sample entry number.
 //
@@ -72,6 +93,8 @@ TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
+~~~
+**/
 
  if (fCanvas)
  {
@@ -111,6 +134,8 @@ TGraph* RnoStation::DisplaySampling(Int_t ich,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TCanvas* RnoStation::DisplaySamplings(Int_t j)
 {
+/**
+~~~
 // Display the sampling of the j-th sampled observable (1=first) for all channels.
 // The graph will display the values of the j-th observable versus the sample entry number.
 //
@@ -118,6 +143,8 @@ TCanvas* RnoStation::DisplaySamplings(Int_t j)
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
+~~~
+**/
 
  if (fCanvas)
  {
@@ -159,10 +186,14 @@ TCanvas* RnoStation::DisplaySamplings(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TGraph RnoStation::GetSamplingGraph(Int_t ich,Int_t j)
 {
+/**
+~~~
 // Provide the sampling graph of the j-th sampled observable (1=first) for the selected channel number "ich".
 // The graph contains the values of the j-th observable versus the sample entry number.
 //
 // The default value is j=1.
+~~~
+**/
 
  TGraph gr;
 
@@ -209,6 +240,8 @@ TGraph RnoStation::GetSamplingGraph(Int_t ich,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TH1F RnoStation::GetSamplingDFT(Int_t ich,TString sel,Int_t j)
 {
+/**
+~~~
 // Provide the Discrete Fourier Transform (DFT) of the j-th sampled observable (1=first)
 // for the selected channel number "ich".
 //
@@ -231,6 +264,8 @@ TH1F RnoStation::GetSamplingDFT(Int_t ich,TString sel,Int_t j)
 // sel="RE k 2" will show all N real components as a function of the index k in the frequency domain.
 //
 // The default values are sel="AMP Hz" and j=1.
+~~~
+**/
 
  TH1F his;
 
@@ -254,11 +289,15 @@ TH1F RnoStation::GetSamplingDFT(Int_t ich,TString sel,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TObject* RnoStation::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  RnoStation* q=new RnoStation(*this);
  if (name)

@@ -991,20 +991,21 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = C:/nick/cxx/source/ncfs \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceCal2Root.cxx \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceCal2Root.h \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceDB2Root.cxx \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceDB2Root.h \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceF2k.cxx \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceF2k.h \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceRawTWR.cxx \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceRawTWR.h \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceRoot.cxx \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceRoot.h \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceRootx.cxx \
-                         C:/nick/cxx/source/ncfs/iceconvert/source/IceRootx.h \
-                         C:/nick/cxx/source/ncfs/icepack/source
+INPUT                  = . \
+                         iceconvert/source/IceCal2Root.cxx \
+                         iceconvert/source/IceCal2Root.h \
+                         iceconvert/source/IceDB2Root.cxx \
+                         iceconvert/source/IceDB2Root.h \
+                         iceconvert/source/IceF2k.cxx \
+                         iceconvert/source/IceF2k.h \
+                         iceconvert/source/IceRawTWR.cxx \
+                         iceconvert/source/IceRawTWR.h \
+                         iceconvert/source/IceRoot.cxx \
+                         iceconvert/source/IceRoot.h \
+                         iceconvert/source/IceRootx.cxx \
+                         iceconvert/source/IceRootx.h \
+                         icepack/source \
+                         rnopack/source
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1061,13 +1062,13 @@ RECURSIVE              = NO
 # Note that relative paths are relative to the directory from which Doxygen is
 # run.
 
-EXCLUDE                = C:/nick/cxx/source/ncfs/ncfspack/source/TMCParticle.cxx \
-                         C:/nick/cxx/source/ncfs/ncfspack/source/TMCParticle.h \
-                         C:/nick/cxx/source/ncfs/ncfspack/source/TPythia6.cxx \
-                         C:/nick/cxx/source/ncfs/ncfspack/source/TPythia6.h \
-                         C:/nick/cxx/source/ncfs/ncfspack/source/TPythia6Calls.h \
-                         C:/nick/cxx/source/ncfs/ncfspack/source/TPythia6Decayer.cxx \
-                         C:/nick/cxx/source/ncfs/ncfspack/source/TPythia6Decayer.h
+EXCLUDE                = ncfspack/source/TMCParticle.cxx \
+                         ncfspack/source/TMCParticle.h \
+                         ncfspack/source/TPythia6.cxx \
+                         ncfspack/source/TPythia6.h \
+                         ncfspack/source/TPythia6Calls.h \
+                         ncfspack/source/TPythia6Decayer.cxx \
+                         ncfspack/source/TPythia6Decayer.h
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2022, RNO-G Experiment at Summit Station. All rights reserved.
  *
  * Author: The RNO-G NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class RnoMonitor
+~~~
 // Class RnoMonitor
 // TTask derived class to perform RNO-G data monitoring over certain time periods.
 //
@@ -46,16 +50,23 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2022  09:51Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 17, 2023  08:37Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoMonitor.h"
 #include "Riostream.h"
 
-ClassImp(RnoMonitor) // Class implementation to enable ROOT I/O
+ClassImp(RnoMonitor); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 RnoMonitor::RnoMonitor(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fEvt=0;
  fDevSample=1;
@@ -78,7 +89,11 @@ RnoMonitor::RnoMonitor(const char* name,const char* title) : TTask(name,title)
 ///////////////////////////////////////////////////////////////////////////
 RnoMonitor::~RnoMonitor()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fVarFunc)
  {
@@ -89,6 +104,8 @@ RnoMonitor::~RnoMonitor()
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetDevices(TString devclass,Int_t ista,Int_t ichan)
 {
+/**
+~~~
 // Specify the devices to be analysed.
 //
 // Input arguments :
@@ -104,19 +121,27 @@ void RnoMonitor::SetDevices(TString devclass,Int_t ista,Int_t ichan)
  fDevClass=devclass;
  fSta=ista;
  fChan=ichan;
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetDeviceSample(Int_t j)
 {
+/**
+~~~
 // Specify the sample (1=first) to be used from the stored device samples.
 //
 // In the default constructor this is set to 1 to select the first sample.
+~~~
+**/
 
  fDevSample=j;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetSampleVariable(Int_t i,TString f)
 {
+/**
+~~~
 // Specify the (function of the) sample variable to be used for monitoring.
 //
 // Input arguments :
@@ -128,6 +153,8 @@ void RnoMonitor::SetSampleVariable(Int_t i,TString f)
 // In case f="-" (which is the default) is specified, just the value of the i-th variable is used.  
 //
 // In the default constructor i=1 and f="-" are set.
+~~~
+**/
 
  fVarIndex=i;
  fVarName="";
@@ -143,6 +170,8 @@ void RnoMonitor::SetSampleVariable(Int_t i,TString f)
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetSampleVariable(TString name,TString f)
 {
+/**
+~~~
 // Specify the (function of the) sample variable to be used for monitoring.
 //
 // Input arguments :
@@ -152,6 +181,8 @@ void RnoMonitor::SetSampleVariable(TString name,TString f)
 //
 // The 1D function "f" has to be specified following the TF1 string format convention.
 // In case f="-" (which is the default) is specified, just the value of the specified variable is used.  
+~~~
+**/
 
  fVarName=name;
  fVarIndex=0;
@@ -167,6 +198,8 @@ void RnoMonitor::SetSampleVariable(TString name,TString f)
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::DefineStatistic(TString mode)
 {
+/**
+~~~
 // Specify the statistic to be used for monitoring of the (function) values
 // val(i) of the selected sample variable, as specified by SetSampleVariable().
 //
@@ -189,6 +222,8 @@ void RnoMonitor::DefineStatistic(TString mode)
 //    may lead to long(er) CPU times.
 //
 // In the default constructor mode="RMSdeviation" is initialised.
+~~~
+**/
 
  if (mode!="Mean" && mode!="Median" && mode!="RMS" && mode!="SpreadMean" && mode!="SpreadMedian" && mode!="RMSdeviation")
  {
@@ -206,6 +241,8 @@ void RnoMonitor::DefineStatistic(TString mode)
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetBaselineMode(Int_t mode,Int_t n,Double_t nrms,Double_t fpr)
 {
+/**
+~~~
 // Specify the (variable) baseline to be subtracted from the recorded waveform before extracting
 // the values of the statistic selected for monitoring, as specified by DefineStatistic().
 // Variable baseline subtraction will allow to obtain a time trace with an overall baseline at 0.
@@ -240,6 +277,8 @@ void RnoMonitor::SetBaselineMode(Int_t mode,Int_t n,Double_t nrms,Double_t fpr)
 //
 // In the default constructor mode=0 is initialised, which also implies n=-1, nrms=-1 and fpr=-1.
 // At invokation of this member function, the default values are n=128, nrms=1.2 and fpr=0.1. 
+~~~
+**/
 
  if (mode<0 || mode>3 || n<1 || nrms<0 || fpr<0)
  {
@@ -264,6 +303,8 @@ void RnoMonitor::SetBaselineMode(Int_t mode,Int_t n,Double_t nrms,Double_t fpr)
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetBandFilters(TArray& freqs,Int_t n)
 {
+/**
+~~~
 // Specify the frequency bands to be used for digital filtering the recorded waveform before extracting
 // the values of the statistic selected for monitoring, as specified by DefineStatistic().
 //
@@ -304,6 +345,8 @@ void RnoMonitor::SetBandFilters(TArray& freqs,Int_t n)
 //          An even value of "n" will be increased by 1 to obtain an odd value. 
 //
 // In case the provided array has a length 0 or n<1, all band filter settings will be removed.
+~~~
+**/
 
  Int_t arrsize=freqs.GetSize();
 
@@ -335,9 +378,13 @@ void RnoMonitor::SetBandFilters(TArray& freqs,Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetNbins24(Int_t n)
 {
+/**
+~~~
 // Set the number of bins for the 24 hour monitoring histograms.
 // In the default constructor the number of bins is set to 24,
 // which corresponds to a daily time resolution of 1 hour.
+~~~
+**/
 
  if (n<1)
  {
@@ -351,11 +398,15 @@ void RnoMonitor::SetNbins24(Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the monitoring procedures.
 //
 // Note : The determination of the final bin values and errors is performed
 //        in the member function WriteHistograms() after all data 
 //        have been processed.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));
@@ -659,7 +710,11 @@ void RnoMonitor::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::ListHistograms() const
 {
+/**
+~~~
 // Provide a list of all the stored histograms.
+~~~
+**/
 
  Int_t nh=fHistos.GetEntries();
  cout << endl;
@@ -675,8 +730,12 @@ void RnoMonitor::ListHistograms() const
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::WriteHistograms(TString filename)
 {
+/**
+~~~
 // Write the baseline parameter settings and all the generated histograms
 // to a ROOT file with the specified filename.
+~~~
+**/
 
  // The Tree with the baseline parameter settings
  TTree Parameters("Parameters","Parameter settings");

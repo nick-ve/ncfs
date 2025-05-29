@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2021, RNO-G Experiment at Summit Station. All rights reserved.
  *
  * Author: The RNO-G NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class RnoConvert
+~~~
 // Class RnoConvert
 // Conversion of RNO-G Root data into RnoEvent data structures.
 // This class is derived from NcJob providing a task-based processing
@@ -34,17 +38,24 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 11, 2023  12:08Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "RnoConvert.h"
 #include "Riostream.h"
 
-ClassImp(RnoConvert) // Class implementation to enable ROOT I/O
+ClassImp(RnoConvert); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
 {
+/**
+~~~
 // Default constructor.
 // By default maxevent=-1, split=0, bsize=32000, printfreq=1 and select=[0,-1].
+~~~
+**/
 
  fSplit=0;
  fBsize=32000;
@@ -59,7 +70,11 @@ RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
 ///////////////////////////////////////////////////////////////////////////
 RnoConvert::~RnoConvert()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fData)
  {
@@ -76,15 +91,21 @@ RnoConvert::~RnoConvert()
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetMaxEvents(Int_t n)
 {
+/**
+~~~
 // Set the maximum number of events to be processed.
 // n=-1 implies processing of the complete input file, which is the default
 // initialisation in the constructor.
+~~~
+**/
 
  fMaxevt=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetPrintFreq(Int_t m,Int_t level)
 {
+/**
+~~~
 // Set the printfrequency to produce info every "m" events.
 // No printout is produced for m<=0.
 //
@@ -96,6 +117,8 @@ void RnoConvert::SetPrintFreq(Int_t m,Int_t level)
 //
 // At invokation of this memberfunction the default value is level=0. 
 // The default constructor has initialized m=0 and level=0.
+~~~
+**/
 
  if (level<0 || level>2)
  {
@@ -110,22 +133,32 @@ void RnoConvert::SetPrintFreq(Int_t m,Int_t level)
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetSplitLevel(Int_t split)
 {
+/**
+~~~
 // Set the split level for the ROOT data file.
 // split=0 is the default initialisation in the constructor.
+~~~
+**/
 
  if (split>=0) fSplit=split;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetBufferSize(Int_t bsize)
 {
+/**
+~~~
 // Set the buffer size for the ROOT data file.
 // bsize=32000 is the default initialisation in the constructor.
+~~~
+**/
 
  if (bsize>=0) fBsize=bsize;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::AddInputFile(TString file,TString tree)
 {
+/**
+~~~
 // Add the RNO-G input file to the data chain.
 //
 // file : Name of the input file to be added (wildcards are allowed)
@@ -135,6 +168,8 @@ void RnoConvert::AddInputFile(TString file,TString tree)
 // For example "$(HOME)/my-data/station11/combined.root".
 //
 // Note : The name of the Tree has to be the same for all added input files.
+~~~
+**/
 
  // Expand the path name of the provided input file
  file=gSystem->ExpandPathName(file.Data());
@@ -150,7 +185,11 @@ void RnoConvert::AddInputFile(TString file,TString tree)
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetOutputFile(TFile* ofile)
 {
+/**
+~~~
 // Set the output file for the RnoEvent data.
+~~~
+**/
 
  if (fOutfile) delete fOutfile;
  fOutfile=ofile;
@@ -158,10 +197,14 @@ void RnoConvert::SetOutputFile(TFile* ofile)
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetOutputFile(TString name)
 {
+/**
+~~~
 // Create the output file for the RnoEvent data.
 //
 // Environment variables may be used as $(...) in the filenname for convenience.
 // For example "$(HOME)/my-data/sample.rnopack".
+~~~
+**/
 
  // Expand the path name of the specified output file
  name=gSystem->ExpandPathName(name.Data());
@@ -172,12 +215,16 @@ void RnoConvert::SetOutputFile(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetSelectLevels(Int_t min,Int_t max)
 {
+/**
+~~~
 // Set the required event selection level interval [min,max] for events to be written out.
 // The generic (NcEvent) convention is <0:reject 0:undecided >0:accept.
 //
 // Note : If max<min there will be no check on the maximum value.
 //
 // min=0 and max=-1 are the default initialisations in the constructor.
+~~~
+**/
 
  fMinSelectLevel=min;
  fMaxSelectLevel=max;
@@ -185,23 +232,35 @@ void RnoConvert::SetSelectLevels(Int_t min,Int_t max)
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoConvert::GetMinSelectLevel() const
 {
+/**
+~~~
 // Provide the minimum required event selection level for events to be written out.
+~~~
+**/
 
  return fMinSelectLevel;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoConvert::GetMaxSelectLevel() const
 {
+/**
+~~~
 // Provide the maximum required event selection level for events to be written out.
+~~~
+**/
 
  return fMaxSelectLevel;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::ListInput(Option_t* opt)
 {
+/**
+~~~
 // Provide an overview listing of the input data chain.
 // The input argument "opt" has the same meaning as for the ROOT TTree::Print().
 // The default is opt="".
+~~~
+**/
 
  TString s=opt;
  if (s=="") s="Default";
@@ -220,13 +279,19 @@ void RnoConvert::ListInput(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 TFile* RnoConvert::GetOutputFile()
 {
+/**
+~~~
 // Provide pointer to the RnoEvent output file.
+~~~
+**/
 
  return fOutfile;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::Exec(Option_t* opt)
 {
+/**
+~~~
 // Job to loop over the specified number of events and convert the 
 // RNO-G Root data into the RnoEvent structure.
 // If maxevents<0 (default) all the entries of the input file
@@ -243,6 +308,8 @@ void RnoConvert::Exec(Option_t* opt)
 //    This provides an event-by-event (sub)task processing before the
 //    final data structures are written out.
 // 2) The main object in this job environment is an RnoEvent* pointer.
+~~~
+**/
 
  if (!fData)
  {

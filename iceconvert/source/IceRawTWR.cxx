@@ -94,7 +94,7 @@
 #include "IceRawTWR.h"
 #include "Riostream.h"
 
-ClassImp(IceRawTWR) // Class implementation to enable ROOT I/O
+ClassImp(IceRawTWR); // Class implementation to enable ROOT I/O
 
 IceRawTWR::IceRawTWR(const char* name,const char* title) : NcJob(name,title)
 {

@@ -8,6 +8,8 @@
 
 #include "RnoStation.h"
 
+/** Handling of RNO-G detector data. **/
+
 class RnoDetector : public NcDetector
 {
  public:

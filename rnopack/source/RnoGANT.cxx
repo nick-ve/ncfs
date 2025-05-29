@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2021, RNO-G Experiment at Summit Station. All rights reserved.
  *
  * Author: The RNO-G NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class RnoGANT
+~~~
 // Class RnoGANT
 // Signal/Hit handling of an RNO-G Generic Antenna (GANT).
 // Basically this class provides an RNO-G tailored user interface
@@ -106,30 +110,47 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, May 3, 2021  10:52Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 5, 2022  10:27Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoGANT.h"
 #include "Riostream.h"
  
-ClassImp(RnoGANT) // Class implementation to enable ROOT I/O
+ClassImp(RnoGANT); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 RnoGANT::RnoGANT(const char* name,const char* title) : NcDevice(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoGANT::~RnoGANT()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoGANT::RnoGANT(const RnoGANT& q) : NcDevice(q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoGANT::GetStation(Int_t id) const
 {
+/**
+~~~
 // Provide the corresponding station number for this antenna.
 //
 // In case the user has specified the input argument id>0, the station number
@@ -139,6 +160,8 @@ Int_t RnoGANT::GetStation(Int_t id) const
 // In case of inconsistent data, the value -1 is returned.
 //
 // The default value is id=0;
+~~~
+**/
 
  Int_t antid=GetUniqueID();
  if (id>0) antid=id;
@@ -154,6 +177,8 @@ Int_t RnoGANT::GetStation(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoGANT::GetString(Int_t id) const
 {
+/**
+~~~
 // Provide the string number for the antenna with the specified unique "id".
 //
 // For id=0, the string number corresponding with the current antenna will be returned.
@@ -163,6 +188,8 @@ Int_t RnoGANT::GetString(Int_t id) const
 // In case of inconsistent data, the value -1 is returned.
 //
 // The default value is id=0;
+~~~
+**/
 
  Int_t antid=GetUniqueID();
  if (id>0) antid=id;
@@ -186,6 +213,8 @@ Int_t RnoGANT::GetString(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoGANT::GetNumber(Int_t id) const
 {
+/**
+~~~
 // Provide the antenna or DAQ channel number according to the specified unique "id".
 //
 // Input argument :
@@ -207,6 +236,8 @@ Int_t RnoGANT::GetNumber(Int_t id) const
 // The default value is id=0;
 //
 // In case of inconsistent input the value -1 is returned.
+~~~
+**/
 
  Int_t number=-1;
 
@@ -238,6 +269,8 @@ Int_t RnoGANT::GetNumber(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t number) const
 {
+/**
+~~~
 // Provide the antenna unique ID based on the station, string and number indicators.
 //
 // Definition of antenna number :
@@ -251,6 +284,8 @@ Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t number) const
 // numbered 1-9 to reflect the Channels 12-20 consecutively.
 //
 // In case of inconsistent input the value -1 is returned.
+~~~
+**/
 
  Int_t antid=-1;
 
@@ -267,6 +302,8 @@ Int_t RnoGANT::GetANTId(Int_t station,Int_t string,Int_t number) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString name,Int_t mode,Int_t vgroup) const
 {
+/**
+~~~
 // Provide the time residual (in nanoseconds) of a recorded signal w.r.t. a track.
 //
 // Input arguments :
@@ -287,6 +324,8 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString na
 //
 // For further details concerning the definition and calculation of the
 // time residual please refer to Astroparticle Physics 28 (2007) 456.
+~~~
+**/
 
  Double_t tres=-99999;
 
@@ -334,6 +373,8 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,NcSignal* s,TString na
 ///////////////////////////////////////////////////////////////////////////
 Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,Int_t j,TString name,Int_t mode,Int_t vgroup) const
 {
+/**
+~~~
 // Provide the time residual (in nanoseconds) of the j-th hit (first hit is at j=1) w.r.t. a track.
 //
 // Input arguments :
@@ -354,6 +395,8 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,Int_t j,TString name,I
 //
 // For further details concerning the definition and calculation of the
 // time residual please refer to Astroparticle Physics 28 (2007) 456.
+~~~
+**/
 
  NcSignal* s=GetHit(j);
  Double_t tres=GetTimeResidual(evt,t,s,name,mode,vgroup);
@@ -362,6 +405,8 @@ Double_t RnoGANT::GetTimeResidual(NcEvent* evt,NcTrack* t,Int_t j,TString name,I
 ///////////////////////////////////////////////////////////////////////////
 TObject* RnoGANT::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -370,6 +415,8 @@ TObject* RnoGANT::Clone(const char* name) const
 // to store either RnoGANT objects or objects derived from RnoGANT
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  RnoGANT* q=new RnoGANT(*this);
  if (name)

@@ -34,8 +34,9 @@
 #include "IceAOM.h"
 #include "Riostream.h"
  
-ClassImp(IceAOM) // Class implementation to enable ROOT I/O
+ClassImp(IceAOM); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 IceAOM::IceAOM() : IceGOM()
 {
 /**

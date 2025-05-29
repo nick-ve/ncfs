@@ -17,7 +17,7 @@ gcccomp="-fPIC -c -g0 -Wno-long-long -Wno-format-overflow -I$NCFS/ncfspack/sourc
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include -o $lib"
+gccroot="-fPIC -shared -g0 -Wunused -Wno-long-long -Woverloaded-virtual -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include -o $lib"
 #
 echo ' '
 echo '*** Creation of the iceconvert shared library for Amanda/IceCube data(base) conversion ***' 

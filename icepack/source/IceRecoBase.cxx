@@ -64,8 +64,9 @@
 #include "IceRecoBase.h"
 #include "Riostream.h"
 
-ClassImp(IceRecoBase) // Class implementation to enable ROOT I/O
+ClassImp(IceRecoBase); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceRecoBase::IceRecoBase(const char* name,const char* title) : TTask(name,title)
 {
 /**

@@ -1567,3 +1567,4 @@
                 selection of classes to allow inclusion in the IceTray software framework of IceCube.
                 Since starting from NCFS release 6.0 the package is fully standalone and can function with any ROOT release,
                 there is no need anymore to provide a stripped down version.  
+29-may-2025 NvE TSpectrum replaced by NcSpectrum in class IceMakeHits, in order to stay consistent. 

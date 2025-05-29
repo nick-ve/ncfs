@@ -11,6 +11,8 @@
 
 #include "RnoEvent.h"
 
+/** TTask derived class to monitor RNO-G data over certain time periods. **/
+
 class RnoMonitor : public TTask
 {
  public :

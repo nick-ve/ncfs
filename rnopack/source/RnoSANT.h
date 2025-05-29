@@ -6,6 +6,8 @@
 
 #include "RnoGANT.h"
 
+/** Signal (Hit) handling of an RNO-G Surface Antenna (SANT). **/
+
 class RnoSANT : public RnoGANT
 {
  public:

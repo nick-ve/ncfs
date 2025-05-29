@@ -6,6 +6,8 @@
 
 #include "NcEvent.h"
 
+/** Signal (Hit) handling of an RNO-G Generic Antenna (GANT). **/
+
 class RnoGANT : public NcDevice
 {
  public:

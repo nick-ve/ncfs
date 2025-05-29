@@ -349,8 +349,9 @@
 #include "IceDwalk.h"
 #include "Riostream.h"
 
-ClassImp(IceDwalk) // Class implementation to enable ROOT I/O
+ClassImp(IceDwalk); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceDwalk::IceDwalk(const char* name,const char* title) : IceRecoBase(name,title)
 {
 /**

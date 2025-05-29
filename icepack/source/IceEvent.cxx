@@ -283,8 +283,9 @@
 #include "IceEvent.h"
 #include "Riostream.h"
  
-ClassImp(IceEvent) // Class implementation to enable ROOT I/O
+ClassImp(IceEvent); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 IceEvent::IceEvent() : NcEvent()
 {
 /**

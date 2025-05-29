@@ -6,6 +6,8 @@
 
 #include "RnoLPDA.h"
 
+/** Signal (Hit) handling of an RNO-G surface Downward pointing LogPeriodic Dipole Antenna (DLPDA). **/
+
 class RnoDLPDA : public RnoLPDA
 {
  public:

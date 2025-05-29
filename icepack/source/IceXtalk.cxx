@@ -86,8 +86,9 @@
 #include "IceXtalk.h"
 #include "Riostream.h"
 
-ClassImp(IceXtalk) // Class implementation to enable ROOT I/O
+ClassImp(IceXtalk); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceXtalk::IceXtalk(const char* name,const char* title) : TTask(name,title)
 {
 /**

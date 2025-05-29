@@ -16,6 +16,8 @@
 #include "RnoDetector.h"
 #include "RnoEvent.h"
 
+/** Job for conversion of RNO-G Root data into RnoEvent data structures. **/
+
 class RnoConvert : public NcJob
 {
  public :

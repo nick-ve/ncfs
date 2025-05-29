@@ -60,8 +60,9 @@
 #include "IceCalibrate.h"
 #include "Riostream.h"
 
-ClassImp(IceCalibrate) // Class implementation to enable ROOT I/O
+ClassImp(IceCalibrate); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceCalibrate::IceCalibrate(const char* name,const char* title) : TTask(name,title)
 {
 /**

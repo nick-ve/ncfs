@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2021, RNO-G Experiment at Summit Station. All rights reserved.
  *
  * Author: The RNO-G NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class RnoDetector
+~~~
 // Class RnoDetector
 // Handling of RNO-G detector data.
 // Basically this class provides an RNO-G tailored user interface
@@ -88,16 +92,23 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 6, 2021  15:42Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, November 25, 2021  14:10Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoDetector.h"
 #include "Riostream.h"
  
-ClassImp(RnoDetector) // Class implementation to enable ROOT I/O
+ClassImp(RnoDetector); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 RnoDetector::RnoDetector(const char* name,const char* title) : NcDetector(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  TString sname=name;
  TString stitle=title;
@@ -110,19 +121,31 @@ RnoDetector::RnoDetector(const char* name,const char* title) : NcDetector(name,t
 ///////////////////////////////////////////////////////////////////////////
 RnoDetector::~RnoDetector()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoDetector::RnoDetector(const RnoDetector& d) : NcDetector(d)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoStation* RnoDetector::GetStation(Int_t id,Bool_t create)
 {
+/**
+~~~
 // Provide the pointer to the station with the specified "id".
 // In case create=kTRUE the station will be created if it is not already present.
 // If a station with the specified id can not be found, the value 0 is returned.
+~~~
+**/
 
  // Only allow the "matrix element" labeled station IDs
  if (id<0 || !id%10)
@@ -150,7 +173,11 @@ RnoStation* RnoDetector::GetStation(Int_t id,Bool_t create)
 ///////////////////////////////////////////////////////////////////////////
 void RnoDetector::CreateStation(Int_t id)
 {
+/**
+~~~
 // Internal memberfunction to create a station with the specified id.
+~~~
+**/
 
  RnoStation station("Station","RNO-G detector station");
 
@@ -300,6 +327,8 @@ void RnoDetector::CreateStation(Int_t id)
 ///////////////////////////////////////////////////////////////////////////
 TGraph* RnoDetector::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 {
+/**
+~~~
 // Display the sampling of the j-th sampled observable (1=first) for the selected channel number "ich"
 // of the station with ID=ista.
 // The graph will display the values of the j-th observable versus the sample entry number.
@@ -308,6 +337,8 @@ TGraph* RnoDetector::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
+~~~
+**/
 
  RnoStation* sta=GetStation(ista,kFALSE);
 
@@ -323,6 +354,8 @@ TGraph* RnoDetector::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TCanvas* RnoDetector::DisplaySamplings(Int_t ista,Int_t j)
 {
+/**
+~~~
 // Display the samplings of the j-th sampled observable (1=first) for all channels
 // of the station with ID=ista.
 // The graph will display the values of the j-th observable versus the sample entry number.
@@ -331,6 +364,8 @@ TCanvas* RnoDetector::DisplaySamplings(Int_t ista,Int_t j)
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
+~~~
+**/
 
  RnoStation* sta=GetStation(ista,kFALSE);
 
@@ -346,11 +381,15 @@ TCanvas* RnoDetector::DisplaySamplings(Int_t ista,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TObject* RnoDetector::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  RnoDetector* d=new RnoDetector(*this);
  if (name)

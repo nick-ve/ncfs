@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2023, RNO-G Experiment at Summit Station. All rights reserved.
  *
  * Author: The RNO-G NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class RnoExplorer
+~~~
 // Class RnoExplorer
 // Graphical User Interface (GUI) to explore RNO-G event data.
 //
@@ -21,21 +25,27 @@
 //
 //--- Author: Nick van Eijndhoven 19-jul-2023 IIHE-VUB Brussel.
 //- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 25, 2025  13:23Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoExplorer.h"
 #include "Riostream.h"
  
-ClassImp(RnoExplorer) // Class implementation to enable ROOT I/O
+ClassImp(RnoExplorer); // Class implementation to enable ROOT I/O
  
 ///////////////////////////////////////////////////////////////////////////
 RnoExplorer::RnoExplorer(const char* name,const char* title) : TChain(name,title)
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
 // The "name"and "title" input arguments have the same meaning as for the
 // default constructor of TChain.
 //
 // The default values are name="T" and title="RnoExplorer".
+~~~
+**/
 
  fExpPanel=0;
  fEnt=0;
@@ -80,7 +90,11 @@ RnoExplorer::RnoExplorer(const char* name,const char* title) : TChain(name,title
 ///////////////////////////////////////////////////////////////////////////
 RnoExplorer::~RnoExplorer()
 {
+/**
+~~~
 // Destructor to delete all allocated memory.
+~~~
+**/
 
  for (Int_t i=0; i<3; i++)
  {
@@ -96,10 +110,14 @@ RnoExplorer::~RnoExplorer()
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExplorePanel()
 {
+/**
+~~~
 // Main internal steering routine for the ExplorePanel GUI.
 // Invokation of this memberfunction will open an interactive GUI
 // to provide a user friendly interface to this NcEvent instance
 // to explore the event contents.
+~~~
+**/
 
  if (gROOT->IsBatch())
  {
@@ -162,7 +180,11 @@ void RnoExplorer::ExplorePanel()
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::FilesPanel(TGCompositeFrame* frame)
 {
+/**
+~~~
 // Internal memberfunction to render the input files GUI panel.
+~~~
+**/
 
  if (!frame) return;
 
@@ -211,7 +233,11 @@ void RnoExplorer::FilesPanel(TGCompositeFrame* frame)
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::FileAdd()
 {
-// Add the specified input file(s)
+/**
+~~~
+// Add the specified input file(s).
+~~~
+**/
 
  if (!fFiles) return;
 
@@ -247,7 +273,11 @@ void RnoExplorer::FileAdd()
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::HeaderPanel(TGCompositeFrame* frame)
 {
+/**
+~~~
 // Internal memberfunction to render the event header info GUI panel.
+~~~
+**/
 
  if (!frame) return;
 
@@ -305,7 +335,11 @@ void RnoExplorer::HeaderPanel(TGCompositeFrame* frame)
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::LoadEntry()
 {
-// Load the specified entry
+/**
+~~~
+// Load the specified entry.
+~~~
+**/
 
  TString s=fEntry->GetText();
  Int_t i=s.Atoi();
@@ -328,7 +362,11 @@ void RnoExplorer::LoadEntry()
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::HeadEnter()
 {
-// Load the event header data
+/**
+~~~
+// Load the event header data.
+~~~
+**/
 
  if (!fEvt)
  {
@@ -366,7 +404,11 @@ void RnoExplorer::HeadEnter()
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::SamplingsPanel(TGCompositeFrame* frame)
 {
+/**
+~~~
 // Internal memberfunction to render the samplings selection GUI panel.
+~~~
+**/
 
  if (!frame) return;
 
@@ -466,14 +508,23 @@ void RnoExplorer::SamplingsPanel(TGCompositeFrame* frame)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpChannel(const char* text)
 {
-// Action on the channel entry field
+/**
+~~~
+// Action on the channel entry field.
+~~~
+**/
+
  TString s=text;
  fChannel=s.Atoi();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpMode(Int_t i)
 {
-// Set the selected sampling mode
+/**
+~~~
+// Set the selected sampling mode.
+~~~
+**/
 
  TString s[5]={"ADC(s)","ADC(t)","Store1","Store2","Store3"};
 
@@ -484,7 +535,12 @@ void RnoExplorer::ExpMode(Int_t i)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpFmV(const char* text)
 {
-// Action on the ADC->mV conversion description entry field
+/**
+~~~
+// Action on the ADC->mV conversion description entry field.
+~~~
+**/
+
  fFmV=text;
 
  // Convert f(y) into f(x) to comply with TF1 format
@@ -493,7 +549,11 @@ void RnoExplorer::ExpFmV(const char* text)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpOpsMode(Int_t i)
 {
-// Set the selected mode for the operations treatment
+/**
+~~~
+// Set the selected mode for the operations treatment.
+~~~
+**/
 
  TString s[15]={"None","mV","DFT","IDFT","AddFilter","BKernel","BFilter","MKernel","MFilter","Bn","BBnrms","BBf","Sub","Corr","SNR"};
 
@@ -648,13 +708,23 @@ void RnoExplorer::ExpOpsMode(Int_t i)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpOpsPar1(const char* text)
 {
-// Action on the operations parameter1 entry field
+/**
+~~~
+// Action on the operations parameter1 entry field.
+~~~
+**/
+
  fOpsPars[0]=text;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpOpsPar2(const char* text)
 {
-// Action on the operations parameter2 entry field
+/**
+~~~
+// Action on the operations parameter2 entry field.
+~~~
+**/
+
  fOpsPars[1]=text;
 
  // Convert the function variable name to "x" to comply with the TF1 format.
@@ -665,13 +735,23 @@ void RnoExplorer::ExpOpsPar2(const char* text)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpOpsPar3(const char* text)
 {
-// Action on the operations parameter3 entry field
+/**
+~~~
+// Action on the operations parameter3 entry field.
+~~~
+**/
+
  fOpsPars[2]=text;
 }
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpExecMode(Int_t i)
 {
-// Set the selected mode Store/Draw treatment
+/**
+~~~
+// Set the selected mode Store/Draw treatment.
+~~~
+**/
+
  TString s[3]={"Store1","Store2","Store3"};
 
  if (i<1 || i>3) return;
@@ -681,7 +761,11 @@ void RnoExplorer::ExpExecMode(Int_t i)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpExecute()
 {
+/**
+~~~
 // Execute the selected actions for the requested channel(s).
+~~~
+**/
 
  // Adding or Resetting of filter bands
  if (fOpsMode=="AddFilter")
@@ -800,7 +884,11 @@ void RnoExplorer::ExpExecute()
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::GetHistograms(Int_t jstore)
 {
+/**
+~~~
 // Obtain the requested output histogram(s) for storage selection i.
+~~~
+**/
 
  // Clear all histograms for this storage
  if (!fMode.Contains("Store"))
@@ -1253,7 +1341,11 @@ void RnoExplorer::GetHistograms(Int_t jstore)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::DrawResult(Int_t jstore)
 {
-// Draw the result of the selected operation(s) for the requested channel(s)
+/**
+~~~
+// Draw the result of the selected operation(s) for the requested channel(s).
+~~~
+**/
 
  if (!fEvt) return;
 
@@ -1346,7 +1438,11 @@ void RnoExplorer::DrawResult(Int_t jstore)
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::CommandPanel(TGCompositeFrame* frame)
 {
+/**
+~~~
 // Internal memberfunction to render the command GUI panel.
+~~~
+**/
 
  if (!frame) return;
 
@@ -1390,13 +1486,22 @@ void RnoExplorer::CommandPanel(TGCompositeFrame* frame)
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpDevName(const char* text)
 {
-// Action on the device (class) name entry field
+/**
+~~~
+// Action on the device (class) name entry field.
+~~~
+**/
+
  fDevName=text;
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ListDevices()
 {
-// List the devices
+/**
+~~~
+// List the devices.
+~~~
+**/
 
  if (!fEvt)
  {
@@ -1432,7 +1537,11 @@ void RnoExplorer::ListDevices()
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ListDAQ()
 {
-// List the event DAQ status
+/**
+~~~
+// List the event DAQ status.
+~~~
+**/
 
  if (!fEvt)
  {
@@ -1455,7 +1564,11 @@ void RnoExplorer::ListDAQ()
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ListTriggers()
 {
-// List the event Trigger data
+/**
+~~~
+// List the event Trigger data.
+~~~
+**/
 
  if (!fEvt)
  {
@@ -1478,7 +1591,11 @@ void RnoExplorer::ListTriggers()
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ListTags()
 {
-// List the event Filter data
+/**
+~~~
+// List the event Filter data.
+~~~
+**/
 
  if (!fEvt)
  {
@@ -1501,7 +1618,11 @@ void RnoExplorer::ListTags()
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpClose()
 {
+/**
+~~~
 // Close the ExplorePanel window but do NOT exit the current ROOT session.
+~~~
+**/
 
  // De-activate all automatic CloseWindow() actions of the system window manager
  // in order to fully control it in this function 
@@ -1516,7 +1637,11 @@ void RnoExplorer::ExpClose()
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpExit()
 {
-// Exit this ROOT session
+/**
+~~~
+// Exit this ROOT session.
+~~~
+**/
 
  fExpPanel->RequestFocus();
  fExpPanel->Cleanup();
@@ -1525,7 +1650,11 @@ void RnoExplorer::ExpExit()
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ShowPanel()
 {
-// Show the GUI panel again after the window was closed
+/**
+~~~
+// Show the GUI panel again after the window was closed.
+~~~
+**/
 
   // Map all subwindows of main frame
   fExpPanel->MapSubwindows();

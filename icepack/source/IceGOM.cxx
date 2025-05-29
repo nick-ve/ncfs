@@ -117,8 +117,9 @@
 #include "IceGOM.h"
 #include "Riostream.h"
  
-ClassImp(IceGOM) // Class implementation to enable ROOT I/O
+ClassImp(IceGOM); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 IceGOM::IceGOM() : NcDevice()
 {
 /**

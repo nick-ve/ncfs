@@ -9,6 +9,8 @@
 #include "RnoVPOL.h"
 #include "RnoHPOL.h"
 
+/** Data handling of an RNO-G string. **/
+
 class RnoString : public NcDetectorUnit
 {
  public:

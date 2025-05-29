@@ -13,7 +13,7 @@ lib=rnopack.so
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -pedantic -Wunused -Wno-long-long -Woverloaded-virtual -I$NCFS/ncfspack/source -I$ROOTSYS/include -o $lib"
+gccroot="-fPIC -shared -g0 -Wunused -Wno-long-long -Woverloaded-virtual -I$NCFS/ncfspack/source -I$ROOTSYS/include -o $lib"
 #
 echo ' '
 echo '*** Creation of the rnopack shared library for RNO-G analyses ***' 

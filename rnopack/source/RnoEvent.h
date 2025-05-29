@@ -8,6 +8,8 @@
 
 #include "RnoDetector.h"
 
+/** Handling of RNO-G event data. **/
+
 class RnoEvent : public NcEvent
 {
  public:

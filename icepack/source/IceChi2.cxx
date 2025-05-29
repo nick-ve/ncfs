@@ -162,8 +162,9 @@
   if (gIceChi2) gIceChi2->FitFCN(npar,gin,f,u,flag);
  }
 
-ClassImp(IceChi2) // Class implementation to enable ROOT I/O
+ClassImp(IceChi2); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceChi2::IceChi2(const char* name,const char* title) : TTask(name,title)
 {
 /**

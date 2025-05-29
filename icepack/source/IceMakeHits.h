@@ -7,12 +7,13 @@
 #include "TROOT.h"
 #include "TTask.h"
 #include "TString.h"
-#include "TSpectrum.h"
+//@@#include "TSpectrum.h" 
 #include "TMath.h"
 #include "TError.h"
 
 #include "NcJob.h"
 #include "NcSample.h"
+#include "NcSpectrum.h"
 
 #include "IceEvent.h"
 #include "IceAOM.h"

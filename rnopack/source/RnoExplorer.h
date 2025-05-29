@@ -22,6 +22,8 @@
 #include "NcBlocks.h"
 #include "NcDSP.h"
 
+/** Graphical User Interface (GUI) to explore RNO-G event data. **/
+
 class RnoExplorer : public TChain
 {
  public:
@@ -85,7 +87,6 @@ class RnoExplorer : public TChain
   virtual void HeaderPanel(TGCompositeFrame* frame);     // Compose the entry selection and event header info panel 
   virtual void SamplingsPanel(TGCompositeFrame* frame);  // Compose the samplings selection panel 
   virtual void CommandPanel(TGCompositeFrame* frame);    // Compose the command panel 
-  void FilesEnter();    // Internal memberfunction to enter the selected input file(s) into the input data chain
   void HeadEnter();     // Internal memberfunction to enter the event header data into the information windows
   void GetHistograms(Int_t jstore); // Internal memberfunction to obtain the requested output histograms
   void DrawResult(Int_t jstore); // Draw the result of the selected operation(s) for the requested channel(s)

@@ -1,4 +1,5 @@
 /*******************************************************************************
+~~~
  * Copyright(c) 2021, RNO-G Experiment at Summit Station. All rights reserved.
  *
  * Author: The RNO-G NCFS-based Offline Project.
@@ -11,9 +12,12 @@
  * appear in the supporting documentation.
  * The authors make no claims about the suitability of this software for
  * any purpose. It is provided "as is" without express or implied warranty.
+~~~
  *******************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class RnoEvent
+~~~
 // Class RnoEvent
 // Handling of RNO-G event data.
 // Basically this class provides an RNO-G tailored user interface
@@ -31,37 +35,58 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:23Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2021  09:53Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "RnoEvent.h"
 #include "Riostream.h"
  
-ClassImp(RnoEvent) // Class implementation to enable ROOT I/O
+ClassImp(RnoEvent); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 RnoEvent::RnoEvent() : NcEvent()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoEvent::~RnoEvent()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 RnoEvent::RnoEvent(const RnoEvent& evt) : NcEvent(evt)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoEvent::Reset()
 {
+/**
+~~~
 // Reset all values.
+~~~
+**/
 
  NcEvent::Reset();
 }
 ///////////////////////////////////////////////////////////////////////////
 TGraph* RnoEvent::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 {
+/**
+~~~
 // Display the sampling of the j-th sampled observable (1=first) for the selected channel number "ich"
 // of the station with ID=ista.
 // The graph will display the values of the j-th observable versus the sample entry number.
@@ -70,6 +95,8 @@ TGraph* RnoEvent::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
+~~~
+**/
 
  TString name="Station";
  name+=ista;
@@ -102,6 +129,8 @@ TGraph* RnoEvent::DisplaySampling(Int_t ista,Int_t ich,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TCanvas* RnoEvent::DisplaySamplings(Int_t ista,Int_t j)
 {
+/**
+~~~
 // Display the samplings of the j-th sampled observable (1=first) for all channels
 // of the station with ID=ista.
 // The graph will display the values of the j-th observable versus the sample entry number.
@@ -110,6 +139,8 @@ TCanvas* RnoEvent::DisplaySamplings(Int_t ista,Int_t j)
 // For extended functionality, please refer to the (inherited) memberfunction DisplaySample().
 //
 // The default value is j=1.
+~~~
+**/
 
  TString name="Station";
  name+=ista;
@@ -154,11 +185,15 @@ TCanvas* RnoEvent::DisplaySamplings(Int_t ista,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TGraph RnoEvent::GetSamplingGraph(Int_t ista,Int_t ich,Int_t j)
 {
+/**
+~~~
 // Provide the sampling graph of the j-th sampled observable (1=first) for the selected channel number "ich"
 // of the station with ID=ista.
 // The graph contains the values of the j-th observable versus the sample entry number.
 //
 // The default value is j=1.
+~~~
+**/
 
  TString name="Station";
  name+=ista;
@@ -187,6 +222,8 @@ TGraph RnoEvent::GetSamplingGraph(Int_t ista,Int_t ich,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TH1F RnoEvent::GetSamplingDFT(Int_t ista,Int_t ich,TString sel,Int_t j)
 {
+/**
+~~~
 // Provide the Discrete Fourier Transform (DFT) of the j-th sampled observable (1=first)
 // for the selected channel number "ich" of the station with ID=ista.
 //
@@ -209,6 +246,8 @@ TH1F RnoEvent::GetSamplingDFT(Int_t ista,Int_t ich,TString sel,Int_t j)
 // sel="RE k 2" will show all N real components as a function of the index k in the frequency domain.
 //
 // The default values are sel="AMP Hz" and j=1.
+~~~
+**/
 
  TH1F his;
 
@@ -239,11 +278,15 @@ TH1F RnoEvent::GetSamplingDFT(Int_t ista,Int_t ich,TString sel,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TObject* RnoEvent::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  RnoEvent* evt=new RnoEvent(*this);
  if (name)

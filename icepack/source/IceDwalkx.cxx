@@ -289,8 +289,9 @@
 #include "IceDwalkx.h"
 #include "Riostream.h"
 
-ClassImp(IceDwalkx) // Class implementation to enable ROOT I/O
+ClassImp(IceDwalkx); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 IceDwalkx::IceDwalkx(const char* name,const char* title) : IceLinefit(name,title)
 {
 /**
