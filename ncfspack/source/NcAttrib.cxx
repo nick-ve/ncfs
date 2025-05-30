@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcAttrib.cxx 67 2012-07-18 14:51:01Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcAttrib
+~~~
 // Class NcAttrib
 // Generic handling of detector signal (calibration) attributes.
 // Normally this class is only used as a base class to provide the various
@@ -54,19 +56,27 @@
 //
 //--- Author: Nick van Eijndhoven 18-sep-2003 Utrecht University
 //- Modified: NvE $Date: 2012-07-18 16:51:01 +0200 (Wed, 18 Jul 2012) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAttrib.h"
 #include "Riostream.h"
  
-ClassImp(NcAttrib) // Class implementation to enable ROOT I/O
+ClassImp(NcAttrib); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcAttrib::NcAttrib()
 {
+/**
+~~~
 // Creation of an NcAttrib object and initialisation of parameters.
 // Several values of the same type (e.g. gain) can be stored in different slots.
 // If needed, the storage for values will be expanded automatically
 // when entering values.
+~~~
+**/
+
  fGains=0;
  fOffsets=0;
  fCalflags=0;
@@ -77,7 +87,12 @@ NcAttrib::NcAttrib()
 ///////////////////////////////////////////////////////////////////////////
 NcAttrib::~NcAttrib()
 {
-// Destructor to delete dynamically allocated memory
+/**
+~~~
+// Destructor to delete dynamically allocated memory.
+~~~
+**/
+
  if (fGains)
  {
   delete fGains;
@@ -112,7 +127,12 @@ NcAttrib::~NcAttrib()
 ///////////////////////////////////////////////////////////////////////////
 NcAttrib::NcAttrib(const NcAttrib& a)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fGains=0;
  fOffsets=0;
  fCalflags=0;
@@ -170,7 +190,11 @@ NcAttrib::NcAttrib(const NcAttrib& a)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetNgains() const
 {
+/**
+~~~
 // Provide the number of specified gains for this attribute.
+~~~
+**/
 
  if (!fGains) return 0;
 
@@ -185,7 +209,11 @@ Int_t NcAttrib::GetNgains() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetNoffsets() const
 {
+/**
+~~~
 // Provide the number of specified offsets for this attribute.
+~~~
+**/
 
  if (!fOffsets) return 0;
 
@@ -200,7 +228,11 @@ Int_t NcAttrib::GetNoffsets() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetNcalflags() const
 {
+/**
+~~~
 // Provide the number of specified calib. flags for this attribute.
+~~~
+**/
 
  if (!fCalflags) return 0;
 
@@ -215,7 +247,11 @@ Int_t NcAttrib::GetNcalflags() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetNnames() const
 {
+/**
+~~~
 // Provide the maximum number of specified names for this attribute.
+~~~
+**/
 
  if (!fNames) return 0;
 
@@ -230,11 +266,15 @@ Int_t NcAttrib::GetNnames() const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetGain(Double_t gain,Int_t j)
 {
+/**
+~~~
 // Store gain value of the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for gain values, the number of reserved slots for the gain
 // values is increased automatically.
+~~~
+**/
 
  if (j<1) 
  {
@@ -263,6 +303,8 @@ void NcAttrib::SetGain(Double_t gain,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetGain(Double_t gain,TString name)
 {
+/**
+~~~
 // Store gain value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -270,6 +312,8 @@ void NcAttrib::SetGain(Double_t gain,TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetGain(gain,j);
@@ -277,11 +321,15 @@ void NcAttrib::SetGain(Double_t gain,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetOffset(Double_t off,Int_t j)
 {
+/**
+~~~
 // Store offset value of the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for offset values, the number of reserved slots for the offset
 // values is increased automatically.
+~~~
+**/
 
  if (j<1) 
  {
@@ -310,6 +358,8 @@ void NcAttrib::SetOffset(Double_t off,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetOffset(Double_t off,TString name)
 {
+/**
+~~~
 // Store offset value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -317,6 +367,8 @@ void NcAttrib::SetOffset(Double_t off,TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetOffset(off,j);
@@ -324,12 +376,16 @@ void NcAttrib::SetOffset(Double_t off,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetCalFlags(Int_t gainflag,Int_t offsetflag,Int_t j)
 {
+/**
+~~~
 // Store calibration flags of the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the calib. flags, the number of reserved slots for the calib.
 // flags is increased automatically.
 // The value stored is : 10000*edge +1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -360,6 +416,8 @@ void NcAttrib::SetCalFlags(Int_t gainflag,Int_t offsetflag,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetGainFlag(Int_t j) const
 {
+/**
+~~~
 // Provide gain flag of the j-th (default j=1) attribute slot.
 //
 // flag = 1 : Gain was set
@@ -367,6 +425,8 @@ Int_t NcAttrib::GetGainFlag(Int_t j) const
 //
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -388,6 +448,8 @@ Int_t NcAttrib::GetGainFlag(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetGainFlag(TString name) const
 {
+/**
+~~~
 // Provide gain flag of the name-specified attribute slot.
 //
 // flag = 1 : Gain was set
@@ -399,6 +461,8 @@ Int_t NcAttrib::GetGainFlag(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t flag=0;
@@ -408,6 +472,8 @@ Int_t NcAttrib::GetGainFlag(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetOffsetFlag(Int_t j) const
 {
+/**
+~~~
 // Provide offset flag of the j-th (default j=1) attribute slot.
 //
 // flag = 1 : Offset was set
@@ -415,6 +481,8 @@ Int_t NcAttrib::GetOffsetFlag(Int_t j) const
 //
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -436,6 +504,8 @@ Int_t NcAttrib::GetOffsetFlag(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetOffsetFlag(TString name) const
 {
+/**
+~~~
 // Provide ofset flag of the name-specified attribute slot.
 //
 // flag = 1 : Offset was set
@@ -447,6 +517,8 @@ Int_t NcAttrib::GetOffsetFlag(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t flag=0;
@@ -456,11 +528,15 @@ Int_t NcAttrib::GetOffsetFlag(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetCalWord(Int_t j) const
 {
+/**
+~~~
 // Provide calib. word of the j-th (default j=1) attribute slot.
 // The word value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
 //
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -478,6 +554,8 @@ Int_t NcAttrib::GetCalWord(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetCalWord(TString name) const
 {
+/**
+~~~
 // Provide calib. word of the name-specified attribute slot.
 // The word value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
 //
@@ -486,6 +564,8 @@ Int_t NcAttrib::GetCalWord(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t word=0;
@@ -495,10 +575,14 @@ Int_t NcAttrib::GetCalWord(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcAttrib::GetGain(Int_t j) const
 {
+/**
+~~~
 // Provide gain value of the j-th (default j=1) attribute slot.
 // The first attribute slot is at j=1.
 // In case no gain value was set or the argument j is invalid, 0 is returned.
 // Note : Use GetGainFlag(j) to check whether this gain was set or not.
+~~~
+**/
 
  if (j<1) 
  {
@@ -519,6 +603,8 @@ Float_t NcAttrib::GetGain(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcAttrib::GetGain(TString name) const
 {
+/**
+~~~
 // Provide gain value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -526,6 +612,8 @@ Float_t NcAttrib::GetGain(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Float_t gain=0;
@@ -535,10 +623,14 @@ Float_t NcAttrib::GetGain(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcAttrib::GetOffset(Int_t j) const
 {
+/**
+~~~
 // Provide offset value of the j-th (default j=1) attribute slot.
 // The first attribute slot at j=1.
 // In case no offset value was set or the argument j is invalid, 0 is returned.
 // Note : Use GetOffsetFlag(j) to check whether this offset was set or not.
+~~~
+**/
 
  if (j<1) 
  {
@@ -559,6 +651,8 @@ Float_t NcAttrib::GetOffset(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcAttrib::GetOffset(TString name) const
 {
+/**
+~~~
 // Provide offset value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -566,6 +660,8 @@ Float_t NcAttrib::GetOffset(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Float_t offset=0;
@@ -575,9 +671,13 @@ Float_t NcAttrib::GetOffset(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::ResetGain(Int_t j)
 {
+/**
+~~~
 // Reset the gain value of the j-th (default j=1) attribute slot.
 // Notes : The first attribute slot is at j=1.
 //         j=0 ==> All gain values will be reset.
+~~~
+**/
  
  if (!fGains) return;
 
@@ -610,6 +710,8 @@ void NcAttrib::ResetGain(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::ResetGain(TString name)
 {
+/**
+~~~
 // Reset the gain value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -617,6 +719,8 @@ void NcAttrib::ResetGain(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) ResetGain(j);
@@ -624,9 +728,13 @@ void NcAttrib::ResetGain(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::ResetOffset(Int_t j)
 {
+/**
+~~~
 // Reset the offset value of the j-th (default j=1) attribute slot.
 // Notes : The first attribute slot is at j=1.
 //         j=0 ==> All offset values will be reset.
+~~~
+**/
  
  if (!fOffsets) return;
 
@@ -659,6 +767,8 @@ void NcAttrib::ResetOffset(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::ResetOffset(TString name)
 {
+/**
+~~~
 // Reset the offset value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -666,6 +776,8 @@ void NcAttrib::ResetOffset(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) ResetOffset(j);
@@ -673,6 +785,8 @@ void NcAttrib::ResetOffset(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::DeleteCalibrations(Int_t mode)
 {
+/**
+~~~
 // User selected delete of all gains and/or offsets.
 // mode = 0 : All attributes (names,gains,offsets,(de)calfuncs, edge and dead values) are deleted.
 //        1 : Only the gains are deleted.
@@ -683,6 +797,8 @@ void NcAttrib::DeleteCalibrations(Int_t mode)
 //        6 : Only the calib. and de-calib. functions are deleted.
 //
 // The default when invoking DeleteCalibrations() corresponds to mode=0.
+~~~
+**/
 
  if (mode<0 || mode>6)
  {
@@ -769,12 +885,16 @@ void NcAttrib::DeleteCalibrations(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetDead(Int_t j)
 {
+/**
+~~~
 // Set the dead flag to 1 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, the number of reserved slots for the flags
 // is increased automatically.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -807,6 +927,8 @@ void NcAttrib::SetDead(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetDead(TString name)
 {
+/**
+~~~
 // Set the dead flag to 1 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -814,6 +936,8 @@ void NcAttrib::SetDead(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetDead(j);
@@ -821,11 +945,15 @@ void NcAttrib::SetDead(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetAlive(Int_t j)
 {
+/**
+~~~
 // Set the dead flag to 0 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, no action is taken since by default the dead flag is 0.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -848,6 +976,8 @@ void NcAttrib::SetAlive(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetAlive(TString name)
 {
+/**
+~~~
 // Set the dead flag to 0 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -855,6 +985,8 @@ void NcAttrib::SetAlive(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetAlive(j);
@@ -862,12 +994,16 @@ void NcAttrib::SetAlive(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::Lock(Int_t j)
 {
+/**
+~~~
 // Set the lock flag to 1 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, the number of reserved slots for the flags
 // is increased automatically.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -900,6 +1036,8 @@ void NcAttrib::Lock(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::Lock(TString name)
 {
+/**
+~~~
 // Set the lock flag to 1 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -907,6 +1045,8 @@ void NcAttrib::Lock(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) Lock(j);
@@ -914,11 +1054,15 @@ void NcAttrib::Lock(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::Unlock(Int_t j)
 {
+/**
+~~~
 // Set the lock flag to 0 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, no action is taken since by default the dead flag is 0.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -941,6 +1085,8 @@ void NcAttrib::Unlock(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::Unlock(TString name)
 {
+/**
+~~~
 // Set the lock flag to 0 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -948,6 +1094,8 @@ void NcAttrib::Unlock(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) Unlock(j);
@@ -955,12 +1103,16 @@ void NcAttrib::Unlock(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetEdgeOn(Int_t j)
 {
+/**
+~~~
 // Set the edge value to 1 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, the number of reserved slots for the flags
 // is increased automatically.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -973,6 +1125,8 @@ void NcAttrib::SetEdgeOn(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetEdgeOn(TString name)
 {
+/**
+~~~
 // Set the edge value to 1 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -980,6 +1134,8 @@ void NcAttrib::SetEdgeOn(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetEdgeOn(j);
@@ -987,11 +1143,15 @@ void NcAttrib::SetEdgeOn(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetEdgeOff(Int_t j)
 {
+/**
+~~~
 // Set the edge value to 0 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, no action is taken since by default the edge flag is 0.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1006,6 +1166,8 @@ void NcAttrib::SetEdgeOff(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetEdgeOff(TString name)
 {
+/**
+~~~
 // Set the edge value to 0 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1013,6 +1175,8 @@ void NcAttrib::SetEdgeOff(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetEdgeOff(j);
@@ -1020,12 +1184,16 @@ void NcAttrib::SetEdgeOff(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetEdgeValue(Int_t val,Int_t j)
 {
+/**
+~~~
 // Set the edge value to "val" for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, the number of reserved slots for the flags
 // is increased automatically.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1058,6 +1226,8 @@ void NcAttrib::SetEdgeValue(Int_t val,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetEdgeValue(Int_t val,TString name)
 {
+/**
+~~~
 // Set the edge value to "val" for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1065,6 +1235,8 @@ void NcAttrib::SetEdgeValue(Int_t val,TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetEdgeValue(val,j);
@@ -1072,12 +1244,16 @@ void NcAttrib::SetEdgeValue(Int_t val,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::IncreaseEdgeValue(Int_t j)
 {
+/**
+~~~
 // Increase the edge value by 1 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, the number of reserved slots for the flags
 // is increased automatically.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1091,6 +1267,8 @@ void NcAttrib::IncreaseEdgeValue(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::IncreaseEdgeValue(TString name)
 {
+/**
+~~~
 // Increase the edge value by 1 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1098,6 +1276,8 @@ void NcAttrib::IncreaseEdgeValue(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) IncreaseEdgeValue(j);
@@ -1105,12 +1285,16 @@ void NcAttrib::IncreaseEdgeValue(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::DecreaseEdgeValue(Int_t j)
 {
+/**
+~~~
 // Decrease the edge value by 1 for the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, the number of reserved slots for the flags
 // is increased automatically.
 // The value stored is : 10000*edge + 1000*lock + 100*dead + 10*gainflag + offsetflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1124,6 +1308,8 @@ void NcAttrib::DecreaseEdgeValue(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::DecreaseEdgeValue(TString name)
 {
+/**
+~~~
 // Decrease the edge value by 1 for the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1131,6 +1317,8 @@ void NcAttrib::DecreaseEdgeValue(TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) DecreaseEdgeValue(j);
@@ -1138,9 +1326,13 @@ void NcAttrib::DecreaseEdgeValue(TString name)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetEdgeValue(Int_t j) const
 {
+/**
+~~~
 // Provide edge value of the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1162,6 +1354,8 @@ Int_t NcAttrib::GetEdgeValue(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetEdgeValue(TString name) const
 {
+/**
+~~~
 // Provide edge value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1169,6 +1363,8 @@ Int_t NcAttrib::GetEdgeValue(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t val=0;
@@ -1178,9 +1374,13 @@ Int_t NcAttrib::GetEdgeValue(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetDeadValue(Int_t j) const
 {
+/**
+~~~
 // Provide dead value of the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1203,6 +1403,8 @@ Int_t NcAttrib::GetDeadValue(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetDeadValue(TString name) const
 {
+/**
+~~~
 // Provide dead value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1210,6 +1412,8 @@ Int_t NcAttrib::GetDeadValue(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t val=0;
@@ -1219,9 +1423,13 @@ Int_t NcAttrib::GetDeadValue(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetLockValue(Int_t j) const
 {
+/**
+~~~
 // Provide lock value of the j-th (default j=1) attribute slot.
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1244,6 +1452,8 @@ Int_t NcAttrib::GetLockValue(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetLockValue(TString name) const
 {
+/**
+~~~
 // Provide lock value of the name-specified attribute slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1251,6 +1461,8 @@ Int_t NcAttrib::GetLockValue(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t val=0;
@@ -1260,7 +1472,11 @@ Int_t NcAttrib::GetLockValue(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetNslots() const
 {
+/**
+~~~
 // Provide the number of existing slots.
+~~~
+**/
 
   Int_t n=GetNcalflags();
   Int_t nn=GetNnames();
@@ -1275,8 +1491,12 @@ Int_t NcAttrib::GetNslots() const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::AddNamedSlot(TString s)
 {
+/**
+~~~
 // Add a new slot with the specified name.
 // In case a slot with the specified name already exists, no action is taken.
+~~~
+**/
 
  if (GetSlotIndex(s)) return;
 
@@ -1286,11 +1506,15 @@ void NcAttrib::AddNamedSlot(TString s)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetSlotName(TString s,Int_t j)
 {
+/**
+~~~
 // Set a user defined name for the j-th (default j=1) slot. 
 // Note : The first attribute slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the names, the number of reserved slots for the names
 // is increased automatically to the corresponding value.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1320,8 +1544,12 @@ void NcAttrib::SetSlotName(TString s,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 TString NcAttrib::GetSlotName(Int_t j) const
 {
+/**
+~~~
 // Provide the user defined name for the j-th (default j=1) slot. 
 // Note : The first attribute slot is at j=1.
+~~~
+**/
 
  TString s="";
  if (j<1) 
@@ -1343,6 +1571,8 @@ TString NcAttrib::GetSlotName(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt) const
 {
+/**
+~~~
 // Provide the slot index for the matching name.
 //
 // opt = 0 --> The specified name has to match exactly the slotname
@@ -1352,6 +1582,8 @@ Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt) const
 //
 // If no matching name is found, 0 is returned.
 // Note : The first attribute slot is at j=1.
+~~~
+**/
 
  Int_t index=0;
 
@@ -1375,9 +1607,13 @@ Int_t NcAttrib::GetSlotIndex(TString name,Int_t opt) const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::List(Int_t j) const
 {
+/**
+~~~
 // Provide attribute information for the j-th slot.
 // The first slot is at j=1.
 // In case j=0 (default) the data of all slots will be listed.
+~~~
+**/
 
  if (j<0) 
  {
@@ -1429,6 +1665,8 @@ void NcAttrib::List(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::List(TString name) const
 {
+/**
+~~~
 // Provide attribute information for the name-specified slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1436,6 +1674,8 @@ void NcAttrib::List(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) List(j);
@@ -1443,11 +1683,15 @@ void NcAttrib::List(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::Load(NcAttrib& a,Int_t j)
 {
+/**
+~~~
 // Load attributes of the j-th slot of the input NcAttrib into this NcAttrib object.
 // 
 // Note : if j=0, then all attributes of all slots are loaded
 //
 // The default is j=0.
+~~~
+**/
 
  if (j<0) 
  {
@@ -1595,6 +1839,8 @@ void NcAttrib::Load(NcAttrib& a,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::Load(NcAttrib& a,TString name)
 {
+/**
+~~~
 // Load attributes of the name-specified slot of the input NcAttrib into
 // this NcAttrib object.
 //
@@ -1603,6 +1849,8 @@ void NcAttrib::Load(NcAttrib& a,TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) Load(a,j);
@@ -1610,7 +1858,11 @@ void NcAttrib::Load(NcAttrib& a,TString name)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetNcalfuncs() const
 {
+/**
+~~~
 // Provide the number of specified calib. functions for this attribute.
+~~~
+**/
 
  if (!fCalfuncs) return 0;
 
@@ -1624,7 +1876,11 @@ Int_t NcAttrib::GetNcalfuncs() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcAttrib::GetNdecalfuncs() const
 {
+/**
+~~~
 // Provide the number of specified de-calib. functions for this attribute.
+~~~
+**/
 
  if (!fDecalfuncs) return 0;
 
@@ -1638,8 +1894,12 @@ Int_t NcAttrib::GetNdecalfuncs() const
 ///////////////////////////////////////////////////////////////////////////
 TF1* NcAttrib::GetCalFunction(Int_t j) const
 {
+/**
+~~~
 // Provide pointer to the calib. function of the j-th (default j=1) slot.
 // Note : The first attribute slot is at j=1.
+~~~
+**/
 
  TF1* f=0;
  if (j>0 && j<=GetNcalfuncs()) f=(TF1*)fCalfuncs->At(j-1);
@@ -1648,8 +1908,12 @@ TF1* NcAttrib::GetCalFunction(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 TF1* NcAttrib::GetCalFunction(TString name) const
 {
+/**
+~~~
 // Provide pointer to the calib. function of the name-specified slot.
 // In case no match is found, zero is returned.
+~~~
+**/
 
  TF1* f=0;
  Int_t j=GetSlotIndex(name);
@@ -1659,6 +1923,8 @@ TF1* NcAttrib::GetCalFunction(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetCalFunction(TF1* f,Int_t j)
 {
+/**
+~~~
 // Set the calib. function of the j-th (default j=1) slot.
 // Note : The first attribute slot is at j=1.
 //
@@ -1675,6 +1941,8 @@ void NcAttrib::SetCalFunction(TF1* f,Int_t j)
 //
 // In all other cases the current function is deleted and a new
 // copy of the input function is created which becomes the current function.
+~~~
+**/
 
  if (j<1) return;
 
@@ -1705,6 +1973,8 @@ void NcAttrib::SetCalFunction(TF1* f,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetCalFunction(TF1* f,TString name)
 {
+/**
+~~~
 // Set the calib. function of the name-specified slot.
 //
 // In case the function pointer argument has the same value as the current function
@@ -1716,6 +1986,8 @@ void NcAttrib::SetCalFunction(TF1* f,TString name)
 //
 // In all other cases the current function is deleted and a new
 // copy of the input function is created which becomes the current function.
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetCalFunction(f,j);
@@ -1723,8 +1995,12 @@ void NcAttrib::SetCalFunction(TF1* f,TString name)
 ///////////////////////////////////////////////////////////////////////////
 TF1* NcAttrib::GetDecalFunction(Int_t j) const
 {
+/**
+~~~
 // Provide pointer to the de-calib. function of the j-th (default j=1) slot.
 // Note : The first attribute slot is at j=1.
+~~~
+**/
 
  TF1* f=0;
  if (j>0 && j<=GetNdecalfuncs()) f=(TF1*)fDecalfuncs->At(j-1);
@@ -1733,8 +2009,12 @@ TF1* NcAttrib::GetDecalFunction(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 TF1* NcAttrib::GetDecalFunction(TString name) const
 {
+/**
+~~~
 // Provide pointer to the de-calib. function of the name-specified slot.
 // In case no match is found, zero is returned.
+~~~
+**/
 
  TF1* f=0;
  Int_t j=GetSlotIndex(name);
@@ -1744,6 +2024,8 @@ TF1* NcAttrib::GetDecalFunction(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetDecalFunction(TF1* f,Int_t j)
 {
+/**
+~~~
 // Set the de-calib. function of the j-th (default j=1) slot.
 // Note : The first attribute slot is at j=1.
 //
@@ -1760,6 +2042,8 @@ void NcAttrib::SetDecalFunction(TF1* f,Int_t j)
 //
 // In all other cases the current function is deleted and a new
 // copy of the input function is created which becomes the current function.
+~~~
+**/
 
  if (j<1) return;
 
@@ -1790,6 +2074,8 @@ void NcAttrib::SetDecalFunction(TF1* f,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcAttrib::SetDecalFunction(TF1* f,TString name)
 {
+/**
+~~~
 // Set the de-calib. function of the name-specified slot.
 //
 // In case the function pointer argument has the same value as the current function
@@ -1801,6 +2087,8 @@ void NcAttrib::SetDecalFunction(TF1* f,TString name)
 //
 // In all other cases the current function is deleted and a new
 // copy of the input function is created which becomes the current function.
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetDecalFunction(f,j);

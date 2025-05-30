@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: Nc3VectorObj.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class Nc3VectorObj
+~~~
 // Class Nc3VectorObj
 // Handling of 3-vectors in various reference frames.
 //
@@ -66,32 +68,51 @@
 //
 //--- Author: Nick van Eijndhoven 18-oct-1999 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Nc3VectorObj.h"
  
-ClassImp(Nc3VectorObj) // Class implementation to enable ROOT I/O
+ClassImp(Nc3VectorObj); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 Nc3VectorObj::Nc3VectorObj() : TObject(),Nc3Vector()
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
 // Creation of an Nc3VectorObj object and initialisation of parameters.
 // All attributes initialised to 0.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc3VectorObj::Nc3VectorObj(Nc3Vector& q) : TObject(),Nc3Vector(q)
 {
+/**
+~~~
 // Creation of an Nc3VectorObj object and initialisation of parameters.
 // All attributes are initialised to the values of the input Nc3Vector.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc3VectorObj::~Nc3VectorObj()
 {
+/**
+~~~
 // Destructor to delete dynamically allocated memory.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc3VectorObj::Nc3VectorObj(Nc3VectorObj& v) : TObject(v),Nc3Vector(v)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////

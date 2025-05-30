@@ -17,7 +17,7 @@ unset LD_PREBIND
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-c -g0 -ansi -pedantic -Wall -Wno-long-long -I$ROOTSYS/include -I$CFITSIO"
+gccroot="-c -g0 -ansi -Wall -Wno-long-long -I$ROOTSYS/include -I$CFITSIO"
 #
 echo "lib1 = " $lib1
 echo "lib2 = " $lib2

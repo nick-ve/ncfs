@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: Nc4VectorObj.cxx 22 2011-02-18 10:24:15Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class Nc4VectorObj
+~~~
 // Class Nc4VectorObj
 // Handling of Lorentz 4-vectors in various reference frames.
 //
@@ -66,32 +68,51 @@
 //
 //--- Author: Nick van Eijndhoven 18-oct-1999 Utrecht University
 //- Modified: NvE $Date: 2011-02-18 11:24:15 +0100 (Fri, 18 Feb 2011) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Nc4VectorObj.h"
  
-ClassImp(Nc4VectorObj) // Class implementation to enable ROOT I/O
+ClassImp(Nc4VectorObj); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 Nc4VectorObj::Nc4VectorObj() : TObject(),Nc4Vector()
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
 // Creation of an Nc4VectorObj object and initialisation of parameters.
 // All attributes initialised to 0.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc4VectorObj::Nc4VectorObj(Nc4Vector& q) : TObject(),Nc4Vector(q)
 {
+/**
+~~~
 // Creation of an Nc4VectorObj object and initialisation of parameters.
 // All attributes are initialised to the values of the input Nc4Vector.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc4VectorObj::~Nc4VectorObj()
 {
+/**
+~~~
 // Destructor to delete dynamically allocated memory.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc4VectorObj::Nc4VectorObj(Nc4VectorObj& v) : TObject(v),Nc4Vector(v)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////

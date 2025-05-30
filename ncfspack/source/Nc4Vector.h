@@ -1,14 +1,14 @@
 #ifndef Nc4Vector_h
 #define Nc4Vector_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: Nc4Vector.h 53 2011-11-09 10:10:37Z nickve $
 
 #include <math.h>
  
 #include "Nc3Vector.h"
 #include "NcSignal.h"
+
+/** Handling of Lorentz 4-vectors in various reference frames. **/
  
 class Nc4Vector
 {
@@ -74,7 +74,7 @@ class Nc4Vector
   Nc3Vector fV;        // The 3-vector part
   Double32_t fDv2;     // The error on the Lorentz invariant
   Double32_t fDv0;     // The error on the scalar part
-  Double32_t fDresult; //! The error on the scalar result of an operation (e.g. dotproduct) 
+  Double32_t fDresult; //!< The error on the scalar result of an operation (e.g. dotproduct) 
   Int_t fScalar;       // Flag denoting scalar mode
   Double_t GetScaTrans(); // Provide "transverse value" of scalar part w.r.t. z-axis
   Double_t GetScaLong();  // Provide "longitudinal value" of scalar part w.r.t. z-axis

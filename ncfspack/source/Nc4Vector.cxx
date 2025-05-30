@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: Nc4Vector.cxx 53 2011-11-09 10:10:37Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class Nc4Vector
+~~~
 // Class Nc4Vector
 // Handling of Lorentz 4-vectors in various reference frames.
 //
@@ -149,18 +151,26 @@
 //
 //--- Author: Nick van Eijndhoven 01-apr-1999 Utrecht University
 //- Modified: NvE $Date: 2011-11-09 11:10:37 +0100 (Wed, 09 Nov 2011) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Nc4Vector.h"
 #include "Riostream.h"
  
-ClassImp(Nc4Vector) // Class implementation to enable ROOT I/O
+ClassImp(Nc4Vector); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 Nc4Vector::Nc4Vector()
 {
+/**
+~~~
 // Creation of a contravariant 4-vector and initialisation of parameters.
 // All values are initialised to 0.
 // Scalar mode is initially selected.
+~~~
+**/
+
  fUser=0;
  SetZero();
  fScalar=1;
@@ -168,7 +178,11 @@ Nc4Vector::Nc4Vector()
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector::~Nc4Vector()
 {
-// Destructor to delete dynamically allocated memory
+/**
+~~~
+// Destructor to delete dynamically allocated memory.
+~~~
+**/
 
  if (fUser)
  {
@@ -179,7 +193,12 @@ Nc4Vector::~Nc4Vector()
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector::Nc4Vector(const Nc4Vector& v)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fScalar=v.fScalar;
  fV2=v.fV2;
  fDv2=v.fDv2;
@@ -193,7 +212,11 @@ Nc4Vector::Nc4Vector(const Nc4Vector& v)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector& Nc4Vector::operator=(const Nc4Vector& q)
 {
+/**
+~~~
 // Set the current vector equal to vector q.
+~~~
+**/
 
  fScalar=q.fScalar;
  fV2=q.fV2;
@@ -209,7 +232,12 @@ Nc4Vector& Nc4Vector::operator=(const Nc4Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::Load(Nc4Vector& q)
 {
+/**
+~~~
 // Load all attributes of the input Nc4Vector into this Nc4Vector object.
+~~~
+**/
+
  fScalar=q.fScalar;
  fV2=q.fV2;
  fDv2=q.fDv2;
@@ -222,8 +250,13 @@ void Nc4Vector::Load(Nc4Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetZero()
 {
+/**
+~~~
 // (Re)set all attributes to zero.
 // Note : The (de)selection of the scalar mode is not modified.
+~~~
+**/
+
  fV2=0;
  fDv2=0;
  fV0=0;
@@ -239,11 +272,16 @@ void Nc4Vector::SetZero()
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetVector(Double_t v0,Nc3Vector& v)
 {
+/**
+~~~
 // Store contravariant vector.
 // The error on the scalar part is initialised to 0.
 // The errors on the vector part are taken from the input Nc3Vector.
 // Scalar mode is automatically selected. 
 // The error on scalar result operations is reset to 0.
+~~~
+**/
+
  fScalar=1;
  fV0=v0;
  fV=v;
@@ -253,6 +291,8 @@ void Nc4Vector::SetVector(Double_t v0,Nc3Vector& v)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetVector(Double_t* v,TString f,TString u)
 {
+/**
+~~~
 // Store vector according to reference frame f.
 // Only vector components will be stored, no errors.
 //
@@ -265,6 +305,8 @@ void Nc4Vector::SetVector(Double_t* v,TString f,TString u)
 //
 // Scalar mode is automatically selected. 
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  fScalar=1;
  Double_t a[3];
@@ -282,6 +324,8 @@ void Nc4Vector::SetVector(Double_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetVector(Double_t v0,Double_t v1,Double_t v2,Double_t v3,TString f,TString u)
 {
+/**
+~~~
 // Store vector according to reference frame f.
 // Only vector components will be stored, no errors.
 //
@@ -294,6 +338,8 @@ void Nc4Vector::SetVector(Double_t v0,Double_t v1,Double_t v2,Double_t v3,TStrin
 //
 // Scalar mode is automatically selected. 
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t vec[4];
  vec[0]=v0;
@@ -305,6 +351,8 @@ void Nc4Vector::SetVector(Double_t v0,Double_t v1,Double_t v2,Double_t v3,TStrin
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::GetVector(Double_t* v,TString f,TString u)
 {
+/**
+~~~
 // Provide 4-vector components according to reference frame f
 // and according to the current mode.
 // Scalar mode    : The scalar part is directly returned via v[0].
@@ -317,6 +365,8 @@ void Nc4Vector::GetVector(Double_t* v,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  if (fScalar)
  {
@@ -336,6 +386,8 @@ void Nc4Vector::GetVector(Double_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetVector(Float_t* v,TString f,TString u)
 {
+/**
+~~~
 // Store vector according to reference frame f.
 // Only vector components will be stored, no errors.
 //
@@ -350,6 +402,8 @@ void Nc4Vector::SetVector(Float_t* v,TString f,TString u)
 //
 // Scalar mode is automatically selected. 
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t vec[4];
  for (Int_t i=0; i<4; i++)
@@ -361,6 +415,8 @@ void Nc4Vector::SetVector(Float_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::GetVector(Float_t* v,TString f,TString u)
 {
+/**
+~~~
 // Provide 4-vector components according to reference frame f
 // and according to the current mode.
 // Scalar mode    : The scalar part is directly returned via v[0].
@@ -373,6 +429,8 @@ void Nc4Vector::GetVector(Float_t* v,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t vec[4];
  GetVector(vec,f,u);
@@ -384,9 +442,14 @@ void Nc4Vector::GetVector(Float_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetScalar()
 {
+/**
+~~~
 // Provide the scalar part.
 // The error on the scalar value is available via GetResultError()
 // after invokation of GetScalar().
+~~~
+**/
+
  if (fScalar)
  {
   fDresult=fDv0;
@@ -408,9 +471,13 @@ Double_t Nc4Vector::GetScalar()
 ///////////////////////////////////////////////////////////////////////////
 Int_t Nc4Vector::HasVector() const
 {
+/**
+~~~
 // Check whether the 3-vector components have been set.
 // In case the 3-vector components have been set, the value 1 is returned.
 // Otherwise, the value 0 is returned.
+~~~
+**/
 
  Int_t val=fV.HasVector();
  return val;
@@ -418,9 +485,13 @@ Int_t Nc4Vector::HasVector() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t Nc4Vector::HasErrors() const
 {
+/**
+~~~
 // Check whether the errors on the 3-vector components have been set.
 // In case the errors have been set, the value 1 is returned.
 // Otherwise, the value 0 is returned.
+~~~
+**/
 
  Int_t val=fV.HasErrors();
  return val;
@@ -428,19 +499,29 @@ Int_t Nc4Vector::HasErrors() const
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetResultError() const
 {
+/**
+~~~
 // Provide the error on the result of an operation yielding a scalar
 // E.g. GetScalar(), GetInvariant() or Dot()
+~~~
+**/
+
  return fDresult;
 }
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetScalar(Double_t v0,Double_t dv0)
 {
+/**
+~~~
 // Modify the scalar part (v0) and its error (dv0).
 // The default value for dv0 is 0.
 // The vector part is not modified. 
 // Scalar mode is automatically selected
 // ==> Lorentz invariant and its error are updated. 
 // The error on scalar result operations is reset to 0.
+~~~
+**/
+
  fScalar=1;
  fV0=v0;
  fV2=pow(v0,2)-fV.Dot(fV);
@@ -449,9 +530,14 @@ void Nc4Vector::SetScalar(Double_t v0,Double_t dv0)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetScalarError(Double_t dv0)
 {
+/**
+~~~
 // Set the error on the scalar part.
 // If in scalar mode, update error on the invariant accordingly.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
+
  fDv0=dv0;
  if (fScalar)
  {
@@ -464,12 +550,17 @@ void Nc4Vector::SetScalarError(Double_t dv0)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::Set3Vector(Nc3Vector& v)
 {
+/**
+~~~
 // Set the 3-vector part, the errors are taken from the input Nc3Vector
 // Scalar mode    : The scalar part and its error are not modified,
 //                  the Lorentz invariantand its error are re-calculated.
 // Invariant mode : The Lorentz invariant and its error are not modified,
 //                  the scalar part and its error are re-calculated.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
+
  fV=v;
  if (fScalar)
  {
@@ -483,6 +574,8 @@ void Nc4Vector::Set3Vector(Nc3Vector& v)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::Set3Vector(Double_t* v,TString f,TString u)
 {
+/**
+~~~
 // Set the 3-vector part according to reference frame f
 // Only vector components will be stored, no errors.
 //
@@ -498,6 +591,8 @@ void Nc4Vector::Set3Vector(Double_t* v,TString f,TString u)
 // Invariant mode : The Lorentz invariant and its error are not modified,
 //                  the scalar part and its error are re-calculated.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t a[3];
  for (Int_t i=0; i<3; i++)
@@ -518,6 +613,8 @@ void Nc4Vector::Set3Vector(Double_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::Set3Vector(Float_t* v,TString f,TString u)
 {
+/**
+~~~
 // Set the 3-vector part according to reference frame f
 // Only vector components will be stored, no errors.
 //
@@ -530,6 +627,8 @@ void Nc4Vector::Set3Vector(Float_t* v,TString f,TString u)
 //
 // The Lorentz invariant is not modified
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t vec[3];
  for (Int_t i=0; i<3; i++)
@@ -541,6 +640,8 @@ void Nc4Vector::Set3Vector(Float_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::Set3Vector(Double_t v1,Double_t v2,Double_t v3,TString f,TString u)
 {
+/**
+~~~
 // Set the 3-vector part according to reference frame f
 // Only vector components will be stored, no errors.
 //
@@ -556,6 +657,8 @@ void Nc4Vector::Set3Vector(Double_t v1,Double_t v2,Double_t v3,TString f,TString
 // Invariant mode : The Lorentz invariant and its error are not modified,
 //                  the scalar part and its error are re-calculated.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t vec[3];
  vec[0]=v1;
@@ -566,13 +669,17 @@ void Nc4Vector::Set3Vector(Double_t v1,Double_t v2,Double_t v3,TString f,TString
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetInvariant(Double_t v2,Double_t dv2)
 {
+/**
+~~~
 // Modify the Lorentz invariant (v2) quantity v^i*v_i and its error (dv2).
 // The default value for the error dv2 is 0.
 // The vector part is not modified.
 // Invariant mode is automatically selected
 // ==> the scalar part and its error are updated.
 // The error on scalar result operations is reset to 0.
-//
+~~~
+**/
+
  fScalar=0;
  fV2=v2;
  fDv2=dv2;
@@ -583,9 +690,14 @@ void Nc4Vector::SetInvariant(Double_t v2,Double_t dv2)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetInvariantError(Double_t dv2)
 {
+/**
+~~~
 // Set the error on the Lorentz invariant.
 // If in invariant mode, update error on the scalar part accordingly.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
+
  fDv2=dv2;
  if (!fScalar)
  {
@@ -596,9 +708,14 @@ void Nc4Vector::SetInvariantError(Double_t dv2)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetInvariant()
 {
+/**
+~~~
 // Provide the Lorentz invariant v^i*v_i.
 // The error on the Lorentz invariant is available via GetResultError()
 // after invokation of GetInvariant().
+~~~
+**/
+
  if (!fScalar)
  {
   fDresult=fDv2;
@@ -613,12 +730,19 @@ Double_t Nc4Vector::GetInvariant()
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc4Vector::Get3Vector() const
 {
-// Provide the 3-vector part
+/**
+~~~
+// Provide the 3-vector part.
+~~~
+**/
+
  return fV;
 }
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetErrors(Double_t* e,TString f,TString u)
 {
+/**
+~~~
 // Store errors for vector v^i according to reference frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -630,6 +754,8 @@ void Nc4Vector::SetErrors(Double_t* e,TString f,TString u)
 //
 // If in scalar mode, update error on the invariant accordingly.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t a[3];
  for (Int_t i=0; i<3; i++)
@@ -642,6 +768,8 @@ void Nc4Vector::SetErrors(Double_t* e,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetErrors(Double_t e0,Double_t e1,Double_t e2,Double_t e3,TString f,TString u)
 {
+/**
+~~~
 // Store errors for vector v^i according to reference frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -653,6 +781,8 @@ void Nc4Vector::SetErrors(Double_t e0,Double_t e1,Double_t e2,Double_t e3,TStrin
 //
 // If in scalar mode, update error on the invariant accordingly.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t vec[4];
  vec[0]=e0;
@@ -664,6 +794,8 @@ void Nc4Vector::SetErrors(Double_t e0,Double_t e1,Double_t e2,Double_t e3,TStrin
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetErrors(Float_t* e,TString f,TString u)
 {
+/**
+~~~
 // Store errors for vector v^i according to reference frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -675,6 +807,8 @@ void Nc4Vector::SetErrors(Float_t* e,TString f,TString u)
 //
 // If in scalar mode, update error on the invariant accordingly.
 // The error on scalar result operations is reset to 0.
+~~~
+**/
 
  Double_t a[4];
  for (Int_t i=0; i<4; i++)
@@ -686,6 +820,8 @@ void Nc4Vector::SetErrors(Float_t* e,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::GetErrors(Double_t* e,TString f,TString u)
 {
+/**
+~~~
 // Provide errors for vector v^i according to reference frame f
 // and according to the current mode.
 // Scalar mode    : The error on the scalar part is directly returned via e[0].
@@ -698,6 +834,8 @@ void Nc4Vector::GetErrors(Double_t* e,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t a[3];
  fV.GetErrors(a,f,u);
@@ -715,6 +853,8 @@ void Nc4Vector::GetErrors(Double_t* e,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::GetErrors(Float_t* e,TString f,TString u)
 {
+/**
+~~~
 // Provide errors for vector v^i according to reference frame f
 // and according to the current mode.
 // Scalar mode    : The error on the scalar part is directly returned via e[0].
@@ -727,6 +867,8 @@ void Nc4Vector::GetErrors(Float_t* e,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t a[4];
  GetErrors(a,f,u);
@@ -738,6 +880,8 @@ void Nc4Vector::GetErrors(Float_t* e,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::Data(TString f,TString u)
 {
+/**
+~~~
 // Print contravariant vector components and errors according to
 // reference frame f and according to the current mode.
 // Scalar mode    : The scalar part and its error are directly returned.
@@ -750,6 +894,8 @@ void Nc4Vector::Data(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  if (f=="car" || f=="sph" || f=="cyl")
  {
@@ -786,7 +932,12 @@ void Nc4Vector::Data(TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::Dot(Nc4Vector& q)
 {
-// Provide the dot product of the current vector with vector q
+/**
+~~~
+// Provide the dot product of the current vector with vector q.
+~~~
+**/
+
  Double_t dotpro=0;
  Double_t a0=GetScalar();
  Double_t da0=GetResultError();
@@ -816,8 +967,13 @@ Double_t Nc4Vector::Dot(Nc4Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector Nc4Vector::operator+(Nc4Vector& q)
 {
-// Add 4-vector q to the current 4-vector
+/**
+~~~
+// Add 4-vector q to the current 4-vector.
 // Error propagation is performed automatically
+~~~
+**/
+
  Double_t a0=GetScalar();
  Double_t da0=GetResultError();
  Nc3Vector a=Get3Vector();
@@ -837,8 +993,13 @@ Nc4Vector Nc4Vector::operator+(Nc4Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector Nc4Vector::operator-(Nc4Vector& q)
 {
-// Subtract 4-vector q from the current 4-vector
+/**
+~~~
+// Subtract 4-vector q from the current 4-vector.
 // Error propagation is performed automatically
+~~~
+**/
+
  Double_t a0=GetScalar();
  Double_t da0=GetResultError();
  Nc3Vector a=Get3Vector();
@@ -858,8 +1019,13 @@ Nc4Vector Nc4Vector::operator-(Nc4Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector Nc4Vector::operator*(Double_t s)
 {
-// Multiply the current 4-vector with a scalar s
+/**
+~~~
+// Multiply the current 4-vector with a scalar s.
 // Error propagation is performed automatically
+~~~
+**/
+
  Double_t a0=GetScalar();
  Double_t da0=GetResultError();
  Nc3Vector a=Get3Vector();
@@ -877,8 +1043,12 @@ Nc4Vector Nc4Vector::operator*(Double_t s)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector Nc4Vector::operator/(Double_t s)
 {
-// Divide the current vector by a scalar s
+/**
+~~~
+// Divide the current vector by a scalar s.
 // Error propagation is performed automatically
+~~~
+**/
 
  if (fabs(s)<1.e-20) // Protect against division by 0
  {
@@ -905,8 +1075,13 @@ Nc4Vector Nc4Vector::operator/(Double_t s)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector& Nc4Vector::operator+=(Nc4Vector& q)
 {
-// Add 4-vector q to the current 4-vector
+/**
+~~~
+// Add 4-vector q to the current 4-vector.
 // Error propagation is performed automatically
+~~~
+**/
+
  Double_t a0=GetScalar();
  Double_t da0=GetResultError();
  Nc3Vector a=Get3Vector();
@@ -926,8 +1101,13 @@ Nc4Vector& Nc4Vector::operator+=(Nc4Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector& Nc4Vector::operator-=(Nc4Vector& q)
 {
-// Subtract 4-vector q from the current 4-vector
+/**
+~~~
+// Subtract 4-vector q from the current 4-vector.
 // Error propagation is performed automatically
+~~~
+**/
+
  Double_t a0=GetScalar();
  Double_t da0=GetResultError();
  Nc3Vector a=Get3Vector();
@@ -947,8 +1127,13 @@ Nc4Vector& Nc4Vector::operator-=(Nc4Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector& Nc4Vector::operator*=(Double_t s)
 {
-// Multiply the current 4-vector with a scalar s
+/**
+~~~
+// Multiply the current 4-vector with a scalar s.
 // Error propagation is performed automatically
+~~~
+**/
+
  Double_t a0=GetScalar();
  Double_t da0=GetResultError();
  Nc3Vector a=Get3Vector();
@@ -965,8 +1150,12 @@ Nc4Vector& Nc4Vector::operator*=(Double_t s)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector& Nc4Vector::operator/=(Double_t s)
 {
-// Divide the current vector by a scalar s
+/**
+~~~
+// Divide the current vector by a scalar s.
 // Error propagation is performed automatically
+~~~
+**/
 
  if (fabs(s)<1.e-20) // Protect against division by 0
  {
@@ -992,33 +1181,51 @@ Nc4Vector& Nc4Vector::operator/=(Double_t s)
 ///////////////////////////////////////////////////////////////////////////
 Int_t Nc4Vector::GetScalarFlag() const
 {
+/**
+~~~
 // Provide the value of the fScalar flag (for internal use only).
+~~~
+**/
+
  return fScalar;
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc4Vector::GetVecTrans() const
 {
+/**
+~~~
 // Provide the transverse vector part w.r.t. z-axis.
 // Error propagation is performed automatically
+~~~
+**/
   
  return fV.GetVecTrans();
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc4Vector::GetVecLong() const
 {
+/**
+~~~
 // Provide the longitudinal vector part w.r.t. z-axis.
 // Error propagation is performed automatically
+~~~
+**/
   
  return fV.GetVecLong();
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetScaTrans()
 {
+/**
+~~~
 // Provide the "transverse value" of the scalar part w.r.t. z-axis.
 // This provides a basis for e.g. E_trans calculation.
 // Note : the returned value is always positive or zero.
 // The error on the value is available via GetResultError()
 // after invokation of GetScaTrans().
+~~~
+**/
+
  Double_t a[3],ea[3];
 
  fV.GetVector(a,"sph");
@@ -1037,11 +1244,16 @@ Double_t Nc4Vector::GetScaTrans()
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetScaLong()
 {
+/**
+~~~
 // Provide the "longitudinal value" of the scalar part w.r.t. z-axis.
 // This provides a basis for e.g. E_long calculation.
 // Note : the returned value can also be negative.
 // The error on the value is available via GetResultError()
 // after invokation of GetScaLong().
+~~~
+**/
+
  Double_t a[3],ea[3];
 
  fV.GetVector(a,"sph");
@@ -1060,9 +1272,14 @@ Double_t Nc4Vector::GetScaLong()
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetPseudoRapidity()
 {
+/**
+~~~
 // Provide the pseudorapidity value of the vector part w.r.t. z-axis.
 // The error on the value is available via GetResultError()
 // after invokation of GetPseudoRapidity().
+~~~
+**/
+
  Double_t eta=fV.GetPseudoRapidity();
  fDresult=fV.GetResultError();
  return eta;
@@ -1070,7 +1287,12 @@ Double_t Nc4Vector::GetPseudoRapidity()
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc4Vector::GetBetaVector() const
 {
-// Provide the beta 3-vector corresponding to this 4-vector.
+/**
+~~~
+// Provide the beta 3-vector (i.e. v/c) corresponding to this 4-vector.
+~~~
+**/
+
  Nc3Vector beta;
  if (fabs(fV0)>0.) beta=fV/fV0;
  if (fabs(fDv0)>0.)
@@ -1091,7 +1313,12 @@ Nc3Vector Nc4Vector::GetBetaVector() const
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetBeta()
 {
+/**
+~~~
 // Provide the beta value (i.e. v/c) corresponding to this 4-vector.
+~~~
+**/
+
  Nc3Vector beta=GetBetaVector();
  Double_t val=beta.GetNorm();
  fDresult=beta.GetResultError();
@@ -1100,8 +1327,13 @@ Double_t Nc4Vector::GetBeta()
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetGamma()
 {
+/**
+~~~
 // Provide the Lorentz gamma factor corresponding to this 4-vector.
 // In case the gamma factor is infinite a value of -1 is returned.
+~~~
+**/
+
  Double_t gamma=-1;
  fDresult=0;
  Double_t inv=sqrt(fabs(fV2));
@@ -1117,6 +1349,8 @@ Double_t Nc4Vector::GetGamma()
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetX(Int_t i,TString f,TString u)
 {
+/**
+~~~
 // Provide i-th vector component according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
@@ -1130,6 +1364,8 @@ Double_t Nc4Vector::GetX(Int_t i,TString f,TString u)
 // So, i=0 denotes the scalar component and i=1 denotes the first 3-vector component.
 // The error on the selected component can be obtained via the
 // usual GetResultError() facility.
+~~~
+**/
  
  fDresult=0;
 
@@ -1152,12 +1388,16 @@ Double_t Nc4Vector::GetX(Int_t i,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetOpeningAngle(Nc4Vector& q,TString u)
 {
+/**
+~~~
 // Provide the opening angle between 3-vector parts with 4-vector q.
 // The string argument "u" allows to choose between different output units.
 // u = "rad" : opening angle provided in radians
 //     "deg" : opening angle provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Nc3Vector v1=fV;
  Nc3Vector v2=q.Get3Vector();
@@ -1170,12 +1410,16 @@ Double_t Nc4Vector::GetOpeningAngle(Nc4Vector& q,TString u)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc4Vector::GetOpeningAngle(Nc3Vector& q,TString u)
 {
+/**
+~~~
 // Provide the opening angle between the 3-vector part and 3-vector q.
 // The string argument "u" allows to choose between different output units.
 // u = "rad" : opening angle provided in radians
 //     "deg" : opening angle provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Nc3Vector v1=fV;
 
@@ -1187,6 +1431,8 @@ Double_t Nc4Vector::GetOpeningAngle(Nc3Vector& q,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc4Vector::SetUserData(NcSignal* s)
 {
+/**
+~~~
 // Enter the NcSignal object containing the user data.
 //
 // The main goal of these user data is to provide a flexible facility
@@ -1209,6 +1455,8 @@ void Nc4Vector::SetUserData(NcSignal* s)
 // Note : The entered NcSignal object is owned by this Nc4Vector instance.
 //        As such, a private copy of it will be stored using the Clone()
 //        memberfunction.
+~~~
+**/
 
  if (fUser)
  {
@@ -1221,7 +1469,12 @@ void Nc4Vector::SetUserData(NcSignal* s)
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* Nc4Vector::GetUserData() const
 {
+/**
+~~~
 // Provide the pointer to the NcSignal object containing the user data.
+~~~
+**/
+
  return fUser;
 }
 ///////////////////////////////////////////////////////////////////////////

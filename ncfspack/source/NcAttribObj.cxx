@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,13 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcAttribObj.cxx 5 2010-03-19 10:10:02Z nickve $
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcAttribObj
+~~~
 // Class NcAttribObj
 // Generic handling of detector signal (calibration) attributes.
 //
@@ -56,43 +59,66 @@
 //
 //--- Author: Nick van Eijndhoven 18-sep-2003 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcAttribObj.h"
 #include "Riostream.h"
  
-ClassImp(NcAttribObj) // Class implementation to enable ROOT I/O
+ClassImp(NcAttribObj); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcAttribObj::NcAttribObj() : TObject(),NcAttrib()
 {
+/**
+~~~
 // Creation of an NcAttrib object and initialisation of parameters.
 // Several values of the same type (e.g. gain) can be stored in different slots.
 // If needed, the storage for values will be expanded automatically
 // when entering values.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcAttribObj::NcAttribObj(NcAttrib& a) : TObject(),NcAttrib(a)
 {
+/**
+~~~
 // Creation of an NcAttrib object and initialisation of parameters.
 // All attributes are initialised to the values of the input NcAttrib.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcAttribObj::~NcAttribObj()
 {
-// Destructor to delete dynamically allocated memory
+/**
+~~~
+// Destructor to delete dynamically allocated memory.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcAttribObj::NcAttribObj(const NcAttribObj& a) : TObject(a),NcAttrib(a)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcAttribObj::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers when adding objects in case the container owns the objects.
+~~~
+**/
 
  NcAttribObj* att=new NcAttribObj(*this);
  if (name)

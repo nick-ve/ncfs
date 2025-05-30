@@ -1005,7 +1005,8 @@ INPUT                  = . \
                          iceconvert/source/IceRootx.cxx \
                          iceconvert/source/IceRootx.h \
                          icepack/source \
-                         rnopack/source
+                         rnopack/source \
+                         ncfspack/source
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses

@@ -12,7 +12,7 @@ lib=ncfspack.so
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-shared -g0 -ansi -pedantic -Wall -Wno-long-long -I$ROOTSYS/include -I$CFITSIO -o $lib"
+gccroot="-shared -g0 -ansi -Wall -Wno-long-long -I$ROOTSYS/include -I$CFITSIO -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS

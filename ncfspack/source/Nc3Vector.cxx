@@ -1,4 +1,5 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
  * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class Nc3Vector
+~~~
 // Class Nc3Vector
 // Handling of 3-vectors in various reference frames.
 //
@@ -93,17 +97,25 @@
 //
 //--- Author: Nick van Eijndhoven 30-mar-1999 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 16, 2023  02:29Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Nc3Vector.h"
 #include "Riostream.h"
  
-ClassImp(Nc3Vector) // Class implementation to enable ROOT I/O
+ClassImp(Nc3Vector); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 Nc3Vector::Nc3Vector()
 {
+/**
+~~~
 // Creation of an Nc3Vector object and initialisation of parameters
 // All attributes initialised to 0
+~~~
+**/
+
  fNv=0;
  fV=0;
  fDresult=0;
@@ -111,7 +123,12 @@ Nc3Vector::Nc3Vector()
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector::~Nc3Vector()
 {
+/**
+~~~
 // Destructor to delete dynamically allocated memory
+~~~
+**/
+
  if (fV)
  {
   delete[] fV;
@@ -121,7 +138,12 @@ Nc3Vector::~Nc3Vector()
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector::Nc3Vector(const Nc3Vector& v)
 {
+/**
+~~~
 // Copy constructor
+~~~
+**/
+
  fNv=v.fNv;
  fV=0;
  if (fNv) fV=new Double32_t[fNv];
@@ -134,7 +156,11 @@ Nc3Vector::Nc3Vector(const Nc3Vector& v)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector& Nc3Vector::operator=(const Nc3Vector& q)
 {
+/**
+~~~
 // Set the current vector equal to vector q.
+~~~
+**/
 
  fNv=0;
  if (fV)
@@ -164,7 +190,12 @@ Nc3Vector& Nc3Vector::operator=(const Nc3Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::Load(Nc3Vector& q)
 {
+/**
+~~~
 // Load all attributes of the input Nc3Vector into this Nc3Vector object.
+~~~
+**/
+
  fNv=q.fNv;
  if (fV)
  {
@@ -181,7 +212,12 @@ void Nc3Vector::Load(Nc3Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::SetZero()
 {
+/**
+~~~
 // (Re)set all attributes to zero.
+~~~
+**/
+
  fNv=0;
  if (fV)
  {
@@ -193,6 +229,8 @@ void Nc3Vector::SetZero()
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
 {
+/**
+~~~
 // Store vector according to reference frame f.
 // Only vector components will be stored, no errors.
 //
@@ -202,6 +240,8 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  fDresult=0;
 
@@ -330,6 +370,8 @@ void Nc3Vector::SetVector(Double_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::SetVector(Double_t v1,Double_t v2,Double_t v3,TString f,TString u)
 {
+/**
+~~~
 // Store vector according to reference frame f.
 // Only vector components will be stored, no errors.
 //
@@ -339,6 +381,8 @@ void Nc3Vector::SetVector(Double_t v1,Double_t v2,Double_t v3,TString f,TString 
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t vec[3];
  vec[0]=v1;
@@ -349,6 +393,8 @@ void Nc3Vector::SetVector(Double_t v1,Double_t v2,Double_t v3,TString f,TString 
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::GetVector(Double_t* v,TString f,TString u) const
 {
+/**
+~~~
 // Provide vector according to reference frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -357,6 +403,8 @@ void Nc3Vector::GetVector(Double_t* v,TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  if (!fNv)
  {
@@ -413,6 +461,8 @@ void Nc3Vector::GetVector(Double_t* v,TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::SetVector(Float_t* v,TString f,TString u)
 {
+/**
+~~~
 // Store vector according to reference frame f.
 // Only vector components will be stored, no errors.
 //
@@ -422,6 +472,8 @@ void Nc3Vector::SetVector(Float_t* v,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t vec[3];
  for (Int_t i=0; i<3; i++)
@@ -433,6 +485,8 @@ void Nc3Vector::SetVector(Float_t* v,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::GetVector(Float_t* v,TString f,TString u) const
 {
+/**
+~~~
 // Provide vector according to reference frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -441,6 +495,8 @@ void Nc3Vector::GetVector(Float_t* v,TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t vec[3];
  GetVector(vec,f,u);
@@ -452,6 +508,8 @@ void Nc3Vector::GetVector(Float_t* v,TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::SetErrors(Double_t* e,TString f,TString u)
 {
+/**
+~~~
 // Store errors according to reference frame f.
 //
 // Note : The errors can only be set after the vector components have
@@ -465,6 +523,8 @@ void Nc3Vector::SetErrors(Double_t* e,TString f,TString u)
 // The default is u="rad".
 //
 // The error on scalar results is reset to 0.
+~~~
+**/
 
  if (!fNv) return;
 
@@ -533,6 +593,8 @@ void Nc3Vector::SetErrors(Double_t* e,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::SetErrors(Double_t e1,Double_t e2,Double_t e3,TString f,TString u)
 {
+/**
+~~~
 // Store errors according to reference frame f.
 //
 // Note : The errors can only be set after the vector components have
@@ -546,6 +608,8 @@ void Nc3Vector::SetErrors(Double_t e1,Double_t e2,Double_t e3,TString f,TString 
 // The default is u="rad".
 //
 // The error on scalar results is reset to 0
+~~~
+**/
 
  Double_t vec[3];
  vec[0]=e1;
@@ -556,6 +620,8 @@ void Nc3Vector::SetErrors(Double_t e1,Double_t e2,Double_t e3,TString f,TString 
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::GetErrors(Double_t* e,TString f,TString u) const
 {
+/**
+~~~
 // Provide errors according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
@@ -564,6 +630,8 @@ void Nc3Vector::GetErrors(Double_t* e,TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  if (fNv<4)
  {
@@ -683,6 +751,8 @@ void Nc3Vector::GetErrors(Double_t* e,TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::SetErrors(Float_t* e,TString f,TString u)
 {
+/**
+~~~
 // Store errors according to reference frame f.
 //
 // Note : The errors can only be set after the vector components have
@@ -696,6 +766,8 @@ void Nc3Vector::SetErrors(Float_t* e,TString f,TString u)
 // The default is u="rad".
 //
 // The error on scalar results is reset to 0
+~~~
+**/
 
  Double_t vec[3];
  for (Int_t i=0; i<3; i++)
@@ -707,6 +779,8 @@ void Nc3Vector::SetErrors(Float_t* e,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::GetErrors(Float_t* e,TString f,TString u) const
 {
+/**
+~~~
 // Provide errors according to reference frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -715,6 +789,8 @@ void Nc3Vector::GetErrors(Float_t* e,TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t vec[3];
  GetErrors(vec,f,u);
@@ -726,6 +802,8 @@ void Nc3Vector::GetErrors(Float_t* e,TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::Data(TString f,TString u) const
 {
+/**
+~~~
 // Print vector components according to reference frame f
 //
 // f = "car" : Cartesian coordinates
@@ -741,6 +819,8 @@ void Nc3Vector::Data(TString f,TString u) const
 //     "hms" : angle provided in hhmmss.sss
 //
 // The defaults are f="car" and  u="rad".
+~~~
+**/
 
  if ((f=="car" || f=="sph" || f=="cyl") && (u=="rad" || u=="deg" || u=="dms"|| u=="hms"))
  {
@@ -799,9 +879,13 @@ void Nc3Vector::Data(TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t Nc3Vector::HasVector() const
 {
+/**
+~~~
 // Check whether the vector components have been set.
 // In case the vector components have been set, the value 1 is returned.
 // Otherwise, the value 0 is returned.
+~~~
+**/
 
  Int_t val=0;
  if (fNv) val=1;
@@ -810,9 +894,13 @@ Int_t Nc3Vector::HasVector() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t Nc3Vector::HasErrors() const
 {
+/**
+~~~
 // Check whether the errors on the vector components have been set.
 // In case the errors have been set, the value 1 is returned.
 // Otherwise, the value 0 is returned.
+~~~
+**/
 
  Int_t val=0;
  if (fNv==6) val=1;
@@ -821,8 +909,12 @@ Int_t Nc3Vector::HasErrors() const
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc3Vector::GetNorm()
 {
-// Provide the norm of the current vector
+/**
+~~~
+// Provide the norm of the current vector.
 // The error on the scalar result (norm) is updated accordingly
+~~~
+**/
 
  Double_t norm=0;
  if (fV) norm=fV[0];
@@ -840,9 +932,13 @@ Double_t Nc3Vector::GetNorm()
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc3Vector::GetPseudoRapidity()
 {
+/**
+~~~
 // Provide the pseudo-rapidity w.r.t. the z-axis.
 // In other words : eta=-log(tan(theta/2))
 // The error on the scalar result (pseudo-rap.) is updated accordingly
+~~~
+**/
 
  Double_t pi=acos(-1.);
  Double_t v[3];
@@ -868,8 +964,12 @@ Double_t Nc3Vector::GetPseudoRapidity()
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc3Vector::Dot(Nc3Vector& q)
 {
-// Provide the dot product of the current vector with vector q
+/**
+~~~
+// Provide the dot product of the current vector with vector q.
 // The error on the scalar result (dotproduct) is updated accordingly
+~~~
+**/
 
  Double_t dotpro=0;
 
@@ -903,15 +1003,25 @@ Double_t Nc3Vector::Dot(Nc3Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc3Vector::GetResultError() const
 {
-// Provide the error on the result of an operation yielding a scalar
+/**
+~~~
+// Provide the error on the result of an operation yielding a scalar.
 // E.g. GetNorm() or Dot()
+~~~
+**/
+
  return fDresult;
 }
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::Cross(Nc3Vector& q) const
 {
-// Provide the cross product of the current vector with vector q
+/**
+~~~
+// Provide the cross product of the current vector with vector q.
 // Error propagation is performed automatically
+~~~
+**/
+
  Double_t a[3],b[3],c[3];
 
  GetVector(a,"car");
@@ -950,8 +1060,12 @@ Nc3Vector Nc3Vector::Cross(Nc3Vector& q) const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::operator+(Nc3Vector& q) const
 {
-// Add vector q to the current vector
+/**
+~~~
+// Add vector q to the current vector.
 // Error propagation is performed automatically
+~~~
+**/
 
  Double_t a[3],b[3];
 
@@ -985,8 +1099,12 @@ Nc3Vector Nc3Vector::operator+(Nc3Vector& q) const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::operator-(Nc3Vector& q) const
 {
-// Subtract vector q from the current vector
+/**
+~~~
+// Subtract vector q from the current vector.
 // Error propagation is performed automatically
+~~~
+**/
 
  Double_t a[3],b[3];
 
@@ -1020,8 +1138,12 @@ Nc3Vector Nc3Vector::operator-(Nc3Vector& q) const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::operator*(Double_t s) const
 {
+/**
+~~~
 // Multiply the current vector with a scalar s.
 // Error propagation is performed automatically.
+~~~
+**/
 
  Double_t a[3];
  GetVector(a,"car");
@@ -1052,8 +1174,12 @@ Nc3Vector Nc3Vector::operator*(Double_t s) const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::operator/(Double_t s) const
 {
-// Divide the current vector by a scalar s
+/**
+~~~
+// Divide the current vector by a scalar s.
 // Error propagation is performed automatically
+~~~
+**/
 
  if (fabs(s)<1.e-20) // Protect against division by 0
  {
@@ -1092,8 +1218,12 @@ Nc3Vector Nc3Vector::operator/(Double_t s) const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector& Nc3Vector::operator+=(Nc3Vector& q)
 {
-// Add vector q to the current vector
+/**
+~~~
+// Add vector q to the current vector.
 // Error propagation is performed automatically
+~~~
+**/
 
  Double_t a[3],b[3],ea[3],eb[3];
 
@@ -1124,8 +1254,12 @@ Nc3Vector& Nc3Vector::operator+=(Nc3Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector& Nc3Vector::operator-=(Nc3Vector& q)
 {
-// Subtract vector q from the current vector
+/**
+~~~
+// Subtract vector q from the current vector.
 // Error propagation is performed automatically
+~~~
+**/
 
  Double_t a[3],b[3],ea[3],eb[3];
 
@@ -1156,8 +1290,12 @@ Nc3Vector& Nc3Vector::operator-=(Nc3Vector& q)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector& Nc3Vector::operator*=(Double_t s)
 {
-// Multiply the current vector with a scalar s
+/**
+~~~
+// Multiply the current vector with a scalar s.
 // Error propagation is performed automatically
+~~~
+**/
 
  Double_t a[3],ea[3];
 
@@ -1186,8 +1324,12 @@ Nc3Vector& Nc3Vector::operator*=(Double_t s)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector& Nc3Vector::operator/=(Double_t s)
 {
-// Divide the current vector by a scalar s
+/**
+~~~
+// Divide the current vector by a scalar s.
 // Error propagation is performed automatically
+~~~
+**/
 
  if (fabs(s)<1.e-20) // Protect against division by 0
  {
@@ -1224,8 +1366,12 @@ Nc3Vector& Nc3Vector::operator/=(Double_t s)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::GetVecTrans() const
 {
+/**
+~~~
 // Provide the transverse vector w.r.t. z-axis.
 // Error propagation is performed automatically
+~~~
+**/
 
  Double_t pi=acos(-1.);
  Double_t a[3],ea[3];
@@ -1254,8 +1400,12 @@ Nc3Vector Nc3Vector::GetVecTrans() const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::GetVecLong() const
 {
+/**
+~~~
 // Provide the longitudinal vector w.r.t. z-axis.
 // Error propagation is performed automatically
+~~~
+**/
 
  Double_t pi=acos(-1.);
  Double_t a[3],ea[3];
@@ -1287,9 +1437,13 @@ Nc3Vector Nc3Vector::GetVecLong() const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::GetPrimed(TRotMatrix* m) const
 {
+/**
+~~~
 // Provide vector components (and errors) in a rotated frame.
 // The orientation of the rotated frame is described by the TRotMatrix
 // input argument.
+~~~
+**/
 
  Nc3Vector v(*this);
  if (!m) return v;
@@ -1321,12 +1475,16 @@ Nc3Vector Nc3Vector::GetPrimed(TRotMatrix* m) const
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector Nc3Vector::GetUnprimed(TRotMatrix* m) const
 {
+/**
+~~~
 // Provide original vector components (and errors) from the rotated ones.
 // The orientation of the rotated frame is described by the TRotMatrix
 // input argument.
 // So, this is the inverse of the GetPrimed() memberfunction.
 // This memberfunction makes use of the fact that the inverse of a certain
 // TRotMatrix is given by its transposed matrix.
+~~~
+**/
 
  Nc3Vector v(*this);
  if (!m) return v;
@@ -1358,6 +1516,8 @@ Nc3Vector Nc3Vector::GetUnprimed(TRotMatrix* m) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc3Vector::GetX(Int_t i,TString f,TString u)
 {
+/**
+~~~
 // Provide i-th vector component according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
@@ -1371,6 +1531,8 @@ Double_t Nc3Vector::GetX(Int_t i,TString f,TString u)
 // So, i=1 denotes the first vector component.
 // The error on the selected component can be obtained via the
 // usual GetResultError() facility.
+~~~
+**/
  
  fDresult=0;
 
@@ -1391,12 +1553,16 @@ Double_t Nc3Vector::GetX(Int_t i,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc3Vector::GetOpeningAngle(Nc3Vector& q,TString u)
 {
+/**
+~~~
 // Provide the opening angle with vector q.
 // The string argument "u" allows to choose between different output units.
 // u = "rad" : opening angle provided in radians
 //     "deg" : opening angle provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  Double_t ang=0;
 
@@ -1449,6 +1615,8 @@ Double_t Nc3Vector::GetOpeningAngle(Nc3Vector& q,TString u)
 ///////////////////////////////////////////////////////////////////////////
 Double_t Nc3Vector::ConvertAngle(Double_t a,TString in,TString out) const
 {
+/**
+~~~
 // Conversion of various angular formats.
 //
 // The input argument "a" denotes the angle to be converted. 
@@ -1465,6 +1633,8 @@ Double_t Nc3Vector::ConvertAngle(Double_t a,TString in,TString out) const
 //       "dms" : output angle provided in dddmmss.sss
 //       "hms" : output angle provided in hhmmss.sss
 //       "hrs" : output angle provided in fractional hours
+~~~
+**/
  
  if (in==out) return a;
 
@@ -1583,6 +1753,8 @@ Double_t Nc3Vector::ConvertAngle(Double_t a,TString in,TString out) const
 ///////////////////////////////////////////////////////////////////////////
 void Nc3Vector::PrintAngle(Double_t a,TString in,TString out,Int_t ndig,Bool_t align) const
 {
+/**
+~~~
 // Printing of angles in various formats.
 //
 // The input argument "a" denotes the angle to be printed. 
@@ -1614,6 +1786,8 @@ void Nc3Vector::PrintAngle(Double_t a,TString in,TString out,Int_t ndig,Bool_t a
 //
 // Note : The angle info is printed without additional spaces or "endline".
 //        This allows the print to be included in various composite output formats.
+~~~
+**/
 
  Double_t b=ConvertAngle(a,in,out);
 
