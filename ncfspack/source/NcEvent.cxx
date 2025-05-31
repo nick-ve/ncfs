@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2001 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcEvent
+~~~
 // Class NcEvent
 // Creation and investigation of an NCFS generic event structure.
 // An NcEvent can be constructed by adding NcTrack, NcVertex, NcJet
@@ -272,17 +276,25 @@
 //
 //--- Author: Nick van Eijndhoven 27-may-2001 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 6, 2022  21:18Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcEvent.h"
 #include "Riostream.h"
  
-ClassImp(NcEvent) // Class implementation to enable ROOT I/O
+ClassImp(NcEvent); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcEvent::NcEvent() : NcVertex(),NcTimestamp()
 {
+/**
+~~~
 // Default constructor.
 // All variables initialised to default values.
+~~~
+**/
+
  fRun=0;
  fEvent=0;
  fWeight=1;
@@ -298,8 +310,13 @@ NcEvent::NcEvent() : NcVertex(),NcTimestamp()
 ///////////////////////////////////////////////////////////////////////////
 NcEvent::NcEvent(Int_t n) : NcVertex(n),NcTimestamp()
 {
-// Create an event to hold initially a maximum of n tracks
+/**
+~~~
+// Create an event to hold initially a maximum of n tracks.
 // All variables initialised to default values
+~~~
+**/
+
  if (n<=0)
  {
   cout << " *** This NcVertex initialisation was invoked via the NcEvent ctor." << endl;
@@ -319,7 +336,11 @@ NcEvent::NcEvent(Int_t n) : NcVertex(n),NcTimestamp()
 ///////////////////////////////////////////////////////////////////////////
 NcEvent::~NcEvent()
 {
-// Default destructor
+/**
+~~~
+// Default destructor.
+~~~
+**/
 
  if (fDetector)
  {
@@ -356,7 +377,12 @@ NcEvent::~NcEvent()
 ///////////////////////////////////////////////////////////////////////////
 NcEvent::NcEvent(const NcEvent& evt) : NcVertex(evt),NcTimestamp(evt)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
+
  fRun=evt.fRun;
  fEvent=evt.fEvent;
  fWeight=evt.fWeight;
@@ -409,12 +435,16 @@ NcEvent::NcEvent(const NcEvent& evt) : NcVertex(evt),NcTimestamp(evt)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::Reset()
 {
+/**
+~~~
 // Reset all variables to default values.
 // The max. number of tracks is set to the initial value again.
 // The max. number of vertices is set to the default value again.
 // The event weight is set to 1 and the event select level is set to 0 again.
 // The timestamp is set to the current time of the system clock.
 // Note : The DevCopy mode is maintained as it was set by the user before.
+~~~
+**/
 
  NcVertex::Reset();
 
@@ -459,6 +489,8 @@ void NcEvent::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetOwner(Bool_t own)
 {
+/**
+~~~
 // Set ownership of all added objects. 
 // The default parameter is own=kTRUE.
 //
@@ -477,6 +509,8 @@ void NcEvent::SetOwner(Bool_t own)
 // ownership (and copy mode) for empty objects (e.g. newly created objects
 // or after invokation of the Reset() memberfunction) otherwise it will
 // very likely result in inconsistent destructor behaviour.
+~~~
+**/
 
  Int_t mode=1;
  if (!own) mode=0;
@@ -489,6 +523,8 @@ void NcEvent::SetOwner(Bool_t own)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetDayTime(TTimeStamp& stamp)
 {
+/**
+~~~
 // Set the date and time stamp for this event.
 // An exact copy of the entered date/time stamp will be saved with an
 // accuracy of 1 nanosecond.
@@ -499,12 +535,16 @@ void NcEvent::SetDayTime(TTimeStamp& stamp)
 //        It is recommended to use the corresponding NcTimestamp
 //        functionality directly for NcEvent instances.
 //        This memberfunction is only kept for backward compatibility.
+~~~
+**/
 
  Set(stamp.GetDate(),stamp.GetTime(),0,kTRUE,0);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetDayTime(TDatime& stamp)
 {
+/**
+~~~
 // Set the date and time stamp for this event.
 // The entered date/time will be interpreted as being the local date/time
 // and the accuracy is 1 second.
@@ -513,39 +553,63 @@ void NcEvent::SetDayTime(TDatime& stamp)
 // compatibility reasons.
 // It is recommended to use the corresponding NcTimestamp functionality
 // directly for NcEvent instances.
+~~~
+**/
 
  Set(stamp.GetDate(),stamp.GetTime(),0,kFALSE,0);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetRunNumber(Int_t run)
 {
-// Set the run number for this event
+/**
+~~~
+// Set the run number for this event.
+~~~
+**/
+
  fRun=run;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetEventNumber(Int_t evt)
 {
-// Set the event number for this event
+/**
+~~~
+// Set the event number for this event.
+~~~
+**/
+
  fEvent=evt;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetWeight(Double_t weight)
 {
+/**
+~~~
 // Set the weight for this event.
 // By default the weight is set to 1 in the constructor.
+~~~
+**/
+
  fWeight=weight;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetSelectLevel(Int_t level)
 {
+/**
+~~~
 // Set the selection level (<0:reject 0:undecided >0:accept) for this event.
 // By default the selection level is set to 0 in the constructor.
+~~~
+**/
+
  fSelectLevel=level;
 }
 ///////////////////////////////////////////////////////////////////////////
 TTimeStamp NcEvent::GetDayTime() const
 {
-// Provide the date and time stamp for this event
+/**
+~~~
+// Provide the date and time stamp for this event.
 //
 // Note : Since the introduction of the more versatile class NcTimestamp
 //        and the fact that NcEvent has now been derived from it,
@@ -553,36 +617,60 @@ TTimeStamp NcEvent::GetDayTime() const
 //        It is recommended to use the corresponding NcTimestamp
 //        functionality directly for NcEvent instances.
 //        This memberfunction is only kept for backward compatibility.
+~~~
+**/
 
  return (TTimeStamp)(*this);
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetRunNumber() const
 {
-// Provide the run number for this event
+/**
+~~~
+// Provide the run number for this event.
+~~~
+**/
+
  return fRun;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetEventNumber() const
 {
-// Provide the event number for this event
+/**
+~~~
+// Provide the event number for this event.
+~~~
+**/
+
  return fEvent;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcEvent::GetWeight() const
 {
-// Provide the weight for this event
+/**
+~~~
+// Provide the weight for this event.
+~~~
+**/
+
  return fWeight;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetSelectLevel() const
 {
+/**
+~~~
 // Provide the selection level (<0:reject 0:undecided >0:accept) for this event.
+~~~
+**/
+
  return fSelectLevel;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetProjectile(Int_t a,Int_t z,Double_t pnuc,Int_t id)
 {
+/**
+~~~
 // Set the projectile A, Z, momentum per nucleon and user defined particle ID.
 // If not explicitly specified by the user, the projectile particle ID is set
 // to zero by default and will not be stored in the event structure.
@@ -591,6 +679,8 @@ void NcEvent::SetProjectile(Int_t a,Int_t z,Double_t pnuc,Int_t id)
 // As such these data are easily retrievable from the event structure.
 // However, for backward compatibility reasons the beam data can also be
 // retrieved via memberfunctions like GetProjectileA() etc...
+~~~
+**/
 
  Int_t newdev=0;
  
@@ -627,6 +717,8 @@ void NcEvent::SetProjectile(Int_t a,Int_t z,Double_t pnuc,Int_t id)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetProjectile(Int_t a,Int_t z,Nc3Vector& p,Int_t id)
 {
+/**
+~~~
 // Set the projectile A, Z, 3-momentum per nucleon and user defined particle ID.
 // If not explicitly specified by the user, the projectile particle ID is set
 // to zero by default and will not be stored in the event structure.
@@ -635,6 +727,8 @@ void NcEvent::SetProjectile(Int_t a,Int_t z,Nc3Vector& p,Int_t id)
 // As such these data are easily retrievable from the event structure.
 // However, for backward compatibility reasons beam data can also be
 // retrieved via memberfunctions like GetProjectileA() etc...
+~~~
+**/
 
  Int_t newdev=0;
  
@@ -682,7 +776,12 @@ void NcEvent::SetProjectile(Int_t a,Int_t z,Nc3Vector& p,Int_t id)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetProjectileA() const
 {
+/**
+~~~
 // Provide the projectile A value.
+~~~
+**/
+
  Int_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=int(beam->GetSignal("Aproj"));
@@ -691,7 +790,12 @@ Int_t NcEvent::GetProjectileA() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetProjectileZ() const
 {
+/**
+~~~
 // Provide the projectile Z value.
+~~~
+**/
+
  Int_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=int(beam->GetSignal("Zproj"));
@@ -700,7 +804,12 @@ Int_t NcEvent::GetProjectileZ() const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcEvent::GetProjectilePnuc() const
 {
+/**
+~~~
 // Provide the projectile momentum value per nucleon.
+~~~
+**/
+
  Double_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=beam->GetSignal("Pnucproj");
@@ -709,7 +818,12 @@ Double_t NcEvent::GetProjectilePnuc() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetProjectileId() const
 {
+/**
+~~~
 // Provide the user defined particle ID of the projectile.
+~~~
+**/
+
  Int_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=int(beam->GetSignal("Idproj"));
@@ -718,6 +832,8 @@ Int_t NcEvent::GetProjectileId() const
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetTarget(Int_t a,Int_t z,Double_t pnuc,Int_t id)
 {
+/**
+~~~
 // Set the target A, Z, momentum per nucleon and user defined particle ID.
 // If not explicitly specified by the user, the target particle ID is set
 // to zero by default and will not be stored in the event structure.
@@ -726,6 +842,8 @@ void NcEvent::SetTarget(Int_t a,Int_t z,Double_t pnuc,Int_t id)
 // As such these data are easily retrievable from the event structure.
 // However, for backward compatibility reasons the beam data can also be
 // retrieved via memberfunctions like GetTargetA() etc...
+~~~
+**/
 
  Int_t newdev=0;
  
@@ -762,6 +880,8 @@ void NcEvent::SetTarget(Int_t a,Int_t z,Double_t pnuc,Int_t id)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetTarget(Int_t a,Int_t z,Nc3Vector& p,Int_t id)
 {
+/**
+~~~
 // Set the target A, Z, 3-momentum per nucleon and user defined particle ID.
 // If not explicitly specified by the user, the target particle ID is set
 // to zero by default and will not be stored in the event structure.
@@ -770,6 +890,8 @@ void NcEvent::SetTarget(Int_t a,Int_t z,Nc3Vector& p,Int_t id)
 // As such these data are easily retrievable from the event structure.
 // However, for backward compatibility reasons beam data can also be
 // retrieved via memberfunctions like GetTargetA() etc...
+~~~
+**/
 
  Int_t newdev=0;
  
@@ -817,7 +939,12 @@ void NcEvent::SetTarget(Int_t a,Int_t z,Nc3Vector& p,Int_t id)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetTargetA() const
 {
+/**
+~~~
 // Provide the target A value.
+~~~
+**/
+
  Int_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=int(beam->GetSignal("Atarg"));
@@ -826,7 +953,12 @@ Int_t NcEvent::GetTargetA() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetTargetZ() const
 {
+/**
+~~~
 // Provide the target Z value.
+~~~
+**/
+
  Int_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=int(beam->GetSignal("Ztarg"));
@@ -835,7 +967,12 @@ Int_t NcEvent::GetTargetZ() const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcEvent::GetTargetPnuc() const
 {
+/**
+~~~
 // Provide the target momentum value per nucleon.
+~~~
+**/
+
  Double_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=beam->GetSignal("Pnuctarg");
@@ -844,7 +981,12 @@ Double_t NcEvent::GetTargetPnuc() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetTargetId() const
 {
+/**
+~~~
 // Provide the user defined particle ID of the target.
+~~~
+**/
+
  Int_t val=0;
  NcDevice* beam=GetDevice("Beam");
  if (beam) val=int(beam->GetSignal("Idtarg"));
@@ -853,7 +995,12 @@ Int_t NcEvent::GetTargetId() const
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::HeaderData()
 {
-// Provide event header information
+/**
+~~~
+// Provide event header information.
+~~~
+**/
+
  const char* name=GetName();
  const char* title=GetTitle();
  cout << " *" << ClassName() << "::Data*";
@@ -869,7 +1016,9 @@ void NcEvent::HeaderData()
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::Data(TString f,TString u)
 {
-// Provide event information within the coordinate frame f
+/**
+~~~
+// Provide event information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -877,6 +1026,8 @@ void NcEvent::Data(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  HeaderData();
  NcVertex::Data(f,u);
@@ -884,6 +1035,8 @@ void NcEvent::Data(TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetDetector(NcDetector d)
 {
+/**
+~~~
 // Store a detector structure.
 //
 // The detector structure replaces the old internal storage array,
@@ -893,6 +1046,8 @@ void NcEvent::SetDetector(NcDetector d)
 // will be used instead for backward compatibility.
 //
 // Note : Once a detector structure is in place, no new one can be set anymore.
+~~~
+**/
 
  if (fDetector)
  {
@@ -919,17 +1074,25 @@ void NcEvent::SetDetector(NcDetector d)
 ///////////////////////////////////////////////////////////////////////////
 NcDetector* NcEvent::GetDetector() const
 {
-// Provide the pointer to the (top level) detector structure
+/**
+~~~
+// Provide the pointer to the (top level) detector structure.
+~~~
+**/
 
  return fDetector;
 } 
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::CreateDetector()
 {
+/**
+~~~
 // Internal memberfunction to create a default detector structure.
 //
 // The detector structure replaces the old internal storage array,
 // which is still kept for backward compatibility with (very) old data files.
+~~~
+**/
 
  NcDetector* d=new NcDetector("Detector","Default detector structure");
  if (fDevCopy) d->SetDevCopy(1);
@@ -939,7 +1102,11 @@ void NcEvent::CreateDetector()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetNdevices() const
 {
-// Provide the number of stored devices
+/**
+~~~
+// Provide the number of stored devices.
+~~~
+**/
 
  Int_t ndevs=0;
 
@@ -958,6 +1125,8 @@ Int_t NcEvent::GetNdevices() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetNdevices(TString classname,TObjArray* hits) const
 {
+/**
+~~~
 // Provide the number of devices of the specified class.
 // In case an array "hits" is provided, the contents of the provided
 // hit array are used to determine the number of different devices of the
@@ -968,6 +1137,8 @@ Int_t NcEvent::GetNdevices(TString classname,TObjArray* hits) const
 // specified class is returned. 
 //
 // By default hits=0.
+~~~
+**/
 
  Int_t ndevs=0;
 
@@ -1038,6 +1209,8 @@ Int_t NcEvent::GetNdevices(TString classname,TObjArray* hits) const
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::AddDevice(NcDevice& d)
 {
+/**
+~~~
 // Add a device to the event.
 //
 // Devices will in principle be stored in the detector structure (see SetDetector),
@@ -1058,6 +1231,8 @@ void NcEvent::AddDevice(NcDevice& d)
 // for all devices a specific copy constructor and override the default Clone()
 // memberfunction using this copy constructor.
 // An example for this may be seen from NcCalorimeter.
+~~~
+**/
  
  if (d.InheritsFrom("NcDetector"))
  {
@@ -1110,7 +1285,11 @@ void NcEvent::AddDevice(NcDevice& d)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::RemoveDevice(NcDevice* d)
 {
+/**
+~~~
 // Remove the specified device from the event.
+~~~
+**/
 
  if (!d) return;
 
@@ -1133,6 +1312,8 @@ void NcEvent::RemoveDevice(NcDevice* d)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::SetDevCopy(Int_t j)
 {
+/**
+~~~
 // (De)activate the creation of private copies of the added devices.
 // j=0 ==> No private copies are made; pointers of original devices are stored.
 // j=1 ==> Private copies of the devices are made and these pointers are stored.
@@ -1152,6 +1333,8 @@ void NcEvent::SetDevCopy(Int_t j)
 //  change the DevCopy mode anymore.
 //  To change the DevCopy mode for an existing NcEvent containing
 //  devices one first has to invoke Reset().
+~~~
+**/
 
  if (!fDevices)
  {
@@ -1173,6 +1356,8 @@ void NcEvent::SetDevCopy(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetDevCopy() const
 {
+/**
+~~~
 // Provide value of the DevCopy mode.
 // 0 ==> No private copies are made; pointers of original devices are stored.
 // 1 ==> Private copies of the devices are made and these pointers are stored.
@@ -1186,14 +1371,20 @@ Int_t NcEvent::GetDevCopy() const
 // for all devices a specific copy constructor and override the default Clone()
 // memberfunction using this copy constructor.
 // An example for this may be seen from NcCalorimeter.   
+~~~
+**/
 
  return fDevCopy;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcEvent::GetDevice(Int_t i) const
 {
+/**
+~~~
 // Return the i-th device of this event.
 // The first device corresponds to i=1.
+~~~
+**/
 
  if (fDetector)
  {
@@ -1222,7 +1413,11 @@ NcDevice* NcEvent::GetDevice(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcEvent::GetDevice(TString name) const
 {
-// Return the device with name tag "name"
+/**
+~~~
+// Return the device with name tag "name".
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1255,11 +1450,15 @@ NcDevice* NcEvent::GetDevice(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcEvent::GetIdDevice(Int_t id,TObjArray* devs) const
 {
+/**
+~~~
 // Return the NcDevice with identifier "id" from the specified array "devs".
 // In case devs=0 (which is the default) all devices stored in the event
 // structure will be evaluated.
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching device will be returned.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1290,11 +1489,15 @@ NcDevice* NcEvent::GetIdDevice(Int_t id,TObjArray* devs) const
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcEvent::GetIdDevice(Int_t id,TString classname) const
 {
+/**
+~~~
 // Return the device with identifier "id" of the specified class.
 // For classname="*", no selection on the device class will be performed.
 //
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching device will be returned.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1322,6 +1525,8 @@ NcDevice* NcEvent::GetIdDevice(Int_t id,TString classname) const
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::ShowDevices(Int_t mode,Bool_t header) const
 {
+/**
+~~~
 // Provide an overview of the available devices from the detector structure.
 // The input argument "header" determines whether header info is printed (kTRUE) or not (kFALSE).
 //
@@ -1331,6 +1536,8 @@ void NcEvent::ShowDevices(Int_t mode,Bool_t header) const
 //        2 ==> Provide a listing with 1 line of info for each linked device at any level
 //
 // The default values are mode=1 and header=kTRUE.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1382,6 +1589,8 @@ void NcEvent::ShowDevices(Int_t mode,Bool_t header) const
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::ShowDevices(TString classname,Int_t mode,Bool_t header) const
 {
+/**
+~~~
 // Provide an overview of the available devices of the specified (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 // The input argument "header" determines whether header info is printed (kTRUE) or not (kFALSE).
@@ -1392,6 +1601,8 @@ void NcEvent::ShowDevices(TString classname,Int_t mode,Bool_t header) const
 //        2 ==> Provide a listing with 1 line of info for each linked device at any level
 //
 // The default values are mode=1 and header=kTRUE.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1444,6 +1655,8 @@ void NcEvent::ShowDevices(TString classname,Int_t mode,Bool_t header) const
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::GetDevices(TString classname,TObjArray* devices)
 {
+/**
+~~~
 // Provide the references to the various devices derived from the specified class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1458,6 +1671,8 @@ TObjArray* NcEvent::GetDevices(TString classname,TObjArray* devices)
 // return argument.
 //
 // The default is devices=0.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1515,6 +1730,8 @@ TObjArray* NcEvent::GetDevices(TString classname,TObjArray* devices)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcEvent::GetNhits(TString classname)
 {
+/**
+~~~
 // Provide the number of hits registered to the specified device (or derived) class.
 // The specified device class has to be derived from NcDevice.
 // For classname="*", no selection on the device class will be performed.
@@ -1522,6 +1739,8 @@ Int_t NcEvent::GetNhits(TString classname)
 // It is possible to indicate with the argument "classname" a specific
 // device instead of a whole class of devices. However, in such a case
 // it is more efficient to use the GetDevice() memberfunction directly.
+~~~
+**/
 
  Int_t nhits=0;
 
@@ -1543,6 +1762,8 @@ Int_t NcEvent::GetNhits(TString classname)
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::GetHits(TString classname,TObjArray* hits,TString name,Int_t mode,Int_t opt)
 {
+/**
+~~~
 // Provide the references to all the hits registered to device (or derived) class as specified
 // by the input argument "classname".
 // The specified device class has to be derived from NcDevice.
@@ -1576,6 +1797,8 @@ TObjArray* NcEvent::GetHits(TString classname,TObjArray* hits,TString name,Int_t
 //       1 --> The specified name string has to be contained in the hit or slotname
 //
 // The defaults are : hits=0, name="none", mode=0 and opt=0.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1613,8 +1836,12 @@ TObjArray* NcEvent::GetHits(TString classname,TObjArray* hits,TString name,Int_t
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcEvent::GetIdHit(Int_t id,TString classname)
 {
+/**
+~~~
 // Return the hit with unique identifier "id" for the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
+~~~
+**/
 
  if (id<0) return 0;
 
@@ -1653,6 +1880,8 @@ NcSignal* NcEvent::GetIdHit(Int_t id,TString classname)
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::LoadHits(TString classname,TObjArray* hits)
 {
+/**
+~~~
 // Load the references to the various hits registered to the specified device (or derived) class.
 // The specified device class has to be derived from NcDevice.
 // For classname="*", no selection on the device class will be performed.
@@ -1666,6 +1895,8 @@ void NcEvent::LoadHits(TString classname,TObjArray* hits)
 // amongst other selections.
 //
 // The default is hits=0.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1710,6 +1941,8 @@ void NcEvent::LoadHits(TString classname,TObjArray* hits)
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::SortHits(TString classname,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1745,6 +1978,8 @@ TObjArray* NcEvent::SortHits(TString classname,Int_t idx,Int_t mode,Int_t mcal,I
 // The default is ordered=0.
 //
 // For more extended functionality see class NcDevice.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1780,6 +2015,8 @@ TObjArray* NcEvent::SortHits(TString classname,Int_t idx,Int_t mode,Int_t mcal,I
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::SortHits(TString classname,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1815,6 +2052,8 @@ TObjArray* NcEvent::SortHits(TString classname,TString name,Int_t mode,Int_t mca
 // The default is ordered=0.
 //
 // For more extended functionality see class NcDevice.
+~~~
+**/
 
  // Investigate the detector structure
  if (fDetector)
@@ -1850,6 +2089,8 @@ TObjArray* NcEvent::SortHits(TString classname,TString name,Int_t mode,Int_t mca
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector NcEvent::GetHitPath(TObjArray* hits,Int_t pos) const
 {
+/**
+~~~
 // Provide the average direction of the hit pattern contained in the array "hits".
 // The direction is obtained by starting at the first hit in the array
 // and then a summation of all the relative hit locations while jumping
@@ -1863,6 +2104,8 @@ Nc3Vector NcEvent::GetHitPath(TObjArray* hits,Int_t pos) const
 // The default is pos=0.
 //
 // Note : In case of inconsistent input a "zero vector" will be returned.
+~~~
+**/
 
  NcDevice d;
  Nc3Vector v=d.GetHitPath(hits,pos);
@@ -1872,6 +2115,8 @@ Nc3Vector NcEvent::GetHitPath(TObjArray* hits,Int_t pos) const
 ///////////////////////////////////////////////////////////////////////////
 NcPosition NcEvent::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mode) const
 {
+/**
+~~~
 // Provide the Center Of Gravity of the hits contained in the array "hits".
 // Each hit can be given a weight according to the absolute value of the signal
 // contained in the slot with the name "slotname".
@@ -1885,6 +2130,8 @@ NcPosition NcEvent::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mode
 // The defaults are pos=0, slotname="none" and mode=0.
 //
 // Note : In case of inconsistent input a "zero vector" will be returned.
+~~~
+**/
 
  NcDevice d;
  NcPosition cog=d.GetCOG(hits,pos,slotname,mode);
@@ -1894,6 +2141,8 @@ NcPosition NcEvent::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mode
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcEvent::GetCVAL(TObjArray* hits,TString obsname,TString weightname,Int_t mode,Int_t type) const
 {
+/**
+~~~
 // Provide the Central Value of the observed signals contained in the slot with name "obsname"
 // in the array "hits". Depending on the input argument "type" the central value represents
 // either the median (type=1) or the mean (type=2).
@@ -1906,6 +2155,8 @@ Double_t NcEvent::GetCVAL(TObjArray* hits,TString obsname,TString weightname,Int
 // The defaults are weightname="none", mode=0 and type=1.
 //
 // Note : In case of inconsistent input 0 will be returned.
+~~~
+**/
 
  Double_t cval=0;
 
@@ -1917,6 +2168,8 @@ Double_t NcEvent::GetCVAL(TObjArray* hits,TString obsname,TString weightname,Int
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,Int_t idx,Int_t mode,Int_t deadcheck)
 {
+/**
+~~~
 // Provide the min. and max. signal values of the various hits registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
@@ -1934,6 +2187,8 @@ void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,Int_t id
 // The default is deadcheck=1 (for backward compatibility reasons).
 //
 // For more extended functionality see class NcDevice.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1948,6 +2203,8 @@ void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,Int_t id
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,TString name,Int_t mode,Int_t deadcheck)
 {
+/**
+~~~
 // Provide the min. and max. signal values of the various hits registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
@@ -1964,6 +2221,8 @@ void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,TString 
 // The default is deadcheck=1 (for backward compatibility reasons).
 //
 // For more extended functionality see class NcDevice.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1976,6 +2235,8 @@ void NcEvent::GetExtremes(TString classname,Float_t& vmin,Float_t& vmax,TString 
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::DisplayHits(TString classname,Int_t idx,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
 {
+/**
+~~~
 // 3D color display of the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -2006,6 +2267,8 @@ void NcEvent::DisplayHits(TString classname,Int_t idx,Float_t scale,Int_t dp,Int
 // TView* view=new TView(1);
 // view->SetRange(-1000,-1000,-1000,1000,1000,1000);
 // view->ShowAxis();
+~~~
+**/
 
  if (idx<=0) return;
 
@@ -2027,6 +2290,8 @@ void NcEvent::DisplayHits(TString classname,Int_t idx,Float_t scale,Int_t dp,Int
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::DisplayHits(TString classname,TString name,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
 {
+/**
+~~~
 // 3D color display of the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -2059,6 +2324,8 @@ void NcEvent::DisplayHits(TString classname,TString name,Float_t scale,Int_t dp,
 // TView* view=new TView(1);
 // view->SetRange(-1000,-1000,-1000,1000,1000,1000);
 // view->ShowAxis();
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -2078,6 +2345,8 @@ void NcEvent::DisplayHits(TString classname,TString name,Float_t scale,Int_t dp,
 ///////////////////////////////////////////////////////////////////////////
 void NcEvent::ShowHits(TString classname,Int_t mode,TString f,TString u)
 {
+/**
+~~~
 // Show all the hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -2091,6 +2360,8 @@ void NcEvent::ShowHits(TString classname,Int_t mode,TString f,TString u)
 //
 // Note : This memberfunction will show hits in printable format.
 //        To obtain a graphic hit display please refer to DisplayHits(). 
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -2131,6 +2402,8 @@ void NcEvent::ShowHits(TString classname,Int_t mode,TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::SortDevices(TString classname,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
@@ -2165,6 +2438,8 @@ TObjArray* NcEvent::SortDevices(TString classname,TString name,Int_t mode,Int_t 
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -2187,6 +2462,8 @@ TObjArray* NcEvent::SortDevices(TString classname,TString name,Int_t mode,Int_t 
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::SortDevices(TString classname,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
@@ -2221,6 +2498,8 @@ TObjArray* NcEvent::SortDevices(TString classname,Int_t idx,Int_t mode,Int_t mca
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered) ordered->Clear();
 
@@ -2243,6 +2522,8 @@ TObjArray* NcEvent::SortDevices(TString classname,Int_t idx,Int_t mode,Int_t mca
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::SortDevices(TObjArray* hits,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals contained
 // in the input array.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -2278,6 +2559,8 @@ TObjArray* NcEvent::SortDevices(TObjArray* hits,TString name,Int_t mode,Int_t mc
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered)
  {
@@ -2346,6 +2629,8 @@ TObjArray* NcEvent::SortDevices(TObjArray* hits,TString name,Int_t mode,Int_t mc
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcEvent::SortDevices(TObjArray* hits,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals contained
 // in the input array.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -2381,6 +2666,8 @@ TObjArray* NcEvent::SortDevices(TObjArray* hits,Int_t idx,Int_t mode,Int_t mcal,
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered)
  {
@@ -2449,6 +2736,8 @@ TObjArray* NcEvent::SortDevices(TObjArray* hits,Int_t idx,Int_t mode,Int_t mcal,
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcEvent::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -2456,6 +2745,8 @@ TObject* NcEvent::Clone(const char* name) const
 // This feature allows to store either NcEvent objects or objects derived from
 // NcEvent via some generic AddEvent memberfunction, provided these derived
 // classes also have a proper Clone memberfunction. 
+~~~
+**/
 
  NcEvent* evt=new NcEvent(*this);
  if (name)

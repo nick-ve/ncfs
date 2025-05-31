@@ -1,7 +1,7 @@
 #ifndef NcBlocks_h
 #define NcBlocks_h
 
-// Copyright(c) 2021, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TGraphErrors.h"
@@ -10,6 +10,8 @@
 #include "TLegend.h"
 
 #include "NcSample.h"
+
+/** (Bayesian) Block treatment of sequential data. **/
 
 class NcBlocks
 {

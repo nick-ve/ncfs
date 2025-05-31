@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcCalcluster.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcCalcluster
+~~~
 // Class NcCalcluster
 // Description of a cluster of calorimeter modules.
 // A 2D (matrix) geometry is assumed in which a cluster center is identified
@@ -57,16 +59,24 @@
 //
 //--- Author: Nick van Eijndhoven 13-jun-1997 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcCalcluster.h"
 #include "Riostream.h"
  
-ClassImp(NcCalcluster) // Class implementation to enable ROOT I/O
+ClassImp(NcCalcluster); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcCalcluster::NcCalcluster() : NcSignal()
 {
-// Default constructor, all data is set to 0
+/**
+~~~
+// Default constructor, all data is set to 0.
+~~~
+**/
+
  fRow=0;
  fCol=0;
  fNmods=0;
@@ -79,7 +89,12 @@ NcCalcluster::NcCalcluster() : NcSignal()
 ///////////////////////////////////////////////////////////////////////////
 NcCalcluster::~NcCalcluster()
 {
-// Destructor to delete dynamically allocated memory
+/**
+~~~
+// Destructor to delete dynamically allocated memory.
+~~~
+**/
+
  if (fVetos)
  {
   delete fVetos;
@@ -89,7 +104,12 @@ NcCalcluster::~NcCalcluster()
 ///////////////////////////////////////////////////////////////////////////
 NcCalcluster::NcCalcluster(const NcCalcluster& c) : NcSignal(c)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fRow=c.fRow;
  fCol=c.fCol;
  fNmods=c.fNmods;
@@ -109,6 +129,8 @@ NcCalcluster::NcCalcluster(const NcCalcluster& c) : NcSignal(c)
 ///////////////////////////////////////////////////////////////////////////
 NcCalcluster::NcCalcluster(NcCalmodule& m) : NcSignal()
 {
+/**
+~~~
 // Cluster constructor with module m as center.
 // Module data is only entered for a module which contains a signal,
 // has not been used in a cluster yet, and is not declared dead.
@@ -117,6 +139,8 @@ NcCalcluster::NcCalcluster(NcCalmodule& m) : NcSignal()
 // It is advised NOT to start a cluster with modules situated at a detector edge.
 // This feature is automatically checked when using the built-in clustering
 // of NcCalorimeter.  
+~~~
+**/
 
  Nc3Vector r;
 
@@ -153,25 +177,45 @@ NcCalcluster::NcCalcluster(NcCalmodule& m) : NcSignal()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalcluster::GetRow() const
 {
-// Provide the row number of the cluster center
+/**
+~~~
+// Provide the row number of the cluster center.
+~~~
+**/
+
  return fRow;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalcluster::GetColumn() const
 {
-// Provide the column number of the cluster center
+/**
+~~~
+// Provide the column number of the cluster center.
+~~~
+**/
+
  return fCol;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalcluster::GetNmodules() const
 {
-// Provide the number of modules in the cluster
+/**
+~~~
+// Provide the number of modules in the cluster.
+~~~
+**/
+
  return fNmods;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCalcluster::GetRowDispersion() const
 {
+/**
+~~~
 // Provide the normalised row dispersion of the cluster.
+~~~
+**/
+
  Float_t sig=GetSignal();
  if (sig > 0.)
  {
@@ -185,7 +229,12 @@ Float_t NcCalcluster::GetRowDispersion() const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCalcluster::GetColumnDispersion() const
 {
-// Provide the normalised column dispersion of the cluster
+/**
+~~~
+// Provide the normalised column dispersion of the cluster.
+~~~
+**/
+
  Float_t sig=GetSignal();
  if (sig > 0.)
  {
@@ -199,6 +248,8 @@ Float_t NcCalcluster::GetColumnDispersion() const
 ///////////////////////////////////////////////////////////////////////////
 void NcCalcluster::Start(NcCalmodule& m)
 {
+/**
+~~~
 // Reset cluster data and start with module m.
 // A module can only start a cluster when it contains a signal,
 // has not been used in a cluster yet, and is not declared dead.
@@ -207,6 +258,8 @@ void NcCalcluster::Start(NcCalmodule& m)
 // It is advised NOT to start a cluster with modules situated at a detector edge.
 // This feature is automatically checked when using the built-in clustering
 // of NcCalorimeter.  
+~~~
+**/
 
  NcSignal::Reset();
 
@@ -237,10 +290,14 @@ void NcCalcluster::Start(NcCalmodule& m)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalcluster::Add(NcCalmodule& m)
 {
+/**
+~~~
 // Add module data to the cluster.
 // Dead modules are NOT added to the cluster.
 // According to the distance of the module w.r.t. the cluster center
 // the various signal values are updated.
+~~~
+**/
 
  if (fNmods)
  {
@@ -292,6 +349,8 @@ void NcCalcluster::Add(NcCalmodule& m)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalcluster::AddVetoSignal(NcSignal& s,Int_t extr)
 {
+/**
+~~~
 // Associate an (extrapolated) NcSignal as veto to the cluster.
 // By default a straight line extrapolation is performed which extrapolates
 // the signal position until the length of its position vector matches that
@@ -310,6 +369,9 @@ void NcCalcluster::AddVetoSignal(NcSignal& s,Int_t extr)
 // corresponding errors. 
 // Note : Three additional values are added to the original NcSignal
 //        to hold the chi2, ndf and confidence level values of the association. 
+~~~
+**/
+
  if (!fVetos)
  {
   fNvetos=0;
@@ -363,14 +425,24 @@ void NcCalcluster::AddVetoSignal(NcSignal& s,Int_t extr)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalcluster::GetNvetos() const
 {
-// Provide the number of veto signals associated to the cluster
+/**
+~~~
+// Provide the number of veto signals associated to the cluster.
+~~~
+**/
+
  return fNvetos;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcCalcluster::GetVetoSignal(Int_t i) const
 {
+/**
+~~~
 // Provide access to the i-th veto signal of this cluster.
 // Note : The first hit corresponds to i=1.
+~~~
+**/
+
  if (!fVetos)
  {
   cout << " *NcCalcluster::GetVetoSignal* No veto signals present." << endl;
@@ -393,7 +465,12 @@ NcSignal* NcCalcluster::GetVetoSignal(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCalcluster::GetVetoLevel() const
 {
+/**
+~~~
 // Provide the confidence level of best associated veto signal.
+~~~
+**/
+
  Float_t cl=0;
  Float_t clmax=0;
  NcSignal* s=0;
@@ -416,9 +493,14 @@ Float_t NcCalcluster::GetVetoLevel() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalcluster::HasVetoHit(Double_t cl) const
 {
+/**
+~~~
 // Investigate if cluster has an associated veto hit with conf. level > cl.
 // Returns 1 if there is such an associated veto hit, otherwise returns 0.
 // Note : This function is faster than GetVetoLevel().
+~~~
+**/
+
  NcSignal* s=0;
  Int_t nvalues=0;
  if (fVetos)

@@ -1,6 +1,6 @@
 /**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 ~~~
- * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
+ * Copyright(c) 2003 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 

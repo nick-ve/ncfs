@@ -1,12 +1,14 @@
 #ifndef NcDevice_h
 #define NcDevice_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2004 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TPolyMarker3D.h"
 #include "TMath.h"
 
 #include "NcSignal.h"
+
+/** Signal (Hit) handling of a generic device. **/
 
 class NcDevice : public NcSignal
 {
@@ -52,8 +54,8 @@ class NcDevice : public NcSignal
   Int_t fStatus;       // User definable status word
   Int_t fHitCopy;      // Flag to denote making private copies of added hits
   TObjArray* fHits;    // Array to hold the registered hits
-  TObjArray* fOrdered; //! Temp. array to hold the ordered hits
-  TObjArray* fMarkers; //! Temp. array to hold the 3D markers for the hit display
+  TObjArray* fOrdered; //!< Temp. array to hold the ordered hits
+  TObjArray* fMarkers; //!< Temp. array to hold the 3D markers for the hit display
 
  ClassDef(NcDevice,13) // Signal (Hit) handling of a generic device.
 };

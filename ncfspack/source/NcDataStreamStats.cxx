@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2028 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcDataStreamStats
+~~~
 // Class NcDataStreamStats
 // TTask derived class to perform statistics of event classification tags.
 //
@@ -183,16 +187,23 @@
 //
 //--- Author: Nick van Eijndhoven 15-jun-2018, IIHE-VUB, Brussel
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 21, 2022  12:49Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDataStreamStats.h"
 #include "Riostream.h"
  
-ClassImp(NcDataStreamStats) // Class implementation to enable ROOT I/O
+ClassImp(NcDataStreamStats); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcDataStreamStats::NcDataStreamStats(const char* name,const char* title) : NcTaggingBase(name,title)
 {
+/**
+~~~
 // Constructor and initialisation of default parameters.
+~~~
+**/
 
  fData=0;
  fBranchname="none";
@@ -202,7 +213,11 @@ NcDataStreamStats::NcDataStreamStats(const char* name,const char* title) : NcTag
 ///////////////////////////////////////////////////////////////////////////
 NcDataStreamStats::~NcDataStreamStats()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fData)
  {
@@ -213,7 +228,11 @@ NcDataStreamStats::~NcDataStreamStats()
 ///////////////////////////////////////////////////////////////////////////
 NcDataStreamStats::NcDataStreamStats(const NcDataStreamStats& q) : NcTaggingBase(q)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 
  fData=0;
  if (q.fData) fData=(TChain*)(q.fData->Clone());
@@ -224,8 +243,12 @@ NcDataStreamStats::NcDataStreamStats(const NcDataStreamStats& q) : NcTaggingBase
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::Exec(Option_t* opt)
 {
+/**
+~~~
 // Perform the analysis.
 // The input argument "opt" is irrelevant.
+~~~
+**/
 
  if (!fData)
  {
@@ -506,6 +529,8 @@ void NcDataStreamStats::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)
 {
+/**
+~~~
 // Add an input file containing NcEvent (or derived) data structures to be analysed.
 //
 // Input arguments :
@@ -522,6 +547,8 @@ void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)
 // 2) This memberfunction may be invoked several times to accumulate data files.
 // 3) The "tree" name may vary for different input files, but the "branch" name
 //    has to be the same for all the input files.
+~~~
+**/
 
  // Expand the path name of the provided input file
  file=gSystem->ExpandPathName(file.Data());
@@ -542,23 +569,37 @@ void NcDataStreamStats::AddInputFile(TString file,TString tree,TString branch)
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::SetMaxEvt(Int_t n)
 {
+/**
+~~~
 // Set the maximum number of events to be processed.
 // The default constructor has set n=0 which means no limitation.
+~~~
+**/
+
  fMaxevt=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::SetPrintFrequency(Int_t m)
 {
+/**
+~~~
 // Set print frequency to provide a progress output line every "m" events.
 // The default constructor has set m=0 which means that no progress printout is produced.
+~~~
+**/
+
  fPfreq=m;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDataStreamStats::ListInputFiles(Option_t* opt) const
 {
+/**
+~~~
 // Provide an overview of the various input files.
 // The input argument "opt" corresponds to the available options of TChain::Print().
 // By default opt="".
+~~~
+**/
 
  if (fData)
  {
@@ -569,10 +610,14 @@ void NcDataStreamStats::ListInputFiles(Option_t* opt) const
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDataStreamStats::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers when adding objects in case the container owns the objects.
+~~~
+**/
 
  NcDataStreamStats* fstat=new NcDataStreamStats(*this);
  if (name)

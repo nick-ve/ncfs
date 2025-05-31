@@ -1,9 +1,7 @@
 #ifndef NcJob_h
 #define NcJob_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2005 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcJob.h 74 2013-01-21 14:02:42Z nickve $
 
 #include <cstdlib>
 
@@ -11,6 +9,8 @@
 #include "TTask.h"
 #include "TFolder.h"
 #include "TObjArray.h"
+
+/** Base class for top level job in a task based procedure. **/
 
 #include "NcVersion.h"
 
@@ -39,7 +39,7 @@ class NcJob : public TTask
   TFolder* fFolder;     // Pointer to the folder which serves as the job's whiteboard
   TObject* fMainObject; // Pointer to the main processing object structure within the job
   TObjArray* fObjects;  // Pointers to the various user-added objects 
-  TObjArray* fSelect;   //! Temp. array of pointers to user-selected stored objects 
+  TObjArray* fSelect;   //!< Temp. array of pointers to user-selected stored objects 
 
   void SetMainObject(TObject* obj); // Store pointer to the main object structure
 

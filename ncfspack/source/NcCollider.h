@@ -1,6 +1,6 @@
 #ifndef NcCollider_h
 #define NcCollider_h
-// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2002 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TSystem.h"
@@ -14,6 +14,8 @@
 #include "NcRandom.h"
 #include "NcBoost.h"
 #include "NcTreeMaker.h"
+
+/** Pythia based universal (astro)physics event generator. **/
  
 class NcCollider : public TPythia6
 {

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2005 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcJob
+~~~
 // Class NcJob
 // Base class for the top level processor class in a task based procedure.
 // It allows stepwise invokation of various sub-tasks by the derived
@@ -122,18 +126,25 @@
 //
 //--- Author: Nick van Eijndhoven 07-may-2005 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 7, 2022  11:39Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcJob.h"
 #include "Riostream.h"
 
-ClassImp(NcJob) // Class implementation to enable ROOT I/O
+ClassImp(NcJob); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 NcJob::NcJob(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
 // Initialise the working environment for general data access
 // by the derived task and its subtasks.
+~~~
+**/
 
  fMakefolder=0;
  fMainObject=0;
@@ -151,11 +162,15 @@ NcJob::NcJob(const char* name,const char* title) : TTask(name,title)
 ///////////////////////////////////////////////////////////////////////////
 NcJob::~NcJob()
 {
+/**
+~~~
 // Default destructor.
 // The internal array and job specific folder (if any) holding the various
 // references are deleted.
 // Note : The objects belonging to the various pointers in the array/folder
 //        and the main processing object are NOT deleted by this base class.
+~~~
+**/
 
  // Remove this NcJob based instance into the ROOT task list
  TSeqCollection* tasks=gROOT->GetListOfTasks();
@@ -189,7 +204,11 @@ NcJob::~NcJob()
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::ListEnvironment()
 {
+/**
+~~~
 // Provide listing of the job environment. 
+~~~
+**/
 
  cout << " ***" << endl;
  cout << " *** Environment of job " << GetName() << " ***" << endl;
@@ -206,6 +225,8 @@ void NcJob::ListEnvironment()
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::ExecuteJob(Int_t mode)
 {
+/**
+~~~
 // Invokation of the top level processor via its Exec() memberfunction.
 // The input argument "mode" can be used to explicitly specify the
 // (de)selection of the folder environment creation and automatic
@@ -228,6 +249,8 @@ void NcJob::ExecuteJob(Int_t mode)
 // The default is mode=0.
 //
 // Note : Before execution gROOT is set as the global working directory.
+~~~
+**/
 
  if (mode<0) fMakefolder=-1;
  if (mode==1 || mode==11) fMakefolder=1;
@@ -244,30 +267,49 @@ void NcJob::ExecuteJob(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::MakeFolder()
 {
+/**
+~~~
 // Select creation of the folder structure in addition to the internal
 // array storage of objects.
 // Creation of the folder structure is only activated if it was not
 // explicitly forbidden by the specified "mode" on invokation of the
 // ExecuteJob() memberfunction.
+~~~
+**/
 
  if (!fMakefolder) fMakefolder=1;
 }
 ///////////////////////////////////////////////////////////////////////////
 TFolder* NcJob::GetFolder() const
 {
+/**
+~~~
 // Provide pointer to the whiteboard folder.
+~~~
+**/
+
  return fFolder;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcJob::GetMainObject() const
 {
+/**
+~~~
 // Provide pointer to the main object structure.
+~~~
+**/
+
  return fMainObject;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::SetMainObject(TObject* obj)
 {
+/**
+~~~
 // Store pointer to the main object structure.
+~~~
+**/
+
  if (obj)
  {
   fMainObject=obj;
@@ -277,7 +319,11 @@ void NcJob::SetMainObject(TObject* obj)
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::AddObject(TObject* obj)
 {
+/**
+~~~
 // Store pointer of specified object in the working environment.
+~~~
+**/
 
  if (!obj) return;
 
@@ -319,7 +365,11 @@ void NcJob::AddObject(TObject* obj)
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::AddObjects(TObjArray* arr)
 {
+/**
+~~~
 // Store pointers of all the array objects individually in the working environment.
+~~~
+**/
 
  if (!arr) return;
 
@@ -333,9 +383,13 @@ void NcJob::AddObjects(TObjArray* arr)
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::RemoveObject(TObject* obj)
 {
+/**
+~~~
 // Remove pointer of specified object from the working environment.
 // In case the specified object is also the main object, the main object
 // pointer will be set to 0 as well.
+~~~
+**/
 
  if (!obj) return;
 
@@ -354,9 +408,13 @@ void NcJob::RemoveObject(TObject* obj)
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::RemoveObjects(const char* classname)
 {
+/**
+~~~
 // Remove all stored objects inheriting from classname.
 // In case one of the removed objects is also the main object, the main object
 // pointer will be set to 0 as well.
+~~~
+**/
 
  if (!fObjects) return;
 
@@ -380,8 +438,12 @@ void NcJob::RemoveObjects(const char* classname)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcJob::GetObject(Int_t j) const
 {
+/**
+~~~
 // Provide pointer to j-th stored object.
 // Note : j=1 indicates the first object.
+~~~
+**/
 
  if (!fObjects || j<1) return 0;
 
@@ -393,7 +455,11 @@ TObject* NcJob::GetObject(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcJob::GetObject(const char* classname) const
 {
+/**
+~~~
 // Provide pointer to the first stored object which inherits from classname.
+~~~
+**/
 
  if (!fObjects) return 0;
 
@@ -412,13 +478,22 @@ TObject* NcJob::GetObject(const char* classname) const
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcJob::GetObjects() const
 {
+/**
+~~~
 // Provide pointers of all the stored objects.
+~~~
+**/
+
  return fObjects;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcJob::GetObjects(const char* classname)
 {
+/**
+~~~
 // Provide pointers to all stored objects inheriting from classname.
+~~~
+**/
 
  if (!fObjects) return 0;
 
@@ -441,6 +516,8 @@ TObjArray* NcJob::GetObjects(const char* classname)
 ///////////////////////////////////////////////////////////////////////////
 void NcJob::ProcessObject(TObject* obj)
 {
+/**
+~~~
 // Invokation of all user defined sub-tasks for the specified object.
 // This facility is very convenient when performing a task based
 // event-by-event analysis in an (interactive) user application.
@@ -455,6 +532,8 @@ void NcJob::ProcessObject(TObject* obj)
 // After the processing of this object has been performed, the object
 // will be removed from the object list and the main object pointer will
 // be set to zero.
+~~~
+**/
 
  if (!obj) return;
 

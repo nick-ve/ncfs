@@ -1,6 +1,6 @@
 #ifndef NcFITSIO_h
 #define NcFITSIO_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2019 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <stdlib.h>
@@ -20,6 +20,8 @@
 #include "TObjArray.h"
 #include "TString.h"
 #include "TObjString.h"
+
+/** I/O interface for FITS files. **/
 
 class NcFITSIO : public TNamed
 {

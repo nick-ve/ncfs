@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2004 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcDevice
+~~~
 // Class NcDevice
 // Signal (Hit) handling of a generic device.
 // Basically this class provides a user interface to group and handle
@@ -92,20 +96,28 @@
 //
 //--- Author: Nick van Eijndhoven 23-jun-2004 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 1, 2021  09:27Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDevice.h"
 #include "Riostream.h"
  
-ClassImp(NcDevice) // Class implementation to enable ROOT I/O
+ClassImp(NcDevice); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcDevice::NcDevice(const char* name,const char* title) : NcSignal(name,title)
 {
+/**
+~~~
 // Default constructor.
 // The user definable status word is set to zero.
 // By default private copies of the recorded hits will be made.
 // This implies that by default the device will own the registered hits.
 // See the SetHitCopy() memberfunction for further details.
+~~~
+**/
+
  fStatus=0;
  fHitCopy=1;
  fHits=0;
@@ -115,7 +127,11 @@ NcDevice::NcDevice(const char* name,const char* title) : NcSignal(name,title)
 ///////////////////////////////////////////////////////////////////////////
 NcDevice::~NcDevice()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  // Remove backward links to this device from the hits which were not owned by it.
  // Note : If a hit has been deleted in the meantime the NcSignal destructor has already
@@ -150,7 +166,11 @@ NcDevice::~NcDevice()
 ///////////////////////////////////////////////////////////////////////////
 NcDevice::NcDevice(const NcDevice& dev) : NcSignal(dev)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fHits=0;
  fOrdered=0;
@@ -201,16 +221,23 @@ NcDevice::NcDevice(const NcDevice& dev) : NcSignal(dev)
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::Reset(Int_t mode)
 {
+/**
+~~~
 // Reset registered hits and NcSignal attributes.
 // Note : The status word and HitCopy flag are NOT modified.
 //        Use SetStatus() and SetHitCopy() to modify these parameters. 
 // See NcSignal::Reset() for further details.
+~~~
+**/
+
  RemoveHits();
  NcSignal::Reset(mode);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::SetHitCopy(Int_t j)
 {
+/**
+~~~
 // (De)activate the creation of private copies of the NcSignals added as hits.
 // j=0 ==> No private copies are made; pointers of original hits are stored.
 // j=1 ==> Private copies of the hits are made and these pointers are stored.
@@ -219,6 +246,9 @@ void NcDevice::SetHitCopy(Int_t j)
 //        change the HitCopy mode anymore.
 //        To change the HitCopy mode for an existing NcDevice containing
 //        hits one first has to invoke either RemoveHits() or Reset().
+~~~
+**/
+
  if (!fHits)
  {
   if (j==0 || j==1)
@@ -239,14 +269,21 @@ void NcDevice::SetHitCopy(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDevice::GetHitCopy() const
 {
+/**
+~~~
 // Provide value of the HitCopy mode.
 // 0 ==> No private copies are made; pointers of original hits are stored.
 // 1 ==> Private copies of the hits are made and these pointers are stored.
+~~~
+**/
+
  return fHitCopy;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::SetOwner(Bool_t own)
 {
+/**
+~~~
 // Set ownership of all added objects. 
 // The default parameter is own=kTRUE.
 //
@@ -265,6 +302,8 @@ void NcDevice::SetOwner(Bool_t own)
 // ownership (and copy mode) for empty objects (e.g. newly created objects
 // or after invokation of the Reset() memberfunction) otherwise it will
 // very likely result in inconsistent destructor behaviour.
+~~~
+**/
 
  Int_t mode=1;
  if (!own) mode=0;
@@ -274,18 +313,30 @@ void NcDevice::SetOwner(Bool_t own)
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::SetStatus(Int_t word)
 {
+/**
+~~~
 // Set a user defined status word for this device.
+~~~
+**/
+
  fStatus=word;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDevice::GetStatus() const
 {
+/**
+~~~
 // Provide the user defined status word for this device.
+~~~
+**/
+
  return fStatus;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::AddHit(NcSignal& s)
 {
+/**
+~~~
 // Register an NcSignal object as a hit to this device.
 // Note : In case this device owns the NcSignal object, the pointer to
 //        this device will be stored in the special owning device
@@ -296,6 +347,8 @@ void NcDevice::AddHit(NcSignal& s)
 //        if there was no link to this device already present.
 //        This (backward) link is essential to prevent pointers to non-existing
 //        NcSignal objects when the corresponding NcSignal object is deleted.
+~~~
+**/
 
  if (!fHits)
  {
@@ -334,7 +387,12 @@ void NcDevice::AddHit(NcSignal& s)
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::RemoveHit(NcSignal& s)
 {
+/**
+~~~
 // Remove NcSignal object registered as a hit from this device.
+~~~
+**/
+
  if (fHits)
  {
   NcSignal* test=(NcSignal*)fHits->Remove(&s);
@@ -353,7 +411,12 @@ void NcDevice::RemoveHit(NcSignal& s)
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::RemoveHits()
 {
+/**
+~~~
 // Remove all NcSignal objects registered as hits from this device.
+~~~
+**/
+
  if (fHits)
  {
   delete fHits;
@@ -373,7 +436,12 @@ void NcDevice::RemoveHits()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDevice::GetNhits() const
 {
+/**
+~~~
 // Provide the number of registered hits for this device.
+~~~
+**/
+
  Int_t nhits=0;
  if (fHits) nhits=fHits->GetEntries();
  return nhits;
@@ -381,6 +449,8 @@ Int_t NcDevice::GetNhits() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDevice::GetNhits(TString name,Int_t mode,Int_t opt) const
 {
+/**
+~~~
 // Provide the number of hits registered with the specified hit or slot name.
 //
 // mode = 0 --> Only hits with a matching hit name will be considered
@@ -391,6 +461,8 @@ Int_t NcDevice::GetNhits(TString name,Int_t mode,Int_t opt) const
 //       1 --> The specified name string has to be contained in the hit or slotname
 //
 // The defaults are mode=0 and opt=0.
+~~~
+**/
 
  if (!fHits) return 0;
 
@@ -416,8 +488,13 @@ Int_t NcDevice::GetNhits(TString name,Int_t mode,Int_t opt) const
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcDevice::GetHit(Int_t j) const
 {
+/**
+~~~
 // Provide the NcSignal object registered as hit number j.
 // Note : j=1 denotes the first hit.
+~~~
+**/
+
  if (!fHits) return 0;
 
  if ((j >= 1) && (j <= GetNhits()))
@@ -432,6 +509,8 @@ NcSignal* NcDevice::GetHit(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcDevice::GetHit(TString name,Int_t mode,Int_t opt) const
 {
+/**
+~~~
 // Provide the NcSignal object registered as hit with the specified hit or slot name.
 // Note : The first hit encountered with the specified name will be provided.
 //
@@ -443,6 +522,8 @@ NcSignal* NcDevice::GetHit(TString name,Int_t mode,Int_t opt) const
 //       1 --> The specified name string has to be contained in the hit or slotname
 //
 // The defaults are mode=0 and opt=0.
+~~~
+**/
 
  if (!fHits) return 0;
 
@@ -467,7 +548,12 @@ NcSignal* NcDevice::GetHit(TString name,Int_t mode,Int_t opt) const
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcDevice::GetIdHit(Int_t id) const
 {
+/**
+~~~
 // Return the hit with unique identifier "id".
+~~~
+**/
+
  if (!fHits || id<0) return 0;
 
  NcSignal* sx=0;
@@ -486,12 +572,19 @@ NcSignal* NcDevice::GetIdHit(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDevice::GetHits()
 {
+/**
+~~~
 // Provide the references to all the registered hits.
+~~~
+**/
+
  return fHits;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::GetHits(TObjArray& selected,TString name,Int_t mode,Int_t opt,TObjArray* hits) const
 {
+/**
+~~~
 // Provide the references to selected hits by looping over the input array "hits"
 // and checking for the specified hit or signal slot name.
 // A "hit" represents an abstract object which is derived from NcSignal.
@@ -516,6 +609,8 @@ void NcDevice::GetHits(TObjArray& selected,TString name,Int_t mode,Int_t opt,TOb
 // hits : Optional input array with NcSignal objects to be used for the search. 
 //
 // The defaults are mode=0, opt=0 and hits=0.
+~~~
+**/
 
  selected.Clear();
 
@@ -563,6 +658,8 @@ void NcDevice::GetHits(TObjArray& selected,TString name,Int_t mode,Int_t opt,TOb
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::ShowHit(Int_t j,TString f,TString u) const
 {
+/**
+~~~
 // Show data of the registered j-th hit according to the specified 
 // coordinate frame f.
 // If j=0 all associated hits will be shown.
@@ -573,6 +670,8 @@ void NcDevice::ShowHit(Int_t j,TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The defaults are j=0, f="car" and "u=rad".
+~~~
+**/
 
  if (!j)
  {
@@ -592,6 +691,8 @@ void NcDevice::ShowHit(Int_t j,TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::Data(TString f,TString u) const
 {
+/**
+~~~
 // Print the device and all registered hit info according to the specified
 // coordinate frame f.
 //
@@ -601,6 +702,8 @@ void NcDevice::Data(TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  NcSignal::Data(f,u);
  Int_t nhits=GetNhits();
@@ -617,6 +720,8 @@ void NcDevice::Data(TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,Int_t idx,TObjArray* hits,Int_t mode,Int_t deadcheck) const
 {
+/**
+~~~
 // Provide the min. and max. signal values of an array of hits.
 //
 // Note : The arguments "vmin" and "max" MUST be both of type Float_t, otherwise the
@@ -634,6 +739,8 @@ void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,Int_t idx,TObjArray* hits
 // To achieve an identical treatment of dead and alive signals, the setting of deadcheck=0
 // will automatically set also mode=0 to retrieve the stored signal values "as is".
 // The default is deadcheck=1 (for backward compatibility reasons).
+~~~
+**/
 
  vmin=0;
  vmax=0;
@@ -677,6 +784,8 @@ void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,Int_t idx,TObjArray* hits
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,TString name,TObjArray* hits,Int_t mode,Int_t deadcheck) const
 {
+/**
+~~~
 // Provide the min. and max. signal values of an array of hits.
 //
 // Note : The arguments "vmin" and "max" MUST be both of type Float_t, otherwise the
@@ -693,6 +802,8 @@ void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,TString name,TObjArray* h
 // To achieve an identical treatment of dead and alive signals, the setting of deadcheck=0
 // will automatically set also mode=0 to retrieve the stored signal values "as is".
 // The default is deadcheck=1 (for backward compatibility reasons).
+~~~
+**/
 
  vmin=0;
  vmax=0;
@@ -743,6 +854,8 @@ void NcDevice::GetExtremes(Float_t& vmin,Float_t& vmax,TString name,TObjArray* h
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDevice::SortHits(Int_t idx,Int_t mode,TObjArray* hits,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to an array of hits by looping over the input array "hits"
 // and checking the signal value.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -777,6 +890,8 @@ TObjArray* NcDevice::SortHits(Int_t idx,Int_t mode,TObjArray* hits,Int_t mcal,In
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered) ordered->Clear();
 
@@ -868,6 +983,8 @@ TObjArray* NcDevice::SortHits(Int_t idx,Int_t mode,TObjArray* hits,Int_t mcal,In
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDevice::SortHits(TString name,Int_t mode,TObjArray* hits,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to an array of hits by looping over the input array "hits"
 // and checking the signal value.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -902,6 +1019,8 @@ TObjArray* NcDevice::SortHits(TString name,Int_t mode,TObjArray* hits,Int_t mcal
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered) ordered->Clear();
 
@@ -999,6 +1118,8 @@ TObjArray* NcDevice::SortHits(TString name,Int_t mode,TObjArray* hits,Int_t mcal
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::DisplayHits(Int_t idx,Float_t scale,TObjArray* hits,Int_t dp,Int_t mode,Int_t mcol)
 {
+/**
+~~~
 // 3D color display of an array hits.
 // The user can specify the index (default=1) of the signal slot to perform the display for.
 // The marker size will indicate the absolute value of the signal (specified by the slotindex)
@@ -1027,6 +1148,8 @@ void NcDevice::DisplayHits(Int_t idx,Float_t scale,TObjArray* hits,Int_t dp,Int_
 // TView* view=new TView(1);
 // view->SetRange(-1000,-1000,-1000,1000,1000,1000);
 // view->ShowAxis();
+~~~
+**/
 
  Int_t thisdev=0; // Indicate whether this is the owning device or not 
  TObjArray* ahits=hits;
@@ -1102,6 +1225,8 @@ void NcDevice::DisplayHits(Int_t idx,Float_t scale,TObjArray* hits,Int_t dp,Int_
 ///////////////////////////////////////////////////////////////////////////
 void NcDevice::DisplayHits(TString name,Float_t scale,TObjArray* hits,Int_t dp,Int_t mode,Int_t mcol)
 {
+/**
+~~~
 // 3D color display of an array hits.
 // The user can specify the name of the signal slot to perform the display for.
 // The marker size will indicate the absolute value of the signal (specified by the slotname)
@@ -1132,6 +1257,8 @@ void NcDevice::DisplayHits(TString name,Float_t scale,TObjArray* hits,Int_t dp,I
 // TView* view=new TView(1);
 // view->SetRange(-1000,-1000,-1000,1000,1000,1000);
 // view->ShowAxis();
+~~~
+**/
 
  Int_t thisdev=0; // Indicate whether this is the owning device or not 
  TObjArray* ahits=hits;
@@ -1210,6 +1337,8 @@ void NcDevice::DisplayHits(TString name,Float_t scale,TObjArray* hits,Int_t dp,I
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcDevice::SumSignals(Int_t idx,Int_t mode,TObjArray* hits)
 {
+/**
+~~~
 // Summation of selected signal values by looping over the input array "hits".
 // In case hits=0 (default), the registered hits of the current device are used. 
 // Note that the original hit array is not modified.
@@ -1221,6 +1350,8 @@ Double_t NcDevice::SumSignals(Int_t idx,Int_t mode,TObjArray* hits)
 // corresponds to the signal correction mode described in the GetSignal
 // memberfunction of class NcSignal.
 // The default in the summation process is mode=1.
+~~~
+**/
 
  TObjArray* ahits=hits;
  if (!ahits) ahits=fHits;
@@ -1252,6 +1383,8 @@ Double_t NcDevice::SumSignals(Int_t idx,Int_t mode,TObjArray* hits)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcDevice::SumSignals(TString name,Int_t mode,TObjArray* hits)
 {
+/**
+~~~
 // Summation of selected signal values by looping over the input array "hits".
 // In case hits=0 (default), the registered hits of the current device are used. 
 // Note that the original hit array is not modified.
@@ -1263,6 +1396,8 @@ Double_t NcDevice::SumSignals(TString name,Int_t mode,TObjArray* hits)
 // corresponds to the signal correction mode described in the GetSignal
 // memberfunction of class NcSignal.
 // The default in the summation process is mode=1.
+~~~
+**/
 
  TObjArray* ahits=hits;
  if (!ahits) ahits=fHits;
@@ -1292,6 +1427,8 @@ Double_t NcDevice::SumSignals(TString name,Int_t mode,TObjArray* hits)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcDevice::SlideWindow(TObjArray* hits,Double_t thres,Double_t swin,TString sname,Int_t smode,TString wname,Int_t wmode,Int_t* i1,Int_t* i2) const
 {
+/**
+~~~
 // Perform a sliding window scan of some cumulated signal by looping over the input array "hits".
 // A "hit" represents an abstract object which is (derived from) NcSignal.
 // Note that the input array "hits" is not modified.
@@ -1361,6 +1498,8 @@ Double_t NcDevice::SlideWindow(TObjArray* hits,Double_t thres,Double_t swin,TStr
 //  NcSignal* sx=(NcSignal*)hits->At(i);
 //  if (sx) sx->Data();
 // }
+~~~
+**/
 
  Int_t nhits=0;
  if (hits) nhits=hits->GetEntries();
@@ -1433,6 +1572,8 @@ Double_t NcDevice::SlideWindow(TObjArray* hits,Double_t thres,Double_t swin,TStr
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector NcDevice::GetHitPath(TObjArray* hits,Int_t pos) const
 {
+/**
+~~~
 // Provide the average direction of the hit pattern contained in the array "hits".
 // The direction is obtained by starting at the first hit in the array
 // and then a summation of all the relative hit locations while jumping
@@ -1446,6 +1587,8 @@ Nc3Vector NcDevice::GetHitPath(TObjArray* hits,Int_t pos) const
 // The default is pos=0.
 //
 // Note : In case of inconsistent input a "zero vector" will be returned.
+~~~
+**/
 
  Nc3Vector v;
 
@@ -1493,6 +1636,8 @@ Nc3Vector NcDevice::GetHitPath(TObjArray* hits,Int_t pos) const
 ///////////////////////////////////////////////////////////////////////////
 NcPosition NcDevice::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mode) const
 {
+/**
+~~~
 // Provide the Center Of Gravity of the hits contained in the array "hits".
 // Each hit can be given a weight according to the absolute value of the signal
 // contained in the slot with the name "slotname".
@@ -1506,6 +1651,8 @@ NcPosition NcDevice::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mod
 // The defaults are pos=0, slotname="none" and mode=0.
 //
 // Note : In case of inconsistent input a "zero vector" will be returned.
+~~~
+**/
 
  NcPosition cog;
 
@@ -1551,6 +1698,8 @@ NcPosition NcDevice::GetCOG(TObjArray* hits,Int_t pos,TString slotname,Int_t mod
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcDevice::GetCVAL(TObjArray* hits,TString obsname,TString weightname,Int_t mode,Int_t type) const
 {
+/**
+~~~
 // Provide the Central Value of the observed signals contained in the slot with name "obsname"
 // in the array "hits". Depending on the input argument "type" the central value represents
 // either the median (type=1) or the mean (type=2).
@@ -1563,6 +1712,8 @@ Double_t NcDevice::GetCVAL(TObjArray* hits,TString obsname,TString weightname,In
 // The defaults are weightname="none", mode=0 and type=1.
 //
 // Note : In case of inconsistent input 0 will be returned.
+~~~
+**/
 
  if (type!=1 && type!=2)
  {
@@ -1622,6 +1773,8 @@ Double_t NcDevice::GetCVAL(TObjArray* hits,TString obsname,TString weightname,In
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDevice::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -1630,6 +1783,8 @@ TObject* NcDevice::Clone(const char* name) const
 // to store either NcDevice objects or objects derived from NcDevice
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  NcDevice* dev=new NcDevice(*this);
  if (name)

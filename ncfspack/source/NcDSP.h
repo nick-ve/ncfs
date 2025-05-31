@@ -1,7 +1,7 @@
 #ifndef NcDSP_h
 #define NcDSP_h
 
-// Copyright(c) 2023, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TArrayD.h"
@@ -12,6 +12,8 @@
 
 #include "NcSample.h"
 #include "NcMath.h"
+
+/** Various Digital Signal Processing (DSP) operations for (sequential) data samples. **/
 
 class NcDSP : public TNamed
 {

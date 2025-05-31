@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcJet
+~~~
 // Class NcJet
 // Creation and investigation of a jet of particle tracks.
 // An NcJet can be constructed by adding NcTracks.
@@ -104,18 +108,26 @@
 //
 //--- Author: Nick van Eijndhoven 10-jul-1997 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  11:29Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcJet.h"
 #include "Riostream.h"
  
-ClassImp(NcJet) // Class implementation to enable ROOT I/O
+ClassImp(NcJet); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcJet::NcJet() : TNamed(),Nc4Vector()
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
 // All variables initialised to 0
 // Initial maximum number of tracks is set to the default value
+~~~
+**/
+
  Init();
  Reset();
  SetNtinit();
@@ -123,7 +135,12 @@ NcJet::NcJet() : TNamed(),Nc4Vector()
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::Init()
 {
+/**
+~~~
 // Initialisation of pointers etc...
+~~~
+**/
+
  fTracks=0;
  fNtinit=0;
  fTrackCopy=0;
@@ -134,8 +151,13 @@ void NcJet::Init()
 ///////////////////////////////////////////////////////////////////////////
 NcJet::NcJet(Int_t n) : TNamed(),Nc4Vector()
 {
-// Create a jet to hold initially a maximum of n tracks
+/**
+~~~
+// Create a jet to hold initially a maximum of n tracks.
 // All variables initialised to 0
+~~~
+**/
+
  Init();
  Reset();
  if (n > 0)
@@ -154,7 +176,12 @@ NcJet::NcJet(Int_t n) : TNamed(),Nc4Vector()
 ///////////////////////////////////////////////////////////////////////////
 NcJet::~NcJet()
 {
-// Default destructor
+/**
+~~~
+// Default destructor.
+~~~
+**/
+
  if (fTracks)
  {
   delete fTracks;
@@ -174,6 +201,8 @@ NcJet::~NcJet()
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::SetOwner(Bool_t own)
 {
+/**
+~~~
 // Set ownership of all added objects. 
 // The default parameter is own=kTRUE.
 //
@@ -192,6 +221,8 @@ void NcJet::SetOwner(Bool_t own)
 // ownership (and copy mode) for empty objects (e.g. newly created objects
 // or after invokation of the Reset() memberfunction) otherwise it will
 // very likely result in inconsistent destructor behaviour.
+~~~
+**/
 
  Int_t mode=1;
  if (!own) mode=0;
@@ -201,7 +232,12 @@ void NcJet::SetOwner(Bool_t own)
 ///////////////////////////////////////////////////////////////////////////
 NcJet::NcJet(const NcJet& j) : TNamed(j),Nc4Vector(j)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fNtinit=j.fNtinit;
  fNtmax=j.fNtmax;
  fQ=j.fQ;
@@ -236,7 +272,12 @@ NcJet::NcJet(const NcJet& j) : TNamed(j),Nc4Vector(j)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::SetNtinit(Int_t n)
 {
-// Set the initial maximum number of tracks for this jet
+/**
+~~~
+// Set the initial maximum number of tracks for this jet.
+~~~
+**/
+
  fNtinit=n;
  fNtmax=n;
 
@@ -254,9 +295,14 @@ void NcJet::SetNtinit(Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::Reset()
 {
-// Reset all variables to 0
+/**
+~~~
+// Reset all variables to 0.
 // The max. number of tracks is set to the initial value again
 // Note : The scale for the energy/momentum units will not be changed.
+~~~
+**/
+
  fNtrk=0;
  fQ=0;
  fUserId=0;
@@ -266,6 +312,8 @@ void NcJet::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::AddTrack(NcTrack& t)
 {
+/**
+~~~
 // Add a track to the jet.
 // In case the maximum number of tracks has been reached
 // space will be extended to hold an additional amount of tracks as
@@ -286,6 +334,8 @@ void NcJet::AddTrack(NcTrack& t)
 // specific track is already present in the jet.
 // If this is the case, no action is performed to prevent multiple
 // additions of the same track.
+~~~
+**/
 
 
  AddTrack(t,1);
@@ -293,6 +343,8 @@ void NcJet::AddTrack(NcTrack& t)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::AddTrack(NcTrack& t,Int_t copy)
 {
+/**
+~~~
 // Internal memberfunction to actually add a track to the jet.
 // In case the maximum number of tracks has been reached
 // space will be extended to hold an additional amount of tracks as
@@ -310,6 +362,8 @@ void NcJet::AddTrack(NcTrack& t,Int_t copy)
 //
 // Note :
 // In case a private copy is made, this is performed via the Clone() memberfunction.
+~~~
+**/
 
  if (!fTracks)
  {
@@ -353,7 +407,9 @@ void NcJet::AddTrack(NcTrack& t,Int_t copy)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::Data(TString f,TString u)
 {
-// Provide jet information within the coordinate frame f
+/**
+~~~
+// Provide jet information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -361,6 +417,8 @@ void NcJet::Data(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  const char* name=GetName();
  const char* title=GetTitle();
@@ -379,7 +437,9 @@ void NcJet::Data(TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::List(TString f,TString u,TObjArray* tracks)
 {
-// Provide jet and primary track information within the coordinate frame f
+/**
+~~~
+// Provide jet and primary track information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -393,6 +453,8 @@ void NcJet::List(TString f,TString u,TObjArray* tracks)
 // In case tracks=0, all the available tracks from this jet will be shown.
 //
 // The default is tracks=0.
+~~~
+**/
 
  Data(f,u); // Information of the current jet
  if (fRef)   { cout << " Ref-point   :"; fRef->Data(f,u); }
@@ -438,7 +500,9 @@ void NcJet::List(TString f,TString u,TObjArray* tracks)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::ListAll(TString f,TString u,TObjArray* tracks)
 {
-// Provide jet and prim.+sec. track information within the coordinate frame f
+/**
+~~~
+// Provide jet and prim.+sec. track information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -452,6 +516,8 @@ void NcJet::ListAll(TString f,TString u,TObjArray* tracks)
 // In case tracks=0, all the available tracks from this jet will be shown.
 //
 // The default is tracks=0.
+~~~
+**/
 
  Data(f,u); // Information of the current jet
  if (fRef)   { cout << " Ref-point   :"; fRef->Data(f,u); }
@@ -497,6 +563,8 @@ void NcJet::ListAll(TString f,TString u,TObjArray* tracks)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcJet::GetNtracks(Int_t idmode,Int_t chmode,Int_t pcode)
 {
+/**
+~~~
 // Provide the number of user selected tracks in this jet based on the
 // idmode, chmode and pcode selections as specified by the user.
 // For specification of the selection parameters see GetTracks().
@@ -511,6 +579,8 @@ Int_t NcJet::GetNtracks(Int_t idmode,Int_t chmode,Int_t pcode)
 //        of GetTracks(idmode,chmode,pcode,tracks) with a user provided array "tracks"
 //        and subsequently invoking GetEntries() of the array might be slightly
 //        faster.
+~~~
+**/
 
  Int_t n=0;
  if (idmode==0 && chmode==2 && pcode==0)
@@ -528,6 +598,8 @@ Int_t NcJet::GetNtracks(Int_t idmode,Int_t chmode,Int_t pcode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcJet::GetNtracks(TString name,Int_t mode)
 {
+/**
+~~~
 // Provide the number of tracks with the specified name.
 // If name="*" all tracks will be provided, irrespective of the value of "mode".
 //
@@ -542,6 +614,8 @@ Int_t NcJet::GetNtracks(TString name,Int_t mode)
 // of GetTracks(name,mode,tracks) with a user provided array "tracks"
 // and subsequently invoking GetEntries() of the array might be slightly
 // faster.
+~~~
+**/
   
  Int_t n=0;
 
@@ -553,6 +627,8 @@ Int_t NcJet::GetNtracks(TString name,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetEnergy(Float_t scale)
 {
+/**
+~~~
 // Return the total energy of the jet.
 // By default the energy is returned in the units as it was stored in the jet
 // structure. However, the user can select a different energy unit scale by
@@ -561,6 +637,9 @@ Double_t NcJet::GetEnergy(Float_t scale)
 // of scale=0.001 will provide the energy in MeV.
 // The error can be obtained by invoking GetResultError() after
 // invokation of GetEnergy().
+~~~
+**/
+
  Double_t E=GetScalar();
  if (E>0)
  {
@@ -579,7 +658,9 @@ Double_t NcJet::GetEnergy(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetMomentum(Float_t scale)
 {
-// Return the value of the total jet 3-momentum
+/**
+~~~
+// Return the value of the total jet 3-momentum.
 // By default the momentum is returned in the units as it was stored in the jet
 // structure. However, the user can select a different momentum unit scale by
 // specification of the scale parameter.
@@ -587,6 +668,8 @@ Double_t NcJet::GetMomentum(Float_t scale)
 // of scale=0.001 will provide the momentum in MeV/c.
 // The error can be obtained by invoking GetResultError() after
 // invokation of GetMomentum().
+~~~
+**/
 
  Double_t norm=fV.GetNorm();
  fDresult=fV.GetResultError();
@@ -600,13 +683,17 @@ Double_t NcJet::GetMomentum(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector NcJet::Get3Momentum(Float_t scale) const
 {
-// Return the the total jet 3-momentum
+/**
+~~~
+// Return the the total jet 3-momentum.
 // By default the components of the 3-momentum are returned in the units
 // as they were stored in the jet structure.
 // However, the user can select a different momentum unit scale for the
 // components by specification of the scale parameter.
 // The convention is that scale=1 corresponds to GeV/c, so specification
 // of scale=0.001 will provide the 3-momentum in MeV/c.
+~~~
+**/
 
  Nc3Vector p=Get3Vector();
  if (scale>0) p*=fEscale/scale;
@@ -615,6 +702,8 @@ Nc3Vector NcJet::Get3Momentum(Float_t scale) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetInvmass(Float_t scale)
 {
+/**
+~~~
 // Return the invariant mass of the jet.
 // By default the mass is returned in the units as it was stored in the jet
 // structure. However, the user can select a different mass unit scale by
@@ -623,6 +712,8 @@ Double_t NcJet::GetInvmass(Float_t scale)
 // of scale=0.001 will provide the invariant mass in MeV/c**2.
 // The error can be obtained by invoking GetResultError() after
 // invokation of GetInvmass().
+~~~
+**/
 
  Double_t inv=Dot(*this);
  Double_t dinv=GetResultError();
@@ -648,13 +739,22 @@ Double_t NcJet::GetInvmass(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcJet::GetCharge() const
 {
-// Return the total charge of the jet
+/**
+~~~
+// Return the total charge of the jet.
+~~~
+**/
+
  return fQ;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* NcJet::GetTrack(Int_t i) const
 {
-// Return the i-th track of this jet
+/**
+~~~
+// Return the i-th track of this jet.
+~~~
+**/
 
  if (!fTracks) return 0;
 
@@ -672,7 +772,12 @@ NcTrack* NcJet::GetTrack(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* NcJet::GetIdTrack(Int_t id) const
 {
-// Return the track with user identifier "id" of this jet
+/**
+~~~
+// Return the track with user identifier "id" of this jet.
+~~~
+**/
+
  if (!fTracks) return 0;
 
  NcTrack* tx=0;
@@ -686,6 +791,8 @@ NcTrack* NcJet::GetIdTrack(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcJet::GetTracks(Int_t idmode,Int_t chmode,Int_t pcode,TObjArray* tracks)
 {
+/**
+~~~
 // Provide references to user selected tracks based on the idmode, chmode
 // and pcode selections as specified by the user.
 //
@@ -731,6 +838,8 @@ TObjArray* NcJet::GetTracks(Int_t idmode,Int_t chmode,Int_t pcode,TObjArray* tra
 //    amongst other selections.
 //    In case a user defined array "tracks" is provided, this memberfunction returns 0 for the
 //    return argument.
+~~~
+**/
 
  if (tracks)
  {
@@ -804,6 +913,8 @@ TObjArray* NcJet::GetTracks(Int_t idmode,Int_t chmode,Int_t pcode,TObjArray* tra
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcJet::GetTracks(TString name,Int_t mode,TObjArray* tracks)
 {
+/**
+~~~
 // Provide references to all tracks with the specified name.
 // If name="*" all tracks will be provided, irrespective of the value of "mode".
 //
@@ -824,6 +935,8 @@ TObjArray* NcJet::GetTracks(TString name,Int_t mode,TObjArray* tracks)
 //    amongst other selections.
 //    In case a user defined array "tracks" is provided, this memberfunction returns 0 for the
 //    return argument.
+~~~
+**/
 
  if (tracks)
  {
@@ -891,8 +1004,12 @@ TObjArray* NcJet::GetTracks(TString name,Int_t mode,TObjArray* tracks)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::RemoveTrack(NcTrack* t)
 {
+/**
+~~~
 // Remove the track with the specified reference.
 // In case t=0 no action will be taken.
+~~~
+**/
 
  if (!t || !fTracks) return;
 
@@ -901,6 +1018,8 @@ void NcJet::RemoveTrack(NcTrack* t)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::RemoveTracks(TString name,Int_t mode)
 {
+/**
+~~~
 // Remove all tracks with the specified name.
 // If name="*" all tracks will be removed, irrespective of the value of "mode".
 //
@@ -914,6 +1033,8 @@ void NcJet::RemoveTracks(TString name,Int_t mode)
 // In case the user has labeled reconstructed tracks with the name of
 // the applied reconstruction algorithm, this memberfunction provides
 // easy removal of all tracks reconstructed by a certain method.
+~~~
+**/
 
  if (!fTracks) return;
 
@@ -935,10 +1056,14 @@ void NcJet::RemoveTracks(TString name,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::RemoveTracks(Int_t idmode,Int_t chmode,Int_t pcode)
 {
+/**
+~~~
 // Remove user selected tracks based on the idmode, chmode and pcode
 // selections as specified by the user.
 // For defintions of these selections see the corresponding GetTracks()
 // memberfunction.
+~~~
+**/
 
  if (!fTracks) return;
 
@@ -960,8 +1085,12 @@ void NcJet::RemoveTracks(Int_t idmode,Int_t chmode,Int_t pcode)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::ReplaceTrack(NcTrack* told,NcTrack* tnew)
 {
+/**
+~~~
 // Replace the existing track "told" with the "tnew" one.
 // In case told=0 or tnew=0 no action will be taken.
+~~~
+**/
 
  if (!told || !tnew || !fTracks) return;
 
@@ -990,6 +1119,8 @@ void NcJet::ReplaceTrack(NcTrack* told,NcTrack* tnew)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::RemoveTrack(NcTrack* t,Int_t compress)
 {
+/**
+~~~
 // Internal memberfunction to remove a track from the jet.
 // In case t=0 no action will be taken.
 //
@@ -999,6 +1130,8 @@ void NcJet::RemoveTrack(NcTrack* t,Int_t compress)
 // after each track removal with compression, it is advised to remove tracks
 // without compression when invoked from within a loop and compress the array
 // (and update the fNtrk counter) after all tracks have been removed.
+~~~
+**/
 
  if (!t || !fTracks) return;
 
@@ -1025,6 +1158,8 @@ void NcJet::RemoveTrack(NcTrack* t,Int_t compress)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::ShowTracks(Int_t mode,TString f,TString u,TObjArray* tracks)
 {
+/**
+~~~
 // Provide an overview of the available tracks.
 // The argument mode determines the amount of information as follows :
 // mode = 0 ==> Only printout of the number of tracks
@@ -1041,6 +1176,8 @@ void NcJet::ShowTracks(Int_t mode,TString f,TString u,TObjArray* tracks)
 // In case tracks=0, all the available tracks will be shown.
 //
 // The default is tracks=0.
+~~~
+**/
 
  Int_t ntk=0;
  if (tracks)
@@ -1101,6 +1238,8 @@ void NcJet::ShowTracks(Int_t mode,TString f,TString u,TObjArray* tracks)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetPt(Float_t scale)
 {
+/**
+~~~
 // Provide the transverse momentum value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the jet
 // structure. However, the user can select a different momentum unit scale by
@@ -1109,6 +1248,9 @@ Double_t NcJet::GetPt(Float_t scale)
 // of scale=0.001 will provide the transverse momentum in MeV/c.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetPt().
+~~~
+**/
+
  Nc3Vector v;
  v=GetVecTrans();
  Double_t norm=v.GetNorm();
@@ -1124,6 +1266,8 @@ Double_t NcJet::GetPt(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetPl(Float_t scale)
 {
+/**
+~~~
 // Provide the longitudinal momentum value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the jet
 // structure. However, the user can select a different momentum unit scale by
@@ -1133,6 +1277,8 @@ Double_t NcJet::GetPl(Float_t scale)
 // Note : the returned value can also be negative.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetPl().
+~~~
+**/
 
  Nc3Vector v;
  v=GetVecLong();
@@ -1154,6 +1300,8 @@ Double_t NcJet::GetPl(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetEt(Float_t scale)
 {
+/**
+~~~
 // Provide transverse energy value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the jet
 // structure. However, the user can select a different energy unit scale by
@@ -1162,6 +1310,8 @@ Double_t NcJet::GetEt(Float_t scale)
 // of scale=0.001 will provide the transverse energy in MeV.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetEt().
+~~~
+**/
 
  Double_t et=GetScaTrans();
  if (scale>0)
@@ -1175,6 +1325,8 @@ Double_t NcJet::GetEt(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetEl(Float_t scale)
 {
+/**
+~~~
 // Provide longitudinal energy value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the jet
 // structure. However, the user can select a different energy unit scale by
@@ -1184,6 +1336,8 @@ Double_t NcJet::GetEl(Float_t scale)
 // Note : the returned value can also be negative.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetEl().
+~~~
+**/
 
  Double_t el=GetScaLong();
  if (scale>0)
@@ -1197,6 +1351,8 @@ Double_t NcJet::GetEl(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetMt(Float_t scale)
 {
+/**
+~~~
 // Provide transverse mass value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the jet
 // structure. However, the user can select a different energy unit scale by
@@ -1205,6 +1361,9 @@ Double_t NcJet::GetMt(Float_t scale)
 // of scale=0.001 will provide the transverse mass in MeV.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetMt().
+~~~
+**/
+
  Double_t pt=GetPt();
  Double_t dpt=GetResultError();
  Double_t m=GetInvmass();
@@ -1225,11 +1384,16 @@ Double_t NcJet::GetMt(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetRapidity()
 {
+/**
+~~~
 // Provide rapidity value w.r.t. z-axis.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetRapidity().
 // Note : Also GetPseudoRapidity() is available since this class is
 //        derived from Nc4Vector.
+~~~
+**/
+
  Double_t e=GetEnergy();
  Double_t de=GetResultError();
  Double_t pl=GetPl();
@@ -1248,6 +1412,8 @@ Double_t NcJet::GetRapidity()
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::SetTrackCopy(Int_t j)
 {
+/**
+~~~
 // (De)activate the creation of private copies of the added tracks.
 // j=0 ==> No private copies are made; pointers of original tracks are stored.
 // j=1 ==> Private copies of the tracks are made and these pointers are stored.
@@ -1256,6 +1422,9 @@ void NcJet::SetTrackCopy(Int_t j)
 //        change the TrackCopy mode anymore.
 //        To change the TrackCopy mode for an existing NcJet containing
 //        tracks one first has to invoke Reset().
+~~~
+**/
+
  if (!fTracks)
  {
   if (j==0 || j==1)
@@ -1276,26 +1445,43 @@ void NcJet::SetTrackCopy(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcJet::GetTrackCopy() const
 {
+/**
+~~~
 // Provide value of the TrackCopy mode.
 // 0 ==> No private copies are made; pointers of original tracks are stored.
 // 1 ==> Private copies of the tracks are made and these pointers are stored.
+~~~
+**/
+
  return fTrackCopy;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::SetId(Int_t id)
 {
+/**
+~~~
 // Set a user defined identifier for this jet.
+~~~
+**/
+
  fUserId=id;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcJet::GetId() const
 {
+/**
+~~~
 // Provide the user defined identifier of this jet.
+~~~
+**/
+
  return fUserId;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::SetReferencePoint(NcPosition& p)
 {
+/**
+~~~
 // Store the position of the jet reference-point.
 // The reference-point of a jet provides a means to define a generic
 // space-time location for the jet as a whole.
@@ -1305,12 +1491,17 @@ void NcJet::SetReferencePoint(NcPosition& p)
 // a normal vertex position and allows to provide complimentary information. 
 // This reference point is the preferable point to start e.g. extrapolations
 // and investigate coincidences in space and/or time.
+~~~
+**/
+
  if (fRef) delete fRef;
  fRef=new NcPositionObj(p);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcJet::GetReferencePoint()
 {
+/**
+~~~
 // Provide the position of the jet reference-point.
 // The reference-point of a jet provides a means to define a generic
 // space-time location for the jet as a whole.
@@ -1320,11 +1511,16 @@ NcPosition* NcJet::GetReferencePoint()
 // a normal vertex position and allows to provide complimentary information. 
 // This reference point is the preferable point to start e.g. extrapolations
 // and investigate coincidences in space and/or time.
+~~~
+**/
+
  return fRef;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcJet::SortTracks(Int_t mode,TObjArray* tracks,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to an array of tracks by looping over the input array "tracks"
 // and checking the value of a certain observable.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -1361,6 +1557,8 @@ TObjArray* NcJet::SortTracks(Int_t mode,TObjArray* tracks,TObjArray* ordered)
 // the ordered track list amongst other selections.
 // In case a user defined array "ordered" is provided, this memberfunction returns 0 for the
 // return argument.
+~~~
+**/
 
  if (ordered) ordered->Clear();
 
@@ -1504,6 +1702,8 @@ TObjArray* NcJet::SortTracks(Int_t mode,TObjArray* tracks,TObjArray* ordered)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetDistance(NcPosition* p,Float_t scale)
 {
+/**
+~~~
 // Provide distance of the current jet to the position p.
 // The error on the result can be obtained as usual by invoking
 // GetResultError() afterwards. 
@@ -1520,6 +1720,8 @@ Double_t NcJet::GetDistance(NcPosition* p,Float_t scale)
 //
 // Note : In case of incomplete information, a distance value of -1 is
 //        returned.
+~~~
+**/
  
  Double_t dist=-1.;
  fDresult=0.;
@@ -1545,6 +1747,8 @@ Double_t NcJet::GetDistance(NcPosition* p,Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetDistance(NcTrack* t,Float_t scale)
 {
+/**
+~~~
 // Provide distance of the current jet to the track t.
 // The error on the result can be obtained as usual by invoking
 // GetResultError() afterwards. 
@@ -1561,6 +1765,8 @@ Double_t NcJet::GetDistance(NcTrack* t,Float_t scale)
 //
 // Note : In case of incomplete information, a distance value of -1 is
 //        returned.
+~~~
+**/
  
  Double_t dist=-1.;
  fDresult=0.;
@@ -1586,6 +1792,8 @@ Double_t NcJet::GetDistance(NcTrack* t,Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetDistance(NcJet* j,Float_t scale)
 {
+/**
+~~~
 // Provide distance of the current jet to the jet j.
 // The error on the result can be obtained as usual by invoking
 // GetResultError() afterwards. 
@@ -1604,6 +1812,8 @@ Double_t NcJet::GetDistance(NcJet* j,Float_t scale)
 //
 // Note : In case of incomplete information, a distance value of -1 is
 //        returned.
+~~~
+**/
  
  Double_t dist=-1.;
  fDresult=0.;
@@ -1628,6 +1838,8 @@ Double_t NcJet::GetDistance(NcJet* j,Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcJet::GetNsignals(TString classname,Int_t par) const
 {
+/**
+~~~
 // Provide the number of signals (derived) of the specified class that are
 // associated to the jet tracks.
 // Multiple occurrences of the same signal are only counted once. 
@@ -1639,6 +1851,8 @@ Int_t NcJet::GetNsignals(TString classname,Int_t par) const
 // The default is classname="TObject" and par=0, which implies that in case no
 // argument is provided the number of all associated signals is returned.
 // This is backward compatible with the previous implementation of this member function.
+~~~
+**/
 
  if (fNtrk<1) return 0;
 
@@ -1682,6 +1896,8 @@ Int_t NcJet::GetNsignals(TString classname,Int_t par) const
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcJet::GetSignals(TString classname,Int_t par,TObjArray* signals)
 {
+/**
+~~~
 // Provide references to the signals (derived) of the specified class that are
 // associated to the jet tracks.
 // Multiple occurrences of the same signal will only appear once. 
@@ -1703,6 +1919,8 @@ TObjArray* NcJet::GetSignals(TString classname,Int_t par,TObjArray* signals)
 // return argument.
 //
 // The default is signals=0.
+~~~
+**/
 
  if (signals)
  {
@@ -1787,6 +2005,8 @@ TObjArray* NcJet::GetSignals(TString classname,Int_t par,TObjArray* signals)
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::ShowSignals(TString classname,Int_t par,Int_t mode,TString f,TString u)
 {
+/**
+~~~
 // Show all signals (derived) from the specified class that are associated to the jet tracks. 
 //
 // par  = 0 ==> The signal itself has to be (derived) of the specified class
@@ -1800,6 +2020,8 @@ void NcJet::ShowSignals(TString classname,Int_t par,Int_t mode,TString f,TString
 // Default values are par=0 and mode=1.
 //
 // The arguments "f" and "u" have the same meaning as in the memberfunction Data(). 
+~~~
+**/
 
  TObjArray hits;
  GetSignals(classname.Data(),par,&hits);
@@ -1829,6 +2051,8 @@ void NcJet::ShowSignals(TString classname,Int_t par,Int_t mode,TString f,TString
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcJet::GetSignalValue(TString classname,TString varname,Int_t mode,Int_t par)
 {
+/**
+~~~
 // Provide the total sum of the value of variable "varname" of all the
 // signals (derived) from the specified class that are associated to the jet tracks.
 //
@@ -1841,6 +2065,8 @@ Double_t NcJet::GetSignalValue(TString classname,TString varname,Int_t mode,Int_
 // The argument "mode" has the same meaning as in the memberfunction GetSignal()
 // of the class NcSignal.
 // Also here the default value is mode=0.
+~~~
+**/
 
  TObjArray hits;
  GetSignals(classname.Data(),par,&hits);
@@ -1862,6 +2088,8 @@ Double_t NcJet::GetSignalValue(TString classname,TString varname,Int_t mode,Int_
 ///////////////////////////////////////////////////////////////////////////
 void NcJet::SetEscale(Float_t scale)
 {
+/**
+~~~
 // Indicate the energy/momentum scale as used by the user.
 // The convention is that scale=1 indicates values in units
 // of GeV, GeV/c or GeV/c**2.
@@ -1869,6 +2097,8 @@ void NcJet::SetEscale(Float_t scale)
 // the scale indicator should be set to scale=0.001.
 //
 // By default scale=1 is set in the constructor.
+~~~
+**/
 
  if (scale>0)
  {
@@ -1882,16 +2112,23 @@ void NcJet::SetEscale(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcJet::GetEscale() const
 {
+/**
+~~~
 // Provide the energy/momentum scale as used by the user.
 // The convention is that scale=1 indicates values in units
 // of GeV, GeV/c or GeV/c**2.
 // So, a value of scale=0.001 indicates that energy/momentum values are
 // stored in units of MeV, MeV/c or MeV/c**2.
+~~~
+**/
+
  return fEscale;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcJet::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -1899,6 +2136,8 @@ TObject* NcJet::Clone(const char* name) const
 // This feature allows e.g. NcVertex to store either NcJet objects or
 // objects derived from NcJet via the AddJet memberfunction, provided
 // these derived classes also have a proper Clone memberfunction. 
+~~~
+**/
 
  NcJet* jet=new NcJet(*this);
  if (name)

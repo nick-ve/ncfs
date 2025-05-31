@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2002 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcCollider
+~~~
 // Class NcCollider
 // Pythia based universal (astro)physics event generator.
 // This class is derived from TPythia6 and has some extensions to
@@ -213,15 +217,20 @@
 //
 //--- Author: Nick van Eijndhoven 22-nov-2002 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 12, 2023  12:54Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcCollider.h"
 #include "Riostream.h"
  
-ClassImp(NcCollider) // Class implementation to enable ROOT I/O
+ClassImp(NcCollider); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcCollider::NcCollider() : TPythia6()
 {
+/**
+~~~
 // Default constructor.
 // All variables initialised to default values.
 //
@@ -235,6 +244,8 @@ NcCollider::NcCollider() : TPythia6()
 // Refer to the SetElastic memberfunction for the inclusion of elastic
 // and diffractive processes.
 // By default these processes are not included.
+~~~
+**/
 
  fVertexmode=0;    // No vertex structure creation
  fResolution=1e-7; // Standard resolution is 0.1 micron
@@ -295,7 +306,11 @@ NcCollider::NcCollider() : TPythia6()
 ///////////////////////////////////////////////////////////////////////////
 NcCollider::~NcCollider()
 {
-// Default destructor
+/**
+~~~
+// Default destructor.
+~~~
+**/
 
  if (fEvent)
  {
@@ -344,6 +359,8 @@ NcCollider::~NcCollider()
 ///////////////////////////////////////////////////////////////////////////
 NcTreeMaker* NcCollider::SetOutputFile(TString name,Int_t mode)
 {
+/**
+~~~
 // Create the output file containing all the NcEvent structures in a ROOT Tree (mode=0)
 // or the output file containing the corresponding NcTreeMaker data (mode=1),
 // or create both output files (mode=2).
@@ -365,6 +382,8 @@ NcTreeMaker* NcCollider::SetOutputFile(TString name,Int_t mode)
 // for the correpsonding output file.
 //
 // The default value is mode=0 for backward compatibility.
+~~~
+**/
 
  // Expand the path name of the provided output filename
  name=gSystem->ExpandPathName(name.Data());
@@ -455,6 +474,8 @@ NcTreeMaker* NcCollider::SetOutputFile(TString name,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetVertexMode(Int_t mode)
 {
+/**
+~~~
 // Set the mode of the vertex structure creation.
 //
 // By default all generated tracks will only appear in the NcEvent
@@ -498,7 +519,9 @@ void NcCollider::SetVertexMode(Int_t mode)
 //              sec. vertices will be connected to the primary vertex.
 //              Also the vertex connecting tracks will be automatically
 //              generated. 
-//
+~~~
+**/
+
  if (mode<0 || mode >3)
  {
   cout << " *NcCollider::SetVertexMode* Invalid argument mode : " << mode << endl;
@@ -512,54 +535,91 @@ void NcCollider::SetVertexMode(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetVertexMode() const
 {
+/**
+~~~
 // Provide the current mode for vertex structure creation.
+~~~
+**/
+
  return fVertexmode;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetResolution(Double_t res)
 {
+/**
+~~~
 // Set the resolution (in meter) for resolving (sec.) vertices.
 // By default this resolution is set to 0.1 micron.
 // Note : In case no vertex creation has been selected, the value of
 //        the resolution is totally irrelevant.
+~~~
+**/
+
  fResolution=fabs(res);
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcCollider::GetResolution() const
 {
+/**
+~~~
 // Provide the current resolution (in meter) for resolving (sec.) vertices.
+~~~
+**/
+
  return fResolution;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetRunNumber(Int_t run)
 {
+/**
+~~~
 // Set the user defined run number.
 // By default the run number is set to 0.
+~~~
+**/
+
  fRunnum=run;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetRunNumber() const
 {
+/**
+~~~
 // Provide the user defined run number.
+~~~
+**/
+
  return fRunnum;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetPrintFreq(Int_t n)
 {
+/**
+~~~
 // Set the print frequency for every "n" events.
 // By default the printfrequency is set to 1 (i.e. every event).
 // When n=0 no printout will be performed.
+~~~
+**/
+
  fPrintfreq=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetPrintFreq() const
 {
+/**
+~~~
 // Provide the user selected print frequency.
+~~~
+**/
+
  return fPrintfreq;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetUserControl(Int_t flag)
 {
+/**
+~~~
 // Set the user control flag w.r.t. disabling automatic optimisation
 // of some Pythia default MC parameters for soft interactions in view of
 // nucleus-nucleus collisions and astrophysical processes.
@@ -567,47 +627,77 @@ void NcCollider::SetUserControl(Int_t flag)
 //        1 : Full user control (automatic optimisation disabled)
 // By default the user control is set to 0 (i.e. automatic optimisation).
 // See the Init() memberfunctions for further details w.r.t. the optimisations.
+~~~
+**/
+
  fUserctrl=flag;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetUserControl() const
 {
+/**
+~~~
 // Provide the value of the user control flag.
+~~~
+**/
+
  return fUserctrl;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetElastic(Int_t flag)
 {
+/**
+~~~
 // Set the flag w.r.t. inclusion of elastic and diffractive processes.
 // By default these processes are not included.
 // Flag = 0 : Do not include elastic and diffractive processes
 //        1 : Elastic and diffractive processes will be included
+~~~
+**/
+
  fElastic=flag;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetElastic() const
 {
+/**
+~~~
 // Provide the value of the control flag for elastic and diffractive processes.
+~~~
+**/
+
  return fElastic;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetMultiple(Int_t flag)
 {
+/**
+~~~
 // Set the flag w.r.t. inclusion of multiple interactions.
 // By default these processes are included.
 // Flag = 0 : Do not include multiple interactions
 //        1 : Multiple interactions will be included
+~~~
+**/
+
  fMultiple=flag;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetMultiple() const
 {
+/**
+~~~
 // Provide the value of the control flag for multiple interactions.
+~~~
+**/
+
  return fMultiple;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetEcmsMin(Double_t ecms)
 {
+/**
+~~~
 // Set the minimal CMS energy (in GeV) for events to get generated.
 // Notes :
 // -------
@@ -616,17 +706,27 @@ void NcCollider::SetEcmsMin(Double_t ecms)
 // 2) By default a minimal CMS energy of 2.7 GeV is required for event generation.
 //    At lower values the underlying Pythia event generation gets rather slow
 //    because of the limited available phase-space.
+~~~
+**/
+
  fEcmsmin=ecms;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcCollider::GetEcmsMin() const
 {
+/**
+~~~
 // Provide the minimal CMS energy (in GeV) for events to get generated.
+~~~
+**/
+
  return fEcmsmin;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetRandomSeed(Int_t iseed)
 {
+/**
+~~~
 // Initialise the random number generator with a specific sequence.
 // Regular allowed values are 0<=iseed<=900000000.
 // However, also the specification iseed<0 is allowed to obtain an
@@ -642,6 +742,8 @@ void NcCollider::SetRandomSeed(Int_t iseed)
 //    different seed is to construct the seed from e.g. the date and time.
 //    An automatic (quasi unique) seed generation based on date and time information
 //    (with second precision) is obtained by providing iseed<0 as input argument.
+~~~
+**/
 
  if (iseed>900000000) return;
 
@@ -658,21 +760,33 @@ void NcCollider::SetRandomSeed(Int_t iseed)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetRandomSeed()
 {
+/**
+~~~
 // Provide the value of the current random number sequence seed.
+~~~
+**/
+
  Int_t iseed=GetMRPY(1);
  return iseed;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCollider::GetWin() const
 {
+/**
+~~~
 // Provide the value of the Pythia energy indicator (in GeV) used for initialisation.
 // For regular frame="free" processing the value is set to -1, whereas a positive value
 // indicates forced CMS processing. See Init() for further details.
+~~~
+**/
+
  return fWin;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3Vector* pbeam,Nc3Vector* ptarget,Int_t wxsec,Double_t fact)
 {
+/**
+~~~
 // Initialisation of the underlying Pythia generator package.
 // The event number is reset to 0.
 //
@@ -783,6 +897,8 @@ Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3
 // by invokation of the SetElastic() memberfunction before this initialisation,
 // irrespective of the UserControl selection. The same is true for the disabling
 // of multiple interactions via the memberfunction SetMultiple().
+~~~
+**/
 
  Int_t ier=0;
  if (frame!="cms" && frame!="fixt" && frame!="free") ier=1;
@@ -985,6 +1101,8 @@ Int_t NcCollider::Init(TString frame,TString beam,TString target,Float_t win,Nc3
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::Init(TString frame,Int_t zp,Int_t ap,Int_t zt,Int_t at,Float_t win,Nc3Vector* pbeam,Nc3Vector* ptarget,Int_t wxsec)
 {
+/**
+~~~
 // Initialisation of the underlying Pythia generator package for the generation
 // of nucleus-nucleus interactions.
 // The event number is reset to 0.
@@ -1053,6 +1171,8 @@ Int_t NcCollider::Init(TString frame,Int_t zp,Int_t ap,Int_t zt,Int_t at,Float_t
 // by invokation of the SetElastic memberfunction before this initialisation,
 // irrespective of the UserControl selection. The same is true for the disabling
 // of multiple interactions via the memberfunction SetMultiple.
+~~~
+**/
 
  Int_t ier=0;
  if (frame!="cms" && frame!="fixt" && frame!="free") ier=1;
@@ -1192,8 +1312,13 @@ Int_t NcCollider::Init(TString frame,Int_t zp,Int_t ap,Int_t zt,Int_t at,Float_t
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::GetFractions(Float_t zp,Float_t ap,Float_t zt,Float_t at)
 {
+/**
+~~~
 // Determine the fractions for the various N-N collision processes.
 // The various processes are : p+p, n+p, p+n and n+n.
+~~~
+**/
+
  if (zp<0) zp=0;
  if (zt<0) zt=0;
 
@@ -1213,6 +1338,8 @@ void NcCollider::GetFractions(Float_t zp,Float_t ap,Float_t zt,Float_t at)
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetMomentum(Nc3Vector& p,Int_t mode)
 {
+/**
+~~~
 // Set c.q. modify the beam or target particle 3-momentum in the case frame="free".
 // Invokation of this function only has effect after the initialisation via Init(). 
 //
@@ -1221,6 +1348,8 @@ void NcCollider::SetMomentum(Nc3Vector& p,Int_t mode)
 // p : Momentum 3-vector in GeV/c
 // mode : 1 ==> Modify the beam particle 3-momentum
 //        2 ==> Modify the target particle 3-momentum
+~~~
+**/
 
  if (mode!=1 && mode!=2)
  {
@@ -1254,6 +1383,8 @@ void NcCollider::SetMomentum(Nc3Vector& p,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
 {
+/**
+~~~
 // Generate one event.
 // In case of a nucleus-nucleus interaction, the argument 'npt' denotes
 // the total number of participant nucleons.
@@ -1289,6 +1420,8 @@ Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
 //
 // The return argument will indicate that an event has been generated (1) or not (0)
 // or that an error occurred (-1).
+~~~
+**/
 
  fEventnum++; 
 
@@ -1885,6 +2018,8 @@ Int_t NcCollider::MakeEvent(Int_t npt,Int_t mlist,Int_t medit)
 ///////////////////////////////////////////////////////////////////////////
 NcEvent* NcCollider::GetEvent(Int_t select) const
 {
+/**
+~~~
 // Provide pointer to the generated event structure.
 //
 // select = 0 : Always return the pointer to the generated event.
@@ -1893,6 +2028,8 @@ NcEvent* NcCollider::GetEvent(Int_t select) const
 //              SelectEvent(). Otherwise the value 0 will be returned.
 //
 // By invoking GetEvent() the default of select=0 will be used.
+~~~
+**/
 
  if (!select || fSelect)
  {
@@ -1906,7 +2043,11 @@ NcEvent* NcCollider::GetEvent(Int_t select) const
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::EndRun()
 {
+/**
+~~~
 // Properly flush last data to the output file(s) and close them.
+~~~
+**/
 
  if (!fOutFile && !fMktree) return;
 
@@ -1935,6 +2076,8 @@ void NcCollider::EndRun()
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetStable(Int_t id,Int_t mode,Int_t cls)
 {
+/**
+~~~
 // Declare whether a particle (class) must be regarded as stable or not.
 //
 // Input arguments :
@@ -1965,6 +2108,8 @@ void NcCollider::SetStable(Int_t id,Int_t mode,Int_t cls)
 // 3) After declaring a whole particle class stable/unstable, specific particles
 //    can be (re)declared unstable/stable by invoking this function again
 //    for the specific particle(s).
+~~~
+**/
 
  if (mode==0 || mode==1)
  {
@@ -2039,6 +2184,8 @@ void NcCollider::SetStable(Int_t id,Int_t mode,Int_t cls)
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SelectEvent(Int_t id)
 {
+/**
+~~~
 // Add a particle to the event selection list.
 // The parameter "id" indicates the Pythia KF particle code, which
 // basically is the PDG particle identifier code.
@@ -2057,7 +2204,9 @@ void NcCollider::SelectEvent(Int_t id)
 // Be aware of the fact that severe selection criteria (i.e. selecting only
 // rare events) may result in long runtimes before an event sample has been
 // obtained.
-//
+~~~
+**/
+
  if (!id)
  {
   if (fSelections)
@@ -2098,14 +2247,21 @@ void NcCollider::SelectEvent(Int_t id)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::GetSelectionFlag() const
 {
+/**
+~~~
 // Return the value of the selection flag for the total event.
 // When the event passed the selection criteria as specified via
 // SelectEvent() the value 1 is returned, otherwise the value 0 is returned.
+~~~
+**/
+
  return fSelect;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCollider::IsSelected()
 {
+/**
+~~~
 // Check whether the generated (sub)event contains one of the particles
 // specified in the selection list via SelectEvent().
 // If this is the case or when no selection list is present, the value 1
@@ -2114,6 +2270,8 @@ Int_t NcCollider::IsSelected()
 //
 // Note : In case no event was generated (due to possible kinematical constraints),
 //        also a value 0 will be returned.
+~~~
+**/
 
  if (GetMSTI(61)) return 0;
 
@@ -2143,6 +2301,8 @@ Int_t NcCollider::IsSelected()
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetSpectatorPmin(Float_t pmin)
 {
+/**
+~~~
 // Set minimal momentum in GeV/c for spectator tracks to be stored.
 // Spectator tracks with a momentum below this threshold will not be stored
 // in the (output) event structure.
@@ -2151,24 +2311,37 @@ void NcCollider::SetSpectatorPmin(Float_t pmin)
 // frame these spectator tracks might have got momenta above the threshold.
 // However, when the spectator tracks were not stored in the event structure
 // in the original frame, there is no way to retreive them anymore. 
+~~~
+**/
+
  fSpecpmin=pmin;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCollider::GetSpectatorPmin() const
 {
+/**
+~~~
 // Provide the minimal spectator momentum in GeV/c.
+~~~
+**/
+
  return fSpecpmin;
 }
 ///////////////////////////////////////////////////////////////////////////
 TString NcCollider::GetPyname(Int_t kf)
 {
-// Provide the correctly truncated Pythia particle name for PGD code kf
+/**
+~~~
+// Provide the correctly truncated Pythia particle name for PGD code kf.
 //
 // The TPythia6::Pyname returned name is copied into a TString and truncated
 // at the first blank to prevent funny trailing characters due to incorrect
 // stripping of empty characters in TPythia6::Pyname.
 // The truncation at the first blank is allowed due to the Pythia convention
 // that particle names never contain blanks.
+~~~
+**/
+
  char name[16];
  TString sname;
  Pyname(kf,name);
@@ -2183,6 +2356,8 @@ TString NcCollider::GetPyname(Int_t kf)
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetJetProtonSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1* hspec,Int_t mode)
 {
+/**
+~~~
 // Set the proton (beam) spectrum of the Jet.
 // If pmax<=pmin a mono-energetic proton beam with momentum "pmin" GeV/c will be used,
 // otherwise a dN/dp spectrum will be used as described by the function "fspec"
@@ -2212,6 +2387,8 @@ void NcCollider::SetJetProtonSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1
 // To provide a plain dN/dp spectrum via the "hspec" histogram, "fspec" should represent a constant function. 
 // 
 // The default values are pmax=-1, fspec=0, hspec=0 and mode=0.
+~~~
+**/
 
  gROOT->cd(); // Make sure to work in memory
 
@@ -2307,6 +2484,8 @@ void NcCollider::SetJetProtonSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::SetJetGammaSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1* hspec,Int_t mode)
 {
+/**
+~~~
 // Set the gamma (target) spectrum of the Jet.
 // If pmax<=pmin a mono-energetic gamma target with momentum "pmin" will be used,
 // otherwise a dN/dp spectrum will be used as described by the function "fspec"
@@ -2336,6 +2515,8 @@ void NcCollider::SetJetGammaSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1*
 // To provide a plain dN/dp spectrum via the "hspec" histogram, "fspec" should represent a constant function. 
 //
 // The default values are pmax=-1, fspec=0, hspec=0 and mode=0.
+~~~
+**/
 
  gROOT->cd(); // Make sure to work in memory
 
@@ -2431,6 +2612,8 @@ void NcCollider::SetJetGammaSpectrum(Double_t pmin,Double_t pmax,TF1* fspec,TH1*
 ///////////////////////////////////////////////////////////////////////////
 TH1* NcCollider::GetJetProtonSpectrum(Double_t* pmin,Double_t* pmax)
 {
+/**
+~~~
 // Provide the proton (beam) spectrum of the Jet.
 // The (optional) "pmin" and "pmax" will contain the momentum range in GeV/c,
 // and in case this is not a mono-energetic proton beam, the return argument
@@ -2438,6 +2621,8 @@ TH1* NcCollider::GetJetProtonSpectrum(Double_t* pmin,Double_t* pmax)
 // In case of a mono-energetic proton beam, the return argument will be zero.
 //
 // The default arguments are pmin=0 and pmax=0.
+~~~
+**/
 
  if (pmin) *pmin=fJetPpmin;
  if (pmax) *pmax=fJetPpmax;
@@ -2447,6 +2632,8 @@ TH1* NcCollider::GetJetProtonSpectrum(Double_t* pmin,Double_t* pmax)
 ///////////////////////////////////////////////////////////////////////////
 TH1* NcCollider::GetJetGammaSpectrum(Double_t* pmin,Double_t* pmax)
 {
+/**
+~~~
 // Provide the gamma (target) spectrum of the Jet.
 // The (optional) "pmin" and "pmax" will contain the momentum range in GeV/c,
 // and in case this is not a mono-energetic gamma target, the return argument
@@ -2454,6 +2641,8 @@ TH1* NcCollider::GetJetGammaSpectrum(Double_t* pmin,Double_t* pmax)
 // In case of a mono-energetic gamma target, the return argument will be zero.
 //
 // The default arguments are pmin=0 and pmax=0.
+~~~
+**/
 
  if (pmin) *pmin=fJetGpmin;
  if (pmax) *pmax=fJetGpmax;
@@ -2463,6 +2652,8 @@ TH1* NcCollider::GetJetGammaSpectrum(Double_t* pmin,Double_t* pmax)
 ///////////////////////////////////////////////////////////////////////////
 void NcCollider::ProcessJet(Double_t np,Double_t gfrac,TString flux,Double_t dthmax,Int_t nlist,Int_t ntrymax,Int_t wxsec,Double_t finit,Int_t full)
 {
+/**
+~~~
 // Processing of a Jet simulation for an (obscured) astrophysical source.
 // Both the p+p interactions of the jet with the surrounding dust and
 // the p+gamma interactions with the ambient photon field are simulated.
@@ -2528,6 +2719,8 @@ void NcCollider::ProcessJet(Double_t np,Double_t gfrac,TString flux,Double_t dth
 //    Example : "nu_mu.p" provides the nu_mu energy spectrum etc.
 //
 // Default values : dthmax=0, nlist=1, ntrymax=1000, wxsec=0, finit=0 and full=0.
+~~~
+**/
 
  if (fJetPpmax<=0 || fJetGpmax<=0 || np<1 || gfrac<0 || ntrymax<1)
  {

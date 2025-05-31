@@ -1,9 +1,7 @@
 #ifndef NcInvmass_h
 #define NcInvmass_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcInvmass.h 5 2010-03-19 10:10:02Z nickve $
 
 #include <math.h>
  
@@ -12,6 +10,8 @@
 
 #include "NcRandom.h"
 #include "NcTrack.h"
+
+/** Construction of invariant mass and combinatorial background. **/
 
 class NcInvmass : public TObject
 {

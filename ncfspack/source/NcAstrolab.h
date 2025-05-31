@@ -1,6 +1,6 @@
 #ifndef NcAstrolab_h
 #define NcAstrolab_h
-// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2007 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <math.h>

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2019 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcFITSIO
+~~~
 // Class NcFITSIO
 // Class to provide an I/O facility for FITS data files.
 //
@@ -280,30 +284,45 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel March 13, 2019  03:40
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel November 26, 2022  01:53Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcFITSIO.h"
 #include "Riostream.h"
  
-ClassImp(NcFITSIO) // Class implementation to enable ROOT I/O
+ClassImp(NcFITSIO); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 NcFITSIO::NcFITSIO(const char* name,const char* title) : TNamed(name,title)
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
+~~~
+**/
 
  Initialize();
 }
 /////////////////////////////////////////////////////////////////////////// 
 NcFITSIO::~NcFITSIO()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  Reset();
 }
 ///////////////////////////////////////////////////////////////////////////
 NcFITSIO::NcFITSIO(const NcFITSIO& q) : TNamed(q)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 
  Initialize();
  fFilename=q.fFilename;
@@ -318,7 +337,11 @@ NcFITSIO::NcFITSIO(const NcFITSIO& q) : TNamed(q)
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::Initialize()
 {
-// Initialization of all parameters 
+/**
+~~~
+// Initialization of all parameters.
+~~~
+**/
 
  fFilename="";           // The (full path) name of the FITS file on the computer system
  fFilenameFilter="";     // The FITS filename with the HDU selection filter
@@ -341,7 +364,11 @@ void NcFITSIO::Initialize()
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::Reset()
 {
-// Reset all allocated memory and parameters
+/**
+~~~
+// Reset all allocated memory and parameters.
+~~~
+**/
 
  if (fKeyNames)
  {
@@ -385,6 +412,8 @@ void NcFITSIO::Reset()
 /////////////////////////////////////////////////////////////////////////// 
 Bool_t NcFITSIO::OpenInputFile(TString specs)
 {
+/**
+~~~
 // Open a FITS input file and indicate success (kTRUE) or failure (kFALSE)
 // via the boolean return value.
 //
@@ -410,6 +439,8 @@ Bool_t NcFITSIO::OpenInputFile(TString specs)
 //    For example "$(ROOTSYS)/tutorials/fitsio/sample1.fits".
 // 2) A specifiec HDU can also be selected by invoking the memberfunction SelectHDU()
 //    after a FITS input file has been opened.
+~~~
+**/
 
  TString file=gSystem->ExpandPathName(specs.Data());
    
@@ -438,7 +469,11 @@ Bool_t NcFITSIO::OpenInputFile(TString specs)
 ///////////////////////////////////////////////////////////////////////////
 TString NcFITSIO::StripFilter(TString filename) const
 {
+/**
+~~~
 // Strip the (optional) HDU filter selection string from the filename.
+~~~
+**/
 
  TString s=filename;
  Int_t idx=s.Index("[",1,0,TString::kExact);
@@ -449,8 +484,12 @@ TString NcFITSIO::StripFilter(TString filename) const
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcFITSIO::LoadHeaderInfo()
 {
+/**
+~~~
 // Load the header records of the current HDU and indicate success (kTRUE) or failure (kFALSE)
 // via the boolean return value.
+~~~
+**/
 
  Bool_t good=kTRUE;
  fInput=0;
@@ -737,6 +776,8 @@ Bool_t NcFITSIO::LoadHeaderInfo()
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcFITSIO::SelectHDU(TString extname)
 {
+/**
+~~~
 // Select the HDU with the specified extension name and indicate success (kTRUE)
 // or failure (kFALSE) via the boolean return value.
 //
@@ -753,6 +794,8 @@ Bool_t NcFITSIO::SelectHDU(TString extname)
 //    https://heasarc.gsfc.nasa.gov/docs/software/fitsio/c/c_user/cfitsio.html
 //
 // The default value is extname="[0]", which is the primary HDU.
+~~~
+**/
 
  fFilenameFilter=fFilename;
  fFilenameFilter+=extname;
@@ -776,6 +819,8 @@ Bool_t NcFITSIO::SelectHDU(TString extname)
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcFITSIO::SelectHDU(Int_t extnumber)
 {
+/**
+~~~
 // Select the HDU with the specified extension number and indicate success (kTRUE)
 // or failure (kFALSE) via the boolean return value.
 //
@@ -785,6 +830,8 @@ Bool_t NcFITSIO::SelectHDU(Int_t extnumber)
 //
 // For a more elaborate HDU selection, please refer to the SelectHDU()
 // memberfunction that selects the HDU via a name specification.
+~~~
+**/
 
  TString extname="[";
  extname+=extnumber;
@@ -797,6 +844,8 @@ Bool_t NcFITSIO::SelectHDU(Int_t extnumber)
 ///////////////////////////////////////////////////////////////////////////
 TString NcFITSIO::GetKeywordValue(TString keyname,Int_t mode)
 {
+/**
+~~~
 // Provide a TString with the value of the HDU keyword with the specified name.
 // 
 // If no match is found, an empty string is returned.
@@ -812,6 +861,8 @@ TString NcFITSIO::GetKeywordValue(TString keyname,Int_t mode)
 //    For example, the HDU keyword value 'Zenith  ' will be provided as TString="Zenith".
 // 2) Conversion from a TString to a numerical value can easily be obtained
 //    via the TString memberfunctions Atof(), Atoi() and Atoll().
+~~~
+**/
 
 
  TString value="";
@@ -833,7 +884,12 @@ TString NcFITSIO::GetKeywordValue(TString keyname,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcFITSIO::IsTable() const
 {
+/**
+~~~
 // Indicate whether the current HDU is a Table (kTRUE) or not (kFALSE).
+~~~
+**/
+
 
  Bool_t flag=kFALSE;
  if (fType==kTableHDU) flag=kTRUE;
@@ -843,7 +899,11 @@ Bool_t NcFITSIO::IsTable() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetHDUCount() const
 {
+/**
+~~~
 // Provide the total number of HDUs present in the FITS file.
+~~~
+**/
 
  Int_t nhdus=0;
 
@@ -879,20 +939,30 @@ Int_t NcFITSIO::GetHDUCount() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableNrows() const
 {
-// Provide the number of rows in the table
+/**
+~~~
+// Provide the number of rows in the table.
+~~~
+**/
 
  return fNrows;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableNcolumns() const
 {
-// Provide the number of columns in the table
+/**
+~~~
+// Provide the number of columns in the table.
+~~~
+**/
 
  return fNcolumns;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetColumnNumber(TString colname,Int_t mode) const
 {
+/**
+~~~
 // Provide the number of the first table column that matches the provided name pattern.
 // Column numbers start at 1.
 // 
@@ -902,6 +972,8 @@ Int_t NcFITSIO::GetColumnNumber(TString colname,Int_t mode) const
 //        1 --> The column name only has to contain the provided "colname" pattern.
 //
 // The default value is mode=0.
+~~~
+**/
    
  Int_t colnum=0;
  Int_t match=0;
@@ -920,10 +992,14 @@ Int_t NcFITSIO::GetColumnNumber(TString colname,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 TString NcFITSIO::GetColumnName(Int_t colnum) const
 {
+/**
+~~~
 // Provide the name of the table column with number "colnum".
 // Column numbers start at 1.
 //
 // In case of inconsistent data an empty string is returned.
+~~~
+**/
 
  TString name="";
 
@@ -935,6 +1011,8 @@ TString NcFITSIO::GetColumnName(Int_t colnum) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,Int_t col,Int_t layer)
 {
+/**
+~~~
 // Provide the real number value of the cell (row,col,layer) in a table.
 // A table element is identified via the usual (row,column) indication.
 // If the table element contains an array of data, the array components are
@@ -947,6 +1025,8 @@ Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,Int_t col,Int_t layer)
 // The default value is layer=1.
 //
 // In case of inconsistent data the value 0 is provided with 0 as return argument.
+~~~
+**/
 
  TArrayD arr;
  Int_t ndim=GetTableCell(arr,row,col);
@@ -963,6 +1043,8 @@ Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,Int_t col,Int_t layer)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,TString colname,Int_t layer,Int_t mode)
 {
+/**
+~~~
 // Provide the real number value of the cell matching the row number "row",
 // column name (pattern) "colname" and layer number "layer" in a table.
 // A table element is identified via the usual (row,column) indication.
@@ -979,6 +1061,8 @@ Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,TString colname,Int_t layer
 // The default values are layer=1 and mode=0.
 //
 // In case of inconsistent data the value 0 is provided with 0 as return argument.
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -989,12 +1073,16 @@ Int_t NcFITSIO::GetTableCell(Double_t &val,Int_t row,TString colname,Int_t layer
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide via array "arr" the real number value(s) of the cell (row,col) in a table.
 // The row and column counting starts at 1.
 //
 // The integer return argument represents the number of array elements.
 //
 // In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+~~~
+**/
 
  arr.Set(0);
 
@@ -1067,6 +1155,8 @@ Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,TString colname,Int_t mode)
 {
+/**
+~~~
 // Provide via array "arr" the real number value(s) of the cell matching the row number "row"
 // and column name (pattern) "colname" in a table.
 // The row and column counting starts at 1.
@@ -1080,6 +1170,8 @@ Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,TString colname,Int_t mode)
 // The integer return argument represents the number of array elements.
 //
 // In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -1090,6 +1182,8 @@ Int_t NcFITSIO::GetTableCell(TArrayD &arr,Int_t row,TString colname,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,Int_t col,Int_t layer)
 {
+/**
+~~~
 // Provide the data item from the cell (row,col,layer) in a table as a TString.
 // A table element is identified via the usual (row,column) indication.
 // If the table element contains an array of data, the array components are
@@ -1108,6 +1202,8 @@ Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,Int_t col,Int_t layer)
 // 1) Any table data item can be obtained as a TString.
 // 2) Conversion from a TString to a numerical value can easily be obtained
 //    via the TString memberfunctions Atof(), Atoi() and Atoll().
+~~~
+**/
 
  TString* arr=0;
  Int_t ndim=GetTableCell(arr,row,col);
@@ -1127,6 +1223,8 @@ Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,Int_t col,Int_t layer)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,TString colname,Int_t layer,Int_t mode)
 {
+/**
+~~~
 // Provide the data item of the cell matching the row number "row",
 // column name (pattern) "colname" and layer number "layer" in a table as a TString.
 // A table element is identified via the usual (row,column) indication.
@@ -1149,6 +1247,8 @@ Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,TString colname,Int_t layer,
 // 1) Any table data item can be obtained as a TString.
 // 2) Conversion from a TString to a numerical value can easily be obtained
 //    via the TString memberfunctions Atof(), Atoi() and Atoll().
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -1159,6 +1259,8 @@ Int_t NcFITSIO::GetTableCell(TString &str,Int_t row,TString colname,Int_t layer,
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide via the TString array "arr" the content(s) of the cell (row,col) in a table.
 // The row and column counting starts at 1.
 //
@@ -1175,6 +1277,8 @@ Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,Int_t col)
 //    the user should invoke the "delete[]" operator when the array is not needed anymore.
 // 4) To obtain an array with automatic memory management and size indication, the user is
 //    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+~~~
+**/
 
  if (!arr) arr=new TString[1];
  arr[0]="";
@@ -1255,6 +1359,8 @@ Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,TString colname,Int_t mode)
 {
+/**
+~~~
 // Provide via the TString array "arr" the content(s) of the cell matching the row number "row"
 // and column name (pattern) "colname" in a table.
 // The row and column counting starts at 1.
@@ -1277,6 +1383,8 @@ Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,TString colname,Int_t mode)
 //    the user should invoke the "delete[]" operator when the array is not needed anymore.
 // 4) To obtain an array with automatic memory management and size indication, the user is
 //    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -1287,6 +1395,8 @@ Int_t NcFITSIO::GetTableCell(TString* &arr,Int_t row,TString colname,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide via an array of TObjString objects the content(s) of the cell (row,col) in a table.
 // The row and column counting starts at 1.
 //
@@ -1299,6 +1409,8 @@ Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,Int_t col)
 // 1) Any table data item can be obtained as a TString.
 // 2) Conversion from a TString to a numerical value can easily be obtained
 //    via the TString memberfunctions Atof(), Atoi() and Atoll().
+~~~
+**/
 
  TString* temp=0;
  Int_t ndim=GetTableCell(temp,row,col);
@@ -1321,6 +1433,8 @@ Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,TString colname,Int_t mode)
 {
+/**
+~~~
 // Provide via an array of TObjString objects the content(s) of the cell matching the row number "row"
 // and column name (pattern) "colname" in a table.
 // The row and column counting starts at 1.
@@ -1339,6 +1453,8 @@ Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,TString colname,Int_t mode
 // 1) Any table data item can be obtained as a TString.
 // 2) Conversion from a TString to a numerical value can easily be obtained
 //    via the TString memberfunctions Atof(), Atoi() and Atoll().
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -1349,6 +1465,8 @@ Int_t NcFITSIO::GetTableCell(TObjArray &arr,Int_t row,TString colname,Int_t mode
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableColumn(TArrayD &arr,Int_t col,Int_t rstart,Int_t rend,Int_t layer)
 {
+/**
+~~~
 // Provide via array "arr" the real number values for row=[rstart,rend], column=col
 // and layer number "layer".
 // A table element is identified via the usual (row,column) indication.
@@ -1368,6 +1486,8 @@ Int_t NcFITSIO::GetTableColumn(TArrayD &arr,Int_t col,Int_t rstart,Int_t rend,In
 // The integer return argument represents the number of array elements.
 //
 // In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+~~~
+**/
 
  if (!rend) rend=fNrows;
 
@@ -1402,6 +1522,8 @@ Int_t NcFITSIO::GetTableColumn(TArrayD &arr,Int_t col,Int_t rstart,Int_t rend,In
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableColumn(TArrayD &arr,TString colname,Int_t rstart,Int_t rend,Int_t layer,Int_t mode)
 {
+/**
+~~~
 // Provide via array "arr" the real number values for row=[rstart,rend], the column
 // for which the name matches the name (pattern) "colname" and the layer number "layer".
 // A table element is identified via the usual (row,column) indication.
@@ -1423,6 +1545,8 @@ Int_t NcFITSIO::GetTableColumn(TArrayD &arr,TString colname,Int_t rstart,Int_t r
 // The integer return argument represents the number of array elements.
 //
 // In case of inconsistent data an empty array "arr" is provided with 0 as return argument.
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -1433,6 +1557,8 @@ Int_t NcFITSIO::GetTableColumn(TArrayD &arr,TString colname,Int_t rstart,Int_t r
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableColumn(TString* &arr,Int_t col,Int_t rstart,Int_t rend,Int_t layer)
 {
+/**
+~~~
 // Provide via the TString array "arr" the contents for row=[rstart,rend], column=col
 // and layer number "layer".
 // A table element is identified via the usual (row,column) indication.
@@ -1462,6 +1588,8 @@ Int_t NcFITSIO::GetTableColumn(TString* &arr,Int_t col,Int_t rstart,Int_t rend,I
 //    the user should invoke the "delete[]" operator when the array is not needed anymore.
 // 4) To obtain an array with automatic memory management and size indication, the user is
 //    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+~~~
+**/
 
  if (!rend) rend=fNrows;
 
@@ -1501,6 +1629,8 @@ Int_t NcFITSIO::GetTableColumn(TString* &arr,Int_t col,Int_t rstart,Int_t rend,I
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableColumn(TString* &arr,TString colname,Int_t rstart,Int_t rend,Int_t layer,Int_t mode)
 {
+/**
+~~~
 // Provide via the TString array "arr" the contents for row=[rstart,rend], the column
 // for which the name matches the name (pattern) "colname" and layer number "layer".
 // A table element is identified via the usual (row,column) indication.
@@ -1532,6 +1662,8 @@ Int_t NcFITSIO::GetTableColumn(TString* &arr,TString colname,Int_t rstart,Int_t 
 //    the user should invoke the "delete[]" operator when the array is not needed anymore.
 // 4) To obtain an array with automatic memory management and size indication, the user is
 //    referred to the corresponding GetTableCell(TObjArray,...) memberfunction.
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -1542,6 +1674,8 @@ Int_t NcFITSIO::GetTableColumn(TString* &arr,TString colname,Int_t rstart,Int_t 
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableColumn(TObjArray &arr,Int_t col,Int_t rstart,Int_t rend,Int_t layer)
 {
+/**
+~~~
 // Provide via an array of TObjString objects the contents for row=[rstart,rend], column=col
 // and layer number "layer".
 // A table element is identified via the usual (row,column) indication.
@@ -1567,6 +1701,8 @@ Int_t NcFITSIO::GetTableColumn(TObjArray &arr,Int_t col,Int_t rstart,Int_t rend,
 // 1) Any table data item can be obtained as a TString.
 // 2) Conversion from a TString to a numerical value can easily be obtained
 //    via the TString memberfunctions Atof(), Atoi() and Atoll().
+~~~
+**/
 
  if (!rend) rend=fNrows;
 
@@ -1602,6 +1738,8 @@ Int_t NcFITSIO::GetTableColumn(TObjArray &arr,Int_t col,Int_t rstart,Int_t rend,
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetTableColumn(TObjArray &arr,TString colname,Int_t rstart,Int_t rend,Int_t layer,Int_t mode)
 {
+/**
+~~~
 // Provide via an array of TObjString objects the contents for row=[rstart,rend], the column
 // for which the name matches the name (pattern) "colname" and layer number "layer".
 // A table element is identified via the usual (row,column) indication.
@@ -1629,6 +1767,8 @@ Int_t NcFITSIO::GetTableColumn(TObjArray &arr,TString colname,Int_t rstart,Int_t
 // 1) Any table data item can be obtained as a TString.
 // 2) Conversion from a TString to a numerical value can easily be obtained
 //    via the TString memberfunctions Atof(), Atoi() and Atoll().
+~~~
+**/
 
  Int_t col=GetColumnNumber(colname,mode);
 
@@ -1639,6 +1779,8 @@ Int_t NcFITSIO::GetTableColumn(TObjArray &arr,TString colname,Int_t rstart,Int_t
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetImageDimension(Int_t i) const
 {
+/**
+~~~
 // Provide the dimension of an N-dimensional Image data unit.
 //
 // Input argument :
@@ -1649,6 +1791,8 @@ Int_t NcFITSIO::GetImageDimension(Int_t i) const
 // In case of inconsistent data the value 0 is returned.
 //
 // The default value is i=0.
+~~~
+**/
 
  if (!fSizes) return 0;
 
@@ -1665,6 +1809,8 @@ Int_t NcFITSIO::GetImageDimension(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetImageLayer(TASImage &im,Int_t layer,Double_t* thres,Double_t max)
 {
+/**
+~~~
 // Provide the specified layer as a displayable image.
 // The return value indicates the number of pixels in the image.
 // 
@@ -1687,6 +1833,8 @@ Int_t NcFITSIO::GetImageLayer(TASImage &im,Int_t layer,Double_t* thres,Double_t 
 // In case of inconsistent data, an empty image and a return value 0 is provided.
 //
 // The default values are layer=1, thres=0 and max=-1.
+~~~
+**/
 
  // Set the image empty
  im.SetImage(0,0);
@@ -1709,6 +1857,8 @@ Int_t NcFITSIO::GetImageLayer(TASImage &im,Int_t layer,Double_t* thres,Double_t 
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetImageLayer(TMatrixD &m,Int_t layer,Double_t* thres,Double_t max)
 {
+/**
+~~~
 // Provide the specified layer as a 2-dimensional matrix.
 // The return value indicates the number of matrix elements.
 // 
@@ -1738,6 +1888,8 @@ Int_t NcFITSIO::GetImageLayer(TMatrixD &m,Int_t layer,Double_t* thres,Double_t m
 // In case of inconsistent data, an empty matrix and a return value 0 is provided.
 //
 // The default values are layer=1, thres=0 and max=-1.
+~~~
+**/
 
  // Clear the matrix elements
  m.Clear();
@@ -1770,6 +1922,8 @@ Int_t NcFITSIO::GetImageLayer(TMatrixD &m,Int_t layer,Double_t* thres,Double_t m
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::GetImageLayer(TH2D &his,Int_t layer,Double_t* thres,Double_t max)
 {
+/**
+~~~
 // Provide the specified layer as a 2-dimensional histogram.
 // The return value indicates the number of histogram entries.
 // 
@@ -1790,6 +1944,8 @@ Int_t NcFITSIO::GetImageLayer(TH2D &his,Int_t layer,Double_t* thres,Double_t max
 // In case of inconsistent data, an empty histogram and a return value 0 is provided.
 //
 // The default values are layer=1, thres=0 and max=-1.
+~~~
+**/
 
  // Clear the histogram
  his.Reset();
@@ -1824,6 +1980,8 @@ Int_t NcFITSIO::GetImageLayer(TH2D &his,Int_t layer,Double_t* thres,Double_t max
 ///////////////////////////////////////////////////////////////////////////
 UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,TArrayI ilast,TArrayI incr)
 {
+/**
+~~~
 // Copy (a subset of) the pixel contents of an N-dimensional Image data unit into a linear data array.
 // The return argument is the number of stored pixels.
 //
@@ -1850,6 +2008,8 @@ UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,TArrayI ilast,TArrayI
 // Note : The incr[i] values must always be larger than 0.
 //
 // In case of inconsistent data, an empty array and a return value 0 is provided.
+~~~
+**/
 
  arr.Set(0);
 
@@ -1930,6 +2090,8 @@ UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,TArrayI ilast,TArrayI
 ///////////////////////////////////////////////////////////////////////////
 UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,UInt_t npix)
 {
+/**
+~~~
 // Copy (a subset of) the pixel contents of an N-dimensional Image data unit into a linear data array.
 // The return argument is the number of stored pixels.
 //
@@ -1952,6 +2114,8 @@ UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,UInt_t npix)
 //           ifirst[0]=1, ifirst[1]=2, ifirst[2]=3 and npix=NAXIS1.
 //
 // In case of inconsistent data, an empty array and a return value 0 is provided.
+~~~
+**/
 
  arr.Set(0);
 
@@ -2025,6 +2189,8 @@ UInt_t NcFITSIO::GetImageArray(TArrayD &arr,TArrayI ifirst,UInt_t npix)
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t cend)
 {
+/**
+~~~
 // List table information for row=[rstart,rend], column=[cstart,cend] and layer=1.
 //
 // A table element is identified via the usual (row,column) indication.
@@ -2045,6 +2211,8 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
 // Note : In general a column width of 10 is sufficient.
 //
 // The default values are width=-10, rstart=1, rend=0, cstart=1 and cend=0.
+~~~
+**/
    
  if (fType != kTableHDU)
  {
@@ -2173,7 +2341,11 @@ void NcFITSIO::ListTable(Int_t width,Int_t rstart,Int_t rend,Int_t cstart,Int_t 
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::ListHDUHeader() const
 {
+/**
+~~~
 // List the header information (also called Metadata) of the current HDU record.
+~~~
+**/
 
  cout << endl;
  cout << " *" << ClassName() << "::ListHDUHeader* The current HDU header record " << fExtensionName  << endl;
@@ -2189,6 +2361,8 @@ void NcFITSIO::ListHDUHeader() const
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::ListFileHeader(Int_t mode) const
 {
+/**
+~~~
 // List the header information (also called Metadata) of the FITS file.
 //
 // Input argument :
@@ -2197,6 +2371,8 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
 //        1 --> For each HDU also the header information is provided
 //
 // The default value is mode=1.
+~~~
+**/
 
  // Open a local mode of the FITS file without any filters and start at the primary HDU
  fitsfile* fp=0;
@@ -2348,9 +2524,13 @@ void NcFITSIO::ListFileHeader(Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcFITSIO::LoadLayer(TArrayD &arr,Int_t layer)
 {
+/**
+~~~
 // Internal memberfunction to load the pixels of an image layer.
 // The layer counting starts at 1.
 // The return argument is the number of stored pixels.
+~~~
+**/
 
  arr.Set(0);
 
@@ -2407,8 +2587,12 @@ Int_t NcFITSIO::LoadLayer(TArrayD &arr,Int_t layer)
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::ApplyPixelThreshold(TArrayD &arr,Double_t thres)
 {
+/**
+~~~
 // Internal memberfunction to apply a threshold to the Image pixel values.
 // All pixels with a value below "thres" will get the value 0.
+~~~
+**/
 
  UInt_t npix=arr.GetSize();
 
@@ -2420,7 +2604,11 @@ void NcFITSIO::ApplyPixelThreshold(TArrayD &arr,Double_t thres)
 ///////////////////////////////////////////////////////////////////////////
 void NcFITSIO::RescalePixels(TArrayD &arr,Double_t max)
 {
+/**
+~~~
 // Internal memberfunction to rescale the Image pixel values to [0,max].
+~~~
+**/
 
  UInt_t npix=arr.GetSize();
 
@@ -2465,10 +2653,14 @@ void NcFITSIO::RescalePixels(TArrayD &arr,Double_t max)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcFITSIO::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers when adding objects in case the container owns the objects.
+~~~
+**/
 
  NcFITSIO* q=new NcFITSIO(*this);
  if (name)

@@ -1,6 +1,6 @@
 #ifndef NcAttrib_h
 #define NcAttrib_h
-// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2003 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TArrayF.h"

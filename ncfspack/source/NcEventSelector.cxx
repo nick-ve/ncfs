@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2007 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcEventSelector
+~~~
 // Class NcEventSelector
 // TTask based processor to perform generic event selection.
 // This class is derived from NcAstrolab in order to also provide event
@@ -142,16 +146,23 @@
 //
 //--- Author: Nick van Eijndhoven 17-sep-2007 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 16, 2023  15:04Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcEventSelector.h"
 #include "Riostream.h"
 
-ClassImp(NcEventSelector) // Class implementation to enable ROOT I/O
+ClassImp(NcEventSelector); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 NcEventSelector::NcEventSelector(const char* name,const char* title) : NcAstrolab(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fFirst=1;
  fEvt=0;
@@ -212,7 +223,11 @@ NcEventSelector::NcEventSelector(const char* name,const char* title) : NcAstrola
 ///////////////////////////////////////////////////////////////////////////
 NcEventSelector::~NcEventSelector()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fParams)
  {
@@ -234,7 +249,11 @@ NcEventSelector::~NcEventSelector()
 ///////////////////////////////////////////////////////////////////////////
 NcEventSelector::NcEventSelector(const NcEventSelector& q) : NcAstrolab(q)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 
  fFirst=1;
  fEvt=0;
@@ -280,6 +299,8 @@ NcEventSelector::NcEventSelector(const NcEventSelector& q) : NcAstrolab(q)
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::SetSelector(TString type,Int_t flag)
 {
+/**
+~~~
 // Specify the selection types to be used.
 // The various types my be selected in a cumulative way by specification
 // of the input argument "type".
@@ -306,6 +327,8 @@ void NcEventSelector::SetSelector(TString type,Int_t flag)
 // The default value is flag=1.
 //
 // Note : In the default constructor all selection types are de-activated.
+~~~
+**/
 
  if (type=="track") fTrackflag=flag;
  if (type=="event") fEventflag=flag;
@@ -314,6 +337,8 @@ void NcEventSelector::SetSelector(TString type,Int_t flag)
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::SetLogic(TString type)
 {
+/**
+~~~
 // Set type of the decision logic.
 //
 // type = "and"  ==> Event selection based on logical "and"
@@ -322,6 +347,8 @@ void NcEventSelector::SetLogic(TString type)
 //        "nor"  ==> Event selection based on logical "nor"
 //
 // Note : In the default constructor the decision logic is set to "unknown".
+~~~
+**/
 
  if (type=="and") fLogic=1;
  if (type=="or") fLogic=2;
@@ -331,6 +358,8 @@ void NcEventSelector::SetLogic(TString type)
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::UseTracks(TString name,Int_t n)
 {
+/**
+~~~
 // Specification of the track names to be used for the investigation
 // of individual track observables and matching with external objects.
 //
@@ -354,6 +383,8 @@ void NcEventSelector::UseTracks(TString name,Int_t n)
 //
 // This will use the first 5 IceDwalk, the first 2 IceLinefit and all the
 // Pythia tracks which are encountered in the event structure.
+~~~
+**/
 
  if (!fUseNames)
  {
@@ -386,12 +417,16 @@ void NcEventSelector::UseTracks(TString name,Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::SetAstroMatch(Double_t da,Double_t dt,TString dir)
 {
+/**
+~~~
 // Set the parameters for the matching of reference objects.
 //
 // da  : Maximum angular difference in degrees
 // dt  : Maximum absolute time difference in seconds
 // dir : "to"   ==> Check the location the track (or event) points to
 //       "from" ==> Check the location the track (or event) originates from
+~~~
+**/
 
  fAstroDa=fabs(da);
  fAstroDt=fabs(dt);
@@ -411,6 +446,8 @@ void NcEventSelector::SetAstroMatch(Double_t da,Double_t dt,TString dir)
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::SetRange(TString type,TString obs,Double_t low,Double_t up)
 {
+/**
+~~~
 // Set range for the specified observable.
 //
 // type : Selection type specifier (e.g. "track" or "event").
@@ -435,6 +472,8 @@ void NcEventSelector::SetRange(TString type,TString obs,Double_t low,Double_t up
 // Note : When up<low the specified observable will not be used for selection.
 //
 // In the default constructor all observables are de-activated for selection.
+~~~
+**/
 
  if (!fParams) fParams=new NcDevice();
 
@@ -620,6 +659,8 @@ void NcEventSelector::SetRange(TString type,TString obs,Double_t low,Double_t up
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::SetRange(TString type,TString obs,TString name,Int_t nlow,Int_t nup)
 {
+/**
+~~~
 // Set range for the specified observable.
 //
 // type  : Selection type specifier (e.g. "track" or "event").
@@ -643,6 +684,8 @@ void NcEventSelector::SetRange(TString type,TString obs,TString name,Int_t nlow,
 // 2) When nup<nlow the specified observable will not be used for selection.
 //
 // In the default constructor all observables are de-activated for selection.
+~~~
+**/
 
  if (!fParams) fParams=new NcDevice();
 
@@ -723,7 +766,11 @@ void NcEventSelector::SetRange(TString type,TString obs,TString name,Int_t nlow,
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the event selection procedures.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));
@@ -803,11 +850,15 @@ void NcEventSelector::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::Track(Int_t mode)
 {
+/**
+~~~
 // Check criteria for individual track observables.
 // This memberfunction serves also the track direction checking
 // for external (astrophysical) objects.
 // mode = 0 : Track observables (e.g. P, Pt etc...) are checked
 //        1 : Track direction is checked w.r.t. external (astrophysical) objects
+~~~
+**/
 
  if (abs(fLogic)==1) fSelect=0; // Selections are made in logical "(n)and"
 
@@ -986,7 +1037,11 @@ void NcEventSelector::Track(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::Event()
 {
+/**
+~~~
 // Check criteria for total event observables.
+~~~
+**/
 
  if (abs(fLogic)==1) fSelect=0; // Selections are made in logical "(n)and"
 
@@ -1157,7 +1212,11 @@ void NcEventSelector::Event()
 ///////////////////////////////////////////////////////////////////////////
 void NcEventSelector::Astro()
 {
+/**
+~~~
 // Check for matches with external objects.
+~~~
+**/
 
  if (abs(fLogic)==1) fSelect=0; // Selections are made in logical "(n)and"
 
@@ -1194,10 +1253,14 @@ void NcEventSelector::Astro()
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcEventSelector::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers when adding objects in case the container owns the objects.
+~~~
+**/
 
  NcEventSelector* sel=new NcEventSelector(*this);
  if (name)

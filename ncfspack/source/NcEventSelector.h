@@ -1,13 +1,13 @@
 #ifndef NcEventSelector_h
 #define NcEventSelector_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2007 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcEventSelector.h 128 2016-06-13 10:52:31Z nickve $
 
 #include "NcJob.h"
 #include "NcAstrolab.h"
 #include "NcEvent.h"
+
+/** TTask derived class to perform generic event selection. **/
 
 class NcEventSelector : public NcAstrolab
 {

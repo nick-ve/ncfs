@@ -1,9 +1,7 @@
 #ifndef NcHelix_h
 #define NcHelix_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2004 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcHelix.h 5 2010-03-19 10:10:02Z nickve $
 
 #include "THelix.h"
 #include "TObjArray.h"
@@ -12,6 +10,8 @@
 #include "Nc3Vector.h"
 #include "NcTrack.h"
 #include "NcEvent.h"
+
+/** Representation and extrapolation of NcTracks in a magnetic field. **/
  
 class NcHelix : public THelix
 {
@@ -40,8 +40,8 @@ class NcHelix : public THelix
   Float_t fMsize;      // The size of the marker
   Int_t fMcol;         // The colour of the marker
   Int_t fEnduse;       // Flag to denote tracks endpoint usage
-  TObjArray* fCurves;  //! Temp. storage for the curves on the drawing
-  NcPosition* fExt;    //! The extrapolation result
+  TObjArray* fCurves;  //!< Temp. storage for the curves on the drawing
+  NcPosition* fExt;    //!< The extrapolation result
  
  ClassDef(NcHelix,1) // Representation and extrapolation of NcTracks in a magnetic field.
 };

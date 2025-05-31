@@ -1,10 +1,8 @@
 #ifndef NcJet_h
 #define NcJet_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcJet.h 122 2016-05-19 18:01:23Z nickve $
- 
 #include <cstdlib>
 #include <math.h>
  
@@ -13,6 +11,8 @@
 
 #include "Nc4Vector.h"
 #include "NcTrack.h"
+
+/** Creation and investigation of a jet of particle tracks. **/
  
 class NcJet : public TNamed,public Nc4Vector
 {
@@ -85,7 +85,7 @@ class NcJet : public TNamed,public Nc4Vector
   Int_t fTrackCopy;                      // Flag to denote creation of private copies in fTracks
   Int_t fUserId;                         // The user defined identifier
   NcPositionObj* fRef;                   // The reference-point of the jet
-  TObjArray* fSelected;                  //! Temp. array to hold user selected or ordered objects
+  TObjArray* fSelected;                  //!< Temp. array to hold user selected or ordered objects
   Float_t fEscale;                       // The scale of the energy/momentum units of the jet
  
  ClassDef(NcJet,8) // Creation and investigation of a jet of particle tracks.

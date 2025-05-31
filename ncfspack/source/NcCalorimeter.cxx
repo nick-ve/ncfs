@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcCalorimeter.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcCalorimeter
+~~~
 // Class NcCalorimeter
 // Description of a modular calorimeter system.
 // A generic 2D geometry is used in which a module is identified by (row,col).
@@ -69,21 +71,29 @@
 //
 //--- Author: Nick van Eijndhoven 13-jun-1997 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcCalorimeter.h"
 #include "Riostream.h"
 
-ClassImp(NcCalorimeter) // Class implementation to enable ROOT I/O
+ClassImp(NcCalorimeter); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcCalorimeter::NcCalorimeter() : NcDevice()
 {
+/**
+~~~
 // Default constructor, all parameters set to 0.
 // Create a calorimeter module matrix with fixed row and column size.
 // Note : Due to the dynamic size extension when signals are set,
 //        the  "edge modules" can NOT be marked automatically.
 //        This has to be done manually by the user via the SetEdgeOn() 
 //        memberfunction.
+~~~
+**/
+
  fNrows=0;
  fNcolumns=0;
  fSwap=0;
@@ -98,7 +108,12 @@ NcCalorimeter::NcCalorimeter() : NcDevice()
 ///////////////////////////////////////////////////////////////////////////
 NcCalorimeter::~NcCalorimeter()
 {
-// Destructor to delete memory allocated to the various arrays and matrices
+/**
+~~~
+// Destructor to delete memory allocated to the various arrays and matrices.
+~~~
+**/
+
  if (fClusters)
  {
   delete fClusters;
@@ -138,8 +153,13 @@ NcCalorimeter::~NcCalorimeter()
 ///////////////////////////////////////////////////////////////////////////
 NcCalorimeter::NcCalorimeter(Int_t nrow,Int_t ncol) : NcDevice()
 {
+/**
+~~~
 // Create a calorimeter module matrix with fixed row and column size.
 // The modules at the edges are automatically marked as "edge modules".
+~~~
+**/
+
  fNrows=nrow;
  fNcolumns=ncol;
  fClusters=0;
@@ -178,7 +198,12 @@ NcCalorimeter::NcCalorimeter(Int_t nrow,Int_t ncol) : NcDevice()
 ///////////////////////////////////////////////////////////////////////////
 NcCalorimeter::NcCalorimeter(const NcCalorimeter& c) : NcDevice(c)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fClusters=0;
  fVetos=0;
 
@@ -245,7 +270,12 @@ NcCalorimeter::NcCalorimeter(const NcCalorimeter& c) : NcDevice(c)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetNrows()
 {
-// Provide the number of rows for the calorimeter module matrix
+/**
+~~~
+// Provide the number of rows for the calorimeter module matrix.
+~~~
+**/
+
  Int_t nrows=fNrows;
  if (!fMatrix) LoadMatrix();
  if (fMatrix && !nrows) nrows=fMatrix->GetMaxRow();
@@ -254,7 +284,12 @@ Int_t NcCalorimeter::GetNrows()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetNcolumns()
 {
-// Provide the number of columns for the calorimeter module matrix
+/**
+~~~
+// Provide the number of columns for the calorimeter module matrix.
+~~~
+**/
+
  Int_t ncols=fNcolumns;
  if (!fMatrix) LoadMatrix();
  if (fMatrix && !ncols) ncols=fMatrix->GetMaxColumn();
@@ -263,7 +298,11 @@ Int_t NcCalorimeter::GetNcolumns()
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetSignal(Int_t row,Int_t col,Float_t sig)
 {
+/**
+~~~
 // Set the signal for a certain calorimeter module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -315,7 +354,11 @@ void NcCalorimeter::SetSignal(Int_t row,Int_t col,Float_t sig)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::AddSignal(Int_t row, Int_t col, Float_t sig)
 {
+/**
+~~~
 // Add the signal to a certain calorimeter module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -339,6 +382,8 @@ void NcCalorimeter::AddSignal(Int_t row, Int_t col, Float_t sig)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::AddSignal(NcCalmodule* mod)
 {
+/**
+~~~
 // Add the signal of module mod to the current calorimeter data.
 // This enables mixing of calorimeter data of various events.
 //
@@ -348,6 +393,8 @@ void NcCalorimeter::AddSignal(NcCalmodule* mod)
 //        attributes of the first module added to the corresponding (row,col)
 //        location will be taken, except for the "edge" and "dead" indicators.
 //        The latter will then both be set to 0.
+~~~
+**/
 
  if (!mod) return;
  
@@ -406,8 +453,12 @@ void NcCalorimeter::AddSignal(NcCalmodule* mod)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::Reset(Int_t row,Int_t col)
 {
+/**
+~~~
 // Reset the signal for a certain calorimeter module.
 // Note : Module position and attributes remain unchanged.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -428,6 +479,8 @@ void NcCalorimeter::Reset(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::Reset(Int_t mode)
 {
+/**
+~~~
 // Reset the signals for the complete calorimeter.
 // Normally this is done to prepare for the data of the next event.
 //
@@ -440,6 +493,8 @@ void NcCalorimeter::Reset(Int_t mode)
 //        one has to reset the NcCalorimeter object with mode=1
 //        (or explicitly delete it) before reading-in the next object
 //        in order to prevent memory leaks.
+~~~
+**/
 
  if (mode<0 || mode>1)
  {
@@ -502,6 +557,8 @@ void NcCalorimeter::Reset(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCalorimeter::GetSignal(Int_t row,Int_t col,Int_t mode)
 {
+/**
+~~~
 // Provide the signal of a certain calorimeter module.
 // In case the module was marked dead, 0 is returned.
 //
@@ -516,6 +573,8 @@ Float_t NcCalorimeter::GetSignal(Int_t row,Int_t col,Int_t mode)
 //              sigc=(signal/gain)-offset 
 //
 // The default is mode=0.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -570,7 +629,11 @@ Float_t NcCalorimeter::GetSignal(Int_t row,Int_t col,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetEdgeOn(Int_t row,Int_t col)
 {
+/**
+~~~
 // Indicate a certain calorimeter module as 'edge module'.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -609,7 +672,11 @@ void NcCalorimeter::SetEdgeOn(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetEdgeOff(Int_t row,Int_t col)
 {
+/**
+~~~
 // Indicate a certain calorimeter module as 'non-edge module'.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -637,7 +704,11 @@ void NcCalorimeter::SetEdgeOff(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetDead(Int_t row,Int_t col)
 {
-// Indicate a certain calorimeter module as 'dead module'
+/**
+~~~
+// Indicate a certain calorimeter module as 'dead module'.
+~~~
+**/
 
  // Check for (row,col) boundaries in case of a fixed size calorimeter
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -712,7 +783,11 @@ void NcCalorimeter::SetDead(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetAlive(Int_t row,Int_t col)
 {
+/**
+~~~
 // Indicate a certain calorimeter module as 'active module'.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -766,8 +841,12 @@ void NcCalorimeter::SetAlive(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetGain(Int_t row,Int_t col,Float_t gain)
 {
+/**
+~~~
 // Set the gain value for a certain calorimeter module.
 // See the memberfunction GetSignal() for a definition of the gain value.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -806,8 +885,12 @@ void NcCalorimeter::SetGain(Int_t row,Int_t col,Float_t gain)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetOffset(Int_t row,Int_t col,Float_t offset)
 {
+/**
+~~~
 // Set the offset value for a certain calorimeter module.
 // See the memberfunction GetSignal() for a definition of the offset value.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -846,7 +929,12 @@ void NcCalorimeter::SetOffset(Int_t row,Int_t col,Float_t offset)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetPosition(Int_t row,Int_t col,Float_t* vec,TString f)
 {
-// Set the position in user coordinates for a certain calorimeter module
+/**
+~~~
+// Set the position in user coordinates for a certain calorimeter module.
+~~~
+**/
+
  Nc3Vector r;
  r.SetVector(vec,f);
  SetPosition(row,col,r);
@@ -854,7 +942,11 @@ void NcCalorimeter::SetPosition(Int_t row,Int_t col,Float_t* vec,TString f)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetPosition(Int_t row,Int_t col,Nc3Vector& r)
 {
-// Set the position for a certain calorimeter module
+/**
+~~~
+// Set the position for a certain calorimeter module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -892,7 +984,11 @@ void NcCalorimeter::SetPosition(Int_t row,Int_t col,Nc3Vector& r)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetEdgeValue(Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide the value of the edge flag of a certain module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -928,7 +1024,11 @@ Int_t NcCalorimeter::GetEdgeValue(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetDeadValue(Int_t row,Int_t col)
 {
-// Provide the value of the dead flag of a certain module
+/**
+~~~
+// Provide the value of the dead flag of a certain module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -964,7 +1064,11 @@ Int_t NcCalorimeter::GetDeadValue(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetGainFlag(Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide the value of the gain flag of a certain module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -1000,7 +1104,11 @@ Int_t NcCalorimeter::GetGainFlag(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetOffsetFlag(Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide the value of the offset flag of a certain module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -1036,10 +1144,14 @@ Int_t NcCalorimeter::GetOffsetFlag(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCalorimeter::GetGain(Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide the gain value of a certain module.
 // See the memberfunction GetSignal() for a definition of the gain value.
 //
 // In case the gain value is unknown, the value 0 will be returned. 
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -1084,10 +1196,14 @@ Float_t NcCalorimeter::GetGain(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCalorimeter::GetOffset(Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide the offset value of a certain module.
 // See the memberfunction GetSignal() for a definition of the offset value.
 //
 // In case the offset value is unknown, the value 0 will be returned. 
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -1132,7 +1248,12 @@ Float_t NcCalorimeter::GetOffset(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::GetPosition(Int_t row,Int_t col,Float_t* vec,TString f)
 {
-// Return the position in user coordinates for a certain calorimeter module
+/**
+~~~
+// Return the position in user coordinates for a certain calorimeter module.
+~~~
+**/
+
  vec[0]=0;
  vec[1]=0;
  vec[2]=0;
@@ -1143,7 +1264,11 @@ void NcCalorimeter::GetPosition(Int_t row,Int_t col,Float_t* vec,TString f)
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcCalorimeter::GetPosition(Int_t row,Int_t col)
 {
+/**
+~~~
 // Access to the position of a certain calorimeter module.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -1164,7 +1289,11 @@ NcPosition* NcCalorimeter::GetPosition(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcCalorimeter::GetClusteredSignal(Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide the module signal after clustering.
+~~~
+**/
 
  // Check for (row,col) boundaries.
  if (row<1 || col<1 || (fNrows && fNcolumns && (row>fNrows || col>fNcolumns)))
@@ -1185,14 +1314,21 @@ Float_t NcCalorimeter::GetClusteredSignal(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetNsignals() const
 {
-// Provide the number of modules that contain a signal
+/**
+~~~
+// Provide the number of modules that contain a signal.
 // Note : The number of modules marked 'dead' but which had a signal
 //        are included.
+~~~
+**/
+
  return GetNhits();
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::Group(Int_t n,Int_t mode)
 {
+/**
+~~~
 // Group the individual modules into clusters.
 // Module signals of n rings around the central module will be grouped.
 // The grouping process will start with the module containing the highest signal
@@ -1206,6 +1342,8 @@ void NcCalorimeter::Group(Int_t n,Int_t mode)
 // See the docs of the memberfunctions SortM and SortA for additional details.
 //
 // Default values : n=1 mode=1.
+~~~
+**/
 
  if (mode<1 || mode>2)
  {
@@ -1273,6 +1411,8 @@ void NcCalorimeter::Group(Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SortM()
 {
+/**
+~~~
 // Order the modules with decreasing signal by looping over the (row,col) grid
 // of the matrix.
 // Modules which were declared as "Dead" will be rejected.
@@ -1298,6 +1438,8 @@ void NcCalorimeter::SortM()
 // ---------------
 // * In case of a very high occupancy, there might be a slight effect on the
 //   cluster signals depending on the geometrical location in the detector matrix.
+~~~
+**/
 
  if (fOrdered)
  {
@@ -1357,6 +1499,8 @@ void NcCalorimeter::SortM()
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SortA()
 {
+/**
+~~~
 // Order the modules with decreasing signal by looping over the linear array
 // of fired modules.
 // Modules which were declared as "Dead" will be rejected.
@@ -1382,16 +1526,22 @@ void NcCalorimeter::SortA()
 //   of the resulting cluster signal.
 // * This method might produce results depending on the filling
 //   order of the matrix modules.
+~~~
+**/
 
  SortHits();
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::AddRing(Int_t row, Int_t col, Int_t n)
 {
+/**
+~~~
 // Add module signals of 1 ring around (row,col) to current cluster.
 // The gain etc... corrected module signals will be used in this process.
 // The parameter n denotes the maximum number of rings around cluster center.
 // Note : This function is used recursively.
+~~~
+**/
 
  if (!fMatrix) return;
 
@@ -1425,7 +1575,12 @@ void NcCalorimeter::AddRing(Int_t row, Int_t col, Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetNclusters() const
 {
-// Provide the number of clusters
+/**
+~~~
+// Provide the number of clusters.
+~~~
+**/
+
  Int_t nclu=0;
  if (fClusters) nclu=fClusters->GetEntries();
  return nclu;
@@ -1433,8 +1588,12 @@ Int_t NcCalorimeter::GetNclusters() const
 ///////////////////////////////////////////////////////////////////////////
 NcCalcluster* NcCalorimeter::GetCluster(Int_t j) const
 {
-// Provide cluster number j
+/**
+~~~
+// Provide cluster number j.
 // Note : j=1 denotes the first cluster
+~~~
+**/
 
  if (!fClusters) return 0;
 
@@ -1452,8 +1611,12 @@ NcCalcluster* NcCalorimeter::GetCluster(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 NcCalmodule* NcCalorimeter::GetModule(Int_t j) const
 {
-// Provide 'fired' module number j
+/**
+~~~
+// Provide 'fired' module number j.
 // Note : j=1 denotes the first 'fired' module
+~~~
+**/
 
  NcCalmodule* m=(NcCalmodule*)GetHit(j);
  return m;
@@ -1461,8 +1624,12 @@ NcCalmodule* NcCalorimeter::GetModule(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 NcCalmodule* NcCalorimeter::GetModule(Int_t row,Int_t col)
 {
+/**
+~~~
 // Provide access to module (row,col).
 // Note : first module is at (1,1).
+~~~
+**/
 
  NcCalmodule* m=0;
  if (!fMatrix) LoadMatrix();
@@ -1472,11 +1639,15 @@ NcCalmodule* NcCalorimeter::GetModule(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 TH2F* NcCalorimeter::DrawModules(Float_t thresh,Int_t mode)
 {
+/**
+~~~
 // Provide a lego plot of the module signals.
 // The input parameter mode (default mode=0) has the same meaning as
 // specified in the memberfunction GetSignal(row,col,mode).
 // Only modules with a (corrected) signal value above the threshold
 // (default thresh=0) will be displayed.
+~~~
+**/
 
  Int_t nrows=fNrows;
  Int_t ncols=fNcolumns;
@@ -1526,9 +1697,13 @@ TH2F* NcCalorimeter::DrawModules(Float_t thresh,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 TH2F* NcCalorimeter::DrawClusters(Float_t thresh)
 {
+/**
+~~~
 // Provide a lego plot of the cluster signals.
 // Only clusters with a signal value above the threshold (default thresh=0)
 // will be displayed.
+~~~
+**/
 
  Int_t nrows=fNrows;
  Int_t ncols=fNcolumns;
@@ -1574,7 +1749,11 @@ TH2F* NcCalorimeter::DrawClusters(Float_t thresh)
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::Ungroup()
 {
-// Set the module signals back to the non-clustered situation
+/**
+~~~
+// Set the module signals back to the non-clustered situation.
+~~~
+**/
 
  if (!fMatrix) LoadMatrix();
 
@@ -1596,7 +1775,12 @@ void NcCalorimeter::Ungroup()
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::AddVetoSignal(NcSignal& s)
 {
+/**
+~~~
 // Associate an (extrapolated) NcSignal as veto to the calorimeter.
+~~~
+**/
+
  if (!fVetos)
  {
   fVetos=new TObjArray();
@@ -1610,7 +1794,12 @@ void NcCalorimeter::AddVetoSignal(NcSignal& s)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetNvetos() const
 {
+/**
+~~~
 // Provide the number of veto signals associated to the calorimeter.
+~~~
+**/
+
  Int_t nvetos=0;
  if (fVetos) nvetos=fVetos->GetEntries();
  return nvetos;
@@ -1618,8 +1807,12 @@ Int_t NcCalorimeter::GetNvetos() const
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcCalorimeter::GetVetoSignal(Int_t i) const
 {
-// Provide access to the i-th veto signal of this calorimeter
+/**
+~~~
+// Provide access to the i-th veto signal of this calorimeter.
 // Note : The first hit corresponds to i=1
+~~~
+**/
 
  if (i>0 && i<=GetNvetos())
  {
@@ -1635,9 +1828,14 @@ NcSignal* NcCalorimeter::GetVetoSignal(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::SetMatrixSwapMode(Int_t swap)
 {
+/**
+~~~
 // Set the swap mode for the module and position matrices.
 // At invokation of this memberfunction the default argument is swap=1.
 // For further details see the documentation of NcObjMatrix.
+~~~
+**/
+
  if (swap==0 || swap==1)
  {
   fSwap=swap;
@@ -1650,14 +1848,24 @@ void NcCalorimeter::SetMatrixSwapMode(Int_t swap)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcCalorimeter::GetMatrixSwapMode() const
 {
+/**
+~~~
 // Provide the swap mode for the module and position matrices.
 // For further details see the documentation of NcObjMatrix.
+~~~
+**/
+
  return fSwap;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcCalorimeter::LoadMatrix()
 {
+/**
+~~~
 // Load the matrix lookup table of module pointers from the linear hit array.
+~~~
+**/
+
  Int_t nhits=GetNhits();
  
  if (!nhits) return;
@@ -1681,11 +1889,15 @@ void NcCalorimeter::LoadMatrix()
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcCalorimeter::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  NcCalorimeter* cal=new NcCalorimeter(*this);
  if (name)

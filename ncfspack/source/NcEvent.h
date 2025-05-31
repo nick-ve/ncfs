@@ -1,6 +1,6 @@
 #ifndef NcEvent_h
 #define NcEvent_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2001 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TDatime.h"
@@ -8,6 +8,8 @@
 #include "NcVertex.h"
 #include "NcTimestamp.h"
 #include "NcDetector.h"
+
+/** Creation and investigation of an NCFS generic event structure. **/
  
 class NcEvent : public NcVertex,public NcTimestamp
 {
@@ -88,10 +90,10 @@ class NcEvent : public NcVertex,public NcTimestamp
   NcDetector* fDetector;                // Pointer to the (top level) detector structure
   TObjArray* fDevices;                  // Array to hold the pointers to the various devices
   Int_t fDevCopy;                       // Flag to denote creation of private copies of the devices
-  TObjArray* fHits;                     //! Temp. array to hold references to the registered NcDevice hits
-  TObjArray* fOrdered;                  //! Temp. array to hold references to various ordered objects
-  TObject* fDisplay;                    //! Temp. pointer to hold objects which serve event displays
-  TObjArray* fDevs;                     //! Temp. array to hold references to user selected devices
+  TObjArray* fHits;                     //!< Temp. array to hold references to the registered NcDevice hits
+  TObjArray* fOrdered;                  //!< Temp. array to hold references to various ordered objects
+  TObject* fDisplay;                    //!< Temp. pointer to hold objects which serve event displays
+  TObjArray* fDevs;                     //!< Temp. array to hold references to user selected devices
 
   void LoadHits(TString classname,TObjArray* hits=0); // Load references to the hits registered to the specified device class
   void CreateDetector(); // Create a default detector structure

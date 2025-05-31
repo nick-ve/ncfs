@@ -1,7 +1,7 @@
 #ifndef NcDetectorUnit_h
 #define NcDetectorUnit_h
 
-// Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <math.h>
@@ -10,6 +10,8 @@
 
 #include "NcDevice.h"
 #include "NcSample.h"
+
+/** Handling of a collection of generic devices. **/
 
 class NcDetectorUnit : public NcDevice
 {
@@ -56,10 +58,10 @@ class NcDetectorUnit : public NcDevice
  protected:
   TObjArray* fDevices;                  // Array to hold the pointers to the various devices
   Int_t fDevCopy;                       // Flag to denote creation of private copies of the devices
-  TObjArray* fDevs;                     //! Temp. array to hold references to user selected devices
-  TObjArray* fThits;                    //! Temp. array to hold references to the registered NcDevice hits
-  TObjArray* fOrdered;                  //! Temp. array to hold references to various ordered objects
-  TObject* fDisplay;                    //! Temp. pointer to hold objects which serve event displays
+  TObjArray* fDevs;                     //!< Temp. array to hold references to user selected devices
+  TObjArray* fThits;                    //!< Temp. array to hold references to the registered NcDevice hits
+  TObjArray* fOrdered;                  //!< Temp. array to hold references to various ordered objects
+  TObject* fDisplay;                    //!< Temp. pointer to hold objects which serve event displays
 
   void LoadHits(TString classname,Bool_t follow,Bool_t inc,TObjArray* hits=0,NcDetectorUnit* unit=0); // Load references to the hits registered to the specified device class
   void LoadDevices(TString classname,Bool_t follow,TObjArray* hits=0,NcDetectorUnit* unit=0); // Load references to the devices derived from the specified device class

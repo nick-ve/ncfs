@@ -1,9 +1,7 @@
 #ifndef NcCalcluster_h
 #define NcCalcluster_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcCalcluster.h 5 2010-03-19 10:10:02Z nickve $
 
 #include <math.h>
  
@@ -12,6 +10,8 @@
  
 #include "NcCalmodule.h"
 #include "NcMath.h"
+
+/** Description of a cluster of calorimeter modules. **/
  
 class NcCalcluster : public NcSignal
 {

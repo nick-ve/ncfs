@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2004 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcHelix.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcHelix
+~~~
 // Class NcHelix
 // Representation and extrapolation of NcTracks in a magnetic field.
 //
@@ -163,16 +165,24 @@
 //
 //--- Author: Nick van Eijndhoven 17-jun-2004 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcHelix.h"
 #include "Riostream.h"
  
-ClassImp(NcHelix) // Class implementation to enable ROOT I/O
+ClassImp(NcHelix); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcHelix::NcHelix() : THelix()
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
+~~~
+**/
+
  fRefresh=0;
  fCurves=0;
  fExt=0;
@@ -188,7 +198,12 @@ NcHelix::NcHelix() : THelix()
 ///////////////////////////////////////////////////////////////////////////
 NcHelix::~NcHelix()
 {
+/**
+~~~
 // Destructor to delete dynamically allocated memory.
+~~~
+**/
+
  if (fCurves)
  {
   delete fCurves;
@@ -203,7 +218,12 @@ NcHelix::~NcHelix()
 ///////////////////////////////////////////////////////////////////////////
 NcHelix::NcHelix(const NcHelix& h) : THelix(h)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fB=h.fB;
  fRefresh=h.fRefresh;
  fTofmax=h.fTofmax;
@@ -215,7 +235,12 @@ NcHelix::NcHelix(const NcHelix& h) : THelix(h)
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::SetB(Nc3Vector& b)
 {
+/**
+~~~
 // Set the magnetic field vector in Tesla.
+~~~
+**/
+
  fB=b;
 
  if (fB.GetNorm()>0)
@@ -228,12 +253,19 @@ void NcHelix::SetB(Nc3Vector& b)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector& NcHelix::GetB()
 {
+/**
+~~~
 // Provide the magnetic field vector in Tesla.
+~~~
+**/
+
  return fB;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::SetTofmax(Float_t tof)
 {
+/**
+~~~
 // Set the maximum time of flight for straight tracks in seconds.
 // This maximum tof will be used for drawing etc... in case no begin
 // and endpoints can be determined from the track info.
@@ -242,22 +274,34 @@ void NcHelix::SetTofmax(Float_t tof)
 // 1) In case the user specifies an explicit range, it will override
 //    the maximum tof limit.
 // 2) By default the tofmax is set to 10 ns in the NcHelix constructor.
+~~~
+**/
+
  fTofmax=tof;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcHelix::GetTofmax() const
 {
+/**
+~~~
 // Provide the maximum time of flight for straight tracks in seconds.
+~~~
+**/
+
  return fTofmax;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::SetMarker(Int_t style,Float_t size,Int_t col)
 {
+/**
+~~~
 // Specify the marker (style, size and colour) to indicate the starting point
 // of a track in a display.
 // In case col<0 the marker will have the same color as the track itself.
 // 
 // Defaults are style=8, size=0.2 and col=-1.
+~~~
+**/
  
  fMstyle=style;
  fMsize=size;
@@ -266,6 +310,8 @@ void NcHelix::SetMarker(Int_t style,Float_t size,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::UseEndPoint(Int_t mode)
 {
+/**
+~~~
 // Select usage of track endpoint in drawing and extrapolation.
 // This allows correct event displays even for very long tracks.
 //
@@ -273,12 +319,16 @@ void NcHelix::UseEndPoint(Int_t mode)
 //        1 : Use the track endpoint
 // 
 // The default value is mode=1 (which is also set in the constructor).
+~~~
+**/
 
  if (mode==0 || mode==1) fEnduse=mode; 
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::MakeCurve(NcTrack* t,Double_t* range,Int_t iaxis,Double_t scale)
 {
+/**
+~~~
 // Make the helix curve for the specified NcTrack.
 // Detailed information of all the helix points can be obtained via the
 // GetN() and GetP() memberfunctions of TPolyLine3D.
@@ -314,6 +364,8 @@ void NcHelix::MakeCurve(NcTrack* t,Double_t* range,Int_t iaxis,Double_t scale)
 // is present, (0,0,0) will be taken as the reference point.
 // 
 // The default values are range=0, iaxis=3 and scale=-1.
+~~~
+**/
 
  SetPolyLine(0); // Reset the polyline data points
 
@@ -647,6 +699,8 @@ void NcHelix::MakeCurve(NcTrack* t,Double_t* range,Int_t iaxis,Double_t scale)
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::Display(NcTrack* t,Double_t* range,Int_t iaxis,Double_t scale)
 {
+/**
+~~~
 // Display the helix curve of an NcTrack.
 // Various curves can be displayed together or individually; please refer to
 // the memberfunction Refresh() for further details.
@@ -693,6 +747,8 @@ void NcHelix::Display(NcTrack* t,Double_t* range,Int_t iaxis,Double_t scale)
 //
 // The user can also use the 3D viewing facilities from the TCanvas menu
 // to open an appropriate view. 
+~~~
+**/
 
  if (!t || (range && !iaxis)) return;
 
@@ -744,6 +800,8 @@ void NcHelix::Display(NcTrack* t,Double_t* range,Int_t iaxis,Double_t scale)
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::Refresh(Int_t mode)
 {
+/**
+~~~
 // Refresh the display screen before showing the next curve.
 //
 // mode = 0 : refreshing fully under user control.
@@ -753,6 +811,8 @@ void NcHelix::Refresh(Int_t mode)
 //            at each event display.
 //
 // The default is mode=0.
+~~~
+**/
 
  if (abs(mode)<2) fRefresh=mode;
  if (fCurves) fCurves->Delete();
@@ -760,6 +820,8 @@ void NcHelix::Refresh(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::Display(NcEvent* evt,Double_t* range,Int_t iaxis,Double_t scale)
 {
+/**
+~~~
 // Display the helix curves of all tracks of the specified event.
 // Various events can be displayed together or individually; please refer to
 // the memberfunction Refresh() for further details.
@@ -780,6 +842,8 @@ void NcHelix::Display(NcEvent* evt,Double_t* range,Int_t iaxis,Double_t scale)
 //
 // The user can also use the 3D viewing facilities from the TCanvas menu
 // to open an appropriate view. 
+~~~
+**/
 
  if (!evt) return;
 
@@ -795,6 +859,8 @@ void NcHelix::Display(NcEvent* evt,Double_t* range,Int_t iaxis,Double_t scale)
 ///////////////////////////////////////////////////////////////////////////
 void NcHelix::Display(TObjArray* arr,Double_t* range,Int_t iaxis,Double_t scale)
 {
+/**
+~~~
 // Display the helix curves of all tracks in the specified array.
 // A convenient way to obtain an array with selected tracks from e.g. an NcEvent
 // is to make use of its GetTracks() selection facility.
@@ -817,6 +883,8 @@ void NcHelix::Display(TObjArray* arr,Double_t* range,Int_t iaxis,Double_t scale)
 //
 // The user can also use the 3D viewing facilities from the TCanvas menu
 // to open an appropriate view. 
+~~~
+**/
 
  if (!arr) return;
 
@@ -833,6 +901,8 @@ void NcHelix::Display(TObjArray* arr,Double_t* range,Int_t iaxis,Double_t scale)
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars,Double_t scale)
 {
+/**
+~~~
 // Extrapolate an NcTrack according to the corresponding helix curve
 // and provide a pointer to the impact position w.r.t. a specified plane.
 // In case the track can never reach the specified plane, the returned
@@ -870,6 +940,8 @@ NcPosition* NcHelix::Extrapolate(NcTrack* t,Double_t* pars,Double_t scale)
 // pars[0]=0  pars[1]=0.001  pars[2]=3  scale=0.01
 //
 // Note : The default value for the scale is -1.
+~~~
+**/
 
  if (fExt)
  {

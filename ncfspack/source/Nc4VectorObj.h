@@ -1,6 +1,6 @@
 #ifndef Nc4VectorObj_h
 #define Nc4VectorObj_h
-// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TObject.h"

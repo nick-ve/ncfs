@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcDetector
+~~~
 // Class NcDetector
 // Creation and investigation of an NCFS generic detector structure.
 //
@@ -183,35 +187,54 @@
 // 
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 25, 2021  07:39Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 27, 2021  09:59Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDetector.h"
 #include "Riostream.h"
  
-ClassImp(NcDetector) // Class implementation to enable ROOT I/O
+ClassImp(NcDetector); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcDetector::NcDetector(const char* name,const char* title) : NcDetectorUnit(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDetector::~NcDetector()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcDetector::NcDetector(const NcDetector& q) : NcDetectorUnit(q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDetector::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  NcDetector* q=new NcDetector(*this);
  if (name)

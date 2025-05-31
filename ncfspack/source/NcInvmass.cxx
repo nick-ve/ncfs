@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcInvmass.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ////////////////////////////////////////////////////////////////////////////////
+/** @class NcInvmass
+~~~
 // Class NcInvmass
 // Construction of invariant mass and combinatorial background.
 //
@@ -114,16 +116,24 @@
 //
 //--- Author: Nick van Eijndhoven 12-apr-1999 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "NcInvmass.h"
 #include "Riostream.h"
  
-ClassImp(NcInvmass) // Class implementation to enable ROOT I/O
+ClassImp(NcInvmass); // Class implementation to enable ROOT I/O
  
+////////////////////////////////////////////////////////////////////////////////
 NcInvmass::NcInvmass()
 {
-// Creation of an NcInvmass object and initialisation of parameters
+/**
+~~~
+// Creation of an NcInvmass object and initialisation of parameters.
+~~~
+**/
+
  fPi=acos(-1.);
  fMode=2;
  fBkg=0;
@@ -135,7 +145,12 @@ NcInvmass::NcInvmass()
 ////////////////////////////////////////////////////////////////////////////////
 NcInvmass::~NcInvmass()
 {
-// Destructor to delete dynamically allocated memory
+/**
+~~~
+// Destructor to delete dynamically allocated memory.
+~~~
+**/
+
  if (fMinv)
  {
   delete fMinv;
@@ -151,48 +166,83 @@ NcInvmass::~NcInvmass()
 ////////////////////////////////////////////////////////////////////////////////
 void NcInvmass::SetStorageMode(Int_t m)
 {
-// Set storage mode for the result arrays for inv. mass and comb. background
+/**
+~~~
+// Set storage mode for the result arrays for inv. mass and comb. background.
+~~~
+**/
+
  fMode=2;
  if (m==1) fMode=1;
 }
 ////////////////////////////////////////////////////////////////////////////////
 void NcInvmass::SetThetaSwitch(Int_t i)
 {
+/**
+~~~
 // Enable/Disable (1/0) switching of theta angle in comb. bkg. reconstruction.
 // Default : Switching of theta is enabled.
+~~~
+**/
+
  fNewtheta=1;
  if (i==0) fNewtheta=0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 void NcInvmass::SetPhiSwitch(Int_t i)
 {
+/**
+~~~
 // Enable/Disable (1/0) switching of phi angle in comb. bkg. reconstruction.
 // Default : Switching of phi is enabled.
+~~~
+**/
+
  fNewphi=1;
  if (i==0) fNewphi=0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 Int_t NcInvmass::GetStorageMode() const
 {
-// Provide mode of storage for the result arrays for inv. mass and comb. background
+/**
+~~~
+// Provide mode of storage for the result arrays for inv. mass and comb. background.
+~~~
+**/
+
  return fMode;
 }
 ////////////////////////////////////////////////////////////////////////////////
 Int_t NcInvmass::GetThetaSwitch() const
 {
-// Provide the theta switching flag
+/**
+~~~
+// Provide the theta switching flag.
+~~~
+**/
+
  return fNewtheta;
 }
 ////////////////////////////////////////////////////////////////////////////////
 Int_t NcInvmass::GetPhiSwitch() const
 {
-// Provide the phi switching flag
+/**
+~~~
+// Provide the phi switching flag.
+~~~
+**/
+
  return fNewphi;
 }
 ////////////////////////////////////////////////////////////////////////////////
 TObjArray* NcInvmass::Invmass(TObjArray* a1,TObjArray* a2)
 {
-// Perform two-particle invariant mass reconstruction
+/**
+~~~
+// Perform two-particle invariant mass reconstruction.
+~~~
+**/
+
  fBkg=0;
  Combine(a1,a2);
  return fMinv;
@@ -200,7 +250,12 @@ TObjArray* NcInvmass::Invmass(TObjArray* a1,TObjArray* a2)
 ////////////////////////////////////////////////////////////////////////////////
 TObjArray* NcInvmass::CombBkg(TObjArray* a1,TObjArray* a2)
 {
-// Perform two-particle combinatorial background reconstruction
+/**
+~~~
+// Perform two-particle combinatorial background reconstruction.
+~~~
+**/
+
  fBkg=1;
  Combine(a1,a2);
  if (fMode != 1)
@@ -215,7 +270,11 @@ TObjArray* NcInvmass::CombBkg(TObjArray* a1,TObjArray* a2)
 ////////////////////////////////////////////////////////////////////////////////
 void NcInvmass::Combine(TObjArray* a1,TObjArray* a2)
 {
-// Perform two-particle invariant mass reconstruction
+/**
+~~~
+// Perform two-particle invariant mass reconstruction.
+~~~
+**/
  
  if ((!fBkg || fMode==1) && fMinv)
  {

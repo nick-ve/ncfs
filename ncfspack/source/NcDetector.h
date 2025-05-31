@@ -1,10 +1,12 @@
 #ifndef NcDetector_h
 #define NcDetector_h
 
-// Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "NcDetectorUnit.h"
+
+/** Creation and investigation of an NCFS generic detector structure. **/
 
 class NcDetector : public NcDetectorUnit
 {

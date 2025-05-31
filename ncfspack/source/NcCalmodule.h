@@ -1,11 +1,11 @@
 #ifndef NcCalmodule_h
 #define NcCalmodule_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
-// $Id: NcCalmodule.h 5 2010-03-19 10:10:02Z nickve $
-
 #include "NcSignal.h"
+
+/** Description of a module in a calorimeter system. **/
  
 class NcCalmodule : public NcSignal
 {

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 2021, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcDSP
+~~~
 // Class NcDSP
 // Class to perform various Digital Signal Processing (DSP) operations on (sequential) data samples.
 //
@@ -276,16 +280,23 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 25, 2025  11:47Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDSP.h"
 #include "Riostream.h"
  
-ClassImp(NcDSP) // Class implementation to enable ROOT I/O
+ClassImp(NcDSP); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcDSP::NcDSP(const char* name,const char* title) : TNamed(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fProc=0;
  Reset();
@@ -295,7 +306,11 @@ NcDSP::NcDSP(const char* name,const char* title) : TNamed(name,title)
 ///////////////////////////////////////////////////////////////////////////
 NcDSP::~NcDSP()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fProc)
  {
@@ -306,7 +321,11 @@ NcDSP::~NcDSP()
 ///////////////////////////////////////////////////////////////////////////
 NcDSP::NcDSP(const NcDSP& q) : TNamed(q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fProc=0;
  fN=q.fN;
@@ -324,7 +343,11 @@ NcDSP::NcDSP(const NcDSP& q) : TNamed(q)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Reset()
 {
+/**
+~~~
 // Internal member function to reset all data and the FFTW processor. 
+~~~
+**/
 
  if (fProc)
  {
@@ -346,23 +369,33 @@ void NcDSP::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetSamplingFrequency(Float_t f)
 {
+/**
+~~~
 // Set the actual DAQ sampling frequency in Hz.
 // This sampling frequency may be overwritten by invokation of
 // one of the various Load() member functions.
 // The sampling frequency is set to 0 in the constructor of this class.
+~~~
+**/
 
  fSample=f;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcDSP::GetSamplingFrequency() const
 {
+/**
+~~~
 // Provide the current value of the DAQ sampling frequency in Hz.
+~~~
+**/
 
  return fSample;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Load(Int_t n,Double_t* re,Double_t* im,Float_t f)
 {
+/**
+~~~
 // Provide new input data to be processed and reset the FFTW processor.
 //
 // Note : The (optional) waveform data stored via SetWaveform() will not be modified.
@@ -378,6 +411,8 @@ void NcDSP::Load(Int_t n,Double_t* re,Double_t* im,Float_t f)
 // If provided, the array size must be at least of dimension "n".
 //
 // The defaults are im=0 and f=-1.
+~~~
+**/
 
  Reset();
 
@@ -398,6 +433,8 @@ void NcDSP::Load(Int_t n,Double_t* re,Double_t* im,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Load(TArray* re,TArray* im,Float_t f)
 {
+/**
+~~~
 // Provide new input data to be processed and reset the FFTW processor.
 //
 // Note : The (optional) waveform data stored via SetWaveform() will not be modified.
@@ -413,6 +450,8 @@ void NcDSP::Load(TArray* re,TArray* im,Float_t f)
 // will be used to compose the input data.
 //
 // The defaults are im=0 and f=-1.
+~~~
+**/
 
  Reset();
 
@@ -453,6 +492,8 @@ void NcDSP::Load(TArray* re,TArray* im,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Load(NcSample* s,Int_t i,Float_t f)
 {
+/**
+~~~
 // Provide new input data from the NcSample "s" to be processed and reset the FFTW processor.
 //
 // Note : The (optional) waveform data stored via SetWaveform() will not be modified.
@@ -466,6 +507,8 @@ void NcDSP::Load(NcSample* s,Int_t i,Float_t f)
 // Note : The Store Mode of the NcSample must be activated. 
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -501,6 +544,8 @@ void NcDSP::Load(NcSample* s,Int_t i,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Load(NcSample* s,TString name,Float_t f)
 {
+/**
+~~~
 // Provide new input data from the NcSample "s" to be processed and reset the FFTW processor.
 //
 // Note : The (optional) waveform data stored via SetWaveform() will not be modified.
@@ -514,6 +559,8 @@ void NcDSP::Load(NcSample* s,TString name,Float_t f)
 // Note : The Store Mode of the NcSample must be activated. 
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -543,6 +590,8 @@ void NcDSP::Load(NcSample* s,TString name,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Load(TH1* h,Float_t f)
 {
+/**
+~~~
 // Provide new input data from a 1-Dimensional histogram to be processed and reset the FFTW processor.
 //
 // Note : The (optional) waveform data stored via SetWaveform() will not be modified.
@@ -554,6 +603,8 @@ void NcDSP::Load(TH1* h,Float_t f)
 //     In case f<0 the current sampling frequency is not modified.
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -588,6 +639,8 @@ void NcDSP::Load(TH1* h,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Load(TGraph* gr,Float_t f)
 {
+/**
+~~~
 // Provide new input data from a TGraph object to be processed and reset the FFTW processor.
 //
 // Note : The (optional) waveform data stored via SetWaveform() will not be modified.
@@ -599,6 +652,8 @@ void NcDSP::Load(TGraph* gr,Float_t f)
 //      In case f<0 the current sampling frequency is not modified.
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -635,6 +690,8 @@ void NcDSP::Load(TGraph* gr,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::LoadResult()
 {
+/**
+~~~
 // Load the current transformation result as new input data in order to enable
 // inverse transformations acting on previous transformation results.
 //
@@ -646,6 +703,8 @@ void NcDSP::LoadResult()
 // 2) Invokation of one of the other Load() memberfunctions will also reset the input arrays.
 //    Use the GetData() memberfunction to retrieve data that might be needed later again. 
 // 3) The (optional) waveform data stored via SetWaveform() will not be modified.
+~~~
+**/
 
  fReIn=fReOut;
  fImIn=fImOut;
@@ -656,6 +715,8 @@ void NcDSP::LoadResult()
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f)
 {
+/**
+~~~
 // Set the (system response) waveform for Convolution, Correlation etc.
 //
 // Note : The input data stored via Load() will not be modified.
@@ -670,6 +731,8 @@ void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f)
 // The array size of "h" must be at least of dimension "n".
 //
 // The default value is f=-1.
+~~~
+**/
 
  fWaveform.Set(0);
  fNwf=0;
@@ -695,6 +758,8 @@ void NcDSP::SetWaveform(Int_t n,Double_t* h,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetWaveform(TArray* h,Float_t f)
 {
+/**
+~~~
 // Set the (system response) waveform for Convolution, Correlation etc.
 //
 // Note : The input data stored via Load() will not be modified.
@@ -706,6 +771,8 @@ void NcDSP::SetWaveform(TArray* h,Float_t f)
 //     In case f<0 the current sampling frequency is not modified.
 //
 // The default value is f=-1.
+~~~
+**/
 
  fWaveform.Set(0);
  fNwf=0;
@@ -736,6 +803,8 @@ void NcDSP::SetWaveform(TArray* h,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetWaveform(NcSample* s,Int_t i,Float_t f)
 {
+/**
+~~~
 // Set the (system response) waveform for Convolution, Correlation etc.
 //
 // Note : The input data stored via Load() will not be modified.
@@ -750,6 +819,8 @@ void NcDSP::SetWaveform(NcSample* s,Int_t i,Float_t f)
 // Note : The Store Mode of the NcSample must be activated. 
 //
 // The default value is f=-1.
+~~~
+**/
 
  fWaveform.Set(0);
  fNwf=0;
@@ -786,6 +857,8 @@ void NcDSP::SetWaveform(NcSample* s,Int_t i,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetWaveform(NcSample* s,TString name,Float_t f)
 {
+/**
+~~~
 // Set the (system response) waveform for Convolution, Correlation etc.
 //
 // Note : The input data stored via Load() will not be modified.
@@ -800,6 +873,8 @@ void NcDSP::SetWaveform(NcSample* s,TString name,Float_t f)
 // Note : The Store Mode of the NcSample must be activated. 
 //
 // The default value is f=-1.
+~~~
+**/
 
  fWaveform.Set(0);
  fNwf=0;
@@ -830,6 +905,8 @@ void NcDSP::SetWaveform(NcSample* s,TString name,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetWaveform(TH1* h,Float_t f)
 {
+/**
+~~~
 // Set the (system response) waveform for Convolution, Correlation etc.
 //
 // Note : The input data stored via Load() will not be modified.
@@ -841,6 +918,8 @@ void NcDSP::SetWaveform(TH1* h,Float_t f)
 //     In case f<0 the current sampling frequency is not modified.
 //
 // The default value is f=-1.
+~~~
+**/
 
  fWaveform.Set(0);
  fNwf=0;
@@ -876,6 +955,8 @@ void NcDSP::SetWaveform(TH1* h,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::SetWaveform(TGraph* gr,Float_t f)
 {
+/**
+~~~
 // Set the (system response) waveform for Convolution, Correlation etc.
 //
 // Note : The input data stored via Load() will not be modified.
@@ -887,6 +968,8 @@ void NcDSP::SetWaveform(TGraph* gr,Float_t f)
 //      In case f<0 the current sampling frequency is not modified.
 //
 // The default value is f=-1.
+~~~
+**/
 
  fWaveform.Set(0);
  fNwf=0;
@@ -924,12 +1007,16 @@ void NcDSP::SetWaveform(TGraph* gr,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDSP::GetN(Int_t mode) const
 {
+/**
+~~~
 // Provide the number of data elements (to be) processed.
 //
 // mode : 0 --> Provide the number of input data elements entered via Load()
 //        1 --> Provide the number of input data elements entered via SetWaveform()
 //
 // The default value is mode=0 for backward compatibility.
+~~~
+**/
 
  Int_t n=fN;
 
@@ -940,6 +1027,8 @@ Int_t NcDSP::GetN(Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::GetData(TString sel) const
 {
+/**
+~~~
 // Provide a selected set of data.
 //
 // Input argument :
@@ -960,6 +1049,8 @@ TArrayD NcDSP::GetData(TString sel) const
 // sel="AMP out" will provide all the N amplitudes of the resulting data after transformation.
 // sel="RE in" will provide all the N real components of the input data.
 // sel="Wave" will provide all the amplitudes of the stored (system response) waveform
+~~~
+**/
 
  if (sel.Contains("RE") && sel.Contains("in")) return fReIn;
  if (sel.Contains("IM") && sel.Contains("in")) return fImIn;
@@ -1000,6 +1091,8 @@ TArrayD NcDSP::GetData(TString sel) const
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Fourier(TString mode,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Fourier Transformation (DFT).
 //
 // Conventions :
@@ -1048,6 +1141,8 @@ void NcDSP::Fourier(TString mode,TH1* hist,TString sel)
 // So, sel="t" is equivalent to sel="RE t" etc... 
 //
 // The default values are hist=0 and sel="none".
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1144,6 +1239,8 @@ void NcDSP::Fourier(TString mode,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Hartley(Int_t mode,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Hartley Transformation (DHT).
 // Actually, a DHT is closely related to a Discrete Fourier Transformation (DFT)
 // with only real input values.
@@ -1189,6 +1286,8 @@ void NcDSP::Hartley(Int_t mode,TH1* hist,TString sel)
 // sel="k 2" will show all N amplitudes as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1234,6 +1333,8 @@ void NcDSP::Hartley(Int_t mode,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Cosine Transformation (DCT).
 // Actually, this is just a regular Discrete Fourier Transformation (DFT)
 // with only real input values which contain an even symmetry.
@@ -1283,6 +1384,8 @@ void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
 // sel="k 2" will show all N amplitudes as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1348,6 +1451,8 @@ void NcDSP::Cosine(Int_t type,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Sine Transformation (DST).
 // Actually, this is just a regular Discrete Fourier Transformation (DFT)
 // with only real input values which contain an odd symmetry.
@@ -1395,6 +1500,8 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
 // sel="k 2" will show all N amplitudes as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1460,6 +1567,8 @@ void NcDSP::Sine(Int_t type,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::Hilbert(Int_t mode,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a 1-dimensional Discrete Hilbert Transformation (DHIT).
 // Actually, a DHIT is closely related to a Discrete Fourier Transformation (DFT)
 // with only real input values, followed by a phase shift and inverse DFT.
@@ -1554,6 +1663,8 @@ void NcDSP::Hilbert(Int_t mode,TH1* hist,TString sel)
 // sel="n" for the inverse transformation is equivalent to sel="X n"
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1656,6 +1767,8 @@ void NcDSP::Hilbert(Int_t mode,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::HistogramTrafoResult(TString name,Int_t mode,TH1* hist,TString sel)
 {
+/**
+~~~
 // Internal memberfunction to provide a histogram with the requested transformation result.
 // The histogram contents are stored in the fHisto array, which can be accessed via GetData().
 // 
@@ -1687,6 +1800,8 @@ void NcDSP::HistogramTrafoResult(TString name,Int_t mode,TH1* hist,TString sel)
 // ----------
 // sel="AMP t" will show the amplitudes as a function of the actual time in seconds.
 // sel="PHID n" will show the phases in degrees as a function of the index n in the time domain.
+~~~
+**/
 
  fHisto.Set(0);
 
@@ -2010,6 +2125,8 @@ void NcDSP::HistogramTrafoResult(TString name,Int_t mode,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
 {
+/**
+~~~
 // Convolve the loaded input data x[] with the data contained in the (system response)
 // waveform h[] and return the resulting data y[] in a TArrayD object.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions,
@@ -2068,6 +2185,8 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
 //    in the time domain histogram.
 //
 // The default values are hist=0, i1=0, i2=0 and shift=0.
+~~~
+**/
 
  TArrayD y(0);
  if (hist) hist->Reset();
@@ -2282,6 +2401,8 @@ TArrayD NcDSP::Convolve(TH1* hist,Int_t* i1,Int_t* i2,Int_t shift)
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,TString norm)
 {
+/**
+~~~
 // (Cross) Correlate the data contained in the waveform h[] with the loaded input data x[]
 // and return the resulting data y[] in a TArrayD object.
 // The input data x[] have to be entered as real numbers by one of the Load() member functions,
@@ -2345,6 +2466,8 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,TString no
 // Note : The sampling (rate) of h has to be the same as for the loaded input data x[].
 //
 // The default values are hist=0, i1=0, i2=0, peak=0 and norm="NONE".
+~~~
+**/
 
  TArrayD y(0);
  if (hist) hist->Reset();
@@ -2453,6 +2576,8 @@ TArrayD NcDSP::Correlate(TH1* hist,Int_t* i1,Int_t* i2,Double_t* peak,TString no
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist,Double_t* stp,Double_t* scale) const
 {
+/**
+~~~
 // **************************************************************************************
 // *** This function has become obsolete and is only kept for backward compatibility. ***
 // *** Please refer to the new, more flexible memberfunction Transmit().              ***
@@ -2511,6 +2636,8 @@ TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist,Double_t*
 // In case of inconsistent input parameters, no digitization is performed and an empty TArrayD is returned.
 //
 // The default values are hist=0, stp=0 and scale=0.
+~~~
+**/
 
  TArrayD arrdig(0);
  if (hist) hist->Reset();
@@ -2670,6 +2797,8 @@ TArrayD NcDSP::Digitize(Int_t nbits,Double_t vcal,Int_t mode,TH1* hist,Double_t*
 ///////////////////////////////////////////////////////////////////////////
 TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TH1* hist,Int_t B,Int_t C) const
 {
+/**
+~~~
 // Processing of an Analog to Digital Converter (ADC). 
 // Construct from analog input signals the discrete quantized data values of an "nbits" ADC,
 // based on the "range" for the analog signal and a bias voltage "Vbias" (see below).
@@ -2750,6 +2879,8 @@ TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TH1*
 // In case of inconsistent input parameters, no digitization is performed and an empty TArrayL64 is returned.
 //
 // The default values are Vbias=0, Vsig=0, hist=0, B=0 and C=3.
+~~~
+**/
 
  TArrayL64 arradc(0);
  if (hist) hist->Reset();
@@ -2893,6 +3024,8 @@ TArrayL64 NcDSP::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TH1*
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TArray* peds,TH1* hist,Int_t B,Int_t C) const
 {
+/**
+~~~
 // Processing of a Digital to Analog Converter (DAC). 
 // Reconstruct the analog signals based on the discrete quantized digital data from an "nbits" ADC,
 // based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
@@ -2976,6 +3109,8 @@ TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TArray
 // In case of inconsistent input parameters, no processing is performed and an empty TArrayD is returned.
 //
 // The default values are Vbias=0, adcs=0, peds=0, hist=0, B=0 and C=3.
+~~~
+**/
 
  TArrayD arrdac(0);
  if (hist) hist->Reset();
@@ -3129,6 +3264,8 @@ TArrayD NcDSP::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TArray
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::Transmit(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TArray* peds,TH1* hist,Int_t B,Int_t C) const
 {
+/**
+~~~
 // Mimic signal transmission according to an "nbits" ADC-DAC chain.
 // Analog input signals are digitized via the discrete quantization levels of an "nbits" ADC,
 // based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
@@ -3184,6 +3321,8 @@ TArrayD NcDSP::Transmit(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,T
 // In case of inconsistent input parameters, no processing is performed and an empty TArrayD is returned.
 //
 // The default values are Vbias=0, Vsig=0, peds=0, hist=0, B=0 and C=3.
+~~~
+**/
 
  TArrayL64 adcarr;
  TArrayD dacarr;
@@ -3217,6 +3356,8 @@ TArrayD NcDSP::Transmit(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,T
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1* hist,Int_t loc) const
 {
+/**
+~~~
 // Perform a Sample-And-Hold operation on the specified function "f"
 // in the interval [vmin,vmax], using "step" as the sampling step size.
 // The result is returned in a TArrayD object and (optionally) in the histogram "hist".
@@ -3232,6 +3373,8 @@ TArrayD NcDSP::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1
 // exceed "vmax", the data will be recorded at the value of "vmax".
 //
 // The default values are hist=0 and loc=-1.
+~~~
+**/
 
  TArrayD data(0);
  if (hist) hist->Reset();
@@ -3286,6 +3429,8 @@ TArrayD NcDSP::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::SampleAndHold(Int_t n,TH1* hist,Int_t loc,Int_t jmin,Int_t jmax) const
 {
+/**
+~~~
 // Perform a Sample-And-Hold operation on the data contained in the stored waveform
 // over the sampled interval [jmin,jmax], using "n" original samples as the new sampling step size.
 // By convention, the first sample is at j=0.
@@ -3305,6 +3450,8 @@ TArrayD NcDSP::SampleAndHold(Int_t n,TH1* hist,Int_t loc,Int_t jmin,Int_t jmax) 
 // If jmax<=jmin the full data array of the stored waveform will be used.
 //
 // The default values are hist=0, loc=-1, jmin=0 and jmax=-1.
+~~~
+**/
 
  TArrayD data(0);
  if (hist) hist->Reset();
@@ -3386,6 +3533,8 @@ TArrayD NcDSP::SampleAndHold(Int_t n,TH1* hist,Int_t loc,Int_t jmin,Int_t jmax) 
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::SampleAndSum(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1* hist) const
 {
+/**
+~~~
 // Perform a Sample-And-Sum operation on the specified function "f"
 // in the interval [vmin,vmax], using "step" as the sampling step size.
 // The result is returned in a TArrayD object and (optionally) in the histogram "hist".
@@ -3399,6 +3548,8 @@ TArrayD NcDSP::SampleAndSum(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1*
 // or equivalently a sampling frequency which is reduced by a factor 1/step.
 //
 // The default value is hist=0.
+~~~
+**/
 
  TArrayD data(0);
  if (hist) hist->Reset();
@@ -3452,6 +3603,8 @@ TArrayD NcDSP::SampleAndSum(TF1 f,Double_t step,Double_t vmin,Double_t vmax,TH1*
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::SampleAndSum(Int_t n,TH1* hist,Int_t jmin,Int_t jmax) const
 {
+/**
+~~~
 // Perform a Sample-And-Sum operation on the data contained in the stored waveform
 // over the sampled interval [jmin,jmax], using "n" original samples as the new sampling step size.
 // By convention, the first sample is at j=0.
@@ -3469,6 +3622,8 @@ TArrayD NcDSP::SampleAndSum(Int_t n,TH1* hist,Int_t jmin,Int_t jmax) const
 // If jmax<=jmin the full data array of the stored waveform will be used.
 //
 // The default values are hist=0, jmin=0 and jmax=-1.
+~~~
+**/
 
  TArrayD data(0);
  if (hist) hist->Reset();
@@ -3542,6 +3697,8 @@ TArrayD NcDSP::SampleAndSum(Int_t n,TH1* hist,Int_t jmin,Int_t jmax) const
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::FilterMovingAverage(Int_t n,TString mode,TH1* hist,Int_t* i1,Int_t* i2,TH1* hisf,Bool_t dB)
 {
+/**
+~~~
 // Perform a Moving Average filter on the loaded input data x[] with averaging over "n" samples.
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist".
 // The frequency domain result is returned in the (optional) histogram "hisf", for which
@@ -3627,6 +3784,8 @@ TArrayD NcDSP::FilterMovingAverage(Int_t n,TString mode,TH1* hist,Int_t* i1,Int_
 //    is vastly larger than for a Moving Average filter.
 //
 // The default values are hist=0, i1=0 i2=0, hisf=0 and dB=kTRUE.
+~~~
+**/
 
  Int_t ny=0;
  TArrayD y(ny);
@@ -3786,6 +3945,8 @@ TArrayD NcDSP::FilterMovingAverage(Int_t n,TString mode,TH1* hist,Int_t* i1,Int_
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::FilterLowPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Int_t* i1,Int_t* i2,Bool_t adaptn)
 {
+/**
+~~~
 // Perform a Low Pass filter on the loaded input data x[] with a frequency cut-off
 // specified by "fcut" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
@@ -3846,6 +4007,8 @@ TArrayD NcDSP::FilterLowPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist
 // dashed blue lines in the time domain histogram.
 //
 // The default values are hisf=0, dB-kTRUE, hist=0, i1=0, i2=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD y(0);
  if (hisf) hisf->Reset();
@@ -3927,6 +4090,8 @@ TArrayD NcDSP::FilterLowPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::FilterHighPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Int_t* i1,Int_t* i2,Bool_t adaptn)
 {
+/**
+~~~
 // Perform a High Pass filter on the loaded input data x[] with a frequency cut-off
 // specified by "fcut" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
@@ -3987,6 +4152,8 @@ TArrayD NcDSP::FilterHighPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* his
 // dashed blue lines in the time domain histogram.
 //
 // The default values are hisf=0, dB=kTRUE, hist=0, i1=0, i2=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD y(0);
  if (hisf) hisf->Reset();
@@ -4068,6 +4235,8 @@ TArrayD NcDSP::FilterHighPass(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* his
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Int_t* i1,Int_t* i2,Bool_t adaptn)
 {
+/**
+~~~
 // Perform a Band Pass filter on the loaded input data x[] in the frequency band
 // specified by "f1" and "f2" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
@@ -4130,6 +4299,8 @@ TArrayD NcDSP::FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t d
 // dashed blue lines in the time domain histogram.
 //
 // The default values are hisf=0, dB=kTRUE, hist=0, i1=0, i2=0 and adaptn=TRUE.
+~~~
+**/
 
  TArrayD y(0);
  if (hisf) hisf->Reset();
@@ -4213,6 +4384,8 @@ TArrayD NcDSP::FilterBandPass(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t d
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Int_t* i1,Int_t* i2,Bool_t adaptn)
 {
+/**
+~~~
 // Perform a Band Reject filter on the loaded input data x[] in the frequency band
 // specified by "f1" and "f2" (see below) and a filter kernel consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
@@ -4274,6 +4447,8 @@ TArrayD NcDSP::FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t
 // dashed blue lines in the time domain histogram.
 //
 // The default values are hisf=0, dB=kTRUE, hist=0, i1=0, i2=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD y(0);
  if (hisf) hisf->Reset();
@@ -4357,6 +4532,8 @@ TArrayD NcDSP::FilterBandReject(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::FilterMultiBand(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Int_t* i1,Int_t* i2,Bool_t adaptn)
 {
+/**
+~~~
 // Perform a MultiBand filter on the loaded input data x[] in various frequency bands as
 // specified by the array "freqs" (see below) and filter kernels consisting of "n" points (see below).
 // The time domain result is returned in a TArrayD object and (optionally) in the histogram "hist",
@@ -4422,6 +4599,8 @@ TArrayD NcDSP::FilterMultiBand(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1* hi
 // dashed blue lines in the time domain histogram.
 //
 // The default values are hisf=0, dB=kTRUE, hist=0, i1=0, i2=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD y(0);
  if (hisf) hisf->Reset();
@@ -4508,6 +4687,8 @@ TArrayD NcDSP::FilterMultiBand(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1* hi
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::GetMovingAverageKernel(Int_t n,TH1* hisf,Bool_t dB,TH1* hist)
 {
+/**
+~~~
 // Provide via the returned TArrayD an n-point time domain Moving Average Filter kernel.
 // The optional argument "hisf" may be used to obtain a histogram of the frequency domain kernel
 // with the amplitude in decibel (dB=kTRUE) or linear (dB=kFALSE).
@@ -4543,6 +4724,8 @@ TArrayD NcDSP::GetMovingAverageKernel(Int_t n,TH1* hisf,Bool_t dB,TH1* hist)
 // hist : (optional) Histogram with the filter kernel in the time domain
 //
 // The default values are hisf=0, dB=kTRUE and hist=0.
+~~~
+**/
 
  TArrayD h(0);
  if (hisf) hisf->Reset();
@@ -4592,6 +4775,8 @@ TArrayD NcDSP::GetMovingAverageKernel(Int_t n,TH1* hisf,Bool_t dB,TH1* hist)
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::GetLowPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Bool_t adaptn)
 {
+/**
+~~~
 // Provide via the returned TArrayD an n-point time domain Low Pass Filter kernel
 // with cut-off frequency "fcut" expressed as a fraction of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
@@ -4635,6 +4820,8 @@ TArrayD NcDSP::GetLowPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* h
 // adaptn : If adaptn=kTRUE an even value of "n" will be increased by 1 to obtain an odd value 
 //
 // The default values are hisf=0, dB=kTRUE, hist=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD h(0);
  if (hisf) hisf->Reset();
@@ -4723,6 +4910,8 @@ TArrayD NcDSP::GetLowPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* h
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::GetHighPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Bool_t adaptn)
 {
+/**
+~~~
 // Provide via the returned TArrayD an n-point time domain High Pass Filter kernel
 // with cut-off frequency "fcut" expressed as a fraction of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
@@ -4766,6 +4955,8 @@ TArrayD NcDSP::GetHighPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* 
 // adaptn : If adaptn=kTRUE an even value of "n" will be increased by 1 to obtain an odd value 
 //
 // The default values are hisf=0, dB=kTRUE, hist=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD h(0);
  if (hisf) hisf->Reset();
@@ -4838,6 +5029,8 @@ TArrayD NcDSP::GetHighPassKernel(Double_t fcut,Int_t n,TH1* hisf,Bool_t dB,TH1* 
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::GetBandPassKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Bool_t adaptn)
 {
+/**
+~~~
 // Provide via the returned TArrayD an n-point time domain Band Pass Filter kernel
 // for the frequency band [f1,f2] expressed as fractions of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
@@ -4883,6 +5076,8 @@ TArrayD NcDSP::GetBandPassKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_
 // adaptn : If adaptn=kTRUE an even value of "n" will be increased by 1 to obtain an odd value 
 //
 // The default values are hisf=0, dB=kTRUE, hist=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD h(0);
  if (hisf) hisf->Reset();
@@ -4957,6 +5152,8 @@ TArrayD NcDSP::GetBandPassKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::GetBandRejectKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Bool_t adaptn)
 {
+/**
+~~~
 // Provide via the returned TArrayD an n-point time domain Band Reject Filter kernel
 // for the frequency band [f1,f2] expressed as fractions of the sampling frequency.
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
@@ -5001,6 +5198,8 @@ TArrayD NcDSP::GetBandRejectKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Boo
 // adaptn : If adaptn=kTRUE an even value of "n" will be increased by 1 to obtain an odd value 
 //
 // The default values are hisf=0, dB=kTRUE, hist=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD h(0);
  if (hisf) hisf->Reset();
@@ -5078,6 +5277,8 @@ TArrayD NcDSP::GetBandRejectKernel(Double_t f1,Double_t f2,Int_t n,TH1* hisf,Boo
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcDSP::GetMultiBandKernel(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1* hist,Bool_t adaptn)
 {
+/**
+~~~
 // Provide via the returned TArrayD a time domain Multi Band Filter kernel in various frequency bands
 // specified by the array "freqs" (see below) and filter kernels consisting of "n" points each (see below).
 // The optional argument "hisf" may be used to obtain a histogram of the kernel
@@ -5127,6 +5328,8 @@ TArrayD NcDSP::GetMultiBandKernel(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1*
 // adaptn : If adaptn=kTRUE an even value of "n" will be increased by 1 to obtain an odd value 
 //
 // The default values are hisf=0, dB=kTRUE, hist=0 and adaptn=kTRUE.
+~~~
+**/
 
  TArrayD h(0); // The convolution of the various filter kernels
  if (hisf) hisf->Reset();
@@ -5216,6 +5419,8 @@ TArrayD NcDSP::GetMultiBandKernel(TArray& freqs,Int_t n,TH1* hisf,Bool_t dB,TH1*
 ///////////////////////////////////////////////////////////////////////////
 void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* hist)
 {
+/**
+~~~
 // Internal member function to provide a filter kernel or filter result histogram in the frequency domain,
 // based on the time domain filter kernel or time domain filter result data contained in "h". 
 // The amplitude may be represented in decibel (dB=kTRUE) or linear (dB=kFALSE).
@@ -5223,6 +5428,8 @@ void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* 
 // such that the maximum value is at 1 for linear amplitudes or 0 for amplitudes in dB. 
 // The optional argument "hist" may be used to obtain a (zero padded) histogram of the time domain kernel.
 // However, in case kernel=kFALSE, the "hist" histogram will be left empty.
+~~~
+**/
 
  if (hisf) hisf->Reset("M");
  if (hist) hist->Reset("M");
@@ -5344,11 +5551,15 @@ void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* 
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDSP::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  NcDSP* q=new NcDSP(*this);
  if (name)

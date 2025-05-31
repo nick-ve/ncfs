@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcBlocks
+~~~
 // Class NcBlocks
 // Class for (Bayesian) Block treatment of sequential data.
 //
@@ -378,34 +382,51 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2024  14:54Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBlocks.h"
 #include "Riostream.h"
  
-ClassImp(NcBlocks) // Class implementation to enable ROOT I/O
+ClassImp(NcBlocks); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcBlocks::NcBlocks()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fMode=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcBlocks::~NcBlocks()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcBlocks::NcBlocks(const NcBlocks& q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fMode=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetPrior(Int_t n,Double_t fpr)
 {
+/**
+~~~
 // Internal member function to provide the prior fitness value for each individual block.
 // The returned value corresponds to -(ncp_prior) of the article of J.D. Scargle et al.
 //
@@ -427,6 +448,8 @@ Double_t NcBlocks::GetPrior(Int_t n,Double_t fpr)
 // and subsequently the value of the corresponding prior.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  Double_t prior=0;
 
@@ -466,6 +489,8 @@ Double_t NcBlocks::GetPrior(Int_t n,Double_t fpr)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlockFitness(Double_t n,Double_t len)
 {
+/**
+~~~
 // Internal member function to provide the fitness value for a certain block content
 // in the case of Data Mode 1 or 2.
 //
@@ -477,6 +502,8 @@ Double_t NcBlocks::GetBlockFitness(Double_t n,Double_t len)
 // The length of the block represents the summed time span of the contained Data Cells.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  Double_t fb=0;
 
@@ -495,6 +522,8 @@ Double_t NcBlocks::GetBlockFitness(Double_t n,Double_t len)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for the binned data (Data Mode 2) of histogram "hin"
 // with a false positive rate "fpr", and provide the results in the 1-D histogram "hout".
 //
@@ -521,6 +550,8 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hin || !hout) return 0;
 
@@ -763,6 +794,8 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for the (Data Mode 1) i-th variable of NcSample "s"
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 // A common case is where the NcSample contains recorded event times.
@@ -793,6 +826,8 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hout)
  {
@@ -852,6 +887,8 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(NcSample s,TString name,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for the (Data Mode 1) named variable of NcSample "s"
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 // A common case is where the NcSample contains recorded event times.
@@ -882,6 +919,8 @@ Double_t NcBlocks::GetBlocks(NcSample s,TString name,Double_t fpr,TH1* hout,Int_
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  Int_t i=s.GetIndex(name);
 
@@ -892,6 +931,8 @@ Double_t NcBlocks::GetBlocks(NcSample s,TString name,Double_t fpr,TH1* hout,Int_
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for the "n" data recordings (Data Mode 1)
 // contained in the data array "arr" with a false positive rate "fpr",
 // and provide the results in the 1-D histogram "hout".
@@ -925,6 +966,8 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hout)
  {
@@ -967,6 +1010,8 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for the "n" data recordings (Data Mode 1)
 // contained in the data array "arr" with a false positive rate "fpr",
 // and provide the results in the 1-D histogram "hout".
@@ -1000,6 +1045,8 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hout)
  {
@@ -1042,6 +1089,8 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
@@ -1073,6 +1122,8 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hout)
  {
@@ -1159,6 +1210,8 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
@@ -1203,6 +1256,8 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  NcSample s;
  TGraphErrors gre=s.GetGraphErrors(&gr,0,0,0,&f);
@@ -1222,6 +1277,8 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
@@ -1267,6 +1324,8 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t nt
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  TF1 func("func",f);
  NcSample s;
@@ -1287,6 +1346,8 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t nt
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_t ntrig)
 {
+/**
+~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
 // with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
 //
@@ -1332,6 +1393,8 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
 // whether that represents a rising or falling edge.
 //
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  // Obtain the RMS deviation of all the y-values
  Double_t rms=gr.GetRMS(2);
@@ -1356,6 +1419,8 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::GetBlocks(TH1* hin,TH1* hout,Int_t n,Int_t mode)
 {
+/**
+~~~
 // Get the block partitions consisting of "n" consecutive bins for binned data
 // contained in histogram "hin" with as block height the mean, median or RMS value
 // of the contained "n" bins and provide the results in the 1-D histogram "hout".
@@ -1380,6 +1445,8 @@ Int_t NcBlocks::GetBlocks(TH1* hin,TH1* hout,Int_t n,Int_t mode)
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hin)
  {
@@ -1487,6 +1554,8 @@ Int_t NcBlocks::GetBlocks(TH1* hin,TH1* hout,Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::GetBlocks(NcSample s,Int_t i,TH1* hout,Int_t n,Int_t mode)
 {
+/**
+~~~
 // Get the block partitions consisting of "n" consecutive samplings for the
 // i-th variable of NcSample "s", with as block height the mean, median or RMS value
 // of the contained "n" samples and provide the results in the 1-D histogram "hout".
@@ -1512,6 +1581,8 @@ Int_t NcBlocks::GetBlocks(NcSample s,Int_t i,TH1* hout,Int_t n,Int_t mode)
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hout)
  {
@@ -1556,6 +1627,8 @@ Int_t NcBlocks::GetBlocks(NcSample s,Int_t i,TH1* hout,Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::GetBlocks(NcSample s,TString name,TH1* hout,Int_t n,Int_t mode)
 {
+/**
+~~~
 // Get the block partitions consisting of "n" consecutive samplings for the
 // named variable of NcSample "s", with as block height the mean, median or RMS value
 // of the contained "n" samples and provide the results in the 1-D histogram "hout".
@@ -1581,6 +1654,8 @@ Int_t NcBlocks::GetBlocks(NcSample s,TString name,TH1* hout,Int_t n,Int_t mode)
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  Int_t i=s.GetIndex(name);
 
@@ -1591,6 +1666,8 @@ Int_t NcBlocks::GetBlocks(NcSample s,TString name,TH1* hout,Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::GetBlocks(Int_t nr,Double_t* arr,TH1* hout,Int_t n,Int_t mode)
 {
+/**
+~~~
 // Get the block partitions consisting of "n" consecutive elements of the "nr" data recordings
 // contained in the data array "arr", and provide the results in the 1-D histogram "hout".
 //
@@ -1615,6 +1692,8 @@ Int_t NcBlocks::GetBlocks(Int_t nr,Double_t* arr,TH1* hout,Int_t n,Int_t mode)
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hout)
  {
@@ -1661,6 +1740,8 @@ Int_t NcBlocks::GetBlocks(Int_t nr,Double_t* arr,TH1* hout,Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::GetBlocks(Int_t nr,Float_t* arr,TH1* hout,Int_t n,Int_t mode)
 {
+/**
+~~~
 // Get the block partitions consisting of "n" consecutive elements of the "nr" data recordings
 // contained in the data array "arr", and provide the results in the 1-D histogram "hout".
 //
@@ -1685,6 +1766,8 @@ Int_t NcBlocks::GetBlocks(Int_t nr,Float_t* arr,TH1* hout,Int_t n,Int_t mode)
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!hout)
  {
@@ -1731,6 +1814,8 @@ Int_t NcBlocks::GetBlocks(Int_t nr,Float_t* arr,TH1* hout,Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode)
 {
+/**
+~~~
 // Get the block partitions consisting of "n" consecutive samples for measurements
 // of an observable with as block height the mean, median or RMS of the values
 // of the contained "n" samples and provide the results in the 1-D histogram "hout".
@@ -1755,6 +1840,8 @@ Int_t NcBlocks::GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode)
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
+~~~
+**/
 
  if (!gr)
  {
@@ -1836,6 +1923,8 @@ Int_t NcBlocks::GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
 {
+/**
+~~~
 // Provide the 1-dimensional histogram hout=h1+c*h2+d.
 // So, for c=-1 and d=0, the values contained in the histogram "h2" will be 
 // subtracted from the corresponding bin values of the input histogram "h1".
@@ -1865,6 +1954,8 @@ Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d
 // the use of scaling will correctly reflect the resulting (event) counts in each bin.
 //
 // The default value is d=0.
+~~~
+**/
 
  if (hout) hout->Reset();
 
@@ -1998,6 +2089,8 @@ Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 {
+/**
+~~~
 // Provide the TGraph gout=gr+c*h+d, where "h" is a 1-dimensional histogram.
 // So, for c=-1 and d=0, the values contained in the histogram "h" will be 
 // subtracted from the corresponding values of the input graph "gr".
@@ -2015,6 +2108,8 @@ Int_t NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 // However, it can be applied to any combination of input graph "gr" and histogram "h".
 //
 // The default value is d=0.
+~~~
+**/
 
  if (gout) gout->Set(0);
 
@@ -2104,6 +2199,8 @@ Int_t NcBlocks::Add(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
 {
+/**
+~~~
 // Provide the 1-dimensional histogram hout=d+h1/(c*h2).
 // The output histogram "hout" will be given the same binning as the histogram "h1".
 //
@@ -2131,6 +2228,8 @@ Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_
 // the use of scaling will correctly reflect the resulting (event) counts in each bin.
 //
 // The default value is d=0.
+~~~
+**/
 
  if (hout) hout->Reset();
 
@@ -2280,6 +2379,8 @@ Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 {
+/**
+~~~
 // Provide the TGraph gout=d+gr/(c*h), where "h" is a 1-dimensional histogram.
 //
 // Notes :
@@ -2295,6 +2396,8 @@ Int_t NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 // However, it can be applied to any combination of input graph "gr" and histogram "h".
 //
 // The default value is d=0.
+~~~
+**/
 
  if (gout) gout->Set(0);
 
@@ -2403,6 +2506,8 @@ Int_t NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,Double_t xmax)
 {
+/**
+~~~
 // Provide the 1-dimensional histogram "hout" as a uniformly binned version of the
 // input 1-dimensional histogram "hin" over the interval [xmin,xmax].
 // This will for instance allow a Fourier analysis of a Bayesian Block result in the time domain.
@@ -2433,6 +2538,8 @@ Int_t NcBlocks::Rebin(TH1* hin,TH1* hout,Bool_t scale,Int_t nbins,Double_t xmin,
 // The return value is the number of bins of the produced output histogram "hout".
 //
 // The default values are nbins=0, xmin=0 and xmax=-1.
+~~~
+**/
 
  if (hout) hout->Reset();
 

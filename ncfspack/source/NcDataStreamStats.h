@@ -1,6 +1,6 @@
 #ifndef NcDataStreamStats_h
 #define NcDataStreamStats_h
-// Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2018 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <iostream>
@@ -12,6 +12,8 @@
 #include "TTree.h"
 
 #include "NcTaggingBase.h"
+
+/** Provide event classification tag statistics. **/
 
 class NcDataStreamStats : public NcTaggingBase
 {

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcDetectorUnit
+~~~
 // Class NcDetectorUnit
 // Handling of a collection of generic devices.
 //
@@ -85,19 +89,26 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, June 22, 2021  08:40Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 14, 2021  12:56Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcDetectorUnit.h"
 #include "Riostream.h"
  
-ClassImp(NcDetectorUnit) // Class implementation to enable ROOT I/O
+ClassImp(NcDetectorUnit); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcDetectorUnit::NcDetectorUnit(const char* name,const char* title) : NcDevice(name,title)
 {
+/**
+~~~
 // Default constructor.
 //
 // By default NO private copies will be made of the added devices.
 // See the memberfunction SetDevCopy() to change this.
+~~~
+**/
 
  fDevices=0;
  fDevCopy=1;
@@ -109,7 +120,11 @@ NcDetectorUnit::NcDetectorUnit(const char* name,const char* title) : NcDevice(na
 ///////////////////////////////////////////////////////////////////////////
 NcDetectorUnit::~NcDetectorUnit()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fDevices)
  {
@@ -140,7 +155,11 @@ NcDetectorUnit::~NcDetectorUnit()
 ///////////////////////////////////////////////////////////////////////////
 NcDetectorUnit::NcDetectorUnit(const NcDetectorUnit& q) : NcDevice(q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fDevCopy=q.fDevCopy;
 
@@ -176,6 +195,8 @@ NcDetectorUnit::NcDetectorUnit(const NcDetectorUnit& q) : NcDevice(q)
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::SetDevCopy(Int_t j)
 {
+/**
+~~~
 // (De)activate the creation of private copies of the added devices.
 // j=0 ==> No private copies are made; pointers of original devices are stored.
 // j=1 ==> Private copies of the devices are made and these pointers are stored.
@@ -196,6 +217,8 @@ void NcDetectorUnit::SetDevCopy(Int_t j)
 //  change the DevCopy mode anymore.
 //  To change the DevCopy mode for an existing NcDetectorUnit containing
 //  devices one first has to invoke Reset().
+~~~
+**/
 
  if (!fDevices)
  {
@@ -217,6 +240,8 @@ void NcDetectorUnit::SetDevCopy(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDetectorUnit::GetDevCopy() const
 {
+/**
+~~~
 // Provide value of the DevCopy mode.
 // 0 ==> No private copies are made; pointers of original devices are stored.
 // 1 ==> Private copies of the devices are made and these pointers are stored.
@@ -230,12 +255,16 @@ Int_t NcDetectorUnit::GetDevCopy() const
 // for all devices a specific copy constructor and override the default Clone()
 // memberfunction using this copy constructor.
 // An example for this may be seen from NcCalorimeter.   
+~~~
+**/
 
  return fDevCopy;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::SetOwner(Bool_t own)
 {
+/**
+~~~
 // Set ownership of all added objects. 
 // The default parameter is own=kTRUE.
 //
@@ -254,6 +283,8 @@ void NcDetectorUnit::SetOwner(Bool_t own)
 // ownership (and copy mode) for empty objects (e.g. newly created objects
 // or after invokation of the Reset() memberfunction) otherwise it will
 // very likely result in inconsistent destructor behaviour.
+~~~
+**/
 
  Int_t mode=1;
  if (!own) mode=0;
@@ -265,10 +296,14 @@ void NcDetectorUnit::SetOwner(Bool_t own)
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::Reset(Int_t mode)
 {
+/**
+~~~
 // Reset registered devices, hits and NcSignal attributes.
 // Note : The status word, DevCopy and HitCopy flag are NOT modified.
 //        Use SetStatus(), SetDevCopy() and SetHitCopy() to modify these parameters. 
 // See NcSignal::Reset() for further details.
+~~~
+**/
 
  NcDevice::Reset(mode);
 
@@ -301,6 +336,8 @@ void NcDetectorUnit::Reset(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::AddDevice(NcDevice& d)
 {
+/**
+~~~
 // Add a device to the detector unit.
 //
 // Note :
@@ -312,6 +349,8 @@ void NcDetectorUnit::AddDevice(NcDevice& d)
 // for all devices a specific copy constructor and override the default Clone()
 // memberfunction using this copy constructor.
 // An example for this may be seen from NcCalorimeter.   
+~~~
+**/
 
  if (!fDevices)
  {
@@ -332,7 +371,11 @@ void NcDetectorUnit::AddDevice(NcDevice& d)
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::RemoveDevice(NcDevice* d)
 {
+/**
+~~~
 // Remove the specified device from the detector unit.
+~~~
+**/
 
  if (!fDevices || !d) return;
 
@@ -346,10 +389,14 @@ void NcDetectorUnit::RemoveDevice(NcDevice* d)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDetectorUnit::GetNdevices(Bool_t follow)
 {
-// Provide the number of stored devices
+/**
+~~~
+// Provide the number of stored devices.
 //
 // follow = kTRUE  ==> Count the number of all devices related this NcDetectorUnit at any level
 //          kFALSE ==> Only count the number of devices directly linked to this NcDetectorUnit
+~~~
+**/
 
  Int_t ndevs=0;
 
@@ -369,6 +416,8 @@ Int_t NcDetectorUnit::GetNdevices(Bool_t follow)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDetectorUnit::GetNdevices(TString classname,Bool_t follow,TObjArray* hits)
 {
+/**
+~~~
 // Provide the number of devices of the specified class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -384,6 +433,8 @@ Int_t NcDetectorUnit::GetNdevices(TString classname,Bool_t follow,TObjArray* hit
 // specified class is returned. 
 //
 // By default hits=0.
+~~~
+**/
  
  if (classname=="*") classname="NcDevice";
 
@@ -443,8 +494,12 @@ Int_t NcDetectorUnit::GetNdevices(TString classname,Bool_t follow,TObjArray* hit
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcDetectorUnit::GetDevice(Int_t i) const
 {
+/**
+~~~
 // Return the i-th device of this detector unit.
 // The first device corresponds to i=1.
+~~~
+**/
 
  if (!fDevices)
  {
@@ -468,10 +523,14 @@ NcDevice* NcDetectorUnit::GetDevice(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcDetectorUnit::GetDevice(TString name,Bool_t follow)
 {
-// Return the device with name tag "name"
+/**
+~~~
+// Return the device with name tag "name".
 //
 // follow = kTRUE  ==> Search all devices related this NcDetectorUnit at any level
 //          kFALSE ==> Only search the devices directly linked to this NcDetectorUnit
+~~~
+**/
 
  if (!fDevices)
  {
@@ -499,6 +558,8 @@ NcDevice* NcDetectorUnit::GetDevice(TString name,Bool_t follow)
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcDetectorUnit::GetIdDevice(Int_t id,Bool_t follow,TObjArray* devs)
 {
+/**
+~~~
 // Return the NcDevice with identifier "id" from the specified array "devs".
 // In case devs=0 (which is the default) the devices stored in the detector unit
 // structure will be evaluated.
@@ -508,6 +569,8 @@ NcDevice* NcDetectorUnit::GetIdDevice(Int_t id,Bool_t follow,TObjArray* devs)
 //
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching device will be returned.
+~~~
+**/
 
  TObjArray temp;
 
@@ -547,6 +610,8 @@ NcDevice* NcDetectorUnit::GetIdDevice(Int_t id,Bool_t follow,TObjArray* devs)
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcDetectorUnit::GetIdDevice(Int_t id,TString classname,Bool_t follow)
 {
+/**
+~~~
 // Return the device with identifier "id" of the specified class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -555,6 +620,8 @@ NcDevice* NcDetectorUnit::GetIdDevice(Int_t id,TString classname,Bool_t follow)
 //
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching device will be returned.
+~~~
+**/
 
  if (!fDevices || id<0) return 0;
 
@@ -584,6 +651,8 @@ NcDevice* NcDetectorUnit::GetIdDevice(Int_t id,TString classname,Bool_t follow)
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::GetDevices(TString classname,Bool_t follow,TObjArray* devices)
 {
+/**
+~~~
 // Provide the references to the various devices derived from the specified class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -601,6 +670,8 @@ TObjArray* NcDetectorUnit::GetDevices(TString classname,Bool_t follow,TObjArray*
 // return argument.
 //
 // The default is devices=0.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -638,10 +709,14 @@ TObjArray* NcDetectorUnit::GetDevices(TString classname,Bool_t follow,TObjArray*
 ///////////////////////////////////////////////////////////////////////////
 NcDetectorUnit* NcDetectorUnit::GetDetectorUnit(TString name,Bool_t follow)
 {
-// Return the detector unit with name tag "name"
+/**
+~~~
+// Return the detector unit with name tag "name".
 //
 // follow = kTRUE  ==> Search all detector units related this NcDetectorUnit at any level
 //          kFALSE ==> Only search the detector units directly linked to this NcDetectorUnit
+~~~
+**/
 
  if (!fDevices)
  {
@@ -670,6 +745,8 @@ NcDetectorUnit* NcDetectorUnit::GetDetectorUnit(TString name,Bool_t follow)
 ///////////////////////////////////////////////////////////////////////////
 NcDetectorUnit* NcDetectorUnit::GetIdDetectorUnit(Int_t id,Bool_t follow,TObjArray* devs)
 {
+/**
+~~~
 // Return the detector unit with identifier "id" from the specified array "devs".
 // In case devs=0 (which is the default) the devices stored in the current detector unit
 // structure will be evaluated.
@@ -679,6 +756,8 @@ NcDetectorUnit* NcDetectorUnit::GetIdDetectorUnit(Int_t id,Bool_t follow,TObjArr
 //
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching device will be returned.
+~~~
+**/
 
  TObjArray temp;
 
@@ -718,6 +797,8 @@ NcDetectorUnit* NcDetectorUnit::GetIdDetectorUnit(Int_t id,Bool_t follow,TObjArr
 ///////////////////////////////////////////////////////////////////////////
 NcDetectorUnit* NcDetectorUnit::GetIdDetectorUnit(Int_t id,TString classname,Bool_t follow)
 {
+/**
+~~~
 // Return the detector unit with identifier "id" of the specified class.
 // For classname="*", no selection on the detector unit class will be performed.
 //
@@ -726,6 +807,8 @@ NcDetectorUnit* NcDetectorUnit::GetIdDetectorUnit(Int_t id,TString classname,Boo
 //
 // Note : In case of multiple occurrences of identifier "id", the first
 //        encountered matching detector unit will be returned.
+~~~
+**/
 
  if (!fDevices || id<0) return 0;
 
@@ -756,7 +839,9 @@ NcDetectorUnit* NcDetectorUnit::GetIdDetectorUnit(Int_t id,TString classname,Boo
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::Data(TString f,TString u)
 {
-// Provide detector unit information within the coordinate frame f
+/**
+~~~
+// Provide detector unit information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -764,6 +849,8 @@ void NcDetectorUnit::Data(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  const char* name=GetName();
  const char* title=GetTitle();
@@ -825,6 +912,8 @@ void NcDetectorUnit::Data(TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::ShowDevices(Int_t mode,Bool_t header)
 {
+/**
+~~~
 // Provide an overview of the available devices.
 // The input argument "header" determines whether header info is printed (kTRUE) or not (kFALSE).
 //
@@ -834,12 +923,16 @@ void NcDetectorUnit::ShowDevices(Int_t mode,Bool_t header)
 //        2 ==> Provide a listing with 1 line of info for each linked device at any level
 //
 // The default values are mode=1 and header=kTRUE.
+~~~
+**/
 
  ShowDevices("*",mode,header);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::ShowDevices(TString classname,Int_t mode,Bool_t header)
 {
+/**
+~~~
 // Provide an overview of the available devices of the specified (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 // The input argument "header" determines whether header info is printed (kTRUE) or not (kFALSE).
@@ -850,6 +943,8 @@ void NcDetectorUnit::ShowDevices(TString classname,Int_t mode,Bool_t header)
 //        2 ==> Provide a listing with 1 line of info for each linked device at any level
 //
 // The default values are mode=1 and header=kTRUE.
+~~~
+**/
 
  Bool_t follow=kFALSE;
  if (mode==2) follow=kTRUE;
@@ -870,6 +965,8 @@ void NcDetectorUnit::ShowDevices(TString classname,Int_t mode,Bool_t header)
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::ShowDevicesTree(TString classname,Int_t mode,NcDetectorUnit* unit)
 {
+/**
+~~~
 // Internal memberfunction to provide an overview of the available devices of the specified class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -881,6 +978,8 @@ void NcDetectorUnit::ShowDevicesTree(TString classname,Int_t mode,NcDetectorUnit
 // This memberfunction is invoked recursively to access also the devices of stored NcDetectorUnit objects (if any).
 //
 // The defaults are mode=1 and unit=0.
+~~~
+**/
  
  if (classname=="*") classname="NcDevice";
 
@@ -969,6 +1068,8 @@ void NcDetectorUnit::ShowDevicesTree(TString classname,Int_t mode,NcDetectorUnit
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcDetectorUnit::GetNhitsDevices(TString classname,Bool_t follow,Bool_t inc)
 {
+/**
+~~~
 // Provide the number of hits registered to the specified device (or derived) class.
 // The specified device class has to be derived from NcDevice.
 // For classname="*", no selection on the device class will be performed.
@@ -983,6 +1084,8 @@ Int_t NcDetectorUnit::GetNhitsDevices(TString classname,Bool_t follow,Bool_t inc
 // It is possible to indicate with the argument "classname" a specific
 // device instead of a whole class of devices. However, in such a case
 // it is more efficient to use the GetDevice() memberfunction directly.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -994,6 +1097,8 @@ Int_t NcDetectorUnit::GetNhitsDevices(TString classname,Bool_t follow,Bool_t inc
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::GetHitsDevices(TString classname,Bool_t follow,Bool_t inc,TObjArray* hits,TString name,Int_t mode,Int_t opt)
 {
+/**
+~~~
 // Provide the references to all the hits registered to the device (or derived) class
 // as specified by the input argument "classname".
 // The specified device class has to be derived from NcDevice.
@@ -1034,6 +1139,8 @@ TObjArray* NcDetectorUnit::GetHitsDevices(TString classname,Bool_t follow,Bool_t
 //       1 --> The specified name string has to be contained in the hit or slotname
 //
 // The defaults are : hits=0, name="none", mode=0 and opt=0.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1060,6 +1167,8 @@ TObjArray* NcDetectorUnit::GetHitsDevices(TString classname,Bool_t follow,Bool_t
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcDetectorUnit::GetIdHit(Int_t id,TString classname,Bool_t follow,Bool_t inc)
 {
+/**
+~~~
 // Return the hit with unique identifier "id" for the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1069,6 +1178,8 @@ NcSignal* NcDetectorUnit::GetIdHit(Int_t id,TString classname,Bool_t follow,Bool
 // inc = kFALSE --> Do NOT include the hits stored in the NcDetectorUnit itself
 //       kTRUE  --> Include the hits stored in the NcDetectorUnit itself
 //                  if it satisfies the specified device class. 
+~~~
+**/
 
  if (id<0) return 0;
 
@@ -1097,6 +1208,8 @@ NcSignal* NcDetectorUnit::GetIdHit(Int_t id,TString classname,Bool_t follow,Bool
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::ShowHits(TString classname,Bool_t follow,Bool_t inc,Int_t mode,TString f,TString u)
 {
+/**
+~~~
 // Show all the hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1117,6 +1230,8 @@ void NcDetectorUnit::ShowHits(TString classname,Bool_t follow,Bool_t inc,Int_t m
 //
 // Note : This memberfunction will show hits in printable format.
 //        To obtain a graphic hit display please refer to DisplayHits(). 
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1148,6 +1263,8 @@ void NcDetectorUnit::ShowHits(TString classname,Bool_t follow,Bool_t inc,Int_t m
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::SortHits(TString classname,Bool_t follow,Bool_t inc,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1191,6 +1308,8 @@ TObjArray* NcDetectorUnit::SortHits(TString classname,Bool_t follow,Bool_t inc,I
 // The default is ordered=0.
 //
 // For more extended functionality see class NcDevice.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1216,6 +1335,8 @@ TObjArray* NcDetectorUnit::SortHits(TString classname,Bool_t follow,Bool_t inc,I
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::SortHits(TString classname,Bool_t follow,Bool_t inc,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1259,6 +1380,8 @@ TObjArray* NcDetectorUnit::SortHits(TString classname,Bool_t follow,Bool_t inc,T
 // The default is ordered=0.
 //
 // For more extended functionality see class NcDevice.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1284,6 +1407,8 @@ TObjArray* NcDetectorUnit::SortHits(TString classname,Bool_t follow,Bool_t inc,T
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,Int_t idx,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
 {
+/**
+~~~
 // 3D color display of the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1321,6 +1446,8 @@ void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,Int_
 // TView* view=new TView(1);
 // view->SetRange(-1000,-1000,-1000,1000,1000,1000);
 // view->ShowAxis();
+~~~
+**/
 
  if (idx<=0) return;
 
@@ -1342,6 +1469,8 @@ void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,Int_
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,TString name,Float_t scale,Int_t dp,Int_t mode,Int_t mcol)
 {
+/**
+~~~
 // 3D color display of the various hits registered to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
 //
@@ -1381,6 +1510,8 @@ void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,TStr
 // TView* view=new TView(1);
 // view->SetRange(-1000,-1000,-1000,1000,1000,1000);
 // view->ShowAxis();
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1400,6 +1531,8 @@ void NcDetectorUnit::DisplayHits(TString classname,Bool_t follow,Bool_t inc,TStr
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t inc,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
@@ -1441,6 +1574,8 @@ TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t in
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1463,6 +1598,8 @@ TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t in
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t inc,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals registered
 // to the specified device (or derived) class.
 // For classname="*", no selection on the device class will be performed.
@@ -1504,6 +1641,8 @@ TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t in
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered) ordered->Clear();
 
@@ -1526,6 +1665,8 @@ TObjArray* NcDetectorUnit::SortDevices(TString classname,Bool_t follow,Bool_t in
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::SortDevices(TObjArray* hits,TString name,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals contained
 // in the input array.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -1561,6 +1702,8 @@ TObjArray* NcDetectorUnit::SortDevices(TObjArray* hits,TString name,Int_t mode,I
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered)
  {
@@ -1628,6 +1771,8 @@ TObjArray* NcDetectorUnit::SortDevices(TObjArray* hits,TString name,Int_t mode,I
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcDetectorUnit::SortDevices(TObjArray* hits,Int_t idx,Int_t mode,Int_t mcal,Int_t deadcheck,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to the various devices based on hit signals contained
 // in the input array.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -1663,6 +1808,8 @@ TObjArray* NcDetectorUnit::SortDevices(TObjArray* hits,Int_t idx,Int_t mode,Int_
 // return argument.
 //
 // The default is ordered=0.
+~~~
+**/
 
  if (ordered)
  {
@@ -1730,6 +1877,8 @@ TObjArray* NcDetectorUnit::SortDevices(TObjArray* hits,Int_t idx,Int_t mode,Int_
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::LoadHits(TString classname,Bool_t follow,Bool_t inc,TObjArray* hits,NcDetectorUnit* unit)
 {
+/**
+~~~
 // Internal memberfunction to load the references to the various hits registered to the specified device (or derived) class.
 // The specified device class has to be derived from NcDevice.
 // For classname="*", no selection on the device class will be performed.
@@ -1752,6 +1901,8 @@ void NcDetectorUnit::LoadHits(TString classname,Bool_t follow,Bool_t inc,TObjArr
 // amongst other selections.
 //
 // The default are hits=0 and unit=0.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1832,6 +1983,8 @@ void NcDetectorUnit::LoadHits(TString classname,Bool_t follow,Bool_t inc,TObjArr
 ///////////////////////////////////////////////////////////////////////////
 void NcDetectorUnit::LoadDevices(TString classname,Bool_t follow,TObjArray* devs,NcDetectorUnit* unit)
 {
+/**
+~~~
 // Internal memberfunction to load the references to the various devices derived from the specified device class.
 // The specified device class has to be derived from NcDevice.
 // For classname="*", no selection on the device class will be performed.
@@ -1850,6 +2003,8 @@ void NcDetectorUnit::LoadDevices(TString classname,Bool_t follow,TObjArray* devs
 // amongst other selections.
 //
 // The default are devs=0 and unit=0.
+~~~
+**/
 
  if (classname=="*") classname="NcDevice";
 
@@ -1913,6 +2068,8 @@ void NcDetectorUnit::LoadDevices(TString classname,Bool_t follow,TObjArray* devs
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDetectorUnit::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -1921,6 +2078,8 @@ TObject* NcDetectorUnit::Clone(const char* name) const
 // either NcDetectorUnit objects or objects derived from NcDetectorUnit
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  NcDetectorUnit* q=new NcDetectorUnit(*this);
  if (name)

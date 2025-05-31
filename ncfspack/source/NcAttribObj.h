@@ -1,6 +1,6 @@
 #ifndef NcAttribObj_h
 #define NcAttribObj_h
-// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2003 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TObject.h"

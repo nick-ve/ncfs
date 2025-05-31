@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1996 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcBoost.cxx 122 2016-05-19 18:01:23Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcBoost
+~~~
 // Class NcBoost
 // Perform various Lorentz transformations.
 //
@@ -71,18 +73,26 @@
 //
 //--- Author: Nick van Eijndhoven 14-may-1996 Utrecht University
 //- Modified: NvE $Date: 2016-05-19 20:01:23 +0200 (Thu, 19 May 2016) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcBoost.h"
 #include "Riostream.h"
  
-ClassImp(NcBoost) // Class implementation to enable ROOT I/O
+ClassImp(NcBoost); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcBoost::NcBoost() : TObject()
 {
+/**
+~~~
 // Creation of a Lorentz boost object and initialisation of parameters.
 // Beta is set to (0,0,0) and consequently Gamma=1. 
 // All errors are initialised to 0. 
+~~~
+**/
+
  Double_t a[3]={0,0,0};
  fBeta.SetVector(a,"sph");
  fGamma=1;
@@ -92,12 +102,21 @@ NcBoost::NcBoost() : TObject()
 ///////////////////////////////////////////////////////////////////////////
 NcBoost::~NcBoost()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcBoost::NcBoost(const NcBoost& b) : TObject(b)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fBeta=b.fBeta;
  fGamma=b.fGamma;
  fDgamma=b.fDgamma;
@@ -106,9 +125,14 @@ NcBoost::NcBoost(const NcBoost& b) : TObject(b)
 ///////////////////////////////////////////////////////////////////////////
 void NcBoost::SetBeta(Nc3Vector& b)
 {
+/**
+~~~
 // Setting of boost parameters on basis of beta 3-vector.
 // The errors on the beta 3-vector are taken from the input 3-vector.
 // The gamma value and its error are calculated accordingly.
+~~~
+**/
+
  fBeta=b;
  Double_t beta2=fBeta.Dot(fBeta);
  Double_t dbeta2=fBeta.GetResultError();
@@ -129,9 +153,14 @@ void NcBoost::SetBeta(Nc3Vector& b)
 ///////////////////////////////////////////////////////////////////////////
 void NcBoost::Set4Momentum(Nc4Vector& p)
 {
+/**
+~~~
 // Setting of boost parameters on basis of momentum 4-vector data.
 // The errors of the input 4-vector are used to calculate the
 // errors on the beta 3-vector and the gamma factor.
+~~~
+**/
+
  Double_t E=p.GetScalar();
  Double_t dE=p.GetResultError();
  if (E <= 0.)
@@ -157,14 +186,24 @@ void NcBoost::Set4Momentum(Nc4Vector& p)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector NcBoost::GetBetaVector() const
 {
+/**
+~~~
 // Provide the beta 3-vector.
+~~~
+**/
+
  return fBeta;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBoost::GetBeta()
 {
+/**
+~~~
 // Provide the norm of the beta 3-vector.
 // The error on the value can be obtained via GetResultError().
+~~~
+**/
+
  Double_t norm=fBeta.GetNorm();
  fDresult=fBeta.GetResultError();
  return norm;
@@ -172,22 +211,37 @@ Double_t NcBoost::GetBeta()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBoost::GetGamma()
 {
+/**
+~~~
 // Provide the gamma factor.
 // The error on the value can be obtained via GetResultError().
+~~~
+**/
+
  fDresult=fDgamma;
  return fGamma;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcBoost::GetResultError() const
 {
+/**
+~~~
 // Provide the error on the result of an operation yielding a scalar.
 // E.g. GetBeta() or GetGamma()
+~~~
+**/
+
  return fDresult;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcBoost::Data(TString f)
 {
+/**
+~~~
 // Printing of the boost parameter info in coordinate frame f.
+~~~
+**/
+
  Double_t beta=fBeta.GetNorm();
  Double_t dbeta=fBeta.GetResultError();
  cout << " *NcBoost::Data* beta : " << beta << " error : " << dbeta
@@ -198,10 +252,14 @@ void NcBoost::Data(TString f)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector NcBoost::Boost(Nc4Vector& v)
 {
+/**
+~~~
 // Perform the Lorentz boost on the 4-vector v.
 // Error propagation is performed automatically.
 // Note : As an approximation Beta and p.Dot(Beta) are considered as
 //        independent quantities.
+~~~
+**/
 
  Double_t beta=fBeta.GetNorm();
  Double_t dbeta=fBeta.GetResultError();
@@ -266,10 +324,14 @@ Nc4Vector NcBoost::Boost(Nc4Vector& v)
 ///////////////////////////////////////////////////////////////////////////
 Nc4Vector NcBoost::Inverse(Nc4Vector& vprim)
 {
+/**
+~~~
 // Perform the inverse Lorentz boost on the 4-vector vprim.
 // Error propagation is performed automatically.
 // Note : As an approximation Beta and pprim.Dot(Beta) are considered as
 //        independent quantities.
+~~~
+**/
 
  Double_t beta=fBeta.GetNorm();
  Double_t dbeta=fBeta.GetResultError();
