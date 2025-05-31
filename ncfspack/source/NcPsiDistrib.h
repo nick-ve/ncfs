@@ -1,9 +1,7 @@
 #ifndef NcPsiDistrib_h
 #define NcPsiDistrib_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2008 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcPsiDistrib.h 5 2010-03-19 10:10:02Z nickve $
 
 #include "TCanvas.h"
 #include "TH1D.h"
@@ -11,6 +9,8 @@
 #include "NcMath.h"
 #include "NcRandom.h"
 #include "NcSample.h"
+
+/** Simple class to simulate Bayesian psi distributions. **/
 
 class NcPsiDistrib 
 {

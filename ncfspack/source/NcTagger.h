@@ -1,10 +1,12 @@
 #ifndef NcTagger_h
 #define NcTagger_h
 
-// Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "NcDevice.h"
+
+/** Handling of generic event classification tags. **/
 
 class NcTagger : public NcDevice
 {

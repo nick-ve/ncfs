@@ -14,6 +14,8 @@
 
 #include "NcEvent.h"
 
+/** Base class for event tag processing. **/
+
 class NcTaggingBase : public TTask
 {
  public:

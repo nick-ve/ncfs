@@ -1,11 +1,13 @@
 #ifndef NcStokes_h
 #define NcStokes_h
 
-// Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TString.h"
 #include "TMath.h"
+
+/** Treatment of Stokes parameters for EM polarisation studies. **/
 
 class NcStokes
 {

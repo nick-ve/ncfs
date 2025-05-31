@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2003 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcObjMatrix.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcObjMatrix
+~~~
 // Class NcObjMatrix
 // Handling of a matrix structure of objects.
 // All objects which are derived from TObject may be entered into the matrix 
@@ -88,19 +90,27 @@
 //
 //--- Author: Nick van Eijndhoven 23-jan-2003 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcObjMatrix.h"
 #include "Riostream.h"
  
-ClassImp(NcObjMatrix) // Class implementation to enable ROOT I/O
+ClassImp(NcObjMatrix); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcObjMatrix::NcObjMatrix() : TNamed()
 {
+/**
+~~~
 // Default constructor.
 // Note : The owner and swap mode flags will be initialised to 0.
 //        See the memberfunctions SetOwner() and SetSwapMode() for further
 //        details. 
+~~~
+**/
+
  fRows=0;
  fOwn=0;
  fSwap=0;
@@ -111,7 +121,12 @@ NcObjMatrix::NcObjMatrix() : TNamed()
 ///////////////////////////////////////////////////////////////////////////
 NcObjMatrix::~NcObjMatrix()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if (fRows)
  {
   delete fRows;
@@ -126,7 +141,11 @@ NcObjMatrix::~NcObjMatrix()
 ///////////////////////////////////////////////////////////////////////////
 NcObjMatrix::NcObjMatrix(const NcObjMatrix& m) : TNamed(m)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 
  fRows=0;
  fMaxrow=0;
@@ -160,10 +179,15 @@ NcObjMatrix::NcObjMatrix(const NcObjMatrix& m) : TNamed(m)
 ///////////////////////////////////////////////////////////////////////////
 void NcObjMatrix::Reset()
 {
+/**
+~~~
 // Reset the whole matrix structure.
 // Note : The values of the owner and swap mode flags will not be modified.
 //        To modify the ownership, use the memberfunction SetOwner(). 
 //        To modify the swap mode, use the memberfunction SetSwapMode(). 
+~~~
+**/
+
  if (fRows)
  {
   delete fRows;
@@ -181,11 +205,15 @@ void NcObjMatrix::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcObjMatrix::SetOwner(Int_t own)
 {
+/**
+~~~
 // Set the owner flag (0/1) for the stored objects.
 // When the owner flag is set to 1, all entered objects are owned by the
 // matrix structure.
 // At invokation of this memberfunction the default argument is own=1.
-//
+~~~
+**/
+
  fOwn=own;
 
  if (!fRows) return;
@@ -209,12 +237,19 @@ void NcObjMatrix::SetOwner(Int_t own)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetOwner() const
 {
+/**
+~~~
 // Provide the owner flag for the stored objects.
+~~~
+**/
+
  return fOwn;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcObjMatrix::SetSwapMode(Int_t swap)
 {
+/**
+~~~
 // Set the swap mode flag (0/1) for the internal matrix storage.
 // In case the number of rows differs considerably from the number of columns,
 // it might be more efficient (w.r.t. memory usage and/or output file size)
@@ -226,7 +261,9 @@ void NcObjMatrix::SetSwapMode(Int_t swap)
 // Note : The swap mode can only be set as long as no objects have
 //        been stored in the matrix structure (i.e. a new instance
 //        of NcObjMatrix or after invokation of the Reset() function). 
-//
+~~~
+**/
+
  if (!fRows)
  {
   fSwap=swap;
@@ -239,18 +276,28 @@ void NcObjMatrix::SetSwapMode(Int_t swap)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetSwapMode() const
 {
+/**
+~~~
 // Provide the swap mode flag for this matrix.
+~~~
+**/
+
  return fSwap;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)
 {
+/**
+~~~
 // Enter an object to the matrix structure at location (row,col).
 // In case the location already contained an object, the existing object
 // will first be removed before the new object is stored.
 // According to the status of the owner flag (see the SetOwner() function)
 // the existing object will also be deleted.
 // Note : The first location in the matrix is indicated as (1,1).
+~~~
+**/
+
  if (row<1 || col<1)
  {
   cout << " *NcObjMatrix::AddObject* Invalid argument(s) (row,col) : ("
@@ -306,10 +353,14 @@ void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)
 ///////////////////////////////////////////////////////////////////////////
 void NcObjMatrix::RemoveObject(Int_t row,Int_t col)
 {
+/**
+~~~
 // Remove the object stored at the matrix location (row,col).
 // In case the object was owned by the matrix, it will be deleted.
 //
 // Note : The first location in the matrix is indicated as (1,1).
+~~~
+**/
 
  TObject* obj=0;
 
@@ -339,6 +390,8 @@ void NcObjMatrix::RemoveObject(Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 void NcObjMatrix::RemoveObjects(TObject* obj,Int_t row,Int_t col)
 {
+/**
+~~~
 // Remove object(s) from the matrix according to user specified selections.
 // In case the object was owned by the matrix, it will be deleted.
 //
@@ -370,7 +423,9 @@ void NcObjMatrix::RemoveObjects(TObject* obj,Int_t row,Int_t col)
 //
 // Invokation of RemoveObjects(0) is equivalent to invoking Reset().
 // Invoking the latter directly is slightly faster.
-//
+~~~
+**/
+
  TArrayI rows;
  TArrayI cols;
  Int_t nrefs=0;
@@ -419,10 +474,14 @@ void NcObjMatrix::RemoveObjects(TObject* obj,Int_t row,Int_t col)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) const
 {
+/**
+~~~
 // Provide a pointer to the object stored at the matrix location (row,col).
 // In case no object was stored at the indicated location or the location
 // would reside outside the matrix boundaries, a value 0 will be returned.
 // Note : The first location in the matrix is indicated as (1,1).
+~~~
+**/
 
  TObject* obj=0;
 
@@ -446,6 +505,8 @@ TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) const
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcObjMatrix::GetObject(Int_t j) const
 {
+/**
+~~~
 // Provide a pointer to the j-th stored object.
 // In case the index j is invalid, a value 0 will be returned.
 // The first stored object is indicated as j=1.
@@ -453,6 +514,8 @@ TObject* NcObjMatrix::GetObject(Int_t j) const
 // Note : Do NOT delete the object.
 //        To remove an object, the memberfunction RemoveObject() or
 //        RemoveObjects() should be used.
+~~~
+**/
 
  TObject* obj=0;
  Int_t nobj=0;
@@ -465,6 +528,8 @@ TObject* NcObjMatrix::GetObject(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcObjMatrix::GetObjects()
 {
+/**
+~~~
 // Provide references to all the stored objects.
 // In case no objects are present, a value 0 will be returned.
 //
@@ -472,25 +537,42 @@ TObjArray* NcObjMatrix::GetObjects()
 //        changing the order of the pointers of the various objects.
 //        For addition or removal of objects, the memberfunctions
 //        EnterObject(), RemoveObject() or RemoveObjects() should be used.
+~~~
+**/
 
  return fObjects;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetMaxRow() const
 {
+/**
+~~~
 // Provide the maximum row number index.
+~~~
+**/
+
  return fMaxrow;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetMaxColumn() const
 {
+/**
+~~~
 // Provide the maximum column number index.
+~~~
+**/
+
  return fMaxcol;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetNobjects() const
 {
+/**
+~~~
 // Provide the number of stored objects.
+~~~
+**/
+
  Int_t nobj=0;
  if (fObjects) nobj=fObjects->GetEntries();
 
@@ -499,8 +581,13 @@ Int_t NcObjMatrix::GetNobjects() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetNrefs(TObject* obj) const
 {
+/**
+~~~
 // Provide the number of stored references to the specified object.
 // If obj=0 the total number of stored references for all objects is returned.
+~~~
+**/
+
  Int_t nobjs=GetNobjects();
 
  if (!obj) return nobjs;
@@ -516,6 +603,8 @@ Int_t NcObjMatrix::GetNrefs(TObject* obj) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetIndices(TObject* obj,TArrayI& rows,TArrayI& cols) const
 {
+/**
+~~~
 // Provide the (row,col) indices of all the storage locations of the
 // specified object.
 // The row and column indices are returned in the two separate TArrayI arrays
@@ -539,7 +628,9 @@ Int_t NcObjMatrix::GetIndices(TObject* obj,TArrayI& rows,TArrayI& cols) const
 // (to increase the dimension of the resulting structure), the (row,col)
 // indices of that TObjArray are obtained and NOT the indices of the
 // actual objects contained in that TObjArray structure.
-//
+~~~
+**/
+
  Int_t nrefs=GetNrefs(obj);
  rows.Reset();
  cols.Reset();
@@ -578,6 +669,8 @@ Int_t NcObjMatrix::GetIndices(TObject* obj,TArrayI& rows,TArrayI& cols) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetIndices(TObject* obj,Int_t row,TArrayI& cols) const
 {
+/**
+~~~
 // Provide the column indices of all the storage locations of the
 // specified object in the specified row of the matrix.
 // The column indices are returned in the TArrayI array.
@@ -605,7 +698,9 @@ Int_t NcObjMatrix::GetIndices(TObject* obj,Int_t row,TArrayI& cols) const
 // (to increase the dimension of the resulting structure), the column
 // indices of that TObjArray are obtained and NOT the indices of the
 // actual objects contained in that TObjArray structure.
-//
+~~~
+**/
+
  cols.Reset();
 
  if (row<0 || row>GetMaxRow()) return 0;
@@ -679,6 +774,8 @@ Int_t NcObjMatrix::GetIndices(TObject* obj,Int_t row,TArrayI& cols) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcObjMatrix::GetIndices(TObject* obj,TArrayI& rows,Int_t col) const
 {
+/**
+~~~
 // Provide the row indices of all the storage locations of the
 // specified object in the specified column of the matrix.
 // The row indices are returned in the TArrayI array.
@@ -706,7 +803,9 @@ Int_t NcObjMatrix::GetIndices(TObject* obj,TArrayI& rows,Int_t col) const
 // (to increase the dimension of the resulting structure), the row
 // indices of that TObjArray are obtained and NOT the indices of the
 // actual objects contained in that TObjArray structure.
-//
+~~~
+**/
+
  rows.Reset();
 
  if (col<0 || col>GetMaxColumn()) return 0;
@@ -780,10 +879,14 @@ Int_t NcObjMatrix::GetIndices(TObject* obj,TArrayI& rows,Int_t col) const
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcObjMatrix::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers when adding objects in case the container owns the objects.
+~~~
+**/
 
  NcObjMatrix* m=new NcObjMatrix(*this);
  if (name)

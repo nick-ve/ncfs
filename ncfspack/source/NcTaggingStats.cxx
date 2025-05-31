@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2022 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcTaggingStats
+~~~
 // Class NcTaggingStats
 // TTask derived class to perform statistics of event classification tags.
 //  
@@ -157,26 +161,41 @@
 //
 //--- Author: Nick van Eijndhoven 18-jul-2022, IIHE-VUB, Brussel
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:30Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTaggingStats.h"
 #include "Riostream.h"
  
-ClassImp(NcTaggingStats) // Class implementation to enable ROOT I/O
+ClassImp(NcTaggingStats); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcTaggingStats::NcTaggingStats(const char* name,const char* title) : NcTaggingBase(name,title)
 {
+/**
+~~~
 // Constructor and initialisation of default parameters.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTaggingStats::~NcTaggingStats()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingStats::Exec(Option_t* opt)
 {
+/**
+~~~
 // Perform the tagging analysis.
+~~~
+**/
 
  Int_t nact=0;
  Int_t ndeact=0;
@@ -394,7 +413,11 @@ void NcTaggingStats::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingStats::ShowStatistics()
 {
+/**
+~~~
 // Provide The final statistics.
+~~~
+**/
 
  ListStatistics();
 }

@@ -1,9 +1,7 @@
 #ifndef NcRandom_h
 #define NcRandom_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcRandom.h 98 2014-10-27 10:13:13Z nickve $
 
 #include <math.h>
  
@@ -11,6 +9,8 @@
 
 #include "NcMath.h"
 #include "NcTimestamp.h"
+
+/** Generate universal random numbers and sequences on all common machines. **/
  
 class NcRandom : public TObject
 {
@@ -45,11 +45,11 @@ class NcRandom : public TObject
   void Start(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts); // Start at certain point
   void Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l);  // Unpack the seed
   void Uniform(Int_t n); // n uniform randoms for quick skipping
-  Int_t fNa;             //! The number of bins of the area function
-  Float_t* fXa;          //! The binned x values of the area function
-  Float_t* fYa;          //! The corresponding y values of the area function
-  Float_t fYamin,fYamax; //! The min. and max. y values of the area function
-  Int_t* fIbins;         //! The bin numbers of the random x candidates
+  Int_t fNa;             //!< The number of bins of the area function
+  Float_t* fXa;          //!< The binned x values of the area function
+  Float_t* fYa;          //!< The corresponding y values of the area function
+  Float_t fYamin,fYamax; //!< The min. and max. y values of the area function
+  Int_t* fIbins;         //!< The bin numbers of the random x candidates
  
  ClassDef(NcRandom,3) // Generate universal random numbers and sequences on all common machines.
 };

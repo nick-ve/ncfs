@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NvTagger
+~~~
 // Class NcTagger
 // NcDevice derived (base) class to handle generic event classification tags.
 //
@@ -124,30 +128,47 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 12, 2021  16:36Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 26, 2022  08:05Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTagger.h"
 #include "Riostream.h"
  
-ClassImp(NcTagger) // Class implementation to enable ROOT I/O
+ClassImp(NcTagger); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcTagger::NcTagger(const char* name,const char* title) : NcDevice(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTagger::~NcTagger()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTagger::NcTagger(const NcTagger& q) : NcDevice(q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTagger::SetPass(TString name,Bool_t flag)
 {
+/**
+~~~
 // Set the pass flag of the tag with the specified name.
 //
 // Note :
@@ -161,6 +182,8 @@ void NcTagger::SetPass(TString name,Bool_t flag)
 // In case the user wants to reflect a different relation between the "pass" and "write" flags,
 // as is the case for a downscaled data stream, the SetWrite() member function has to be invoked
 // AFTER this SetPass() invokation. 
+~~~
+**/
 
  Float_t value=0;
  if (flag) value=1;
@@ -171,9 +194,13 @@ void NcTagger::SetPass(TString name,Bool_t flag)
 ///////////////////////////////////////////////////////////////////////////
 void NcTagger::SetWrite(TString name,Bool_t flag)
 {
+/**
+~~~
 // Set the write flag of the tag with the specified name.
 //
 // Note : The setting of the pass flag is not modified.
+~~~
+**/
 
  Float_t value=0;
  if (flag) value=1;
@@ -183,7 +210,11 @@ void NcTagger::SetWrite(TString name,Bool_t flag)
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcTagger::GetPass(TString name)
 {
+/**
+~~~
 // Provide the pass flag of the tag with the specified name.
+~~~
+**/
 
  Bool_t flag=kFALSE;
  
@@ -199,7 +230,11 @@ Bool_t NcTagger::GetPass(TString name)
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcTagger::GetWrite(TString name)
 {
+/**
+~~~
 // Provide the pass flag of the tag with the specified name.
+~~~
+**/
 
  Bool_t flag=kFALSE;
  
@@ -215,7 +250,11 @@ Bool_t NcTagger::GetWrite(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcTagger::SetTag(TString hitname,TString slotname,Float_t value)
 {
+/**
+~~~
 // Internal member function to record the tag data.
+~~~
+**/
 
  NcSignal* sx=GetHit(hitname);
 
@@ -237,6 +276,8 @@ void NcTagger::SetTag(TString hitname,TString slotname,Float_t value)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcTagger::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -245,6 +286,8 @@ TObject* NcTagger::Clone(const char* name) const
 // to store either NcTagger objects or objects derived from NcTagger
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  NcTagger* q=new NcTagger(*this);
  if (name)

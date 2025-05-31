@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcPosition
+~~~
 // Class NcPosition
 // Handling of positions in various reference frames.
 //
@@ -81,24 +85,37 @@
 //
 //--- Author: Nick van Eijndhoven 06-feb-1999 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:49Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcPosition.h"
 #include "Riostream.h"
  
-ClassImp(NcPosition) // Class implementation to enable ROOT I/O
+ClassImp(NcPosition); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcPosition::NcPosition()
 {
+/**
+~~~
 // Creation of an NcPosition object and initialisation of parameters.
 // The unit scale for position coordinates is initialised to cm.
+~~~
+**/
+
  fScale=1;
  fTstamp=0;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPosition::~NcPosition()
 {
-// Destructor to delete dynamically allocated memory
+/**
+~~~
+// Destructor to delete dynamically allocated memory.
+~~~
+**/
+
  if (fTstamp)
  {
   delete fTstamp;
@@ -108,7 +125,12 @@ NcPosition::~NcPosition()
 ///////////////////////////////////////////////////////////////////////////
 NcPosition::NcPosition(const NcPosition& p) : Nc3Vector(p)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fScale=p.fScale;
  fTstamp=0;
  if (p.fTstamp) fTstamp=new NcTimestamp(*(p.fTstamp));
@@ -116,7 +138,9 @@ NcPosition::NcPosition(const NcPosition& p) : Nc3Vector(p)
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPosition(Double_t* r,TString f,TString u)
 {
-// Store position according to reference frame f
+/**
+~~~
+// Store position according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -124,13 +148,17 @@ void NcPosition::SetPosition(Double_t* r,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  SetVector(r,f,u);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPosition(Double_t r1,Double_t r2,Double_t r3,TString f,TString u)
 {
-// Store position according to reference frame f
+/**
+~~~
+// Store position according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -138,13 +166,17 @@ void NcPosition::SetPosition(Double_t r1,Double_t r2,Double_t r3,TString f,TStri
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  SetVector(r1,r2,r3,f,u);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::GetPosition(Double_t* r,TString f,TString u,Float_t scale) const
 {
-// Provide position according to reference frame f
+/**
+~~~
+// Provide position according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -159,6 +191,8 @@ void NcPosition::GetPosition(Double_t* r,TString f,TString u,Float_t scale) cons
 // specification of the scale parameter.
 // The convention is that scale=1 corresponds to meter, so specification
 // of scale=0.01 will provide the position coordinates in cm.
+~~~
+**/
 
  Nc3Vector v=(Nc3Vector)(*this);
  if (scale>0) v*=fScale/scale;
@@ -167,7 +201,9 @@ void NcPosition::GetPosition(Double_t* r,TString f,TString u,Float_t scale) cons
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPosition(Float_t* r,TString f,TString u)
 {
-// Store position according to reference frame f
+/**
+~~~
+// Store position according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -175,13 +211,17 @@ void NcPosition::SetPosition(Float_t* r,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  SetVector(r,f,u);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::GetPosition(Float_t* r,TString f,TString u,Float_t scale) const
 {
-// Provide position according to reference frame f
+/**
+~~~
+// Provide position according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -196,6 +236,8 @@ void NcPosition::GetPosition(Float_t* r,TString f,TString u,Float_t scale) const
 // specification of the scale parameter.
 // The convention is that scale=1 corresponds to meter, so specification
 // of scale=0.01 will provide the position coordinates in cm.
+~~~
+**/
 
  Nc3Vector v=(Nc3Vector)(*this);
  if (scale>0) v*=fScale/scale;
@@ -204,13 +246,23 @@ void NcPosition::GetPosition(Float_t* r,TString f,TString u,Float_t scale) const
 ///////////////////////////////////////////////////////////////////////////
 NcPosition& NcPosition::GetPosition()
 {
-// Provide position
+/**
+~~~
+// Provide position.
+~~~
+**/
+
  return (*this);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPosition(Nc3Vector& r)
 {
-// Set position
+/**
+~~~
+// Set position.
+~~~
+**/
+
  Double_t a[3];
  r.GetVector(a,"sph");
  SetVector(a,"sph");
@@ -220,7 +272,9 @@ void NcPosition::SetPosition(Nc3Vector& r)
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPositionErrors(Double_t* e,TString f,TString u)
 {
-// Store position errors according to reference frame f
+/**
+~~~
+// Store position errors according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -228,13 +282,17 @@ void NcPosition::SetPositionErrors(Double_t* e,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  SetErrors(e,f,u);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPositionErrors(Double_t e1,Double_t e2,Double_t e3,TString f,TString u)
 {
-// Store position errors according to reference frame f
+/**
+~~~
+// Store position errors according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -242,13 +300,17 @@ void NcPosition::SetPositionErrors(Double_t e1,Double_t e2,Double_t e3,TString f
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  SetErrors(e1,e2,e3,f,u);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::GetPositionErrors(Double_t* e,TString f,TString u,Float_t scale) const
 {
-// Provide position errors according to reference frame f
+/**
+~~~
+// Provide position errors according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -263,6 +325,8 @@ void NcPosition::GetPositionErrors(Double_t* e,TString f,TString u,Float_t scale
 // specification of the scale parameter.
 // The convention is that scale=1 corresponds to meter, so specification
 // of scale=0.01 will provide the position coordinate errors in cm.
+~~~
+**/
 
  Nc3Vector v=(Nc3Vector)(*this);
  if (scale>0) v*=fScale/scale;
@@ -271,7 +335,9 @@ void NcPosition::GetPositionErrors(Double_t* e,TString f,TString u,Float_t scale
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPositionErrors(Float_t* e,TString f,TString u)
 {
-// Store position errors according to reference frame f
+/**
+~~~
+// Store position errors according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -279,13 +345,17 @@ void NcPosition::SetPositionErrors(Float_t* e,TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The default is u="rad".
+~~~
+**/
 
  SetErrors(e,f,u);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::GetPositionErrors(Float_t* e,TString f,TString u,Float_t scale) const
 {
-// Provide position errors according to reference frame f
+/**
+~~~
+// Provide position errors according to reference frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -300,6 +370,8 @@ void NcPosition::GetPositionErrors(Float_t* e,TString f,TString u,Float_t scale)
 // specification of the scale parameter.
 // The convention is that scale=1 corresponds to meter, so specification
 // of scale=0.01 will provide the position coordinate errors in cm.
+~~~
+**/
 
  Nc3Vector v=(Nc3Vector)(*this);
  if (scale>0) v*=fScale/scale;
@@ -308,14 +380,20 @@ void NcPosition::GetPositionErrors(Float_t* e,TString f,TString u,Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::ResetPosition()
 {
+/**
+~~~
 // Reset the position and corresponding errors.
-// When retrieved values of 0 will be returned.
+// When retrieved, values of 0 will be returned.
+~~~
+**/
 
  SetZero();
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcPosition::GetDistance(NcPosition& p,Float_t scale)
 {
+/**
+~~~
 // Provide distance of the current NcPosition to position p.
 // The error on the result can be obtained as usual by invoking
 // GetResultError() afterwards. 
@@ -331,7 +409,9 @@ Double_t NcPosition::GetDistance(NcPosition& p,Float_t scale)
 // As such it is possible to obtain a correctly computed distance even in case
 // the position coordinates have a different unit scale.
 // However, it is recommended to work always with one single unit scale.
-//
+~~~
+**/
+
  Nc3Vector d=(Nc3Vector)p;
  Float_t pscale=p.GetUnitScale();
  if ((pscale/fScale > 1.1) || (fScale/pscale > 1.1)) d=d*(pscale/fScale);
@@ -350,6 +430,8 @@ Double_t NcPosition::GetDistance(NcPosition& p,Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetUnitScale(Float_t s)
 {
+/**
+~~~
 // Set the unit scale for the position coordinates.
 // The scale is normalised w.r.t. the meter, so setting the unit scale
 // to 0.01 means that all position coordinates are in cm.
@@ -360,7 +442,9 @@ void NcPosition::SetUnitScale(Float_t s)
 // Note : This memberfunction does not modify the numerical values of
 //        the position coordinates.
 //        It only specifies their numerical meaning.
-// 
+~~~
+**/
+
  if (s>0.)
  {
   fScale=s;
@@ -373,28 +457,48 @@ void NcPosition::SetUnitScale(Float_t s)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcPosition::GetUnitScale() const
 {
+/**
+~~~
 // Provide the unit scale for the position coordinates.
 // The scale is normalised w.r.t. the meter, so a unit scale of 0.01
 // means that all position coordinates are in cm.
+~~~
+**/
+
  return fScale;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetTimestamp(NcTimestamp& t)
 {
+/**
+~~~
 // Store the timestamp for this position.
+~~~
+**/
+
  if (fTstamp) delete fTstamp;
  fTstamp=new NcTimestamp(t);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp* NcPosition::GetTimestamp()
 {
+/**
+~~~
 // Provide the timestamp of this position.
+~~~
+**/
+
  return fTstamp;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::RemoveTimestamp()
 {
+/**
+~~~
 // Remove the timestamp from this postion.
+~~~
+**/
+
  if (fTstamp)
  {
   delete fTstamp;
@@ -404,6 +508,8 @@ void NcPosition::RemoveTimestamp()
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::Data(TString f,TString u) const
 {
+/**
+~~~
 // Provide all position/time information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
@@ -412,6 +518,8 @@ void NcPosition::Data(TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  Nc3Vector::Data(f,u);
  if (fNv) cout << "   Metric unit : " << fScale << " meter" << endl;

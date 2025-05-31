@@ -1,6 +1,6 @@
 #ifndef NcSignal_h
 #define NcSignal_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TObject.h"
@@ -16,6 +16,8 @@
 
 class NcDevice;
 class NcTrack;
+
+/** Generic handling of (extrapolated) detector signals. **/
 
 class NcSignal : public TNamed,public NcPosition,public NcAttrib
 {

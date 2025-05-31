@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1996 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcSample
+~~~
 // Class NcSample
 // Perform statistics on various multi-dimensional data samples.
 //
@@ -74,17 +78,24 @@
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 14, 2025  13:09Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSample.h"
 #include "Riostream.h"
  
-ClassImp(NcSample) // Class implementation to enable ROOT I/O
+ClassImp(NcSample); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcSample::NcSample(const char* name,const char* title) : TNamed(name,title)
 {
-// Creation of an NcSample object and resetting the statistics values
+/**
+~~~
+// Creation of an NcSample object and resetting the statistics values.
 // The dimension is initialised to maximum
+~~~
+**/
 
  fDim=fMaxdim;
  fN=0;
@@ -108,7 +119,11 @@ NcSample::NcSample(const char* name,const char* title) : TNamed(name,title)
 ///////////////////////////////////////////////////////////////////////////
 NcSample::~NcSample()
 {
-// Default destructor
+/**
+~~~
+// Default destructor.
+~~~
+**/
 
  if (fX)
  {
@@ -159,7 +174,11 @@ NcSample::~NcSample()
 ///////////////////////////////////////////////////////////////////////////
 NcSample::NcSample(const NcSample& s) : TNamed(s)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  for (Int_t i=0; i<s.fMaxdim; i++)
  {
@@ -235,9 +254,13 @@ NcSample::NcSample(const NcSample& s) : TNamed(s)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Reset()
 {
+/**
+~~~
 // Resetting the statistics values for this NcSample object.
 // Also the variable names are reset to their (X,Y,Z,T) defaults.
 // Dimension and storage parameters are NOT changed.
+~~~
+**/
 
  fN=0;
  fRemove=0;
@@ -303,6 +326,8 @@ void NcSample::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::SetNames(TString name1,TString name2,TString name3,TString name4)
 {
+/**
+~~~
 // Specification of the names of the various variables.
 //
 // The user specified names will only be stored before the first entry has been entered.
@@ -313,6 +338,8 @@ void NcSample::SetNames(TString name1,TString name2,TString name3,TString name4)
 // Note : Specification of name="" and name="-" should not be used.
 //
 // The default values are : name1="X",  name2="Y",  name3="Z" and name4="T".
+~~~
+**/
 
  if (!fN)
  {
@@ -329,8 +356,12 @@ void NcSample::SetNames(TString name1,TString name2,TString name3,TString name4)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Enter(Double_t x)
 {
-// Entering a value into a 1-dim. sample
-// In case of first entry the dimension is set to 1
+/**
+~~~
+// Entering a value into a 1-dim. sample.
+// In case of first entry the dimension is set to 1.
+~~~
+**/
 
  if (!fN)
  {
@@ -378,7 +409,11 @@ void NcSample::Enter(Double_t x)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Remove(Double_t x)
 {
-// Removing a value from a 1-dim. sample
+/**
+~~~
+// Removing a value from a 1-dim. sample.
+~~~
+**/
 
  if (!fN) return;
 
@@ -416,8 +451,12 @@ void NcSample::Remove(Double_t x)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Enter(Double_t x,Double_t y)
 {
-// Entering a pair (x,y) into a 2-dim. sample
-// In case of first entry the dimension is set to 2
+/**
+~~~
+// Entering a pair (x,y) into a 2-dim. sample.
+// In case of first entry the dimension is set to 2.
+~~~
+**/
 
  if (!fN)
  {
@@ -475,7 +514,11 @@ void NcSample::Enter(Double_t x,Double_t y)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Remove(Double_t x,Double_t y)
 {
-// Removing a pair (x,y) from a 2-dim. sample
+/**
+~~~
+// Removing a pair (x,y) from a 2-dim. sample.
+~~~
+**/
 
  if (!fN) return;
 
@@ -521,8 +564,12 @@ void NcSample::Remove(Double_t x,Double_t y)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Enter(Double_t x,Double_t y,Double_t z)
 {
-// Entering a set (x,y,z) into a 3-dim. sample
-// In case of first entry the dimension is set to 3
+/**
+~~~
+// Entering a set (x,y,z) into a 3-dim. sample.
+// In case of first entry the dimension is set to 3.
+~~~
+**/
 
  if (!fN)
  {
@@ -592,7 +639,11 @@ void NcSample::Enter(Double_t x,Double_t y,Double_t z)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Remove(Double_t x,Double_t y,Double_t z)
 {
-// Removing a set (x,y,z) from a 3-dim. sample
+/**
+~~~
+// Removing a set (x,y,z) from a 3-dim. sample.
+~~~
+**/
 
  if (!fN) return;
 
@@ -648,8 +699,12 @@ void NcSample::Remove(Double_t x,Double_t y,Double_t z)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Enter(Double_t x,Double_t y,Double_t z,Double_t t)
 {
-// Entering a set (x,y,z,t) into a 4-dim. sample
-// In case of first entry the dimension is set to 4
+/**
+~~~
+// Entering a set (x,y,z,t) into a 4-dim. sample.
+// In case of first entry the dimension is set to 4.
+~~~
+**/
 
  if (!fN) fDim=4;
 
@@ -730,7 +785,11 @@ void NcSample::Enter(Double_t x,Double_t y,Double_t z,Double_t t)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Remove(Double_t x,Double_t y,Double_t z,Double_t t)
 {
-// Removing a set (x,y,z,t) from a 4-dim. sample
+/**
+~~~
+// Removing a set (x,y,z,t) from a 4-dim. sample.
+~~~
+**/
 
  if (!fN) return;
 
@@ -798,6 +857,8 @@ void NcSample::Remove(Double_t x,Double_t y,Double_t z,Double_t t)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::RemoveEntry(Int_t i,Int_t mode,Int_t j)
 {
+/**
+~~~
 // Remove the full data entry at the index "i" (1=first) after ordering
 // w.r.t. the j-th variable (1=first).
 //
@@ -815,6 +876,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t mode,Int_t j)
 // For this functionality the storage mode has to be activated.
 //
 // Note : If mode=0 the value of "j" is irrelevant
+~~~
+**/
 
  if (fDim<1 || fN<=0 || i<1 || i>fN) return;
 
@@ -853,6 +916,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t mode,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::RemoveEntry(Int_t i,Int_t mode,TString name)
 {
+/**
+~~~
 // Remove the full data entry at the index "i" (1=first) after ordering
 // w.r.t. the variable with the specified name.
 //
@@ -870,6 +935,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t mode,TString name)
 // For this functionality the storage mode has to be activated.
 //
 // Note : If mode=0 the value of name is irrelevant
+~~~
+**/
 
  Int_t j=GetIndex(name);
  RemoveEntry(i,mode,j);
@@ -877,6 +944,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t mode,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 {
+/**
+~~~
 // Remove the full data entries at the index interval [i,j] (1=first) after ordering
 // w.r.t. the k-th variable (1=first).
 //
@@ -887,6 +956,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 // For this functionality the storage mode has to be activated.
 //
 // Note : If mode=0 the value of "k" is irrelevant
+~~~
+**/
 
  for (Int_t m=i; m<=j; m++)
  {
@@ -896,6 +967,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,TString name)
 {
+/**
+~~~
 // Remove the full data entry at the index interval [i,j] (1=first) after ordering
 // w.r.t. the variable with the specified name.
 //
@@ -906,6 +979,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,TString name)
 // For this functionality the storage mode has to be activated.
 //
 // Note : If mode=0 the value of name is irrelevant
+~~~
+**/
 
  for (Int_t m=i; m<=j; m++)
  {
@@ -915,6 +990,8 @@ void NcSample::RemoveEntry(Int_t i,Int_t j,Int_t mode,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Order(Int_t mode,Int_t i)
 {
+/**
+~~~
 // Internal member function to order the entries according to the i-th variable (first is i=1).
 //
 // mode : <0 --> Order in decreasing order
@@ -925,6 +1002,8 @@ void NcSample::Order(Int_t mode,Int_t i)
 //
 // Note : If mode=0 the value of "i" is irrelevant, but i=1 will be used to obtain
 //        a correct setting of the ordering status word.
+~~~
+**/
 
  if (mode && (i<1 || i>fDim))
  {
@@ -1045,8 +1124,12 @@ void NcSample::Order(Int_t mode,Int_t i)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetIndex(TString name) const
 {
+/**
+~~~
 // Provide the index (1=first) of the specified variable name.
 // In case of no match, the value 0 is returned.
+~~~
+**/
 
  Int_t idx=0;
 
@@ -1060,8 +1143,12 @@ Int_t NcSample::GetIndex(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Compute()
 {
+/**
+~~~
 // Internal member function to compute the various statistical values
 // after each entering or removing action on a certain sample.
+~~~
+**/
 
  // Reset the ordering status word
  fOrdered=0;
@@ -1100,19 +1187,33 @@ void NcSample::Compute()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetDimension() const
 {
-// Provide the dimension of this sample
+/**
+~~~
+// Provide the dimension of this sample.
+~~~
+**/
+
  return fDim;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetN() const
 {
-// Provide the number of entries of a certain sample
+/**
+~~~
+// Provide the number of entries of a certain sample.
+~~~
+**/
+
  return fN;
 }
 ///////////////////////////////////////////////////////////////////////////
 TString NcSample::GetVariableName(Int_t i) const
 {
-// Provide the name of the i-th variable (first is i=1)
+/**
+~~~
+// Provide the name of the i-th variable (first is i=1).
+~~~
+**/
 
  TString name="";
 
@@ -1130,7 +1231,11 @@ TString NcSample::GetVariableName(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSum(Int_t i) const
 {
-// Provide the sum of the i-th variable (first is i=1)
+/**
+~~~
+// Provide the sum of the i-th variable (first is i=1).
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1145,7 +1250,11 @@ Double_t NcSample::GetSum(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSum(TString name) const
 {
+/**
+~~~
 // Provide the sum of the variable with the specified name.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetSum(i);
@@ -1153,7 +1262,11 @@ Double_t NcSample::GetSum(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMean(Int_t i) const
 {
-// Provide the mean of the i-th variable (first is i=1)
+/**
+~~~
+// Provide the mean of the i-th variable (first is i=1).
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1166,7 +1279,11 @@ Double_t NcSample::GetMean(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMean(TString name) const
 {
+/**
+~~~
 // Provide the mean of the variable with the specified name.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetMean(i);
@@ -1174,12 +1291,16 @@ Double_t NcSample::GetMean(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetRMS(Int_t i) const
 {
-// Provide the Root Mean Square of the i-th variable (first is i=1)
+/**
+~~~
+// Provide the Root Mean Square of the i-th variable (first is i=1).
 //
 // Note :
 // ------
 // This is NOT the RMS deviation defined as sqrt(variance).
 // Use the memberfunction GetSigma() to obtain the RMS deviation.
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1196,12 +1317,16 @@ Double_t NcSample::GetRMS(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetRMS(TString name) const
 {
+/**
+~~~
 // Provide the Root Mean Square of the variable with the specified name.
 //
 // Note :
 // ------
 // This is NOT the RMS deviation defined as sqrt(variance).
 // Use the memberfunction GetSigma() to obtain the RMS deviation.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetRMS(i);
@@ -1209,10 +1334,14 @@ Double_t NcSample::GetRMS(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetVar(Int_t i,Int_t model) const
 {
+/**
+~~~
 // Provide the variance of the i-th variable (first is i=1)
 // as (rms-deviation)^2 when model=0 or as sigma^2 when model=1.
 //
 // The default value is model=0.
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1228,10 +1357,14 @@ Double_t NcSample::GetVar(Int_t i,Int_t model) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetVar(TString name,Int_t model) const
 {
+/**
+~~~
 // Provide the variance of the variable with the specified name.
 // as (rms-deviation)^2 when model=0 or as sigma^2 when model=1.
 //
 // The default value is model=0.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetVar(i);
@@ -1239,11 +1372,15 @@ Double_t NcSample::GetVar(TString name,Int_t model) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSigma(Int_t i,Int_t model) const
 {
-// Provide the rms-deviation (model=0) or standard deviation of the
+/**
+~~~
+// Provide the rms-deviation (model=0) or standard deviation sigma of the
 // underlying parent distribution (model=1) of the i-th variable.
 // The first variable corresponds to i=1.
 //
 // The default value is model=0.
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1259,10 +1396,14 @@ Double_t NcSample::GetSigma(Int_t i,Int_t model) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSigma(TString name,Int_t model) const
 {
-// Provide the rms-deviation (model=0) or standard deviation (model=1)
+/**
+~~~
+// Provide the rms-deviation (model=0) or standard deviation sigma (model=1)
 // of the variable with the specified name.
 //
 // The default value is model=0.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetSigma(i,model);
@@ -1270,8 +1411,12 @@ Double_t NcSample::GetSigma(TString name,Int_t model) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetCov(Int_t i,Int_t j) const
 {
+/**
+~~~
 // Provide the covariance between variables i and j.
 // The index of the first variable is 1.
+~~~
+**/
 
  if (i<1 || i>fDim || j<1 || j>fDim)
  {
@@ -1284,7 +1429,11 @@ Double_t NcSample::GetCov(Int_t i,Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetCov(TString nameA, TString nameB) const
 {
+/**
+~~~
 // Provide the covariance between the variables with the specified names.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -1293,8 +1442,12 @@ Double_t NcSample::GetCov(TString nameA, TString nameB) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetCor(Int_t i,Int_t j) const
 {
-// Provide the correlation coefficient between variables i and j
+/**
+~~~
+// Provide the correlation coefficient between variables i and j.
 // The index of the first variable is 1.
+~~~
+**/
 
  if (i<1 || i>fDim || j<1 || j>fDim)
  {
@@ -1307,7 +1460,11 @@ Double_t NcSample::GetCor(Int_t i,Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetCor(TString nameA, TString nameB) const
 {
+/**
+~~~
 // Provide the correlation coefficient the variables with the specified names.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -1316,6 +1473,8 @@ Double_t NcSample::GetCor(TString nameA, TString nameB) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Data(Int_t i,Int_t j)
 {
+/**
+~~~
 // Listing of statistics of all or selected variables.
 //
 // Meaning of the input arguments (i,j) :
@@ -1327,6 +1486,8 @@ void NcSample::Data(Int_t i,Int_t j)
 // Note : The input (0,k) provides the same listing as (k,0).
 //
 // The default values are i=0 and j=0.
+~~~
+**/
 
  const char* name=GetName();
  const char* title=GetTitle();
@@ -1406,6 +1567,8 @@ void NcSample::Data(Int_t i,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Data(TString nameA,TString nameB)
 {
+/**
+~~~
 // Listing of statistics of all or selected variables.
 //
 // Input arguments :
@@ -1427,6 +1590,8 @@ void NcSample::Data(TString nameA,TString nameB)
 // 4) Invokation of Data() corresponds to Data("-","-").
 //
 // The default value is nameB="-".
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -1435,6 +1600,8 @@ void NcSample::Data(TString nameA,TString nameB)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::ListOrdered(Int_t mode,Int_t i)
 {
+/**
+~~~
 // Provide a listing of all stored entries according to the specified ordering
 // mode of the i-th variable (first is i=1). 
 //
@@ -1444,7 +1611,9 @@ void NcSample::ListOrdered(Int_t mode,Int_t i)
 //
 // For this functionality the storage mode has to be activated.
 //
-// Note : If mode=0 the value of "i" is irrelvant. 
+// Note : If mode=0 the value of "i" is irrelevant. 
+~~~
+**/
 
  if (!fStore)
  {
@@ -1513,6 +1682,8 @@ void NcSample::ListOrdered(Int_t mode,Int_t i)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::ListOrdered(Int_t mode,TString name)
 {
+/**
+~~~
 // Provide a listing of all stored entries according to the specified ordering
 // mode of the variable with the specified name.
 //
@@ -1522,7 +1693,9 @@ void NcSample::ListOrdered(Int_t mode,TString name)
 //
 // For this functionality the storage mode has to be activated.
 //
-// Note : If mode=0 the provided name is irrelvant.
+// Note : If mode=0 the provided name is irrelevant.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  ListOrdered(mode,i);
@@ -1530,8 +1703,12 @@ void NcSample::ListOrdered(Int_t mode,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::List(Int_t i)
 {
-// Internal member function to list the statistics of i-th variable
+/**
+~~~
+// Internal member function to list the statistics of i-th variable.
 // The index of the first variable is 1.
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1558,8 +1735,12 @@ void NcSample::List(Int_t i)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::List(Int_t i,Int_t j) const
 {
+/**
+~~~
 // Internal member function to list the covariance and correlation coefficient between variables i and j.
 // The index of the first variable is 1.
+~~~
+**/
 
  if (i<1 || i>fDim || j<1 || j>fDim)
  {
@@ -1574,6 +1755,8 @@ void NcSample::List(Int_t i,Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 {
+/**
+~~~
 // Set storage mode for entered data.
 // The input parameter "nmax" allows to limit the number of stored entries,
 // by removing every first entry after ordering w.r.t. the i-th variable (1=first)
@@ -1607,6 +1790,8 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 //
 // Note : Specification of storage mode can only be performed before the
 //        first data item is entered or after invokation of Reset(). 
+~~~
+**/
 
  if (fN)
  {
@@ -1628,18 +1813,30 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetStoreMode() const
 {
-// Provide the storage mode
+/**
+~~~
+// Provide the storage mode.
+~~~
+**/
+
  return fStore;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSample::GetStoreNmax() const
 {
-// Provide the maximum number of entries for storage
+/**
+~~~
+// Provide the maximum number of entries for storage.
+~~~
+**/
+
  return fNmax;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetQuantile(Double_t f,Int_t i)
 {
+/**
+~~~
 // Provide the value of the i-th variable (first is i=1) that marks the
 // quantile with fraction "f" of the sample.
 // By definition "f" belongs to the interval [0,1] where f=0.5 indicates
@@ -1652,6 +1849,8 @@ Double_t NcSample::GetQuantile(Double_t f,Int_t i)
 // Note : For large datasets it is more efficient to determine the quantile
 //        via the specification of a histogram. 
 //        See the other GetQuantile memberfunction for details.
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1702,6 +1901,8 @@ Double_t NcSample::GetQuantile(Double_t f,Int_t i)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetQuantile(Double_t f,TString name)
 {
+/**
+~~~
 // Provide the value of the variable with the specified name that marks the
 // quantile with fraction "f" of the sample.
 // By definition "f" belongs to the interval [0,1] where f=0.5 indicates
@@ -1714,6 +1915,8 @@ Double_t NcSample::GetQuantile(Double_t f,TString name)
 // Note : For large datasets it is more efficient to determine the quantile
 //        via the specification of a histogram. 
 //        See the other GetQuantile memberfunction for details.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetQuantile(f,i);
@@ -1721,6 +1924,8 @@ Double_t NcSample::GetQuantile(Double_t f,TString name)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMedian(Int_t i)
 {
+/**
+~~~
 // Provide the median of the i-th variable (first is i=1).
 // For this functionality the storage mode has to be activated.
 //
@@ -1733,6 +1938,8 @@ Double_t NcSample::GetMedian(Int_t i)
 // Note : For large datasets it is more efficient to determine the median
 //        via the specification of a histogram. 
 //        See the other GetMedian memberfunction for details.
+~~~
+**/
 
  Double_t median=GetQuantile(0.5,i);
  return median;
@@ -1740,6 +1947,8 @@ Double_t NcSample::GetMedian(Int_t i)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMedian(TString name)
 {
+/**
+~~~
 // Provide the median of the variable with the specified name.
 // For this functionality the storage mode has to be activated.
 //
@@ -1752,6 +1961,8 @@ Double_t NcSample::GetMedian(TString name)
 // Note : For large datasets it is more efficient to determine the median
 //        via the specification of a histogram. 
 //        See the other GetMedian memberfunction for details.
+~~~
+**/
 
  Double_t median=GetQuantile(0.5,name);
  return median;
@@ -1759,6 +1970,8 @@ Double_t NcSample::GetMedian(TString name)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSpread(Int_t i,Int_t model,Double_t vref)
 {
+/**
+~~~
 // Provide the spread w.r.t. some reference value of the i-th variable (first is i=1).
 // The spread is defined as the average of |median-val(i)| when model=0,
 // the average of |mean-val(i)| when model=1, or the average of |vref-val(i)| when model=2.
@@ -1774,6 +1987,8 @@ Double_t NcSample::GetSpread(Int_t i,Int_t model,Double_t vref)
 // The default values are model=0 and vref=0 for backward compatibility.
 //
 // In case of inconsistent data, the value -1 is returned. 
+~~~
+**/
 
  if (model<0 || model>2)
  {
@@ -1812,6 +2027,8 @@ Double_t NcSample::GetSpread(Int_t i,Int_t model,Double_t vref)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSpread(TString name,Int_t model,Double_t vref)
 {
+/**
+~~~
 // Provide the spread w.r.t. some reference value of the variable with the specified name.
 // The spread is defined as the average of |median-val(i)| when model=0,
 // the average of |mean-val(i)| when model=1, or the average of |vref-val(i)| when model=2.
@@ -1827,6 +2044,8 @@ Double_t NcSample::GetSpread(TString name,Int_t model,Double_t vref)
 // The default values are model=0 and vref=0 for backward compatibility.
 //
 // In case of inconsistent data, the value -1 is returned. 
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetSpread(i,model,vref);
@@ -1834,9 +2053,13 @@ Double_t NcSample::GetSpread(TString name,Int_t model,Double_t vref)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMinimum(Int_t i) const
 {
+/**
+~~~
 // Provide the minimum value of the i-th variable (first is i=1).
 // In case entries have been removed from the sample, a correct value can
 // only be obtained if the storage mode has been activated.
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1872,9 +2095,13 @@ Double_t NcSample::GetMinimum(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMinimum(TString name) const
 {
+/**
+~~~
 // Provide the minimum value of the variable with the specified name.
 // In case entries have been removed from the sample, a correct value can
 // only be obtained if the storage mode has been activated.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetMinimum(i);
@@ -1882,9 +2109,13 @@ Double_t NcSample::GetMinimum(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMaximum(Int_t i) const
 {
+/**
+~~~
 // Provide the maximum value of the i-th variable (first is i=1).
 // In case entries have been removed from the sample, a correct value can
 // only be obtained if the storage mode has been activated.
+~~~
+**/
 
  if (i<1 || i>fDim)
  {
@@ -1920,9 +2151,13 @@ Double_t NcSample::GetMaximum(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMaximum(TString name) const
 {
+/**
+~~~
 // Provide the maximum value of the variable with the specified name.
 // In case entries have been removed from the sample, a correct value can
 // only be obtained if the storage mode has been activated.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetMaximum(i);
@@ -1930,6 +2165,8 @@ Double_t NcSample::GetMaximum(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetQuantile(Double_t f,TH1* histo,Int_t mode) const
 {
+/**
+~~~
 // Provide the value of the variable X or Y from the specified 1D histogram
 // that marks the quantile with fraction "f" for the selected variable.
 // By definition "f" belongs to the interval [0,1] where f=0.5 indicates
@@ -1948,6 +2185,8 @@ Double_t NcSample::GetQuantile(Double_t f,TH1* histo,Int_t mode) const
 //        2 ==> The Y-quantile value is returned.
 //
 // By default mode=0 will be used to agree with standard ROOT processing.
+~~~
+**/
 
  if (!histo) return 0;
 
@@ -2002,6 +2241,8 @@ Double_t NcSample::GetQuantile(Double_t f,TH1* histo,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetMedian(TH1* histo,Int_t mode) const
 {
+/**
+~~~
 // Provide the median of the variable X or Y from the specified 1D histogram.
 // For this functionality it is not needed to activate the storage mode.
 //
@@ -2010,6 +2251,8 @@ Double_t NcSample::GetMedian(TH1* histo,Int_t mode) const
 // The median is determined by invokation of GetQuantile(0.5,histo,mode).
 // Please refer to the documentation of the corresponding GetQuantile()
 // memberfunction for further details.
+~~~
+**/
 
  Double_t median=GetQuantile(0.5,histo,mode);
  return median;
@@ -2017,6 +2260,8 @@ Double_t NcSample::GetMedian(TH1* histo,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSpread(TH1* histo,Int_t mode,Int_t model,Double_t vref) const
 {
+/**
+~~~
 // Provide the spread w.r.t. some X or Y reference value for the specified 1D histogram.
 // The spread is defined as the average of |median-val(i)| when model=0,
 // the average of |mean-val(i)| when model=1, or the average of |vref-val(i)| when model=2.
@@ -2039,6 +2284,8 @@ Double_t NcSample::GetSpread(TH1* histo,Int_t mode,Int_t model,Double_t vref) co
 // By default mode=0 will be used to agree with standard ROOT processing.
 //
 // The default values are mode=0, model=0 and vref=0 for backward compatibility.
+~~~
+**/
 
  if (model<0 || model>2)
  {
@@ -2092,6 +2339,8 @@ Double_t NcSample::GetSpread(TH1* histo,Int_t mode,Int_t model,Double_t vref) co
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 {
+/**
+~~~
 // Access the data entry at index "i" and provide the value of the j-th variable,
 // after ordering w.r.t. the k-th variable.
 // The first entry is indicated by the index i=1 and the first variable is j=1.
@@ -2105,6 +2354,8 @@ Double_t NcSample::GetEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 // Note : If mode=0 the value of "k" is irrelevant.
 //
 // The default values are mode=0 and k=0.
+~~~
+**/
 
  TString name=GetName();
 
@@ -2159,6 +2410,8 @@ Double_t NcSample::GetEntry(Int_t i,Int_t j,Int_t mode,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetEntry(Int_t i,TString nameA,Int_t mode,TString nameB)
 {
+/**
+~~~
 // Access the data entry at index "i" and provide the value of the variable 
 // specified with nameA, after ordering w.r.t. the variable specified with nameB.
 // The first entry is indicated by the index i=1.
@@ -2172,6 +2425,8 @@ Double_t NcSample::GetEntry(Int_t i,TString nameA,Int_t mode,TString nameB)
 // Note : If mode=0 the value of nameB is irrelevant.
 //
 // The default values are mode=0 and nameB="-".
+~~~
+**/
 
  Int_t j=GetIndex(nameA);
  Int_t k=GetIndex(nameB);
@@ -2180,6 +2435,8 @@ Double_t NcSample::GetEntry(Int_t i,TString nameA,Int_t mode,TString nameB)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode,Int_t k)
 {
+/**
+~~~
 // Provide the [ifirst,ilast] entries, after ordering w.r.t. the k-th variable, via the output NcSample "s".
 // The first entry is indicated by the index ifirst=1 and the first variable is k=1.
 //
@@ -2194,6 +2451,8 @@ void NcSample::GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode,Int_t k
 // Note : If mode=0 the value of "k" is irrelevant.
 //
 // The default values are mode=0 and k=0.
+~~~
+**/
 
  if (!s)
  {
@@ -2242,6 +2501,8 @@ void NcSample::GetSubset(NcSample* s,Int_t ifirst,Int_t ilast,Int_t mode,Int_t k
 ///////////////////////////////////////////////////////////////////////////
 NcSample NcSample::GetDtSample(Int_t i,Int_t nc,Int_t store,Int_t nmax,Int_t order)
 {
+/**
+~~~
 // The i-th variable of the current sample is regarded as the recording of event times,
 // and this memberfunction samples the time intervals (dt) between a certain fixed
 // amount of time ordered consecutive entries for this i-th variable.
@@ -2286,6 +2547,8 @@ NcSample NcSample::GetDtSample(Int_t i,Int_t nc,Int_t store,Int_t nmax,Int_t ord
 // ------
 // In the text above the values of the current sample are regarded as observed event times,
 // but actually any sampling of an observable with a well defined ordering can be used.
+~~~
+**/
 
  // Make "order" value to comply with a single variable sample
  if (order>0) order=1;
@@ -2328,6 +2591,8 @@ NcSample NcSample::GetDtSample(Int_t i,Int_t nc,Int_t store,Int_t nmax,Int_t ord
 ///////////////////////////////////////////////////////////////////////////
 NcSample NcSample::GetDtSample(TString name,Int_t nc,Int_t store,Int_t nmax,Int_t order)
 {
+/**
+~~~
 // The variable with the specified name of the current sample is regarded as the recording of event times,
 // and this memberfunction samples the time intervals (dt) between a certain fixed amount of
 // time ordered consecutive entries for the specified variable.
@@ -2372,6 +2637,8 @@ NcSample NcSample::GetDtSample(TString name,Int_t nc,Int_t store,Int_t nmax,Int_
 // ------
 // In the text above the values of the current sample are regarded as observed event times,
 // but actually any sampling of an observable with a well defined ordering can be used.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  NcSample sdt=GetDtSample(i,nc,store,nmax,order);
@@ -2381,6 +2648,8 @@ NcSample NcSample::GetDtSample(TString name,Int_t nc,Int_t store,Int_t nmax,Int_
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::GetSamplingHistogram(Int_t i,TF1* f)
 {
+/**
+~~~
 // Provide a TH1D histogram with : X-axis=sampling entry number and Y-axis=variable i.
 // In case the 1-dimensional function "f" is specified, then the
 // function value of variable i will be used as at the Y-axis.
@@ -2389,6 +2658,8 @@ TH1D NcSample::GetSamplingHistogram(Int_t i,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  TString s="Sampling Histogram for NcSample ";
  s+=GetName();
@@ -2431,11 +2702,15 @@ TH1D NcSample::GetSamplingHistogram(Int_t i,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::GetSamplingHistogram(Int_t i,TString f)
 {
+/**
+~~~
 // Provide a TH1D with : X-axis=sampling entry number and Y-axis=f(variable i).
 // The 1D function "f" has to be specified following the TF1 string format convention,
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  TF1 func("func",f);
 
@@ -2444,6 +2719,8 @@ TH1D NcSample::GetSamplingHistogram(Int_t i,TString f)
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::GetSamplingHistogram(TString nameA,TF1* f)
 {
+/**
+~~~
 // Provide a TH1D with : X-axis=sampling entry number and Y-axis=variable with nameA.
 // In case the 1-dimensional function "f" is specified, then the
 // function value of nameA will be used as at the Y-axis.
@@ -2451,6 +2728,8 @@ TH1D NcSample::GetSamplingHistogram(TString nameA,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  return GetSamplingHistogram(i,f);
@@ -2458,11 +2737,15 @@ TH1D NcSample::GetSamplingHistogram(TString nameA,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::GetSamplingHistogram(TString nameA,TString f)
 {
+/**
+~~~
 // Provide a TH1D with : X-axis=sampling entry number and Y-axis=f(variable with nameA).
 // The 1D function "f" has to be specified following the TF1 string format convention,
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  TF1 func("func",f);
 
@@ -2471,6 +2754,8 @@ TH1D NcSample::GetSamplingHistogram(TString nameA,TString f)
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx,TF1* f)
 {
+/**
+~~~
 // Provide a TH1D histogram with the values of variable i.
 // If j>0 the corresponding value of variable j will be used as a weight.
 // In case j>0 and also the 1-dimensional function "f" is specified,
@@ -2482,6 +2767,8 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are j=0, sumw2=kFALSE, nbx=100 and f=0.
+~~~
+**/
 
  TString s="1D Histogram for NcSample ";
  s+=GetName();
@@ -2549,6 +2836,8 @@ TH1D NcSample::Get1DHistogram(Int_t i,Int_t j,Bool_t sumw2,Int_t nbx,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TH1D NcSample::Get1DHistogram(TString nameA,TString nameB,Bool_t sumw2,Int_t nbx,TF1* f)
 {
+/**
+~~~
 // Provide a TH1D histogram for the variable specified with nameA.
 // If nameB is valid, the corresponding value of that variable will be used as a weight.
 // In case nameB is valid and also the 1-dimensional function "f" is specified,
@@ -2559,6 +2848,8 @@ TH1D NcSample::Get1DHistogram(TString nameA,TString nameB,Bool_t sumw2,Int_t nbx
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are nameB="-", sumw2=kFALSE, nbx=100 and f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -2567,6 +2858,8 @@ TH1D NcSample::Get1DHistogram(TString nameA,TString nameB,Bool_t sumw2,Int_t nbx
 ///////////////////////////////////////////////////////////////////////////
 TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int_t nby,TF1* f)
 {
+/**
+~~~
 // Provide a TH2D histogram for the values of variables i and j.
 // If k>0 the corresponding value of variable k will be used as a weight.
 // In case k>0 and also the 1-dimensional function "f" is specified,
@@ -2579,6 +2872,8 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are k=0, sumw2=kFALSE, nbx=100, nby=100 and f=0.
+~~~
+**/
 
  TString s="2D Histogram for NcSample ";
  s+=GetName();
@@ -2657,6 +2952,8 @@ TH2D NcSample::Get2DHistogram(Int_t i,Int_t j,Int_t k,Bool_t sumw2,Int_t nbx,Int
 ///////////////////////////////////////////////////////////////////////////
 TH2D NcSample::Get2DHistogram(TString nameA,TString nameB,TString nameC,Bool_t sumw2,Int_t nbx,Int_t nby,TF1* f)
 {
+/**
+~~~
 // Provide a TH2D histogram for the variables specified with nameA and nameB.
 // If nameC is valid, the corresponding value of that variable will be used as a weight.
 // In case nameC is valid and also the 1-dimensional function "f" is specified,
@@ -2668,6 +2965,8 @@ TH2D NcSample::Get2DHistogram(TString nameA,TString nameB,TString nameC,Bool_t s
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are nameC="-", sumw2=kFALSE, nbx=100, nby=100 and f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -2677,6 +2976,8 @@ TH2D NcSample::Get2DHistogram(TString nameA,TString nameB,TString nameC,Bool_t s
 ///////////////////////////////////////////////////////////////////////////
 TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t nbx,Int_t nby,Int_t nbz,TF1* f)
 {
+/**
+~~~
 // Provide a TH3D histogram for the values of variables i, j and k.
 // If m>0 the corresponding value of variable m will be used as a weight.
 // In case m>0 and also the 1-dimensional function "f" is specified,
@@ -2689,6 +2990,8 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are m=0, sumw2=kFALSE, nbx=100, nby=100, nbz=100 and f=0.
+~~~
+**/
 
  TString s="3D Histogram for NcSample ";
  s+=GetName();
@@ -2776,6 +3079,8 @@ TH3D NcSample::Get3DHistogram(Int_t i,Int_t j,Int_t k,Int_t m,Bool_t sumw2,Int_t
 ///////////////////////////////////////////////////////////////////////////
 TH3D NcSample::Get3DHistogram(TString nameA,TString nameB,TString nameC,TString nameD,Bool_t sumw2,Int_t nbx,Int_t nby,Int_t nbz,TF1* f)
 {
+/**
+~~~
 // Provide a TH3D histogram for the variables specified with nameA, nameB and nameC.
 // If nameD is valid, the corresponding value of that variable will be used as a weight.
 // In case nameD is valid and also the 1-dimensional function "f" is specified,
@@ -2787,6 +3092,8 @@ TH3D NcSample::Get3DHistogram(TString nameA,TString nameB,TString nameC,TString 
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are nameD="-", sumw2=kFALSE, nbx=100, nby=100, nbz=100 and f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -2797,6 +3104,8 @@ TH3D NcSample::Get3DHistogram(TString nameA,TString nameB,TString nameC,TString 
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(Int_t i,TF1* f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable i.
 // In case the 1-dimensional function "f" is specified, then the
 // function value of variable i will be used as at the Y-axis.
@@ -2805,6 +3114,8 @@ TGraph NcSample::GetGraph(Int_t i,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  TGraph gr;
  gr.SetName("NcSample");
@@ -2856,11 +3167,15 @@ TGraph NcSample::GetGraph(Int_t i,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(Int_t i,TString f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=sampling entry number and Y-axis=f(variable i).
 // The 1D function "f" has to be specified following the TF1 string format convention,
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  TF1 func("func",f);
 
@@ -2869,6 +3184,8 @@ TGraph NcSample::GetGraph(Int_t i,TString f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(TString nameA,TF1* f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=sampling entry number and Y-axis=variable with nameA.
 // In case the 1-dimensional function "f" is specified, then the
 // function value of nameA will be used as at the Y-axis.
@@ -2876,6 +3193,8 @@ TGraph NcSample::GetGraph(TString nameA,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  return GetGraph(i,f);
@@ -2883,6 +3202,8 @@ TGraph NcSample::GetGraph(TString nameA,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(Int_t i,Int_t j,TF1* f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=variable i and Y-axis=variable j.
 // In case the 1-dimensional function "f" is specified, then the
 // function value of variable j will be used as at the Y-axis.
@@ -2891,6 +3212,8 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  TGraph gr;
  gr.SetName("NcSample");
@@ -2945,12 +3268,15 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(Int_t i,Int_t j,TString f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=variable i and Y-axis=f(variable j).
 // The 1D function "f" has to be specified following the TF1 string format convention,
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
-//
+~~~
+**/
 
  TF1 func("func",f);
 
@@ -2959,6 +3285,8 @@ TGraph NcSample::GetGraph(Int_t i,Int_t j,TString f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcSample::GetGraph(TString nameA,TString nameB,TF1* f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=variable with nameA and Y-axis=variable with nameB.
 // In case the 1-dimensional function "f" is specified, then the
 // function value of nameB will be used as at the Y-axis.
@@ -2966,6 +3294,8 @@ TGraph NcSample::GetGraph(TString nameA,TString nameB,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -2974,6 +3304,8 @@ TGraph NcSample::GetGraph(TString nameA,TString nameB,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TGraphErrors NcSample::GetGraphErrors(TGraph* gr,Int_t ix,Int_t iy,TF1* fx,TF1* fy)
 {
+/**
+~~~
 // Provide a Graph with new c.q. modified errors.
 // The returned object is a TGraphErrors and the provided input Graph is not modified.
 //
@@ -3011,6 +3343,8 @@ TGraphErrors NcSample::GetGraphErrors(TGraph* gr,Int_t ix,Int_t iy,TF1* fx,TF1* 
 //    the absolute value of 0.1 times the corresponding Y-value of the input graph.
 //
 // The defaults are ix=0, iy=0, fx=0 and fy=0.
+~~~
+**/
 
  TGraphErrors gre;
 
@@ -3161,6 +3495,8 @@ TGraphErrors NcSample::GetGraphErrors(TGraph* gr,Int_t ix,Int_t iy,TF1* fx,TF1* 
 ///////////////////////////////////////////////////////////////////////////
 TGraphErrors NcSample::GetGraphErrors(TGraph* gr,TString nameA,TString nameB,TF1* fx,TF1* fy)
 {
+/**
+~~~
 // Provide a Graph with new c.q. modified errors.
 // The returned object is a TGraphErrors and the provided input Graph is not modified.
 //
@@ -3198,6 +3534,8 @@ TGraphErrors NcSample::GetGraphErrors(TGraph* gr,TString nameA,TString nameB,TF1
 //    the absolute value of 0.1 times the corresponding Y-value of the input graph.
 //
 // The defaults are fx=0 and fy=0.
+~~~
+**/
 
  Int_t ix=GetIndex(nameA);
  Int_t iy=GetIndex(nameB);
@@ -3207,6 +3545,8 @@ TGraphErrors NcSample::GetGraphErrors(TGraph* gr,TString nameA,TString nameB,TF1
 ///////////////////////////////////////////////////////////////////////////
 TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
 {
+/**
+~~~
 // Provide a pointer to a TGraphTime with : X-axis=variable i and Y-axis=variable j.
 // The first variable has index 1.
 //
@@ -3242,6 +3582,8 @@ TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
 // In case of inconsistent data, the value 0 is returned.
 //
 // The default value is smp=kTRUE.
+~~~
+**/
 
  if (!fStore)
  {
@@ -3311,6 +3653,8 @@ TGraphTime* NcSample::GetGraph(Int_t i,Int_t j,Int_t mode,Int_t k,Bool_t smp)
 ///////////////////////////////////////////////////////////////////////////
 TGraphTime* NcSample::GetGraph(TString nameA,TString nameB,Int_t mode,TString nameC,Bool_t smp)
 {
+/**
+~~~
 // Provide a pointer to a TGraphTime with : X-axis=variable nameA and Y-axis=variable nameB.
 //
 // Note :
@@ -3345,6 +3689,8 @@ TGraphTime* NcSample::GetGraph(TString nameA,TString nameB,Int_t mode,TString na
 // In case of inconsistent data, the value 0 is returned.
 //
 // The default value is smp=kTRUE.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -3354,6 +3700,8 @@ TGraphTime* NcSample::GetGraph(TString nameA,TString nameB,Int_t mode,TString na
 ///////////////////////////////////////////////////////////////////////////
 TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TF1* f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
 // In case the 1-dimensional function "f" is specified, the function value of variable k
 // will be used as at the Z-axis.
@@ -3362,6 +3710,8 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  TGraph2D gr;
  gr.SetName("NcSample");
@@ -3428,11 +3778,15 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TString f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=variable i, Y-axis=variable j and Z-axis=f(variable k).
 // The 1D function "f" has to be specified following the TF1 string format convention.
 // The first variable has index 1.
 //
 // Note : This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  TF1 func("func",f);
 
@@ -3441,6 +3795,8 @@ TGraph2D NcSample::GetGraph(Int_t i,Int_t j,Int_t k,TString f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TF1* f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
 // In case the 1-dimensional function "f" is specified, then the function value of nameC
 // will be used as at the Z-axis.
@@ -3448,6 +3804,8 @@ TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default value is f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -3457,10 +3815,14 @@ TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TString f)
 {
+/**
+~~~
 // Provide a TGraph with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=f(variable nameC).
 // The 1D function "f" has to be specified following the TF1 string format convention,
 //
 // Note : This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  TF1 func("func",f);
 
@@ -3469,6 +3831,8 @@ TGraph2D NcSample::GetGraph(TString nameA,TString nameB,TString nameC,TString f)
 ///////////////////////////////////////////////////////////////////////////
 TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,Int_t ix,Int_t iy,Int_t iz,TF1* fx,TF1* fy,TF1* fz)
 {
+/**
+~~~
 // Provide a Graph2D with new c.q. modified errors.
 // The returned object is a TGraph2DErrors and the provided input Graph2D is not modified.
 //
@@ -3511,6 +3875,8 @@ TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,Int_t ix,Int_t iy,Int_t i
 //    the absolute value of 0.1 times the corresponding Y-values of the input graph and the Z-errors will be set to 0.
 //
 // The defaults are ix=0, iy=0, iz=0, fx=0, fy=0 and fz=0.
+~~~
+**/
 
  TGraph2DErrors gre;
 
@@ -3712,6 +4078,8 @@ TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,Int_t ix,Int_t iy,Int_t i
 ///////////////////////////////////////////////////////////////////////////
 TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,TString nameA,TString nameB,TString nameC,TF1* fx,TF1* fy,TF1* fz)
 {
+/**
+~~~
 // Provide a Graph2D with new c.q. modified errors.
 // The returned object is a TGraph2DErrors and the provided input Graph2D is not modified.
 //
@@ -3754,6 +4122,8 @@ TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,TString nameA,TString nam
 //    the absolute value of 0.1 times the corresponding Y-values of the input graph and the Z-errors will be set to 0.
 //
 // The defaults are fx=0, fy=0 and fz=0.
+~~~
+**/
 
  Int_t ix=GetIndex(nameA);
  Int_t iy=GetIndex(nameB);
@@ -3764,6 +4134,8 @@ TGraph2DErrors NcSample::GetGraph2DErrors(TGraph2D* gr,TString nameA,TString nam
 ///////////////////////////////////////////////////////////////////////////
 TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
 {
+/**
+~~~
 // Provide a QQ-plot (TGraphQQ) for the values of the variables i and j.
 // The first variable has index 1.
 // In case the function "f" is specified, it will replace the role of variable j.
@@ -3772,6 +4144,8 @@ TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default is f=0.
+~~~
+**/
 
  TGraphQQ gr;
  gr.SetName("NcSample");
@@ -3846,6 +4220,8 @@ TGraphQQ NcSample::GetQQplot(Int_t i,Int_t j,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 TGraphQQ NcSample::GetQQplot(TString nameA,TString nameB,TF1* f)
 {
+/**
+~~~
 // Provide a QQ-plot (TGraphQQ) for the the variables specified by nameA and nameB.
 // In case the function "f" is specified, it will replace the role of variable nameB.
 // When the function "f" is specified, the value of nameB is irrelevant.
@@ -3853,6 +4229,8 @@ TGraphQQ NcSample::GetQQplot(TString nameA,TString nameB,TF1* f)
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default is f=0.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -3861,6 +4239,8 @@ TGraphQQ NcSample::GetQQplot(TString nameA,TString nameB,TF1* f)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Load(TGraph* g,Int_t clr)
 {
+/**
+~~~
 // Load the data points of a TGraph object as 2-dimensional (x,y) data.
 //
 // Input arguments :
@@ -3869,6 +4249,8 @@ void NcSample::Load(TGraph* g,Int_t clr)
 // clr : Flag to denote to first clear (1) the data storage or not (0).
 //
 // The default value is clr=1.
+~~~
+**/
  
  if (!g)
  {
@@ -3898,6 +4280,8 @@ void NcSample::Load(TGraph* g,Int_t clr)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Load(TGraph2D* g,Int_t clr)
 {
+/**
+~~~
 // Load the data points of a TGraph2D object as 3-dimensional (x,y,z) data.
 //
 // Input arguments :
@@ -3906,6 +4290,8 @@ void NcSample::Load(TGraph2D* g,Int_t clr)
 // clr : Flag to denote to first clear (1) the data storage or not (0).
 //
 // The default value is clr=1.
+~~~
+**/
  
  if (!g)
  {
@@ -3936,6 +4322,8 @@ void NcSample::Load(TGraph2D* g,Int_t clr)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Load(TH1* h,Int_t clr)
 {
+/**
+~~~
 // Load the data of a 1-dimensional histogram.
 //
 // Input arguments :
@@ -3944,6 +4332,8 @@ void NcSample::Load(TH1* h,Int_t clr)
 // clr : Flag to denote to first clear (1) the data storage or not (0).
 //
 // The default value is clr=1.
+~~~
+**/
  
  if (!h)
  {
@@ -3979,6 +4369,8 @@ void NcSample::Load(TH1* h,Int_t clr)
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Load(TArray* arr,Int_t clr)
 {
+/**
+~~~
 // Load the data of a 1-dimensional data array.
 //
 // Input arguments :
@@ -3987,6 +4379,8 @@ void NcSample::Load(TArray* arr,Int_t clr)
 // clr : Flag to denote to first clear (1) the data storage or not (0).
 //
 // The default value is clr=1.
+~~~
+**/
  
  if (!arr)
  {
@@ -4014,6 +4408,8 @@ void NcSample::Load(TArray* arr,Int_t clr)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSNR(Int_t i,Int_t mode,Bool_t dB) const
 {
+/**
+~~~
 // Provide the Signal to Noise Ratio (SNR) of the i-th variable.
 // The first variable corresponds to i=1.
 //
@@ -4087,6 +4483,8 @@ Double_t NcSample::GetSNR(Int_t i,Int_t mode,Bool_t dB) const
 //  SNR=Mu^2/(sigma^2)  (7)
 //
 // In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used.
+~~~
+**/
 
  if (i<1 || i>fDim || !mode || abs(mode)>4) return -9999;
 
@@ -4146,6 +4544,8 @@ Double_t NcSample::GetSNR(Int_t i,Int_t mode,Bool_t dB) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetSNR(TString name,Int_t mode,Bool_t dB) const
 {
+/**
+~~~
 // Provide the Signal to Noise Ratio (SNR) of the variable with the specified name.
 //
 // For a transient c.q. pulse signal, the SNR is defined as the ratio between
@@ -4218,6 +4618,8 @@ Double_t NcSample::GetSNR(TString name,Int_t mode,Bool_t dB) const
 //  SNR=Mu^2/(sigma^2)  (7)
 //
 // In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetSNR(i,mode,dB);
@@ -4225,6 +4627,8 @@ Double_t NcSample::GetSNR(TString name,Int_t mode,Bool_t dB) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetCV(Int_t i,Int_t mode) const
 {
+/**
+~~~
 // Provide the Coefficient of Variation (CV) of the i-th variable.
 // The first variable corresponds to i=1.
 //
@@ -4245,6 +4649,8 @@ Double_t NcSample::GetCV(Int_t i,Int_t mode) const
 // The default value is mode=1 for backward compatibility.
 //
 // In case of inconsistent data, the value -1 is returned. 
+~~~
+**/
 
  if (i<1 || i>fDim || abs(mode)<1 || abs(mode)>2) return -1;
 
@@ -4264,6 +4670,8 @@ Double_t NcSample::GetCV(Int_t i,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::GetCV(TString name,Int_t mode) const
 {
+/**
+~~~
 // Provide the Coefficient of Variation (CV) of the variable with the specified name.
 //
 // As indicated below, the input argument "mode" allows to select use of
@@ -4283,6 +4691,8 @@ Double_t NcSample::GetCV(TString name,Int_t mode) const
 // The default value is mode=1 for backward compatibility.
 //
 // In case of inconsistent data, the value -1 is returned.
+~~~
+**/
 
  Int_t i=GetIndex(name);
  return GetCV(i,mode);
@@ -4290,6 +4700,8 @@ Double_t NcSample::GetCV(TString name,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString opt)
 {
+/**
+~~~
 // Animation of an (ordered) sampling with : X-axis=variable i and Y-axis=variable j.
 // The first variable has index 1.
 //
@@ -4311,6 +4723,8 @@ void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString 
 // The default value is opt="AP".
 //
 // This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  if (!fStore || fN<1 || i<1 || i>fDim || j<1 || j>fDim || (mode && (k<1 || k>fDim)) || delay<0)
  {
@@ -4367,6 +4781,8 @@ void NcSample::Animation(Int_t i,Int_t j,Int_t mode,Int_t k,Int_t delay,TString 
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Animation(TString nameA,TString nameB,Int_t mode,TString nameC,Int_t delay,TString opt)
 {
+/**
+~~~
 // Animation of an (ordered) sampling with : X-axis=variable nameA and Y-axis=variable nameB.
 //
 // Every data entry is considered to occur at a step in time, and this member function
@@ -4387,6 +4803,8 @@ void NcSample::Animation(TString nameA,TString nameB,Int_t mode,TString nameC,In
 // The default value is opt="AP".
 //
 // This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -4396,6 +4814,8 @@ void NcSample::Animation(TString nameA,TString nameB,Int_t mode,TString nameC,In
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Animation(Int_t i,Int_t j,Int_t k,Int_t mode,Int_t m,Int_t delay,TString opt)
 {
+/**
+~~~
 // Animation of an (ordered) sampling with : X-axis=variable i, Y-axis=variable j and Z-axis=variable k.
 // The first variable has index 1.
 //
@@ -4417,6 +4837,8 @@ void NcSample::Animation(Int_t i,Int_t j,Int_t k,Int_t mode,Int_t m,Int_t delay,
 // The default value is opt="PFB".
 //
 // This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  if (!fStore || fN<1 || i<1 || i>fDim || j<1 || j>fDim || k<1 || k>fDim || (mode && (m<1 || m>fDim)) || delay<0)
  {
@@ -4478,6 +4900,8 @@ void NcSample::Animation(Int_t i,Int_t j,Int_t k,Int_t mode,Int_t m,Int_t delay,
 ///////////////////////////////////////////////////////////////////////////
 void NcSample::Animation(TString nameA,TString nameB,TString nameC,Int_t mode,TString nameD,Int_t delay,TString opt)
 {
+/**
+~~~
 // Animation of an (ordered) sampling with : X-axis=variable nameA, Y-axis=variable nameB and Z-axis=variable nameC.
 //
 // Every data entry is considered to occur at a step in time, and this member function
@@ -4498,6 +4922,8 @@ void NcSample::Animation(TString nameA,TString nameB,TString nameC,Int_t mode,TS
 // The default value is opt="PFB".
 //
 // This facility is only available if the storage mode has been activated.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -4508,6 +4934,8 @@ void NcSample::Animation(TString nameA,TString nameB,TString nameC,Int_t mode,TS
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode)
 {
+/**
+~~~
 // Digitize the values of the i-th variable according to an "nbits" ADC.
 //
 // **************************************************************************************
@@ -4566,6 +4994,8 @@ Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode)
 // This facility is only available if the storage mode has been activated.
 //
 // In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
+~~~
+**/
 
  if (mode<0 || mode>3)
  {
@@ -4708,6 +5138,8 @@ Double_t NcSample::Digitize(Int_t i,Int_t nbits,Double_t vcal,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcSample::Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode)
 {
+/**
+~~~
 // Digitize the values of the variable with the specified name according to an "nbits" ADC.
 //
 // **************************************************************************************
@@ -4766,6 +5198,8 @@ Double_t NcSample::Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode)
 // This facility is only available if the storage mode has been activated.
 //
 // In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.
+~~~
+**/
 
  Int_t i=GetIndex(name);
 
@@ -4774,6 +5208,8 @@ Double_t NcSample::Digitize(TString name,Int_t nbits,Double_t vcal,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,TH1* hist,Int_t B,Int_t C) const
 {
+/**
+~~~
 // Internal member function for processing of an Analog to Digital Converter (ADC). 
 // Construct from analog input signals the discrete quantized data values of an "nbits" ADC,
 // based on the "range" for the analog signal and a bias voltage "Vbias" (see below).
@@ -4852,6 +5288,8 @@ TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,T
 // In case of inconsistent input parameters, no digitization is performed and an empty TArrayL64 is returned.
 //
 // The default values are Vbias=0, Vsig=0, hist=0, B=0 and C=3.
+~~~
+**/
 
  TArrayL64 arradc(0);
  if (hist) hist->Reset();
@@ -4987,6 +5425,8 @@ TArrayL64 NcSample::ADC(Int_t nbits,Double_t range,Double_t Vbias,TArray* Vsig,T
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TArray* peds,TH1* hist,Int_t B,Int_t C) const
 {
+/**
+~~~
 // Internal member function for processing of a Digital to Analog Converter (DAC). 
 // Reconstruct the analog signals based on the discrete quantized digital data from an "nbits" ADC,
 // based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
@@ -5069,6 +5509,8 @@ TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TAr
 // In case of inconsistent input parameters, no processing is performed and an empty TArrayD is returned.
 //
 // The default values are Vbias=0, adcs=0, peds=0, hist=0, B=0 and C=3.
+~~~
+**/
 
  TArrayD arrdac(0);
  if (hist) hist->Reset();
@@ -5212,6 +5654,8 @@ TArrayD NcSample::DAC(Int_t nbits,Double_t range,Double_t Vbias,TArray* adcs,TAr
 ///////////////////////////////////////////////////////////////////////////
 Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias,TArray* peds,TH1* hist,Int_t B,Int_t C)
 {
+/**
+~~~
 // Mimic signal transmission according to an "nbits" ADC-DAC chain.
 // The values of the i-th variable are digitized via the discrete quantization levels of an "nbits" ADC,
 // based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
@@ -5280,6 +5724,8 @@ Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias,TA
 // In case of inconsistent input parameters, no processing is performed.
 //
 // The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.
+~~~
+**/
 
  TArrayL64 adcarr;
  TArrayD dacarr;
@@ -5362,6 +5808,8 @@ Long64_t NcSample::Transmit(Int_t i,Int_t nbits,Double_t range,Double_t Vbias,TA
 ///////////////////////////////////////////////////////////////////////////
 Long64_t NcSample::Transmit(TString name,Int_t nbits,Double_t range,Double_t Vbias,TArray* peds,TH1* hist,Int_t B,Int_t C)
 {
+/**
+~~~
 // Mimic signal transmission according to an "nbits" ADC-DAC chain.
 // The values of the variable "name" are digitized via the discrete quantization levels of an "nbits" ADC,
 // based on the "range" for the analog signal and a bias voltage "Vbias" or array "peds" of pedestal values (see below).
@@ -5431,6 +5879,8 @@ Long64_t NcSample::Transmit(TString name,Int_t nbits,Double_t range,Double_t Vbi
 // In case of inconsistent input parameters, no processing is performed.
 //
 // The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.
+~~~
+**/
 
  Int_t i=GetIndex(name);
 
@@ -5439,6 +5889,8 @@ Long64_t NcSample::Transmit(TString name,Int_t nbits,Double_t range,Double_t Vbi
 ///////////////////////////////////////////////////////////////////////////
 NcSample NcSample::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax,Int_t loc) const
 {
+/**
+~~~
 // Perform a Sample-And-Hold operation on the specified function "f"
 // in the interval [vmin,vmax], using "step" as the sampling step size.
 //
@@ -5453,6 +5905,8 @@ NcSample NcSample::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax
 // exceed "vmax", the data will be recorded at the value of "vmax".
 //
 // The default value is loc=-1.
+~~~
+**/
 
  NcSample s("SampleAndHold","Error occurred in SampleAndHold");
  s.SetStoreMode(1);
@@ -5490,6 +5944,8 @@ NcSample NcSample::SampleAndHold(TF1 f,Double_t step,Double_t vmin,Double_t vmax
 ///////////////////////////////////////////////////////////////////////////
 NcSample NcSample::SampleAndSum(Int_t i,Double_t step,Int_t loc,Int_t j,Double_t vmin,Double_t vmax)
 {
+/**
+~~~
 // Perform a Sample-And-Sum operation on the values of the i-th variable
 // in the interval [vmin,vmax], using "step" as the sampling step size.
 // If vmax<=vmin the minimum and maximum values of the i-th variable will be used.
@@ -5512,6 +5968,8 @@ NcSample NcSample::SampleAndSum(Int_t i,Double_t step,Int_t loc,Int_t j,Double_t
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are loc=0, j=0, vmin=0 and vmax=-1.
+~~~
+**/
 
  NcSample s("SampleAndSum","Error occurred in SampleAndSum");
  s.SetStoreMode(1);
@@ -5597,6 +6055,8 @@ NcSample NcSample::SampleAndSum(Int_t i,Double_t step,Int_t loc,Int_t j,Double_t
 ///////////////////////////////////////////////////////////////////////////
 NcSample NcSample::SampleAndSum(TString nameA,Double_t step,Int_t loc,TString nameB,Double_t vmin,Double_t vmax)
 {
+/**
+~~~
 // Perform a Sample-And-Sum operation on the values of the variable specified with nameA
 // in the interval [vmin,vmax], using "step" as the sampling step size.
 // If vmax<=vmin the minimum and maximum values of the variable with nameA will be used.
@@ -5618,6 +6078,8 @@ NcSample NcSample::SampleAndSum(TString nameA,Double_t step,Int_t loc,TString na
 // Note : This facility is only available if the storage mode has been activated.
 //
 // The default values are loc=0, nameB="-", vmin=0 and vmax=-1.
+~~~
+**/
 
  Int_t i=GetIndex(nameA);
  Int_t j=GetIndex(nameB);
@@ -5627,11 +6089,15 @@ NcSample NcSample::SampleAndSum(TString nameA,Double_t step,Int_t loc,TString na
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSample::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  NcSample* q=new NcSample(*this);
  if (name)

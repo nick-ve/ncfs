@@ -1,13 +1,13 @@
 #ifndef NcPositionObj_h
 #define NcPositionObj_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcPositionObj.h 5 2010-03-19 10:10:02Z nickve $
 
 #include "TObject.h"
 
 #include "NcPosition.h"
+
+/** Handling of positions in various reference frames. **/
  
 class NcPositionObj : public TObject,public NcPosition
 {

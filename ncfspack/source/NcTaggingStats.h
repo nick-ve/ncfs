@@ -1,6 +1,6 @@
 #ifndef NcTaggingStats_h
 #define NcTaggingStats_h
-// Copyright(c) 1997-2022, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2022 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <iostream>
@@ -8,6 +8,8 @@
 
 #include "NcTaggingBase.h"
 #include "NcJob.h"
+
+/** Provide event classification tag statistics. **/
 
 class NcTaggingStats : public NcTaggingBase
 {

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 2022, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2022 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcTaggingBase
+~~~
 // Class NcTaggingBase
 // TTask derived base class to facilitate processing of event classification tags.
 //  
@@ -36,16 +40,23 @@
 //
 //--- Author: Nick van Eijndhoven 20-dec-2022, IIHE-VUB, Brussel
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 22, 2022  01:28Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTaggingBase.h"
 #include "Riostream.h"
  
-ClassImp(NcTaggingBase) // Class implementation to enable ROOT I/O
+ClassImp(NcTaggingBase); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcTaggingBase::NcTaggingBase(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Constructor and initialisation of default parameters.
+~~~
+**/
 
  // Items for general processing
  fMaxtag=99;
@@ -66,7 +77,12 @@ NcTaggingBase::NcTaggingBase(const char* name,const char* title) : TTask(name,ti
 ///////////////////////////////////////////////////////////////////////////
 NcTaggingBase::~NcTaggingBase()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if (fAct)
  {
   delete fAct;
@@ -96,7 +112,11 @@ NcTaggingBase::~NcTaggingBase()
 ///////////////////////////////////////////////////////////////////////////
 NcTaggingBase::NcTaggingBase(const NcTaggingBase& q) : TTask(q)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 
  // Items for general processing
  fMaxtag=q.fMaxtag;
@@ -119,13 +139,20 @@ NcTaggingBase::NcTaggingBase(const NcTaggingBase& q) : TTask(q)
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingBase::SetMaxTag(Int_t n)
 {
+/**
+~~~
 // Set the maximum number of tags to be processed.
 // The default constructor has set n=99.
+~~~
+**/
+
  fMaxtag=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingBase::SetDeviceNames(TString devname,TString passname,TString writename)
 {
+/**
+~~~
 // Set the name of a generic NcDevice to be investigated and the corresponding names
 // of the tag passing and writing indicators. 
 // Note that the device must have the specific data structure as outlined in the general
@@ -147,6 +174,8 @@ void NcTaggingBase::SetDeviceNames(TString devname,TString passname,TString writ
 //    For new(er) data, the use of NcTagger (derived) devices is recommended.
 // 2) In case passname="*" and/or writename="*", no check will be made for the
 //    corresponding indicator setting and the tag criteria will be regarded as fulfilled.
+~~~
+**/
 
  fDevname=devname;
  fPassname=passname; 
@@ -155,6 +184,8 @@ void NcTaggingBase::SetDeviceNames(TString devname,TString passname,TString writ
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingBase::SetDevice(TString devname,Bool_t passcheck,Bool_t writecheck)
 {
+/**
+~~~
 // Set the name of an NcTagger (derived) device and the check modes of the tag
 // passing and writing indicators.
 // 
@@ -166,6 +197,8 @@ void NcTaggingBase::SetDevice(TString devname,Bool_t passcheck,Bool_t writecheck
 // corresponding indicator setting and the tag criteria will be regarded as fulfilled.
 //
 // The default values are passcheck=kTRUE and writecheck=kTRUE.
+~~~
+**/
 
  fDevname=devname;
  fPassname="Pass"; 
@@ -177,6 +210,8 @@ void NcTaggingBase::SetDevice(TString devname,Bool_t passcheck,Bool_t writecheck
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingBase::ActivateTag(TString name)
 {
+/**
+~~~
 // In case the specified "name" matches (part of) a certain tag name, that
 // specific tag will be used by NcTaggingSelector to mark candidate events
 // for selection for further analysis.
@@ -208,6 +243,8 @@ void NcTaggingBase::ActivateTag(TString name)
 //    by the user will be considered de-activated for the combined pass*write statistics.
 // 3) Tags that are explicitly de-activated by the user via invokation of DeactivateTag()
 //    can not be effectively activated anymore.
+~~~
+**/
 
  if (!fAct)
  {
@@ -221,6 +258,8 @@ void NcTaggingBase::ActivateTag(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingBase::DeactivateTag(TString name)
 {
+/**
+~~~
 // In case the specified "name" matches (part of) a certain tag name, that
 // specific tag will be used by NcTaggingSelector to mark candidate events
 // for selection for further analysis.
@@ -251,6 +290,8 @@ void NcTaggingBase::DeactivateTag(TString name)
 //    various tags before executing the task.
 // 2) Tags that are explicitly de-activated via this memberfunction
 //    can not be effectively activated anymore via invokation of ActivateTag().
+~~~
+**/
 
  if (!fDeact)
  {
@@ -264,7 +305,11 @@ void NcTaggingBase::DeactivateTag(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingBase::ListStatistics()
 {
+/**
+~~~
 // Provide the final statistics.
+~~~
+**/
 
   cout << endl;
   cout << " *" << ClassName() << "* Final tagging statistics." << endl;

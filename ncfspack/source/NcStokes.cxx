@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcStokes
+~~~
 // Class NcStokes
 // Treatment of Stokes parameters for EM polarisation studies.
 //
@@ -139,16 +143,23 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, August 21, 2021  13:39Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, August 27, 2021  10:48Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcStokes.h"
 #include "Riostream.h"
  
-ClassImp(NcStokes) // Class implementation to enable ROOT I/O
+ClassImp(NcStokes); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcStokes::NcStokes()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fI=0;
  fQ=0;
@@ -158,12 +169,20 @@ NcStokes::NcStokes()
 ///////////////////////////////////////////////////////////////////////////
 NcStokes::~NcStokes()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcStokes::NcStokes(const NcStokes& q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fI=q.fI;
  fQ=q.fQ;
@@ -173,8 +192,12 @@ NcStokes::NcStokes(const NcStokes& q)
 ///////////////////////////////////////////////////////////////////////////
 void NcStokes::SetStokesParameters(Double_t I,Double_t Q,Double_t U,Double_t V)
 {
+/**
+~~~
 // Set the values of the Stokes parameters I, Q, U and V.
 // These parameters are also known as S0, S1, S2 and S3, respectively.
+~~~
+**/
 
  if (I<=0)
  {
@@ -191,6 +214,8 @@ void NcStokes::SetStokesParameters(Double_t I,Double_t Q,Double_t U,Double_t V)
 ///////////////////////////////////////////////////////////////////////////
 void NcStokes::SetEllipseParameters(Double_t a,Double_t b,Double_t theta,TString u,Int_t h,Double_t p)
 {
+/**
+~~~
 // Set the parameters of the polarisation ellipse.
 //
 // Input arguments :
@@ -204,6 +229,8 @@ void NcStokes::SetEllipseParameters(Double_t a,Double_t b,Double_t theta,TString
 // p     : total polarisation fraction
 //
 // The default value is p=1.
+~~~
+**/
 
  fI=0;
  fQ=0;
@@ -233,6 +260,8 @@ void NcStokes::SetEllipseParameters(Double_t a,Double_t b,Double_t theta,TString
 ///////////////////////////////////////////////////////////////////////////
 void NcStokes::SetJonesVector(Double_t A1,Double_t A2,Double_t phi,TString u,Double_t p)
 {
+/**
+~~~
 // Set the components of the Jones field vector (E1,E2)=(A1*exp(i*phi1),A2*exp(i*phi2))
 // with phase difference phi=phi1-phi2.
 //
@@ -241,6 +270,8 @@ void NcStokes::SetJonesVector(Double_t A1,Double_t A2,Double_t phi,TString u,Dou
 // p : total polarisation fraction
 //
 // The default value is p=1.
+~~~
+**/
 
  fI=0;
  fQ=0;
@@ -266,6 +297,8 @@ void NcStokes::SetJonesVector(Double_t A1,Double_t A2,Double_t phi,TString u,Dou
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcStokes::GetParameter(TString name,TString u)
 {
+/**
+~~~
 // Provide the value of the parameter with the specified name.
 // For details about the various parameters, please refer to the
 // general documentation of this class.
@@ -293,6 +326,8 @@ Double_t NcStokes::GetParameter(TString name,TString u)
 // phi       : Phase difference (phi1-phi2) between the Jones vector components 
 //
 // The default value is u="rad".
+~~~
+**/
 
  Double_t value=0;
 
@@ -351,6 +386,8 @@ Double_t NcStokes::GetParameter(TString name,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void NcStokes::Data(TString u)
 {
+/**
+~~~
 // Provide all polarisation related information.
 // For details about the various parameters, please refer to the
 // general documentation of this class.
@@ -361,6 +398,8 @@ void NcStokes::Data(TString u)
 //     "rad" --> Angles are given in radians
 //
 // The default value is u="rad".
+~~~
+**/
 
  if (fI<=0)
  {

@@ -1,6 +1,6 @@
 #ifndef NcTaggingSelector_h
 #define NcTaggingSelector_h
-// Copyright(c) 2022, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2022 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <iostream>
@@ -8,6 +8,8 @@
 
 #include "NcTaggingBase.h"
 #include "NcJob.h"
+
+/** Perform event selection based on event tag settings. **/
 
 class NcTaggingSelector : public NcTaggingBase
 {

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1998 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcMath
+~~~
 // Class NcMath
 // Various mathematical tools which may be very convenient while
 // performing scientific analysis.
@@ -44,30 +48,47 @@
 //
 //--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 10, 2025  16:22Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcMath.h"
 #include "Riostream.h"
  
-ClassImp(NcMath) // Class implementation to enable ROOT I/O
+ClassImp(NcMath); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcMath::NcMath() : TObject()
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcMath::~NcMath()
 {
-// Destructor
+/**
+~~~
+// Destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcMath::NcMath(const NcMath& m) : TObject(m)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Zeta(Double_t x, Int_t nterms) const
 {
+/**
+~~~
 // Computation of the Riemann Zeta function Zeta(x) for all x>1.
 //
 // The input argument "nterms" determines the number of terms that will be
@@ -77,6 +98,8 @@ Double_t NcMath::Zeta(Double_t x, Int_t nterms) const
 // In case of invalid input, the value 0 is returned.
 //
 //--- Nick van Eijndhoven 14-may-2012, IIHE, Brussels.
+~~~
+**/
  
  if (x<=1)
  {
@@ -97,6 +120,8 @@ Double_t NcMath::Zeta(Double_t x, Int_t nterms) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Gamma(Double_t z) const
 {
+/**
+~~~
 // Computation of Gamma(z) for all z>0.
 //
 // The algorithm is based on the article by C.Lanczos [1] as denoted in
@@ -104,7 +129,9 @@ Double_t NcMath::Gamma(Double_t z) const
 //
 // [1] C.Lanczos, SIAM Journal of Numerical Analysis B1 (1964), 86.
 //
-//--- Nve 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  if (z<=0.)
  {
@@ -118,6 +145,8 @@ Double_t NcMath::Gamma(Double_t z) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Gamma(Double_t a,Double_t x,Int_t mode) const
 {
+/**
+~~~
 // Computation of the incomplete gamma function P(a,x) or gamma(a,x).
 //
 // where : P(a,x)=gamma(a,x)/Gamma(a)
@@ -130,7 +159,9 @@ Double_t NcMath::Gamma(Double_t a,Double_t x,Int_t mode) const
 // The algorithm is based on the formulas and code as denoted in
 // Numerical Recipes 2nd ed. on p. 210-212 (W.H.Press et al.).
 //
-//--- Nve 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  Double_t value=0;
 
@@ -161,6 +192,8 @@ Double_t NcMath::Gamma(Double_t a,Double_t x,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::LnGamma(Double_t z) const
 {
+/**
+~~~
 // Computation of ln[Gamma(z)] for all z>0.
 //
 // The algorithm is based on the article by C.Lanczos [1] as denoted in
@@ -170,7 +203,9 @@ Double_t NcMath::LnGamma(Double_t z) const
 //
 // The accuracy of the result is better than 2e-10.
 //
-//--- Nve 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  if (z<=0.)
  {
@@ -204,6 +239,8 @@ Double_t NcMath::LnGamma(Double_t z) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::LnGamma(Double_t a,Double_t x,Int_t mode) const
 {
+/**
+~~~
 // Computation of the ln of the incomplete gamma function P(a,x) or gamma(a,x).
 //
 // where : P(a,x)=gamma(a,x)/Gamma(a)
@@ -214,6 +251,8 @@ Double_t NcMath::LnGamma(Double_t a,Double_t x,Int_t mode) const
 // By default mode=0.
 //
 //--- Nick van Eijndhoven 07-feb-2016, IIHE-VUB, Brussel
+~~~
+**/
  
  Double_t value=0;
  Double_t gammaP=0;
@@ -231,13 +270,17 @@ Double_t NcMath::LnGamma(Double_t a,Double_t x,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::GamSer(Double_t a,Double_t x) const
 {
+/**
+~~~
 // Computation of the incomplete gamma function P(a,x)
 // via its series representation.
 //
 // The algorithm is based on the formulas and code as denoted in
 // Numerical Recipes 2nd ed. on p. 210-212 (W.H.Press et al.).
 //
-//--- Nve 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  Int_t itmax=100;   // Maximum number of iterations
  Double_t eps=3.e-7; // Relative accuracy
@@ -272,13 +315,17 @@ Double_t NcMath::GamSer(Double_t a,Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::GamCf(Double_t a,Double_t x) const
 {
+/**
+~~~
 // Computation of the incomplete gamma function P(a,x)
 // via its continued fraction representation.
 //
 // The algorithm is based on the formulas and code as denoted in
 // Numerical Recipes 2nd ed. on p. 210-212 (W.H.Press et al.).
 //
-//--- Nve 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  Int_t itmax=100;      // Maximum number of iterations
  Double_t eps=3.e-7;    // Relative accuracy
@@ -322,15 +369,21 @@ Double_t NcMath::GamCf(Double_t a,Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Erf(Double_t x) const
 {
+/**
+~~~
 // Computation of the error function erf(x).
 //
-//--- NvE 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  return (1.-Erfc(x));
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Erfc(Double_t x) const
 {
+/**
+~~~
 // Computation of the complementary error function erfc(x).
 //
 // The algorithm is based on a Chebyshev fit as denoted in
@@ -338,7 +391,9 @@ Double_t NcMath::Erfc(Double_t x) const
 //
 // The fractional error is always less than 1.2e-7.
 //
-//--- Nve 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  // The parameters of the Chebyshev fit
  const Double_t ka1=-1.26551223,  ka2=1.00002368,
@@ -365,6 +420,8 @@ Double_t NcMath::Erfc(Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Prob(Double_t chi2,Int_t ndf,Int_t mode) const
 {
+/**
+~~~
 // Computation of the probability for a certain Chi-squared (chi2)
 // and number of degrees of freedom (ndf).
 //
@@ -391,7 +448,9 @@ Double_t NcMath::Prob(Double_t chi2,Int_t ndf,Int_t mode) const
 // which denotes the probability that an observed Chi-squared is at least
 // the value chi2 by chance, even for a correct model.
 //
-//--- NvE 14-nov-1998 UU-SAP Utrecht
+//--- Nick van Eijndhoven 14-nov-1998 UU-SAP Utrecht
+~~~
+**/
  
  if (ndf <= 0) return 0; // Set CL to zero in case ndf<=0
  
@@ -437,6 +496,8 @@ Double_t NcMath::Prob(Double_t chi2,Int_t ndf,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::BesselI0(Double_t x) const
 {
+/**
+~~~
 // Computation of the modified Bessel function I_0(x) for any real x.
 //
 // The algorithm is based on the article by Abramowitz and Stegun [1]
@@ -445,7 +506,9 @@ Double_t NcMath::BesselI0(Double_t x) const
 // [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
 //     Applied Mathematics Series vol. 55 (1964), Washington.  
 //
-//--- NvE 12-mar-2000 UU-SAP Utrecht
+//--- Nick van Eijndhoven 12-mar-2000 UU-SAP Utrecht
+~~~
+**/
 
  // Parameters of the polynomial approximation  
  const Double_t kp1=1.0,          kp2=3.5156229,    kp3=3.0899424,
@@ -476,6 +539,8 @@ Double_t NcMath::BesselI0(Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::BesselK0(Double_t x) const
 {
+/**
+~~~
 // Computation of the modified Bessel function K_0(x) for positive real x.
 //
 // The algorithm is based on the article by Abramowitz and Stegun [1]
@@ -484,7 +549,9 @@ Double_t NcMath::BesselK0(Double_t x) const
 // [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
 //     Applied Mathematics Series vol. 55 (1964), Washington.  
 //
-//--- NvE 12-mar-2000 UU-SAP Utrecht
+//--- Nick van Eijndhoven 12-mar-2000 UU-SAP Utrecht
+~~~
+**/
 
  // Parameters of the polynomial approximation  
  const Double_t kp1=-0.57721566,  kp2=0.42278420,   kp3=0.23069756,
@@ -519,6 +586,8 @@ Double_t NcMath::BesselK0(Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::BesselI1(Double_t x) const
 {
+/**
+~~~
 // Computation of the modified Bessel function I_1(x) for any real x.
 //
 // The algorithm is based on the article by Abramowitz and Stegun [1]
@@ -527,7 +596,9 @@ Double_t NcMath::BesselI1(Double_t x) const
 // [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
 //     Applied Mathematics Series vol. 55 (1964), Washington.  
 //
-//--- NvE 12-mar-2000 UU-SAP Utrecht
+//--- Nick van Eijndhoven 12-mar-2000 UU-SAP Utrecht
+~~~
+**/
 
  // Parameters of the polynomial approximation  
  const Double_t kp1=0.5,          kp2=0.87890594,   kp3=0.51498869,
@@ -559,6 +630,8 @@ Double_t NcMath::BesselI1(Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::BesselK1(Double_t x) const
 {
+/**
+~~~
 // Computation of the modified Bessel function K_1(x) for positive real x.
 //
 // The algorithm is based on the article by Abramowitz and Stegun [1]
@@ -567,7 +640,9 @@ Double_t NcMath::BesselK1(Double_t x) const
 // [1] M.Abramowitz and I.A.Stegun, Handbook of Mathematical Functions,
 //     Applied Mathematics Series vol. 55 (1964), Washington.  
 //
-//--- NvE 12-mar-2000 UU-SAP Utrecht
+//--- Nick van Eijndhoven 12-mar-2000 UU-SAP Utrecht
+~~~
+**/
 
  // Parameters of the polynomial approximation  
  const Double_t kp1= 1.,          kp2= 0.15443144,  kp3=-0.67278579,
@@ -602,6 +677,8 @@ Double_t NcMath::BesselK1(Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::BesselK(Int_t n,Double_t x) const
 {
+/**
+~~~
 // Computation of the Integer Order Modified Bessel function K_n(x)
 // for n=0,1,2,... and positive real x.
 //
@@ -611,7 +688,9 @@ Double_t NcMath::BesselK(Int_t n,Double_t x) const
 //
 // as denoted in Numerical Recipes 2nd ed. on p. 232 (W.H.Press et al.).
 //
-//--- NvE 12-mar-2000 UU-SAP Utrecht
+//--- Nick van Eijndhoven 12-mar-2000 UU-SAP Utrecht
+~~~
+**/
 
  if (x <= 0 || n < 0)
  {
@@ -640,6 +719,8 @@ Double_t NcMath::BesselK(Int_t n,Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::BesselI(Int_t n,Double_t x) const
 {
+/**
+~~~
 // Computation of the Integer Order Modified Bessel function I_n(x)
 // for n=0,1,2,... and any real x.
 //
@@ -649,7 +730,9 @@ Double_t NcMath::BesselI(Int_t n,Double_t x) const
 //
 // as denoted in Numerical Recipes 2nd ed. on p. 232 (W.H.Press et al.).
 //
-//--- NvE 12-mar-2000 UU-SAP Utrecht
+//--- Nick van Eijndhoven 12-mar-2000 UU-SAP Utrecht
+~~~
+**/
 
  Int_t iacc=40; // Increase to enhance accuracy
  Double_t bigno=1.e10, bigni=1.e-10;
@@ -693,12 +776,16 @@ Double_t NcMath::BesselI(Int_t n,Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::Chi2Dist(Int_t ndf) const
 {
+/**
+~~~
 // Provide the Chi-squared PDF corresponding to the specified ndf degrees of freedom.
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <chi2>=ndf  Var(chi2)=2*ndf
+~~~
+**/
  
  TF1 pdf("Chi2PDF","1./(TMath::Gamma([0]/2.)*pow(2,[0]/2.))*pow(x,[0]/2.-1.)*exp(-x/2.)");
  pdf.SetParName(0,"ndf");
@@ -713,11 +800,15 @@ TF1 NcMath::Chi2Dist(Int_t ndf) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::Chi2CDF(Int_t ndf) const
 {
+/**
+~~~
 // Provide the Chi-squared cumulative distribution function corresponding to the
 // specified ndf degrees of freedom.
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("Chi2CDF","1.-TMath::Prob(x,[0])");
  cdf.SetParName(0,"ndf");
@@ -732,6 +823,8 @@ TF1 NcMath::Chi2CDF(Int_t ndf) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::StudentDist(Double_t ndf) const
 {
+/**
+~~~
 // Provide the Student's T PDF corresponding to the specified ndf degrees of freedom.
 //
 // In a frequentist approach, the Student's T distribution is particularly
@@ -747,6 +840,8 @@ TF1 NcMath::StudentDist(Double_t ndf) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <T>=0  Var(T)=ndf/(ndf-2)
+~~~
+**/
  
  TF1 pdf("StudentPDF","(TMath::Gamma(([0]+1.)/2.)/(sqrt(pi*[0])*TMath::Gamma([0]/2.)))*pow(1.+x*x/[0],-([0]+1.)/2.)");
  pdf.SetParName(0,"ndf");
@@ -761,6 +856,8 @@ TF1 NcMath::StudentDist(Double_t ndf) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::StudentCDF(Double_t ndf) const
 {
+/**
+~~~
 // Provide the Student's T cumulative distribution function corresponding to the
 // specified ndf degrees of freedom.
 //
@@ -775,6 +872,8 @@ TF1 NcMath::StudentCDF(Double_t ndf) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("StudentCDF","TMath::StudentI(x,[0])");
  cdf.SetParName(0,"ndf");
@@ -789,6 +888,8 @@ TF1 NcMath::StudentCDF(Double_t ndf) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::FratioDist(Int_t ndf1,Int_t ndf2) const
 {
+/**
+~~~
 // Provide the F (ratio) PDF corresponding to the specified ndf1 and ndf2
 // degrees of freedom of the two samples.
 //
@@ -803,6 +904,8 @@ TF1 NcMath::FratioDist(Int_t ndf1,Int_t ndf2) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <F>=ndf2/(ndf2-2)  Var(F)=2*ndf2*ndf2*(ndf2+ndf1-2)/(ndf1*(ndf2-1)*(ndf2-1)*(ndf2-4))
+~~~
+**/
  
  TF1 pdf("FratioPDF",
  "(TMath::Gamma(([0]+[1])/2.)/(TMath::Gamma([0]/2.)*TMath::Gamma([1]/2.)))*pow([0]/[1],[0]/2.)*pow(x,([0]-2.)/2.)/pow(1.+x*[0]/[1],([0]+[1])/2.)");
@@ -822,6 +925,8 @@ TF1 NcMath::FratioDist(Int_t ndf1,Int_t ndf2) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::FratioCDF(Int_t ndf1,Int_t ndf2) const
 {
+/**
+~~~
 // Provide the F (ratio) cumulative distribution function corresponding to the
 // specified ndf1 and ndf2 degrees of freedom of the two samples.
 //
@@ -834,6 +939,8 @@ TF1 NcMath::FratioCDF(Int_t ndf1,Int_t ndf2) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("FratioCDF","TMath::FDistI(x,[0],[1])");
  cdf.SetParName(0,"ndf1");
@@ -852,6 +959,8 @@ TF1 NcMath::FratioCDF(Int_t ndf1,Int_t ndf2) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::BinomialDist(Int_t n,Double_t p) const
 {
+/**
+~~~
 // Provide the Binomial PDF corresponding to the specified number of trials n
 // and probability p of success.
 //
@@ -862,6 +971,8 @@ TF1 NcMath::BinomialDist(Int_t n,Double_t p) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <k>=n*p  Var(k)=n*p*(1-p)
+~~~
+**/
  
  TF1 pdf("BinomialPDF","TMath::Binomial(int([0]),int(x))*pow([1],int(x))*pow(1.-[1],int([0])-int(x))");
  pdf.SetParName(0,"n");
@@ -880,6 +991,8 @@ TF1 NcMath::BinomialDist(Int_t n,Double_t p) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::BinomialCDF(Int_t n,Double_t p) const
 {
+/**
+~~~
 // Provide the Binomial cumulative distribution function corresponding to the
 // specified number of trials n and probability p of success.
 //
@@ -888,6 +1001,8 @@ TF1 NcMath::BinomialCDF(Int_t n,Double_t p) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("BinomialCDF","1.-TMath::BetaIncomplete([1],(x+1.),([0]-x))");
  cdf.SetParName(0,"n");
@@ -906,6 +1021,8 @@ TF1 NcMath::BinomialCDF(Int_t n,Double_t p) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::NegBinomialnDist(Int_t k,Double_t p) const
 {
+/**
+~~~
 // Provide the Negative Binomial PDF corresponding to the specified number of
 // successes k and probability p of success.
 //
@@ -916,6 +1033,8 @@ TF1 NcMath::NegBinomialnDist(Int_t k,Double_t p) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <n>=k/p  Var(n)=k*(1-p)/(p*p) 
+~~~
+**/
  
  TF1 pdf("NegBinomialnPDF","TMath::Binomial(int(x)-1,int([0])-1)*pow([1],int([0]))*pow(1.-[1],int(x)-int([0]))");
  pdf.SetParName(0,"k");
@@ -934,6 +1053,8 @@ TF1 NcMath::NegBinomialnDist(Int_t k,Double_t p) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::NegBinomialnCDF(Int_t k,Double_t p) const
 {
+/**
+~~~
 // Provide the Negative Binomial cumulative distribution function corresponding to the
 // specified number of successes k and probability p of success.
 //
@@ -942,6 +1063,8 @@ TF1 NcMath::NegBinomialnCDF(Int_t k,Double_t p) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("NegBinomialnCDF","TMath::BetaIncomplete([1],[0],x-[0]+1.)");
  cdf.SetParName(0,"k");
@@ -960,6 +1083,8 @@ TF1 NcMath::NegBinomialnCDF(Int_t k,Double_t p) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::NegBinomialxDist(Int_t k,Double_t p) const
 {
+/**
+~~~
 // Provide the Negative Binomial PDF corresponding to the specified number of
 // successes k and probability p of success.
 //
@@ -972,6 +1097,8 @@ TF1 NcMath::NegBinomialxDist(Int_t k,Double_t p) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <x>=k*(1-p)/p  Var(x)=k*(1-p)/(p*p) 
+~~~
+**/
  
  TF1 pdf("NegBinomialxPDF","TMath::Binomial(int(x)+[0]-1,int([0])-1)*pow([1],int([0]))*pow(1.-[1],int(x))");
  pdf.SetParName(0,"k");
@@ -990,6 +1117,8 @@ TF1 NcMath::NegBinomialxDist(Int_t k,Double_t p) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::NegBinomialxCDF(Int_t k,Double_t p) const
 {
+/**
+~~~
 // Provide the Negative Binomial cumulative distribution function corresponding to the
 // specified number of successes k and probability p of success.
 //
@@ -1000,6 +1129,8 @@ TF1 NcMath::NegBinomialxCDF(Int_t k,Double_t p) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("NegBinomialxCDF","TMath::BetaIncomplete([1],[0],x+1.)");
  cdf.SetParName(0,"k");
@@ -1018,6 +1149,8 @@ TF1 NcMath::NegBinomialxCDF(Int_t k,Double_t p) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::PoissonDist(Double_t mu) const
 {
+/**
+~~~
 // Provide the Poisson PDF p(n|mu).
 //
 // p(n|mu) = pdf for observing n events given an average number mu 
@@ -1027,6 +1160,8 @@ TF1 NcMath::PoissonDist(Double_t mu) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <n>=mu  Var(n)=mu
+~~~
+**/
  
  TF1 pdf("PoissPDFmu","exp(-[0])*pow([0],int(x))/TMath::Factorial(int(x))");
  pdf.SetParName(0,"mu");
@@ -1041,6 +1176,8 @@ TF1 NcMath::PoissonDist(Double_t mu) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::PoissonCDF(Double_t mu) const
 {
+/**
+~~~
 // Provide the Poisson cumulative distribution function for p(n|mu).
 //
 // p(n|mu) = pdf for observing n events given an average number mu 
@@ -1048,6 +1185,8 @@ TF1 NcMath::PoissonCDF(Double_t mu) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("PoissCDFmu","1.-TMath::Gamma(x,[0])");
  cdf.SetParName(0,"mu");
@@ -1062,6 +1201,8 @@ TF1 NcMath::PoissonCDF(Double_t mu) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::PoissonDist(Double_t r,Double_t dt) const
 {
+/**
+~~~
 // Provide the Poisson PDF p(n|r,dt).
 //
 // p(n|r,dt) = pdf for observing n events in a certain time or space interval dt
@@ -1071,6 +1212,8 @@ TF1 NcMath::PoissonDist(Double_t r,Double_t dt) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <n>=rdt  Var(n)=rdt
+~~~
+**/
  
  TF1 pdf("PoissPDFrdt","exp(-[0]*[1])*pow(([0]*[1]),int(x))/TMath::Factorial(int(x))");
  pdf.SetParName(0,"r");
@@ -1088,6 +1231,8 @@ TF1 NcMath::PoissonDist(Double_t r,Double_t dt) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::PoissonCDF(Double_t r,Double_t dt) const
 {
+/**
+~~~
 // Provide the Poisson cumulative distribution function for p(n|r,dt).
 //
 // p(n|r,dt) = pdf for observing n events in a certain time or space interval dt
@@ -1095,6 +1240,8 @@ TF1 NcMath::PoissonCDF(Double_t r,Double_t dt) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("PoissCDFrdt","1.-TMath::Gamma(x,[0]*[1])");
  cdf.SetParName(0,"r");
@@ -1112,6 +1259,8 @@ TF1 NcMath::PoissonCDF(Double_t r,Double_t dt) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::PoissonDtDist(Double_t r,Int_t n) const
 {
+/**
+~~~
 // Provide the Poisson related PDF p(dt|r,n).
 //
 // p(dt|r,n) = pdf for a time or space interval dt in which exactly
@@ -1123,6 +1272,8 @@ TF1 NcMath::PoissonDtDist(Double_t r,Int_t n) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <dt>=n/r  Var(dt)=n/(r*r)
+~~~
+**/
  
  TF1 pdf("PoissDtPDF","exp(-[0]*x)*pow(([0]),[1])*pow(x,([1]-1.))/TMath::Factorial(int([1]-1.))");
  pdf.SetParName(0,"r");
@@ -1141,6 +1292,8 @@ TF1 NcMath::PoissonDtDist(Double_t r,Int_t n) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::PoissonDtCDF(Double_t r,Int_t n) const
 {
+/**
+~~~
 // Provide the cumulative distribution for the Poisson related pdf p(dt|r,n).
 //
 // p(dt|r,n) = pdf for a time or space interval dt in which exactly
@@ -1150,6 +1303,8 @@ TF1 NcMath::PoissonDtCDF(Double_t r,Int_t n) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("PoissDtCDF","TMath::Gamma([1],[0]*x)");
  cdf.SetParName(0,"r");
@@ -1168,6 +1323,8 @@ TF1 NcMath::PoissonDtCDF(Double_t r,Int_t n) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::GammaDtDist(Double_t r,Double_t z) const
 {
+/**
+~~~
 // Provide the Gamma function related PDF p(dt|r,z).
 //
 // p(dt|r,z) = pdf for a time or space interval dt in which exactly
@@ -1180,6 +1337,8 @@ TF1 NcMath::GammaDtDist(Double_t r,Double_t z) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <dt>=z/r  Var(dt)=z/(r*r)
+~~~
+**/
  
  TF1 pdf("GammaDtPDF","exp(-[0]*x)*pow([0],[1])*pow(x,([1]-1.))/TMath::Gamma([1])");
  pdf.SetParName(0,"r");
@@ -1197,6 +1356,8 @@ TF1 NcMath::GammaDtDist(Double_t r,Double_t z) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::GaussDist(Double_t mu,Double_t sigma) const
 {
+/**
+~~~
 // Provide the Gaussian PDF p(x|mu,sigma).
 //
 // p(x|mu,sigma) = pdf for obtaining a value x given a mean value mu 
@@ -1206,6 +1367,8 @@ TF1 NcMath::GaussDist(Double_t mu,Double_t sigma) const
 // "Bayesian Logical Data Analysis for the Physical Sciences".
 //
 // Note : <x>=mu  Var(x)=sigma*sigma
+~~~
+**/
  
  TF1 pdf("GaussPDF","TMath::Gaus(x,[0],[1],1)");
  pdf.SetParName(0,"mu");
@@ -1223,6 +1386,8 @@ TF1 NcMath::GaussDist(Double_t mu,Double_t sigma) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::GaussCDF(Double_t mu,Double_t sigma) const
 {
+/**
+~~~
 // Provide the cumulative distribution function for the Gaussian p(x|mu,sigma).
 //
 // p(x|mu,sigma) = pdf for obtaining a value x given a mean value mu 
@@ -1230,6 +1395,8 @@ TF1 NcMath::GaussCDF(Double_t mu,Double_t sigma) const
 //
 // Details can be found in the excellent textbook of Phil Gregory
 // "Bayesian Logical Data Analysis for the Physical Sciences".
+~~~
+**/
  
  TF1 cdf("GaussCDF","0.5*(1.+TMath::Erf((x-[0])/([1]*sqrt(2.))))");
  cdf.SetParName(0,"mu");
@@ -1247,6 +1414,8 @@ TF1 NcMath::GaussCDF(Double_t mu,Double_t sigma) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::RayleighDist(Double_t sigma) const
 {
+/**
+~~~
 // Provide the Rayleigh PDF p(r|sigma).
 //
 // p(r|sigma) = pdf for obtaining a value r (r>=0) given a scale factor sigma.
@@ -1283,6 +1452,8 @@ TF1 NcMath::RayleighDist(Double_t sigma) const
 //    Rayleigh PDF describes the (fading of the) noise signal strength.
 //
 // Note : <x>=s*sqrt(pi/2) Median=s*sqrt(ln(4)) Var(x)=2-(pow(s,2)*pi/2)
+~~~
+**/
 
  TF1 pdf("RayleighPDF","x*exp(-pow(x,2)/(2.*pow([0],2)))/pow([0],2)");
  pdf.SetParName(0,"sigma");
@@ -1296,11 +1467,15 @@ TF1 NcMath::RayleighDist(Double_t sigma) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::RayleighCDF(Double_t sigma) const
 {
+/**
+~~~
 // Provide the cumulative distribution related to the Rayleigh PDF p(r|sigma).
 //
 // p(r|sigma) = pdf for obtaining a value r (r>=0) given a scale factor sigma.
 //
 // Please refer to the memberfunction RayleighDist() for further details.
+~~~
+**/
  
  TF1 cdf("RayleighCDF","1.-exp(-pow(x,2)/(2.*pow([0],2)))");
  cdf.SetParName(0,"sigma");
@@ -1314,6 +1489,8 @@ TF1 NcMath::RayleighCDF(Double_t sigma) const
 ///////////////////////////////////////////////////////////////////////////
 TF1 NcMath::Rayleigh3Dist(Double_t sigma) const
 {
+/**
+~~~
 // Provide the 3-dimensional extension of the Rayleigh PDF p(r|sigma).
 //
 // p(r|sigma) = pdf for obtaining a value r (r>=0) given a scale factor sigma.
@@ -1348,6 +1525,8 @@ TF1 NcMath::Rayleigh3Dist(Double_t sigma) const
 //    3-dimensional Rayleigh PDF describes the (fading of the) noise signal strength.
 //
 // Note : To obtain the corresponding CDF, please use the memberfunction GetCDF().
+~~~
+**/
 
  TF1 pdf("3D-RayleighPDF","2*pow(x,2)*pow(2*pi,-0.5)*exp(-pow(x,2)/(2.*pow([0],2)))/pow([0],3)");
  pdf.SetParName(0,"sigma");
@@ -1361,6 +1540,8 @@ TF1 NcMath::Rayleigh3Dist(Double_t sigma) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::GetStatistic(TF1 f,TString name,Int_t n,Double_t vref,Int_t npx) const
 {
+/**
+~~~
 // Provide the statistic specified by "name" for the x variable of the 1D function "f" (representing a PDF).
 // The 1D function "f" does not have to be normalized.
 // The optional parameter "n" is only used for the (central)moments and spread as outlined below.
@@ -1389,6 +1570,8 @@ Double_t NcMath::GetStatistic(TF1 f,TString name,Int_t n,Double_t vref,Int_t npx
 // 2) In case of unsupported c.q. inconsistent input, the value 0 is returned.
 //
 // The default values are n=0, vref=0 and npx=1000.
+~~~
+**/
 
  // Set number of evaluation points to ensure accurate results
  f.SetNpx(npx);
@@ -1465,6 +1648,8 @@ Double_t NcMath::GetStatistic(TF1 f,TString name,Int_t n,Double_t vref,Int_t npx
 ///////////////////////////////////////////////////////////////////////////
 TGraph NcMath::GetCDF(TF1 f,Int_t npx) const
 {
+/**
+~~~
 // Provide the CDF of the function "f" in the form of a TGraph.
 // The optional parameter "npx" allows to increase the number of evaluation points
 // of the function "f". A larger number of evaluation points increases the accuracy.
@@ -1473,6 +1658,8 @@ TGraph NcMath::GetCDF(TF1 f,Int_t npx) const
 //        Make sure to set the proper range before invoking this memberfunction.
 //
 // The default value is npx=1000.
+~~~
+**/
 
  f.SetNpx(npx);
 
@@ -1512,6 +1699,8 @@ TGraph NcMath::GetCDF(TF1 f,Int_t npx) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::GaussProb(Double_t q,Double_t mean,Double_t sigma,Int_t isig) const
 {
+/**
+~~~
 // Computation of the integrated probability P(|x-mean|<=dist) for a
 // normalised Gaussian pdf, characterised by the "mean" and "sigma".
 //
@@ -1524,7 +1713,9 @@ Double_t NcMath::GaussProb(Double_t q,Double_t mean,Double_t sigma,Int_t isig) c
 //
 // In case of inconsistent input, a value of -1 is returned.
 //
-//--- NvE 27-nov-2008 NCFS
+//--- Nick van Eijndhoven 27-nov-2008 NCFS
+~~~
+**/
 
  Double_t val=-1;
  if (!isig)
@@ -1540,6 +1731,8 @@ Double_t NcMath::GaussProb(Double_t q,Double_t mean,Double_t sigma,Int_t isig) c
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::GaussPvalue(Double_t q,Double_t mean,Double_t sigma,Int_t sides,Int_t isig) const
 {
+/**
+~~~
 // Computation of the P-value of "q" w.r.t. a normalised Gaussian pdf,
 // characterised by the "mean" and "sigma".
 //
@@ -1570,7 +1763,9 @@ Double_t NcMath::GaussPvalue(Double_t q,Double_t mean,Double_t sigma,Int_t sides
 //
 // In case of inconsistent input, a value of -1 is returned.
 //
-//--- NvE 21-may-2005 Utrecht University
+//--- Nick van Eijndhoven 21-may-2005 Utrecht University
+~~~
+**/
 
  Double_t val=-1;
  if (!isig)
@@ -1588,6 +1783,8 @@ Double_t NcMath::GaussPvalue(Double_t q,Double_t mean,Double_t sigma,Int_t sides
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Chi2Pvalue(Double_t chi2,Int_t ndf,Int_t sides,Int_t sigma,Int_t mode) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified Chi-squared (chi2) value 
 // for a Chi-squared distribution with ndf degrees of freedom.
 //
@@ -1632,7 +1829,9 @@ Double_t NcMath::Chi2Pvalue(Double_t chi2,Int_t ndf,Int_t sides,Int_t sigma,Int_
 //
 // The default values are sides=0, sigma=0 and mode=1.
 //
-//--- NvE 21-may-2005 Utrecht University
+//--- Nick van Eijndhoven 21-may-2005 Utrecht University
+~~~
+**/
 
  if (ndf<=0) return 0;
 
@@ -1675,6 +1874,8 @@ Double_t NcMath::Chi2Pvalue(Double_t chi2,Int_t ndf,Int_t sides,Int_t sigma,Int_
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::StudentPvalue(Double_t t,Double_t ndf,Int_t sides,Int_t sigma) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified Student's t value 
 // for a Student's T distribution with ndf degrees of freedom.
 //
@@ -1713,7 +1914,9 @@ Double_t NcMath::StudentPvalue(Double_t t,Double_t ndf,Int_t sides,Int_t sigma) 
 //  
 // The default values are sides=0 and sigma=0.
 //
-//--- NvE 21-may-2005 Utrecht University
+//--- Nick van Eijndhoven 21-may-2005 Utrecht University
+~~~
+**/
 
  if (ndf<=0) return 0;
 
@@ -1759,6 +1962,8 @@ Double_t NcMath::StudentPvalue(Double_t t,Double_t ndf,Int_t sides,Int_t sigma) 
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::FratioPvalue(Double_t f,Int_t ndf1,Int_t ndf2,Int_t sides,Int_t sigma) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified F ratio f value 
 // for an F (ratio) distribution with ndf1 and ndf2 degrees of freedom
 // for the two samples X,Y respectively to be compared in the ratio X/Y.
@@ -1801,7 +2006,9 @@ Double_t NcMath::FratioPvalue(Double_t f,Int_t ndf1,Int_t ndf2,Int_t sides,Int_t
 //  
 // The default values are sides=0 and sigma=0.
 //
-//--- NvE 21-may-2005 Utrecht University
+//--- Nick van Eijndhoven 21-may-2005 Utrecht University
+~~~
+**/
 
  if (ndf1<=0 || ndf2<=0 || f<=0) return 0;
 
@@ -1848,6 +2055,8 @@ Double_t NcMath::FratioPvalue(Double_t f,Int_t ndf1,Int_t ndf2,Int_t sides,Int_t
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::BinomialPvalue(Int_t k,Int_t n,Double_t p,Int_t sides,Int_t sigma,Int_t mode) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified number of successes k
 // for a Binomial distribution with n trials and success probability p.
 //
@@ -1886,7 +2095,9 @@ Double_t NcMath::BinomialPvalue(Int_t k,Int_t n,Double_t p,Int_t sides,Int_t sig
 //
 // The default values are sides=0, sigma=0 and mode=0.
 //
-//--- NvE 24-may-2005 Utrecht University
+//--- Nick van Eijndhoven 24-may-2005 Utrecht University
+~~~
+**/
 
  Double_t mean=double(n)*p;
 
@@ -1948,6 +2159,8 @@ Double_t NcMath::BinomialPvalue(Int_t k,Int_t n,Double_t p,Int_t sides,Int_t sig
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PoissonPvalue(Int_t k,Double_t mu,Int_t sides,Int_t sigma) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified number of occurrences k
 // for a Poisson distribution with a given average number (in time or space)
 // of mu occurrences.
@@ -1986,7 +2199,9 @@ Double_t NcMath::PoissonPvalue(Int_t k,Double_t mu,Int_t sides,Int_t sigma) cons
 //        Lower tail contents = 1-P(k,mu)
 //        Upper tail contents = P(k,mu)
 //
-//--- NvE 24-may-2005 Utrecht University
+//--- Nick van Eijndhoven 24-may-2005 Utrecht University
+~~~
+**/
 
  Double_t mean=mu;
 
@@ -2028,6 +2243,8 @@ Double_t NcMath::PoissonPvalue(Int_t k,Double_t mu,Int_t sides,Int_t sigma) cons
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PoissonPvalue(Int_t k,Double_t r,Double_t dt,Int_t sides,Int_t sigma) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified number of occurrences k
 // for a Poisson distribution with a given average rate r (in time or space)
 // of occurrences and a (time or space) interval dt.
@@ -2066,7 +2283,9 @@ Double_t NcMath::PoissonPvalue(Int_t k,Double_t r,Double_t dt,Int_t sides,Int_t 
 //        Lower tail contents = 1-P(k,mu)
 //        Upper tail contents = P(k,mu)
 //
-//--- NvE 14-oct-2014 IIHE-VUB, Brussel
+//--- Nick van Eijndhoven 14-oct-2014 IIHE-VUB, Brussel
+~~~
+**/
 
  Double_t mu=r*dt;
  Double_t val=PoissonPvalue(k,mu,sides,sigma);
@@ -2075,6 +2294,8 @@ Double_t NcMath::PoissonPvalue(Int_t k,Double_t r,Double_t dt,Int_t sides,Int_t 
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PoissonDtPvalue(Double_t dt,Double_t r,Int_t n,Int_t sides,Int_t sigma) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified time (or space) interval dt
 // for a Poisson related distribution with a given average rate r (in time or space)
 // of occurrences and an observed number n of events.
@@ -2115,7 +2336,9 @@ Double_t NcMath::PoissonDtPvalue(Double_t dt,Double_t r,Int_t n,Int_t sides,Int_
 //
 // In case of inconsistent input the value -1 is returned.
 //
-//--- NvE 15-oct-2014 IIHE-VUB, Brussel
+//--- Nick van Eijndhoven 15-oct-2014 IIHE-VUB, Brussel
+~~~
+**/
  
  Double_t val=-1;
 
@@ -2161,6 +2384,8 @@ Double_t NcMath::PoissonDtPvalue(Double_t dt,Double_t r,Int_t n,Int_t sides,Int_
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::NegBinomialnPvalue(Int_t n,Int_t k,Double_t p,Int_t sides,Int_t sigma,Int_t mode) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified number of trials n
 // for a Negative Binomial distribution where exactly k successes are to
 // be reached which have each a probability p.
@@ -2203,7 +2428,9 @@ Double_t NcMath::NegBinomialnPvalue(Int_t n,Int_t k,Double_t p,Int_t sides,Int_t
 //
 // The default values are sides=0, sigma=0 and mode=0.
 //
-//--- NvE 24-may-2005 Utrecht University
+//--- Nick van Eijndhoven 24-may-2005 Utrecht University
+~~~
+**/
 
  Double_t mean=double(k)/p;
 
@@ -2270,6 +2497,8 @@ Double_t NcMath::NegBinomialnPvalue(Int_t n,Int_t k,Double_t p,Int_t sides,Int_t
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::NegBinomialxPvalue(Int_t x,Int_t k,Double_t p,Int_t sides,Int_t sigma,Int_t mode) const
 {
+/**
+~~~
 // Computation of the P-value for a certain specified number of failures x
 // for a Negative Binomial distribution where exactly k successes are to
 // be reached which have each a probability p.
@@ -2314,7 +2543,9 @@ Double_t NcMath::NegBinomialxPvalue(Int_t x,Int_t k,Double_t p,Int_t sides,Int_t
 //
 // The default values are sides=0, sigma=0 and mode=0.
 //
-//--- NvE 24-may-2005 Utrecht University
+//--- Nick van Eijndhoven 24-may-2005 Utrecht University
+~~~
+**/
 
  Double_t mean=double(x)*(1.-p)/p;
 
@@ -2381,9 +2612,13 @@ Double_t NcMath::NegBinomialxPvalue(Int_t x,Int_t k,Double_t p,Int_t sides,Int_t
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Log(Double_t B,Double_t x) const
 {
+/**
+~~~
 // Compute log_B(x) with base B.
 //
 // In case of inconsistent input the value 0 is returned.
+~~~
+**/
 
  Double_t val=0;
 
@@ -2395,6 +2630,8 @@ Double_t NcMath::Log(Double_t B,Double_t x) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Nfac(Int_t n,Int_t mode) const
 {
+/**
+~~~
 // Compute n!.
 // The algorithm can be selected by the "mode" input argument.
 //
@@ -2408,7 +2645,9 @@ Double_t NcMath::Nfac(Int_t n,Int_t mode) const
 //
 // Note : Because of Double_t value overflow the maximum value is n=170.
 //
-//--- NvE 20-jan-2007 Utrecht University
+//--- Nick van Eijndhoven 20-jan-2007 Utrecht University
+~~~
+**/
 
  if (n<0) return 0;
  if (n==0 || n==1) return 1;
@@ -2448,6 +2687,8 @@ Double_t NcMath::Nfac(Int_t n,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::LnNfac(Int_t n,Int_t mode) const
 {
+/**
+~~~
 // Compute ln(n!).
 // The algorithm can be selected by the "mode" input argument.
 //
@@ -2461,7 +2702,9 @@ Double_t NcMath::LnNfac(Int_t n,Int_t mode) const
 // By default mode=2 is used.
 // For n<1 the value 0 will be returned.
 //
-//--- NvE 20-jan-2007 Utrecht University
+//--- Nick van Eijndhoven 20-jan-2007 Utrecht University
+~~~
+**/
 
  if (n<=1) return 0;
 
@@ -2496,13 +2739,17 @@ Double_t NcMath::LnNfac(Int_t n,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::LogNfac(Int_t n,Int_t mode) const
 {
+/**
+~~~
 // Compute log_10(n!).
 // First ln(n!) is evaluated via invokation of LnNfac(n,mode).
 // Then the algorithm log_10(z)=ln(z)*log_10(e) is used.
 //
 // For n<1 the value 0 will be returned.
 //
-//--- NvE 20-jan-2007 Utrecht University
+//--- Nick van Eijndhoven 20-jan-2007 Utrecht University
+~~~
+**/
 
  if (n<=1) return 0;
 
@@ -2516,6 +2763,8 @@ Double_t NcMath::LogNfac(Int_t n,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Rfac(Double_t r) const
 {
+/**
+~~~
 // Compute r! for a fractional value r.
 // The algorithm used is : r!=Gamma(r+1).
 //
@@ -2523,7 +2772,9 @@ Double_t NcMath::Rfac(Double_t r) const
 //
 // Note : Because of Double_t value overflow the maximum value is about r=170.
 //
-//--- NvE 17-jul-2008 Utrecht University
+//--- Nick van Eijndhoven 17-jul-2008 Utrecht University
+~~~
+**/
 
  if (r<0) return 0;
  if (r==0 || r==1) return 1;
@@ -2534,12 +2785,16 @@ Double_t NcMath::Rfac(Double_t r) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::LnRfac(Double_t r) const
 {
+/**
+~~~
 // Compute ln(r!) for a fractional value r.
 // The algorithm used is : ln(r!)=LnGamma(r+1).
 //
 // For r<0 the value 0 will be returned.
 //
-//--- NvE 17-jul-2008 Utrecht University
+//--- Nick van Eijndhoven 17-jul-2008 Utrecht University
+~~~
+**/
 
  if (r<=0 || r==1) return 0;
 
@@ -2549,13 +2804,17 @@ Double_t NcMath::LnRfac(Double_t r) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::LogRfac(Double_t r) const
 {
+/**
+~~~
 // Compute log_10(r!) for a fractional value r.
 // First ln(r!) is evaluated via invokation of LnRfac(r).
 // Then the algorithm log_10(z)=ln(z)*log_10(e) is used.
 //
 // For r<0 the value 0 will be returned.
 //
-//--- NvE 17-jul-2008 Utrecht University
+//--- Nick van Eijndhoven 17-jul-2008 Utrecht University
+~~~
+**/
 
  if (r<=0 || r==1) return 0;
 
@@ -2569,6 +2828,8 @@ Double_t NcMath::LogRfac(Double_t r) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PsiValue(Int_t m,Int_t* n,Double_t* p,Int_t f) const
 {
+/**
+~~~
 // Provide the Bayesian Psi value of observations of a counting experiment
 // w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -2604,7 +2865,9 @@ Double_t NcMath::PsiValue(Int_t m,Int_t* n,Double_t* p,Int_t f) const
 //
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
-//--- NvE 03-oct-2007 Utrecht University
+//--- Nick van Eijndhoven 03-oct-2007 Utrecht University
+~~~
+**/
 
  Double_t psi=-1;
 
@@ -2649,6 +2912,8 @@ Double_t NcMath::PsiValue(Int_t m,Int_t* n,Double_t* p,Int_t f) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PsiValue(Int_t m,Double_t* n,Double_t* p,Int_t f) const
 {
+/**
+~~~
 // Provide the Bayesian Psi value of observations of a counting experiment
 // w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -2689,7 +2954,9 @@ Double_t NcMath::PsiValue(Int_t m,Double_t* n,Double_t* p,Int_t f) const
 //
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
-//--- NvE 25-jul-2008 Utrecht University
+//--- Nick van Eijndhoven 25-jul-2008 Utrecht University
+~~~
+**/
 
  Double_t psi=-1;
 
@@ -2734,6 +3001,8 @@ Double_t NcMath::PsiValue(Int_t m,Double_t* n,Double_t* p,Int_t f) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
 {
+/**
+~~~
 // Provide the Bayesian Psi value of observations of a counting experiment
 // (in histogram format) w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -2773,7 +3042,9 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
 //
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
-//--- NvE 03-oct-2007 Utrecht University
+//--- Nick van Eijndhoven 03-oct-2007 Utrecht University
+~~~
+**/
 
  Double_t psi=-1;
 
@@ -2866,6 +3137,8 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
 {
+/**
+~~~
 // Provide extreme Bayesian Psi values for a certain number of trials
 // w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -2917,6 +3190,8 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
 //--- Nick van Eijndhoven 17-jul-2008 NCFS
+~~~
+**/
 
  Double_t psi=-1;
 
@@ -3111,6 +3386,8 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
 {
+/**
+~~~
 // Provide extreme Bayesian Psi values based on observations in histogram
 // format w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -3167,6 +3444,8 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
 //--- Nick van Eijndhoven 18-jul-2008 NCFS
+~~~
+**/
 
  Double_t psi=-1;
 
@@ -3248,6 +3527,8 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t* p,Int_t f,Double_t* na,TH1F* psih,Int_t ncut,Double_t* nrx,Int_t mark)
 {
+/**
+~~~
 // Provide the statistical P-value (i.e. the fraction of recorded psi values
 // with psi>=psi0) for the specified psi0 based on "nr" repetitions of a
 // counting experiment corresponding to a Bernoulli class hypothesis B_m
@@ -3332,7 +3613,9 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t
 //
 // In the case of inconsistent input, a value of -1 is returned.
 //
-//--- NvE 17-nov-2008 NCFS
+//--- Nick van Eijndhoven 17-nov-2008 NCFS
+~~~
+**/
 
  if (psi0<0 || nr<0 || (nr>0 && nr<2)) return -1;
 
@@ -3389,6 +3672,8 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,Int_t f,Double_t* na,TH1F* psih,Int_t ncut,Double_t* nrx,Int_t mark)
 {
+/**
+~~~
 // Provide the statistical P-value (i.e. the fraction of recorded psi values
 // with psi>=psi0) for the specified psi0 based on "nr" repetitions of a
 // counting experiment (specified by the observed histogram "his") corresponding
@@ -3485,6 +3770,8 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
 // In the case of inconsistent input, a P-value of -1 is returned.
 //
 //--- Nick van Eijndhoven 05-may-2011 IIHE Brussel
+~~~
+**/
 
  Double_t pval=-1;
 
@@ -3579,6 +3866,8 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Chi2Value(Int_t m,Int_t* n,Double_t* p,Int_t* ndf) const
 {
+/**
+~~~
 // Provide the frequentist chi-squared value of observations of a counting
 // experiment w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -3603,6 +3892,8 @@ Double_t NcMath::Chi2Value(Int_t m,Int_t* n,Double_t* p,Int_t* ndf) const
 // In the case of inconsistent input, a chi-squared and ndf value of -1 is returned.
 //
 //--- Nick van Eijndhoven 03-oct-2007 NCFS
+~~~
+**/
 
  Double_t chi=-1;
  if (ndf) *ndf=-1;
@@ -3632,6 +3923,8 @@ Double_t NcMath::Chi2Value(Int_t m,Int_t* n,Double_t* p,Int_t* ndf) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Chi2Value(Int_t m,Double_t* n,Double_t* p,Int_t* ndf) const
 {
+/**
+~~~
 // Provide the frequentist chi-squared value of observations of a counting
 // experiment w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -3661,6 +3954,8 @@ Double_t NcMath::Chi2Value(Int_t m,Double_t* n,Double_t* p,Int_t* ndf) const
 // In the case of inconsistent input, a chi-squared and ndf value of -1 is returned.
 //
 //--- Nick van Eijndhoven 25-jul-2008 NCFS
+~~~
+**/
 
  Double_t chi=-1;
  if (ndf) *ndf=-1;
@@ -3690,6 +3985,8 @@ Double_t NcMath::Chi2Value(Int_t m,Double_t* n,Double_t* p,Int_t* ndf) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::Chi2Value(TH1* his,TH1* hyp,TF1* pdf,Int_t* ndf) const
 {
+/**
+~~~
 // Provide the frequentist chi-squared value of observations of a counting
 // experiment (in histogram format) w.r.t. a Bernoulli class hypothesis B_m.
 // The hypothesis B_m represents a counting experiment with m different
@@ -3717,6 +4014,8 @@ Double_t NcMath::Chi2Value(TH1* his,TH1* hyp,TF1* pdf,Int_t* ndf) const
 // In the case of inconsistent input, a chi-squared and ndf value of -1 is returned.
 //
 //--- Nick van Eijndhoven 03-oct-2007 NCFS
+~~~
+**/
 
  Double_t chi=-1;
 
@@ -3809,6 +4108,8 @@ Double_t NcMath::Chi2Value(TH1* his,TH1* hyp,TF1* pdf,Int_t* ndf) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::MeanMu(Double_t cl,Double_t nbkg,Int_t mode,TF1* fw,TFeldmanCousins* fc,Int_t nmax) const
 {
+/**
+~~~
 // Provide the Feldman-Cousins average upper/lower limit corresponding to
 // the confidence level "cl", some background expectation and weight function.
 //
@@ -3830,6 +4131,8 @@ Double_t NcMath::MeanMu(Double_t cl,Double_t nbkg,Int_t mode,TF1* fw,TFeldmanCou
 //    which corresponds to 10 sigma above the expectation value for a Poisson pdf.
 //
 // Default values are w=0, f=0 an nmax=0.
+~~~
+**/
 
  TFeldmanCousins* f=fc;
  if (!f) f=new TFeldmanCousins();
@@ -3868,6 +4171,8 @@ Double_t NcMath::MeanMu(Double_t cl,Double_t nbkg,Int_t mode,TF1* fw,TFeldmanCou
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcMath::LiMaSignificance(Double_t Non,Double_t Ton,Double_t Noff,Double_t Toff,Double_t Ra,Double_t Re) const
 {
+/**
+~~~
 // Provide the significance in terms of the amount of standard deviations 
 // of a certain "on source" and "off source" observation according to the
 // procedure outlined by T.Li and Y.Ma in Astrophysical Journal 271 (1983) 317.
@@ -3890,6 +4195,8 @@ Double_t NcMath::LiMaSignificance(Double_t Non,Double_t Ton,Double_t Noff,Double
 // 2) The resulting significance is most reliable for Non>10 and Noff>10.
 //
 // The default values are Ra=1 and Re=1.
+~~~
+**/
 
  Double_t s=-1;
 

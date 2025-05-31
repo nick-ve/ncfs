@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcRandom.cxx 98 2014-10-27 10:13:13Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcRandom
+~~~
 // Class NcRandom
 // Generate universal random numbers and sequences on all common machines.
 //
@@ -121,15 +123,20 @@
 //
 //--- Author: Nick van Eijndhoven 11-oct-1997 Utrecht University
 //- Modified: NvE $Date: 2014-10-27 11:13:13 +0100 (Mon, 27 Oct 2014) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcRandom.h"
 #include "Riostream.h"
  
-ClassImp(NcRandom) // Class implementation to enable ROOT I/O
+ClassImp(NcRandom); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcRandom::NcRandom()
 {
+/**
+~~~
 // Creation of an NcRandom object and default initialisation.
 // The random sequence will be started from scratch.
 //
@@ -141,6 +148,8 @@ NcRandom::NcRandom()
 // which corresponds to  : seed=53310452
 //
 // This seed value of 53310452 is used in this default initialisation.
+~~~
+**/
  
  Int_t seed=53310452; // Default seed
  Start(seed,0,0,0);   // Start the sequence for this seed from scratch
@@ -148,6 +157,8 @@ NcRandom::NcRandom()
 ///////////////////////////////////////////////////////////////////////////
 NcRandom::NcRandom(Int_t seed,NcTimestamp* ts)
 {
+/**
+~~~
 // Creation of an NcRandom object and user defined initialisation.
 // The random sequence will be started from scratch.
 //
@@ -169,12 +180,16 @@ NcRandom::NcRandom(Int_t seed,NcTimestamp* ts)
 // to the default value of 53310452.
 //
 // The default value is ts=0.
+~~~
+**/
  
  Start(seed,0,0,ts); // Start the sequence for this seed from scratch
 }
 ///////////////////////////////////////////////////////////////////////////
 NcRandom::NcRandom(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
 {
+/**
+~~~
 // Creation of an NcRandom object and user defined initialisation.
 // The random sequence is started from a user defined point specified via "cnt1" and "cnt2"
 // as outlined below.
@@ -204,13 +219,20 @@ NcRandom::NcRandom(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
 // To start a sequence from scratch one should select : cnt1=0 and cnt2=0.
 //
 // The default value is ts=0.
+~~~
+**/
  
  Start(seed,cnt1,cnt2,ts); // Start the sequence from a user defined point
 }
 ///////////////////////////////////////////////////////////////////////////
 NcRandom::~NcRandom()
 {
-// Destructor to delete memory allocated for the area function arrays
+/**
+~~~
+// Destructor to delete memory allocated for the area function arrays.
+~~~
+**/
+
  if (fXa) delete [] fXa;
  fXa=0;
  if (fYa) delete [] fYa;
@@ -221,6 +243,8 @@ NcRandom::~NcRandom()
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Start(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
 {
+/**
+~~~
 // Internal member function to start a certain sequence from scratch or from a user defined point.
 //
 // The algorithm to start from scratch is based on the routine RSTART
@@ -258,6 +282,8 @@ void NcRandom::Start(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
 // The current values of seed, cnt1 and cnt2 can be obtained
 // via the member functions "GetSeed", "GetCnt1" and "GetCnt2" resp.
 // To start from scratch one should select : cnt1=0 and cnt2=0.
+~~~
+**/
 
  if (seed>921350143) seed=53310452;
 
@@ -344,6 +370,8 @@ void NcRandom::Start(Int_t seed,Int_t cnt1,Int_t cnt2,NcTimestamp* ts)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l)
 {
+/**
+~~~
 // Internal member function to unpack the seed into the four startup parameters i,j,k and l.
 //
 // The range of the seed is : 0 <= seed <= 921350143
@@ -372,6 +400,8 @@ void NcRandom::Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l)
 //
 // and use the formula :
 // seed = (i-2)*176*176*169 + (j-2)*176*169 + (k-2)*169 + l
+~~~
+**/
  
  if ((seed >= 0) && (seed <= 921350143)) // Check seed value
  {
@@ -400,32 +430,54 @@ void NcRandom::Unpack(Int_t seed,Int_t& i,Int_t& j,Int_t& k,Int_t& l)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcRandom::GetSeed() const
 {
-// Provide the current seed value
+/**
+~~~
+// Provide the current seed value.
+~~~
+**/
+
  return fSeed;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcRandom::GetCnt1() const
 {
-// Provide the current value of the counter cnt1
+/**
+~~~
+// Provide the current value of the counter cnt1.
+~~~
+**/
+
  return fCnt1;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcRandom::GetCnt2() const
 {
-// Provide the current value of the counter cnt2
+/**
+~~~
+// Provide the current value of the counter cnt2.
+~~~
+**/
+
  return fCnt2;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Data() const
 {
-// Print the current seed, cnt1 and cnt2 values
+/**
+~~~
+// Print the current seed, cnt1 and cnt2 values.
+~~~
+**/
+
  cout << " *NcRandom* seed = " << fSeed
       << " cnt1 = " << fCnt1 << " cnt2 = " << fCnt2 << endl;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcRandom::Uniform()
 {
-// Generate uniform random numbers in the interval <0,1>
+/**
+~~~
+// Generate uniform random numbers in the interval <0,1>.
 //
 // The algorithm is based on lagged Fibonacci sequences (first part)
 // combined with a congruential method (second part)
@@ -435,6 +487,8 @@ Float_t NcRandom::Uniform()
 // Features :
 // 1) Period = 2**144
 // 2) Same sequence of 24-bit real numbers on all common machines
+~~~
+**/
  
 // First part of the combination : F(97,33,*) (see article for explanation)
  Float_t unirnu=fU[fI-1]-fU[fJ-1];
@@ -471,7 +525,12 @@ Float_t NcRandom::Uniform()
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcRandom::Uniform(Float_t a,Float_t b)
 {
-// Generate uniform random numbers in the interval <a,b>
+/**
+~~~
+// Generate uniform random numbers in the interval <a,b>.
+~~~
+**/
+
  Float_t rmin=a;
  if (a > b) rmin=b;
  
@@ -483,7 +542,9 @@ Float_t NcRandom::Uniform(Float_t a,Float_t b)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Uniform(Float_t* vec,Int_t n,Float_t a,Float_t b)
 {
-// Generate a vector of uniform random numbers in the interval <a,b>
+/**
+~~~
+// Generate a vector of uniform random numbers in the interval <a,b>.
 // This saves lots of (member)function calls in case many random
 // numbers are needed at once.
 //
@@ -497,6 +558,8 @@ void NcRandom::Uniform(Float_t* vec,Int_t n,Float_t a,Float_t b)
 // Features :
 // 1) Period = 2**144
 // 2) Same sequence of 24-bit real numbers on all common machines
+~~~
+**/
  
 // Determine the minimum of a and b
  Float_t rmin=a;
@@ -549,17 +612,23 @@ void NcRandom::Uniform(Float_t* vec,Int_t n,Float_t a,Float_t b)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Uniform(Float_t* vec,Int_t n)
 {
-// Generate a vector of uniform random numbers in the interval <0,1>
+/**
+~~~
+// Generate a vector of uniform random numbers in the interval <0,1>.
 // This saves lots of (member)function calls in case many random
 // numbers are needed at once.
 //
 // n = The number of random numbers to be generated
+~~~
+**/
  
  Uniform(vec,n,0.,1.);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Uniform(Int_t n)
 {
+/**
+~~~
 // Internal member function to generate n uniform random numbers in one go.
 // This saves lots of (member)function calls in case one needs to skip
 // to a certain point in a sequence.
@@ -577,6 +646,8 @@ void NcRandom::Uniform(Int_t n)
 // Features :
 // 1) Period = 2**144
 // 2) Same sequence of 24-bit real numbers on all common machines
+~~~
+**/
  
  if (n > 0) // Check n value
  {
@@ -619,7 +690,9 @@ void NcRandom::Uniform(Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcRandom::Gauss(Float_t mean,Float_t sigma)
 {
-// Generate gaussian distributed random numbers with certain mean and sigma
+/**
+~~~
+// Generate gaussian distributed random numbers with certain mean and sigma.
 //
 // Method :
 // P(x) = The gaussian distribution function
@@ -637,6 +710,8 @@ Float_t NcRandom::Gauss(Float_t mean,Float_t sigma)
 // 2) q1 is in fact a uniform generated value for P which is substituted
 //    directly in the formula above.
 // 3) The value of q2 determines whether we use the + or - sign.
+~~~
+**/
  
 // Generate the two uniform random numbers q1 and q2 in <0,1>
  Float_t q1,q2;
@@ -652,18 +727,26 @@ Float_t NcRandom::Gauss(Float_t mean,Float_t sigma)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcRandom::Gauss()
 {
-// Generate gaussian distributed random numbers with mean=0 and sigma=1
+/**
+~~~
+// Generate gaussian distributed random numbers with mean=0 and sigma=1.
+~~~
+**/
  
  return Gauss(0.,1.);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Gauss(Float_t* vec,Int_t n,Float_t mean,Float_t sigma)
 {
-// Generate a vector of gaussian random numbers with certain mean and sigma
+/**
+~~~
+// Generate a vector of gaussian random numbers with certain mean and sigma.
 // This saves lots of (member)function calls in case many random
 // numbers are needed at once.
 //
 // n = The number of random numbers to be generated
+~~~
+**/
  
  if (n > 0) // Check n value
  {
@@ -694,18 +777,24 @@ void NcRandom::Gauss(Float_t* vec,Int_t n,Float_t mean,Float_t sigma)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Gauss(Float_t* vec,Int_t n)
 {
-// Generate a vector of gaussian random numbers with mean=0 and sigma=1
+/**
+~~~
+// Generate a vector of gaussian random numbers with mean=0 and sigma=1.
 // This saves lots of (member)function calls in case many random
 // numbers are needed at once.
 //
 // n = The number of random numbers to be generated
+~~~
+**/
  
  Gauss(vec,n,0.,1.);
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcRandom::Poisson(Float_t mean)
 {
-// Generate Poisson distributed random numbers with certain mean
+/**
+~~~
+// Generate Poisson distributed random numbers with certain mean.
 //
 // Method :
 //
@@ -715,6 +804,8 @@ Float_t NcRandom::Poisson(Float_t mean)
 //
 // To generate the distribution, the "sum trick" is used as mentioned
 // in "Formulae and Methods in Experimental data Evaluation Vol. 1"
+~~~
+**/
  
  Float_t unirnp=0.; // Initialise the random number value
  
@@ -752,7 +843,9 @@ Float_t NcRandom::Poisson(Float_t mean)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::Poisson(Float_t* vec,Int_t n,Float_t mean)
 {
-// Generate a vector of Poisson dist. random numbers with certain mean
+/**
+~~~
+// Generate a vector of Poisson dist. random numbers with certain mean.
 // This saves lots of (member)function calls in case many random
 // numbers are needed at once.
 //
@@ -766,6 +859,8 @@ void NcRandom::Poisson(Float_t* vec,Int_t n,Float_t mean)
 //
 // To generate the distribution, the "sum trick" is used as mentioned
 // in "Formulae and Methods in Experimental data Evaluation Vol. 1"
+~~~
+**/
  
  if (n <= 0) // Check n value
  {
@@ -819,12 +914,16 @@ void NcRandom::Poisson(Float_t* vec,Int_t n,Float_t mean)
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::SetUser(Float_t a,Float_t b,Int_t n,Float_t (*f)(Float_t))
 {
-// Determine the area under f(x) as a function of x
+/**
+~~~
+// Determine the area under f(x) as a function of x.
 // This is called the "area function" and serves as a basis to
 // provide random numbers in [a,b] according to the user defined
 // distribution f(x).
 // The area function is normalised such that the most extreme
 // value is 1 or -1.
+~~~
+**/
  
  fNa=n+1;             // The number of bins for the area function
  fXa=new Float_t[fNa];  // The binned x values of the area function
@@ -857,12 +956,16 @@ void NcRandom::SetUser(Float_t a,Float_t b,Int_t n,Float_t (*f)(Float_t))
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::SetUser(Float_t* x,Float_t* y,Int_t n)
 {
+/**
+~~~
 // Determine the area under y[i] as a function of x[i]
 // This is called the "area function" and serves as a basis to
 // provide random numbers in x according to the user provided
 // distribution (x[i],y[i]).
 // The area function is normalised such that the most extreme
 // value is 1 or -1.
+~~~
+**/
  
  fNa=n;               // The number of bins for the area function
  fXa=new Float_t[fNa];  // The binned x values of the area function
@@ -913,7 +1016,9 @@ void NcRandom::SetUser(Float_t* x,Float_t* y,Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcRandom::User()
 {
-// Provide a random number according to the user defined distribution
+/**
+~~~
+// Provide a random number according to the user defined distribution.
 //
 // Method :
 // --------
@@ -922,6 +1027,8 @@ Float_t NcRandom::User()
 // The required random number is given by the corresponding x value (fXa[])
 // of the area function.
 // In case of more than one x value candidate, select randomly one of them.
+~~~
+**/
  
  Float_t unirnf=0;
  
@@ -968,6 +1075,8 @@ Float_t NcRandom::User()
 ///////////////////////////////////////////////////////////////////////////
 void NcRandom::User(Float_t* vec,Int_t n)
 {
+/**
+~~~
 // Generate a vector of random numbers according to a user defined dist.
 // This saves lots of (member)function calls in case many random
 // numbers are needed at once.
@@ -981,6 +1090,8 @@ void NcRandom::User(Float_t* vec,Int_t n)
 // The required random number is given by the corresponding x value (fXa[])
 // of the area function.
 // In case of more than one x value candidate, select randomly one of them.
+~~~
+**/
  
  Float_t unirnf,ra,dmin,dist;
  Int_t ncand,jbin;
@@ -1031,6 +1142,8 @@ void NcRandom::User(Float_t* vec,Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcRandom::RanBm(Double_t nr,Double_t n,Int_t m,Double_t* p,Double_t* na,Double_t* psia,Double_t psi0,Int_t f,TH1* psih,Int_t ncut,Double_t* nrx)
 {
+/**
+~~~
 // Perform "nr" repetitions (and provide the corresponding statistics) of a
 // counting experiment corresponding to a Bernoulli class hypothesis B_m
 // with "n" independent random trials.
@@ -1127,7 +1240,9 @@ Double_t NcRandom::RanBm(Double_t nr,Double_t n,Int_t m,Double_t* p,Double_t* na
 // In case nr>1 (or nr=0) and psi0>=0, the number of encountered Psi values with Psi>=psi0 is returned. 
 // In the case of inconsistent input, a value of -1 is returned.
 //
-//--- NvE 16-nov-2008 NCFS
+//--- Nick van Eijndhoven 16-nov-2008 NCFS
+~~~
+**/
 
  if (nrx) *nrx=-1;
 

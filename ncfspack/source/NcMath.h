@@ -1,6 +1,6 @@
 #ifndef NcMath_h
 #define NcMath_h
-// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1998 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <math.h>
@@ -19,6 +19,8 @@
 #include "TGraph.h"
 
 #include "NcRandom.h"
+
+/** Various mathematical tools for scientific analysis. **/
  
 class NcMath : public TObject
 {

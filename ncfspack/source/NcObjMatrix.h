@@ -1,13 +1,13 @@
 #ifndef NcObjMatrix_h
 #define NcObjMatrix_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2003 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcObjMatrix.h 5 2010-03-19 10:10:02Z nickve $
 
 #include "TNamed.h"
 #include "TObjArray.h"
 #include "TArrayI.h"
+
+/** Handling of a matrix structure of objects. **/
 
 class NcObjMatrix : public TNamed
 {

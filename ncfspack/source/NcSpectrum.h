@@ -1,14 +1,6 @@
 #ifndef NcSpectrum_h
 #define NcSpectrum_h
 
-/*************************************************************************
- * Copyright (C) 1995-2006, Rene Brun and Fons Rademakers.               *
- * All rights reserved.                                                  *
- *                                                                       *
- * For the licensing terms see $ROOTSYS/LICENSE.                         *
- * For the list of contributors see $ROOTSYS/README/CREDITS.             *
- *************************************************************************/
-
 // This is a copy of the file TSpectrum.h from ROOT 5.34/38
 // which was created by Miroslav Morhac (27/05/99).
 // It has been introduced as NcSpectrum.h in order to provide compatible
@@ -28,6 +20,8 @@
 
 // Commented out by Nick van Eijndhoven, VUB-IIHE, Brussels, May 7, 2025  07:01Z
 //@@@ class TH1;
+
+/** Facilities for advanced spectral analysis. **/
 
 class NcSpectrum : public TNamed {
 private:
@@ -89,7 +83,7 @@ public:
    static Int_t        StaticSearch(const TH1 *hist, Double_t sigma=2, Option_t *option="goff", Double_t threshold=0.05);
    static TH1         *StaticBackground(const TH1 *hist,Int_t niter=20, Option_t *option="");
 
-   ClassDef(NcSpectrum,1)  //Peak Finder, background estimator, Deconvolution
+   ClassDef(NcSpectrum,1)  // Facilities for advanced spectral analysis
 };
 #endif
 

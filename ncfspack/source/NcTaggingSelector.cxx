@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 2022, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2022 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcTaggingSelector
+~~~
 // Class NcTaggingSelector
 // TTask derived class to perform event selection based on the event classification tag settings.
 //  
@@ -173,16 +177,23 @@
 //
 //--- Author: Nick van Eijndhoven 21-dec-2022, IIHE-VUB, Brussel
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 9, 2023  01:05Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTaggingSelector.h"
 #include "Riostream.h"
  
-ClassImp(NcTaggingSelector) // Class implementation to enable ROOT I/O
+ClassImp(NcTaggingSelector); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcTaggingSelector::NcTaggingSelector(const char* name,const char* title) : NcTaggingBase(name,title)
 {
+/**
+~~~
 // Constructor and initialisation of default parameters.
+~~~
+**/
 
  fLogicA="OR";
  fLogicD="OR";
@@ -190,11 +201,17 @@ NcTaggingSelector::NcTaggingSelector(const char* name,const char* title) : NcTag
 ///////////////////////////////////////////////////////////////////////////
 NcTaggingSelector::~NcTaggingSelector()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingSelector::SetLogic(TString logic,TString type)
 {
+/**
+~~~
 // Set the logic for combination of tag setting selections.
 //
 // Input arguments :
@@ -204,6 +221,8 @@ void NcTaggingSelector::SetLogic(TString logic,TString type)
 //         "D" --> Logic for the tags that are requested to be set "not passed" (aka Deactive tags)
 //
 // Note : In the constructor of this class both logic settings are initialized to "OR".
+~~~
+**/
 
  if ((logic!="OR" && logic!="AND") || (type!="A" && type!="D"))
  {
@@ -219,7 +238,11 @@ void NcTaggingSelector::SetLogic(TString logic,TString type)
 ///////////////////////////////////////////////////////////////////////////
 void NcTaggingSelector::Exec(Option_t* opt)
 {
+/**
+~~~
 // Perform the tagging analysis.
+~~~
+**/
 
  Int_t nact=0;
  Int_t ndeact=0;

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2008 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcPsiDistrib.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcPsiDistrib
+~~~
 // Class NcPsiDistrib
 // Tool to analyse the distribution of possibly observed psi values
 // (see NcMath::PsiValue()) in the case of random background only
@@ -82,16 +84,24 @@
 // 
 //--- Author: Garmt de Vries-Uiterweerd 15-jun-2008 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcPsiDistrib.h"
 #include "Riostream.h"
 
-ClassImp(NcPsiDistrib) // Class implementation to enable ROOT I/O
+ClassImp(NcPsiDistrib); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 NcPsiDistrib::NcPsiDistrib()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
+
  fNtrials=10000;
  fNevents=100;
  fNoutcomes=100;
@@ -119,7 +129,12 @@ NcPsiDistrib::NcPsiDistrib()
 ///////////////////////////////////////////////////////////////////////////
 NcPsiDistrib::~NcPsiDistrib()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
+
  if(fProbs)
  {
   delete[] fProbs;
@@ -144,23 +159,38 @@ NcPsiDistrib::~NcPsiDistrib()
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetNtrials(Long_t n)
 {
+/**
+~~~
 // Set number of trials.
+~~~
+**/
+
  fNtrials=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetNevents(Int_t n)
 {
+/**
+~~~
 // Set number of background events to simulate.
+~~~
+**/
+
  fNevents=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetNoutcomes(Int_t n, Double_t* p)
 {
+/**
+~~~
 // Set number of possible outcomes.
 // The optional argument p is an array containing the respective probabilities
 // of the outcomes. Its length must be equal to the number of outcomes. In 
 // case no probabilities are specified, a flat distribution is assumed.
 // Setting the number of outcomes resets any signal that may be present.
+~~~
+**/
+
  fNoutcomes=n;
  if(fProbs)
  {
@@ -180,9 +210,14 @@ void NcPsiDistrib::SetNoutcomes(Int_t n, Double_t* p)
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetProbabilities(Double_t* p)
 {
+/**
+~~~
 // Set probabilities of the possible outcomes.
 // The length of the array passed as an argument must be equal to the number 
 // of outcomes. In case p=0, a flat distribution is made.
+~~~
+**/
+
  if(p)
  {
   Double_t sum=0;
@@ -202,9 +237,14 @@ void NcPsiDistrib::SetProbabilities(Double_t* p)
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetSignal(Int_t* s)
 {
+/**
+~~~
 // Set signal counts for each outcome.
 // The length of the array passed as an argument must be equal to the number of outcomes.
 // In case s=0, the signal is set to 0 for all outcomes.
+~~~
+**/
+
  if(s)
  {
   for(Int_t i=0; i<fNoutcomes; i++)
@@ -223,32 +263,42 @@ void NcPsiDistrib::SetSignal(Int_t* s)
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetPsiRange(Int_t nb, Float_t low, Float_t high)
 {
+/**
+~~~
 // Set number of bins and range of the psi histogram.
+~~~
+**/
+
  fPsiHisto->SetBins(nb,low,high);
  fRangeSet=kTRUE;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetReferencePsi(Double_t ref)
 {
+/**
+~~~
 // Set reference psi.
+~~~
+**/
+
  fRefPsi=ref;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::SetPrintFreq(Int_t freq)
 {
+/**
+~~~
 // Set print frequency.
+~~~
+**/
+
  fPrintFreq=freq;
 }
 ///////////////////////////////////////////////////////////////////////////
-//void NcPsiDistrib::SetSampleStoreMode(Int_t mode)
-//{
-// Set store mode of the psi sample (see NcSample::SetStoreMode()).
-// This resets the sample, and 
-// fSample->SetStoreMode(mode);
-//}
-///////////////////////////////////////////////////////////////////////////
 void NcPsiDistrib::Distribute(Int_t storemode)
 {
+/**
+~~~
 // Make distribution.
 // The parameter storemode is the mode to be used for the NcSample of the 
 // psi distribution. In case storemode=1, entered data will be stored in the 
@@ -256,6 +306,8 @@ void NcPsiDistrib::Distribute(Int_t storemode)
 // Setting mode=1 can be memory-intensive, and is not advised when dealing
 // with large number of trials. The default is storemode=0, meaning no storage
 // of entered data.
+~~~
+**/
 
  // Variables we need
  Int_t* data=new Int_t[fNoutcomes];
@@ -327,31 +379,55 @@ void NcPsiDistrib::Distribute(Int_t storemode)
 ///////////////////////////////////////////////////////////////////////////
 TH1D* NcPsiDistrib::GetPsiHisto()
 {
+/**
+~~~
 // Get histogram with psi distribution.
+~~~
+**/
+
  return fPsiHisto;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcSample* NcPsiDistrib::GetPsiSample()
 {
+/**
+~~~
 // Get the sample containing information on the psi distribution.
+~~~
+**/
+
  return fSample;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcPsiDistrib::GetFracBelow()
 {
+/**
+~~~
 // Get fraction of trials in which a psi smaller than the reference psi is observed.
+~~~
+**/
+
  return ((Double_t)fNbelow)/((Double_t)fNtrials);
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcPsiDistrib::GetFracAbove()
 {
+/**
+~~~
 // Get fraction of trials in which a psi larger than the reference psi is observed.
+~~~
+**/
+
  return ((Double_t)fNabove)/((Double_t)fNtrials);
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcPsiDistrib::FindMaxPsi()
 {
+/**
+~~~
 // Find the maximum possible psi value with the given signal, probabilities and number of events.
+~~~
+**/
 
  // Make data array and initialise with signal
  Int_t* data=new Int_t[fNoutcomes];

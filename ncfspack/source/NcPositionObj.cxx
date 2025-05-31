@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcPositionObj.cxx 5 2010-03-19 10:10:02Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcPositionObj
+~~~
 // Class NcPositionObj
 // Handling of positions in various reference frames.
 //
@@ -66,31 +68,50 @@
 //
 //--- Author: Nick van Eijndhoven 18-oct-1999 Utrecht University
 //- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcPositionObj.h"
  
-ClassImp(NcPositionObj) // Class implementation to enable ROOT I/O
+ClassImp(NcPositionObj); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcPositionObj::NcPositionObj() : TObject(),NcPosition()
 {
+/**
+~~~
 // Creation of an NcPositionObj object and initialisation of parameters.
 // All attributes initialised to 0.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPositionObj::NcPositionObj(NcPosition& p) : TObject(),NcPosition(p)
 {
+/**
+~~~
 // Creation of an NcPositionObj object and initialisation of parameters.
 // All attributes are initialised to the values of the input NcPosition.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPositionObj::~NcPositionObj()
 {
+/**
+~~~
 // Destructor to delete dynamically allocated memory.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPositionObj::NcPositionObj(const NcPositionObj& p) : TObject(p),NcPosition(p)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////

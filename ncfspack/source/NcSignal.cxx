@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1999 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcSignal
+~~~
 // Class NcSignal
 // Generic handling of (extrapolated) detector signals.
 //
@@ -137,20 +141,28 @@
 //
 //--- Author: Nick van Eijndhoven 23-jan-1999 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 11, 2021  14:06Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcSignal.h"
 #include "NcTrack.h"
 #include "Riostream.h"
  
-ClassImp(NcSignal) // Class implementation to enable ROOT I/O
+ClassImp(NcSignal); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcSignal::NcSignal(const char* name,const char* title) : TNamed(name,title),NcPosition(),NcAttrib()
 {
+/**
+~~~
 // Creation of an NcSignal object and initialisation of parameters.
 // Several signal values (with errors) can be stored in different slots.
 // If needed, the storage for values (and errors) will be expanded automatically
 // when entering values and/or errors.
+~~~
+**/
+
  fSignals=0;
  fDsignals=0;
  fSigflags=0;
@@ -164,7 +176,12 @@ NcSignal::NcSignal(const char* name,const char* title) : TNamed(name,title),NcPo
 ///////////////////////////////////////////////////////////////////////////
 NcSignal::~NcSignal()
 {
-// Destructor to delete dynamically allocated memory
+/**
+~~~
+// Destructor to delete dynamically allocated memory.
+~~~
+**/
+
  if (fLinks)
  {
   // Remove this signal from all related devices
@@ -228,7 +245,12 @@ NcSignal::~NcSignal()
 ///////////////////////////////////////////////////////////////////////////
 NcSignal::NcSignal(const NcSignal& s) : TNamed(s),NcPosition(s),NcAttrib(s)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fSignals=0;
  fDsignals=0;
  fSigflags=0;
@@ -311,6 +333,8 @@ NcSignal::NcSignal(const NcSignal& s) : TNamed(s),NcPosition(s),NcAttrib(s)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::Reset(Int_t mode)
 {
+/**
+~~~
 // Reset all signal and position values and errors to 0.
 //
 // mode = 0 Reset position and all signal values and their errors to 0.
@@ -339,7 +363,8 @@ void NcSignal::Reset(Int_t mode)
 // For more specific actions see ResetPosition(), ResetSignals(),
 // DeleteSignals(), ResetGain(), ResetOffset(), ResetLink(), ResetWaveform(),
 // DeleteWaveform(), ResetSample(), DeleteSample() and DeleteCalibrations().
-//
+~~~
+**/
 
  if (mode<0 || mode>1)
  {
@@ -370,6 +395,8 @@ void NcSignal::Reset(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetSignals(Int_t mode)
 {
+/**
+~~~
 // Reset various signal data according to user selection.
 //
 // mode = 0 Reset all signal values, their errors and all waveform histos and samples.
@@ -379,6 +406,8 @@ void NcSignal::ResetSignals(Int_t mode)
 //       -2 Reset only signal errors.
 //
 // The default when invoking ResetSignals() corresponds to mode=0.
+~~~
+**/
 
  if (abs(mode)>2)
  {
@@ -419,6 +448,8 @@ void NcSignal::ResetSignals(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::DeleteSignals(Int_t mode)
 {
+/**
+~~~
 // Delete storage arrays of various signal data according to user selection.
 //
 // mode = 0 Delete arrays of signal values, their errors, all waveform histos and samples.
@@ -428,6 +459,8 @@ void NcSignal::DeleteSignals(Int_t mode)
 //       -2 Delete only signal errors array.
 //
 // The default when invoking DeleteSignals() corresponds to mode=0.
+~~~
+**/
 
  if (abs(mode)>2)
  {
@@ -482,6 +515,8 @@ void NcSignal::DeleteSignals(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSignal(Double_t sig,Int_t j)
 {
+/**
+~~~
 // Store signal value for the j-th (default j=1) slot.
 // Notes :
 // -------
@@ -493,6 +528,8 @@ void NcSignal::SetSignal(Double_t sig,Int_t j)
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for signal values, the number of reserved slots for the
 // signal values is increased automatically.
+~~~
+**/
 
  if (GetLockValue(j)) return;
 
@@ -517,6 +554,8 @@ void NcSignal::SetSignal(Double_t sig,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSignal(Double_t sig,TString name)
 {
+/**
+~~~
 // Store signal value for the name-specified slot.
 //
 // Note :
@@ -531,6 +570,8 @@ void NcSignal::SetSignal(Double_t sig,TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0)
@@ -541,6 +582,8 @@ void NcSignal::SetSignal(Double_t sig,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::AddSignal(Double_t sig,Int_t j)
 {
+/**
+~~~
 // Add value to the signal of the j-th (default j=1) slot.
 // Notes :
 // -------
@@ -552,6 +595,8 @@ void NcSignal::AddSignal(Double_t sig,Int_t j)
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for signal values, the number of reserved slots for the
 // signal values is increased automatically.
+~~~
+**/
 
  if (GetLockValue(j)) return;
 
@@ -577,6 +622,8 @@ void NcSignal::AddSignal(Double_t sig,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::AddSignal(Double_t sig,TString name)
 {
+/**
+~~~
 // Add value to the signal of the name-specified slot.
 //
 // Note :
@@ -591,6 +638,8 @@ void NcSignal::AddSignal(Double_t sig,TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0)
@@ -601,6 +650,8 @@ void NcSignal::AddSignal(Double_t sig,TString name)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcSignal::GetSignal(Int_t j,Int_t mode) const
 {
+/**
+~~~
 // Provide signal value of the j-th (default j=1) slot.
 // Note : The first signal slot is at j=1.
 // In case no signal is present or the input argument "j" or "mode" is invalid,
@@ -654,6 +705,8 @@ Float_t NcSignal::GetSignal(Int_t j,Int_t mode) const
 //              signal=(sigc+offset)*gain 
 //
 // The default is mode=0.
+~~~
+**/
 
  if (abs(mode)>8) return 0;
 
@@ -762,6 +815,8 @@ Float_t NcSignal::GetSignal(Int_t j,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcSignal::GetSignal(TString name,Int_t mode) const
 {
+/**
+~~~
 // Provide signal value of the name-specified slot.
 // In case no signal is present, 0 is returned.
 // The parameter "mode" allows for automatic (de)calibration of the signal
@@ -776,6 +831,8 @@ Float_t NcSignal::GetSignal(TString name,Int_t mode) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  if (!fSignals) return 0;
 
@@ -787,6 +844,8 @@ Float_t NcSignal::GetSignal(TString name,Int_t mode) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSignalError(Double_t dsig,Int_t j)
 {
+/**
+~~~
 // Store error on the signal for the j-th (default j=1) slot.
 // Notes :
 // -------
@@ -798,6 +857,8 @@ void NcSignal::SetSignalError(Double_t dsig,Int_t j)
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for signal error values, the number of reserved slots for the
 // signal errors is increased automatically.
+~~~
+**/
 
  if (GetLockValue(j)) return;
 
@@ -822,6 +883,8 @@ void NcSignal::SetSignalError(Double_t dsig,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSignalError(Double_t dsig,TString name)
 {
+/**
+~~~
 // Store error on the signal for the name-specified slot.
 //
 // Note :
@@ -836,6 +899,8 @@ void NcSignal::SetSignalError(Double_t dsig,TString name)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0)
@@ -846,9 +911,14 @@ void NcSignal::SetSignalError(Double_t dsig,TString name)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcSignal::GetSignalError(Int_t j) const
 {
+/**
+~~~
 // Provide error on the signal of the j-th (default j=1) slot.
 // Note : The first signal slot is at j=1.
 // In case no signal is present or the argument j is invalid, 0 is returned.
+~~~
+**/
+
  Float_t err=0;
  if (fDsignals)
  {
@@ -866,6 +936,8 @@ Float_t NcSignal::GetSignalError(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcSignal::GetSignalError(TString name) const
 {
+/**
+~~~
 // Provide error on the signal of the name-specified slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -873,6 +945,8 @@ Float_t NcSignal::GetSignalError(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  if (!fDsignals) return 0;
 
@@ -884,6 +958,8 @@ Float_t NcSignal::GetSignalError(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::Data(TString f,TString u) const
 {
+/**
+~~~
 // Provide all signal information within the coordinate frame f.
 //
 // f="car" ==> Cartesian   (x,y,z)
@@ -897,6 +973,8 @@ void NcSignal::Data(TString f,TString u) const
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  const char* name=GetName();
  const char* title=GetTitle();
@@ -935,11 +1013,15 @@ void NcSignal::Data(TString f,TString u) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::List(Int_t j) const
 {
+/**
+~~~
 // Provide signal information for the j-th slot.
 // The first slot is at j=1.
 // In case j=0 (default) the data of all slots will be listed.
 // In case j=-1 the data of all slots will be listed, but the header
 // information will be suppressed.
+~~~
+**/
 
  if (j<-1) 
  {
@@ -1051,6 +1133,8 @@ void NcSignal::List(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::List(TString name) const
 {
+/**
+~~~
 // Provide signal information for the name-specified slot.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1058,6 +1142,8 @@ void NcSignal::List(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) List(j);
@@ -1065,11 +1151,15 @@ void NcSignal::List(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ListWaveform(Int_t j) const
 {
+/**
+~~~
 // Provide information for the j-th waveform.
 // The first waveform is at j=1.
 // In case j=0 (default) the info of all waveforms will be listed.
 // In case j=-1 the info of all waveforms will be listed, but the header
 // information will be suppressed.
+~~~
+**/
 
  if (j<-1) 
  {
@@ -1136,11 +1226,15 @@ void NcSignal::ListWaveform(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ListSample(Int_t j) const
 {
+/**
+~~~
 // Provide information for the j-th sample.
 // The first sample is at j=1.
 // In case j=0 (default) the info of all samples will be listed.
 // In case j=-1 the info of all samples will be listed, but the header
 // information will be suppressed.
+~~~
+**/
 
  if (j<-1) 
  {
@@ -1207,11 +1301,15 @@ void NcSignal::ListSample(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ListTrack(Int_t j) const
 {
+/**
+~~~
 // Provide information for the j-th associated track.
 // The first associated track is at j=1.
 // In case j=0 (default) the info of all associated tracks will be listed.
 // In case j=-1 the info of all tracks will be listed, but the header
 // information will be suppressed.
+~~~
+**/
 
  if (j<-1) 
  {
@@ -1278,7 +1376,11 @@ void NcSignal::ListTrack(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNvalues() const
 {
+/**
+~~~
 // Provide the number of values for this signal.
+~~~
+**/
  
  if (!fSignals) return 0;
 
@@ -1293,7 +1395,11 @@ Int_t NcSignal::GetNvalues() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNerrors() const
 {
+/**
+~~~
 // Provide the number specified errors on the values for this signal.
+~~~
+**/
  
  if (!fDsignals) return 0;
 
@@ -1308,12 +1414,16 @@ Int_t NcSignal::GetNerrors() const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSigFlags(Int_t is,Int_t ie,Int_t j)
 {
+/**
+~~~
 // Store signal and/or error value flags of the j-th (default j=1) slot.
 // Note : The first slot is at j=1.
 // In case the value of the index j exceeds the maximum number of reserved
 // slots for the flags, the number of reserved slots for the flags is
 // increased automatically.
 // The value stored is : 10*signalflag + errorflag.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1340,6 +1450,8 @@ void NcSignal::SetSigFlags(Int_t is,Int_t ie,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetSignalFlag(Int_t j) const
 {
+/**
+~~~
 // Provide signal value flag of the j-th (default j=1) slot.
 //
 // flag = 1 : Signal value was set
@@ -1347,6 +1459,8 @@ Int_t NcSignal::GetSignalFlag(Int_t j) const
 //
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1367,6 +1481,8 @@ Int_t NcSignal::GetSignalFlag(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetSignalFlag(TString name) const
 {
+/**
+~~~
 // Provide signal value flag of the name-specified slot.
 //
 // flag = 1 : Signal value was set
@@ -1378,6 +1494,8 @@ Int_t NcSignal::GetSignalFlag(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  if (!fSigflags) return 0;
 
@@ -1389,6 +1507,8 @@ Int_t NcSignal::GetSignalFlag(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetErrorFlag(Int_t j) const
 {
+/**
+~~~
 // Provide error value flag of the j-th (default j=1) slot.
 //
 // flag = 1 : Error value was set
@@ -1396,6 +1516,8 @@ Int_t NcSignal::GetErrorFlag(Int_t j) const
 //
 // Note : The first attribute slot is at j=1.
 // In case j is invalid, 0 is returned.
+~~~
+**/
 
  if (j<1) 
  {
@@ -1416,6 +1538,8 @@ Int_t NcSignal::GetErrorFlag(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetErrorFlag(TString name) const
 {
+/**
+~~~
 // Provide error value flag of the name-specified slot.
 //
 // flag = 1 : Error value was set
@@ -1427,6 +1551,8 @@ Int_t NcSignal::GetErrorFlag(TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  if (!fSigflags) return 0;
 
@@ -1438,7 +1564,11 @@ Int_t NcSignal::GetErrorFlag(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNslots() const
 {
+/**
+~~~
 // Provide the number of existing slots.
+~~~
+**/
 
  Int_t n=NcAttrib::GetNslots();
 
@@ -1457,6 +1587,8 @@ Int_t NcSignal::GetNslots() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNwaveforms() const
 {
+/**
+~~~
 // Provide the number of specified waveforms for this signal.
 // Actually the return value is the highest index of the stored waveforms.
 // This allows an index dependent meaning of waveform info (e.g. waveforms
@@ -1469,6 +1601,9 @@ Int_t NcSignal::GetNwaveforms() const
 // This implies that when looping over the various waveform slots, one
 // always has to check whether the returned pointer value is non-zero
 // (which is a good practice anyhow).
+~~~
+**/
+
  Int_t n=-1;
  if (fWaveforms) n=fWaveforms->GetLast();
  return (n+1);
@@ -1476,7 +1611,12 @@ Int_t NcSignal::GetNwaveforms() const
 ///////////////////////////////////////////////////////////////////////////
 TH1F* NcSignal::GetWaveform(Int_t j) const
 {
+/**
+~~~
 // Provide pointer to the j-th waveform histogram.
+~~~
+**/
+
  TH1F* waveform=0;
  if (j>0 && j<=GetNwaveforms()) waveform=(TH1F*)fWaveforms->At(j-1);
  return waveform;
@@ -1484,6 +1624,8 @@ TH1F* NcSignal::GetWaveform(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 TH1F* NcSignal::GetWaveform(TString name) const
 {
+/**
+~~~
 // Provide pointer to the waveform histogram with the specified name.
 //
 // Note :
@@ -1494,6 +1636,9 @@ TH1F* NcSignal::GetWaveform(TString name) const
 // As such the name matching can be regarded as using wildcards.
 //
 // In case no match is found, zero is returned.
+~~~
+**/
+
  Int_t n=GetNwaveforms();
  TString str;
  for (Int_t i=1; i<=n; i++)
@@ -1510,6 +1655,8 @@ TH1F* NcSignal::GetWaveform(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetWaveformIndex(TString name) const
 {
+/**
+~~~
 // Provide index to the waveform histogram with the specified name.
 //
 // Note :
@@ -1520,6 +1667,9 @@ Int_t NcSignal::GetWaveformIndex(TString name) const
 // As such the name matching can be regarded as using wildcards.
 //
 // In case no match is found, zero is returned.
+~~~
+**/
+
  Int_t n=GetNwaveforms();
  TString str;
  for (Int_t i=1; i<=n; i++)
@@ -1536,6 +1686,8 @@ Int_t NcSignal::GetWaveformIndex(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetWaveform(TH1F* waveform,Int_t j)
 {
+/**
+~~~
 // Set the 1D waveform histogram for the j-th waveform.
 //
 // Notes :
@@ -1556,6 +1708,8 @@ void NcSignal::SetWaveform(TH1F* waveform,Int_t j)
 // In all other cases the current waveform histogram is deleted and a new
 // copy of the input histogram is created which becomes the current waveform
 // histogram.
+~~~
+**/
 
  if (j<1) return;
 
@@ -1586,11 +1740,15 @@ void NcSignal::SetWaveform(TH1F* waveform,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetWaveform(Int_t j)
 {
+/**
+~~~
 // Reset the histogram of the j-th (default j=1) waveform.
 // This memberfunction invokes TH1F::Reset() for the corresponding waveform(s).
 // To actually delete the histograms from memory, use DeleteWaveform().
 // Notes : The first position is at j=1.
 //         j=0 ==> All waveforms will be reset.
+~~~
+**/
  
  if (!fWaveforms) return;
 
@@ -1621,16 +1779,25 @@ void NcSignal::ResetWaveform(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetWaveform(TString name)
 {
+/**
+~~~
 // Reset the waveform with the specified name.
+~~~
+**/
+
  Int_t j=GetWaveformIndex(name);
  if (j>0) ResetWaveform(j);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::DeleteWaveform(Int_t j)
 {
+/**
+~~~
 // Delete the histogram of the j-th (default j=1) waveform.
 // Notes : The first position is at j=1.
 //         j=0 ==> All waveforms will be deleted.
+~~~
+**/
  
  if (!fWaveforms) return;
 
@@ -1662,13 +1829,20 @@ void NcSignal::DeleteWaveform(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::DeleteWaveform(TString name)
 {
+/**
+~~~
 // Delete the waveform with the specified name.
+~~~
+**/
+
  Int_t j=GetWaveformIndex(name);
  if (j>0) DeleteWaveform(j);
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNsamples() const
 {
+/**
+~~~
 // Provide the number of specified samples for this signal.
 // Actually the return value is the highest index of the stored samples.
 // This allows an index dependent meaning of sample info (e.g. samples
@@ -1681,6 +1855,9 @@ Int_t NcSignal::GetNsamples() const
 // This implies that when looping over the various sample slots, one
 // always has to check whether the returned pointer value is non-zero
 // (which is a good practice anyhow).
+~~~
+**/
+
  Int_t n=-1;
  if (fSamples) n=fSamples->GetLast();
  return (n+1);
@@ -1688,7 +1865,12 @@ Int_t NcSignal::GetNsamples() const
 ///////////////////////////////////////////////////////////////////////////
 NcSample* NcSignal::GetSample(Int_t j) const
 {
+/**
+~~~
 // Provide pointer to the j-th sample.
+~~~
+**/
+
  NcSample* sample=0;
  if (j>0 && j<=GetNsamples()) sample=(NcSample*)fSamples->At(j-1);
  return sample;
@@ -1696,6 +1878,8 @@ NcSample* NcSignal::GetSample(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 NcSample* NcSignal::GetSample(TString name) const
 {
+/**
+~~~
 // Provide pointer to the sample with the specified name.
 //
 // Note :
@@ -1706,6 +1890,8 @@ NcSample* NcSignal::GetSample(TString name) const
 // As such the name matching can be regarded as using wildcards.
 //
 // In case no match is found, zero is returned.
+~~~
+**/
 
  Int_t n=GetNsamples();
  TString str;
@@ -1723,6 +1909,8 @@ NcSample* NcSignal::GetSample(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetSampleIndex(TString name) const
 {
+/**
+~~~
 // Provide index to the sample with the specified name.
 //
 // Note :
@@ -1733,6 +1921,8 @@ Int_t NcSignal::GetSampleIndex(TString name) const
 // As such the name matching can be regarded as using wildcards.
 //
 // In case no match is found, zero is returned.
+~~~
+**/
 
  Int_t n=GetNsamples();
  TString str;
@@ -1750,6 +1940,8 @@ Int_t NcSignal::GetSampleIndex(TString name) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSample(NcSample* sample,Int_t j)
 {
+/**
+~~~
 // Set the sample data for the j-th sample.
 //
 // Notes :
@@ -1769,6 +1961,8 @@ void NcSignal::SetSample(NcSample* sample,Int_t j)
 //
 // In all other cases the current sample is deleted and a new
 // copy of the input sample is created which becomes the current sample.
+~~~
+**/
 
  if (j<1) return;
 
@@ -1799,11 +1993,15 @@ void NcSignal::SetSample(NcSample* sample,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetSample(Int_t j)
 {
+/**
+~~~
 // Reset the sample data of the j-th (default j=1) sample.
 // This memberfunction invokes NcSample::Reset() for the corresponding sample(s).
 // To actually delete the sample(s) from memory, use DeleteSample().
 // Notes : The first position is at j=1.
 //         j=0 ==> All samples will be reset.
+~~~
+**/
  
  if (!fSamples) return;
 
@@ -1834,7 +2032,11 @@ void NcSignal::ResetSample(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetSample(TString name)
 {
+/**
+~~~
 // Reset the sample with the specified name.
+~~~
+**/
 
  Int_t j=GetSampleIndex(name);
  if (j>0) ResetSample(j);
@@ -1842,9 +2044,13 @@ void NcSignal::ResetSample(TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::DeleteSample(Int_t j)
 {
+/**
+~~~
 // Delete the sample data of the j-th (default j=1) sample.
 // Notes : The first position is at j=1.
 //         j=0 ==> All samples will be deleted.
+~~~
+**/
  
  if (!fSamples) return;
 
@@ -1876,7 +2082,11 @@ void NcSignal::DeleteSample(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::DeleteSample(TString name)
 {
+/**
+~~~
 // Delete the sample with the specified name.
+~~~
+**/
 
  Int_t j=GetSampleIndex(name);
  if (j>0) DeleteSample(j);
@@ -1884,11 +2094,16 @@ void NcSignal::DeleteSample(TString name)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNlinks(TObject* obj,Int_t j) const
 {
+/**
+~~~
 // Provide the number of links to the specified object for the j-th slot.
 // If j=0 (default) all slots will be scanned for the specified object.
 // If obj=0 (default) all encountered objects for the specified slot will be counted.
 // So, invokation of the default GetNlinks() will return the total number of
 // all references to all sorts of stored objects.
+~~~
+**/
+
  if (j<0)
  {
   cout << " *NcSignal::GetNlinks* Index j = " << j << " invalid." << endl;
@@ -1912,6 +2127,8 @@ Int_t NcSignal::GetNlinks(TObject* obj,Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNlinks(TObject* obj,TString name) const
 {
+/**
+~~~
 // Provide the number of links to the specified object for the name-spec. slot.
 // If obj=0 all encountered objects for the specified slot will be counted.
 //
@@ -1920,6 +2137,8 @@ Int_t NcSignal::GetNlinks(TObject* obj,TString name) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t n=0;
@@ -1929,7 +2148,11 @@ Int_t NcSignal::GetNlinks(TObject* obj,TString name) const
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSignal::GetLink(Int_t j,Int_t k) const
 {
+/**
+~~~
 // Provide pointer of the object linked to the j-th slot at position k.
+~~~
+**/
 
  TObject* obj=0;
  // Note : In the internal storage matrix slots=columns positions=rows 
@@ -1939,6 +2162,8 @@ TObject* NcSignal::GetLink(Int_t j,Int_t k) const
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSignal::GetLink(TString name,Int_t k) const
 {
+/**
+~~~
 // Provide pointer of the object linked to the name-spec. slot at position k.
 //
 // This procedure involves a slot-index search based on the specified name
@@ -1946,6 +2171,8 @@ TObject* NcSignal::GetLink(TString name,Int_t k) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  TObject* obj=0;
@@ -1955,6 +2182,8 @@ TObject* NcSignal::GetLink(TString name,Int_t k) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetLink(TObject* obj,Int_t j,Int_t k)
 {
+/**
+~~~
 // Introduce a link (=pointer) to an object for the j-th slot at position k.
 // Only the pointer values are stored for (backward) reference, meaning
 // that the objects of which the pointers are stored are NOT owned
@@ -1988,6 +2217,8 @@ void NcSignal::SetLink(TObject* obj,Int_t j,Int_t k)
 // 
 // Please also have a look at the docs of the memberfunction ResetLink()
 // to prevent the situation of stored pointers to non-existent object. 
+~~~
+**/
 
  if (!fLinks && obj) fLinks=new NcObjMatrix();
 
@@ -2007,6 +2238,8 @@ void NcSignal::SetLink(TObject* obj,Int_t j,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetLink(TObject* obj,TString name,Int_t k)
 {
+/**
+~~~
 // Introduce a link (=pointer) to an object for the name-spec. slot at position k.
 // Only the pointer values are stored for (backward) reference, meaning
 // that the objects of which the pointers are stored are NOT owned
@@ -2040,6 +2273,8 @@ void NcSignal::SetLink(TObject* obj,TString name,Int_t k)
 // 
 // Please also have a look at the docs of the memberfunction ResetLink()
 // to prevent the situation of stored pointers to non-existent object. 
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) SetLink(obj,j,k);
@@ -2047,6 +2282,8 @@ void NcSignal::SetLink(TObject* obj,TString name,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::AddLink(TObject* obj,Int_t j)
 {
+/**
+~~~
 // Introduce a link (=pointer) to an object for the j-th slot at the first
 // free position.
 // Only the pointer values are stored for (backward) reference, meaning
@@ -2080,6 +2317,8 @@ void NcSignal::AddLink(TObject* obj,Int_t j)
 // 
 // Please also have a look at the docs of the memberfunction ResetLink()
 // to prevent the situation of stored pointers to non-existent object. 
+~~~
+**/
 
  if (!obj || j<=0) return;
 
@@ -2100,6 +2339,8 @@ void NcSignal::AddLink(TObject* obj,Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::AddLink(TObject* obj,TString name)
 {
+/**
+~~~
 // Introduce a link (=pointer) to an object for the name-spec slot at the first
 // free position.
 // Only the pointer values are stored for (backward) reference, meaning
@@ -2134,6 +2375,8 @@ void NcSignal::AddLink(TObject* obj,TString name)
 // 
 // Please also have a look at the docs of the memberfunction ResetLink()
 // to prevent the situation of stored pointers to non-existent object. 
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) AddLink(obj,j);
@@ -2141,6 +2384,8 @@ void NcSignal::AddLink(TObject* obj,TString name)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetLink(Int_t j,Int_t k)
 {
+/**
+~~~
 // Reset the link of the j-th slot at position k.
 //
 // Notes :
@@ -2161,6 +2406,8 @@ void NcSignal::ResetLink(Int_t j,Int_t k)
 // So, in case the link introduced via SetLink() is the pointer of an NcTrack object,
 // the user doesn't have to worry about clearing the corresponding NcTrack link from
 // the NcSignal object when the corresponding NcTrack object is deleted.
+~~~
+**/
  
  // Note : In the internal storage matrix slots=columns positions=rows 
  if (fLinks) fLinks->RemoveObject(k,j);
@@ -2168,6 +2415,8 @@ void NcSignal::ResetLink(Int_t j,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetLink(TString name,Int_t k)
 {
+/**
+~~~
 // Reset the link of the name-specified slot at position k.
 //
 // This memberfunction is intended to reset only 1 specified link location.
@@ -2178,6 +2427,8 @@ void NcSignal::ResetLink(TString name,Int_t k)
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) ResetLink(j,k);
@@ -2185,6 +2436,8 @@ void NcSignal::ResetLink(TString name,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetLinks(TObject* obj,Int_t j,Int_t k)
 {
+/**
+~~~
 // Reset single or multiple slot link(s) according to user specified selections.
 //
 // IMPORTANT NOTE :
@@ -2232,6 +2485,8 @@ void NcSignal::ResetLinks(TObject* obj,Int_t j,Int_t k)
 // So, in case the link introduced via SetLink() is the pointer of an NcTrack object,
 // the user doesn't have to worry about clearing the corresponding NcTrack link from
 // the NcSignal object when the corresponding NcTrack object is deleted.
+~~~
+**/
  
  if (!fLinks) return;
 
@@ -2248,6 +2503,8 @@ void NcSignal::ResetLinks(TObject* obj,Int_t j,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::ResetLinks(TObject* obj,TString name,Int_t k)
 {
+/**
+~~~
 // Reset single or multiple slot link(s) according to user specified selections.
 //
 // IMPORTANT NOTE :
@@ -2283,6 +2540,8 @@ void NcSignal::ResetLinks(TObject* obj,TString name,Int_t k)
 // So, in case the link introduced via SetLink() is the pointer of an NcTrack object,
 // the user doesn't have to worry about clearing the corresponding NcTrack link from
 // the NcSignal object when the corresponding NcTrack object is deleted.
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  if (j>0) ResetLinks(obj,j,k);
@@ -2290,6 +2549,8 @@ void NcSignal::ResetLinks(TObject* obj,TString name,Int_t k)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetIndices(TObject* obj,TArrayI& js,TArrayI& ks) const
 {
+/**
+~~~
 // Provide the slot and position indices of all the storage locations
 // of the specified object.
 // The slot (j) and pos. (k) indices are returned in the two separate TArrayI arrays
@@ -2313,7 +2574,9 @@ Int_t NcSignal::GetIndices(TObject* obj,TArrayI& js,TArrayI& ks) const
 // (to increase the dimension of the resulting structure), the (j,k)
 // indices of that TObjArray are obtained and NOT the indices of the
 // actual objects contained in that TObjArray structure.
-//
+~~~
+**/
+
  Int_t nrefs=0;
  js.Reset();
  ks.Reset();
@@ -2324,6 +2587,8 @@ Int_t NcSignal::GetIndices(TObject* obj,TArrayI& js,TArrayI& ks) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetIndices(TObject* obj,Int_t j,TArrayI& ks) const
 {
+/**
+~~~
 // Provide the position indices of all the storage locations of the
 // specified object in the j-th slot of this NcSignal.
 // The position indices are returned in the TArrayI array.
@@ -2350,7 +2615,9 @@ Int_t NcSignal::GetIndices(TObject* obj,Int_t j,TArrayI& ks) const
 // (to increase the dimension of the resulting structure), the position
 // indices of that TObjArray are obtained and NOT the indices of the
 // actual objects contained in that TObjArray structure.
-//
+~~~
+**/
+
  Int_t nrefs=0;
  ks.Reset();
  // Note : In the internal storage matrix slots=columns positions=rows 
@@ -2360,6 +2627,8 @@ Int_t NcSignal::GetIndices(TObject* obj,Int_t j,TArrayI& ks) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetIndices(TObject* obj,TString name,TArrayI& ks) const
 {
+/**
+~~~
 // Provide the position indices of all the storage locations of the
 // specified object in the name-specified slot of this NcSignal.
 // The position indices are returned in the TArrayI array.
@@ -2374,6 +2643,8 @@ Int_t NcSignal::GetIndices(TObject* obj,TString name,TArrayI& ks) const
 // defined and/or when this procedure is invoked many times.
 // In such cases it is preferable to use indexed addressing in the user code
 // either directly or via a few invokations of GetSlotIndex().
+~~~
+**/
 
  Int_t j=GetSlotIndex(name);
  Int_t n=0;
@@ -2383,6 +2654,8 @@ Int_t NcSignal::GetIndices(TObject* obj,TString name,TArrayI& ks) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetIndices(TObject* obj,TArrayI& js,Int_t k) const
 {
+/**
+~~~
 // Provide the slot indices of all the storage locations of the
 // specified object for the k-th position in this NcSignal.
 // The slot indices are returned in the TArrayI array.
@@ -2409,7 +2682,9 @@ Int_t NcSignal::GetIndices(TObject* obj,TArrayI& js,Int_t k) const
 // (to increase the dimension of the resulting structure), the slot
 // indices of that TObjArray are obtained and NOT the indices of the
 // actual objects contained in that TObjArray structure.
-//
+~~~
+**/
+
  Int_t nrefs=0;
  js.Reset();
  // Note : In the internal storage matrix slots=columns positions=rows 
@@ -2419,6 +2694,8 @@ Int_t NcSignal::GetIndices(TObject* obj,TArrayI& js,Int_t k) const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetSwapMode(Int_t swap)
 {
+/**
+~~~
 // Set swapmode flag for the internal link storage.
 // In case for the stored links the maximum slot number differs considerably
 // from the maximum position number, it might be more efficient
@@ -2431,6 +2708,8 @@ void NcSignal::SetSwapMode(Int_t swap)
 // Note : The swap mode can only be set as long as no links are
 //        stored in the NcSignal (i.e. a new instance of NcSignal
 //        or after invokation of the Reset() or ResetLinks() function).
+~~~
+**/
  
  if (!fLinks) fLinks=new NcObjMatrix();
  fLinks->SetSwapMode(swap);
@@ -2438,7 +2717,12 @@ void NcSignal::SetSwapMode(Int_t swap)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetSwapMode() const
 {
+/**
+~~~
 // Provide swapmode flag of the link storage.
+~~~
+**/
+
  Int_t swap=0; 
  if (fLinks) swap=fLinks->GetSwapMode();
  return swap;
@@ -2446,8 +2730,12 @@ Int_t NcSignal::GetSwapMode() const
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::SetDevice(NcDevice* dev)
 {
+/**
+~~~
 // Store the pointer to the device that owns this NcSignal (or derived) object.
 // This facility may only be used internally by NcDevice (or derived) objects.
+~~~
+**/
 
  if (fDevset)
  {
@@ -2461,12 +2749,19 @@ void NcSignal::SetDevice(NcDevice* dev)
 ///////////////////////////////////////////////////////////////////////////
 NcDevice* NcSignal::GetDevice() const
 {
+/**
+~~~
 // Provide the pointer to the device that owns this NcSignal (or derived) object.
+~~~
+**/
+
  return (NcDevice*)fDevice;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::AddTrack(NcTrack& t,Int_t mode)
 {
+/**
+~~~
 // Relate an NcTrack object to this signal.
 // Only the pointer values are stored for (backward) reference, meaning
 // that the tracks of which the pointers are stored are NOT owned
@@ -2480,6 +2775,8 @@ void NcSignal::AddTrack(NcTrack& t,Int_t mode)
 //            input argument.
 //
 // The default is mode=1.
+~~~
+**/
 
  if (!fTracks) fTracks=new TObjArray(1);
 
@@ -2496,6 +2793,8 @@ void NcSignal::AddTrack(NcTrack& t,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::RemoveTrack(NcTrack& t,Int_t mode)
 {
+/**
+~~~
 // Remove related NcTrack object from this signal.
 // Also all references (if any) to this track in the slot links area
 // are removed.
@@ -2508,6 +2807,8 @@ void NcSignal::RemoveTrack(NcTrack& t,Int_t mode)
 //            input argument.
 //
 // The default is mode=1.
+~~~
+**/
 
  if (fTracks)
  {
@@ -2522,6 +2823,8 @@ void NcSignal::RemoveTrack(NcTrack& t,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcSignal::RemoveTracks(Int_t mode)
 {
+/**
+~~~
 // Remove all related NcTrack objects from this signal.
 // Also all references (if any) to the related tracks in the slot links area
 // are removed.
@@ -2533,6 +2836,8 @@ void NcSignal::RemoveTracks(Int_t mode)
 //            removed from the corresponding NcTrack (or derived) objects.
 //
 // The default is mode=1.
+~~~
+**/
  
  if (!fTracks) return;
 
@@ -2553,12 +2858,16 @@ void NcSignal::RemoveTracks(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcSignal::GetNtracks(NcTrack* t) const
 {
+/**
+~~~
 // Provide the number of related NcTracks.
 // In case an NcTrack pointer is specified as input argument,
 // the number returned will be the number of occurrences (i.e. 0 or 1)
 // for that specified track.
 // By default t=0, which implies that just the number of all associated
 // tracks will be returned.
+~~~
+**/
 
  if (!fTracks) return 0;
 
@@ -2577,8 +2886,12 @@ Int_t NcSignal::GetNtracks(NcTrack* t) const
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* NcSignal::GetTrack(Int_t j) const
 {
+/**
+~~~
 // Provide the related NcTrack number j.
 // Note : j=1 denotes the first track.
+~~~
+**/
 
  if (!fTracks) return 0;
 
@@ -2596,7 +2909,12 @@ NcTrack* NcSignal::GetTrack(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* NcSignal::GetIdTrack(Int_t id) const
 {
-// Return the track with user identifier "id" of this signal
+/**
+~~~
+// Return the track with user identifier "id" of this signal.
+~~~
+**/
+
  if (!fTracks) return 0;
 
  NcTrack* tx=0;
@@ -2610,6 +2928,8 @@ NcTrack* NcSignal::GetIdTrack(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 NcSample* NcSignal::DisplaySample(Int_t j,Int_t i) const
 {
+/**
+~~~
 // Display a TGraph of the j-th variable (1=first) of the i-th (1=first) stored NcSample.
 // The graph will display the values of the j-th variable versus the sample entry number.
 //
@@ -2623,6 +2943,8 @@ NcSample* NcSignal::DisplaySample(Int_t j,Int_t i) const
 // For more elaborate functionality, please refer to the docs of NcSample.
 //
 // The default value is i=1.
+~~~
+**/
 
  if (j<1) return 0;
 
@@ -2644,6 +2966,8 @@ NcSample* NcSignal::DisplaySample(Int_t j,Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 NcSample* NcSignal::DisplaySample(TString name,Int_t i) const
 {
+/**
+~~~
 // Display a TGraph of the variable with the specified name of the i-th (1=first) stored NcSample.
 // The graph will display the values of the specified variable versus the sample entry number.
 //
@@ -2657,6 +2981,8 @@ NcSample* NcSignal::DisplaySample(TString name,Int_t i) const
 // For more elaborate functionality, please refer to the docs of NcSample.
 //
 // The default value is i=1.
+~~~
+**/
 
  TGraph gr;
  NcSample* sx=GetSample(i);
@@ -2672,6 +2998,8 @@ NcSample* NcSignal::DisplaySample(TString name,Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcSignal::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -2679,6 +3007,8 @@ TObject* NcSignal::Clone(const char* name) const
 // This feature allows e.g. NcTrack to store either NcSignal objects or
 // objects derived from NcSignal via the AddSignal memberfunction, provided
 // these derived classes also have a proper Clone memberfunction. 
+~~~
+**/
 
  NcSignal* sig=new NcSignal(*this);
  if (name)
