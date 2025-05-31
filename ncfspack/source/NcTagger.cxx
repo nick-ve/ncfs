@@ -30,7 +30,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
-/** @class NvTagger
+/** @class NcTagger
 ~~~
 // Class NcTagger
 // NcDevice derived (base) class to handle generic event classification tags.

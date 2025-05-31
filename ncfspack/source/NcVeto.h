@@ -1,12 +1,12 @@
 #ifndef NcVeto_h
 #define NcVeto_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2016 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcVeto.h 130 2016-08-24 11:11:33Z nickve $
 
 #include "NcDevice.h"
 #include "NcEvent.h"
+
+/** NcDevice derived class to serve as a generic interface for event vetoing procedures. **/
 
 class NcVeto : public NcDevice
 {

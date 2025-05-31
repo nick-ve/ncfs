@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1998 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcVertex
+~~~
 // Class NcVertex
 // Creation and investigation of an NcVertex.
 // An NcVertex can be constructed by adding NcTracks and/or NcJets.
@@ -158,19 +162,27 @@
 //
 //--- Author: Nick van Eijndhoven 04-apr-1998 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  11:16Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcVertex.h"
 #include "Riostream.h"
  
-ClassImp(NcVertex) // Class implementation to enable ROOT I/O
+ClassImp(NcVertex); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcVertex::NcVertex() : NcJet(),NcPosition()
 {
+/**
+~~~
 // Default constructor.
 // All variables initialised to 0.
 // Initial maximum number of tracks is set to the default value.
 // Initial maximum number of sec. vertices is set to the default value.
+~~~
+**/
+
  Init();
  Reset();
  SetNvmax();
@@ -179,7 +191,12 @@ NcVertex::NcVertex() : NcJet(),NcPosition()
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::Init()
 {
+/**
+~~~
 // Initialisation of pointers etc...
+~~~
+**/
+
  fNvmax=0;
  fVertices=0;
  fConnects=0;
@@ -193,8 +210,13 @@ void NcVertex::Init()
 ///////////////////////////////////////////////////////////////////////////
 NcVertex::NcVertex(Int_t n) : NcJet(n),NcPosition()
 {
-// Create a vertex to hold initially a maximum of n tracks
-// All variables initialised to 0
+/**
+~~~
+// Create a vertex to hold initially a maximum of n tracks.
+// All variables initialised to 0.
+~~~
+**/
+
  if (n<=0)
  {
   cout << " *** This NcJet initialisation was invoked via the NcVertex ctor." << endl;
@@ -207,7 +229,12 @@ NcVertex::NcVertex(Int_t n) : NcJet(n),NcPosition()
 ///////////////////////////////////////////////////////////////////////////
 NcVertex::~NcVertex()
 {
-// Default destructor
+/**
+~~~
+// Default destructor.
+~~~
+**/
+
  if (fVertices)
  {
   delete fVertices;
@@ -237,6 +264,8 @@ NcVertex::~NcVertex()
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::SetOwner(Bool_t own)
 {
+/**
+~~~
 // Set ownership of all added objects. 
 // The default parameter is own=kTRUE.
 //
@@ -255,6 +284,8 @@ void NcVertex::SetOwner(Bool_t own)
 // ownership (and copy mode) for empty objects (e.g. newly created objects
 // or after invokation of the Reset() memberfunction) otherwise it will
 // very likely result in inconsistent destructor behaviour.
+~~~
+**/
 
  Int_t mode=1;
  if (!own) mode=0;
@@ -268,7 +299,12 @@ void NcVertex::SetOwner(Bool_t own)
 ///////////////////////////////////////////////////////////////////////////
 NcVertex::NcVertex(const NcVertex& v) : NcJet(v.fNtinit),NcPosition(v)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  Init();
  fNvtx=0;
  fNjets=0;
@@ -340,7 +376,12 @@ NcVertex::NcVertex(const NcVertex& v) : NcJet(v.fNtinit),NcPosition(v)
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::SetNvmax(Int_t n)
 {
-// Set the initial maximum number of (secondary) vertices
+/**
+~~~
+// Set the initial maximum number of (secondary) vertices.
+~~~
+**/
+
  if (n > 0)
  {
   fNvmax=n;
@@ -358,7 +399,12 @@ void NcVertex::SetNvmax(Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::SetNjmax(Int_t n)
 {
-// Set the initial maximum number of jets
+/**
+~~~
+// Set the initial maximum number of jets.
+~~~
+**/
+
  if (n > 0)
  {
   fNjmax=n;
@@ -376,10 +422,14 @@ void NcVertex::SetNjmax(Int_t n)
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::Reset()
 {
+/**
+~~~
 // Reset all variables to 0 and reset all stored vertex and jet lists.
 // The max. number of tracks is set to the initial value again
 // The max. number of vertices is set to the default value again
 // The max. number of jets is set to the default value again
+~~~
+**/
 
  NcJet::Reset();
 
@@ -410,11 +460,16 @@ void NcVertex::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::ResetVertices()
 {
+/**
+~~~
 // Reset the stored vertex list and delete all connecting tracks which
 // were generated automatically via connect=1 in AddVertex().
 // The max. number of vertices is set to the default value again.
 // All physics quantities are updated according to the removal of the
 // connecting tracks.
+~~~
+**/
+
  NcTrack* t;
  if (fConnects)
  {
@@ -444,6 +499,8 @@ void NcVertex::ResetVertices()
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::AddJet(NcJet& j,Int_t tracks)
 {
+/**
+~~~
 // Add a jet (and its tracks) to the vertex
 // In case the maximum number of jets has been reached,
 // the array space will be extended automatically
@@ -463,6 +520,8 @@ void NcVertex::AddJet(NcJet& j,Int_t tracks)
 // for all derived classes a specific copy constructor and override the default Clone()
 // memberfunction using this copy constructor.
 // An example for this may be seen from NcJet.   
+~~~
+**/
 
  if (!fJets)
  {
@@ -508,6 +567,8 @@ void NcVertex::AddJet(NcJet& j,Int_t tracks)
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::AddVertex(NcVertex& v,Int_t connect)
 {
+/**
+~~~
 // Add a (secondary) vertex to the current vertex.
 // In case the maximum number of (secondary) vertices has been reached,
 // the array space will be extended automatically
@@ -529,6 +590,8 @@ void NcVertex::AddVertex(NcVertex& v,Int_t connect)
 // for all derived classes a specific copy constructor and override the default Clone()
 // memberfunction using this copy constructor.
 // An example for this may be seen from NcVertex.   
+~~~
+**/
 
  if (!fVertices)
  {
@@ -573,6 +636,8 @@ void NcVertex::AddVertex(NcVertex& v,Int_t connect)
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::Data(TString f,TString u)
 {
+/**
+~~~
 // Provide vertex information within the coordinate frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -581,6 +646,8 @@ void NcVertex::Data(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  const char* name=GetName();
  const char* title=GetTitle();
@@ -601,6 +668,8 @@ void NcVertex::Data(TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::List(TString f,TString u,TObjArray* tracks)
 {
+/**
+~~~
 // Provide primary track and sec. vertex information within the coordinate frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -615,6 +684,8 @@ void NcVertex::List(TString f,TString u,TObjArray* tracks)
 // In case tracks=0, all the available tracks from this vertex will be shown.
 //
 // The default is tracks=0.
+~~~
+**/
 
  Data(f,u); // Information of the current vertex
 
@@ -676,6 +747,8 @@ void NcVertex::List(TString f,TString u,TObjArray* tracks)
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::ListAll(TString f,TString u,TObjArray* tracks)
 {
+/**
+~~~
 // Provide complete (sec) vertex and (decay) track info within the coordinate frame f
 //
 // The string argument "u" allows to choose between different angular units
@@ -690,6 +763,8 @@ void NcVertex::ListAll(TString f,TString u,TObjArray* tracks)
 // In case tracks=0, all the available tracks from this vertex will be shown.
 //
 // The default is tracks=0.
+~~~
+**/
 
  Data(f,u); // Information of the current vertex
 
@@ -737,7 +812,12 @@ void NcVertex::ListAll(TString f,TString u,TObjArray* tracks)
 //////////////////////////////////////////////////////////////////////////
 void NcVertex::Dumps(NcVertex* v,Int_t n,TString f,TString u)
 {
-// Recursively provide the info of all secondary vertices of this vertex
+/**
+~~~
+// Recursively provide the info of all secondary vertices of this vertex.
+~~~
+**/
+
  NcVertex* vs; 
  for (Int_t iv=1; iv<=v->GetNvertices(); iv++)
  {
@@ -777,13 +857,23 @@ void NcVertex::Dumps(NcVertex* v,Int_t n,TString f,TString u)
 //////////////////////////////////////////////////////////////////////////
 Int_t NcVertex::GetNvertices() const
 {
-// Return the current number of (secondary) vertices
+/**
+~~~
+// Return the current number of (secondary) vertices.
+~~~
+**/
+
  return fNvtx;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVertex* NcVertex::GetVertex(Int_t i) const
 {
-// Return the i-th (secondary) vertex of the current vertex
+/**
+~~~
+// Return the i-th (secondary) vertex of the current vertex.
+~~~
+**/
+
  if (!fVertices)
  {
   cout << " *NcVertex*::GetVertex* No (secondary) vertices present." << endl;
@@ -806,7 +896,12 @@ NcVertex* NcVertex::GetVertex(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 NcVertex* NcVertex::GetIdVertex(Int_t id) const
 {
-// Return the (sec.) vertex with user identifier "id"
+/**
+~~~
+// Return the (sec.) vertex with user identifier "id".
+~~~
+**/
+
  NcVertex* vx=0;
  NcVertex* v=0;
  if (!fVertices)
@@ -827,6 +922,8 @@ NcVertex* NcVertex::GetIdVertex(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::SetVertexCopy(Int_t j)
 {
+/**
+~~~
 // (De)activate the creation of private copies of the added vertices.
 // j=0 ==> No private copies are made; pointers of original vertices are stored.
 // j=1 ==> Private copies of the vertices are made and these pointers are stored.
@@ -835,6 +932,9 @@ void NcVertex::SetVertexCopy(Int_t j)
 //        change the VertexCopy mode anymore.
 //        To change the VertexCopy mode for an existing NcVertex containing
 //        vertices one first has to invoke Reset().
+~~~
+**/
+
  if (!fVertices)
  {
   if (j==0 || j==1)
@@ -855,21 +955,36 @@ void NcVertex::SetVertexCopy(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcVertex::GetVertexCopy() const
 {
+/**
+~~~
 // Provide value of the VertexCopy mode.
 // 0 ==> No private copies are made; pointers of original vertices are stored.
 // 1 ==> Private copies of the vertices are made and these pointers are stored.
+~~~
+**/
+
  return fVertexCopy;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcVertex::GetNjets() const
 {
-// Return the current number of jets
+/**
+~~~
+// Return the current number of jets.
+~~~
+**/
+
  return fNjets;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcJet* NcVertex::GetJet(Int_t i) const
 {
-// Return the i-th jet of the current vertex
+/**
+~~~
+// Return the i-th jet of the current vertex.
+~~~
+**/
+
  if (!fJets)
  {
   cout << " *NcVertex*::GetJet* No jets present." << endl;
@@ -892,7 +1007,12 @@ NcJet* NcVertex::GetJet(Int_t i) const
 ///////////////////////////////////////////////////////////////////////////
 NcJet* NcVertex::GetIdJet(Int_t id) const
 {
-// Return the jet with user identifier "id"
+/**
+~~~
+// Return the jet with user identifier "id".
+~~~
+**/
+
  NcJet* jx=0;
  NcJet* j=0;
  if (!fJets)
@@ -913,6 +1033,8 @@ NcJet* NcVertex::GetIdJet(Int_t id) const
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::SetJetCopy(Int_t j)
 {
+/**
+~~~
 // (De)activate the creation of private copies of the added jets.
 // j=0 ==> No private copies are made; pointers of original jets are stored.
 // j=1 ==> Private copies of the jets are made and these pointers are stored.
@@ -921,6 +1043,9 @@ void NcVertex::SetJetCopy(Int_t j)
 //        change the JetCopy mode anymore.
 //        To change the JetCopy mode for an existing NcVertex containing
 //        jets one first has to invoke Reset().
+~~~
+**/
+
  if (!fJets)
  {
   if (j==0 || j==1)
@@ -941,18 +1066,28 @@ void NcVertex::SetJetCopy(Int_t j)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcVertex::GetJetCopy() const
 {
+/**
+~~~
 // Provide value of the JetCopy mode.
 // 0 ==> No private copies are made; pointers of original jets are stored.
 // 1 ==> Private copies of the jets are made and these pointers are stored.
+~~~
+**/
+
  return fJetCopy;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcVertex::IsConnectTrack(NcTrack* t) const
 {
+/**
+~~~
 // Indicate whether a track from the tracklist was created via the
 // connection of a (secondary) vertex or not.
 // In case the track was the result of (secondary) vertex addition the
 // return value is 1, otherwise the value 0 will be returned.
+~~~
+**/
+
  Int_t connect=0;
  if (fConnects)
  {
@@ -963,10 +1098,15 @@ Int_t NcVertex::IsConnectTrack(NcTrack* t) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcVertex::IsJetTrack(NcTrack* t) const
 {
+/**
+~~~
 // Indicate whether a track from the tracklist was created via the
 // addition of a jet or not.
 // In case the track was the result of jet addition the return value is 1,
 // otherwise the value 0 will be returned.
+~~~
+**/
+
  Int_t jetflag=0;
  if (fJetTracks)
  {
@@ -977,6 +1117,8 @@ Int_t NcVertex::IsJetTrack(NcTrack* t) const
 ///////////////////////////////////////////////////////////////////////////
 void NcVertex::Draw(Int_t secs,Int_t cons,Int_t jets)
 {
+/**
+~~~
 // 3-Dimensional visualisation of an NcVertex with its attributes.
 // The displayed tracklength is proportional to the momentum of the track.
 //
@@ -1001,7 +1143,9 @@ void NcVertex::Draw(Int_t secs,Int_t cons,Int_t jets)
 // Auto generated connecting tracks will be drawn as thin lines.
 // Tracks belonging to jets will be marked as somewhat thinner magenta lines.
 // This memberfunction is used recursively.
-//
+~~~
+**/
+
  Double_t vec[3]={0,0,0};
  NcTrack* tx=0;
  NcVertex* vx=0;
@@ -1086,6 +1230,8 @@ void NcVertex::Draw(Int_t secs,Int_t cons,Int_t jets)
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcVertex::SortJets(Int_t mode,TObjArray* jets,TObjArray* ordered)
 {
+/**
+~~~
 // Order the references to an array of jets by looping over the input array "jets"
 // and checking the value of a certain observable.
 // The ordered array is returned as a TObjArray either via a user provided array "ordered"
@@ -1122,6 +1268,8 @@ TObjArray* NcVertex::SortJets(Int_t mode,TObjArray* jets,TObjArray* ordered)
 // the ordered jet list amongst other selections.
 // In case a user defined array "ordered" is provided, this memberfunction returns 0 for the
 // return argument.
+~~~
+**/
 
  if (ordered) ordered->Clear();
 
@@ -1265,6 +1413,8 @@ TObjArray* NcVertex::SortJets(Int_t mode,TObjArray* jets,TObjArray* ordered)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcVertex::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -1272,6 +1422,8 @@ TObject* NcVertex::Clone(const char* name) const
 // This feature allows e.g. NcEvent to store either NcVertex objects or
 // objects derived from NcVertex via the AddVertex memberfunction, provided
 // these derived classes also have a proper Clone memberfunction. 
+~~~
+**/
 
  NcVertex* vtx=new NcVertex(*this);
  if (name)

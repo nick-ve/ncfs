@@ -1,9 +1,7 @@
 #ifndef NcVertex_h
 #define NcVertex_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1998 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcVertex.h 88 2013-08-18 18:14:09Z nickve $
 
 #include <cstdlib>
 #include <math.h>
@@ -14,6 +12,8 @@
  
 #include "NcJet.h"
 #include "NcPosition.h"
+
+/** Creation and investigation of an NcVertex. **/
  
 class NcVertex : public NcJet,public NcPosition
 {
@@ -64,7 +64,7 @@ class NcVertex : public NcJet,public NcPosition
   TObjArray* fJets;     // Array to hold the pointers to the jets
   TObjArray* fJetTracks;// Array to hold the pointers to tracks introduced by jet addition
   Int_t fJetCopy;       // Flag to denote creation of private copies in fJets
-  TObjArray* fLines;    //! Array to (temporarily) store the 3D lines for the event display 
+  TObjArray* fLines;    //!< Array to (temporarily) store the 3D lines for the event display 
 
  private:
   void Dumps(NcVertex* v,Int_t n,TString f,TString u); // Recursively print all sec. vertices

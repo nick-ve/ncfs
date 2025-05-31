@@ -1559,7 +1559,7 @@
                 As such, the version indicator in NcVersion has been updated to 6.0.          
 27-may-2025 NvE The docs sections in the .h and .cxx files of IceCal2Root, IceDB2Root, IceF2k, IceRawTWR, IceRoot and IceRootx
                 in the folder /iceconvert modified, such that they satisfy both the THtml and Doxygen format.
-                The docs sections in the .h and .cxx files in the folder /iceconvert modified, such that they satisfy
+                The docs sections in the .h and .cxx files in the folder /icepack modified, such that they satisfy
                 both the THtml and Doxygen format.
                 To prepare for Doxygen documentation generation, the files Doxyfile.txt, doxygen.xml and ncfslogo.jpg
                 have been introduced to the /ncfs top directory, in order to provide the standard settings for Doxygen runs.
@@ -1568,3 +1568,9 @@
                 Since starting from NCFS release 6.0 the package is fully standalone and can function with any ROOT release,
                 there is no need anymore to provide a stripped down version.  
 29-may-2025 NvE TSpectrum replaced by NcSpectrum in class IceMakeHits, in order to stay consistent. 
+                The docs sections in the .h and .cxx files in the folder /rnopack modified, such that they satisfy
+                both the THtml and Doxygen format.
+31-may-2025 NvE The docs sections in the .h and .cxx files in the folder /ncfspack modified, such that they satisfy
+                both the THtml and Doxygen format.
+                Also the documentation in ncfs/docs has now been produced by Doxygen. 
+                The version indicator in NcVersion has been updated to 6.1.          

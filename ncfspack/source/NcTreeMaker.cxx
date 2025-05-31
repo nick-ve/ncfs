@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2008 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcTreeMaker
+~~~
 // Class NcTreeMaker
 // TTask based processor to convert NCFS generic event structures into a plain
 // ROOT tree structure.
@@ -112,16 +116,23 @@
 //
 //--- Author: Nick van Eijndhoven 03-apr-2008 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 17, 2023  16:40Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcTreeMaker.h"
 #include "Riostream.h"
 
-ClassImp(NcTreeMaker) // Class implementation to enable ROOT I/O
+ClassImp(NcTreeMaker); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 NcTreeMaker::NcTreeMaker(const char* name,const char* title) : TTask(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  fFirst=1;
  fOutfile=0;
@@ -187,7 +198,11 @@ NcTreeMaker::NcTreeMaker(const char* name,const char* title) : TTask(name,title)
 ///////////////////////////////////////////////////////////////////////////
 NcTreeMaker::~NcTreeMaker()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  // Delete the output file.
  // This will also delete the corresponding output Tree
@@ -311,7 +326,11 @@ NcTreeMaker::~NcTreeMaker()
 ///////////////////////////////////////////////////////////////////////////
 NcTreeMaker::NcTreeMaker(const NcTreeMaker& q) : TTask(q)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 
  fFirst=1;
  fOutfile=0;
@@ -422,6 +441,8 @@ NcTreeMaker::NcTreeMaker(const NcTreeMaker& q) : TTask(q)
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::SetOutputFile(TString fname,TString ftitle,TString tname,TString ttitle)
 {
+/**
+~~~
 // Create the output file for the ROOT data tree.
 // Also the overall output tree is created.
 //
@@ -434,6 +455,8 @@ void NcTreeMaker::SetOutputFile(TString fname,TString ftitle,TString tname,TStri
 // For example "$(HOME)/my-data/sample.root".
 //
 // By default tname="Data" and ttitle="All event data".
+~~~
+**/
 
  // Expand the path name of the specified output file
  fname=gSystem->ExpandPathName(fname.Data());
@@ -446,7 +469,11 @@ void NcTreeMaker::SetOutputFile(TString fname,TString ftitle,TString tname,TStri
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::CloseTree()
 {
+/**
+~~~
 // Proper writing and closing of the output tree structure(s).
+~~~
+**/
 
  if (!fOutfile) return;
 
@@ -467,6 +494,8 @@ void NcTreeMaker::CloseTree()
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::SetTrackMaximum(Int_t n)
 {
+/**
+~~~
 // Set maximum number of tracks per name in the output tree.
 // In the constructor n is set to a default of 1000, which implies that each
 // trackname can occur at maximum 1000 times in the output tree storage.
@@ -480,12 +509,16 @@ void NcTreeMaker::SetTrackMaximum(Int_t n)
 //        This implies that the argument "n" (or the default 1000) defines
 //        the total number of tracks per event that can occur in the produced
 //        output tree. 
+~~~
+**/
 
  fNtkmax=n;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::UseTracks(TString name,Int_t n,Int_t mode)
 {
+/**
+~~~
 // Specification of the track names to be used for the investigation
 // of individual track observables.
 //
@@ -521,6 +554,8 @@ void NcTreeMaker::UseTracks(TString name,Int_t n,Int_t mode)
 //
 // This will use the first 5 IceDwalk, the first 2 IceLinefit and all the
 // Pythia tracks which are encountered in the event structure.
+~~~
+**/
 
  if (!fUseTracks)
  {
@@ -557,6 +592,8 @@ void NcTreeMaker::UseTracks(TString name,Int_t n,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::UseDevices(TString classname)
 {
+/**
+~~~
 // Specification of the device classes to be used for the various observables.
 //
 // classname : Specifies the device class (e.g. "IceGOM").
@@ -578,6 +615,8 @@ void NcTreeMaker::UseDevices(TString classname)
 //
 // This will take into account all devices (derived from) IceAOM, IceIDOM
 // and IceTDOM as well as all the hits of these devices.
+~~~
+**/
 
  if (!fUseDevices)
  {
@@ -606,6 +645,8 @@ void NcTreeMaker::UseDevices(TString classname)
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::Select(TString type,TString obs,TString uname)
 {
+/**
+~~~
 // Select the observable to appear in the output tree.
 //
 // type  : Selection type specifier (e.g. "track", "event" or "device").
@@ -638,6 +679,8 @@ void NcTreeMaker::Select(TString type,TString obs,TString uname)
 // of this member function with the observable name "user" and the required user data word name "uname".
 //
 // In the default constructor all observables are de-activated for selection.
+~~~
+**/
 
  TString s;
  Int_t nen;
@@ -723,6 +766,8 @@ void NcTreeMaker::Select(TString type,TString obs,TString uname)
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::SetAstrolab(NcAstrolab* lab)
 {
+/**
+~~~
 // Specify the astrolab to be used.
 // This will lead to the appearance of so called "astrotracks" from
 // (astrophysical) reference objects in the produced output tree.
@@ -734,6 +779,8 @@ void NcTreeMaker::SetAstrolab(NcAstrolab* lab)
 // An internal copy of the specified Astrolab will be made.
 // In case one wants to modify the Astrolab, this should be done via
 // the corresponding pointer which is provided via GetAstrolab.
+~~~
+**/
 
  if (fAstrolab)
  {
@@ -746,13 +793,22 @@ void NcTreeMaker::SetAstrolab(NcAstrolab* lab)
 ///////////////////////////////////////////////////////////////////////////
 NcAstrolab* NcTreeMaker::GetAstrolab() const
 {
+/**
+~~~
 // Provide pointer to the astrolab.
+~~~
+**/
+
  return fAstrolab;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::Exec(Option_t* opt)
 {
+/**
+~~~
 // Implementation of the ouput tree creation and filling.
+~~~
+**/
 
  TString name=opt;
  NcJob* parent=(NcJob*)(gROOT->GetListOfTasks()->FindObject(name.Data()));
@@ -989,8 +1045,12 @@ void NcTreeMaker::Exec(Option_t* opt)
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::Track()
 {
+/**
+~~~
 // Obtain individual track observables.
 // Note : Tracks without vector information will be skipped.
+~~~
+**/
 
  if (!fUseTracks) return;
 
@@ -1094,7 +1154,11 @@ void NcTreeMaker::Track()
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::Event()
 {
+/**
+~~~
 // Obtain total event observables.
+~~~
+**/
 
  TTree* tree=(TTree*)fOutfile->Get("evt");
  if (!tree) return;
@@ -1138,7 +1202,11 @@ void NcTreeMaker::Event()
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::Device()
 {
+/**
+~~~
 // Obtain device observables.
+~~~
+**/
 
  if (!fUseDevices) return;
 
@@ -1166,6 +1234,8 @@ void NcTreeMaker::Device()
 ///////////////////////////////////////////////////////////////////////////
 void NcTreeMaker::AstroTrack()
 {
+/**
+~~~
 // Create individual track observables from (astrophysical) reference objects.
 // The astrotrack directions correspond to hypothetical tracks of messengers arriving
 // from the (astrophysical) reference object.
@@ -1178,6 +1248,8 @@ void NcTreeMaker::AstroTrack()
 // of an (astrophysical) phenomenon and the regular detected tracks/signals in the detector. 
 // Also the ICRS longitude (l) and latitude (b) of the (astrophysical) reference objects
 // are provided in radians.
+~~~
+**/
 
  if (!fAstrolab) return;
 
@@ -1227,10 +1299,14 @@ void NcTreeMaker::AstroTrack()
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcTreeMaker::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers when adding objects in case the container owns the objects.
+~~~
+**/
 
  NcTreeMaker* sel=new NcTreeMaker(*this);
  if (name)

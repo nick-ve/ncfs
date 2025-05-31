@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2016 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcVeto.cxx 130 2016-08-24 11:11:33Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcVeto
+~~~
 // Class NcVeto
 // NcDevice derived class to serve as a generic interface for event vetoing procedures.
 //
@@ -50,30 +52,47 @@
 //
 //--- Author: Nick van Eijndhoven 09-jun-2016 IIHE-VUB, Brussels
 //- Modified: NvE $Date: 2016-08-24 13:11:33 +0200 (Wed, 24 Aug 2016) $ IIHE-VUB
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
  
 #include "NcVeto.h"
 #include "Riostream.h"
 
-ClassImp(NcVeto) // Class implementation to enable ROOT I/O
+ClassImp(NcVeto); // Class implementation to enable ROOT I/O
 
+///////////////////////////////////////////////////////////////////////////
 NcVeto::NcVeto() : NcDevice()
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVeto::~NcVeto()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVeto::NcVeto(const NcVeto& v) : NcDevice(v)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcVeto::StoreVetoLevel(NcEvent* evt,Double_t level)
 {
+/**
+~~~
 // Store the veto level in the event structure.
 //
 // Input arguments :
@@ -85,6 +104,8 @@ void NcVeto::StoreVetoLevel(NcEvent* evt,Double_t level)
 // and the name of the signal slot is "VetoLevel".
 // These standardised names allow the use of the veto level in other tasks
 // like for instance NcEventSelector.
+~~~
+**/
 
  if (!evt) return;
 
@@ -108,6 +129,8 @@ void NcVeto::StoreVetoLevel(NcEvent* evt,Double_t level)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcVeto::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -116,6 +139,8 @@ TObject* NcVeto::Clone(const char* name) const
 // to store either IceGOM objects or objects derived from IceGOM
 // via tha AddDevice memberfunction, provided these derived classes also have
 // a proper Clone memberfunction. 
+~~~
+**/
 
  NcVeto* v=new NcVeto(*this);
  if (name)

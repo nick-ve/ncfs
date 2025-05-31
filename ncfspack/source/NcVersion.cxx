@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2009 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcVersion
+~~~
 // Class NcVersion
 // Facility to provide version information of the current release.
 // Instead of using separate branches and tags for the various related
@@ -51,30 +55,47 @@
 // improvements or extensions that are fully backward compatible.
 //
 //--- Author: Nick van Eijndhoven 24-sep-2009 NCFS
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, May 15, 2025  07:40Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, May 31, 2025  19:34Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcVersion.h"
 #include "Riostream.h"
  
-ClassImp(NcVersion) // Class implementation to enable ROOT I/O
+ClassImp(NcVersion); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcVersion::NcVersion() : TObject()
 {
-// Default constructor to initialise all parameters
- fVersion="6.0";
+/**
+~~~
+// Default constructor to initialise all parameters.
+~~~
+**/
+
+ fVersion="6.1";
  fRev="Branch: master";
- fDate="May 16, 2025  12:55 UTC";
+ fDate="May 31, 2025  19:34 UTC";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()
 {
-// Default destructor
+/**
+~~~
+// Default destructor.
+~~~
+**/
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::NcVersion(const NcVersion& v) : TObject(v)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  fVersion=v.fVersion;
  fRev=v.fRev;
  fDate=v.fDate;
@@ -82,7 +103,12 @@ NcVersion::NcVersion(const NcVersion& v) : TObject(v)
 ///////////////////////////////////////////////////////////////////////////
 NcVersion& NcVersion::operator=(const NcVersion& q)
 {
+/**
+~~~
 // Set the current version attributes equal to version instance q.
+~~~
+**/
+
  fVersion=q.fVersion;
  fRev=q.fRev;
  fDate=q.fDate;
@@ -92,7 +118,12 @@ NcVersion& NcVersion::operator=(const NcVersion& q)
 ///////////////////////////////////////////////////////////////////////////
 void NcVersion::Data() const
 {
+/**
+~~~
 // Provide the version information for this release.
+~~~
+**/
+
  cout << endl;
  cout << " *" << ClassName() << "* Version information." << endl;
  cout << " NCFS-Pack version : " << fVersion << " corresponding to GIT " << fRev << endl;
@@ -102,7 +133,12 @@ void NcVersion::Data() const
 ///////////////////////////////////////////////////////////////////////////
 TString NcVersion::GetVersion() const
 {
+/**
+~~~
 // Provide the version string.
+~~~
+**/
+
  return fVersion;
 }
 ///////////////////////////////////////////////////////////////////////////

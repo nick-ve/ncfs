@@ -171,7 +171,7 @@ void NcSpectrum::SetDeconIterations(Int_t n)
 
 
 //______________________________________________________________________________
-TH1 *NcSpectrum::Background(const TH1 * h, int numberIterations, Option_t * option)
+TH1* NcSpectrum::Background(const TH1 * h, int numberIterations, Option_t * option)
 {
 /**
 ~~~
@@ -431,7 +431,7 @@ void NcSpectrum::SetResolution(Float_t resolution)
 
 
 //______________________________________________________________________________
-const char *NcSpectrum::Background(float *spectrum, int ssize,
+const char* NcSpectrum::Background(float *spectrum, int ssize,
                                           int numberIterations,
                                           int direction, int filterOrder,
                                           bool smoothing,int smoothWindow,
@@ -1656,7 +1656,7 @@ const char* NcSpectrum::SmoothMarkov(float *source, int ssize, int averWindow)
 
 
 //______________________________________________________________________________
-const char *NcSpectrum::Deconvolution(float *source, const float *response,
+const char* NcSpectrum::Deconvolution(float *source, const float *response,
                                       int ssize, int numberIterations,
                                       int numberRepetitions, double boost )
 {
@@ -2060,7 +2060,7 @@ const char *NcSpectrum::Deconvolution(float *source, const float *response,
 
 
 //______________________________________________________________________________
-const char *NcSpectrum::DeconvolutionRL(float *source, const float *response,
+const char* NcSpectrum::DeconvolutionRL(float *source, const float *response,
                                       int ssize, int numberIterations,
                                       int numberRepetitions, double boost )
 {
@@ -2309,7 +2309,7 @@ const char *NcSpectrum::DeconvolutionRL(float *source, const float *response,
 
 
 //______________________________________________________________________________
-const char *NcSpectrum::Unfolding(float *source,
+const char* NcSpectrum::Unfolding(float *source,
                                  const float **respMatrix,
                                  int ssizex, int ssizey,
                                  int numberIterations,
@@ -3244,7 +3244,7 @@ Int_t NcSpectrum::StaticSearch(const TH1 *hist, Double_t sigma, Option_t *option
 
 
 //______________________________________________________________________________
-TH1 *NcSpectrum::StaticBackground(const TH1 *hist,Int_t niter, Option_t *option)
+TH1* NcSpectrum::StaticBackground(const TH1 *hist,Int_t niter, Option_t *option)
 {
 /**
 ~~~

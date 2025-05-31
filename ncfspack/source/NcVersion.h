@@ -1,10 +1,12 @@
 #ifndef NcVersion_h
 #define NcVersion_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2009 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TObject.h"
 #include "TString.h"
+
+/** Facility to provide version information. **/
  
 class NcVersion : public TObject
 {

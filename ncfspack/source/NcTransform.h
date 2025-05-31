@@ -1,13 +1,15 @@
 #ifndef NcTransform_h
 #define NcTransform_h
 
-// Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include "TArrayD.h"
 #include "TVirtualFFT.h"
 
 #include "NcSample.h"
+
+/** Various transformations of (sequential) data samples. **/
 
 class NcTransform : public TNamed
 {

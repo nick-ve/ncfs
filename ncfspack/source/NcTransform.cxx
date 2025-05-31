@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2021, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2021 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcTransform
+~~~
 // Class NcTransform
 // Class to perform various discrete transformations of (sequential) data samples.
 //
@@ -119,16 +123,23 @@
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
 //- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 11, 2021  01:51Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTransform.h"
 #include "Riostream.h"
  
-ClassImp(NcTransform) // Class implementation to enable ROOT I/O
+ClassImp(NcTransform); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcTransform::NcTransform(const char* name,const char* title) : TNamed(name,title)
 {
+/**
+~~~
 // Default constructor.
+~~~
+**/
 
  Reset();
  fSample=0;
@@ -136,7 +147,11 @@ NcTransform::NcTransform(const char* name,const char* title) : TNamed(name,title
 ///////////////////////////////////////////////////////////////////////////
 NcTransform::~NcTransform()
 {
+/**
+~~~
 // Default destructor.
+~~~
+**/
 
  if (fProc)
  {
@@ -147,7 +162,11 @@ NcTransform::~NcTransform()
 ///////////////////////////////////////////////////////////////////////////
 NcTransform::NcTransform(const NcTransform& q) : TNamed(q)
 {
+/**
+~~~
 // Copy constructor.
+~~~
+**/
 
  fProc=0;
  fN=q.fN;
@@ -160,7 +179,11 @@ NcTransform::NcTransform(const NcTransform& q) : TNamed(q)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Reset()
 {
+/**
+~~~
 // Internal member function to reset all data and the processor. 
+~~~
+**/
 
  fProc=0;
  fN=0;
@@ -172,23 +195,33 @@ void NcTransform::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::SetSamplingFrequency(Float_t f)
 {
+/**
+~~~
 // Set the actual DAQ sampling frequency in Hz.
 // This sampling frequency may be overwritten by invokation of
 // one of the various Load() member functions.
 // The sampling frequency is set to 0 in the constructor of this class.
+~~~
+**/
 
  fSample=f;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcTransform::GetSamplingFrequency() const
 {
+/**
+~~~
 // Provide the current value of the DAQ sampling frequency in Hz.
+~~~
+**/
 
  return fSample;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Load(Int_t n,Double_t* re,Double_t* im,Float_t f)
 {
+/**
+~~~
 // Provide new input data to be transformed and reset the processor.
 //
 // Input arguments :
@@ -202,6 +235,8 @@ void NcTransform::Load(Int_t n,Double_t* re,Double_t* im,Float_t f)
 // If provided, the array size must be at least of dimension "n".
 //
 // The defaults are im=0 and f=-1.
+~~~
+**/
 
  Reset();
 
@@ -222,6 +257,8 @@ void NcTransform::Load(Int_t n,Double_t* re,Double_t* im,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Load(TArray* re,TArray* im,Float_t f)
 {
+/**
+~~~
 // Provide new input data to be transformed and reset the processor.
 //
 // Input arguments :
@@ -235,6 +272,8 @@ void NcTransform::Load(TArray* re,TArray* im,Float_t f)
 // will be used to compose the input data.
 //
 // The defaults are im=0 and f=-1.
+~~~
+**/
 
  Reset();
 
@@ -275,6 +314,8 @@ void NcTransform::Load(TArray* re,TArray* im,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Load(NcSample* s,Int_t i,Float_t f)
 {
+/**
+~~~
 // Provide new input data from the NcSample "s" to be transformed and reset the processor.
 //
 // Input arguments :
@@ -286,6 +327,8 @@ void NcTransform::Load(NcSample* s,Int_t i,Float_t f)
 // Note : The Store Mode of the NcSample must be activated. 
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -321,6 +364,8 @@ void NcTransform::Load(NcSample* s,Int_t i,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Load(NcSample* s,TString name,Float_t f)
 {
+/**
+~~~
 // Provide new input data from the NcSample "s" to be transformed and reset the processor.
 //
 // Input arguments :
@@ -332,6 +377,8 @@ void NcTransform::Load(NcSample* s,TString name,Float_t f)
 // Note : The Store Mode of the NcSample must be activated. 
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -361,6 +408,8 @@ void NcTransform::Load(NcSample* s,TString name,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Load(TH1* h,Float_t f)
 {
+/**
+~~~
 // Provide new input data from a 1-Dimensional histogram to be transformed and reset the processor.
 //
 // Input arguments :
@@ -370,6 +419,8 @@ void NcTransform::Load(TH1* h,Float_t f)
 //     In case f<0 the current sampling frequency is not modified.
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -404,6 +455,8 @@ void NcTransform::Load(TH1* h,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Load(TGraph* gr,Float_t f)
 {
+/**
+~~~
 // Provide new input data from a TGraph object to be transformed and reset the processor.
 //
 // Input arguments :
@@ -413,6 +466,8 @@ void NcTransform::Load(TGraph* gr,Float_t f)
 //      In case f<0 the current sampling frequency is not modified.
 //
 // The default value is f=-1.
+~~~
+**/
 
  Reset();
 
@@ -449,8 +504,12 @@ void NcTransform::Load(TGraph* gr,Float_t f)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::LoadResult()
 {
+/**
+~~~
 // Load the transformation result as new input data in order to enable
 // inverse transformations acting on previous transformation results.
+~~~
+**/
 
  fReIn=fReOut;
  fImIn=fImOut;
@@ -460,13 +519,19 @@ void NcTransform::LoadResult()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTransform::GetN() const
 {
+/**
+~~~
 // Provide the number of data elements (to be) processed.
+~~~
+**/
 
  return fN;
 }
 ///////////////////////////////////////////////////////////////////////////
 TArrayD NcTransform::GetData(TString sel) const
 {
+/**
+~~~
 // Provide a selected set of data.
 //
 // Input argument :
@@ -484,6 +549,8 @@ TArrayD NcTransform::GetData(TString sel) const
 // ----------
 // sel="AMP out" will provide all the N amplitudes of the resulting data after transformation.
 // sel="RE in" will provide all the N real components of the input data.
+~~~
+**/
 
  if (sel.Contains("RE") && sel.Contains("in")) return fReIn;
  if (sel.Contains("IM") && sel.Contains("in")) return fImIn;
@@ -522,6 +589,8 @@ TArrayD NcTransform::GetData(TString sel) const
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Fourier(TString mode,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Fourier Transformation (DFT).
 //
 // Conventions :
@@ -563,6 +632,8 @@ void NcTransform::Fourier(TString mode,TH1* hist,TString sel)
 // sel="RE k 2" will show all N real components as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -807,6 +878,8 @@ void NcTransform::Fourier(TString mode,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Hartley(Int_t mode,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Hartley Transformation (DHT).
 // Actually, a DHT is closely related to a Discrete Fourier Transformation (DFT)
 // with only real input values.
@@ -852,6 +925,8 @@ void NcTransform::Hartley(Int_t mode,TH1* hist,TString sel)
 // sel="k 2" will show all N amplitudes as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1003,6 +1078,8 @@ void NcTransform::Hartley(Int_t mode,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Cosine(Int_t type,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Cosine Transformation (DCT).
 // Actually, this is just a regular Discrete Fourier Transformation (DFT)
 // with only real input values which contain an even symmetry.
@@ -1052,6 +1129,8 @@ void NcTransform::Cosine(Int_t type,TH1* hist,TString sel)
 // sel="k 2" will show all N amplitudes as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1256,6 +1335,8 @@ void NcTransform::Cosine(Int_t type,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 void NcTransform::Sine(Int_t type,TH1* hist,TString sel)
 {
+/**
+~~~
 // Perform a normalized 1-dimensional Discrete Sine Transformation (DST).
 // Actually, this is just a regular Discrete Fourier Transformation (DFT)
 // with only real input values which contain an odd symmetry.
@@ -1303,6 +1384,8 @@ void NcTransform::Sine(Int_t type,TH1* hist,TString sel)
 // sel="k 2" will show all N amplitudes as a function of the index k in the frequency domain.
 //
 // The default values are hist=0 and sel="none"
+~~~
+**/
 
  fReOut.Set(0);
  fImOut.Set(0);
@@ -1507,11 +1590,15 @@ void NcTransform::Sine(Int_t type,TH1* hist,TString sel)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcTransform::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
 // for containers like NcEvent when adding objects in case the
 // container owns the objects.
+~~~
+**/
 
  NcTransform* q=new NcTransform(*this);
  if (name)

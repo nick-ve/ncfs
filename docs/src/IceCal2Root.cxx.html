@@ -1,751 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!--                                             -->
-<!-- Author: ROOT team (rootdev@cern.ch)         -->
-<!--                                             -->
-<!--   Date: Mon Apr  5 23:39:07 2021            -->
-<!--                                             -->
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>IceCal2Root - source file</title>
-<meta name="rating" content="General" />
-<meta name="objecttype" content="Manual" />
-<meta name="keywords" content="software development, oo, object oriented, unix, x11, windows, c++, html, rene brun, fons rademakers, cern" />
-<meta name="description" content="ROOT - An Object Oriented Framework For Large Scale Data Analysis." />
-<link rel="stylesheet" type="text/css" href="../ROOT.css" id="ROOTstyle" />
-<script type="text/javascript" src="../ROOT.js"></script>
-</head>
-<body  onload="javascript:SetValuesFromCookie();"><div id="body_content">
-<div id="root_header"><img src="http://root.cern.ch/drupal/sites/default/files/rootdrawing-logo.png" alt="ROOT logo"/></div>
-<div id="codeAndLineNumbers"><pre class="listing">
-<span class="comment">/*******************************************************************************
- * Copyright(c) 2003, IceCube Experiment at the South Pole. All rights reserved.
- *
- * Author: The IceCube NCFS-based Offline Project.
- * Contributors are mentioned in the code where appropriate.
- *
- * Permission to use, copy, modify and distribute this software and its
- * documentation strictly for non-commercial purposes is hereby granted
- * without fee, provided that the above copyright notice appears in all
- * copies and that both the copyright notice and this permission notice
- * appear in the supporting documentation.
- * The authors make no claims about the suitability of this software for
- * any purpose. It is provided <span class="string">"as is"</span> without express or implied warranty.
- *******************************************************************************/</span>
-
-<span class="comment">// $Id: <a href="../IceCal2Root.html">IceCal2Root</a>.cxx 5 2010-03-19 10:10:02Z nickve $</span>
-
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<span class="comment">// <a href="../IceCal2Root.html#IceCal2Root:Class" title="TClass* IceCal2Root::Class()">Class</a> <a href="../IceCal2Root.html">IceCal2Root</a></span>
-<span class="comment">// Conversion of Amanda (ascii) calibration data into a <a href="../NcObjMatrix.html">NcObjMatrix</a> objects</span>
-<span class="comment">// containing the complete OM position, calibration, Xtalk etc... database.</span>
-<span class="comment">//</span>
-<span class="comment">// This facility will become obsolete soon and is only kept for</span>
-<span class="comment">// backward compatibility and testing purposes.</span>
-<span class="comment">// Please use the more recent <a href="../IceDB2Root.html">IceDB2Root</a> facility instead.</span>
-<span class="comment">//</span>
-<span class="comment">// Via specification of the various input files, various <a href="../NcObjMatrix.html">NcObjMatrix</a> objects</span>
-<span class="comment">// are created and (optionally) stored in a single output file.</span>
-<span class="comment">// The names of the <a href="../NcObjMatrix.html">NcObjMatrix</a> objects indicate the type of database they</span>
-<span class="comment">// contain.</span>
-<span class="comment">// For example :</span>
-<span class="comment">// The name <span class="string">"MuDaq-OMDBASE"</span> indicates the database info for MuDaq data,</span>
-<span class="comment">// whereas TWRDaq calibration data is in the object named <span class="string">"TWRDaq-OMDBASE"</span>.</span>
-<span class="comment">// Note that a MuDaq Amacalib ascii input file has always to be provided,</span>
-<span class="comment">// since the geometry data for all the other databases is obtained from there.   </span>
-<span class="comment">// In addition a PDG particle database, extended with some specific Amanda</span>
-<span class="comment">// entries, is provided as well.</span>
-<span class="comment">// This class is derived from <a href="../NcJob.html">NcJob</a> providing task-based processing.</span>
-<span class="comment">// Note that the data structures are only written out if an outputfile has</span>
-<span class="comment">// been specified via the <a href="../IceCal2Root.html#IceCal2Root:SetOutputFile" title="void IceCal2Root::SetOutputFile(TString name)">SetOutputFile</a> memberfunction.</span>
-<span class="comment">// In case no outputfile has been specified, this class provides a facility</span>
-<span class="comment">// to investigate/use the dbase data directly in subsequent (sub)tasks.</span>
-<span class="comment">//</span>
-<span class="comment">// The OM database information in the <a href="../NcObjMatrix.html">NcObjMatrix</a> has the following structure :</span>
-<span class="comment">//</span>
-<span class="comment">// (j,1)    : Pointer to OM with identifier <span class="string">"j"</span></span>
-<span class="comment">// (j,k+1)  : Pointer to a TF1* being the probability function for Xtalk</span>
-<span class="comment">//            with OM <span class="string">"j"</span> as transmitter and OM <span class="string">"k"</span> as receiver.</span>
-<span class="comment">//</span>
-<span class="comment">// The latter is only available for MuDaq databases.</span>
-<span class="comment">//</span>
-<span class="comment">// The geometry information is directly available from the OM pointer</span>
-<span class="comment">// in the form of its position and data words like <span class="string">"ORIENT"</span> for orientation etc...</span>
-<span class="comment">// Just use the OM memberfunction Data() to obtain a full overview. </span>
-<span class="comment">//</span>
-<span class="comment">// Note : Position coordinates are indicated in meters and times are in nanoseconds,</span>
-<span class="comment">//        in accordance with the convention used previously for Amanda.</span>
-<span class="comment">//</span>
-<span class="comment">// From the OM pointer also the various (de)calibration functions for</span>
-<span class="comment">// ADC, LE and TOT can be obtained as TF1* pointers.</span>
-<span class="comment">// The actual values of the calibration constants are stored as parameters</span>
-<span class="comment">// of these (de)calibration functions and can be investigated via the</span>
-<span class="comment">// usual TF1::<a href="../#TNamed:Print" title="void TNamed::Print(Option_t* option=&quot;&quot;)">Print</a>() or TF1::GetParameter() facilities.</span>
-<span class="comment">// The last two parameters of the Xtalk probability function have no effect</span>
-<span class="comment">// on the evaluated probability value. However, these two parameters provide</span>
-<span class="comment">// the minimum and maximum allowed LE differences between the transmitter</span>
-<span class="comment">// and receiver hits, respectively (as can be seen from the parameter names).</span>
-<span class="comment">//</span>
-<span class="comment">// The (de)calibration of signals and/or determination of the Xtalk probability</span>
-<span class="comment">// can be performed via the standard TF1::Eval(x) functionality, where <span class="string">"x"</span></span>
-<span class="comment">// represents the input argument of the function (e.g. an uncalibrated ADC value).</span>
-<span class="comment">//</span>
-<span class="comment">// In general the database is not directly accessed by the user in performing</span>
-<span class="comment">// physics analysis, since all the necessary information is contained in the</span>
-<span class="comment">// event data itself and available via the GetSignal() memberfunction of the hits.</span>
-<span class="comment">// However, specific tasks like e.g. calibration, Xtalk correction,</span>
-<span class="comment">// bad module removal, noise hit removal etc... might need explicit database access.</span>
-<span class="comment">// So, at the end of the example below some functionality is indicated for clarity.</span>
-<span class="comment">// The user may use exactly the same procedures to obtain explicit access to the calibration</span>
-<span class="comment">// functions etc... from the various OMs and/or hits within the actual event data which he/she</span>
-<span class="comment">// is analysing.</span>
-<span class="comment">//</span>
-<span class="comment">// The PDG particle database is a standard ROOT TDatabasePDG object</span>
-<span class="comment">// with the following extensions :</span>
-<span class="comment">//</span>
-<span class="comment">// Name        PDG code</span>
-<span class="comment">// ----        --------</span>
-<span class="comment">// brems       10001001</span>
-<span class="comment">// deltae      10001002</span>
-<span class="comment">// pairprod    10001003</span>
-<span class="comment">// nucl_int    10001004</span>
-<span class="comment">// mu_pair     10001005</span>
-<span class="comment">// hadrons     10001006</span>
-<span class="comment">// fiberlaser  10002100</span>
-<span class="comment">// n2laser     10002101</span>
-<span class="comment">// yaglaser    10002201</span>
-<span class="comment">// z_primary   10003000</span>
-<span class="comment">// a_primary   10003500</span>
-<span class="comment">// </span>
-<span class="comment">// Usage example :</span>
-<span class="comment">// ---------------</span>
-<span class="comment">//</span>
-<span class="comment">// gSystem-&gt;Load(<span class="string">"ncfspack"</span>);</span>
-<span class="comment">// gSystem-&gt;Load(<span class="string">"icepack"</span>);</span>
-<span class="comment">// gSystem-&gt;Load(<span class="string">"iceconvert"</span>);</span>
-<span class="comment">//</span>
-<span class="comment">// <a href="../IceCal2Root.html">IceCal2Root</a> q(<span class="string">"IceCal2Root"</span>,<span class="string">"Amacalib to IcePack data structure conversion"</span>);</span>
-<span class="comment">//</span>
-<span class="comment">// // The MuDaq Amacalib input filename</span>
-<span class="comment">// q.<a href="../IceCal2Root.html#IceCal2Root:SetAmacalibFile" title="void IceCal2Root::SetAmacalibFile(TString name)">SetAmacalibFile</a>(<span class="string">"amacalib_amanda2_2005.txt"</span>);</span>
-<span class="comment">//</span>
-<span class="comment">// // The TWRDaq input filename with the newly determined TWR T0 and ADC calibs.</span>
-<span class="comment">// q.<a href="../IceCal2Root.html#IceCal2Root:SetTWRDaqFile" title="void IceCal2Root::SetTWRDaqFile(TString name)">SetTWRDaqFile</a>(<span class="string">"twr-cal-2005.txt"</span>);</span>
-<span class="comment">//</span>
-<span class="comment">// // Output file for the event structures</span>
-<span class="comment">// q.<a href="../IceCal2Root.html#IceCal2Root:SetOutputFile" title="void IceCal2Root::SetOutputFile(TString name)">SetOutputFile</a>(<span class="string">"cal2005.root"</span>);</span>
-<span class="comment">//</span>
-<span class="comment">// ///////////////////////////////////////////////////////////////////</span>
-<span class="comment">// // Here the user can specify his/her sub-tasks to be executed</span>
-<span class="comment">// // after the database structures have been filled and before the</span>
-<span class="comment">// // data is written out.</span>
-<span class="comment">// // Sub-tasks (i.e. a user classes derived from <a href="../#TTask:TTask" title="TTask TTask::TTask() or overloads">TTask</a>) are entered</span>
-<span class="comment">// // as follows :</span>
-<span class="comment">// //</span>
-<span class="comment">// //    MyTask1 task1(<span class="string">"task1"</span>,<span class="string">"Some modifications to specific OMs"</span>);</span>
-<span class="comment">// //    MyTask2 task2(<span class="string">"task2"</span>,<span class="string">"Removal of specific OMs"</span>);</span>
-<span class="comment">// //    MyTask3 task3(<span class="string">"task3"</span>,<span class="string">"Add private objects to the output file"</span>);</span>
-<span class="comment">// //    q.<a href="../#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task1);</span>
-<span class="comment">// //    q.<a href="../#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task2);</span>
-<span class="comment">// //    q.<a href="../#TTask:Add" title="void TTask::Add(TTask* task)">Add</a>(&amp;task3);</span>
-<span class="comment">// //</span>
-<span class="comment">// // The sub-tasks will be executed in the order as they are entered.</span>
-<span class="comment">// ///////////////////////////////////////////////////////////////////</span>
-<span class="comment">//</span>
-<span class="comment">// // Perform the conversion and execute subtasks (if any)</span>
-<span class="comment">// q.<a href="../NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a>();</span>
-<span class="comment">//</span>
-<span class="comment">// // Outline of dbase usage for (de)calibration and Xtalk</span>
-<span class="comment">//</span>
-<span class="comment">// <a href="../NcObjMatrix.html">NcObjMatrix</a>* omdb=q.<a href="../IceCal2Root.html#IceCal2Root:GetOMdbase" title="NcObjMatrix* IceCal2Root::GetOMdbase(TString name=&quot;MuDaq&quot;)">GetOMdbase</a>(<span class="string">"MuDaq"</span>);</span>
-<span class="comment">// <a href="../IceAOM.html">IceAOM</a>* om=(<a href="../IceAOM.html">IceAOM</a>*)omdb-&gt;<a href="../NcJob.html#NcJob:GetObject" title="TObject* NcJob::GetObject(const char* classname) or overloads">GetObject</a>(9,1); // Pointer to OM 9</span>
-<span class="comment">// om-&gt;Data(); // Overview of generic module parameters</span>
-<span class="comment">// TF1* fcal=0;   // Calibration function</span>
-<span class="comment">// TF1* fdecal=0; // De-calibration function</span>
-<span class="comment">// fcal=om-&gt;GetCalFunction(<span class="string">"ADC"</span>);</span>
-<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> adc=248; // Uncalibrated ADC</span>
-<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> cadc=0;  // Calibrated ADC</span>
-<span class="comment">// if (fcal) cadc=fcal-&gt;Eval(adc);</span>
-<span class="comment">// fcal=om-&gt;GetCalFunction(<span class="string">"TOT"</span>);</span>
-<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> tot=1538; // Uncalibrated TOT</span>
-<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> ctot=0;   // Calibrated TOT</span>
-<span class="comment">// if (fcal) ctot=fcal-&gt;Eval(tot);</span>
-<span class="comment">// fdecal=om-&gt;GetDecalFunction(<span class="string">"LE"</span>);</span>
-<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> le=21697; // Uncalibrated LE</span>
-<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> cle=0;    // Calibrated LE</span>
-<span class="comment">// if (fcal) cle=fcal-&gt;Eval(le);</span>
-<span class="comment">//</span>
-<span class="comment">// // Xtalk probability between (trans) OM 90 and (rec) OM 113</span>
-<span class="comment">// // for a transmitter signal of uncalibrated amplitude <span class="string">"adc"</span>.</span>
-<span class="comment">// TF1* fxtalkp=(TF1*)omdb-&gt;<a href="../NcJob.html#NcJob:GetObject" title="TObject* NcJob::GetObject(const char* classname) or overloads">GetObject</a>(90,113+1);</span>
-<span class="comment">// <a href="../ListOfTypes.html#Float_t">Float_t</a> prob=0;</span>
-<span class="comment">// adc=378;</span>
-<span class="comment">// if (fxtalkp) prob=fxtalkp-&gt;Eval(adc);</span>
-<span class="comment">//</span>
-<span class="comment">//--- Author: Nick van Eijndhoven 09-aug-2005 Utrecht University</span>
-<span class="comment">//- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS</span>
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
- 
-<span class="cpp">#include "<a href="../IceCal2Root.h">IceCal2Root.h</a>"</span>
-<span class="cpp">#include "Rstrstream.h"</span>
-
-ClassImp(<a href="../IceCal2Root.html">IceCal2Root</a>) <span class="comment">// <a href="../IceCal2Root.html#IceCal2Root:Class" title="TClass* IceCal2Root::Class()">Class</a> implementation to enable ROOT I/O</span>
-
-<a name="Q8T75B"></a><a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:IceCal2Root" title="IceCal2Root IceCal2Root::IceCal2Root(const char* name=&quot;IceCal2Root&quot;,const char* title=&quot;&quot;)">IceCal2Root</a>(<span class="keyword">const</span> <span class="keyword">char</span>* name,<span class="keyword">const</span> <span class="keyword">char</span>* title) : <a href="../NcJob.html">NcJob</a>(name,title)
-{
-<span class="comment">// Default constructor.</span>
- <a href="../IceCal2Root.html#IceCal2Root:fAmacalFileName" title="TString IceCal2Root::fAmacalFileName">fAmacalFileName</a>=<span class="string">""</span>;
- <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqFileName" title="TString IceCal2Root::fTWRDaqFileName">fTWRDaqFileName</a>=<span class="string">""</span>;
- <a href="../IceCal2Root.html#IceCal2Root:fRootFileName" title="TString IceCal2Root::fRootFileName">fRootFileName</a>=<span class="string">""</span>;
- <a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>=0;
-
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>=0;
- <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>=0;
- <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>=0;
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="Ag3SqD"></a><a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:_IceCal2Root" title="void IceCal2Root::~IceCal2Root()">~IceCal2Root</a>()
-{
-<span class="comment">// Default destructor.</span>
-
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>)
- {
-  <span class="keyword">delete</span> <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>;
-  <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>=0;
- }
-
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>)
- {
-  <span class="keyword">delete</span> <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>;
-  <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>=0;
- }
-
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>)
- {
-  <span class="keyword">delete</span> <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>;
-  <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>=0;
- }
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="OL9UdC"></a><span class="keyword">void</span> <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:SetAmacalibFile" title="void IceCal2Root::SetAmacalibFile(TString name)">SetAmacalibFile</a>(TString name)
-{
-<span class="comment">// Set the name of the Amacalib MuDaq input file.</span>
- <a href="../IceCal2Root.html#IceCal2Root:fAmacalFileName" title="TString IceCal2Root::fAmacalFileName">fAmacalFileName</a>=name;
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="Je_9tE"></a><span class="keyword">void</span> <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:SetTWRDaqFile" title="void IceCal2Root::SetTWRDaqFile(TString name)">SetTWRDaqFile</a>(TString name)
-{
-<span class="comment">// Set the name of the TWRDaq calibration input file.</span>
- <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqFileName" title="TString IceCal2Root::fTWRDaqFileName">fTWRDaqFileName</a>=name;
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="pIbK3C"></a><span class="keyword">void</span> <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:SetOutputFile" title="void IceCal2Root::SetOutputFile(TString name)">SetOutputFile</a>(TString name)
-{
-<span class="comment">// Set the name of the ROOT output file.</span>
- <a href="../IceCal2Root.html#IceCal2Root:fRootFileName" title="TString IceCal2Root::fRootFileName">fRootFileName</a>=name;
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="ipxhT"></a>TDatabasePDG* <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:GetPDG" title="TDatabasePDG* IceCal2Root::GetPDG()">GetPDG</a>()
-{
-<span class="comment">// Provide pointer to the PDG database</span>
- <span class="keyword">return</span> <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>;
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="SWPOoC"></a><a href="../NcObjMatrix.html">NcObjMatrix</a>* <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:GetOMdbase" title="NcObjMatrix* IceCal2Root::GetOMdbase(TString name=&quot;MuDaq&quot;)">GetOMdbase</a>(TString name)
-{
-<span class="comment">// Provide pointer to the requested OM geometry, calib. etc... database.</span>
-<span class="comment">// Options for the <span class="string">"name"</span> specification are : MuDaq, TWRDaq.</span>
-<span class="comment">// For backward compatibility the default is name=<span class="string">"MuDaq"</span>.</span>
-
- <span class="keyword">if</span> (name==<span class="string">"MuDaq"</span>) <span class="keyword">return</span> <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>;
- <span class="keyword">if</span> (name==<span class="string">"TWRDaq"</span>) <span class="keyword">return</span> <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>;
- <span class="keyword">return</span> 0;
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="hSUIdE"></a><span class="keyword">void</span> <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:Exec" title="void IceCal2Root::Exec(Option_t* opt)">Exec</a>(<a href="../ListOfTypes.html#Option_t">Option_t</a>* opt)
-{
-<span class="comment">// Job to convert the (ascii) database info into the IcePack structure.</span>
-<span class="comment">//</span>
-<span class="comment">// Notes :</span>
-<span class="comment">// -------</span>
-<span class="comment">// 1) This class is derived from <a href="../NcJob.html">NcJob</a>, allowing a task based processing.</span>
-<span class="comment">//    After conversion of the (ascii) dbase data into the IcePack structure,</span>
-<span class="comment">//    the processing of all available sub-tasks (if any) is invoked.</span>
-<span class="comment">//    This provides a facility to investigate/use the dbase data in</span>
-<span class="comment">//    subsequent (sub)tasks processing before the final data structures</span>
-<span class="comment">//    are written out.</span>
-<span class="comment">//</span>
-<span class="comment">// 2) Creation of a TFolder via the argument of the <a href="../NcJob.html#NcJob:ExecuteJob" title="void NcJob::ExecuteJob(Int_t mode=0)">ExecuteJob</a> statement</span>
-<span class="comment">//    makes all created database objects accessible to subsequent tasks</span>
-<span class="comment">//    via the TFolder::<a href="../#TObject:FindObject" title="TObject* TObject::FindObject(const char* name) or overloads">FindObject</a> facility.</span>
-
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>)
- {
-  <span class="keyword">delete</span> <a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>;
-  <a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>=0;
- }
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fRootFileName" title="TString IceCal2Root::fRootFileName">fRootFileName</a> != <span class="string">""</span>)
- {
-  <a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>=<span class="keyword">new</span> TFile(<a href="../IceCal2Root.html#IceCal2Root:fRootFileName" title="TString IceCal2Root::fRootFileName">fRootFileName</a>.Data(),<span class="string">"RECREATE"</span>,<span class="string">"Calibration data in IcePack structure"</span>);
- }
-
- <span class="comment">// Create the particle database and extend it with some F2000 specific definitions</span>
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>) <span class="keyword">delete</span> <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>;
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>=<span class="keyword">new</span> TDatabasePDG();
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;<a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"PDG-DBASE"</span>,<span class="string">"The extended PDG particle database"</span>);
- <a href="../ListOfTypes.html#Double_t">Double_t</a> me=<a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;GetParticle(11)-&gt;Mass();
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"brems"</span>   ,<span class="string">"brems"</span>   ,0,1,0,0,<span class="string">"none"</span>,10001001,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"deltae"</span>  ,<span class="string">"deltae"</span>  ,me,1,0,-3,<span class="string">"Lepton"</span>,10001002,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"pairprod"</span>,<span class="string">"pairprod"</span>,0,1,0,0,<span class="string">"none"</span>,10001003,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"nucl_int"</span>,<span class="string">"nucl_Int"</span>,0,1,0,0,<span class="string">"none"</span>,10001004,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"mu_pair"</span> ,<span class="string">"mu_pair"</span> ,0,1,0,0,<span class="string">"none"</span>,10001005,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"hadrons"</span> ,<span class="string">"hadrons"</span> ,0,1,0,0,<span class="string">"none"</span>,10001006,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"fiberlaser"</span>,<span class="string">"fiberlaser"</span>,0,1,0,0,<span class="string">"none"</span>,10002100,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"n2laser"</span>   ,<span class="string">"n2laser"</span>   ,0,1,0,0,<span class="string">"none"</span>,10002101,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"yaglaser"</span>  ,<span class="string">"yaglaser"</span>  ,0,1,0,0,<span class="string">"none"</span>,10002201,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"z_primary"</span>,<span class="string">"z_primary"</span>,0,1,0,0,<span class="string">"none"</span>,10003000,0,0);
- <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;AddParticle(<span class="string">"a_primary"</span>,<span class="string">"a_primary"</span>,0,1,0,0,<span class="string">"none"</span>,10003500,0,0);
-
- <span class="comment">// Initialise the job working environment</span>
- <a href="../NcJob.html#NcJob:AddObject" title="void NcJob::AddObject(TObject* obj)">AddObject</a>(<a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>);
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>) <a href="../NcJob.html#NcJob:AddObject" title="void NcJob::AddObject(TObject* obj)">AddObject</a>(<a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>);
-
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *** Start processing of job "</span> &lt;&lt; <a href="../#TNamed:GetName" title="const char* TNamed::GetName()">GetName</a>() &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ***"</span> &lt;&lt; endl;
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" Amacalib MuDaq input file : "</span> &lt;&lt; <a href="../IceCal2Root.html#IceCal2Root:fAmacalFileName" title="TString IceCal2Root::fAmacalFileName">fAmacalFileName</a>.Data() &lt;&lt; endl;
- <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" TWRDaq input file : "</span> &lt;&lt; <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqFileName" title="TString IceCal2Root::fTWRDaqFileName">fTWRDaqFileName</a>.Data() &lt;&lt; endl;
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>) <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" ROOT output file : "</span> &lt;&lt; <a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>-&gt;<a href="../#TNamed:GetName" title="const char* TNamed::GetName()">GetName</a>() &lt;&lt; endl;
-
- <a href="../IceCal2Root.html#IceCal2Root:GetMuDaqData" title="void IceCal2Root::GetMuDaqData()">GetMuDaqData</a>();
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>) <a href="../NcJob.html#NcJob:AddObject" title="void NcJob::AddObject(TObject* obj)">AddObject</a>(<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>);
-
- <a href="../IceCal2Root.html#IceCal2Root:GetTWRDaqData" title="void IceCal2Root::GetTWRDaqData()">GetTWRDaqData</a>();
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>) <a href="../NcJob.html#NcJob:AddObject" title="void NcJob::AddObject(TObject* obj)">AddObject</a>(<a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>);
-
- <a href="../NcJob.html#NcJob:ListEnvironment" title="void NcJob::ListEnvironment()">ListEnvironment</a>();
-
- <span class="comment">// Invoke all available sub-tasks (if any)</span>
- <a href="../#TTask:CleanTasks" title="void TTask::CleanTasks()">CleanTasks</a>();
- <a href="../#TTask:ExecuteTasks" title="void TTask::ExecuteTasks(Option_t* option)">ExecuteTasks</a>(opt);
-
- <span class="comment">// <a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a> the datastructures to the output file</span>
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>)
- {
-  <a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>-&gt;cd();
-  <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>) <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
-  <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>) <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>-><a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
-  <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>) <a href="../IceCal2Root.html#IceCal2Root:fPdg" title="TDatabasePDG* IceCal2Root::fPdg">fPdg</a>-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
- }
-
- <span class="comment">// Flush remaining memory resident data to the output file</span>
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>) <a href="../IceCal2Root.html#IceCal2Root:fOutfile" title="TFile* IceCal2Root::fOutfile">fOutfile</a>-&gt;<a href="../#TObject:Write" title="Int_t TObject::Write(const char* name=0,Int_t option=0,Int_t bufsize=0) or overloads">Write</a>();
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="xb7Qi"></a><span class="keyword">void</span> <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:GetMuDaqData" title="void IceCal2Root::GetMuDaqData()">GetMuDaqData</a>()
-{
-<span class="comment">// Obtain all the MuDaq geometry, calibration and Xtalk data.</span>
-
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fAmacalFileName" title="TString IceCal2Root::fAmacalFileName">fAmacalFileName</a>==<span class="string">""</span>)
- {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceCal2Root GetMuDaqData* No amacalib input file specified."</span> &lt;&lt; endl;
-  <span class="keyword">return</span>;
- }
-
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.clear();
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.open(<a href="../IceCal2Root.html#IceCal2Root:fAmacalFileName" title="TString IceCal2Root::fAmacalFileName">fAmacalFileName</a>.Data());
-
- <span class="keyword">if</span> (!<a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.good())
- {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceCal2Root GetMuDaqData* Bad input file : "</span> &lt;&lt; <a href="../IceCal2Root.html#IceCal2Root:fAmacalFileName" title="TString IceCal2Root::fAmacalFileName">fAmacalFileName</a>.Data() &lt;&lt; endl;
-  <span class="keyword">return</span>;
- }
-
- <span class="comment">// The MuDaq OM database object</span>
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>)
- {
-  <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:Reset" title="void NcObjMatrix::Reset()">Reset</a>();
- }
- <span class="keyword">else</span>
- {
-  <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>=<span class="keyword">new</span> <a href="../NcObjMatrix.html">NcObjMatrix</a>();
-  <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"MuDaq-OMDBASE"</span>,<span class="string">"The MuDaq OM geometry, calib. etc... database"</span>);
-  <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:SetOwner" title="void NcObjMatrix::SetOwner(Int_t own=1)">SetOwner</a>();
- }
-
- <span class="comment">// Prescription of the various (de)calibration functions</span>
- TF1 fadccal(<span class="string">"fadccal"</span>,<span class="string">"(x-[1])*[0]"</span>);
- TF1 fadcdecal(<span class="string">"fadcdecal"</span>,<span class="string">"(x/[0])+[1]"</span>);
- fadccal.SetParName(0,<span class="string">"BETA-ADC"</span>);
- fadccal.SetParName(1,<span class="string">"PED-ADC"</span>);
- fadcdecal.SetParName(0,<span class="string">"BETA-ADC"</span>);
- fadcdecal.SetParName(1,<span class="string">"PED-ADC"</span>);
-
- TF1 ftdccal(<span class="string">"ftdccal"</span>,<span class="string">"(x*[0])-[1]-([0]-1.)*32767.-[2]/sqrt([3])"</span>);
- TF1 ftdcdecal(<span class="string">"ftdcdecal"</span>,<span class="string">"(x+([0]-1.)*32767.+[1]+[2]/sqrt([3]))/[0]"</span>);
- ftdccal.SetParName(0,<span class="string">"BETA-TDC"</span>);
- ftdccal.SetParName(1,<span class="string">"T0"</span>);
- ftdccal.SetParName(2,<span class="string">"ALPHA-TDC"</span>);
- ftdccal.SetParName(3,<span class="string">"ADC-SLEW"</span>);
- ftdcdecal.SetParName(0,<span class="string">"BETA-TDC"</span>);
- ftdcdecal.SetParName(1,<span class="string">"T0"</span>);
- ftdcdecal.SetParName(2,<span class="string">"ALPHA-TDC"</span>);
- ftdcdecal.SetParName(3,<span class="string">"ADC-SLEW"</span>);
-
- TF1 ftotcal(<span class="string">"ftotcal"</span>,<span class="string">"x*[0]"</span>);
- TF1 ftotdecal(<span class="string">"ftotdecal"</span>,<span class="string">"x/[0]"</span>);
- ftotcal.SetParName(0,<span class="string">"BETA-TOT"</span>);
- ftotdecal.SetParName(0,<span class="string">"BETA-TOT"</span>);
-
- <span class="comment">// The cross talk probability function</span>
- TF1 fxtalkp(<span class="string">"fxtalkp"</span>,<span class="string">"(1.+[2]-[2]+[3]-[3])/(1.+exp(([0]-x)/[1]))"</span>);
- fxtalkp.SetParName(0,<span class="string">"C"</span>);
- fxtalkp.SetParName(1,<span class="string">"B"</span>);
- fxtalkp.SetParName(2,<span class="string">"dLE-min"</span>);
- fxtalkp.SetParName(3,<span class="string">"dLE-max"</span>);
-
- <span class="comment">// The basic OM contents</span>
- <a href="../IceAOM.html">IceAOM</a> om;
-
- <span class="comment">// Slots to hold the various (de)calibration functions</span>
- om.AddNamedSlot(<span class="string">"ADC"</span>);
- om.AddNamedSlot(<span class="string">"LE"</span>);
- om.AddNamedSlot(<span class="string">"TOT"</span>);
- <span class="comment">// Slots with hardware parameters</span>
- om.AddNamedSlot(<span class="string">"TYPE"</span>);
- om.AddNamedSlot(<span class="string">"ORIENT"</span>);
-<span class="comment">/// om.AddNamedSlot(<span class="string">"THRESH"</span>);</span>
-<span class="comment">/// om.AddNamedSlot(<span class="string">"SENSIT"</span>);</span>
-<span class="comment">/// om.AddNamedSlot(<span class="string">"READOUT"</span>); // 0=unknown 1=electrical 2=optical 3=digital</span>
-
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.seekg(0); <span class="comment">// Position at beginning of file</span>
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; dec;   <span class="comment">// Make sure all integers starting with 0 are taken in decimal format</span>
-
- TString s;
- <a href="../ListOfTypes.html#Int_t">Int_t</a> jmod,type,serial,string,ix,iy,iz,ori;
- <a href="../ListOfTypes.html#Float_t">Float_t</a> costh=0;
-<span class="comment">/// <a href="../ListOfTypes.html#Float_t">Float_t</a> thresh=0;</span>
-<span class="comment">/// <a href="../ListOfTypes.html#Float_t">Float_t</a> sensit=1;</span>
-<span class="comment">/// <a href="../ListOfTypes.html#Float_t">Float_t</a> readout=0;</span>
- <a href="../ListOfTypes.html#Double_t">Double_t</a> pos[3]={0,0,0};
- <a href="../ListOfTypes.html#Float_t">Float_t</a> ped,beta,alpha;
- <a href="../ListOfTypes.html#Int_t">Int_t</a> pol;
- <a href="../ListOfTypes.html#Float_t">Float_t</a> totped;
- <a href="../ListOfTypes.html#Int_t">Int_t</a> jtrans,jrec;
- <a href="../ListOfTypes.html#Float_t">Float_t</a> c,b,dlemin,dlemax;
- <a href="../IceAOM.html">IceAOM</a>* omx=0;
- TF1* fcal=0;
- TF1* fdecal=0;
- <span class="keyword">while</span> (<a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; s)
- {
-  <span class="keyword">if</span> (s == <span class="string">"P"</span>) <span class="comment">// <a href="../#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> the Geom data</span>
-  {
-   <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; jmod &gt;&gt; type &gt;&gt; serial &gt;&gt; string &gt;&gt; ix &gt;&gt; iy &gt;&gt; iz &gt;&gt; ori;
-   omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) or overloads">GetObject</a>(jmod,1);
-   <span class="keyword">if</span> (!omx)
-   {
-    omx=<span class="keyword">new</span> <a href="../IceAOM.html">IceAOM</a>(om);
-    omx-&gt;<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(jmod);
-    <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)">EnterObject</a>(jmod,1,omx);
-   }
-   pos[0]=<span class="keyword">double</span>(ix)/1000.;
-   pos[1]=<span class="keyword">double</span>(iy)/1000.;
-   pos[2]=<span class="keyword">double</span>(iz)/1000.;
-   omx-&gt;SetPosition(pos,<span class="string">"car"</span>);
-   costh=1;
-   <span class="keyword">if</span> (ori==2) costh=-1;
-   omx-&gt;SetSignal(type,<span class="string">"TYPE"</span>);
-   omx-&gt;SetSignal(costh,<span class="string">"ORIENT"</span>);
-<span class="comment">///   omx-&gt;SetSignal(thresh,<span class="string">"THRESH"</span>);</span>
-<span class="comment">///   omx-&gt;SetSignal(sensit,<span class="string">"SENSIT"</span>);</span>
-<span class="comment">///   omx-&gt;SetSignal(readout,<span class="string">"READOUT"</span>);</span>
-  }
-  <span class="keyword">else</span> <span class="keyword">if</span> (s == <span class="string">"T"</span>) <span class="comment">// <a href="../#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> the Time calibration constants</span>
-  {
-   <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; jmod &gt;&gt; ped &gt;&gt; beta &gt;&gt; alpha &gt;&gt; pol;
-   omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) or overloads">GetObject</a>(jmod,1);
-   <span class="keyword">if</span> (!omx)
-   {
-    omx=<span class="keyword">new</span> <a href="../IceAOM.html">IceAOM</a>(om);
-    omx-&gt;<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(jmod);
-    <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)">EnterObject</a>(jmod,1,omx);
-   }
-
-   omx-&gt;SetCalFunction(&amp;ftdccal,<span class="string">"LE"</span>);
-   omx-&gt;SetDecalFunction(&amp;ftdcdecal,<span class="string">"LE"</span>);
-   omx-&gt;SetCalFunction(&amp;ftotcal,<span class="string">"TOT"</span>);
-   omx-&gt;SetDecalFunction(&amp;ftotdecal,<span class="string">"TOT"</span>);
-
-   <span class="comment">// Flag time slots of bad OMs as dead and don't provide time (de)calib functions</span>
-   <span class="keyword">if</span> (ped&lt;-1e5 || beta&lt;=0 || alpha&lt;0)
-   {
-    omx-&gt;SetDead(<span class="string">"LE"</span>);
-    omx-&gt;SetDead(<span class="string">"TOT"</span>);
-    omx-&gt;SetCalFunction(0,<span class="string">"LE"</span>);
-    omx-&gt;SetDecalFunction(0,<span class="string">"LE"</span>);
-    omx-&gt;SetCalFunction(0,<span class="string">"TOT"</span>);
-    omx-&gt;SetDecalFunction(0,<span class="string">"TOT"</span>);
-   }
-
-   fcal=omx-&gt;GetCalFunction(<span class="string">"LE"</span>);
-   fdecal=omx-&gt;GetDecalFunction(<span class="string">"LE"</span>);
-   <span class="keyword">if</span> (fcal)
-   {
-    fcal-&gt;SetParameter(0,beta);
-    fcal-&gt;SetParameter(1,ped);
-    fcal-&gt;SetParameter(2,alpha);
-    fcal-&gt;SetParameter(3,1.e20);
-   }
-   <span class="keyword">if</span> (fdecal)
-   {
-    fdecal-&gt;SetParameter(0,beta);
-    <span class="keyword">if</span> (!beta) fdecal-&gt;SetParameter(0,1);
-    fdecal-&gt;SetParameter(1,ped);
-    fdecal-&gt;SetParameter(2,alpha);
-    fdecal-&gt;SetParameter(3,1.e20);
-   }
-
-   fcal=omx-&gt;GetCalFunction(<span class="string">"TOT"</span>);
-   fdecal=omx-&gt;GetDecalFunction(<span class="string">"TOT"</span>);
-   <span class="keyword">if</span> (fcal)
-   {
-    fcal-&gt;SetParameter(0,beta);
-   }
-   <span class="keyword">if</span> (fdecal)
-   {
-    fdecal-&gt;SetParameter(0,beta);
-   }
-  }
-  <span class="keyword">else</span> <span class="keyword">if</span> (s == <span class="string">"A"</span>) <span class="comment">// <a href="../#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> the Amplitude calibration constants</span>
-  {
-   <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; jmod &gt;&gt; ped &gt;&gt; beta &gt;&gt; totped &gt;&gt; pol;
-   omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) or overloads">GetObject</a>(jmod,1);
-   <span class="keyword">if</span> (!omx)
-   {
-    omx=<span class="keyword">new</span> <a href="../IceAOM.html">IceAOM</a>(om);
-    omx-&gt;<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(jmod);
-    <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)">EnterObject</a>(jmod,1,omx);
-   }
-
-   omx-&gt;SetCalFunction(&amp;fadccal,<span class="string">"ADC"</span>);
-   omx-&gt;SetDecalFunction(&amp;fadcdecal,<span class="string">"ADC"</span>);
-
-   <span class="comment">// Flag amplitude slots of bad OMs as dead and don't provide amplitude (de)calib functions</span>
-   <span class="keyword">if</span> (ped&lt;-1e5 || beta&lt;=0)
-   {
-    omx-&gt;SetDead(<span class="string">"ADC"</span>);
-    omx-&gt;SetCalFunction(0,<span class="string">"ADC"</span>);
-    omx-&gt;SetDecalFunction(0,<span class="string">"ADC"</span>);
-   }
-   <span class="keyword">if</span> (totped&lt;-1e5)
-   {
-    omx-&gt;SetDead(<span class="string">"TOT"</span>);
-    omx-&gt;SetCalFunction(0,<span class="string">"TOT"</span>);
-    omx-&gt;SetDecalFunction(0,<span class="string">"TOT"</span>);
-   }
-
-   fcal=omx-&gt;GetCalFunction(<span class="string">"ADC"</span>);
-   fdecal=omx-&gt;GetDecalFunction(<span class="string">"ADC"</span>);
-   <span class="keyword">if</span> (fcal)
-   {
-    fcal-&gt;SetParameter(0,beta);
-    fcal-&gt;SetParameter(1,ped);
-   }
-   <span class="keyword">if</span> (fdecal)
-   {
-    fdecal-&gt;SetParameter(0,beta);
-    <span class="keyword">if</span> (!beta) fdecal-&gt;SetParameter(0,1);
-    fdecal-&gt;SetParameter(1,ped);
-   }
-  }
-  <span class="keyword">else</span> <span class="keyword">if</span> (s == <span class="string">"K"</span>) <span class="comment">// <a href="../#TObject:Read" title="Int_t TObject::Read(const char* name)">Read</a> the cross talk probability constants</span>
-  {
-   <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; jtrans &gt;&gt; jrec &gt;&gt; c &gt;&gt; b &gt;&gt; dlemin &gt;&gt; dlemax;
-   omx=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) or overloads">GetObject</a>(jtrans,1);
-   <span class="keyword">if</span> (!omx)
-   {
-    omx=<span class="keyword">new</span> <a href="../IceAOM.html">IceAOM</a>(om);
-    omx-&gt;<a href="../#TObject:SetUniqueID" title="void TObject::SetUniqueID(UInt_t uid)">SetUniqueID</a>(jtrans);
-    <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)">EnterObject</a>(jtrans,1,omx);
-   }
-
-   TF1* fx=<span class="keyword">new</span> TF1(fxtalkp);
-   fx-&gt;SetParameter(0,c);
-   <span class="keyword">if</span> (b)
-   {
-    fx-&gt;SetParameter(1,b);
-   }
-   <span class="keyword">else</span>
-   {
-    fx-&gt;SetParameter(1,1);
-   }
-   fx-&gt;SetParameter(2,dlemin);
-   fx-&gt;SetParameter(3,dlemax);
-   <a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)">EnterObject</a>(jtrans,jrec+1,fx);
-  }
-  <span class="keyword">else</span> <span class="comment">// Skip this line</span>
-  {
-   <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.ignore(99999,'\n');
-  } 
- }
-
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.close();
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-<a name="QWcQgE"></a><span class="keyword">void</span> <a href="../IceCal2Root.html">IceCal2Root</a>::<a href="../IceCal2Root.html#IceCal2Root:GetTWRDaqData" title="void IceCal2Root::GetTWRDaqData()">GetTWRDaqData</a>()
-{
-<span class="comment">// Obtain all the TWRDaq geometry and calibration data.</span>
-
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fTWRDaqFileName" title="TString IceCal2Root::fTWRDaqFileName">fTWRDaqFileName</a>==<span class="string">""</span>)
- {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceCal2Root GetTWRDaqData* No TWRDaq calibration data will be produced."</span> &lt;&lt; endl;
-  <span class="keyword">return</span>;
- }
-
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.clear();
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.open(<a href="../IceCal2Root.html#IceCal2Root:fTWRDaqFileName" title="TString IceCal2Root::fTWRDaqFileName">fTWRDaqFileName</a>.Data());
-
- <span class="keyword">if</span> (!<a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.good())
- {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceCal2Root GetTWRDaqData* Bad input file : "</span> &lt;&lt; <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqFileName" title="TString IceCal2Root::fTWRDaqFileName">fTWRDaqFileName</a>.Data() &lt;&lt; endl;
-  <span class="keyword">return</span>;
- }
-
- <span class="comment">// The geometry info will be obtained from the MuDaq OM database</span>
- <span class="keyword">if</span> (!<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>)
- {
-  <a href="../ListOfTypes.html#ostream">cout</a> &lt;&lt; <span class="string">" *IceCal2Root GetTWRDaqData* MuDaq OM geometry database is missing."</span> &lt;&lt; endl;
-  <span class="keyword">return</span>;
- }
-
- <span class="comment">// The TWRDaq OM database object</span>
- <span class="keyword">if</span> (<a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>)
- {
-  <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:Reset" title="void NcObjMatrix::Reset()">Reset</a>();
- }
- <span class="keyword">else</span>
- {
-  <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>=<span class="keyword">new</span> <a href="../NcObjMatrix.html">NcObjMatrix</a>();
-  <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>-><a href="../#TNamed:SetNameTitle" title="void TNamed::SetNameTitle(const char* name,const char* title)">SetNameTitle</a>(<span class="string">"TWRDaq-OMDBASE"</span>,<span class="string">"The TWRDaq OM geometry, calib. etc... database"</span>);
-  <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:SetOwner" title="void NcObjMatrix::SetOwner(Int_t own=1)">SetOwner</a>();
- }
-
- <span class="comment">// Prescription of the various (de)calibration functions</span>
- TF1 fadccal(<span class="string">"fadccal"</span>,<span class="string">"x*(5./4096.)/(50.*[0])"</span>);
- TF1 fadcdecal(<span class="string">"fadcdecal"</span>,<span class="string">"x*(50.*[0])/(5./4096.)"</span>);
- fadccal.SetParName(0,<span class="string">"nC/PE"</span>);
- fadcdecal.SetParName(0,<span class="string">"nC/PE"</span>);
-
- TF1 ftdccal(<span class="string">"ftdccal"</span>,<span class="string">"x-[0]"</span>);
- TF1 ftdcdecal(<span class="string">"ftdcdecal"</span>,<span class="string">"x+[0]"</span>);
- ftdccal.SetParName(0,<span class="string">"T0"</span>);
- ftdcdecal.SetParName(0,<span class="string">"T0"</span>);
-
- TF1 ftotcal(<span class="string">"ftotcal"</span>,<span class="string">"x*[0]"</span>);
- TF1 ftotdecal(<span class="string">"ftotdecal"</span>,<span class="string">"x/[0]"</span>);
- ftotcal.SetParName(0,<span class="string">"TOT-FACT"</span>);
- ftotdecal.SetParName(0,<span class="string">"TOT-FACT"</span>);
-
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.seekg(0); <span class="comment">// Position at beginning of file</span>
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; dec;   <span class="comment">// Make sure all integers starting with 0 are taken in decimal format</span>
-
- <a href="../ListOfTypes.html#Int_t">Int_t</a> jmod;
- <a href="../ListOfTypes.html#Float_t">Float_t</a> t0;
- <a href="../ListOfTypes.html#Float_t">Float_t</a> ncpe;
- <a href="../IceAOM.html">IceAOM</a>* omx=0;
- TF1* fcal=0;
- TF1* fdecal=0;
- <span class="keyword">while</span> (<a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a> &gt;&gt; jmod &gt;&gt; t0 &gt;&gt; ncpe)
- {
-  <span class="comment">// <a href="../#TNamed:Copy" title="void TNamed::Copy(TObject&amp; named)">Copy</a> the Geom data from the MuDaq OM database</span>
-  <a href="../IceAOM.html">IceAOM</a>* omg=(<a href="../IceAOM.html">IceAOM</a>*)<a href="../IceCal2Root.html#IceCal2Root:fMuDaqdb" title="NcObjMatrix* IceCal2Root::fMuDaqdb">fMuDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:GetObject" title="TObject* NcObjMatrix::GetObject(Int_t row,Int_t col) or overloads">GetObject</a>(jmod,1);
-  <span class="keyword">if</span> (!omg) <span class="keyword">continue</span>;
-
-  omx=<span class="keyword">new</span> <a href="../IceAOM.html">IceAOM</a>(*omg);
-
-  <span class="comment">// Reset all previous <span class="string">"dead"</span> flags</span>
-  omx-&gt;SetAlive(<span class="string">"ADC"</span>);
-  omx-&gt;SetAlive(<span class="string">"LE"</span>);
-  omx-&gt;SetAlive(<span class="string">"TOT"</span>);
-
-  <span class="comment">// Enter the TWRDaq (de)calibration functions</span>
-  omx-&gt;SetCalFunction(&amp;fadccal,<span class="string">"ADC"</span>);
-  omx-&gt;SetDecalFunction(&amp;fadcdecal,<span class="string">"ADC"</span>);
-  omx-&gt;SetCalFunction(&amp;ftdccal,<span class="string">"LE"</span>);
-  omx-&gt;SetDecalFunction(&amp;ftdcdecal,<span class="string">"LE"</span>);
-  omx-&gt;SetCalFunction(&amp;ftotcal,<span class="string">"TOT"</span>);
-  omx-&gt;SetDecalFunction(&amp;ftotdecal,<span class="string">"TOT"</span>);
-
-  <span class="comment">// Flag slots of bad OMs as dead and don't provide time (de)calib functions</span>
-  <span class="keyword">if</span> (ncpe&lt;=0)
-  {
-   omx-&gt;SetDead(<span class="string">"ADC"</span>);
-   omx-&gt;SetCalFunction(0,<span class="string">"ADC"</span>);
-   omx-&gt;SetDecalFunction(0,<span class="string">"ADC"</span>);
-  }
-  <span class="keyword">if</span> (t0&lt;-999)
-  {
-   omx-&gt;SetDead(<span class="string">"LE"</span>);
-   omx-&gt;SetDead(<span class="string">"TOT"</span>);
-   omx-&gt;SetCalFunction(0,<span class="string">"LE"</span>);
-   omx-&gt;SetDecalFunction(0,<span class="string">"LE"</span>);
-   omx-&gt;SetCalFunction(0,<span class="string">"TOT"</span>);
-   omx-&gt;SetDecalFunction(0,<span class="string">"TOT"</span>);
-  }
-
-  <span class="comment">// Set the TWRDaq (de)calibration function parameters for the good OMs</span>
-  fcal=omx-&gt;GetCalFunction(<span class="string">"ADC"</span>);
-  fdecal=omx-&gt;GetDecalFunction(<span class="string">"ADC"</span>);
-  <span class="keyword">if</span> (fcal)
-  {
-   fcal-&gt;SetParameter(0,ncpe);
-  }
-  <span class="keyword">if</span> (fdecal)
-  {
-   fdecal-&gt;SetParameter(0,ncpe);
-  }
-
-  fcal=omx-&gt;GetCalFunction(<span class="string">"LE"</span>);
-  fdecal=omx-&gt;GetDecalFunction(<span class="string">"LE"</span>);
-  <span class="keyword">if</span> (fcal)
-  {
-   fcal-&gt;SetParameter(0,t0);
-  }
-  <span class="keyword">if</span> (fdecal)
-  {
-   fdecal-&gt;SetParameter(0,t0);
-  }
-
-  fcal=omx-&gt;GetCalFunction(<span class="string">"TOT"</span>);
-  fdecal=omx-&gt;GetDecalFunction(<span class="string">"TOT"</span>);
-  <span class="keyword">if</span> (fcal)
-  {
-   fcal-&gt;SetParameter(0,1);
-  }
-  <span class="keyword">if</span> (fdecal)
-  {
-   fdecal-&gt;SetParameter(0,1);
-  }
-
-  <a href="../IceCal2Root.html#IceCal2Root:fTWRDaqdb" title="NcObjMatrix* IceCal2Root::fTWRDaqdb">fTWRDaqdb</a>-><a href="../NcObjMatrix.html#NcObjMatrix:EnterObject" title="void NcObjMatrix::EnterObject(Int_t row,Int_t col,TObject* obj)">EnterObject</a>(jmod,1,omx);
-
- } <span class="comment">// End of reading loop</span>
-
- <a href="../IceCal2Root.html#IceCal2Root:fInput" title="ifstream IceCal2Root::fInput">fInput</a>.close();
-}
-<span class="comment">///////////////////////////////////////////////////////////////////////////</span>
-</pre>
-<div id="linenums"><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="1" href="#1" class="ln">1</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="2" href="#2" class="ln">2</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="3" href="#3" class="ln">3</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="4" href="#4" class="ln">4</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="5" href="#5" class="ln">5</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="6" href="#6" class="ln">6</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="7" href="#7" class="ln">7</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="8" href="#8" class="ln">8</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="9" href="#9" class="ln">9</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="10" href="#10" class="ln">10</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="11" href="#11" class="ln">11</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="12" href="#12" class="ln">12</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="13" href="#13" class="ln">13</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="14" href="#14" class="ln">14</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="15" href="#15" class="ln">15</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="16" href="#16" class="ln">16</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="17" href="#17" class="ln">17</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="18" href="#18" class="ln">18</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="19" href="#19" class="ln">19</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="20" href="#20" class="ln">20</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="21" href="#21" class="ln">21</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="22" href="#22" class="ln">22</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="23" href="#23" class="ln">23</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="24" href="#24" class="ln">24</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="25" href="#25" class="ln">25</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="26" href="#26" class="ln">26</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="27" href="#27" class="ln">27</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="28" href="#28" class="ln">28</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="29" href="#29" class="ln">29</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="30" href="#30" class="ln">30</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="31" href="#31" class="ln">31</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="32" href="#32" class="ln">32</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="33" href="#33" class="ln">33</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="34" href="#34" class="ln">34</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="35" href="#35" class="ln">35</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="36" href="#36" class="ln">36</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="37" href="#37" class="ln">37</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="38" href="#38" class="ln">38</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="39" href="#39" class="ln">39</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="40" href="#40" class="ln">40</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="41" href="#41" class="ln">41</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="42" href="#42" class="ln">42</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="43" href="#43" class="ln">43</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="44" href="#44" class="ln">44</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="45" href="#45" class="ln">45</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="46" href="#46" class="ln">46</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="47" href="#47" class="ln">47</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="48" href="#48" class="ln">48</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="49" href="#49" class="ln">49</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="50" href="#50" class="ln">50</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="51" href="#51" class="ln">51</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="52" href="#52" class="ln">52</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="53" href="#53" class="ln">53</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="54" href="#54" class="ln">54</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="55" href="#55" class="ln">55</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="56" href="#56" class="ln">56</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="57" href="#57" class="ln">57</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="58" href="#58" class="ln">58</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="59" href="#59" class="ln">59</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="60" href="#60" class="ln">60</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="61" href="#61" class="ln">61</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="62" href="#62" class="ln">62</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="63" href="#63" class="ln">63</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="64" href="#64" class="ln">64</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="65" href="#65" class="ln">65</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="66" href="#66" class="ln">66</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="67" href="#67" class="ln">67</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="68" href="#68" class="ln">68</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="69" href="#69" class="ln">69</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="70" href="#70" class="ln">70</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="71" href="#71" class="ln">71</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="72" href="#72" class="ln">72</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="73" href="#73" class="ln">73</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="74" href="#74" class="ln">74</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="75" href="#75" class="ln">75</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="76" href="#76" class="ln">76</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="77" href="#77" class="ln">77</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="78" href="#78" class="ln">78</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="79" href="#79" class="ln">79</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="80" href="#80" class="ln">80</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="81" href="#81" class="ln">81</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="82" href="#82" class="ln">82</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="83" href="#83" class="ln">83</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="84" href="#84" class="ln">84</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="85" href="#85" class="ln">85</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="86" href="#86" class="ln">86</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="87" href="#87" class="ln">87</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="88" href="#88" class="ln">88</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="89" href="#89" class="ln">89</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="90" href="#90" class="ln">90</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="91" href="#91" class="ln">91</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="92" href="#92" class="ln">92</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="93" href="#93" class="ln">93</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="94" href="#94" class="ln">94</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="95" href="#95" class="ln">95</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="96" href="#96" class="ln">96</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="97" href="#97" class="ln">97</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="98" href="#98" class="ln">98</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="99" href="#99" class="ln">99</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="100" href="#100" class="ln">100</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="101" href="#101" class="ln">101</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="102" href="#102" class="ln">102</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="103" href="#103" class="ln">103</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="104" href="#104" class="ln">104</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="105" href="#105" class="ln">105</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="106" href="#106" class="ln">106</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="107" href="#107" class="ln">107</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="108" href="#108" class="ln">108</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="109" href="#109" class="ln">109</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="110" href="#110" class="ln">110</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="111" href="#111" class="ln">111</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="112" href="#112" class="ln">112</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="113" href="#113" class="ln">113</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="114" href="#114" class="ln">114</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="115" href="#115" class="ln">115</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="116" href="#116" class="ln">116</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="117" href="#117" class="ln">117</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="118" href="#118" class="ln">118</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="119" href="#119" class="ln">119</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="120" href="#120" class="ln">120</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="121" href="#121" class="ln">121</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="122" href="#122" class="ln">122</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="123" href="#123" class="ln">123</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="124" href="#124" class="ln">124</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="125" href="#125" class="ln">125</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="126" href="#126" class="ln">126</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="127" href="#127" class="ln">127</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="128" href="#128" class="ln">128</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="129" href="#129" class="ln">129</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="130" href="#130" class="ln">130</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="131" href="#131" class="ln">131</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="132" href="#132" class="ln">132</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="133" href="#133" class="ln">133</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="134" href="#134" class="ln">134</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="135" href="#135" class="ln">135</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="136" href="#136" class="ln">136</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="137" href="#137" class="ln">137</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="138" href="#138" class="ln">138</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="139" href="#139" class="ln">139</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="140" href="#140" class="ln">140</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="141" href="#141" class="ln">141</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="142" href="#142" class="ln">142</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="143" href="#143" class="ln">143</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="144" href="#144" class="ln">144</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="145" href="#145" class="ln">145</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="146" href="#146" class="ln">146</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="147" href="#147" class="ln">147</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="148" href="#148" class="ln">148</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="149" href="#149" class="ln">149</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="150" href="#150" class="ln">150</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="151" href="#151" class="ln">151</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="152" href="#152" class="ln">152</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="153" href="#153" class="ln">153</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="154" href="#154" class="ln">154</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="155" href="#155" class="ln">155</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="156" href="#156" class="ln">156</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="157" href="#157" class="ln">157</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="158" href="#158" class="ln">158</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="159" href="#159" class="ln">159</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="160" href="#160" class="ln">160</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="161" href="#161" class="ln">161</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="162" href="#162" class="ln">162</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="163" href="#163" class="ln">163</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="164" href="#164" class="ln">164</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="165" href="#165" class="ln">165</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="166" href="#166" class="ln">166</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="167" href="#167" class="ln">167</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="168" href="#168" class="ln">168</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="169" href="#169" class="ln">169</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="170" href="#170" class="ln">170</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="171" href="#171" class="ln">171</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="172" href="#172" class="ln">172</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="173" href="#173" class="ln">173</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="174" href="#174" class="ln">174</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="175" href="#175" class="ln">175</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="176" href="#176" class="ln">176</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="177" href="#177" class="ln">177</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="178" href="#178" class="ln">178</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="179" href="#179" class="ln">179</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="180" href="#180" class="ln">180</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="181" href="#181" class="ln">181</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="182" href="#182" class="ln">182</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="183" href="#183" class="ln">183</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="184" href="#184" class="ln">184</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="185" href="#185" class="ln">185</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="186" href="#186" class="ln">186</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="187" href="#187" class="ln">187</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="188" href="#188" class="ln">188</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="189" href="#189" class="ln">189</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="190" href="#190" class="ln">190</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="191" href="#191" class="ln">191</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="192" href="#192" class="ln">192</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="193" href="#193" class="ln">193</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="194" href="#194" class="ln">194</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="195" href="#195" class="ln">195</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="196" href="#196" class="ln">196</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="197" href="#197" class="ln">197</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="198" href="#198" class="ln">198</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="199" href="#199" class="ln">199</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="200" href="#200" class="ln">200</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="201" href="#201" class="ln">201</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="202" href="#202" class="ln">202</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="203" href="#203" class="ln">203</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="204" href="#204" class="ln">204</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="205" href="#205" class="ln">205</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="206" href="#206" class="ln">206</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="207" href="#207" class="ln">207</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="208" href="#208" class="ln">208</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="209" href="#209" class="ln">209</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="210" href="#210" class="ln">210</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="211" href="#211" class="ln">211</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="212" href="#212" class="ln">212</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="213" href="#213" class="ln">213</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="214" href="#214" class="ln">214</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="215" href="#215" class="ln">215</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="216" href="#216" class="ln">216</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="217" href="#217" class="ln">217</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="218" href="#218" class="ln">218</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="219" href="#219" class="ln">219</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="220" href="#220" class="ln">220</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="221" href="#221" class="ln">221</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="222" href="#222" class="ln">222</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="223" href="#223" class="ln">223</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="224" href="#224" class="ln">224</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="225" href="#225" class="ln">225</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="226" href="#226" class="ln">226</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="227" href="#227" class="ln">227</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="228" href="#228" class="ln">228</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="229" href="#229" class="ln">229</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="230" href="#230" class="ln">230</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="231" href="#231" class="ln">231</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="232" href="#232" class="ln">232</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="233" href="#233" class="ln">233</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="234" href="#234" class="ln">234</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="235" href="#235" class="ln">235</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="236" href="#236" class="ln">236</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="237" href="#237" class="ln">237</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="238" href="#238" class="ln">238</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="239" href="#239" class="ln">239</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="240" href="#240" class="ln">240</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="241" href="#241" class="ln">241</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="242" href="#242" class="ln">242</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="243" href="#243" class="ln">243</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="244" href="#244" class="ln">244</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="245" href="#245" class="ln">245</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="246" href="#246" class="ln">246</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="247" href="#247" class="ln">247</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="248" href="#248" class="ln">248</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="249" href="#249" class="ln">249</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="250" href="#250" class="ln">250</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="251" href="#251" class="ln">251</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="252" href="#252" class="ln">252</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="253" href="#253" class="ln">253</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="254" href="#254" class="ln">254</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="255" href="#255" class="ln">255</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="256" href="#256" class="ln">256</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="257" href="#257" class="ln">257</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="258" href="#258" class="ln">258</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="259" href="#259" class="ln">259</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="260" href="#260" class="ln">260</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="261" href="#261" class="ln">261</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="262" href="#262" class="ln">262</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="263" href="#263" class="ln">263</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="264" href="#264" class="ln">264</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="265" href="#265" class="ln">265</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="266" href="#266" class="ln">266</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="267" href="#267" class="ln">267</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="268" href="#268" class="ln">268</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="269" href="#269" class="ln">269</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="270" href="#270" class="ln">270</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="271" href="#271" class="ln">271</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="272" href="#272" class="ln">272</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="273" href="#273" class="ln">273</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="274" href="#274" class="ln">274</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="275" href="#275" class="ln">275</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="276" href="#276" class="ln">276</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="277" href="#277" class="ln">277</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="278" href="#278" class="ln">278</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="279" href="#279" class="ln">279</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="280" href="#280" class="ln">280</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="281" href="#281" class="ln">281</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="282" href="#282" class="ln">282</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="283" href="#283" class="ln">283</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="284" href="#284" class="ln">284</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="285" href="#285" class="ln">285</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="286" href="#286" class="ln">286</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="287" href="#287" class="ln">287</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="288" href="#288" class="ln">288</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="289" href="#289" class="ln">289</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="290" href="#290" class="ln">290</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="291" href="#291" class="ln">291</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="292" href="#292" class="ln">292</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="293" href="#293" class="ln">293</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="294" href="#294" class="ln">294</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="295" href="#295" class="ln">295</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="296" href="#296" class="ln">296</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="297" href="#297" class="ln">297</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="298" href="#298" class="ln">298</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="299" href="#299" class="ln">299</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="300" href="#300" class="ln">300</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="301" href="#301" class="ln">301</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="302" href="#302" class="ln">302</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="303" href="#303" class="ln">303</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="304" href="#304" class="ln">304</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="305" href="#305" class="ln">305</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="306" href="#306" class="ln">306</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="307" href="#307" class="ln">307</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="308" href="#308" class="ln">308</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="309" href="#309" class="ln">309</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="310" href="#310" class="ln">310</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="311" href="#311" class="ln">311</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="312" href="#312" class="ln">312</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="313" href="#313" class="ln">313</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="314" href="#314" class="ln">314</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="315" href="#315" class="ln">315</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="316" href="#316" class="ln">316</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="317" href="#317" class="ln">317</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="318" href="#318" class="ln">318</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="319" href="#319" class="ln">319</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="320" href="#320" class="ln">320</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="321" href="#321" class="ln">321</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="322" href="#322" class="ln">322</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="323" href="#323" class="ln">323</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="324" href="#324" class="ln">324</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="325" href="#325" class="ln">325</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="326" href="#326" class="ln">326</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="327" href="#327" class="ln">327</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="328" href="#328" class="ln">328</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="329" href="#329" class="ln">329</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="330" href="#330" class="ln">330</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="331" href="#331" class="ln">331</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="332" href="#332" class="ln">332</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="333" href="#333" class="ln">333</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="334" href="#334" class="ln">334</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="335" href="#335" class="ln">335</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="336" href="#336" class="ln">336</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="337" href="#337" class="ln">337</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="338" href="#338" class="ln">338</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="339" href="#339" class="ln">339</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="340" href="#340" class="ln">340</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="341" href="#341" class="ln">341</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="342" href="#342" class="ln">342</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="343" href="#343" class="ln">343</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="344" href="#344" class="ln">344</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="345" href="#345" class="ln">345</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="346" href="#346" class="ln">346</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="347" href="#347" class="ln">347</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="348" href="#348" class="ln">348</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="349" href="#349" class="ln">349</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="350" href="#350" class="ln">350</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="351" href="#351" class="ln">351</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="352" href="#352" class="ln">352</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="353" href="#353" class="ln">353</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="354" href="#354" class="ln">354</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="355" href="#355" class="ln">355</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="356" href="#356" class="ln">356</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="357" href="#357" class="ln">357</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="358" href="#358" class="ln">358</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="359" href="#359" class="ln">359</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="360" href="#360" class="ln">360</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="361" href="#361" class="ln">361</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="362" href="#362" class="ln">362</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="363" href="#363" class="ln">363</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="364" href="#364" class="ln">364</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="365" href="#365" class="ln">365</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="366" href="#366" class="ln">366</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="367" href="#367" class="ln">367</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="368" href="#368" class="ln">368</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="369" href="#369" class="ln">369</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="370" href="#370" class="ln">370</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="371" href="#371" class="ln">371</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="372" href="#372" class="ln">372</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="373" href="#373" class="ln">373</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="374" href="#374" class="ln">374</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="375" href="#375" class="ln">375</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="376" href="#376" class="ln">376</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="377" href="#377" class="ln">377</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="378" href="#378" class="ln">378</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="379" href="#379" class="ln">379</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="380" href="#380" class="ln">380</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="381" href="#381" class="ln">381</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="382" href="#382" class="ln">382</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="383" href="#383" class="ln">383</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="384" href="#384" class="ln">384</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="385" href="#385" class="ln">385</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="386" href="#386" class="ln">386</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="387" href="#387" class="ln">387</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="388" href="#388" class="ln">388</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="389" href="#389" class="ln">389</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="390" href="#390" class="ln">390</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="391" href="#391" class="ln">391</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="392" href="#392" class="ln">392</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="393" href="#393" class="ln">393</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="394" href="#394" class="ln">394</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="395" href="#395" class="ln">395</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="396" href="#396" class="ln">396</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="397" href="#397" class="ln">397</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="398" href="#398" class="ln">398</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="399" href="#399" class="ln">399</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="400" href="#400" class="ln">400</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="401" href="#401" class="ln">401</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="402" href="#402" class="ln">402</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="403" href="#403" class="ln">403</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="404" href="#404" class="ln">404</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="405" href="#405" class="ln">405</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="406" href="#406" class="ln">406</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="407" href="#407" class="ln">407</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="408" href="#408" class="ln">408</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="409" href="#409" class="ln">409</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="410" href="#410" class="ln">410</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="411" href="#411" class="ln">411</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="412" href="#412" class="ln">412</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="413" href="#413" class="ln">413</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="414" href="#414" class="ln">414</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="415" href="#415" class="ln">415</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="416" href="#416" class="ln">416</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="417" href="#417" class="ln">417</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="418" href="#418" class="ln">418</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="419" href="#419" class="ln">419</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="420" href="#420" class="ln">420</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="421" href="#421" class="ln">421</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="422" href="#422" class="ln">422</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="423" href="#423" class="ln">423</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="424" href="#424" class="ln">424</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="425" href="#425" class="ln">425</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="426" href="#426" class="ln">426</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="427" href="#427" class="ln">427</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="428" href="#428" class="ln">428</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="429" href="#429" class="ln">429</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="430" href="#430" class="ln">430</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="431" href="#431" class="ln">431</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="432" href="#432" class="ln">432</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="433" href="#433" class="ln">433</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="434" href="#434" class="ln">434</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="435" href="#435" class="ln">435</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="436" href="#436" class="ln">436</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="437" href="#437" class="ln">437</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="438" href="#438" class="ln">438</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="439" href="#439" class="ln">439</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="440" href="#440" class="ln">440</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="441" href="#441" class="ln">441</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="442" href="#442" class="ln">442</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="443" href="#443" class="ln">443</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="444" href="#444" class="ln">444</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="445" href="#445" class="ln">445</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="446" href="#446" class="ln">446</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="447" href="#447" class="ln">447</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="448" href="#448" class="ln">448</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="449" href="#449" class="ln">449</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="450" href="#450" class="ln">450</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="451" href="#451" class="ln">451</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="452" href="#452" class="ln">452</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="453" href="#453" class="ln">453</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="454" href="#454" class="ln">454</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="455" href="#455" class="ln">455</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="456" href="#456" class="ln">456</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="457" href="#457" class="ln">457</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="458" href="#458" class="ln">458</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="459" href="#459" class="ln">459</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="460" href="#460" class="ln">460</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="461" href="#461" class="ln">461</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="462" href="#462" class="ln">462</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="463" href="#463" class="ln">463</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="464" href="#464" class="ln">464</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="465" href="#465" class="ln">465</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="466" href="#466" class="ln">466</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="467" href="#467" class="ln">467</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="468" href="#468" class="ln">468</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="469" href="#469" class="ln">469</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="470" href="#470" class="ln">470</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="471" href="#471" class="ln">471</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="472" href="#472" class="ln">472</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="473" href="#473" class="ln">473</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="474" href="#474" class="ln">474</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="475" href="#475" class="ln">475</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="476" href="#476" class="ln">476</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="477" href="#477" class="ln">477</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="478" href="#478" class="ln">478</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="479" href="#479" class="ln">479</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="480" href="#480" class="ln">480</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="481" href="#481" class="ln">481</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="482" href="#482" class="ln">482</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="483" href="#483" class="ln">483</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="484" href="#484" class="ln">484</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="485" href="#485" class="ln">485</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="486" href="#486" class="ln">486</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="487" href="#487" class="ln">487</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="488" href="#488" class="ln">488</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="489" href="#489" class="ln">489</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="490" href="#490" class="ln">490</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="491" href="#491" class="ln">491</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="492" href="#492" class="ln">492</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="493" href="#493" class="ln">493</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="494" href="#494" class="ln">494</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="495" href="#495" class="ln">495</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="496" href="#496" class="ln">496</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="497" href="#497" class="ln">497</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="498" href="#498" class="ln">498</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="499" href="#499" class="ln">499</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="500" href="#500" class="ln">500</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="501" href="#501" class="ln">501</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="502" href="#502" class="ln">502</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="503" href="#503" class="ln">503</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="504" href="#504" class="ln">504</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="505" href="#505" class="ln">505</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="506" href="#506" class="ln">506</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="507" href="#507" class="ln">507</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="508" href="#508" class="ln">508</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="509" href="#509" class="ln">509</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="510" href="#510" class="ln">510</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="511" href="#511" class="ln">511</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="512" href="#512" class="ln">512</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="513" href="#513" class="ln">513</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="514" href="#514" class="ln">514</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="515" href="#515" class="ln">515</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="516" href="#516" class="ln">516</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="517" href="#517" class="ln">517</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="518" href="#518" class="ln">518</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="519" href="#519" class="ln">519</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="520" href="#520" class="ln">520</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="521" href="#521" class="ln">521</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="522" href="#522" class="ln">522</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="523" href="#523" class="ln">523</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="524" href="#524" class="ln">524</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="525" href="#525" class="ln">525</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="526" href="#526" class="ln">526</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="527" href="#527" class="ln">527</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="528" href="#528" class="ln">528</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="529" href="#529" class="ln">529</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="530" href="#530" class="ln">530</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="531" href="#531" class="ln">531</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="532" href="#532" class="ln">532</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="533" href="#533" class="ln">533</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="534" href="#534" class="ln">534</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="535" href="#535" class="ln">535</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="536" href="#536" class="ln">536</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="537" href="#537" class="ln">537</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="538" href="#538" class="ln">538</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="539" href="#539" class="ln">539</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="540" href="#540" class="ln">540</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="541" href="#541" class="ln">541</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="542" href="#542" class="ln">542</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="543" href="#543" class="ln">543</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="544" href="#544" class="ln">544</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="545" href="#545" class="ln">545</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="546" href="#546" class="ln">546</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="547" href="#547" class="ln">547</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="548" href="#548" class="ln">548</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="549" href="#549" class="ln">549</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="550" href="#550" class="ln">550</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="551" href="#551" class="ln">551</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="552" href="#552" class="ln">552</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="553" href="#553" class="ln">553</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="554" href="#554" class="ln">554</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="555" href="#555" class="ln">555</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="556" href="#556" class="ln">556</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="557" href="#557" class="ln">557</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="558" href="#558" class="ln">558</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="559" href="#559" class="ln">559</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="560" href="#560" class="ln">560</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="561" href="#561" class="ln">561</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="562" href="#562" class="ln">562</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="563" href="#563" class="ln">563</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="564" href="#564" class="ln">564</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="565" href="#565" class="ln">565</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="566" href="#566" class="ln">566</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="567" href="#567" class="ln">567</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="568" href="#568" class="ln">568</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="569" href="#569" class="ln">569</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="570" href="#570" class="ln">570</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="571" href="#571" class="ln">571</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="572" href="#572" class="ln">572</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="573" href="#573" class="ln">573</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="574" href="#574" class="ln">574</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="575" href="#575" class="ln">575</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="576" href="#576" class="ln">576</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="577" href="#577" class="ln">577</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="578" href="#578" class="ln">578</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="579" href="#579" class="ln">579</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="580" href="#580" class="ln">580</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="581" href="#581" class="ln">581</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="582" href="#582" class="ln">582</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="583" href="#583" class="ln">583</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="584" href="#584" class="ln">584</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="585" href="#585" class="ln">585</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="586" href="#586" class="ln">586</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="587" href="#587" class="ln">587</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="588" href="#588" class="ln">588</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="589" href="#589" class="ln">589</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="590" href="#590" class="ln">590</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="591" href="#591" class="ln">591</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="592" href="#592" class="ln">592</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="593" href="#593" class="ln">593</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="594" href="#594" class="ln">594</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="595" href="#595" class="ln">595</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="596" href="#596" class="ln">596</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="597" href="#597" class="ln">597</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="598" href="#598" class="ln">598</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="599" href="#599" class="ln">599</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="600" href="#600" class="ln">600</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="601" href="#601" class="ln">601</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="602" href="#602" class="ln">602</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="603" href="#603" class="ln">603</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="604" href="#604" class="ln">604</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="605" href="#605" class="ln">605</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="606" href="#606" class="ln">606</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="607" href="#607" class="ln">607</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="608" href="#608" class="ln">608</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="609" href="#609" class="ln">609</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="610" href="#610" class="ln">610</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="611" href="#611" class="ln">611</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="612" href="#612" class="ln">612</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="613" href="#613" class="ln">613</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="614" href="#614" class="ln">614</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="615" href="#615" class="ln">615</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="616" href="#616" class="ln">616</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="617" href="#617" class="ln">617</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="618" href="#618" class="ln">618</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="619" href="#619" class="ln">619</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="620" href="#620" class="ln">620</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="621" href="#621" class="ln">621</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="622" href="#622" class="ln">622</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="623" href="#623" class="ln">623</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="624" href="#624" class="ln">624</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="625" href="#625" class="ln">625</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="626" href="#626" class="ln">626</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="627" href="#627" class="ln">627</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="628" href="#628" class="ln">628</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="629" href="#629" class="ln">629</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="630" href="#630" class="ln">630</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="631" href="#631" class="ln">631</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="632" href="#632" class="ln">632</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="633" href="#633" class="ln">633</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="634" href="#634" class="ln">634</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="635" href="#635" class="ln">635</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="636" href="#636" class="ln">636</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="637" href="#637" class="ln">637</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="638" href="#638" class="ln">638</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="639" href="#639" class="ln">639</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="640" href="#640" class="ln">640</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="641" href="#641" class="ln">641</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="642" href="#642" class="ln">642</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="643" href="#643" class="ln">643</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="644" href="#644" class="ln">644</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="645" href="#645" class="ln">645</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="646" href="#646" class="ln">646</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="647" href="#647" class="ln">647</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="648" href="#648" class="ln">648</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="649" href="#649" class="ln">649</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="650" href="#650" class="ln">650</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="651" href="#651" class="ln">651</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="652" href="#652" class="ln">652</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="653" href="#653" class="ln">653</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="654" href="#654" class="ln">654</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="655" href="#655" class="ln">655</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="656" href="#656" class="ln">656</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="657" href="#657" class="ln">657</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="658" href="#658" class="ln">658</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="659" href="#659" class="ln">659</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="660" href="#660" class="ln">660</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="661" href="#661" class="ln">661</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="662" href="#662" class="ln">662</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="663" href="#663" class="ln">663</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="664" href="#664" class="ln">664</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="665" href="#665" class="ln">665</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="666" href="#666" class="ln">666</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="667" href="#667" class="ln">667</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="668" href="#668" class="ln">668</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="669" href="#669" class="ln">669</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="670" href="#670" class="ln">670</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="671" href="#671" class="ln">671</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="672" href="#672" class="ln">672</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="673" href="#673" class="ln">673</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="674" href="#674" class="ln">674</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="675" href="#675" class="ln">675</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="676" href="#676" class="ln">676</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="677" href="#677" class="ln">677</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="678" href="#678" class="ln">678</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="679" href="#679" class="ln">679</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="680" href="#680" class="ln">680</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="681" href="#681" class="ln">681</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="682" href="#682" class="ln">682</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="683" href="#683" class="ln">683</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="684" href="#684" class="ln">684</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="685" href="#685" class="ln">685</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="686" href="#686" class="ln">686</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="687" href="#687" class="ln">687</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="688" href="#688" class="ln">688</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="689" href="#689" class="ln">689</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="690" href="#690" class="ln">690</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="691" href="#691" class="ln">691</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="692" href="#692" class="ln">692</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="693" href="#693" class="ln">693</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="694" href="#694" class="ln">694</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="695" href="#695" class="ln">695</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="696" href="#696" class="ln">696</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="697" href="#697" class="ln">697</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="698" href="#698" class="ln">698</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="699" href="#699" class="ln">699</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="700" href="#700" class="ln">700</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="701" href="#701" class="ln">701</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="702" href="#702" class="ln">702</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="703" href="#703" class="ln">703</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="704" href="#704" class="ln">704</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="705" href="#705" class="ln">705</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="706" href="#706" class="ln">706</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="707" href="#707" class="ln">707</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="708" href="#708" class="ln">708</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="709" href="#709" class="ln">709</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="710" href="#710" class="ln">710</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="711" href="#711" class="ln">711</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="712" href="#712" class="ln">712</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="713" href="#713" class="ln">713</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="714" href="#714" class="ln">714</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="715" href="#715" class="ln">715</a></div><div class="ln">&nbsp;<span class="lnfile">IceCal2Root.cxx:</span><a name="716" href="#716" class="ln">716</a></div></div>
-</div>
-
-<br />
-<!--SIGNATURE-->
-<div id="footer">
-
-<em>&raquo; Last changed: 2021-04-05 23:39 </em><em>&raquo; Last generated: 2021-04-05 23:39</em><br />
-<em>This page has been automatically generated. For comments or suggestions regarding the documentation or ROOT in general please send a mail to <a href="mailto:rootdev@cern.ch">ROOT support</a>.</em>
-</div>
-</div>
-</body>
-</html>

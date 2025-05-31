@@ -1,6 +1,6 @@
 #ifndef NcTimestamp_h
 #define NcTimestamp_h
-// Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 2005 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
 
 #include <iostream>
@@ -13,6 +13,8 @@
 #include "TTimeStamp.h"
 #include "TString.h"
 #include "TTree.h"
+
+/** Handling of timestamps for (astro)particle physics research. **/
 
 class NcTimestamp : public TTimeStamp
 {

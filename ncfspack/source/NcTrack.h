@@ -1,9 +1,7 @@
 #ifndef NcTrack_h
 #define NcTrack_h
-// Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.
+// Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.
 // See cxx source for full Copyright notice.
-
-// $Id: NcTrack.h 88 2013-08-18 18:14:09Z nickve $
 
 #include "TObject.h"
 #include "TObjArray.h"
@@ -14,6 +12,8 @@
 #include "NcBoost.h"
 #include "NcPositionObj.h"
 #include "NcTimestamp.h"
+
+/** Handling of the attributes of a reconstructed particle track. **/
  
 class NcTrack : public TNamed,public Nc4Vector
 {
@@ -114,7 +114,7 @@ class NcTrack : public TNamed,public Nc4Vector
   TObject* fFit;             // Object containing details of the fit
   NcTimestamp* fTstamp;      // The track timestamp
   Float_t fEscale;           // The scale of the energy-momentum units of the track
-  TObjArray* fTemp;          //! Temporary storage for exchange of object pointers
+  TObjArray* fTemp;          //!< Temporary storage for exchange of object pointers
   Int_t fHypCopy;            // Flag to denote storage of private copies of hypothesis tracks
 
  private:

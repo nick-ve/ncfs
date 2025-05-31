@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997, NCFS/IIHE, All Rights Reserved.                          *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 2005 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,9 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcTimestamp
+~~~
 // Class NcTimestamp
 // Handling of timestamps for (astro)particle physics reserach.
 // This facility supports picosecond timing precision.
@@ -360,19 +364,26 @@
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
 //- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 29, 2024  07:15Z
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTimestamp.h"
 #include "Riostream.h"
 
-ClassImp(NcTimestamp) // Class implementation to enable ROOT I/O
+ClassImp(NcTimestamp); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcTimestamp::NcTimestamp() : TTimeStamp()
 {
-// Default constructor
+/**
+~~~
+// Default constructor.
 // Creation of an NcTimestamp object and initialisation of parameters.
 // All attributes are initialised to the current UTC date/time as specified
 // in the docs of TTimeStamp.
+~~~
+**/
 
  FillJulian();
  fJps=0;
@@ -388,8 +399,12 @@ NcTimestamp::NcTimestamp() : TTimeStamp()
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp::NcTimestamp(TTimeStamp& t) : TTimeStamp(t)
 {
+/**
+~~~
 // Creation of an NcTimestamp object and initialisation of parameters.
 // All attributes are initialised to the values of the input TTimeStamp.
+~~~
+**/
 
  FillJulian();
  fJps=0;
@@ -405,7 +420,12 @@ NcTimestamp::NcTimestamp(TTimeStamp& t) : TTimeStamp(t)
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp::~NcTimestamp()
 {
+/**
+~~~
 // Destructor to delete dynamically allocated memory.
+~~~
+**/
+
  if (fUTCdata)
  {
   delete fUTCdata;
@@ -415,7 +435,11 @@ NcTimestamp::~NcTimestamp()
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp::NcTimestamp(const NcTimestamp& t) : TTimeStamp(t)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
 
  fMJD=t.fMJD;
  fJsec=t.fJsec;
@@ -437,6 +461,8 @@ NcTimestamp::NcTimestamp(const NcTimestamp& t) : TTimeStamp(t)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Date(Int_t mode,Double_t offset)
 {
+/**
+~~~
 // Print date/time info.
 //
 // mode = 1 ==> Only the date/time info for UT and GMST and the Equation of Time (EoT) and Equinoxes (EoX) is listed
@@ -455,6 +481,8 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 //
 // Note : In case the (M/T)JD falls outside the TTimeStamp range,
 //        the yy-mm-dd info will be omitted.
+~~~
+**/
 
  Int_t mjd,mjsec,mjns;
  GetMJD(mjd,mjsec,mjns);
@@ -639,6 +667,8 @@ void NcTimestamp::Date(Int_t mode,Double_t offset)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns) const
 {
+/**
+~~~
 // Provide the (fractional) Julian Date (JD) corresponding to the UT date
 // and time in the Gregorian calendar as specified by the input arguments.
 //
@@ -666,6 +696,8 @@ Double_t NcTimestamp::GetJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,I
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp. 
+~~~
+**/
 
  if (y<0 || m<1 || m>12 || d<1 || d>31) return -1;
  if (hh<0 || hh>23 || mm<0 || mm>59 || ss<0 || ss>59 || ns<0 || ns>1e9) return -1;
@@ -684,6 +716,8 @@ Double_t NcTimestamp::GetJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,I
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetMJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns) const
 {
+/**
+~~~
 // Provide the (fractional) Modified Julian Date corresponding to the UT
 // date and time in the Gregorian calendar as specified by the input arguments.
 //
@@ -711,6 +745,8 @@ Double_t NcTimestamp::GetMJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
 
  Double_t JD=GetJD(y,m,d,hh,mm,ss,ns);
 
@@ -723,6 +759,8 @@ Double_t NcTimestamp::GetMJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetTJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns) const
 {
+/**
+~~~
 // Provide the (fractional) Truncated Julian Date corresponding to the UT
 // date and time in the Gregorian calendar as specified by the input arguments.
 //
@@ -750,6 +788,8 @@ Double_t NcTimestamp::GetTJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
 
  Double_t JD=GetJD(y,m,d,hh,mm,ss,ns);
 
@@ -762,6 +802,8 @@ Double_t NcTimestamp::GetTJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetJE(Double_t date,TString mode) const
 {
+/**
+~~~
 // Provide the Julian Epoch (JE) corresponding to the specified date.
 // The argument "mode" indicates the type of the argument "date".
 //
@@ -783,6 +825,8 @@ Double_t NcTimestamp::GetJE(Double_t date,TString mode) const
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
 
  if ((mode != "jd") && (mode != "mjd") && (mode != "tjd")) return -99999;
 
@@ -797,6 +841,8 @@ Double_t NcTimestamp::GetJE(Double_t date,TString mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetBE(Double_t date,TString mode) const
 {
+/**
+~~~
 // Provide the Besselian Epoch (JE) corresponding to the specified date.
 // The argument "mode" indicates the type of the argument "date".
 //
@@ -818,6 +864,8 @@ Double_t NcTimestamp::GetBE(Double_t date,TString mode) const
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
 
  if ((mode != "jd") && (mode != "mjd") && (mode != "tjd")) return -99999;
 
@@ -832,6 +880,8 @@ Double_t NcTimestamp::GetBE(Double_t date,TString mode) const
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Convert(Double_t date,Int_t& days,Int_t& secs,Int_t& ns) const
 {
+/**
+~~~
 // Convert date as fractional day count into integer days, secs and ns.
 //
 // Note : Due to computer accuracy the ns value may become inaccurate.
@@ -851,6 +901,8 @@ void NcTimestamp::Convert(Double_t date,Int_t& days,Int_t& secs,Int_t& ns) const
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
  
  days=int(date);
  date=date-double(days);
@@ -863,6 +915,8 @@ void NcTimestamp::Convert(Double_t date,Int_t& days,Int_t& secs,Int_t& ns) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::Convert(Int_t days,Int_t secs,Int_t ns) const
 {
+/**
+~~~
 // Convert date in integer days, secs and ns into fractional day count. 
 //
 // Note : Due to computer accuracy the ns precision may be lost.
@@ -881,6 +935,8 @@ Double_t NcTimestamp::Convert(Int_t days,Int_t secs,Int_t ns) const
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
 
  Double_t frac=double(secs)+double(ns)*1.e-9;
  Int_t daysecs=24*3600;
@@ -891,6 +947,8 @@ Double_t NcTimestamp::Convert(Int_t days,Int_t secs,Int_t ns) const
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Convert(Double_t h,Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps) const
 {
+/**
+~~~
 // Convert fractional hour count h into hh:mm:ss:ns:ps.
 // The sign of the input value will be neglected, so h<0 will result in
 // the same output values as h>0.
@@ -906,6 +964,8 @@ void NcTimestamp::Convert(Double_t h,Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
  
  // Neglect sign of h
  h=fabs(h);
@@ -927,6 +987,8 @@ void NcTimestamp::Convert(Double_t h,Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Convert(Double_t h,Int_t& hh,Int_t& mm,Double_t& ss) const
 {
+/**
+~~~
 // Convert fractional hour count h into hh:mm:ss.s.
 // The sign of the input value will be neglected, so h<0 will result in
 // the same output values as h>0.
@@ -941,6 +1003,8 @@ void NcTimestamp::Convert(Double_t h,Int_t& hh,Int_t& mm,Double_t& ss) const
 //    please use the corresponding SET() memberfunctions of either NcTimestamp
 //    or TTimeStamp.
 // 2) This facility can also be used to convert degrees in arcminutes etc...
+~~~
+**/
  
  // Neglect sign of h
  h=fabs(h);
@@ -955,6 +1019,8 @@ void NcTimestamp::Convert(Double_t h,Int_t& hh,Int_t& mm,Double_t& ss) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::Convert(Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps) const
 {
+/**
+~~~
 // Convert hh:mm:ss:ns:ps into fractional hour count. 
 // The sign of the input values will be neglected, so the output value
 // will always correspond to a positive hh:mm:ss:ns:ps specification.
@@ -970,6 +1036,8 @@ Double_t NcTimestamp::Convert(Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps) cons
 // To set the Julian parameters for the current NcTimestamp instance,
 // please use the corresponding SET() memberfunctions of either NcTimestamp
 // or TTimeStamp.
+~~~
+**/
 
  // Neglect the sign of the input values
  hh=abs(hh);
@@ -986,6 +1054,8 @@ Double_t NcTimestamp::Convert(Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps) cons
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::Convert(Int_t hh,Int_t mm,Double_t ss) const
 {
+/**
+~~~
 // Convert hh:mm:ss.s into fractional hour count. 
 // The sign of the input values will be neglected, so the output value
 // will always correspond to a positive hh:mm:ss.s specification.
@@ -1000,6 +1070,8 @@ Double_t NcTimestamp::Convert(Int_t hh,Int_t mm,Double_t ss) const
 //    please use the corresponding SET() memberfunctions of either NcTimestamp
 //    or TTimeStamp.
 // 2) This facility can also be used to convert ddd:mm:ss.s into fractional degrees.
+~~~
+**/
 
  // Neglect the sign of the input values
  hh=abs(hh);
@@ -1014,6 +1086,8 @@ Double_t NcTimestamp::Convert(Int_t hh,Int_t mm,Double_t ss) const
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::PrintTime(Double_t h,Int_t ndig) const
 {
+/**
+~~~
 // Print a fractional hour count in hh:mm:ss.ssss format.
 // The range of the printed hour value is : -24 < hh < 24.
 // The argument "ndig" specifies the number of digits for the fractional
@@ -1026,6 +1100,8 @@ void NcTimestamp::PrintTime(Double_t h,Int_t ndig) const
 //
 // Note : The time info is printed without additional spaces or "endline".
 //        This allows the print to be included in various composite output formats.
+~~~
+**/
 
  Int_t hh,mm,ss;
  ULong64_t sfrac;
@@ -1052,8 +1128,12 @@ void NcTimestamp::PrintTime(Double_t h,Int_t ndig) const
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::FillJulian()
 {
+/**
+~~~
 // Internal memberfunction for calculation and setting of the Julian date/time parameters
 // corresponding to the current TTimeStamp UTC date/time parameters.
+~~~
+**/
 
  UInt_t y,m,d,hh,mm,ss;
 
@@ -1075,6 +1155,8 @@ void NcTimestamp::FillJulian()
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::GetMJD(Int_t& mjd,Int_t& sec,Int_t& ns)
 {
+/**
+~~~
 // Provide the Modified Julian Date (MJD) and time corresponding to the
 // currently stored NcTimestamp date/time parameters.
 //
@@ -1082,6 +1164,8 @@ void NcTimestamp::GetMJD(Int_t& mjd,Int_t& sec,Int_t& ns)
 // mjd : The modified Julian date.
 // sec : The number of seconds elapsed within the MJD.
 // ns  : The remaining fractional number of seconds (in ns) elapsed within the MJD.
+~~~
+**/
 
  if (fCalcs != GetSec() || fCalcns != GetNanoSec())
  {
@@ -1096,11 +1180,15 @@ void NcTimestamp::GetMJD(Int_t& mjd,Int_t& sec,Int_t& ns)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetMJD()
 {
+/**
+~~~
 // Provide the (fractional) Modified Julian Date (MJD) corresponding to the
 // currently stored NcTimestamp date/time parameters.
 //
 // Due to computer accuracy the ns precision may be lost.
 // It is advised to use the (mjd,sec,ns) getter instead.
+~~~
+**/
 
  Int_t mjd=0;
  Int_t sec=0;
@@ -1114,6 +1202,8 @@ Double_t NcTimestamp::GetMJD()
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::GetTJD(Int_t& tjd,Int_t& sec,Int_t& ns)
 {
+/**
+~~~
 // Provide the Truncated Julian Date (TJD) and time corresponding to the
 // currently stored NcTimestamp date/time parameters.
 //
@@ -1121,6 +1211,8 @@ void NcTimestamp::GetTJD(Int_t& tjd,Int_t& sec,Int_t& ns)
 // tjd : The truncated Julian date.
 // sec : The number of seconds elapsed within the TJD.
 // ns  : The remaining fractional number of seconds (in ns) elapsed within the TJD.
+~~~
+**/
 
  Int_t mjd=0;
  GetMJD(mjd,sec,ns);
@@ -1130,11 +1222,15 @@ void NcTimestamp::GetTJD(Int_t& tjd,Int_t& sec,Int_t& ns)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetTJD()
 {
+/**
+~~~
 // Provide the (fractional) Truncated Julian Date (TJD) corresponding to the
 // currently stored NcTimestamp date/time parameters.
 //
 // Due to computer accuracy the ns precision may be lost.
 // It is advised to use the (tjd,sec,ns) getter instead.
+~~~
+**/
 
  Int_t tjd=0;
  Int_t sec=0;
@@ -1148,6 +1244,8 @@ Double_t NcTimestamp::GetTJD()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetTAI(Int_t& d,Int_t& sec,Int_t& ns,Int_t& ps,Bool_t tmjd)
 {
+/**
+~~~
 // Provide the TAI day count and time corresponding to the currently stored
 // NcTimestamp date/time parameters.
 // The return value indicates whether the TAI and UTC parameters were actually
@@ -1169,6 +1267,8 @@ Int_t NcTimestamp::GetTAI(Int_t& d,Int_t& sec,Int_t& ns,Int_t& ps,Bool_t tmjd)
 // 1) In case TAI recording was not activated, all returned values will be zero.
 // 2) In case tmjd=kFALSE and the current timestamp lies before the TAI start epoch,
 //    a negative day count is returned.
+~~~
+**/
 
  // Make sure to have the updated parameters
  GetMJD(d,sec,ns);
@@ -1193,6 +1293,8 @@ Int_t NcTimestamp::GetTAI(Int_t& d,Int_t& sec,Int_t& ns,Int_t& ps,Bool_t tmjd)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetTAI(Bool_t tmjd)
 {
+/**
+~~~
 // Provide the (fractional) number of elapsed TAI days corresponding to the
 // currently stored NcTimestamp date/time parameters.
 //
@@ -1210,6 +1312,8 @@ Double_t NcTimestamp::GetTAI(Bool_t tmjd)
 // 1) In case TAI recording was not activated, the value 0 will be returned.
 // 2) In case tmjd=kFALSE and the current timestamp lies before the TAI start epoch,
 //    a negative value is returned.
+~~~
+**/
 
  if (!fUtc) return 0;
 
@@ -1226,6 +1330,8 @@ Double_t NcTimestamp::GetTAI(Bool_t tmjd)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TString type)
 {
+/**
+~~~
 // Provide the corrresponding TAI time as hh:mm:ss:ns:ps.
 // The return value indicates whether the TAI and UTC parameters were actually
 // set manually (1), automatically (-1) or not (0).
@@ -1245,6 +1351,8 @@ Int_t NcTimestamp::GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TStr
 //    all returned values will be zero.
 // 3) This facility is based on the TAI day count, so the TTimeStamp limitations
 //    do not apply here.
+~~~
+**/
 
  hh=0;
  mm=0;
@@ -1280,6 +1388,8 @@ Int_t NcTimestamp::GetTAI(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps,TStr
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetUnixTime()
 {
+/**
+~~~
 // Provide the Unix time.
 // Unix Time is also called POSIX Time or UNIX Epoch Time and represents
 // the (fractional) elapsed second count since the start of the Unix Epoch. 
@@ -1306,6 +1416,8 @@ Double_t NcTimestamp::GetUnixTime()
 //
 // Due to computer accuracy the ns precision may be lost.
 // For better precision it is advised to use the other date/time Get() facilities instead.
+~~~
+**/
 
  Double_t t=0;
 
@@ -1336,6 +1448,8 @@ Double_t NcTimestamp::GetUnixTime()
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::GetJD(Int_t& jd,Int_t& sec,Int_t& ns)
 {
+/**
+~~~
 // Provide the Julian Date (JD) and time corresponding to the currently
 // stored NcTimestamp date/time parameters.
 //
@@ -1343,6 +1457,8 @@ void NcTimestamp::GetJD(Int_t& jd,Int_t& sec,Int_t& ns)
 // jd  : The Julian date.
 // sec : The number of seconds elapsed within the JD.
 // ns  : The remaining fractional number of seconds (in ns) elapsed within the JD.
+~~~
+**/
 
  Int_t mjd=0;
  GetMJD(mjd,sec,ns);
@@ -1358,11 +1474,15 @@ void NcTimestamp::GetJD(Int_t& jd,Int_t& sec,Int_t& ns)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetJD()
 {
+/**
+~~~
 // Provide the (fractional) Julian Date (JD) corresponding to the currently
 // stored NcTimestamp date/time parameters.
 //
 // Due to computer accuracy the ns precision may be lost.
 // It is advised to use the (jd,sec,ns) getter instead.
+~~~
+**/
 
  Int_t jd=0;
  Int_t sec=0;
@@ -1376,8 +1496,12 @@ Double_t NcTimestamp::GetJD()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetJE()
 {
+/**
+~~~
 // Provide the Julian Epoch (JE) corresponding to the currently stored
 // NcTimestamp date/time parameters.
+~~~
+**/
 
  Double_t jd=GetJD();
  Double_t je=GetJE(jd);
@@ -1386,8 +1510,12 @@ Double_t NcTimestamp::GetJE()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetBE()
 {
+/**
+~~~
 // Provide the Besselian Epoch (BE) corresponding to the currently stored
 // NcTimestamp date/time parameters.
+~~~
+**/
 
  Double_t jd=GetJD();
  Double_t be=GetBE(jd);
@@ -1396,6 +1524,8 @@ Double_t NcTimestamp::GetBE()
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the Modified Julian Date (MJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // The provided UTC parameters (see below) will not affect the MJD setting.
@@ -1470,6 +1600,8 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 //    will be set to zero.
 //
 // The defaults are ps=0, utc="U", leap=0 and dut=0.
+~~~
+**/
 
  if (sec<0 || sec>=24*3600 || ns<0 || ns>=1e9 || ps<0 || ps>=1000)
  {
@@ -1521,6 +1653,8 @@ void NcTimestamp::SetMJD(Int_t mjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the Modified Julian Date (MJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // The provided UTC parameters (see below) will not affect the MJD setting.
@@ -1595,6 +1729,8 @@ void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 //    will be set to zero.
 //
 // The default values are utc="U", leap=0 and dut=0.
+~~~
+**/
 
  Int_t days=0;
  Int_t secs=0;
@@ -1605,6 +1741,8 @@ void NcTimestamp::SetMJD(Double_t mjd,TString utc,Int_t leap,Double_t dut)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the Julian Date (JD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // The provided UTC parameters (see below) will not affect the JD setting.
@@ -1679,6 +1817,8 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t l
 //    will be set to zero.
 //
 // The default values are ps=0, utc="U", leap=0 and dut=0.
+~~~
+**/
 
  Int_t mjd=jd-2400000;
  sec-=12*3600;
@@ -1693,6 +1833,8 @@ void NcTimestamp::SetJD(Int_t jd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t l
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the Julian Date (JD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // The provided UTC parameters (see below) will not affect the JD setting.
@@ -1767,6 +1909,8 @@ void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 //    will be set to zero.
 //
 // The default values are utc="U", leap=0 and dut=0.
+~~~
+**/
 
  Int_t days=0;
  Int_t secs=0;
@@ -1778,6 +1922,8 @@ void NcTimestamp::SetJD(Double_t jd,TString utc,Int_t leap,Double_t dut)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the Truncated Julian Date (TJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // The provided UTC parameters (see below) will not affect the TJD setting.
@@ -1852,6 +1998,8 @@ void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 //    will be set to zero.
 //
 // The default values are ps=0, utc="U", leap=0 and dut=0.
+~~~
+**/
 
  Int_t mjd=tjd+40000;
 
@@ -1860,6 +2008,8 @@ void NcTimestamp::SetTJD(Int_t tjd,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the Truncated Julian Date (TJD) and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // The provided UTC parameters (see below) will not affect the TJD setting.
@@ -1934,6 +2084,8 @@ void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 //    will be set to zero.
 //
 // The default values are utc="U", leap=0, dut=0.
+~~~
+**/
 
  Int_t days=0;
  Int_t secs=0;
@@ -1945,9 +2097,13 @@ void NcTimestamp::SetTJD(Double_t tjd,TString utc,Int_t leap,Double_t dut)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::FillTAI()
 {
+/**
+~~~
 // Internal memberfunction to calculate and set the TAI day count parameters
 // corresponding to the current NcTimestamp parameters.
 // A separate MJD counting system is recorded for the TAI timing system. 
+~~~
+**/
 
  if (!fUtc || fUtc==-3)
  {
@@ -1977,6 +2133,8 @@ void NcTimestamp::FillTAI()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::SetTAI(TString type,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the specified TAI based date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
@@ -2028,6 +2186,8 @@ Int_t NcTimestamp::SetTAI(TString type,TString date,TString time,Int_t mode,TStr
 // 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
 // 3) In case a date/time setting outside the range of the IERS information is required,
 //    the manual setting of "leap" and "dut" has to be invoked.  
+~~~
+**/
 
  Int_t ibad=0;
 
@@ -2064,6 +2224,8 @@ Int_t NcTimestamp::SetTAI(TString type,TString date,TString time,Int_t mode,TStr
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Bool_t tmjd)
 {
+/**
+~~~
 // Set the International Atomic Time (TAI) date and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
@@ -2126,6 +2288,8 @@ Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t 
 //    be set corresponding to the start of the TTimeStamp EPOCH.  
 //    This implies that for these earlier/later TAI values the TTimeStamp parameters
 //    do not match the TAI c.q. Julian parameters of NcTimestamp.  
+~~~
+**/
 
  Int_t ibad=0;
 
@@ -2167,6 +2331,8 @@ Int_t NcTimestamp::SetTAI(Int_t d,Int_t sec,Int_t ns,Int_t ps,TString utc,Int_t 
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_t tmjd)
 {
+/**
+~~~
 // Set the International Atomic Time (TAI) date and time and update the TTimeStamp
 // parameters accordingly (if possible).
 // Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
@@ -2229,6 +2395,8 @@ Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_
 //    be set corresponding to the start of the TTimeStamp EPOCH.  
 //    This implies that for these earlier/later TAI values the TTimeStamp parameters
 //    do not match the TAI c.q. Julian parameters of NcTimestamp.  
+~~~
+**/
 
  Int_t days=0;
  Int_t secs=0;
@@ -2242,6 +2410,8 @@ Int_t NcTimestamp::SetTAI(Double_t tai,TString utc,Int_t leap,Double_t dut,Bool_
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::SetGPS(Int_t w,Int_t sow,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Int_t icycle)
 {
+/**
+~~~
 // Set the date and time from Global Positioning System (GPS) broadcast data.
 // Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
 // also the UT will be set.
@@ -2293,6 +2463,8 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t sow,Int_t ns,Int_t ps,TString utc,Int_t 
 // 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
 // 3) In case a date/time setting outside the range of the IERS information is required,
 //    the manual setting of "leap" and "dut" has to be invoked.  
+~~~
+**/
 
  if (w<0 || sow<0 || sow>604800 || ns<0 || ns>999999999 || ps<0 || ps>999 || icycle<0)
  {
@@ -2317,6 +2489,8 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t sow,Int_t ns,Int_t ps,TString utc,Int_t 
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut,Int_t icycle)
 {
+/**
+~~~
 // Set the date and time from Global Positioning System (GPS) broadcast data.
 // Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
 // also the UT will be set.
@@ -2369,6 +2543,8 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString 
 // 2) For the available IERS information please refer to the docs of LoadUTCparameterFiles().
 // 3) In case a date/time setting outside the range of the IERS information is required,
 //    the manual setting of "leap" and "dut" has to be invoked.  
+~~~
+**/
 
  if (w<0 || dow<0 || dow>7 || sod<0 || sod>86400 || ns<0 || ns>999999999 || ps<0 || ps>999 || icycle<0)
  {
@@ -2389,6 +2565,8 @@ Int_t NcTimestamp::SetGPS(Int_t w,Int_t dow,Int_t sod,Int_t ns,Int_t ps,TString 
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the Unix date and time and update the TTimeStamp parameters accordingly (if possible).
 // Based on the specified accumulated number of Leap Seconds ("leap") and the UT1-UTC value ("dut")
 // also the UT will be set.
@@ -2465,6 +2643,8 @@ Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
 //    and the values of the Leap Seconds and dut=UT-UTC will be set to zero.
 // 2) In case utc="A" and no data files have been loaded, or no information is available,
 //    the utc="N" mode will be invoked.
+~~~
+**/
 
  // Determine the fractional day count since the start of the Unix Epoch
  Double_t tday=sec/86400.;
@@ -2495,6 +2675,8 @@ Int_t NcTimestamp::SetUnixTime(Double_t sec,TString utc,Int_t leap,Double_t dut)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetNs(Int_t ns)
 {
+/**
+~~~
 // Set the remaining fractional number of seconds in nanosecond precision.
 // Notes :
 // -------
@@ -2502,43 +2684,59 @@ void NcTimestamp::SetNs(Int_t ns)
 //    Outside that range no action is performed.
 // 2) The ns fraction can also be entered directly via SetMJD() etc...
 // 3) For additional accuracy see SetPs().
+~~~
+**/
 
  if (ns>=0 && ns<=999999999) fJns=ns; 
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetNs() const
 {
+/**
+~~~
 // Provide the remaining fractional number of seconds in nanosecond precision.
 // This function allows trigger/timing analysis for (astro)particle physics
 // experiments.
 // Note : For additional accuracy see also GetPs().
+~~~
+**/
 
  return fJns; 
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetPs(Int_t ps)
 {
+/**
+~~~
 // Set the remaining fractional number of nanoseconds in picoseconds.
 // Notes :
 // -------
 // 1) The allowed range for the argument "ps" is [0,999].
 //    Outside that range no action is performed.
 // 2) The ps fraction can also be entered directly via SetMJD() etc...
+~~~
+**/
 
  if (ps>=0 && ps<=999) fJps=ps; 
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetPs() const
 {
+/**
+~~~
 // Provide remaining fractional number of nanoseconds in picoseconds.
 // This function allows time of flight analysis for particle physics
 // experiments.
+~~~
+**/
 
  return fJps; 
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetUTCparameters(Int_t& leap,Double_t& dut) const
 {
+/**
+~~~
 // Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT1-UTC).
 //
 // The return value indicates whether the UTC parameters are actually set or not,
@@ -2556,6 +2754,8 @@ Int_t NcTimestamp::GetUTCparameters(Int_t& leap,Double_t& dut) const
 //    depending on the input argument "utc", as outlined above.
 // 2) A return value of -2 or -3 indicates that the time which was entered via SetUT()
 //    or via one of the Julian Date facilities was actually UT1.
+~~~
+**/
 
  leap=fLeap;
  dut=fDut;
@@ -2565,12 +2765,16 @@ Int_t NcTimestamp::GetUTCparameters(Int_t& leap,Double_t& dut) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetUTCparameters(Int_t mjd,Int_t& leap,Double_t& dut) const
 {
+/**
+~~~
 // Provide the values of the UTC parameters (i.e. Leap Seconds and dut=UT1-UTC)
 // from the daily IERS data for the specified MJD.
 // The return value indicates the entry (0=first) in the IERS data TTree at which
 // the corresponding data was stored.
 // In case the corresponding data could not be found, the return value is -1
 // and "leap" and "dut" are set to 0.
+~~~
+**/
 
  leap=0;
  dut=0;
@@ -2613,6 +2817,8 @@ Int_t NcTimestamp::GetUTCparameters(Int_t mjd,Int_t& leap,Double_t& dut) const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Internal memberfunction to set the UTC parameters (i.e. Leap Seconds and dut=UT1-UTC).
 // The TAI time recording is updated accordingly, depending on the input argument "utc", as outlined below.
 //
@@ -2669,6 +2875,8 @@ Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)
 //    depending on the input argument "utc", as outlined above.
 // 3) A return value of -2 or -3 indicates that the time which was entered via SetUT()
 //    or via one of the Julian Date facilities was actually UT1.
+~~~
+**/
 
  fUtc=0;
  if (utc=="U") fUtc=-3;
@@ -2739,6 +2947,8 @@ Int_t NcTimestamp::SetUTCparameters(TString utc,Int_t leap,Double_t dut)
 ///////////////////////////////////////////////////////////////////////////
 TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 {
+/**
+~~~
 // Load the IERS data for automatic setting of Leap Seconds and dUT=UT1-UTC.
 //
 // For the current timestamp the corresponding Leap seconds and dUT are set.
@@ -2783,6 +2993,8 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 //
 // Note : In case of an error or inconsistency, no ROOT TTree will be created
 //        and the returned pointer will be zero.
+~~~
+**/
 
  // Expand the input file pathnames 
  leapfile=gSystem->ExpandPathName(leapfile.Data());
@@ -2932,15 +3144,21 @@ TTree* NcTimestamp::LoadUTCparameterFiles(TString leapfile,TString dutfile)
 ///////////////////////////////////////////////////////////////////////////
 TTree* NcTimestamp::GetIERSdatabase() const
 {
+/**
+~~~
 // Provide the pointer to the internal IERS database TTree.
 // In case no database TTree exists the pointer value 0 will be returned.
 // For details please refer to the member function LoadUTCparameterFiles().
+~~~
+**/
 
  return fUTCdata;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps)
 {
+/**
+~~~
 // Add (or subtract) a certain time difference to the current timestamp.
 // Subtraction can be achieved by entering negative values as input arguments.
 //
@@ -2962,12 +3180,16 @@ void NcTimestamp::Add(Int_t d,Int_t s,Int_t ns,Int_t ps)
 // which obviously will provide incorrect results. 
 //
 // Note : ps=0 is the default value.
+~~~
+**/
 
  AddCalc(d,s,ns,ps);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Add(Double_t hours)
 {
+/**
+~~~
 // Add (or subtract) a certain time difference to the current timestamp.
 // The time difference is specified as a (fractional) number of hours.
 // Subtraction can be achieved by entering a negative value as input argument.
@@ -2976,12 +3198,16 @@ void NcTimestamp::Add(Double_t hours)
 //        the memberfunction AddSec() or Add(d,s,ns,ps).
 //
 // The UTC parameters (i.e. Leap Seconds and dut=UT1-UTC) will be updated accordingly.
+~~~
+**/
 
  AddCalc(hours);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::AddSec(Double_t seconds)
 {
+/**
+~~~
 // Add (or subtract) a certain time difference to the current timestamp.
 // The time difference is specified as a (fractional) number of seconds.
 // Subtraction can be achieved by entering a negative value as input argument.
@@ -2990,12 +3216,16 @@ void NcTimestamp::AddSec(Double_t seconds)
 //        using the memberfunction Add(d,s,ns,ps).
 //
 // The UTC parameters (i.e. Leap Seconds and dut=UT1-UTC) will be updated accordingly.
+~~~
+**/
 
  AddSecCalc(seconds);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::AddCalc(Int_t d,Int_t s,Int_t ns,Int_t ps,Bool_t utcpar)
 {
+/**
+~~~
 // Internal memberfunction to actually add (or subtract) a certain time difference
 // to the current timestamp and (optionally) update also the UTC parameters.
 // Subtraction can be achieved by entering negative values as input arguments.
@@ -3021,6 +3251,8 @@ void NcTimestamp::AddCalc(Int_t d,Int_t s,Int_t ns,Int_t ps,Bool_t utcpar)
 // add (or subtract) time differences in FillTAI() without creating an infinite loop.
 //
 // The default values are ps=0 and utcpar=kTRUE.
+~~~
+**/
 
  Int_t days=0;
  Int_t secs=0;
@@ -3084,6 +3316,8 @@ void NcTimestamp::AddCalc(Int_t d,Int_t s,Int_t ns,Int_t ps,Bool_t utcpar)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::AddCalc(Double_t hours,Bool_t utcpar)
 {
+/**
+~~~
 // Internal memberfunction to actually add (or subtract) a certain time difference
 // to the current timestamp and (optionally) update also the UTC parameters.
 // The time difference is specified as a (fractional) number of hours.
@@ -3098,6 +3332,8 @@ void NcTimestamp::AddCalc(Double_t hours,Bool_t utcpar)
 // add (or subtract) time differences in FillTAI() without creating an infinite loop.
 //
 // The default value is utcpar=kTRUE.
+~~~
+**/
 
  Int_t d,s,ns,ps;
  Double_t h=fabs(hours);
@@ -3116,6 +3352,8 @@ void NcTimestamp::AddCalc(Double_t hours,Bool_t utcpar)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::AddSecCalc(Double_t seconds,Bool_t utcpar)
 {
+/**
+~~~
 // Internal memberfunction to actually add (or subtract) a certain time difference
 // to the current timestamp and (optionally) update also the UTC parameters.
 // The time difference is specified as a (fractional) number of seconds.
@@ -3130,6 +3368,8 @@ void NcTimestamp::AddSecCalc(Double_t seconds,Bool_t utcpar)
 // add (or subtract) time differences in FillTAI() without creating an infinite loop.
 //
 // The default value is utcpar=kTRUE.
+~~~
+**/
 
  Int_t s,ns,ps;
  Double_t a=fabs(seconds);
@@ -3145,6 +3385,8 @@ void NcTimestamp::AddSecCalc(Double_t seconds,Bool_t utcpar)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t& d,Int_t& s,Int_t& ns,Int_t& ps,TString type)
 {
+/**
+~~~
 // Provide the time difference w.r.t the NcTimestamp specified on the input.
 // This memberfunction supports both very small (i.e. time of flight analysis
 // for particle physics experiments) and very long (i.e. investigation of
@@ -3187,6 +3429,8 @@ Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t& d,Int_t& s,Int_t& ns,Int_
 // on the input argument occurred earlier (-1), simultaneously (0) or later (1).
 //
 // In case of inconsistent input the time difference and the return argument will be set to 0.
+~~~
+**/
 
  d=0;
  s=0;
@@ -3296,6 +3540,8 @@ Int_t NcTimestamp::GetDifference(NcTimestamp* t,Int_t& d,Int_t& s,Int_t& ns,Int_
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTimestamp::GetDifference(NcTimestamp& t,Int_t& d,Int_t& s,Int_t& ns,Int_t& ps,TString type)
 {
+/**
+~~~
 // Provide the time difference w.r.t the NcTimestamp specified on the input.
 // This memberfunction supports both very small (i.e. time of flight analysis
 // for particle physics experiments) and very long (i.e. investigation of
@@ -3338,12 +3584,16 @@ Int_t NcTimestamp::GetDifference(NcTimestamp& t,Int_t& d,Int_t& s,Int_t& ns,Int_
 // on the input argument occurred earlier (-1), simultaneously (0) or later (1).
 //
 // In case of inconsistent input the time difference and the return argument will be set to 0.
+~~~
+**/
 
  return GetDifference(&t,d,s,ns,ps,type);
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode,TString type)
 {
+/**
+~~~
 // Provide the time difference w.r.t the NcTimestamp specified on the input
 // in the units as specified by the TString "u" argument.
 // A positive return value means that the NcTimestamp specified on the input
@@ -3406,6 +3656,8 @@ Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode,TString 
 // The default is mode=1.
 //
 // In case of inconsistent input the time difference will be set to 0.
+~~~
+**/
 
  if (!t || mode<1 || mode>3 || (type!="UT" && type!="TAI")) return 0;
 
@@ -3506,6 +3758,8 @@ Double_t NcTimestamp::GetDifference(NcTimestamp* t,TString u,Int_t mode,TString 
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetDifference(NcTimestamp& t,TString u,Int_t mode,TString type)
 {
+/**
+~~~
 // Provide the time difference w.r.t the NcTimestamp specified on the input
 // in the units as specified by the TString "u" argument.
 // A positive return value means that the NcTimestamp specified on the input
@@ -3568,12 +3822,16 @@ Double_t NcTimestamp::GetDifference(NcTimestamp& t,TString u,Int_t mode,TString 
 // The default is mode=1.
 //
 // In case of inconsistent input the time difference will be set to 0.
+~~~
+**/
 
  return GetDifference(&t,u,mode,type);
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Note that UT may represent either UT1 or UTC as specified by the
@@ -3646,6 +3904,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t
 // for the elapsed timespan.
 // As such this facility is valid for all AD dates in the Gregorian
 // calendar with picosecond precision.
+~~~
+**/
 
  if (d<1 || d>31 || m<1 || m>12 || hh<0 || hh>23 || mm<0 || mm>59 || ss<0 || ss>59 || ns<0 || ns>999999999 || ps<0 || ps>999)
  {
@@ -3663,6 +3923,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Note that UT may represent either UT1 or UTC as specified by the
@@ -3722,6 +3984,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TSt
 //    will be set to zero.
 //
 // The default values are utc="A", leap=0 and dut=0.
+~~~
+**/
 
  Int_t ss=int(s);
  s-=double(ss);
@@ -3733,6 +3997,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TSt
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Note that UT may represent either UT1 or UTC as specified by the
@@ -3790,6 +4056,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t l
 //    will be set to zero.
 //
 // The default values are utc="A", leap=0 and dut=0.
+~~~
+**/
 
  Long64_t iword=0;
  Int_t hh=0;
@@ -3819,6 +4087,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t l
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetUT(TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the UT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Note that UT may represent either UT1 or UTC as specified by the
@@ -3880,6 +4150,8 @@ void NcTimestamp::SetUT(TString date,TString time,Int_t mode,TString utc,Int_t l
 // The default values are utc="A", leap=0 and dut=0.
 //
 // Note : In case of incompatible argument(s) the current UT date/time will not be modified.
+~~~
+**/
 
  Int_t iword=0;
  Int_t utdate=0;
@@ -3938,6 +4210,8 @@ void NcTimestamp::SetUT(TString date,TString time,Int_t mode,TString utc,Int_t l
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the specified elapsed
 // timespan since the beginning of the new UT year.
 // Note that UT may represent either UT1 or UTC as specified by the
@@ -4015,6 +4289,8 @@ void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,In
 // Sky & Telescope 82, (aug. 1991) 183.
 // Subsequently the day and (sub)second parts are added to the NcTimestamp.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
+~~~
+**/
 
  Double_t jd=GetJD(y,1,1,0,0,0,0);
  SetJD(jd);
@@ -4031,9 +4307,13 @@ void NcTimestamp::SetUT(Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,In
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::GetUT(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps)
 {
+/**
+~~~
 // Provide the corresponding UT reference time as hh:mm:ss:ns:ps.
 // This facility is based on the MJD, so the TTimeStamp limitations
 // do not apply here.
+~~~
+**/
 
  Int_t mjd,sec,nsec,psec;
 
@@ -4050,9 +4330,13 @@ void NcTimestamp::GetUT(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetUT()
 {
+/**
+~~~
 // Provide the corresponding UT reference time in fractional hours.
 // This facility is based on the MJD, so the TTimeStamp limitations
 // do not apply here.
+~~~
+**/
 
  Int_t hh,mm,ss,ns,ps;
 
@@ -4065,11 +4349,15 @@ Double_t NcTimestamp::GetUT()
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::GetGMST(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps)
 {
+/**
+~~~
 // Provide the corrresponding Greenwich Mean Sideral Time (GMST).
 // The algorithm used is the one described at p. 83 of the book
 // Astronomy Methods by Hale Bradt.
 // This facility is based on the MJD, so the TTimeStamp limitations
 // do not apply here.
+~~~
+**/
 
  Int_t mjd,sec,nsec,psec;
 
@@ -4113,10 +4401,14 @@ void NcTimestamp::GetGMST(Int_t& hh,Int_t& mm,Int_t& ss,Int_t& ns,Int_t& ps)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetGMST()
 {
+/**
+~~~
 // Provide the corrresponding Greenwich Mean Sideral Time (GMST)
 // in fractional hours.
 // This facility is based on the MJD, so the TTimeStamp limitations
 // do not apply here.
+~~~
+**/
 
  Int_t hh,mm,ss,ns,ps;
 
@@ -4129,6 +4421,8 @@ Double_t NcTimestamp::GetGMST()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetGAST()
 {
+/**
+~~~
 // Provide the corrresponding Greenwich Apparent Sideral Time (GAST)
 // in fractional hours.
 // In case a hh:mm:ss.sss format is needed, please invoke the Convert()
@@ -4144,6 +4438,8 @@ Double_t NcTimestamp::GetGAST()
 // The equation of the equinoxes is determined via the Almanac() memberfunction.
 // 
 // Since GMST is based on the MJD, the TTimeStamp limitations do not apply here.
+~~~
+**/
 
  Double_t da=Almanac();
 
@@ -4166,6 +4462,8 @@ Double_t NcTimestamp::GetGAST()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetLT(Double_t offset)
 {
+/**
+~~~
 // Provide the corresponding UT based (aka mean solar) Local Time in fractional hours.
 // The "offset" denotes the time difference in (fractional) hours w.r.t. UT.
 // A mean solar day lasts 24h (i.e. 86400s), so this local time is directly
@@ -4174,6 +4472,8 @@ Double_t NcTimestamp::GetLT(Double_t offset)
 // Note : This local time is often referred to as Local Mean Time (LMT).
 //
 // In case a hh:mm:ss format is needed, please use the Convert() facility. 
+~~~
+**/
 
  // Current UT time in fractional hours
  Double_t h=GetUT();
@@ -4194,6 +4494,8 @@ Double_t NcTimestamp::GetLT(Double_t offset)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetLAT(Double_t offset)
 {
+/**
+~~~
 // Provide the corresponding Local Apparent (solar) Time in fractional hours.
 // The "offset" denotes the time difference in (fractional) hours of the
 // UT based (aka mean solar) Local Time w.r.t. UT.
@@ -4209,6 +4511,8 @@ Double_t NcTimestamp::GetLAT(Double_t offset)
 // See also the member function Almanac(). 
 // 
 // In case a hh:mm:ss format is needed, please use the Convert() facility. 
+~~~
+**/
 
  // Current UT time in fractional hours
  Double_t h=GetUT();
@@ -4234,6 +4538,8 @@ Double_t NcTimestamp::GetLAT(Double_t offset)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetLMST(Double_t offset)
 {
+/**
+~~~
 // Provide the corresponding Local Mean Sidereal Time (LMST) in fractional hours.
 // The "offset" denotes the time difference in (fractional) hours w.r.t. GMST.
 // A sidereal day corresponds to 23h 56m 04.09s (i.e. 86164.09s) mean solar time.
@@ -4242,6 +4548,8 @@ Double_t NcTimestamp::GetLMST(Double_t offset)
 // As such, local time offsets w.r.t. UT and GMST can be treated similarly. 
 //
 // In case a hh:mm:ss format is needed, please use the Convert() facility. 
+~~~
+**/
 
  // Current GMST time in fractional hours
  Double_t h=GetGMST();
@@ -4262,6 +4570,8 @@ Double_t NcTimestamp::GetLMST(Double_t offset)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetLAST(Double_t offset)
 {
+/**
+~~~
 // Provide the corresponding Local Apparent Sidereal Time (LAST) in fractional hours.
 // The "offset" denotes the time difference in (fractional) hours w.r.t. GAST.
 // A sidereal day corresponds to 23h 56m 04.09s (i.e. 86164.09s) mean solar time.
@@ -4270,6 +4580,8 @@ Double_t NcTimestamp::GetLAST(Double_t offset)
 // As such, local time offsets w.r.t. UT, GMST and GAST can be treated similarly. 
 //
 // In case a hh:mm:ss.sss format is needed, please use the Convert() facility. 
+~~~
+**/
 
  // Current GAST time in fractional hours
  Double_t h=GetGAST();
@@ -4290,6 +4602,8 @@ Double_t NcTimestamp::GetLAST(Double_t offset)
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // This facility is exact upto picosecond precision and as such is
@@ -4350,6 +4664,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,In
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian
 // calendar with picosecond precision.
+~~~
+**/
 
  SetUT(y,m,d,hh,mm,ss,ns,ps,utc,leap,dut);
  Add(-dt);
@@ -4357,6 +4673,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,In
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Double_t s,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
@@ -4409,6 +4727,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Do
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
+~~~
+**/
 
  SetUT(y,m,d,hh,mm,s,utc,leap,dut);
  Add(-dt);
@@ -4416,6 +4736,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Do
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
@@ -4466,6 +4788,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time,TString
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
+~~~
+**/
 
  SetUT(y,m,d,time,utc,leap,dut);
  Add(-dt);
@@ -4473,6 +4797,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t m,Int_t d,TString time,TString
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetLT(Double_t dt,TString date,TString time,Int_t mode,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the LT date and time
 // in the Gregorian calendar as specified by the input arguments.
 // Due to rounding errors the highest (i.e. picosecond) accuracy might not be reached.
@@ -4525,6 +4851,8 @@ void NcTimestamp::SetLT(Double_t dt,TString date,TString time,Int_t mode,TString
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
+~~~
+**/
 
  SetUT(date,time,mode,utc,leap,dut);
  Add(-dt);
@@ -4532,6 +4860,8 @@ void NcTimestamp::SetLT(Double_t dt,TString date,TString time,Int_t mode,TString
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the NcTimestamp parameters corresponding to the specified elapsed
 // timespan since the beginning of the new LT year.
 // This facility is exact upto picosecond precision and as such is
@@ -4596,6 +4926,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TS
 // This facility first sets the UT as specified by the input arguments
 // and then corrects the UT by subtracting the local time offset w.r.t. UT.
 // As such this facility is valid for all AD dates in the Gregorian calendar.
+~~~
+**/
 
  SetUT(y,d,s,ns,ps,utc,leap,dut);
  Add(-dt);
@@ -4603,6 +4935,8 @@ void NcTimestamp::SetLT(Double_t dt,Int_t y,Int_t d,Int_t s,Int_t ns,Int_t ps,TS
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetJD(Double_t e,TString mode) const
 {
+/**
+~~~
 // Provide the fractional Julian Date from epoch e.
 // The sort of epoch may be specified via the "mode" parameter.
 //
@@ -4610,6 +4944,8 @@ Double_t NcTimestamp::GetJD(Double_t e,TString mode) const
 //        "B" ==> Besselian epoch
 //
 // The default value is mode="J".
+~~~
+**/
 
  Double_t jd=0;
 
@@ -4622,6 +4958,8 @@ Double_t NcTimestamp::GetJD(Double_t e,TString mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetMJD(Double_t e,TString mode) const
 {
+/**
+~~~
 // Provide the fractional Modified Julian Date from epoch e.
 // The sort of epoch may be specified via the "mode" parameter.
 //
@@ -4629,6 +4967,8 @@ Double_t NcTimestamp::GetMJD(Double_t e,TString mode) const
 //        "B" ==> Besselian epoch
 //
 // The default value is mode="J".
+~~~
+**/
 
  Double_t mjd=GetJD(e,mode)-2400000.5;
 
@@ -4637,6 +4977,8 @@ Double_t NcTimestamp::GetMJD(Double_t e,TString mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetTJD(Double_t e,TString mode) const
 {
+/**
+~~~
 // Provide the fractional Truncated Julian Date from epoch e.
 // The sort of epoch may be specified via the "mode" parameter.
 //
@@ -4644,6 +4986,8 @@ Double_t NcTimestamp::GetTJD(Double_t e,TString mode) const
 //        "B" ==> Besselian epoch
 //
 // The default value is mode="J".
+~~~
+**/
 
  Double_t tjd=GetJD(e,mode)-2440000.5;
 
@@ -4652,6 +4996,8 @@ Double_t NcTimestamp::GetTJD(Double_t e,TString mode) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double_t* dl,TString name,Double_t* el,Double_t* eb,Double_t* dr,Double_t* value,Int_t j)
 {
+/**
+~~~
 // Determination of various astronomical observables which may be needed
 // for further calculations like e.g. precession of coordinates.
 //
@@ -4756,6 +5102,8 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
 // 
 // Since all calculations are based on the JD, the TTimeStamp limitations
 // do not apply here.
+~~~
+**/
 
  Double_t pi=acos(-1.);
 
@@ -5204,6 +5552,8 @@ Double_t NcTimestamp::Almanac(Double_t* dpsi,Double_t* deps,Double_t* eps,Double
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc,Int_t leap,Double_t dut)
 {
+/**
+~~~
 // Set the timestamp parameters according to the specified epoch.
 //
 // Optionally the user can also provide the corresponding UTC parameters 
@@ -5255,6 +5605,8 @@ void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc,Int_t leap,Double
 //    the utc="N" mode will be invoked.
 //
 // The default values are utc="U", leap=0 and dut=0.
+~~~
+**/
 
  Double_t jd=GetJD(e,mode);
  SetJD(jd,utc,leap,dut);
@@ -5262,11 +5614,15 @@ void NcTimestamp::SetEpoch(Double_t e,TString mode,TString utc,Int_t leap,Double
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTimestamp::GetEpoch(TString mode)
 {
+/**
+~~~
 // Provide the corresponding epoch value.
 // Via the input argument "mode" the user can specify the type of epoch
 //
 // mode = "B" ==> Besselian epoch
 //        "J" ==> Julian epoch
+~~~
+**/
 
  Double_t e=0;
  if (mode=="B" || mode=="b") e=GetBE();
@@ -5276,6 +5632,8 @@ Double_t NcTimestamp::GetEpoch(TString mode)
 ///////////////////////////////////////////////////////////////////////////
 TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TString* date,TString* time,Bool_t full)
 {
+/**
+~~~
 // Get a string with date and time info for the date/time system specified via "mode".
 // The returned string contains both the date and time info, but via the optional arguments
 // "date" and "time" the user may also retrieve the date and time info separately, when a
@@ -5315,6 +5673,8 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
 //    Please refer to the memberfunctions LoadUTCparameterFiles() and GetUTCparameters() for details.
 // 2) In case the MJD falls outside the TTimeStamp range, the date info will be omitted from the
 //    combined date/time string and the (optional) date string will contain "---". 
+~~~
+**/
 
  Bool_t set=kFALSE;
 
@@ -5509,10 +5869,14 @@ TString NcTimestamp::GetDayTimeString(TString mode,Int_t ndig,Double_t offset,TS
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::SetSystemTime()
 {
+/**
+~~~
 // Set UTC to the current time of the system clock.
 //
 // In case no database value of dUT=UT1-UTC is available,
 // the system clock time is used as the main (UTC) reference.
+~~~
+**/
 
  // Retrieve the current system clock time
  Set();
@@ -5535,7 +5899,11 @@ void NcTimestamp::SetSystemTime()
 ///////////////////////////////////////////////////////////////////////////
 Bool_t NcTimestamp::IsUT1() const
 {
+/**
+~~~
 // Indicate whether the reference time is UT1 (kTRUE) or UTC (kFALSE).
+~~~
+**/
 
  Bool_t ut1=kTRUE;
  if (!fUtc) ut1=kFALSE;

@@ -1,5 +1,6 @@
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Copyright(c) 1997-2019, NCFS/IIHE, All Rights Reserved.                     *
+/**  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+~~~
+ * Copyright(c) 1997 NCFS/IIHE, All Rights Reserved.                           *
  *                                                                             *
  * Authors: The Netherlands Center for Fundamental Studies (NCFS).             *
  *          The Inter-university Institute for High Energies (IIHE).           *                 
@@ -25,11 +26,12 @@
  * If you do use this software in such a manner, it is at your own risk.       *
  * The authors disclaim all liability for direct or consequential damage       *
  * resulting from your use of this software.                                   *
+~~~
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// $Id: NcTrack.cxx 88 2013-08-18 18:14:09Z nickve $
-
 ///////////////////////////////////////////////////////////////////////////
+/** @class NcTrack
+~~~
 // Class NcTrack
 // Handling of the attributes of a reconstructed particle track.
 //
@@ -105,24 +107,37 @@
 //
 //--- Author: Nick van Eijndhoven 10-jul-1997 Utrecht University
 //- Modified: NvE $Date: 2013-08-18 20:14:09 +0200 (Sun, 18 Aug 2013) $ NCFS
+~~~
+**/
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NcTrack.h"
 #include "Riostream.h"
  
-ClassImp(NcTrack) // Class implementation to enable ROOT I/O
+ClassImp(NcTrack); // Class implementation to enable ROOT I/O
  
+///////////////////////////////////////////////////////////////////////////
 NcTrack::NcTrack() : TNamed(),Nc4Vector()
 {
-// Default constructor
-// All variables initialised to 0
+/**
+~~~
+// Default constructor.
+// All variables initialised to 0.
+~~~
+**/
+
  Init();
  Reset();
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::Init()
 {
+/**
+~~~
 // Initialisation of pointers etc...
+~~~
+**/
+
  fDecays=0;
  fSignals=0;
  fHypotheses=0;
@@ -143,10 +158,14 @@ void NcTrack::Init()
 ///////////////////////////////////////////////////////////////////////////
 NcTrack::~NcTrack()
 {
+/**
+~~~
 // Destructor to delete memory allocated for decay tracks array.
 // This destructor automatically cleares all references to this NcTrack
 // from all the related NcSignal objects and track hypotheses (if any).
 // It also removes it as a track hypothesis from the parent track (if any).
+~~~
+**/
 
  Int_t nsig=GetNsignals();
  for (Int_t i=1; i<=nsig; i++)
@@ -238,7 +257,12 @@ NcTrack::~NcTrack()
 ///////////////////////////////////////////////////////////////////////////
 NcTrack::NcTrack(const NcTrack& t) : TNamed(t),Nc4Vector(t)
 {
-// Copy constructor
+/**
+~~~
+// Copy constructor.
+~~~
+**/
+
  Init();
 
  fQ=t.fQ;
@@ -296,11 +320,15 @@ NcTrack::NcTrack(const NcTrack& t) : TNamed(t),Nc4Vector(t)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::Reset()
 {
+/**
+~~~
 // Reset all variables to 0 and delete all auto-generated decay tracks.
 // Notes :
 // -------
 // 1) The scale for the energy/momentum units will not be changed.
 // 2) The HypCopy mode is maintained as it was set (by the user) before.
+~~~
+**/
 
  fQ=0;
  fUserId=0;
@@ -372,8 +400,13 @@ void NcTrack::Reset()
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::Set3Momentum(Nc3Vector& p)
 {
+/**
+~~~
 // Set the track parameters according to the 3-momentum p.
 // In case the mass was not yet set, the energy is set to correspond to m=0. 
+~~~
+**/
+
  Set3Vector(p);
  Double_t inv=GetInvariant();
  if (inv<0) SetMass(0.);
@@ -381,7 +414,12 @@ void NcTrack::Set3Momentum(Nc3Vector& p)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::Set4Momentum(Nc4Vector& p)
 {
-// Set the track parameters according to the 4-momentum p
+/**
+~~~
+// Set the track parameters according to the 4-momentum p.
+~~~
+**/
+
  Double_t E=p.GetScalar();
  Double_t dE=p.GetResultError();
  Nc3Vector pv=p.Get3Vector();
@@ -391,8 +429,13 @@ void NcTrack::Set4Momentum(Nc4Vector& p)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetMass(Double_t m,Double_t dm)
 {
-// Set the particle mass
+/**
+~~~
+// Set the particle mass.
 // The default value for the error dm is 0.
+~~~
+**/
+
  Double_t inv=pow(m,2);
  Double_t dinv=fabs(2.*m*dm);
  SetInvariant(inv,dinv);
@@ -400,13 +443,20 @@ void NcTrack::SetMass(Double_t m,Double_t dm)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetCharge(Float_t q)
 {
-// Set the particle charge
+/**
+~~~
+// Set the particle charge.
+~~~
+**/
+
  fQ=q;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::Data(TString f,TString u)
 {
-// Provide track information within the coordinate frame f
+/**
+~~~
+// Provide track information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -414,6 +464,8 @@ void NcTrack::Data(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  Double_t m=GetMass();
  Double_t dm=GetResultError();
@@ -451,7 +503,9 @@ void NcTrack::Data(TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::List(TString f,TString u)
 {
-// Provide current track and decay level 1 information within coordinate frame f
+/**
+~~~
+// Provide current track and decay level 1 information within coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -459,6 +513,8 @@ void NcTrack::List(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  Data(f,u); // Information of the current track
  if (fBegin) { cout << " Begin-point :"; fBegin->Data(f,u); }
@@ -484,7 +540,9 @@ void NcTrack::List(TString f,TString u)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::ListAll(TString f,TString u)
 {
-// Provide complete track and decay information within the coordinate frame f
+/**
+~~~
+// Provide complete track and decay information within the coordinate frame f.
 //
 // The string argument "u" allows to choose between different angular units
 // in case e.g. a spherical frame is selected.
@@ -492,6 +550,8 @@ void NcTrack::ListAll(TString f,TString u)
 //     "deg" : angles provided in degrees
 //
 // The defaults are f="car" and u="rad".
+~~~
+**/
 
  Data(f,u); // Information of the current track
  if (fBegin) { cout << " Begin-point :"; fBegin->Data(f,u); }
@@ -517,7 +577,12 @@ void NcTrack::ListAll(TString f,TString u)
 //////////////////////////////////////////////////////////////////////////
 void NcTrack::Dumps(NcTrack* t,Int_t n,TString f,TString u)
 {
-// Recursively provide the info of all decay levels of this track
+/**
+~~~
+// Recursively provide the info of all decay levels of this track.
+~~~
+**/
+
  NcTrack* td; 
  for (Int_t id=1; id<=t->GetNdecay(); id++)
  {
@@ -561,6 +626,8 @@ void NcTrack::Dumps(NcTrack* t,Int_t n,TString f,TString u)
 //////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetMomentum(Float_t scale)
 {
+/**
+~~~
 // Provide the value of the track 3-momentum.
 // By default the momentum is returned in the units as it was stored in the track
 // structure. However, the user can select a different momentum unit scale by
@@ -569,6 +636,8 @@ Double_t NcTrack::GetMomentum(Float_t scale)
 // of scale=0.001 will provide the momentum in MeV/c.
 // The error can be obtained by invoking GetResultError() after
 // invokation of GetMomentum().
+~~~
+**/
 
  Double_t norm=fV.GetNorm();
  fDresult=fV.GetResultError();
@@ -582,6 +651,8 @@ Double_t NcTrack::GetMomentum(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Nc3Vector NcTrack::Get3Momentum(Float_t scale) const
 {
+/**
+~~~
 // Provide the track 3-momentum.
 // By default the components of the 3-momentum are returned in the units
 // as they were stored in the track structure.
@@ -589,6 +660,8 @@ Nc3Vector NcTrack::Get3Momentum(Float_t scale) const
 // components by specification of the scale parameter.
 // The convention is that scale=1 corresponds to GeV/c, so specification
 // of scale=0.001 will provide the 3-momentum in MeV/c.
+~~~
+**/
 
  Nc3Vector p=Get3Vector();
  if (scale>0) p*=fEscale/scale;
@@ -597,6 +670,8 @@ Nc3Vector NcTrack::Get3Momentum(Float_t scale) const
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetMass(Float_t scale)
 {
+/**
+~~~
 // Provide the particle mass.
 // By default the mass is returned in the units as it was stored in the track
 // structure. However, the user can select a different mass unit scale by
@@ -605,6 +680,8 @@ Double_t NcTrack::GetMass(Float_t scale)
 // of scale=0.001 will provide the mass in MeV/c**2.
 // The error can be obtained by invoking GetResultError() after
 // invokation of GetMass().
+~~~
+**/
 
  Double_t inv=GetInvariant();
  Double_t dinv=GetResultError();
@@ -632,12 +709,19 @@ Double_t NcTrack::GetMass(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcTrack::GetCharge() const
 {
-// Provide the particle charge
+/**
+~~~
+// Provide the particle charge.
+~~~
+**/
+
  return fQ;
 }
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetEnergy(Float_t scale)
 {
+/**
+~~~
 // Provide the particle's energy.
 // By default the energy is returned in the units as it was stored in the track
 // structure. However, the user can select a different energy unit scale by
@@ -646,6 +730,9 @@ Double_t NcTrack::GetEnergy(Float_t scale)
 // of scale=0.001 will provide the energy in MeV.
 // The error can be obtained by invoking GetResultError() after
 // invokation of GetEnergy().
+~~~
+**/
+
  Double_t E=GetScalar();
  if (E>0)
  {
@@ -666,11 +753,15 @@ Double_t NcTrack::GetEnergy(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::Decay(Double_t m1,Double_t m2,Double_t thcms,Double_t phicms)
 {
+/**
+~~~
 // Perform 2-body decay of current track
 // m1     : mass of decay product 1
 // m2     : mass of decay product 2
 // thcms  : cms theta decay angle (in rad.) of m1
 // phicms : cms phi decay angle (in rad.) of m1
+~~~
+**/
  
  Double_t M=GetMass();
  
@@ -737,7 +828,12 @@ void NcTrack::Decay(Double_t m1,Double_t m2,Double_t thcms,Double_t phicms)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTrack::GetNdecay() const
 {
-// Provide the number of decay produced tracks
+/**
+~~~
+// Provide the number of decay produced tracks.
+~~~
+**/
+
  Int_t ndec=0;
  if (fDecays) ndec=fDecays->GetEntries();
  return ndec;
@@ -745,8 +841,13 @@ Int_t NcTrack::GetNdecay() const
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* NcTrack::GetDecayTrack(Int_t j) const
 {
-// Provide decay produced track number j
-// Note : j=1 denotes the first decay track
+/**
+~~~
+// Provide decay produced track number j.
+// Note : j=1 denotes the first decay track.
+~~~
+**/
+
  if (!fDecays)
  {
   cout << " *NcTrack::GetDecayTrack* No tracks present." << endl;
@@ -769,7 +870,12 @@ NcTrack* NcTrack::GetDecayTrack(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::RemoveDecays()
 {
+/**
+~~~
 // Remove all decay tracks from this track.
+~~~
+**/
+
  if (fDecays)
  {
   delete fDecays;
@@ -779,6 +885,8 @@ void NcTrack::RemoveDecays()
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::AddSignal(NcSignal& s,Int_t mode)
 {
+/**
+~~~
 // Relate an NcSignal object to this track.
 //
 // mode = 0 : Only the reference to the specified signal is stored in
@@ -789,6 +897,8 @@ void NcTrack::AddSignal(NcSignal& s,Int_t mode)
 //            input argument.
 //
 // The default is mode=0.
+~~~
+**/
 
  if (!fSignals) fSignals=new TObjArray(1);
 
@@ -805,6 +915,8 @@ void NcTrack::AddSignal(NcSignal& s,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::RemoveSignal(NcSignal& s,Int_t mode)
 {
+/**
+~~~
 // Remove related NcSignal object from this track.
 //
 // mode = 0 : Only the reference to the specified signal is removed from
@@ -815,6 +927,8 @@ void NcTrack::RemoveSignal(NcSignal& s,Int_t mode)
 //            input argument.
 //
 // The default is mode=1.
+~~~
+**/
 
  if (fSignals)
  {
@@ -826,6 +940,8 @@ void NcTrack::RemoveSignal(NcSignal& s,Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::RemoveSignals(Int_t mode)
 {
+/**
+~~~
 // Remove all related NcSignal objects from this track.
 //
 // mode = 0 : All signal references are removed from the current track,
@@ -835,6 +951,8 @@ void NcTrack::RemoveSignals(Int_t mode)
 //            removed from the corresponding NcSignal (or derived) objects.
 //
 // The default is mode=1.
+~~~
+**/
 
  if (!fSignals) return;
 
@@ -851,7 +969,12 @@ void NcTrack::RemoveSignals(Int_t mode)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTrack::GetNsignals() const
 {
+/**
+~~~
 // Provide the number of related NcSignals.
+~~~
+**/
+
  Int_t nsig=0;
  if (fSignals) nsig=fSignals->GetEntries();
  return nsig;
@@ -859,6 +982,8 @@ Int_t NcTrack::GetNsignals() const
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTrack::GetNsignals(const char* classname,Int_t par) const
 {
+/**
+~~~
 // Provide the number of stored signals (derived) of the specified class.
 //
 // par = 0 ==> The signal itself has to be (derived) of the specified class
@@ -866,6 +991,8 @@ Int_t NcTrack::GetNsignals(const char* classname,Int_t par) const
 //       2 ==> The signal or the parent device has to be (derived) of the specified class
 //
 // The default is par=0.
+~~~
+**/
 
  Int_t nsigs=0;
  for (Int_t isig=1; isig<=GetNsignals(); isig++)
@@ -889,8 +1016,13 @@ Int_t NcTrack::GetNsignals(const char* classname,Int_t par) const
 ///////////////////////////////////////////////////////////////////////////
 NcSignal* NcTrack::GetSignal(Int_t j) const
 {
+/**
+~~~
 // Provide the related NcSignal number j.
 // Note : j=1 denotes the first signal.
+~~~
+**/
+
  if (!fSignals)
  {
   cout << " *NcTrack::GetSignal* No signals present." << endl;
@@ -913,6 +1045,8 @@ NcSignal* NcTrack::GetSignal(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 TObjArray* NcTrack::GetSignals(const char* classname,Int_t par,TObjArray* signals)
 {
+/**
+~~~
 // Provide references to the stored signals (derived) from the specified class.
 //
 // par = 0 ==> The signal itself has to be (derived) from the specified class
@@ -932,6 +1066,8 @@ TObjArray* NcTrack::GetSignals(const char* classname,Int_t par,TObjArray* signal
 // return argument.
 //
 // The default is signals=0.
+~~~
+**/
 
  if (signals)
  {
@@ -989,6 +1125,8 @@ TObjArray* NcTrack::GetSignals(const char* classname,Int_t par,TObjArray* signal
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::ShowSignals(const char* classname,Int_t par,Int_t mode,TString f,TString u)
 {
+/**
+~~~
 // Show all the associated signals (derived) from the specified class.
 //
 // par  = 0 ==> The signal itself has to be (derived) of the specified class
@@ -1002,6 +1140,8 @@ void NcTrack::ShowSignals(const char* classname,Int_t par,Int_t mode,TString f,T
 // Default values are par=0 and mode=1.
 //
 // The arguments "f" and "u" have the same meaning as in the memberfunction Data(). 
+~~~
+**/
 
  TObjArray hits;
  GetSignals(classname,par,&hits);
@@ -1031,6 +1171,8 @@ void NcTrack::ShowSignals(const char* classname,Int_t par,Int_t mode,TString f,T
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetSignalValue(TString classname,TString varname,Int_t mode,Int_t par)
 {
+/**
+~~~
 // Provide the total sum of the value of variable "varname" of all the
 // associated signals (derived) from the specified class.
 //
@@ -1043,6 +1185,8 @@ Double_t NcTrack::GetSignalValue(TString classname,TString varname,Int_t mode,In
 // The argument "mode" has the same meaning as in the memberfunction GetSignal()
 // of the class NcSignal.
 // Also here the default value is mode=0.
+~~~
+**/
 
  TObjArray hits;
  GetSignals(classname.Data(),par,&hits);
@@ -1064,6 +1208,8 @@ Double_t NcTrack::GetSignalValue(TString classname,TString varname,Int_t mode,In
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetHypCopy(Int_t flag)
 {
+/**
+~~~
 // (De)activate the creation of private copies of the added hypothesis tracks.
 //
 // flag = 0 : No private copies are made; pointers of original tracks are stored.
@@ -1081,6 +1227,8 @@ void NcTrack::SetHypCopy(Int_t flag)
 //  Once the storage contains pointer(s) to track(s) one cannot change the HypCopy mode anymore.
 //  To change the HypCopy mode for an existing NcTrack containing hypothesis tracks, one first
 //  has to invoke Reset().
+~~~
+**/
 
  if (!fHypotheses)
  {
@@ -1097,6 +1245,8 @@ void NcTrack::SetHypCopy(Int_t flag)
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTrack::GetHypCopy() const
 {
+/**
+~~~
 // Provide value of the DevCopy mode.
 //
 // mode = 0 : No private copies are made; pointers of original tracks are stored.
@@ -1110,12 +1260,16 @@ Int_t NcTrack::GetHypCopy() const
 //  which may include pointers to other objects. Therefore it is recommended to provide
 //  for all tracks a specific copy constructor and override the default Clone()
 //  memberfunction using this copy constructor.
+~~~
+**/
 
  return fHypCopy;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::AddTrackHypothesis(NcTrack& t)
 {
+/**
+~~~
 // Relate a track hypothesis "t" to the current track.
 //
 // Note :
@@ -1123,6 +1277,8 @@ void NcTrack::AddTrackHypothesis(NcTrack& t)
 // By default a private copy of the input track will be made via the Clone() facility.
 // See the memberfunction SetHypCopy() to suppress the creation of a private copy
 // so that only the pointer to the input track will be stored.
+~~~
+**/
 
  if (!fHypotheses)
  {
@@ -1144,6 +1300,8 @@ void NcTrack::AddTrackHypothesis(NcTrack& t)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::AddTrackHypothesis(Double_t prob,Double_t m,Double_t dm)
 {
+/**
+~~~
 // Add a track hypothesis by explicitly setting the mass and probability.
 // This will affect e.g. the hypothesis track's energy, since the momentum
 // and all other attributes will be copied from the current track.
@@ -1154,6 +1312,8 @@ void NcTrack::AddTrackHypothesis(Double_t prob,Double_t m,Double_t dm)
 // ----------------- 
 // prob=probalility  m=mass value  dm=error on the mass value.
 // The default value for the mass error dm is 0.
+~~~
+**/
 
  NcTrack* t=new NcTrack(*this);
  t->RemoveDecays();
@@ -1168,7 +1328,12 @@ void NcTrack::AddTrackHypothesis(Double_t prob,Double_t m,Double_t dm)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::RemoveTrackHypothesis(NcTrack& t)
 {
+/**
+~~~
 // Remove the specified track hypothesis from this track.
+~~~
+**/
+
  if (fHypotheses)
  {
   NcTrack* test=(NcTrack*)fHypotheses->Remove(&t);
@@ -1182,7 +1347,12 @@ void NcTrack::RemoveTrackHypothesis(NcTrack& t)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::RemoveTrackHypotheses()
 {
+/**
+~~~
 // Remove all track hypotheses from this track.
+~~~
+**/
+
  if (fHypotheses)
  {
   delete fHypotheses;
@@ -1192,7 +1362,12 @@ void NcTrack::RemoveTrackHypotheses()
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTrack::GetNhypotheses() const
 {
+/**
+~~~
 // Provide the number of track hypotheses.
+~~~
+**/
+
  Int_t nhyp=0;
  if (fHypotheses) nhyp=fHypotheses->GetEntries();
  return nhyp;
@@ -1200,9 +1375,13 @@ Int_t NcTrack::GetNhypotheses() const
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* NcTrack::GetTrackHypothesis(Int_t j) const
 {
+/**
+~~~
 // Provide the j-th track hypothesis.
 // Note : j=1 denotes the first hypothesis.
 // Default : j=0 ==> Hypothesis with highest probability.
+~~~
+**/
 
  if (!fHypotheses) return 0;
 
@@ -1243,54 +1422,88 @@ NcTrack* NcTrack::GetTrackHypothesis(Int_t j) const
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetBeginPoint(NcPosition& p)
 {
+/**
+~~~
 // Store the position of the track begin-point.
+~~~
+**/
+
  if (fBegin) delete fBegin;
  fBegin=new NcPositionObj(p);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcTrack::GetBeginPoint()
 {
+/**
+~~~
 // Provide the position of the track begin-point.
+~~~
+**/
+
  return fBegin;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetEndPoint(NcPosition& p)
 {
+/**
+~~~
 // Store the position of the track end-point.
+~~~
+**/
+
  if (fEnd) delete fEnd;
  fEnd=new NcPositionObj(p);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcTrack::GetEndPoint()
 {
+/**
+~~~
 // Provide the position of the track end-point.
+~~~
+**/
+
  return fEnd;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetReferencePoint(NcPosition& p)
 {
+/**
+~~~
 // Store the position of the track reference-point.
 // The reference-point is the point on the track in which the 
 // 3-momentum vector components have been defined.
 // This reference point is the preferable point to start track extrapolations
 // etc... which are sensitive to the components of the 3-momentum vector.
+~~~
+**/
+
  if (fRef) delete fRef;
  fRef=new NcPositionObj(p);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcTrack::GetReferencePoint()
 {
+/**
+~~~
 // Provide the position of the track reference-point.
 // The reference-point is the point on the track in which the 
 // 3-momentum vector components have been defined.
 // This reference point is the preferable point to start track extrapolations
 // etc... which are sensitive to the components of the 3-momentum vector.
+~~~
+**/
+
  return fRef;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetMass()
 {
+/**
+~~~
 // Set the mass and error to the value of the hypothesis with highest prob.
+~~~
+**/
 
  Double_t m=0,dm=0;
 
@@ -1310,6 +1523,8 @@ void NcTrack::SetMass()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetPt(Float_t scale)
 {
+/**
+~~~
 // Provide the transverse momentum value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the track
 // structure. However, the user can select a different momentum unit scale by
@@ -1318,6 +1533,9 @@ Double_t NcTrack::GetPt(Float_t scale)
 // of scale=0.001 will provide the transverse momentum in MeV/c.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetPt().
+~~~
+**/
+
  Nc3Vector v;
  v=GetVecTrans();
  Double_t norm=v.GetNorm();
@@ -1333,6 +1551,8 @@ Double_t NcTrack::GetPt(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetPl(Float_t scale)
 {
+/**
+~~~
 // Provide the longitudinal momentum value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the track
 // structure. However, the user can select a different momentum unit scale by
@@ -1342,6 +1562,8 @@ Double_t NcTrack::GetPl(Float_t scale)
 // Note : the returned value can also be negative.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetPl().
+~~~
+**/
 
  Nc3Vector v;
  v=GetVecLong();
@@ -1363,6 +1585,8 @@ Double_t NcTrack::GetPl(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetEt(Float_t scale)
 {
+/**
+~~~
 // Provide transverse energy value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the track
 // structure. However, the user can select a different energy unit scale by
@@ -1371,6 +1595,8 @@ Double_t NcTrack::GetEt(Float_t scale)
 // of scale=0.001 will provide the transverse energy in MeV.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetEt().
+~~~
+**/
 
  Double_t et=GetScaTrans();
  if (scale>0)
@@ -1384,6 +1610,8 @@ Double_t NcTrack::GetEt(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetEl(Float_t scale)
 {
+/**
+~~~
 // Provide longitudinal energy value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the track
 // structure. However, the user can select a different energy unit scale by
@@ -1393,6 +1621,8 @@ Double_t NcTrack::GetEl(Float_t scale)
 // Note : the returned value can also be negative.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetEl().
+~~~
+**/
 
  Double_t el=GetScaLong();
  if (scale>0)
@@ -1406,6 +1636,8 @@ Double_t NcTrack::GetEl(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetMt(Float_t scale)
 {
+/**
+~~~
 // Provide transverse mass value w.r.t. z-axis.
 // By default the value is returned in the units as it was stored in the track
 // structure. However, the user can select a different energy unit scale by
@@ -1414,6 +1646,9 @@ Double_t NcTrack::GetMt(Float_t scale)
 // of scale=0.001 will provide the transverse mass in MeV.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetMt().
+~~~
+**/
+
  Double_t pt=GetPt();
  Double_t dpt=GetResultError();
  Double_t m=GetMass();
@@ -1434,11 +1669,16 @@ Double_t NcTrack::GetMt(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetRapidity()
 {
+/**
+~~~
 // Provide rapidity value w.r.t. z-axis.
 // The error on the value can be obtained by GetResultError()
 // after invokation of GetRapidity().
 // Note : Also GetPseudoRapidity() is available since this class is
 //        derived from Nc4Vector.
+~~~
+**/
+
  Double_t e=GetEnergy();
  Double_t de=GetResultError();
  Double_t pl=GetPl();
@@ -1457,10 +1697,15 @@ Double_t NcTrack::GetRapidity()
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetImpactPoint(NcPosition& p,TString q)
 {
+/**
+~~~
 // Store the position of the impact-point in the plane "q=0".
 // Here q denotes one of the axes X, Y or Z.
 // Note : The character to denote the axis may be entered in lower or
 //        in uppercase.
+~~~
+**/
+
  Int_t axis=0;
  if (q=="x" || q=="X") axis=1;
  if (q=="y" || q=="Y") axis=2;
@@ -1492,10 +1737,15 @@ void NcTrack::SetImpactPoint(NcPosition& p,TString q)
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcTrack::GetImpactPoint(TString q)
 {
+/**
+~~~
 // Provide the position of the impact-point in the plane "q=0".
 // Here q denotes one of the axes X, Y or Z.
 // Note : The character to denote the axis may be entered in lower or
 //        in uppercase.
+~~~
+**/
+
  Int_t axis=0;
  if (q=="x" || q=="X") axis=1;
  if (q=="y" || q=="Y") axis=2;
@@ -1521,31 +1771,53 @@ NcPosition* NcTrack::GetImpactPoint(TString q)
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetId(Int_t id)
 {
+/**
+~~~
 // Set a user defined unique identifier for this track.
+~~~
+**/
+
  fUserId=id;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTrack::GetId() const
 {
+/**
+~~~
 // Provide the user defined unique identifier of this track.
+~~~
+**/
+
  return fUserId;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetClosestPoint(NcPosition& p)
 {
-// Set position p as the point of closest approach w.r.t. some reference
+/**
+~~~
+// Set position p as the point of closest approach w.r.t. some reference.
+~~~
+**/
+
  if (fClosest) delete fClosest;
  fClosest=new NcPositionObj(p);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcPosition* NcTrack::GetClosestPoint()
 {
-// Provide the point of closest approach w.r.t. some reference
+/**
+~~~
+// Provide the point of closest approach w.r.t. some reference.
+~~~
+**/
+
  return fClosest;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetEscale(Float_t scale)
 {
+/**
+~~~
 // Indicate the energy/momentum scale as used by the user.
 // The convention is that scale=1 indicates values in units
 // of GeV, GeV/c or GeV/c**2.
@@ -1553,6 +1825,8 @@ void NcTrack::SetEscale(Float_t scale)
 // the scale indicator should be set to scale=0.001.
 //
 // By default scale=1 is set in the constructor.
+~~~
+**/
 
  if (scale>0)
  {
@@ -1566,52 +1840,89 @@ void NcTrack::SetEscale(Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcTrack::GetEscale() const
 {
+/**
+~~~
 // Provide the energy/momentum scale as used by the user.
 // The convention is that scale=1 indicates values in units
 // of GeV, GeV/c or GeV/c**2.
 // So, a value of scale=0.001 indicates that energy/momentum values are
 // stored in units of MeV, MeV/c or MeV/c**2.
+~~~
+**/
+
  return fEscale;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetParticleCode(Int_t code)
 {
+/**
+~~~
 // Set the user defined particle id code (e.g. the PDF convention).
+~~~
+**/
+
  fCode=code;
 }
 ///////////////////////////////////////////////////////////////////////////
 Int_t NcTrack::GetParticleCode() const
 {
+/**
+~~~
 // Provide the user defined particle id code.
+~~~
+**/
+
  return fCode;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetParentTrack(NcTrack* t)
 {
+/**
+~~~
 // Set pointer to the parent track.
+~~~
+**/
+
  fParent=t;
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTrack* NcTrack::GetParentTrack()
 {
+/**
+~~~
 // Provide pointer to the parent track.
+~~~
+**/
+
  return fParent;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetProb(Double_t prob)
 {
+/**
+~~~
 // Set hypothesis probability for this track.
+~~~
+**/
+
  fProb=prob;
 }
 ///////////////////////////////////////////////////////////////////////////
 Float_t NcTrack::GetProb() const
 {
+/**
+~~~
 // Provide the hypothesis probability for this track.
+~~~
+**/
+
  return fProb;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetFitDetails(TObject* obj)
 {
+/**
+~~~
 // Enter the object containing the fit details.
 // In case an object to hold fit details was already present, this
 // will be deleted first before the new one is stored.
@@ -1636,7 +1947,9 @@ void NcTrack::SetFitDetails(TObject* obj)
 //        the user has to provide the appropriate Clone() memberfunction
 //        for the class to which the entered object belongs.
 //        An example can be seen from NcTrack::Clone().   
-//
+~~~
+**/
+
  if (fFit)
  {
   delete fFit;
@@ -1648,26 +1961,46 @@ void NcTrack::SetFitDetails(TObject* obj)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcTrack::GetFitDetails()
 {
+/**
+~~~
 // Provide the pointer to the object containing the fit details.
+~~~
+**/
+
  return fFit;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::SetTimestamp(NcTimestamp& t)
 {
+/**
+~~~
 // Store the timestamp for this track.
+~~~
+**/
+
  if (fTstamp) delete fTstamp;
  fTstamp=new NcTimestamp(t);
 }
 ///////////////////////////////////////////////////////////////////////////
 NcTimestamp* NcTrack::GetTimestamp()
 {
+/**
+~~~
 // Provide the timestamp of this track.
+~~~
+**/
+
  return fTstamp;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTrack::RemoveTimestamp()
 {
+/**
+~~~
 // Remove the timestamp from this track.
+~~~
+**/
+
  if (fTstamp)
  {
   delete fTstamp;
@@ -1677,6 +2010,8 @@ void NcTrack::RemoveTimestamp()
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetDistance(NcPosition* p,Float_t scale)
 {
+/**
+~~~
 // Provide distance of the current track to the position p.
 // The error on the result can be obtained as usual by invoking
 // GetResultError() afterwards. 
@@ -1693,6 +2028,8 @@ Double_t NcTrack::GetDistance(NcPosition* p,Float_t scale)
 //
 // Note : In case of incomplete information, a distance value of -1 is
 //        returned.
+~~~
+**/
  
  Double_t dist=-1.;
  fDresult=0.;
@@ -1741,6 +2078,8 @@ Double_t NcTrack::GetDistance(NcPosition* p,Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 Double_t NcTrack::GetDistance(NcTrack* t,Float_t scale)
 {
+/**
+~~~
 // Provide distance of the current track to the track t.
 // The error on the result can be obtained as usual by invoking
 // GetResultError() afterwards. 
@@ -1759,6 +2098,8 @@ Double_t NcTrack::GetDistance(NcTrack* t,Float_t scale)
 //
 // Note : In case of incomplete information, a distance value of -1 is
 //        returned.
+~~~
+**/
  
  Double_t dist=-1.;
  fDresult=0.;
@@ -1825,6 +2166,8 @@ Double_t NcTrack::GetDistance(NcTrack* t,Float_t scale)
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcTrack::Clone(const char* name) const
 {
+/**
+~~~
 // Make a deep copy of the current object and provide the pointer to the copy.
 // This memberfunction enables automatic creation of new objects of the
 // correct type depending on the object type, a feature which may be very useful
@@ -1832,6 +2175,8 @@ TObject* NcTrack::Clone(const char* name) const
 // This feature allows e.g. NcJet to store either NcTrack objects or
 // objects derived from NcTrack via the AddTrack memberfunction, provided
 // these derived classes also have a proper Clone memberfunction. 
+~~~
+**/
 
  NcTrack* trk=new NcTrack(*this);
  if (name)
