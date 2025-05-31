@@ -46,5 +46,4 @@ mv -f iceconvertdict* $NCFS/libs
 ### Return to the scripts directory
 cd ../scripts
 #
-echo ' ' 
 echo '*** amdgcclib.sh done. Result in ' $lib 
