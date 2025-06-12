@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['kbackdecreasingwindow_0',['kBackDecreasingWindow',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7ab0218fbef0ebe9ad6d907aa4686596a4',1,'NcSpectrum']]],
+  ['kbackincreasingwindow_1',['kBackIncreasingWindow',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7aa54ae562fb67e430b08a3f5898430e13',1,'NcSpectrum']]],
+  ['kbackorder2_2',['kBackOrder2',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7a35807771b45db73ad0211b5b80c583d0',1,'NcSpectrum']]],
+  ['kbackorder4_3',['kBackOrder4',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7a133139524d7b768d5e8c021afeea488c',1,'NcSpectrum']]],
+  ['kbackorder6_4',['kBackOrder6',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7ae9bf42c8575b64dbcb932af8028c2b93',1,'NcSpectrum']]],
+  ['kbackorder8_5',['kBackOrder8',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7ac436ed736f0592f694b5099e1aa29838',1,'NcSpectrum']]],
+  ['kbacksmoothing11_6',['kBackSmoothing11',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7a08c185054fe88ee9b09231088c7d2d3f',1,'NcSpectrum']]],
+  ['kbacksmoothing13_7',['kBackSmoothing13',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7a65c8eba52308421d1315aff788718d4a',1,'NcSpectrum']]],
+  ['kbacksmoothing15_8',['kBackSmoothing15',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7a3e73bb787ca43dc90c00660d3c93e02e',1,'NcSpectrum']]],
+  ['kbacksmoothing3_9',['kBackSmoothing3',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7ad7af090f39a3ef0a998beb000cbbdaf9',1,'NcSpectrum']]],
+  ['kbacksmoothing5_10',['kBackSmoothing5',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7ad626d4c6822a6b8c42f88d01702044ed',1,'NcSpectrum']]],
+  ['kbacksmoothing7_11',['kBackSmoothing7',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7a653c47c2eeb80a6e6f2c0d532072a141',1,'NcSpectrum']]],
+  ['kbacksmoothing9_12',['kBackSmoothing9',['../d1/d95/class_nc_spectrum.html#a47d6385726be1ea3b5406485bf0d7dc7a7ea6725442ccf5b35ce92bfb16bbcdd0',1,'NcSpectrum']]],
+  ['kcomplexarray_13',['kComplexArray',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7a0743e9ae3235bf72b628734b2ce4ce2d',1,'NcFITSIO']]],
+  ['kcomplexnumber_14',['kComplexNumber',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7a2873410e701952f52915e911bb3a35fd',1,'NcFITSIO']]],
+  ['kimagehdu_15',['kImageHDU',['../d6/ddc/class_nc_f_i_t_s_i_o.html#af416211b184790c6c1f976234e956ef6a818e0467b7df090e0547e1108382e379',1,'NcFITSIO']]],
+  ['klogical_16',['kLogical',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7a394b7246bb77963705ba2e82c839e241',1,'NcFITSIO']]],
+  ['klogicalarray_17',['kLogicalArray',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7ad1d8590dcccef9c4ad072fdabc8b1425',1,'NcFITSIO']]],
+  ['kolmogorovtest_18',['KolmogorovTest',['../d1/dfe/class_nc_astrolab.html#ae418fd3ed809b4cacd1a129c1acbfa79',1,'NcAstrolab']]],
+  ['krealarray_19',['kRealArray',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7ad4d83b78b929f2ac6ea4306166712223',1,'NcFITSIO']]],
+  ['krealnumber_20',['kRealNumber',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7a2a71d731cb01aa36306875e2311b7b43',1,'NcFITSIO']]],
+  ['kstring_21',['kString',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7abd433f64e767a2128c6a68feaa2ffbc1',1,'NcFITSIO']]],
+  ['kstringarray_22',['kStringArray',['../d6/ddc/class_nc_f_i_t_s_i_o.html#a0026ac04862ab1e3e25c899ce902d0f7a6535a7b58ef857f316cf99b9e8f64f53',1,'NcFITSIO']]],
+  ['ktablehdu_23',['kTableHDU',['../d6/ddc/class_nc_f_i_t_s_i_o.html#af416211b184790c6c1f976234e956ef6a559f36c8cd4bcd99259e4e334e6a4172',1,'NcFITSIO']]]
+];
