@@ -1,0 +1,27 @@
+var class_nc_helix =
+[
+    [ "NcHelix", "df/d61/class_nc_helix.html#a3228a5e5928effb1d85615ef0f96194b", null ],
+    [ "~NcHelix", "df/d61/class_nc_helix.html#aeaa1d4682d6fda0a67f00830ea012b39", null ],
+    [ "NcHelix", "df/d61/class_nc_helix.html#a16af4269d28c30c938ddf20b2722ad2c", null ],
+    [ "Display", "df/d61/class_nc_helix.html#a1bab09d2a51b18721b9e5cffd54bef3b", null ],
+    [ "Display", "df/d61/class_nc_helix.html#a740871ac1e87b628e0044587c6fe5a7a", null ],
+    [ "Display", "df/d61/class_nc_helix.html#ad8a402b71cf35d08f576484f08b5ed2f", null ],
+    [ "Extrapolate", "df/d61/class_nc_helix.html#a3a0423f72f0dc9ef40abea9197f14ad2", null ],
+    [ "GetB", "df/d61/class_nc_helix.html#a113850684a17e7fb8811355003d7f125", null ],
+    [ "GetTofmax", "df/d61/class_nc_helix.html#afcd2b65f7e1ec0a3740581bd6ba8da94", null ],
+    [ "MakeCurve", "df/d61/class_nc_helix.html#aad4193fc76b3835b71e2495b79ed3f27", null ],
+    [ "Refresh", "df/d61/class_nc_helix.html#ab5ccc9737000d61d28c5654a5522e0c8", null ],
+    [ "SetB", "df/d61/class_nc_helix.html#a95dd671a407baf212da550c07ce36d8e", null ],
+    [ "SetMarker", "df/d61/class_nc_helix.html#aade16091da9dc29cdb713f034949ce7a", null ],
+    [ "SetTofmax", "df/d61/class_nc_helix.html#a309c32aed131861c3e8c1787e218dd3b", null ],
+    [ "UseEndPoint", "df/d61/class_nc_helix.html#a08a7c89b828a9d4dae3645a5e26b5f6d", null ],
+    [ "fB", "df/d61/class_nc_helix.html#a8af064855686edf2efc3a91dc6a0bf4e", null ],
+    [ "fCurves", "df/d61/class_nc_helix.html#a70040d036893adbbf56fef7f1cce4bbf", null ],
+    [ "fEnduse", "df/d61/class_nc_helix.html#ae1b6e8ad6fa7ae3340b5141f7218c7b4", null ],
+    [ "fExt", "df/d61/class_nc_helix.html#aea3f24d94d9c2e4cd95a36051534e26c", null ],
+    [ "fMcol", "df/d61/class_nc_helix.html#a549f05e7fdddfe24309166da4d10288e", null ],
+    [ "fMsize", "df/d61/class_nc_helix.html#a8bde4e72d80681c7484f4a312cb9c7fb", null ],
+    [ "fMstyle", "df/d61/class_nc_helix.html#a504dd23ecb6e3062c1c2f4dc03a630db", null ],
+    [ "fRefresh", "df/d61/class_nc_helix.html#aaeba651654e84989788d269ee075ae5f", null ],
+    [ "fTofmax", "df/d61/class_nc_helix.html#a7a1d46428374862cc5980b28893e5a97", null ]
+];

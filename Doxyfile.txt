@@ -61,7 +61,7 @@ PROJECT_BRIEF          = "A generic (astro)particle physics analysis framework"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = C:/nick/cxx/source/ncfs/ncfslogo.jpg
+PROJECT_LOGO           = ncfslogo.jpg
 
 # With the PROJECT_ICON tag one can specify an icon that is included in the tabs
 # when the HTML document is shown. Doxygen will copy the logo to the output
@@ -74,7 +74,7 @@ PROJECT_ICON           =
 # entered, it will be relative to the location where Doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = C:/nick/cxx/source/ncfs
+OUTPUT_DIRECTORY       = .
 
 # If the CREATE_SUBDIRS tag is set to YES then Doxygen will create up to 4096
 # sub-directories (in 2 levels) under the output directory of each output format
@@ -85,7 +85,7 @@ OUTPUT_DIRECTORY       = C:/nick/cxx/source/ncfs
 # control the number of sub-directories.
 # The default value is: NO.
 
-CREATE_SUBDIRS         = NO
+CREATE_SUBDIRS         = YES
 
 # Controls the number of sub-directories that will be created when
 # CREATE_SUBDIRS tag is set to YES. Level 0 represents 16 directories, and every
@@ -520,7 +520,7 @@ NUM_PROC_THREADS       = 1
 # Possible values are: YES, NO, DATETIME and DATE.
 # The default value is: NO.
 
-TIMESTAMP              = YES
+TIMESTAMP              = NO
 
 #---------------------------------------------------------------------------
 # Build related configuration options
@@ -1069,7 +1069,15 @@ EXCLUDE                = ncfspack/source/TMCParticle.cxx \
                          ncfspack/source/TPythia6.h \
                          ncfspack/source/TPythia6Calls.h \
                          ncfspack/source/TPythia6Decayer.cxx \
-                         ncfspack/source/TPythia6Decayer.h
+                         ncfspack/source/TPythia6Decayer.h \
+                         iceconvert/source/ICEConvHeaders.h \
+                         iceconvert/source/ICEConvLinkDef.h \
+                         icepack/source/ICEHeaders.h \
+                         icepack/source/ICELinkDef.h \
+                         ncfspack/source/NCFSHeaders.h \
+                         ncfspack/source/NCFSLinkDef.h \
+                         rnopack/source/RNOHeaders.h \
+                         rnopack/source/RNOLinkDef.h
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
