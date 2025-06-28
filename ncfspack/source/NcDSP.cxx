@@ -45,7 +45,7 @@
 // All transformation results have been normalized, such that
 // the inverse transformation provides the original input spectrum.
 //
-// In addition to the above transformations, also convolution, correlation,
+// In addition to the above transformations, also convolution, correlation, periodogram,
 // filter, Analog to Digital Converter (ADC), Digital to Analog Converter (DAC)
 // and ADC-DAC chain transmission processors are provided.
 //
@@ -279,7 +279,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 25, 2025  11:47Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 28, 2025  14:21Z
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -5547,6 +5547,648 @@ void NcDSP::HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* 
  }
  hisf->SetLineWidth(2);
  hisf->SetLineColor(kBlue);
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TArray& t,TArray& y,TArray* dy,TF1* Z,NcDevice* results) const
+{
+/**
+~~~
+// Provide via the returned TGraph a periodogram of the specified data.
+// If the array "dy" is provided, these uncertainties will be used as weights
+// in the fitting procedure (see below).
+//
+// This memberfunction provides a tool to search for periodicity in time series,
+// even in case of unequally spaced data.
+// The implementation consists of an analytic algorithm known as the
+// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function
+//
+//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c
+//
+// where :
+// a,b  = Amplitudes
+// Z(t) = Amplitude modulation
+// c    = Offset
+// f    = Frequency
+//
+// By performing the fit at various frequencies, the corresponding amplitudes can be used
+// to provide for each frequency the corresponding power P.
+// It is the distribution P(f) that is reflected in the periodogram, where for the implementation
+// here the power is normalised to the interval [0,1]. 
+//
+// Details of the used algorithm can be found at :
+//
+// M. Zechmeister and M. Kuerster, Astronomy & Astrophysics 496 (2009) 577.
+//
+// Input arguments :
+// -----------------
+// tu      : Units of the time recording.
+//           Supported are : "ps", "ns", "sec", "hour", "day".
+// Tmin    : Lower bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency upper bound of fmax=1/Tmin.
+// Tmax    : Upper bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency lower bound of fmin=1/Tmax.
+//           Specification of Tmax<=Tmin will result in fmin=0.
+// n       : Number of steps to be used for the frequency scan.
+//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].
+// t       : Array with the times of the data recordings.
+// y       : Array with the observed values y(t).
+// dy      : Optional array with the uncertainties of the y-values.
+//           dy=0 will result in unweighted treatment of the data.
+// Z       : Optional function to describe the amplitude modulation Z(t).
+//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.
+// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.
+//           Each set (f,a,b,c,P) is stored as a "hit" in the NcDevice, ordered w.r.t. increasing f.
+//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.
+//
+// Notes :
+// -------
+// 1) All provided input arrays should have the same size.
+// 2) The values stored in the arrays t, y and (optionally) dy should match 
+//    such that (t[i],y[i],dy[i]) represents a single data recording of the time series.
+// 3) In case the array dy is provided and some dy[i]=0, the corresponding data recording will be neglected. 
+// 4) The settings dy=0 and Z=0 basically result in the original Lomb-Scargle periodogram.
+//
+// The default values are : dy=0, Z=0 and results=0. 
+~~~
+**/
+
+  if (results) results->Reset();
+
+  TGraph gr;
+
+  if (tu!="ps" && tu!="ns" && tu!="sec" && tu!="hour" && tu!="day")
+  {
+   printf("*%-s::Periodogram* Unsupported time unit : %-s \n",ClassName(),tu.Data());
+   return gr;
+  } 
+
+  if (Tmin<=0 || (Tmax>Tmin && Tmax<=0) || n<1)
+  {
+   printf("*%-s::Periodogram* Inconsistent input : Tmin=%-g Tmax=%-g n=%-i \n",ClassName(),Tmin,Tmax,n);
+   return gr;
+  }
+
+  // Check the compatibility of the input array sizes
+  Int_t nt=t.GetSize();
+  Int_t ny=y.GetSize();
+  Int_t ndy=ny;
+  if (dy) ndy=dy->GetSize();
+
+  if ((nt+ny+ndy)!=3*nt)
+  {
+   if (dy)
+   {
+    printf("*%-s::Periodogram* Incompatible input array sizes : nt=%-i ny=%-i ndy=%-i \n",ClassName(),nt,ny,ndy);
+   }
+   else
+   {
+    printf("*%-s::Periodogram* Incompatible input array sizes : nt=%-i ny=%-i \n",ClassName(),nt,ny);
+   }
+   return gr;
+  }
+
+  // Determine the frequency bounds and step size
+  Float_t fmax=1./Tmin;
+  Float_t fmin=0;
+  if (Tmax>Tmin) fmin=1./Tmax;
+  Float_t fstep=(fmax-fmin)/float(n);
+
+  // Create compact internal arrays for efficient processing 
+  Int_t na=0;
+  Float_t ti,yi,dyi2,wi,zi;
+  TArrayF tarr(nt);
+  TArrayF yarr(nt);
+  TArrayF warr(nt);
+  TArrayF zarr(nt);
+  Float_t Y=0;
+  Float_t Y2=0;
+  for (Int_t i=0; i<nt; i++)
+  {
+   ti=t.GetAt(i);
+   yi=y.GetAt(i);
+   wi=1;
+   zi=1;
+   if (dy)
+   {
+    dyi2=pow(dy->GetAt(i),2);
+    if (!dyi2) continue;
+    wi=1./dyi2;
+   }
+   if (Z) zi=Z->Eval(ti);
+   tarr[na]=ti;
+   yarr[na]=yi;
+   warr[na]=wi;
+   zarr[na]=zi;
+   Y+=wi*yi;
+   Y2+=wi*pow(yi,2);
+   na++;
+  }
+
+  tarr.Set(na);
+  yarr.Set(na);
+  warr.Set(na);
+  Float_t W=warr.GetSum();
+
+  if (!na || W<=0)
+  {
+   printf("*%-s::Periodogram* No valid data available. \n",ClassName());
+   return gr;
+  }
+
+  Y=Y/W;
+  Y2=Y2/W;
+
+  // Loop over the frequencies
+  Float_t twopi=2.*acos(-1.);
+  Float_t omega=0;
+  Float_t zcosi=0;
+  Float_t zsini=0;
+  Float_t C=0;
+  Float_t S=0;
+  Float_t CS=0;
+  Float_t C2=0;
+  Float_t S2=0;
+  Float_t YC=0;
+  Float_t YS=0;
+  Float_t D=0;
+  Float_t P=0;
+  Float_t a=0;
+  Float_t b=0;
+  Float_t c=0;
+  Int_t ip=0;
+  NcSignal sx;
+  sx.AddNamedSlot("f");
+  sx.AddNamedSlot("a");
+  sx.AddNamedSlot("b");
+  sx.AddNamedSlot("c");
+  sx.AddNamedSlot("P");
+  Float_t f=fmin;
+  fmax+=0.1*fstep; // To prevent accuracy issues
+  while (f<=fmax)
+  {
+   omega=twopi*f;
+   C=0;
+   S=0;
+   CS=0;
+   C2=0;
+   S2=0;
+   YC=0;
+   YS=0;
+   // Loop over the data points
+   for (Int_t i=0; i<na; i++)
+   {
+    ti=tarr[i];
+    yi=yarr[i];
+    wi=warr[i]/W;
+    zi=zarr[i];
+    zcosi=zi*cos(omega*ti);
+    zsini=zi*sin(omega*ti);
+    C+=wi*zcosi;
+    S+=wi*zsini;
+    CS+=wi*zcosi*zsini;
+    C2+=wi*pow(zcosi,2);
+    S2+=wi*pow(zsini,2);
+    YC+=wi*yi*zcosi;
+    YS+=wi*yi*zsini;
+   }
+
+   CS-=C*S;
+   Y2-=pow(Y,2);
+   C2-=pow(C,2);
+   S2-=pow(S,2);
+   YC-=Y*C;
+   YS-=Y*S;
+
+   D=C2*S2-pow(CS,2);
+
+   P=0;
+   if (Y2*D) P=(S2*pow(YC,2)+C2*pow(YS,2)-2.*CS*YC*YS)/(Y2*D);
+
+   a=0;
+   b=0;
+   if (D)
+   {
+    a=(YC*S2-YS*CS)/D;
+    b=(YS*C2-YC*CS)/D;
+   }
+   c=Y-a*C-b*S;
+
+   // Record this (f,a,b,c,P) dataset as a hit in the (optional) NcDevice "results"
+   if (results)
+   {
+    sx.SetSignal(f,"f");
+    sx.SetSignal(a,"a");
+    sx.SetSignal(b,"b");
+    sx.SetSignal(c,"c");
+    sx.SetSignal(P,"P");
+    results->AddHit(sx);
+   }
+
+   // Record this entry in the periodogram graph
+   gr.SetPoint(ip,f,P);
+
+   f+=fstep;
+   ip++;
+  }
+
+ TString unit="Hz";
+ if (tu=="ps") unit="THz";
+ if (tu=="ns") unit="GHz";
+ if (tu=="hour") unit="1/hour";
+ if (tu=="day") unit="1/day";
+ TString title;
+ title.Form("%-s Periodogram;Frequency in %-s;Normalized Power",ClassName(),unit.Data());
+ gr.SetNameTitle("Periodogram",title);
+ gr.SetMarkerStyle(8);
+ gr.SetMarkerSize(0.5);
+ gr.SetMarkerColor(kBlue);
+ gr.SetLineWidth(2);
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,NcSample s,Int_t it,Int_t iy,Int_t idy,TF1* Z,NcDevice* results) const
+{
+/**
+~~~
+// Provide via the returned TGraph a periodogram of the specified data as stored in the NcSample object "s".
+// Note that the storage mode for the NcSample object has to be activated. 
+// If the index "idy" is provided, the corresponding values will be regarded as uncertainties
+// and will be used as weights in the fitting procedure (see below).
+//
+// This memberfunction provides a tool to search for periodicity in time series,
+// even in case of unequally spaced data.
+// The implementation consists of an analytic algorithm known as the
+// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function
+//
+//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c
+//
+// where :
+// a,b  = Amplitudes
+// Z(t) = Amplitude modulation
+// c    = Offset
+// f    = Frequency
+//
+// By performing the fit at various frequencies, the corresponding amplitudes can be used
+// to provide for each frequency the corresponding power P.
+// It is the distribution P(f) that is reflected in the periodogram, where for the implementation
+// here the power is normalised to the interval [0,1]. 
+//
+// Details of the used algorithm can be found at :
+//
+// M. Zechmeister and M. Kuerster, Astronomy & Astrophysics 496 (2009) 577.
+//
+// Input arguments :
+// -----------------
+// tu      : Units of the time recording.
+//           Supported are : "ps", "ns", "sec", "hour", "day".
+// Tmin    : Lower bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency upper bound of fmax=1/Tmin.
+// Tmax    : Upper bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency lower bound of fmin=1/Tmax.
+//           Specification of Tmax<=Tmin will result in fmin=0.
+// n       : Number of steps to be used for the frequency scan.
+//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].
+// s       : The NcSample object containing the recorded data.
+// it      : Index (1=first) of the NcSample variable with the times of the data recordings.
+// iy      : Index (1=first) of the NcSample variable with the observed values y(t).
+// idy     : Optional index (1=first) of the NcSample varaible with the uncertainties of the y-values.
+//           idy=0 will result in unweighted treatment of the data.
+// Z       : Optional function to describe the amplitude modulation Z(t).
+//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.
+// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.
+//           Each set (f,a,b,c,P) is stored as a "hit" in the NcDevice, ordered w.r.t. increasing f.
+//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.
+//
+// Notes :
+// -------
+// 1) Each entry of the provided NcSample object represents a single data recording of the time series.
+// 2) In case the index idy>0 is provided but a stored "y uncertainty" is 0, the corresponding NcSample entry will be neglected. 
+// 3) The settings idxdy=0 and Z=0 basically result in the original Lomb-Scargle periodogram.
+//
+// The default values are : idxdy=0, Z=0 and results=0. 
+~~~
+**/
+
+ TGraph gr;
+
+ if (!s.GetStoreMode())
+ {
+  printf("*%-s::Periodogram* Error: NcSample storage mode is not activated. \n",ClassName());
+  return gr;
+ }
+
+ Int_t ndim=s.GetDimension();
+ Int_t ns=s.GetN();
+
+ if (ns<1 || it<1 || it>ndim || iy<1 || iy>ndim || idy<0 || idy>ndim)
+ {
+  printf("*%-s::Periodogram* Inconsistent NcSample input: it=%-i iy=%-i idy=%-i #entries=%-i \n",ClassName(),it,iy,idy,ns);
+  return gr;
+ }
+
+ TArrayD t(ns);
+ TArrayD y(ns);
+ TArrayD dy(ns);
+
+ for (Int_t i=1; i<=ns; i++)
+ {
+  t[i-1]=s.GetEntry(i,it);
+  y[i-1]=s.GetEntry(i,iy);
+  if (idy) dy[i-1]=s.GetEntry(i,idy);
+ }
+
+ if (idy) // Uncertainties will be used as weights
+ {
+  gr=Periodogram(tu,Tmin,Tmax,n,t,y,&dy,Z,results);
+ }
+ else // No weights will be used
+ {
+  gr=Periodogram(tu,Tmin,Tmax,n,t,y,0,Z,results);
+ }
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,NcSample s,TString namet,TString namey,TString namedy,TF1* Z,NcDevice* results) const
+{
+/**
+~~~
+// Provide via the returned TGraph a periodogram of the specified data as stored in the NcSample object "s".
+// Note that the storage mode for the NcSample object has to be activated. 
+// If a valid "namedy" is provided, the corresponding values will be regarded as uncertainties
+// and will be used as weights in the fitting procedure (see below).
+//
+// This memberfunction provides a tool to search for periodicity in time series,
+// even in case of unequally spaced data.
+// The implementation consists of an analytic algorithm known as the
+// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function
+//
+//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c
+//
+// where :
+// a,b  = Amplitudes
+// Z(t) = Amplitude modulation
+// c    = Offset
+// f    = Frequency
+//
+// By performing the fit at various frequencies, the corresponding amplitudes can be used
+// to provide for each frequency the corresponding power P.
+// It is the distribution P(f) that is reflected in the periodogram, where for the implementation
+// here the power is normalised to the interval [0,1]. 
+//
+// Details of the used algorithm can be found at :
+//
+// M. Zechmeister and M. Kuerster, Astronomy & Astrophysics 496 (2009) 577.
+//
+// Input arguments :
+// -----------------
+// tu      : Units of the time recording.
+//           Supported are : "ps", "ns", "sec", "hour", "day".
+// Tmin    : Lower bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency upper bound of fmax=1/Tmin.
+// Tmax    : Upper bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency lower bound of fmin=1/Tmax.
+//           Specification of Tmax<=Tmin will result in fmin=0.
+// n       : Number of steps to be used for the frequency scan.
+//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].
+// s       : The NcSample object containing the recorded data.
+// namet   : Name of the NcSample variable with the times of the data recordings.
+// namey   : Name of the NcSample variable with the observed values y(t).
+// namedy  : Name of the optional NcSample variable with the uncertainties of the y-values.
+//           namedy="-" will result in unweighted treatment of the data.
+// Z       : Optional function to describe the amplitude modulation Z(t).
+//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.
+// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.
+//           Each set (f,a,b,c,P) is stored as a "hit" in the NcDevice, ordered w.r.t. increasing f.
+//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.
+//
+// Notes :
+// -------
+// 1) Each entry of the provided NcSample object represents a single data recording of the time series.
+// 2) In case a valid namedy is provided but a stored "y uncertainty" is 0, the corresponding NcSample entry will be neglected. 
+// 3) The settings namedy="-" and Z=0 basically result in the original Lomb-Scargle periodogram.
+//
+// The default values are : namedy="-", Z=0 and results=0. 
+~~~
+**/
+
+ TGraph gr;
+
+ // Get the indices corresponding to the specified variable names
+ Int_t it=s.GetIndex(namet);
+ Int_t iy=s.GetIndex(namey);
+ Int_t idy=s.GetIndex(namedy);
+
+ // Check for unsupported namedy
+ if (!idy && namedy!="-") idy=-1;
+
+ Int_t ns=s.GetN();
+
+ if (ns<1 || it<1 || iy<1 || idy<0)
+ {
+  printf("*%-s::Periodogram* Inconsistent NcSample input: namet=%-s namey=%-s namedy=%-s #entries=%-i \n",ClassName(),namet.Data(),namey.Data(),namedy.Data(),ns);
+  return gr;
+ }
+
+ gr=Periodogram(tu,Tmin,Tmax,n,s,it,iy,idy,Z,results);
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TH1& h,Bool_t err,TF1* Z,NcDevice* results) const
+{
+/**
+~~~
+// Provide via the returned TGraph a periodogram of the data contained in the histogram "h".
+// If err=kTRUE, the uncertainties of the histogram values will be used as weights in the fitting procedure (see below).
+//
+// This memberfunction provides a tool to search for periodicity in time series,
+// even in case of unequally spaced data.
+// The implementation consists of an analytic algorithm known as the
+// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function
+//
+//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c
+//
+// where :
+// a,b  = Amplitudes
+// Z(t) = Amplitude modulation
+// c    = Offset
+// f    = Frequency
+//
+// By performing the fit at various frequencies, the corresponding amplitudes can be used
+// to provide for each frequency the corresponding power P.
+// It is the distribution P(f) that is reflected in the periodogram, where for the implementation
+// here the power is normalised to the interval [0,1]. 
+//
+// Details of the used algorithm can be found at :
+//
+// M. Zechmeister and M. Kuerster, Astronomy & Astrophysics 496 (2009) 577.
+//
+// Input arguments :
+// -----------------
+// tu      : Units of the time recording.
+//           Supported are : "ps", "ns", "sec", "hour", "day".
+// Tmin    : Lower bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency upper bound of fmax=1/Tmin.
+// Tmax    : Upper bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency lower bound of fmin=1/Tmax.
+//           Specification of Tmax<=Tmin will result in fmin=0.
+// n       : Number of steps to be used for the frequency scan.
+//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].
+// h       : The histogram containing the recorded data (t,y).
+// err     : Flag to trigger the use of the uncertainties of the y-values (kTRUE) or not (kFALSE).
+//           err=kFALSE will result in unweighted treatment of the data.
+// Z       : Optional function to describe the amplitude modulation Z(t).
+//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.
+// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.
+//           Each set (f,a,b,c,P) is stored as a "hit" in the NcDevice, ordered w.r.t. increasing f.
+//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.
+//
+// Notes :
+// -------
+// 1) Each bin of the provided histogram represents a single data recording of the time series.
+// 2) In case err=kTRUE but a stored "y uncertainty" is 0, the corresponding bin will be neglected. 
+// 3) The settings err=kFALSE and Z=0 basically result in the original Lomb-Scargle periodogram.
+//
+// The default values are : err=kFALSE, Z=0 and results=0. 
+~~~
+**/
+
+ TGraph gr;
+
+ Int_t nbins=h.GetNbinsX();
+ Int_t nen=h.GetEntries();
+
+ if (nbins<1 || nen<1)
+ {
+  printf("*%-s::Periodogram* Inconsistent histogram input: nbins=%-i #entries=%-i \n",ClassName(),nbins,nen);
+  return gr;
+ }
+
+ TArrayD t(nbins);
+ TArrayD y(nbins);
+ TArrayD dy(nbins);
+
+ for (Int_t i=1; i<=nbins; i++)
+ {
+  t[i-1]=h.GetBinCenter(i);
+  y[i-1]=h.GetBinContent(i);
+  if (err) dy[i-1]=h.GetBinError(i);
+ }
+
+ if (err) // Uncertainties will be used as weights
+ {
+  gr=Periodogram(tu,Tmin,Tmax,n,t,y,&dy,Z,results);
+ }
+ else // No weights will be used
+ {
+  gr=Periodogram(tu,Tmin,Tmax,n,t,y,0,Z,results);
+ }
+
+ return gr;
+}
+///////////////////////////////////////////////////////////////////////////
+TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TGraph& g,Bool_t err,TF1* Z,NcDevice* results) const
+{
+/**
+~~~
+// Provide via the returned TGraph a periodogram of the data contained in the graph "g".
+// If err=kTRUE, the uncertainties of the graph values will be used as weights in the fitting procedure (see below).
+// Note: Treatment of the uncertainties can only be performed if "g" is a TGraphErrors object. Not for a TGraph.
+//
+// This memberfunction provides a tool to search for periodicity in time series,
+// even in case of unequally spaced data.
+// The implementation consists of an analytic algorithm known as the
+// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function
+//
+//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c
+//
+// where :
+// a,b  = Amplitudes
+// Z(t) = Amplitude modulation
+// c    = Offset
+// f    = Frequency
+//
+// By performing the fit at various frequencies, the corresponding amplitudes can be used
+// to provide for each frequency the corresponding power P.
+// It is the distribution P(f) that is reflected in the periodogram, where for the implementation
+// here the power is normalised to the interval [0,1]. 
+//
+// Details of the used algorithm can be found at :
+//
+// M. Zechmeister and M. Kuerster, Astronomy & Astrophysics 496 (2009) 577.
+//
+// Input arguments :
+// -----------------
+// tu      : Units of the time recording.
+//           Supported are : "ps", "ns", "sec", "hour", "day".
+// Tmin    : Lower bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency upper bound of fmax=1/Tmin.
+// Tmax    : Upper bound of the period (in units of "tu") to be investigated.
+//           This will lead to a frequency lower bound of fmin=1/Tmax.
+//           Specification of Tmax<=Tmin will result in fmin=0.
+// n       : Number of steps to be used for the frequency scan.
+//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].
+// g       : The graph containing the recorded data (t,y).
+// err     : Flag to trigger the use of the uncertainties of the y-values (kTRUE) or not (kFALSE).
+//           err=kFALSE will result in unweighted treatment of the data.
+// Z       : Optional function to describe the amplitude modulation Z(t).
+//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.
+// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.
+//           Each set (f,a,b,c,P) is stored as a "hit" in the NcDevice, ordered w.r.t. increasing f.
+//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.
+//
+// Notes :
+// -------
+// 1) Each point of the provided graph represents a single data recording of the time series.
+// 2) In case err=kTRUE but a stored "y uncertainty" is 0, the corresponding point will be neglected. 
+// 3) The settings err=kFALSE and Z=0 basically result in the original Lomb-Scargle periodogram.
+//
+// The default values are : err=kFALSE, Z=0 and results=0. 
+~~~
+**/
+
+ TGraph gr;
+
+ if (err && !(g.InheritsFrom("TGraphErrors")))
+ {
+  printf("*%-s::Periodogram* Error: For weighted fitting the input graph has to be a TGraphErrors object. \n",ClassName());
+  return gr;
+ }
+
+ Int_t np=g.GetN();
+
+ if (np<1)
+ {
+  printf("*%-s::Periodogram* Error: Input graph is empty. \n",ClassName());
+  return gr;
+ }
+
+ TArrayD t(np);
+ TArrayD y(np);
+ TArrayD dy(np);
+
+ Double_t gx=0;
+ Double_t gy=0;
+ for (Int_t i=0; i<np; i++)
+ {
+  g.GetPoint(i,gx,gy);
+  t[i]=gx;
+  y[i]=gy;
+  if (err) dy[i]=g.GetErrorY(i);
+ }
+
+ if (err) // Uncertainties will be used as weights
+ {
+  gr=Periodogram(tu,Tmin,Tmax,n,t,y,&dy,Z,results);
+ }
+ else // No weights will be used
+ {
+  gr=Periodogram(tu,Tmin,Tmax,n,t,y,0,Z,results);
+ }
+
+ return gr;
 }
 ///////////////////////////////////////////////////////////////////////////
 TObject* NcDSP::Clone(const char* name) const

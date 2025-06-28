@@ -166,7 +166,7 @@ Inheritance diagram for NcDSP:</div>
 <div class="line"><span class="comment">// All transformation results have been normalized, such that</span></div>
 <div class="line"><span class="comment">// the inverse transformation provides the original input spectrum.</span></div>
 <div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// In addition to the above transformations, also convolution, correlation,</span></div>
+<div class="line"><span class="comment">// In addition to the above transformations, also convolution, correlation, periodogram,</span></div>
 <div class="line"><span class="comment">// filter, Analog to Digital Converter (ADC), Digital to Analog Converter (DAC)</span></div>
 <div class="line"><span class="comment">// and ADC-DAC chain transmission processors are provided.</span></div>
 <div class="line"><span class="comment">//</span></div>
@@ -400,9 +400,9 @@ Inheritance diagram for NcDSP:</div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">//--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z</span></div>
-<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, March 25, 2025  11:47Z</span></div>
+<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 28, 2025  14:21Z</span></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00018">18</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00020">20</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -476,6 +476,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a33355ba7cd7a534f275c5ea45f24d716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0251f481e659a9d8aea78b76dc311a33" id="r_a0251f481e659a9d8aea78b76dc311a33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0251f481e659a9d8aea78b76dc311a33">LoadResult</a> ()</td></tr>
 <tr class="separator:a0251f481e659a9d8aea78b76dc311a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08d20a4688fc4e002b703caa6d1a4930" id="r_a08d20a4688fc4e002b703caa6d1a4930"><td class="memItemLeft" align="right" valign="top">TGraph&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08d20a4688fc4e002b703caa6d1a4930">Periodogram</a> (TString tu, Double_t Tmin, Double_t Tmax, Int_t n, <a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a> s, Int_t it, Int_t iy, Int_t idy=0, TF1 *Z=0, <a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *results=0) const</td></tr>
+<tr class="separator:a08d20a4688fc4e002b703caa6d1a4930"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad16a95c30ada3e7d4fcedde517df9bc" id="r_aad16a95c30ada3e7d4fcedde517df9bc"><td class="memItemLeft" align="right" valign="top">TGraph&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad16a95c30ada3e7d4fcedde517df9bc">Periodogram</a> (TString tu, Double_t Tmin, Double_t Tmax, Int_t n, <a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a> s, TString namet, TString namey, TString namedy=&quot;-&quot;, TF1 *Z=0, <a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *results=0) const</td></tr>
+<tr class="separator:aad16a95c30ada3e7d4fcedde517df9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37e5d5f7d0ed5644ec4e8da2ad78acee" id="r_a37e5d5f7d0ed5644ec4e8da2ad78acee"><td class="memItemLeft" align="right" valign="top">TGraph&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a> (TString tu, Double_t Tmin, Double_t Tmax, Int_t n, TArray &amp;t, TArray &amp;y, TArray *dy=0, TF1 *Z=0, <a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *results=0) const</td></tr>
+<tr class="separator:a37e5d5f7d0ed5644ec4e8da2ad78acee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00e88fa06a6bf28519e0e4ba6b520e6a" id="r_a00e88fa06a6bf28519e0e4ba6b520e6a"><td class="memItemLeft" align="right" valign="top">TGraph&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00e88fa06a6bf28519e0e4ba6b520e6a">Periodogram</a> (TString tu, Double_t Tmin, Double_t Tmax, Int_t n, TGraph &amp;g, Bool_t err=kFALSE, TF1 *Z=0, <a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *results=0) const</td></tr>
+<tr class="separator:a00e88fa06a6bf28519e0e4ba6b520e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ad029a3a5062d39663fa4cd0f238044" id="r_a2ad029a3a5062d39663fa4cd0f238044"><td class="memItemLeft" align="right" valign="top">TGraph&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ad029a3a5062d39663fa4cd0f238044">Periodogram</a> (TString tu, Double_t Tmin, Double_t Tmax, Int_t n, TH1 &amp;h, Bool_t err=kFALSE, TF1 *Z=0, <a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *results=0) const</td></tr>
+<tr class="separator:a2ad029a3a5062d39663fa4cd0f238044"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93c6598a165c81a817c66d8d33b7af6a" id="r_a93c6598a165c81a817c66d8d33b7af6a"><td class="memItemLeft" align="right" valign="top">TArrayD&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93c6598a165c81a817c66d8d33b7af6a">SampleAndHold</a> (Int_t ns, TH1 *hist=0, Int_t loc=-1, Int_t jmin=0, Int_t jmax=-1) const</td></tr>
 <tr class="separator:a93c6598a165c81a817c66d8d33b7af6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac85fe915d2a3bcd806ea3968a73c53be" id="r_ac85fe915d2a3bcd806ea3968a73c53be"><td class="memItemLeft" align="right" valign="top">TArrayD&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac85fe915d2a3bcd806ea3968a73c53be">SampleAndHold</a> (TF1 f, Double_t step, Double_t vmin, Double_t vmax, TH1 *hist=0, Int_t loc=-1) const</td></tr>
@@ -769,7 +779,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// for containers like NcEvent when adding objects in case the</span></div>
 <div class="line"><span class="comment">// container owns the objects.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html#l05552">5552</a> of file <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html">NcDSP.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html#l06194">6194</a> of file <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html">NcDSP.cxx</a>.</p>
 
 </div>
 </div>
@@ -3263,6 +3273,569 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a08d20a4688fc4e002b703caa6d1a4930" name="a08d20a4688fc4e002b703caa6d1a4930"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08d20a4688fc4e002b703caa6d1a4930">&#9670;&#160;</a></span>Periodogram() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TGraph NcDSP::Periodogram </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>tu</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmax</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>it</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>iy</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>idy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TF1 *</td>          <td class="paramname"><span class="paramname"><em>Z</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *</td>          <td class="paramname"><span class="paramname"><em>results</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide via the returned TGraph a periodogram of the specified data as stored in the NcSample object &quot;s&quot;.</span></div>
+<div class="line"><span class="comment">// Note that the storage mode for the NcSample object has to be activated. </span></div>
+<div class="line"><span class="comment">// If the index &quot;idy&quot; is provided, the corresponding values will be regarded as uncertainties</span></div>
+<div class="line"><span class="comment">// and will be used as weights in the fitting procedure (see below).</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// This memberfunction provides a tool to search for periodicity in time series,</span></div>
+<div class="line"><span class="comment">// even in case of unequally spaced data.</span></div>
+<div class="line"><span class="comment">// The implementation consists of an analytic algorithm known as the</span></div>
+<div class="line"><span class="comment">// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// where :</span></div>
+<div class="line"><span class="comment">// a,b  = Amplitudes</span></div>
+<div class="line"><span class="comment">// Z(t) = Amplitude modulation</span></div>
+<div class="line"><span class="comment">// c    = Offset</span></div>
+<div class="line"><span class="comment">// f    = Frequency</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// By performing the fit at various frequencies, the corresponding amplitudes can be used</span></div>
+<div class="line"><span class="comment">// to provide for each frequency the corresponding power P.</span></div>
+<div class="line"><span class="comment">// It is the distribution P(f) that is reflected in the periodogram, where for the implementation</span></div>
+<div class="line"><span class="comment">// here the power is normalised to the interval [0,1]. </span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Details of the used algorithm can be found at :</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// M. Zechmeister and M. Kuerster, Astronomy &amp; Astrophysics 496 (2009) 577.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Input arguments :</span></div>
+<div class="line"><span class="comment">// -----------------</span></div>
+<div class="line"><span class="comment">// tu      : Units of the time recording.</span></div>
+<div class="line"><span class="comment">//           Supported are : &quot;ps&quot;, &quot;ns&quot;, &quot;sec&quot;, &quot;hour&quot;, &quot;day&quot;.</span></div>
+<div class="line"><span class="comment">// Tmin    : Lower bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency upper bound of fmax=1/Tmin.</span></div>
+<div class="line"><span class="comment">// Tmax    : Upper bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency lower bound of fmin=1/Tmax.</span></div>
+<div class="line"><span class="comment">//           Specification of Tmax&lt;=Tmin will result in fmin=0.</span></div>
+<div class="line"><span class="comment">// n       : Number of steps to be used for the frequency scan.</span></div>
+<div class="line"><span class="comment">//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].</span></div>
+<div class="line"><span class="comment">// s       : The NcSample object containing the recorded data.</span></div>
+<div class="line"><span class="comment">// it      : Index (1=first) of the NcSample variable with the times of the data recordings.</span></div>
+<div class="line"><span class="comment">// iy      : Index (1=first) of the NcSample variable with the observed values y(t).</span></div>
+<div class="line"><span class="comment">// idy     : Optional index (1=first) of the NcSample varaible with the uncertainties of the y-values.</span></div>
+<div class="line"><span class="comment">//           idy=0 will result in unweighted treatment of the data.</span></div>
+<div class="line"><span class="comment">// Z       : Optional function to describe the amplitude modulation Z(t).</span></div>
+<div class="line"><span class="comment">//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.</span></div>
+<div class="line"><span class="comment">// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.</span></div>
+<div class="line"><span class="comment">//           Each set (f,a,b,c,P) is stored as a &quot;hit&quot; in the NcDevice, ordered w.r.t. increasing f.</span></div>
+<div class="line"><span class="comment">//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Notes :</span></div>
+<div class="line"><span class="comment">// -------</span></div>
+<div class="line"><span class="comment">// 1) Each entry of the provided NcSample object represents a single data recording of the time series.</span></div>
+<div class="line"><span class="comment">// 2) In case the index idy&gt;0 is provided but a stored &quot;y uncertainty&quot; is 0, the corresponding NcSample entry will be neglected. </span></div>
+<div class="line"><span class="comment">// 3) The settings idxdy=0 and Z=0 basically result in the original Lomb-Scargle periodogram.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// The default values are : idxdy=0, Z=0 and results=0. </span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html#l05810">5810</a> of file <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html">NcDSP.cxx</a>.</p>
+
+</div>
+</div>
+<a id="aad16a95c30ada3e7d4fcedde517df9bc" name="aad16a95c30ada3e7d4fcedde517df9bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad16a95c30ada3e7d4fcedde517df9bc">&#9670;&#160;</a></span>Periodogram() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TGraph NcDSP::Periodogram </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>tu</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmax</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>namet</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>namey</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>namedy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;-&quot;</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TF1 *</td>          <td class="paramname"><span class="paramname"><em>Z</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *</td>          <td class="paramname"><span class="paramname"><em>results</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide via the returned TGraph a periodogram of the specified data as stored in the NcSample object &quot;s&quot;.</span></div>
+<div class="line"><span class="comment">// Note that the storage mode for the NcSample object has to be activated. </span></div>
+<div class="line"><span class="comment">// If a valid &quot;namedy&quot; is provided, the corresponding values will be regarded as uncertainties</span></div>
+<div class="line"><span class="comment">// and will be used as weights in the fitting procedure (see below).</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// This memberfunction provides a tool to search for periodicity in time series,</span></div>
+<div class="line"><span class="comment">// even in case of unequally spaced data.</span></div>
+<div class="line"><span class="comment">// The implementation consists of an analytic algorithm known as the</span></div>
+<div class="line"><span class="comment">// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// where :</span></div>
+<div class="line"><span class="comment">// a,b  = Amplitudes</span></div>
+<div class="line"><span class="comment">// Z(t) = Amplitude modulation</span></div>
+<div class="line"><span class="comment">// c    = Offset</span></div>
+<div class="line"><span class="comment">// f    = Frequency</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// By performing the fit at various frequencies, the corresponding amplitudes can be used</span></div>
+<div class="line"><span class="comment">// to provide for each frequency the corresponding power P.</span></div>
+<div class="line"><span class="comment">// It is the distribution P(f) that is reflected in the periodogram, where for the implementation</span></div>
+<div class="line"><span class="comment">// here the power is normalised to the interval [0,1]. </span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Details of the used algorithm can be found at :</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// M. Zechmeister and M. Kuerster, Astronomy &amp; Astrophysics 496 (2009) 577.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Input arguments :</span></div>
+<div class="line"><span class="comment">// -----------------</span></div>
+<div class="line"><span class="comment">// tu      : Units of the time recording.</span></div>
+<div class="line"><span class="comment">//           Supported are : &quot;ps&quot;, &quot;ns&quot;, &quot;sec&quot;, &quot;hour&quot;, &quot;day&quot;.</span></div>
+<div class="line"><span class="comment">// Tmin    : Lower bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency upper bound of fmax=1/Tmin.</span></div>
+<div class="line"><span class="comment">// Tmax    : Upper bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency lower bound of fmin=1/Tmax.</span></div>
+<div class="line"><span class="comment">//           Specification of Tmax&lt;=Tmin will result in fmin=0.</span></div>
+<div class="line"><span class="comment">// n       : Number of steps to be used for the frequency scan.</span></div>
+<div class="line"><span class="comment">//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].</span></div>
+<div class="line"><span class="comment">// s       : The NcSample object containing the recorded data.</span></div>
+<div class="line"><span class="comment">// namet   : Name of the NcSample variable with the times of the data recordings.</span></div>
+<div class="line"><span class="comment">// namey   : Name of the NcSample variable with the observed values y(t).</span></div>
+<div class="line"><span class="comment">// namedy  : Name of the optional NcSample variable with the uncertainties of the y-values.</span></div>
+<div class="line"><span class="comment">//           namedy=&quot;-&quot; will result in unweighted treatment of the data.</span></div>
+<div class="line"><span class="comment">// Z       : Optional function to describe the amplitude modulation Z(t).</span></div>
+<div class="line"><span class="comment">//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.</span></div>
+<div class="line"><span class="comment">// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.</span></div>
+<div class="line"><span class="comment">//           Each set (f,a,b,c,P) is stored as a &quot;hit&quot; in the NcDevice, ordered w.r.t. increasing f.</span></div>
+<div class="line"><span class="comment">//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Notes :</span></div>
+<div class="line"><span class="comment">// -------</span></div>
+<div class="line"><span class="comment">// 1) Each entry of the provided NcSample object represents a single data recording of the time series.</span></div>
+<div class="line"><span class="comment">// 2) In case a valid namedy is provided but a stored &quot;y uncertainty&quot; is 0, the corresponding NcSample entry will be neglected. </span></div>
+<div class="line"><span class="comment">// 3) The settings namedy=&quot;-&quot; and Z=0 basically result in the original Lomb-Scargle periodogram.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// The default values are : namedy=&quot;-&quot;, Z=0 and results=0. </span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html#l05913">5913</a> of file <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html">NcDSP.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a37e5d5f7d0ed5644ec4e8da2ad78acee" name="a37e5d5f7d0ed5644ec4e8da2ad78acee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37e5d5f7d0ed5644ec4e8da2ad78acee">&#9670;&#160;</a></span>Periodogram() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TGraph NcDSP::Periodogram </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>tu</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmax</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TArray &amp;</td>          <td class="paramname"><span class="paramname"><em>t</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TArray &amp;</td>          <td class="paramname"><span class="paramname"><em>y</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TArray *</td>          <td class="paramname"><span class="paramname"><em>dy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TF1 *</td>          <td class="paramname"><span class="paramname"><em>Z</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *</td>          <td class="paramname"><span class="paramname"><em>results</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide via the returned TGraph a periodogram of the specified data.</span></div>
+<div class="line"><span class="comment">// If the array &quot;dy&quot; is provided, these uncertainties will be used as weights</span></div>
+<div class="line"><span class="comment">// in the fitting procedure (see below).</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// This memberfunction provides a tool to search for periodicity in time series,</span></div>
+<div class="line"><span class="comment">// even in case of unequally spaced data.</span></div>
+<div class="line"><span class="comment">// The implementation consists of an analytic algorithm known as the</span></div>
+<div class="line"><span class="comment">// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// where :</span></div>
+<div class="line"><span class="comment">// a,b  = Amplitudes</span></div>
+<div class="line"><span class="comment">// Z(t) = Amplitude modulation</span></div>
+<div class="line"><span class="comment">// c    = Offset</span></div>
+<div class="line"><span class="comment">// f    = Frequency</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// By performing the fit at various frequencies, the corresponding amplitudes can be used</span></div>
+<div class="line"><span class="comment">// to provide for each frequency the corresponding power P.</span></div>
+<div class="line"><span class="comment">// It is the distribution P(f) that is reflected in the periodogram, where for the implementation</span></div>
+<div class="line"><span class="comment">// here the power is normalised to the interval [0,1]. </span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Details of the used algorithm can be found at :</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// M. Zechmeister and M. Kuerster, Astronomy &amp; Astrophysics 496 (2009) 577.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Input arguments :</span></div>
+<div class="line"><span class="comment">// -----------------</span></div>
+<div class="line"><span class="comment">// tu      : Units of the time recording.</span></div>
+<div class="line"><span class="comment">//           Supported are : &quot;ps&quot;, &quot;ns&quot;, &quot;sec&quot;, &quot;hour&quot;, &quot;day&quot;.</span></div>
+<div class="line"><span class="comment">// Tmin    : Lower bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency upper bound of fmax=1/Tmin.</span></div>
+<div class="line"><span class="comment">// Tmax    : Upper bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency lower bound of fmin=1/Tmax.</span></div>
+<div class="line"><span class="comment">//           Specification of Tmax&lt;=Tmin will result in fmin=0.</span></div>
+<div class="line"><span class="comment">// n       : Number of steps to be used for the frequency scan.</span></div>
+<div class="line"><span class="comment">//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].</span></div>
+<div class="line"><span class="comment">// t       : Array with the times of the data recordings.</span></div>
+<div class="line"><span class="comment">// y       : Array with the observed values y(t).</span></div>
+<div class="line"><span class="comment">// dy      : Optional array with the uncertainties of the y-values.</span></div>
+<div class="line"><span class="comment">//           dy=0 will result in unweighted treatment of the data.</span></div>
+<div class="line"><span class="comment">// Z       : Optional function to describe the amplitude modulation Z(t).</span></div>
+<div class="line"><span class="comment">//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.</span></div>
+<div class="line"><span class="comment">// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.</span></div>
+<div class="line"><span class="comment">//           Each set (f,a,b,c,P) is stored as a &quot;hit&quot; in the NcDevice, ordered w.r.t. increasing f.</span></div>
+<div class="line"><span class="comment">//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Notes :</span></div>
+<div class="line"><span class="comment">// -------</span></div>
+<div class="line"><span class="comment">// 1) All provided input arrays should have the same size.</span></div>
+<div class="line"><span class="comment">// 2) The values stored in the arrays t, y and (optionally) dy should match </span></div>
+<div class="line"><span class="comment">//    such that (t[i],y[i],dy[i]) represents a single data recording of the time series.</span></div>
+<div class="line"><span class="comment">// 3) In case the array dy is provided and some dy[i]=0, the corresponding data recording will be neglected. </span></div>
+<div class="line"><span class="comment">// 4) The settings dy=0 and Z=0 basically result in the original Lomb-Scargle periodogram.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// The default values are : dy=0, Z=0 and results=0. </span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html#l05552">5552</a> of file <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html">NcDSP.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a00e88fa06a6bf28519e0e4ba6b520e6a" name="a00e88fa06a6bf28519e0e4ba6b520e6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00e88fa06a6bf28519e0e4ba6b520e6a">&#9670;&#160;</a></span>Periodogram() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TGraph NcDSP::Periodogram </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>tu</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmax</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TGraph &amp;</td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Bool_t</td>          <td class="paramname"><span class="paramname"><em>err</em></span><span class="paramdefsep"> = </span><span class="paramdefval">kFALSE</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TF1 *</td>          <td class="paramname"><span class="paramname"><em>Z</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *</td>          <td class="paramname"><span class="paramname"><em>results</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide via the returned TGraph a periodogram of the data contained in the graph &quot;g&quot;.</span></div>
+<div class="line"><span class="comment">// If err=kTRUE, the uncertainties of the graph values will be used as weights in the fitting procedure (see below).</span></div>
+<div class="line"><span class="comment">// Note: Treatment of the uncertainties can only be performed if &quot;g&quot; is a TGraphErrors object. Not for a TGraph.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// This memberfunction provides a tool to search for periodicity in time series,</span></div>
+<div class="line"><span class="comment">// even in case of unequally spaced data.</span></div>
+<div class="line"><span class="comment">// The implementation consists of an analytic algorithm known as the</span></div>
+<div class="line"><span class="comment">// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// where :</span></div>
+<div class="line"><span class="comment">// a,b  = Amplitudes</span></div>
+<div class="line"><span class="comment">// Z(t) = Amplitude modulation</span></div>
+<div class="line"><span class="comment">// c    = Offset</span></div>
+<div class="line"><span class="comment">// f    = Frequency</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// By performing the fit at various frequencies, the corresponding amplitudes can be used</span></div>
+<div class="line"><span class="comment">// to provide for each frequency the corresponding power P.</span></div>
+<div class="line"><span class="comment">// It is the distribution P(f) that is reflected in the periodogram, where for the implementation</span></div>
+<div class="line"><span class="comment">// here the power is normalised to the interval [0,1]. </span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Details of the used algorithm can be found at :</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// M. Zechmeister and M. Kuerster, Astronomy &amp; Astrophysics 496 (2009) 577.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Input arguments :</span></div>
+<div class="line"><span class="comment">// -----------------</span></div>
+<div class="line"><span class="comment">// tu      : Units of the time recording.</span></div>
+<div class="line"><span class="comment">//           Supported are : &quot;ps&quot;, &quot;ns&quot;, &quot;sec&quot;, &quot;hour&quot;, &quot;day&quot;.</span></div>
+<div class="line"><span class="comment">// Tmin    : Lower bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency upper bound of fmax=1/Tmin.</span></div>
+<div class="line"><span class="comment">// Tmax    : Upper bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency lower bound of fmin=1/Tmax.</span></div>
+<div class="line"><span class="comment">//           Specification of Tmax&lt;=Tmin will result in fmin=0.</span></div>
+<div class="line"><span class="comment">// n       : Number of steps to be used for the frequency scan.</span></div>
+<div class="line"><span class="comment">//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].</span></div>
+<div class="line"><span class="comment">// g       : The graph containing the recorded data (t,y).</span></div>
+<div class="line"><span class="comment">// err     : Flag to trigger the use of the uncertainties of the y-values (kTRUE) or not (kFALSE).</span></div>
+<div class="line"><span class="comment">//           err=kFALSE will result in unweighted treatment of the data.</span></div>
+<div class="line"><span class="comment">// Z       : Optional function to describe the amplitude modulation Z(t).</span></div>
+<div class="line"><span class="comment">//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.</span></div>
+<div class="line"><span class="comment">// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.</span></div>
+<div class="line"><span class="comment">//           Each set (f,a,b,c,P) is stored as a &quot;hit&quot; in the NcDevice, ordered w.r.t. increasing f.</span></div>
+<div class="line"><span class="comment">//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Notes :</span></div>
+<div class="line"><span class="comment">// -------</span></div>
+<div class="line"><span class="comment">// 1) Each point of the provided graph represents a single data recording of the time series.</span></div>
+<div class="line"><span class="comment">// 2) In case err=kTRUE but a stored &quot;y uncertainty&quot; is 0, the corresponding point will be neglected. </span></div>
+<div class="line"><span class="comment">// 3) The settings err=kFALSE and Z=0 basically result in the original Lomb-Scargle periodogram.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// The default values are : err=kFALSE, Z=0 and results=0. </span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html#l06092">6092</a> of file <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html">NcDSP.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a2ad029a3a5062d39663fa4cd0f238044" name="a2ad029a3a5062d39663fa4cd0f238044"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ad029a3a5062d39663fa4cd0f238044">&#9670;&#160;</a></span>Periodogram() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TGraph NcDSP::Periodogram </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>tu</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Double_t</td>          <td class="paramname"><span class="paramname"><em>Tmax</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TH1 &amp;</td>          <td class="paramname"><span class="paramname"><em>h</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Bool_t</td>          <td class="paramname"><span class="paramname"><em>err</em></span><span class="paramdefsep"> = </span><span class="paramdefval">kFALSE</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TF1 *</td>          <td class="paramname"><span class="paramname"><em>Z</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *</td>          <td class="paramname"><span class="paramname"><em>results</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide via the returned TGraph a periodogram of the data contained in the histogram &quot;h&quot;.</span></div>
+<div class="line"><span class="comment">// If err=kTRUE, the uncertainties of the histogram values will be used as weights in the fitting procedure (see below).</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// This memberfunction provides a tool to search for periodicity in time series,</span></div>
+<div class="line"><span class="comment">// even in case of unequally spaced data.</span></div>
+<div class="line"><span class="comment">// The implementation consists of an analytic algorithm known as the</span></div>
+<div class="line"><span class="comment">// Generalised Lomb-Scargle (GLS) periodogram and is equivalent to fitting the function</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">//         y(t)=a*Z(t)*cos(2*pi*f*t)+b*Z(t)*sin(2*pi*f*t)+c</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// where :</span></div>
+<div class="line"><span class="comment">// a,b  = Amplitudes</span></div>
+<div class="line"><span class="comment">// Z(t) = Amplitude modulation</span></div>
+<div class="line"><span class="comment">// c    = Offset</span></div>
+<div class="line"><span class="comment">// f    = Frequency</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// By performing the fit at various frequencies, the corresponding amplitudes can be used</span></div>
+<div class="line"><span class="comment">// to provide for each frequency the corresponding power P.</span></div>
+<div class="line"><span class="comment">// It is the distribution P(f) that is reflected in the periodogram, where for the implementation</span></div>
+<div class="line"><span class="comment">// here the power is normalised to the interval [0,1]. </span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Details of the used algorithm can be found at :</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// M. Zechmeister and M. Kuerster, Astronomy &amp; Astrophysics 496 (2009) 577.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Input arguments :</span></div>
+<div class="line"><span class="comment">// -----------------</span></div>
+<div class="line"><span class="comment">// tu      : Units of the time recording.</span></div>
+<div class="line"><span class="comment">//           Supported are : &quot;ps&quot;, &quot;ns&quot;, &quot;sec&quot;, &quot;hour&quot;, &quot;day&quot;.</span></div>
+<div class="line"><span class="comment">// Tmin    : Lower bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency upper bound of fmax=1/Tmin.</span></div>
+<div class="line"><span class="comment">// Tmax    : Upper bound of the period (in units of &quot;tu&quot;) to be investigated.</span></div>
+<div class="line"><span class="comment">//           This will lead to a frequency lower bound of fmin=1/Tmax.</span></div>
+<div class="line"><span class="comment">//           Specification of Tmax&lt;=Tmin will result in fmin=0.</span></div>
+<div class="line"><span class="comment">// n       : Number of steps to be used for the frequency scan.</span></div>
+<div class="line"><span class="comment">//           This will result in n+1 frequency samplings to cover the interval [fmin,fmax].</span></div>
+<div class="line"><span class="comment">// h       : The histogram containing the recorded data (t,y).</span></div>
+<div class="line"><span class="comment">// err     : Flag to trigger the use of the uncertainties of the y-values (kTRUE) or not (kFALSE).</span></div>
+<div class="line"><span class="comment">//           err=kFALSE will result in unweighted treatment of the data.</span></div>
+<div class="line"><span class="comment">// Z       : Optional function to describe the amplitude modulation Z(t).</span></div>
+<div class="line"><span class="comment">//           Z=0 is equivalent to Z(t)=1, i.e. unmodulated amplitudes.</span></div>
+<div class="line"><span class="comment">// results : Optional NcDevice to contain the resulting (f,a,b,c,P) values.</span></div>
+<div class="line"><span class="comment">//           Each set (f,a,b,c,P) is stored as a &quot;hit&quot; in the NcDevice, ordered w.r.t. increasing f.</span></div>
+<div class="line"><span class="comment">//           Ordering w.r.t. any value can be obtained via the SortHits() facility of NcDevice.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Notes :</span></div>
+<div class="line"><span class="comment">// -------</span></div>
+<div class="line"><span class="comment">// 1) Each bin of the provided histogram represents a single data recording of the time series.</span></div>
+<div class="line"><span class="comment">// 2) In case err=kTRUE but a stored &quot;y uncertainty&quot; is 0, the corresponding bin will be neglected. </span></div>
+<div class="line"><span class="comment">// 3) The settings err=kFALSE and Z=0 basically result in the original Lomb-Scargle periodogram.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// The default values are : err=kFALSE, Z=0 and results=0. </span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html#l05999">5999</a> of file <a class="el" href="../../d6/d65/_nc_d_s_p_8cxx_source.html">NcDSP.cxx</a>.</p>
+
+</div>
+</div>
 <a id="af9d6afad52d8b8cf9ec43e851f63bf03" name="af9d6afad52d8b8cf9ec43e851f63bf03"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9d6afad52d8b8cf9ec43e851f63bf03">&#9670;&#160;</a></span>Reset()</h2>
 
@@ -3962,7 +4535,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00079">79</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00087">87</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -3986,7 +4559,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00076">76</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00084">84</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4010,7 +4583,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00078">78</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00086">86</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4034,7 +4607,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00083">83</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00091">91</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4058,7 +4631,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00073">73</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00081">81</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4082,7 +4655,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00081">81</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00089">89</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4106,7 +4679,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00074">74</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00082">82</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4130,7 +4703,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00072">72</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00080">80</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4154,7 +4727,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00075">75</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00083">83</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4178,7 +4751,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00077">77</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00085">85</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4202,7 +4775,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00082">82</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00090">90</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>
@@ -4226,7 +4799,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00080">80</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html#l00088">88</a> of file <a class="el" href="../../db/da5/_nc_d_s_p_8h_source.html">NcDSP.h</a>.</p>
 
 </div>
 </div>

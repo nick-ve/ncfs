@@ -1574,3 +1574,5 @@
                 both the THtml and Doxygen format.
                 Also the documentation in ncfs/docs has now been produced by Doxygen. 
                 The version indicator in NcVersion has been updated to 6.1.          
+28-jun-2025 NvE New member function Periodogram() introduced in class NcDSP.
+                The version indicator in NcVersion has been updated to 6.2.          

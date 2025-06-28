@@ -12,6 +12,8 @@
 
 #include "NcSample.h"
 #include "NcMath.h"
+#include "NcSignal.h"
+#include "NcDevice.h"
 
 /** Various Digital Signal Processing (DSP) operations for (sequential) data samples. **/
 
@@ -68,6 +70,12 @@ class NcDSP : public TNamed
   Int_t GetN(Int_t mode=0) const;      // Provide the number of data elements (to be) processed.
   TArrayD GetData(TString mode) const; // Provide a selected set of data
 
+  TGraph Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TArray& t,TArray& y,TArray* dy=0,TF1* Z=0, NcDevice* results=0) const; // Provide a periodogram for the specified data
+  TGraph Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,NcSample s,Int_t it,Int_t iy,Int_t idy=0,TF1* Z=0, NcDevice* results=0) const; // Provide a periodogram for the specified data
+  TGraph Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,NcSample s,TString namet,TString namey,TString namedy="-",TF1* Z=0, NcDevice* results=0) const; // Provide a periodogram for the specified data
+  TGraph Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TH1& h,Bool_t err=kFALSE,TF1* Z=0, NcDevice* results=0) const; // Provide a periodogram for the specified data
+  TGraph Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TGraph& g,Bool_t err=kFALSE,TF1* Z=0, NcDevice* results=0) const; // Provide a periodogram for the specified data
+
  protected:
   TVirtualFFT* fProc; // The FFTW processor
   Int_t fN;           // The number of data elements to be processed as entered via Load()
@@ -87,6 +95,6 @@ class NcDSP : public TNamed
   void HistogramFilterFFT(TArray* h,TH1* hisf,Bool_t dB,Bool_t kernel,TH1* hist=0); // Provide filter kernel or result histograms
   void HistogramTrafoResult(TString name,Int_t mode,TH1* hist,TString sel); // Provide a histogram of the requested transformation result
 
- ClassDef(NcDSP,10) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
+ ClassDef(NcDSP,11) // Various Digital Signal Processing (DSP) operations for (sequential) data samples
 };
 #endif

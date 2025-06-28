@@ -3643,72 +3643,436 @@ $(function(){initNavTree('d6/d65/_nc_d_s_p_8cxx_source.html','../../'); initResi
 </div>
 <div class="line"><a id="l05551" name="l05551"></a><span class="lineno"> 5551</span></div>
 <div class="foldopen" id="foldopen05552" data-start="{" data-end="}">
-<div class="line"><a id="l05552" name="l05552"></a><span class="lineno"><a class="line" href="../../d7/d8a/class_nc_d_s_p.html#ac9fd73361974806a775989f7e89e5729"> 5552</a></span>TObject* <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#ac9fd73361974806a775989f7e89e5729">NcDSP::Clone</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name)<span class="keyword"> const</span></div>
+<div class="line"><a id="l05552" name="l05552"></a><span class="lineno"><a class="line" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee"> 5552</a></span>TGraph <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">NcDSP::Periodogram</a>(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TArray&amp; t,TArray&amp; y,TArray* dy,TF1* Z,<a class="code hl_class" href="../../de/df5/class_nc_device.html">NcDevice</a>* results)<span class="keyword"> const</span></div>
 <div class="line"><a id="l05553" name="l05553"></a><span class="lineno"> 5553</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l05563" name="l05563"></a><span class="lineno"> 5563</span> </div>
-<div class="line"><a id="l05564" name="l05564"></a><span class="lineno"> 5564</span> <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a6f2607c80cc20d8fb8acf85c8469e293">NcDSP</a>* q=<span class="keyword">new</span> <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a6f2607c80cc20d8fb8acf85c8469e293">NcDSP</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a id="l05565" name="l05565"></a><span class="lineno"> 5565</span> <span class="keywordflow">if</span> (name)</div>
-<div class="line"><a id="l05566" name="l05566"></a><span class="lineno"> 5566</span> {</div>
-<div class="line"><a id="l05567" name="l05567"></a><span class="lineno"> 5567</span>  <span class="keywordflow">if</span> (strlen(name)) q-&gt;SetName(name);</div>
-<div class="line"><a id="l05568" name="l05568"></a><span class="lineno"> 5568</span> }</div>
-<div class="line"><a id="l05569" name="l05569"></a><span class="lineno"> 5569</span> <span class="keywordflow">return</span> q;</div>
-<div class="line"><a id="l05570" name="l05570"></a><span class="lineno"> 5570</span>}</div>
+<div class="line"><a id="l05614" name="l05614"></a><span class="lineno"> 5614</span> </div>
+<div class="line"><a id="l05615" name="l05615"></a><span class="lineno"> 5615</span>  <span class="keywordflow">if</span> (results) results-&gt;<a class="code hl_function" href="../../de/df5/class_nc_device.html#aeeab04a1fcf3146e4510fea9df1ad356">Reset</a>();</div>
+<div class="line"><a id="l05616" name="l05616"></a><span class="lineno"> 5616</span> </div>
+<div class="line"><a id="l05617" name="l05617"></a><span class="lineno"> 5617</span>  TGraph gr;</div>
+<div class="line"><a id="l05618" name="l05618"></a><span class="lineno"> 5618</span> </div>
+<div class="line"><a id="l05619" name="l05619"></a><span class="lineno"> 5619</span>  <span class="keywordflow">if</span> (tu!=<span class="stringliteral">&quot;ps&quot;</span> &amp;&amp; tu!=<span class="stringliteral">&quot;ns&quot;</span> &amp;&amp; tu!=<span class="stringliteral">&quot;sec&quot;</span> &amp;&amp; tu!=<span class="stringliteral">&quot;hour&quot;</span> &amp;&amp; tu!=<span class="stringliteral">&quot;day&quot;</span>)</div>
+<div class="line"><a id="l05620" name="l05620"></a><span class="lineno"> 5620</span>  {</div>
+<div class="line"><a id="l05621" name="l05621"></a><span class="lineno"> 5621</span>   printf(<span class="stringliteral">&quot;*%-s::Periodogram* Unsupported time unit : %-s \n&quot;</span>,ClassName(),tu.Data());</div>
+<div class="line"><a id="l05622" name="l05622"></a><span class="lineno"> 5622</span>   <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05623" name="l05623"></a><span class="lineno"> 5623</span>  } </div>
+<div class="line"><a id="l05624" name="l05624"></a><span class="lineno"> 5624</span> </div>
+<div class="line"><a id="l05625" name="l05625"></a><span class="lineno"> 5625</span>  <span class="keywordflow">if</span> (Tmin&lt;=0 || (Tmax&gt;Tmin &amp;&amp; Tmax&lt;=0) || n&lt;1)</div>
+<div class="line"><a id="l05626" name="l05626"></a><span class="lineno"> 5626</span>  {</div>
+<div class="line"><a id="l05627" name="l05627"></a><span class="lineno"> 5627</span>   printf(<span class="stringliteral">&quot;*%-s::Periodogram* Inconsistent input : Tmin=%-g Tmax=%-g n=%-i \n&quot;</span>,ClassName(),Tmin,Tmax,n);</div>
+<div class="line"><a id="l05628" name="l05628"></a><span class="lineno"> 5628</span>   <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05629" name="l05629"></a><span class="lineno"> 5629</span>  }</div>
+<div class="line"><a id="l05630" name="l05630"></a><span class="lineno"> 5630</span> </div>
+<div class="line"><a id="l05631" name="l05631"></a><span class="lineno"> 5631</span>  <span class="comment">// Check the compatibility of the input array sizes</span></div>
+<div class="line"><a id="l05632" name="l05632"></a><span class="lineno"> 5632</span>  Int_t nt=t.GetSize();</div>
+<div class="line"><a id="l05633" name="l05633"></a><span class="lineno"> 5633</span>  Int_t ny=y.GetSize();</div>
+<div class="line"><a id="l05634" name="l05634"></a><span class="lineno"> 5634</span>  Int_t ndy=ny;</div>
+<div class="line"><a id="l05635" name="l05635"></a><span class="lineno"> 5635</span>  <span class="keywordflow">if</span> (dy) ndy=dy-&gt;GetSize();</div>
+<div class="line"><a id="l05636" name="l05636"></a><span class="lineno"> 5636</span> </div>
+<div class="line"><a id="l05637" name="l05637"></a><span class="lineno"> 5637</span>  <span class="keywordflow">if</span> ((nt+ny+ndy)!=3*nt)</div>
+<div class="line"><a id="l05638" name="l05638"></a><span class="lineno"> 5638</span>  {</div>
+<div class="line"><a id="l05639" name="l05639"></a><span class="lineno"> 5639</span>   <span class="keywordflow">if</span> (dy)</div>
+<div class="line"><a id="l05640" name="l05640"></a><span class="lineno"> 5640</span>   {</div>
+<div class="line"><a id="l05641" name="l05641"></a><span class="lineno"> 5641</span>    printf(<span class="stringliteral">&quot;*%-s::Periodogram* Incompatible input array sizes : nt=%-i ny=%-i ndy=%-i \n&quot;</span>,ClassName(),nt,ny,ndy);</div>
+<div class="line"><a id="l05642" name="l05642"></a><span class="lineno"> 5642</span>   }</div>
+<div class="line"><a id="l05643" name="l05643"></a><span class="lineno"> 5643</span>   <span class="keywordflow">else</span></div>
+<div class="line"><a id="l05644" name="l05644"></a><span class="lineno"> 5644</span>   {</div>
+<div class="line"><a id="l05645" name="l05645"></a><span class="lineno"> 5645</span>    printf(<span class="stringliteral">&quot;*%-s::Periodogram* Incompatible input array sizes : nt=%-i ny=%-i \n&quot;</span>,ClassName(),nt,ny);</div>
+<div class="line"><a id="l05646" name="l05646"></a><span class="lineno"> 5646</span>   }</div>
+<div class="line"><a id="l05647" name="l05647"></a><span class="lineno"> 5647</span>   <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05648" name="l05648"></a><span class="lineno"> 5648</span>  }</div>
+<div class="line"><a id="l05649" name="l05649"></a><span class="lineno"> 5649</span> </div>
+<div class="line"><a id="l05650" name="l05650"></a><span class="lineno"> 5650</span>  <span class="comment">// Determine the frequency bounds and step size</span></div>
+<div class="line"><a id="l05651" name="l05651"></a><span class="lineno"> 5651</span>  Float_t fmax=1./Tmin;</div>
+<div class="line"><a id="l05652" name="l05652"></a><span class="lineno"> 5652</span>  Float_t fmin=0;</div>
+<div class="line"><a id="l05653" name="l05653"></a><span class="lineno"> 5653</span>  <span class="keywordflow">if</span> (Tmax&gt;Tmin) fmin=1./Tmax;</div>
+<div class="line"><a id="l05654" name="l05654"></a><span class="lineno"> 5654</span>  Float_t fstep=(fmax-fmin)/<span class="keywordtype">float</span>(n);</div>
+<div class="line"><a id="l05655" name="l05655"></a><span class="lineno"> 5655</span> </div>
+<div class="line"><a id="l05656" name="l05656"></a><span class="lineno"> 5656</span>  <span class="comment">// Create compact internal arrays for efficient processing </span></div>
+<div class="line"><a id="l05657" name="l05657"></a><span class="lineno"> 5657</span>  Int_t na=0;</div>
+<div class="line"><a id="l05658" name="l05658"></a><span class="lineno"> 5658</span>  Float_t ti,yi,dyi2,wi,zi;</div>
+<div class="line"><a id="l05659" name="l05659"></a><span class="lineno"> 5659</span>  TArrayF tarr(nt);</div>
+<div class="line"><a id="l05660" name="l05660"></a><span class="lineno"> 5660</span>  TArrayF yarr(nt);</div>
+<div class="line"><a id="l05661" name="l05661"></a><span class="lineno"> 5661</span>  TArrayF warr(nt);</div>
+<div class="line"><a id="l05662" name="l05662"></a><span class="lineno"> 5662</span>  TArrayF zarr(nt);</div>
+<div class="line"><a id="l05663" name="l05663"></a><span class="lineno"> 5663</span>  Float_t Y=0;</div>
+<div class="line"><a id="l05664" name="l05664"></a><span class="lineno"> 5664</span>  Float_t Y2=0;</div>
+<div class="line"><a id="l05665" name="l05665"></a><span class="lineno"> 5665</span>  <span class="keywordflow">for</span> (Int_t i=0; i&lt;nt; i++)</div>
+<div class="line"><a id="l05666" name="l05666"></a><span class="lineno"> 5666</span>  {</div>
+<div class="line"><a id="l05667" name="l05667"></a><span class="lineno"> 5667</span>   ti=t.GetAt(i);</div>
+<div class="line"><a id="l05668" name="l05668"></a><span class="lineno"> 5668</span>   yi=y.GetAt(i);</div>
+<div class="line"><a id="l05669" name="l05669"></a><span class="lineno"> 5669</span>   wi=1;</div>
+<div class="line"><a id="l05670" name="l05670"></a><span class="lineno"> 5670</span>   zi=1;</div>
+<div class="line"><a id="l05671" name="l05671"></a><span class="lineno"> 5671</span>   <span class="keywordflow">if</span> (dy)</div>
+<div class="line"><a id="l05672" name="l05672"></a><span class="lineno"> 5672</span>   {</div>
+<div class="line"><a id="l05673" name="l05673"></a><span class="lineno"> 5673</span>    dyi2=pow(dy-&gt;GetAt(i),2);</div>
+<div class="line"><a id="l05674" name="l05674"></a><span class="lineno"> 5674</span>    <span class="keywordflow">if</span> (!dyi2) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l05675" name="l05675"></a><span class="lineno"> 5675</span>    wi=1./dyi2;</div>
+<div class="line"><a id="l05676" name="l05676"></a><span class="lineno"> 5676</span>   }</div>
+<div class="line"><a id="l05677" name="l05677"></a><span class="lineno"> 5677</span>   <span class="keywordflow">if</span> (Z) zi=Z-&gt;Eval(ti);</div>
+<div class="line"><a id="l05678" name="l05678"></a><span class="lineno"> 5678</span>   tarr[na]=ti;</div>
+<div class="line"><a id="l05679" name="l05679"></a><span class="lineno"> 5679</span>   yarr[na]=yi;</div>
+<div class="line"><a id="l05680" name="l05680"></a><span class="lineno"> 5680</span>   warr[na]=wi;</div>
+<div class="line"><a id="l05681" name="l05681"></a><span class="lineno"> 5681</span>   zarr[na]=zi;</div>
+<div class="line"><a id="l05682" name="l05682"></a><span class="lineno"> 5682</span>   Y+=wi*yi;</div>
+<div class="line"><a id="l05683" name="l05683"></a><span class="lineno"> 5683</span>   Y2+=wi*pow(yi,2);</div>
+<div class="line"><a id="l05684" name="l05684"></a><span class="lineno"> 5684</span>   na++;</div>
+<div class="line"><a id="l05685" name="l05685"></a><span class="lineno"> 5685</span>  }</div>
+<div class="line"><a id="l05686" name="l05686"></a><span class="lineno"> 5686</span> </div>
+<div class="line"><a id="l05687" name="l05687"></a><span class="lineno"> 5687</span>  tarr.Set(na);</div>
+<div class="line"><a id="l05688" name="l05688"></a><span class="lineno"> 5688</span>  yarr.Set(na);</div>
+<div class="line"><a id="l05689" name="l05689"></a><span class="lineno"> 5689</span>  warr.Set(na);</div>
+<div class="line"><a id="l05690" name="l05690"></a><span class="lineno"> 5690</span>  Float_t W=warr.GetSum();</div>
+<div class="line"><a id="l05691" name="l05691"></a><span class="lineno"> 5691</span> </div>
+<div class="line"><a id="l05692" name="l05692"></a><span class="lineno"> 5692</span>  <span class="keywordflow">if</span> (!na || W&lt;=0)</div>
+<div class="line"><a id="l05693" name="l05693"></a><span class="lineno"> 5693</span>  {</div>
+<div class="line"><a id="l05694" name="l05694"></a><span class="lineno"> 5694</span>   printf(<span class="stringliteral">&quot;*%-s::Periodogram* No valid data available. \n&quot;</span>,ClassName());</div>
+<div class="line"><a id="l05695" name="l05695"></a><span class="lineno"> 5695</span>   <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05696" name="l05696"></a><span class="lineno"> 5696</span>  }</div>
+<div class="line"><a id="l05697" name="l05697"></a><span class="lineno"> 5697</span> </div>
+<div class="line"><a id="l05698" name="l05698"></a><span class="lineno"> 5698</span>  Y=Y/W;</div>
+<div class="line"><a id="l05699" name="l05699"></a><span class="lineno"> 5699</span>  Y2=Y2/W;</div>
+<div class="line"><a id="l05700" name="l05700"></a><span class="lineno"> 5700</span> </div>
+<div class="line"><a id="l05701" name="l05701"></a><span class="lineno"> 5701</span>  <span class="comment">// Loop over the frequencies</span></div>
+<div class="line"><a id="l05702" name="l05702"></a><span class="lineno"> 5702</span>  Float_t twopi=2.*acos(-1.);</div>
+<div class="line"><a id="l05703" name="l05703"></a><span class="lineno"> 5703</span>  Float_t omega=0;</div>
+<div class="line"><a id="l05704" name="l05704"></a><span class="lineno"> 5704</span>  Float_t zcosi=0;</div>
+<div class="line"><a id="l05705" name="l05705"></a><span class="lineno"> 5705</span>  Float_t zsini=0;</div>
+<div class="line"><a id="l05706" name="l05706"></a><span class="lineno"> 5706</span>  Float_t C=0;</div>
+<div class="line"><a id="l05707" name="l05707"></a><span class="lineno"> 5707</span>  Float_t S=0;</div>
+<div class="line"><a id="l05708" name="l05708"></a><span class="lineno"> 5708</span>  Float_t CS=0;</div>
+<div class="line"><a id="l05709" name="l05709"></a><span class="lineno"> 5709</span>  Float_t C2=0;</div>
+<div class="line"><a id="l05710" name="l05710"></a><span class="lineno"> 5710</span>  Float_t S2=0;</div>
+<div class="line"><a id="l05711" name="l05711"></a><span class="lineno"> 5711</span>  Float_t YC=0;</div>
+<div class="line"><a id="l05712" name="l05712"></a><span class="lineno"> 5712</span>  Float_t YS=0;</div>
+<div class="line"><a id="l05713" name="l05713"></a><span class="lineno"> 5713</span>  Float_t D=0;</div>
+<div class="line"><a id="l05714" name="l05714"></a><span class="lineno"> 5714</span>  Float_t P=0;</div>
+<div class="line"><a id="l05715" name="l05715"></a><span class="lineno"> 5715</span>  Float_t a=0;</div>
+<div class="line"><a id="l05716" name="l05716"></a><span class="lineno"> 5716</span>  Float_t b=0;</div>
+<div class="line"><a id="l05717" name="l05717"></a><span class="lineno"> 5717</span>  Float_t c=0;</div>
+<div class="line"><a id="l05718" name="l05718"></a><span class="lineno"> 5718</span>  Int_t ip=0;</div>
+<div class="line"><a id="l05719" name="l05719"></a><span class="lineno"> 5719</span>  <a class="code hl_class" href="../../d6/d42/class_nc_signal.html">NcSignal</a> sx;</div>
+<div class="line"><a id="l05720" name="l05720"></a><span class="lineno"> 5720</span>  sx.<a class="code hl_function" href="../../d5/d2a/class_nc_attrib.html#a4887a29a0f4ff85953718fd21c964313">AddNamedSlot</a>(<span class="stringliteral">&quot;f&quot;</span>);</div>
+<div class="line"><a id="l05721" name="l05721"></a><span class="lineno"> 5721</span>  sx.<a class="code hl_function" href="../../d5/d2a/class_nc_attrib.html#a4887a29a0f4ff85953718fd21c964313">AddNamedSlot</a>(<span class="stringliteral">&quot;a&quot;</span>);</div>
+<div class="line"><a id="l05722" name="l05722"></a><span class="lineno"> 5722</span>  sx.<a class="code hl_function" href="../../d5/d2a/class_nc_attrib.html#a4887a29a0f4ff85953718fd21c964313">AddNamedSlot</a>(<span class="stringliteral">&quot;b&quot;</span>);</div>
+<div class="line"><a id="l05723" name="l05723"></a><span class="lineno"> 5723</span>  sx.<a class="code hl_function" href="../../d5/d2a/class_nc_attrib.html#a4887a29a0f4ff85953718fd21c964313">AddNamedSlot</a>(<span class="stringliteral">&quot;c&quot;</span>);</div>
+<div class="line"><a id="l05724" name="l05724"></a><span class="lineno"> 5724</span>  sx.<a class="code hl_function" href="../../d5/d2a/class_nc_attrib.html#a4887a29a0f4ff85953718fd21c964313">AddNamedSlot</a>(<span class="stringliteral">&quot;P&quot;</span>);</div>
+<div class="line"><a id="l05725" name="l05725"></a><span class="lineno"> 5725</span>  Float_t f=fmin;</div>
+<div class="line"><a id="l05726" name="l05726"></a><span class="lineno"> 5726</span>  fmax+=0.1*fstep; <span class="comment">// To prevent accuracy issues</span></div>
+<div class="line"><a id="l05727" name="l05727"></a><span class="lineno"> 5727</span>  <span class="keywordflow">while</span> (f&lt;=fmax)</div>
+<div class="line"><a id="l05728" name="l05728"></a><span class="lineno"> 5728</span>  {</div>
+<div class="line"><a id="l05729" name="l05729"></a><span class="lineno"> 5729</span>   omega=twopi*f;</div>
+<div class="line"><a id="l05730" name="l05730"></a><span class="lineno"> 5730</span>   C=0;</div>
+<div class="line"><a id="l05731" name="l05731"></a><span class="lineno"> 5731</span>   S=0;</div>
+<div class="line"><a id="l05732" name="l05732"></a><span class="lineno"> 5732</span>   CS=0;</div>
+<div class="line"><a id="l05733" name="l05733"></a><span class="lineno"> 5733</span>   C2=0;</div>
+<div class="line"><a id="l05734" name="l05734"></a><span class="lineno"> 5734</span>   S2=0;</div>
+<div class="line"><a id="l05735" name="l05735"></a><span class="lineno"> 5735</span>   YC=0;</div>
+<div class="line"><a id="l05736" name="l05736"></a><span class="lineno"> 5736</span>   YS=0;</div>
+<div class="line"><a id="l05737" name="l05737"></a><span class="lineno"> 5737</span>   <span class="comment">// Loop over the data points</span></div>
+<div class="line"><a id="l05738" name="l05738"></a><span class="lineno"> 5738</span>   <span class="keywordflow">for</span> (Int_t i=0; i&lt;na; i++)</div>
+<div class="line"><a id="l05739" name="l05739"></a><span class="lineno"> 5739</span>   {</div>
+<div class="line"><a id="l05740" name="l05740"></a><span class="lineno"> 5740</span>    ti=tarr[i];</div>
+<div class="line"><a id="l05741" name="l05741"></a><span class="lineno"> 5741</span>    yi=yarr[i];</div>
+<div class="line"><a id="l05742" name="l05742"></a><span class="lineno"> 5742</span>    wi=warr[i]/W;</div>
+<div class="line"><a id="l05743" name="l05743"></a><span class="lineno"> 5743</span>    zi=zarr[i];</div>
+<div class="line"><a id="l05744" name="l05744"></a><span class="lineno"> 5744</span>    zcosi=zi*cos(omega*ti);</div>
+<div class="line"><a id="l05745" name="l05745"></a><span class="lineno"> 5745</span>    zsini=zi*sin(omega*ti);</div>
+<div class="line"><a id="l05746" name="l05746"></a><span class="lineno"> 5746</span>    C+=wi*zcosi;</div>
+<div class="line"><a id="l05747" name="l05747"></a><span class="lineno"> 5747</span>    S+=wi*zsini;</div>
+<div class="line"><a id="l05748" name="l05748"></a><span class="lineno"> 5748</span>    CS+=wi*zcosi*zsini;</div>
+<div class="line"><a id="l05749" name="l05749"></a><span class="lineno"> 5749</span>    C2+=wi*pow(zcosi,2);</div>
+<div class="line"><a id="l05750" name="l05750"></a><span class="lineno"> 5750</span>    S2+=wi*pow(zsini,2);</div>
+<div class="line"><a id="l05751" name="l05751"></a><span class="lineno"> 5751</span>    YC+=wi*yi*zcosi;</div>
+<div class="line"><a id="l05752" name="l05752"></a><span class="lineno"> 5752</span>    YS+=wi*yi*zsini;</div>
+<div class="line"><a id="l05753" name="l05753"></a><span class="lineno"> 5753</span>   }</div>
+<div class="line"><a id="l05754" name="l05754"></a><span class="lineno"> 5754</span> </div>
+<div class="line"><a id="l05755" name="l05755"></a><span class="lineno"> 5755</span>   CS-=C*S;</div>
+<div class="line"><a id="l05756" name="l05756"></a><span class="lineno"> 5756</span>   Y2-=pow(Y,2);</div>
+<div class="line"><a id="l05757" name="l05757"></a><span class="lineno"> 5757</span>   C2-=pow(C,2);</div>
+<div class="line"><a id="l05758" name="l05758"></a><span class="lineno"> 5758</span>   S2-=pow(S,2);</div>
+<div class="line"><a id="l05759" name="l05759"></a><span class="lineno"> 5759</span>   YC-=Y*C;</div>
+<div class="line"><a id="l05760" name="l05760"></a><span class="lineno"> 5760</span>   YS-=Y*S;</div>
+<div class="line"><a id="l05761" name="l05761"></a><span class="lineno"> 5761</span> </div>
+<div class="line"><a id="l05762" name="l05762"></a><span class="lineno"> 5762</span>   D=C2*S2-pow(CS,2);</div>
+<div class="line"><a id="l05763" name="l05763"></a><span class="lineno"> 5763</span> </div>
+<div class="line"><a id="l05764" name="l05764"></a><span class="lineno"> 5764</span>   P=0;</div>
+<div class="line"><a id="l05765" name="l05765"></a><span class="lineno"> 5765</span>   <span class="keywordflow">if</span> (Y2*D) P=(S2*pow(YC,2)+C2*pow(YS,2)-2.*CS*YC*YS)/(Y2*D);</div>
+<div class="line"><a id="l05766" name="l05766"></a><span class="lineno"> 5766</span> </div>
+<div class="line"><a id="l05767" name="l05767"></a><span class="lineno"> 5767</span>   a=0;</div>
+<div class="line"><a id="l05768" name="l05768"></a><span class="lineno"> 5768</span>   b=0;</div>
+<div class="line"><a id="l05769" name="l05769"></a><span class="lineno"> 5769</span>   <span class="keywordflow">if</span> (D)</div>
+<div class="line"><a id="l05770" name="l05770"></a><span class="lineno"> 5770</span>   {</div>
+<div class="line"><a id="l05771" name="l05771"></a><span class="lineno"> 5771</span>    a=(YC*S2-YS*CS)/D;</div>
+<div class="line"><a id="l05772" name="l05772"></a><span class="lineno"> 5772</span>    b=(YS*C2-YC*CS)/D;</div>
+<div class="line"><a id="l05773" name="l05773"></a><span class="lineno"> 5773</span>   }</div>
+<div class="line"><a id="l05774" name="l05774"></a><span class="lineno"> 5774</span>   c=Y-a*C-b*S;</div>
+<div class="line"><a id="l05775" name="l05775"></a><span class="lineno"> 5775</span> </div>
+<div class="line"><a id="l05776" name="l05776"></a><span class="lineno"> 5776</span>   <span class="comment">// Record this (f,a,b,c,P) dataset as a hit in the (optional) NcDevice &quot;results&quot;</span></div>
+<div class="line"><a id="l05777" name="l05777"></a><span class="lineno"> 5777</span>   <span class="keywordflow">if</span> (results)</div>
+<div class="line"><a id="l05778" name="l05778"></a><span class="lineno"> 5778</span>   {</div>
+<div class="line"><a id="l05779" name="l05779"></a><span class="lineno"> 5779</span>    sx.<a class="code hl_function" href="../../d6/d42/class_nc_signal.html#a3e47ac0595b960172b1cbe35b26cc01a">SetSignal</a>(f,<span class="stringliteral">&quot;f&quot;</span>);</div>
+<div class="line"><a id="l05780" name="l05780"></a><span class="lineno"> 5780</span>    sx.<a class="code hl_function" href="../../d6/d42/class_nc_signal.html#a3e47ac0595b960172b1cbe35b26cc01a">SetSignal</a>(a,<span class="stringliteral">&quot;a&quot;</span>);</div>
+<div class="line"><a id="l05781" name="l05781"></a><span class="lineno"> 5781</span>    sx.<a class="code hl_function" href="../../d6/d42/class_nc_signal.html#a3e47ac0595b960172b1cbe35b26cc01a">SetSignal</a>(b,<span class="stringliteral">&quot;b&quot;</span>);</div>
+<div class="line"><a id="l05782" name="l05782"></a><span class="lineno"> 5782</span>    sx.<a class="code hl_function" href="../../d6/d42/class_nc_signal.html#a3e47ac0595b960172b1cbe35b26cc01a">SetSignal</a>(c,<span class="stringliteral">&quot;c&quot;</span>);</div>
+<div class="line"><a id="l05783" name="l05783"></a><span class="lineno"> 5783</span>    sx.<a class="code hl_function" href="../../d6/d42/class_nc_signal.html#a3e47ac0595b960172b1cbe35b26cc01a">SetSignal</a>(P,<span class="stringliteral">&quot;P&quot;</span>);</div>
+<div class="line"><a id="l05784" name="l05784"></a><span class="lineno"> 5784</span>    results-&gt;<a class="code hl_function" href="../../de/df5/class_nc_device.html#a12e83b8de4e2d514c2bbc02a39261abb">AddHit</a>(sx);</div>
+<div class="line"><a id="l05785" name="l05785"></a><span class="lineno"> 5785</span>   }</div>
+<div class="line"><a id="l05786" name="l05786"></a><span class="lineno"> 5786</span> </div>
+<div class="line"><a id="l05787" name="l05787"></a><span class="lineno"> 5787</span>   <span class="comment">// Record this entry in the periodogram graph</span></div>
+<div class="line"><a id="l05788" name="l05788"></a><span class="lineno"> 5788</span>   gr.SetPoint(ip,f,P);</div>
+<div class="line"><a id="l05789" name="l05789"></a><span class="lineno"> 5789</span> </div>
+<div class="line"><a id="l05790" name="l05790"></a><span class="lineno"> 5790</span>   f+=fstep;</div>
+<div class="line"><a id="l05791" name="l05791"></a><span class="lineno"> 5791</span>   ip++;</div>
+<div class="line"><a id="l05792" name="l05792"></a><span class="lineno"> 5792</span>  }</div>
+<div class="line"><a id="l05793" name="l05793"></a><span class="lineno"> 5793</span> </div>
+<div class="line"><a id="l05794" name="l05794"></a><span class="lineno"> 5794</span> TString unit=<span class="stringliteral">&quot;Hz&quot;</span>;</div>
+<div class="line"><a id="l05795" name="l05795"></a><span class="lineno"> 5795</span> <span class="keywordflow">if</span> (tu==<span class="stringliteral">&quot;ps&quot;</span>) unit=<span class="stringliteral">&quot;THz&quot;</span>;</div>
+<div class="line"><a id="l05796" name="l05796"></a><span class="lineno"> 5796</span> <span class="keywordflow">if</span> (tu==<span class="stringliteral">&quot;ns&quot;</span>) unit=<span class="stringliteral">&quot;GHz&quot;</span>;</div>
+<div class="line"><a id="l05797" name="l05797"></a><span class="lineno"> 5797</span> <span class="keywordflow">if</span> (tu==<span class="stringliteral">&quot;hour&quot;</span>) unit=<span class="stringliteral">&quot;1/hour&quot;</span>;</div>
+<div class="line"><a id="l05798" name="l05798"></a><span class="lineno"> 5798</span> <span class="keywordflow">if</span> (tu==<span class="stringliteral">&quot;day&quot;</span>) unit=<span class="stringliteral">&quot;1/day&quot;</span>;</div>
+<div class="line"><a id="l05799" name="l05799"></a><span class="lineno"> 5799</span> TString title;</div>
+<div class="line"><a id="l05800" name="l05800"></a><span class="lineno"> 5800</span> title.Form(<span class="stringliteral">&quot;%-s Periodogram;Frequency in %-s;Normalized Power&quot;</span>,ClassName(),unit.Data());</div>
+<div class="line"><a id="l05801" name="l05801"></a><span class="lineno"> 5801</span> gr.SetNameTitle(<span class="stringliteral">&quot;Periodogram&quot;</span>,title);</div>
+<div class="line"><a id="l05802" name="l05802"></a><span class="lineno"> 5802</span> gr.SetMarkerStyle(8);</div>
+<div class="line"><a id="l05803" name="l05803"></a><span class="lineno"> 5803</span> gr.SetMarkerSize(0.5);</div>
+<div class="line"><a id="l05804" name="l05804"></a><span class="lineno"> 5804</span> gr.SetMarkerColor(kBlue);</div>
+<div class="line"><a id="l05805" name="l05805"></a><span class="lineno"> 5805</span> gr.SetLineWidth(2);</div>
+<div class="line"><a id="l05806" name="l05806"></a><span class="lineno"> 5806</span> </div>
+<div class="line"><a id="l05807" name="l05807"></a><span class="lineno"> 5807</span> <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05808" name="l05808"></a><span class="lineno"> 5808</span>}</div>
 </div>
-<div class="line"><a id="l05571" name="l05571"></a><span class="lineno"> 5571</span></div>
+<div class="line"><a id="l05809" name="l05809"></a><span class="lineno"> 5809</span></div>
+<div class="foldopen" id="foldopen05810" data-start="{" data-end="}">
+<div class="line"><a id="l05810" name="l05810"></a><span class="lineno"><a class="line" href="../../d7/d8a/class_nc_d_s_p.html#a08d20a4688fc4e002b703caa6d1a4930"> 5810</a></span>TGraph <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">NcDSP::Periodogram</a>(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,<a class="code hl_class" href="../../de/dcd/class_nc_sample.html">NcSample</a> s,Int_t it,Int_t iy,Int_t idy,TF1* Z,<a class="code hl_class" href="../../de/df5/class_nc_device.html">NcDevice</a>* results)<span class="keyword"> const</span></div>
+<div class="line"><a id="l05811" name="l05811"></a><span class="lineno"> 5811</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l05872" name="l05872"></a><span class="lineno"> 5872</span> </div>
+<div class="line"><a id="l05873" name="l05873"></a><span class="lineno"> 5873</span> TGraph gr;</div>
+<div class="line"><a id="l05874" name="l05874"></a><span class="lineno"> 5874</span> </div>
+<div class="line"><a id="l05875" name="l05875"></a><span class="lineno"> 5875</span> <span class="keywordflow">if</span> (!s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#a25a13255e900ace9dd6c5cdc558e5461">GetStoreMode</a>())</div>
+<div class="line"><a id="l05876" name="l05876"></a><span class="lineno"> 5876</span> {</div>
+<div class="line"><a id="l05877" name="l05877"></a><span class="lineno"> 5877</span>  printf(<span class="stringliteral">&quot;*%-s::Periodogram* Error: NcSample storage mode is not activated. \n&quot;</span>,ClassName());</div>
+<div class="line"><a id="l05878" name="l05878"></a><span class="lineno"> 5878</span>  <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05879" name="l05879"></a><span class="lineno"> 5879</span> }</div>
+<div class="line"><a id="l05880" name="l05880"></a><span class="lineno"> 5880</span> </div>
+<div class="line"><a id="l05881" name="l05881"></a><span class="lineno"> 5881</span> Int_t ndim=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#acabfe2d329ac183cdc9d66229209c07a">GetDimension</a>();</div>
+<div class="line"><a id="l05882" name="l05882"></a><span class="lineno"> 5882</span> Int_t ns=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#a4dc856cc392555b060d258cfff28f2a5">GetN</a>();</div>
+<div class="line"><a id="l05883" name="l05883"></a><span class="lineno"> 5883</span> </div>
+<div class="line"><a id="l05884" name="l05884"></a><span class="lineno"> 5884</span> <span class="keywordflow">if</span> (ns&lt;1 || it&lt;1 || it&gt;ndim || iy&lt;1 || iy&gt;ndim || idy&lt;0 || idy&gt;ndim)</div>
+<div class="line"><a id="l05885" name="l05885"></a><span class="lineno"> 5885</span> {</div>
+<div class="line"><a id="l05886" name="l05886"></a><span class="lineno"> 5886</span>  printf(<span class="stringliteral">&quot;*%-s::Periodogram* Inconsistent NcSample input: it=%-i iy=%-i idy=%-i #entries=%-i \n&quot;</span>,ClassName(),it,iy,idy,ns);</div>
+<div class="line"><a id="l05887" name="l05887"></a><span class="lineno"> 5887</span>  <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05888" name="l05888"></a><span class="lineno"> 5888</span> }</div>
+<div class="line"><a id="l05889" name="l05889"></a><span class="lineno"> 5889</span> </div>
+<div class="line"><a id="l05890" name="l05890"></a><span class="lineno"> 5890</span> TArrayD t(ns);</div>
+<div class="line"><a id="l05891" name="l05891"></a><span class="lineno"> 5891</span> TArrayD y(ns);</div>
+<div class="line"><a id="l05892" name="l05892"></a><span class="lineno"> 5892</span> TArrayD dy(ns);</div>
+<div class="line"><a id="l05893" name="l05893"></a><span class="lineno"> 5893</span> </div>
+<div class="line"><a id="l05894" name="l05894"></a><span class="lineno"> 5894</span> <span class="keywordflow">for</span> (Int_t i=1; i&lt;=ns; i++)</div>
+<div class="line"><a id="l05895" name="l05895"></a><span class="lineno"> 5895</span> {</div>
+<div class="line"><a id="l05896" name="l05896"></a><span class="lineno"> 5896</span>  t[i-1]=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#ae9433e1eeaf4725edc948a6ae3339a17">GetEntry</a>(i,it);</div>
+<div class="line"><a id="l05897" name="l05897"></a><span class="lineno"> 5897</span>  y[i-1]=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#ae9433e1eeaf4725edc948a6ae3339a17">GetEntry</a>(i,iy);</div>
+<div class="line"><a id="l05898" name="l05898"></a><span class="lineno"> 5898</span>  <span class="keywordflow">if</span> (idy) dy[i-1]=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#ae9433e1eeaf4725edc948a6ae3339a17">GetEntry</a>(i,idy);</div>
+<div class="line"><a id="l05899" name="l05899"></a><span class="lineno"> 5899</span> }</div>
+<div class="line"><a id="l05900" name="l05900"></a><span class="lineno"> 5900</span> </div>
+<div class="line"><a id="l05901" name="l05901"></a><span class="lineno"> 5901</span> <span class="keywordflow">if</span> (idy) <span class="comment">// Uncertainties will be used as weights</span></div>
+<div class="line"><a id="l05902" name="l05902"></a><span class="lineno"> 5902</span> {</div>
+<div class="line"><a id="l05903" name="l05903"></a><span class="lineno"> 5903</span>  gr=<a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a>(tu,Tmin,Tmax,n,t,y,&amp;dy,Z,results);</div>
+<div class="line"><a id="l05904" name="l05904"></a><span class="lineno"> 5904</span> }</div>
+<div class="line"><a id="l05905" name="l05905"></a><span class="lineno"> 5905</span> <span class="keywordflow">else</span> <span class="comment">// No weights will be used</span></div>
+<div class="line"><a id="l05906" name="l05906"></a><span class="lineno"> 5906</span> {</div>
+<div class="line"><a id="l05907" name="l05907"></a><span class="lineno"> 5907</span>  gr=<a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a>(tu,Tmin,Tmax,n,t,y,0,Z,results);</div>
+<div class="line"><a id="l05908" name="l05908"></a><span class="lineno"> 5908</span> }</div>
+<div class="line"><a id="l05909" name="l05909"></a><span class="lineno"> 5909</span> </div>
+<div class="line"><a id="l05910" name="l05910"></a><span class="lineno"> 5910</span> <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05911" name="l05911"></a><span class="lineno"> 5911</span>}</div>
+</div>
+<div class="line"><a id="l05912" name="l05912"></a><span class="lineno"> 5912</span></div>
+<div class="foldopen" id="foldopen05913" data-start="{" data-end="}">
+<div class="line"><a id="l05913" name="l05913"></a><span class="lineno"><a class="line" href="../../d7/d8a/class_nc_d_s_p.html#aad16a95c30ada3e7d4fcedde517df9bc"> 5913</a></span>TGraph <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">NcDSP::Periodogram</a>(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,<a class="code hl_class" href="../../de/dcd/class_nc_sample.html">NcSample</a> s,TString namet,TString namey,TString namedy,TF1* Z,<a class="code hl_class" href="../../de/df5/class_nc_device.html">NcDevice</a>* results)<span class="keyword"> const</span></div>
+<div class="line"><a id="l05914" name="l05914"></a><span class="lineno"> 5914</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l05975" name="l05975"></a><span class="lineno"> 5975</span> </div>
+<div class="line"><a id="l05976" name="l05976"></a><span class="lineno"> 5976</span> TGraph gr;</div>
+<div class="line"><a id="l05977" name="l05977"></a><span class="lineno"> 5977</span> </div>
+<div class="line"><a id="l05978" name="l05978"></a><span class="lineno"> 5978</span> <span class="comment">// Get the indices corresponding to the specified variable names</span></div>
+<div class="line"><a id="l05979" name="l05979"></a><span class="lineno"> 5979</span> Int_t it=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#a623113fbadb6586117c84b3f4f582ba8">GetIndex</a>(namet);</div>
+<div class="line"><a id="l05980" name="l05980"></a><span class="lineno"> 5980</span> Int_t iy=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#a623113fbadb6586117c84b3f4f582ba8">GetIndex</a>(namey);</div>
+<div class="line"><a id="l05981" name="l05981"></a><span class="lineno"> 5981</span> Int_t idy=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#a623113fbadb6586117c84b3f4f582ba8">GetIndex</a>(namedy);</div>
+<div class="line"><a id="l05982" name="l05982"></a><span class="lineno"> 5982</span> </div>
+<div class="line"><a id="l05983" name="l05983"></a><span class="lineno"> 5983</span> <span class="comment">// Check for unsupported namedy</span></div>
+<div class="line"><a id="l05984" name="l05984"></a><span class="lineno"> 5984</span> <span class="keywordflow">if</span> (!idy &amp;&amp; namedy!=<span class="stringliteral">&quot;-&quot;</span>) idy=-1;</div>
+<div class="line"><a id="l05985" name="l05985"></a><span class="lineno"> 5985</span> </div>
+<div class="line"><a id="l05986" name="l05986"></a><span class="lineno"> 5986</span> Int_t ns=s.<a class="code hl_function" href="../../de/dcd/class_nc_sample.html#a4dc856cc392555b060d258cfff28f2a5">GetN</a>();</div>
+<div class="line"><a id="l05987" name="l05987"></a><span class="lineno"> 5987</span> </div>
+<div class="line"><a id="l05988" name="l05988"></a><span class="lineno"> 5988</span> <span class="keywordflow">if</span> (ns&lt;1 || it&lt;1 || iy&lt;1 || idy&lt;0)</div>
+<div class="line"><a id="l05989" name="l05989"></a><span class="lineno"> 5989</span> {</div>
+<div class="line"><a id="l05990" name="l05990"></a><span class="lineno"> 5990</span>  printf(<span class="stringliteral">&quot;*%-s::Periodogram* Inconsistent NcSample input: namet=%-s namey=%-s namedy=%-s #entries=%-i \n&quot;</span>,ClassName(),namet.Data(),namey.Data(),namedy.Data(),ns);</div>
+<div class="line"><a id="l05991" name="l05991"></a><span class="lineno"> 5991</span>  <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05992" name="l05992"></a><span class="lineno"> 5992</span> }</div>
+<div class="line"><a id="l05993" name="l05993"></a><span class="lineno"> 5993</span> </div>
+<div class="line"><a id="l05994" name="l05994"></a><span class="lineno"> 5994</span> gr=<a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a>(tu,Tmin,Tmax,n,s,it,iy,idy,Z,results);</div>
+<div class="line"><a id="l05995" name="l05995"></a><span class="lineno"> 5995</span> </div>
+<div class="line"><a id="l05996" name="l05996"></a><span class="lineno"> 5996</span> <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l05997" name="l05997"></a><span class="lineno"> 5997</span>}</div>
+</div>
+<div class="line"><a id="l05998" name="l05998"></a><span class="lineno"> 5998</span></div>
+<div class="foldopen" id="foldopen05999" data-start="{" data-end="}">
+<div class="line"><a id="l05999" name="l05999"></a><span class="lineno"><a class="line" href="../../d7/d8a/class_nc_d_s_p.html#a2ad029a3a5062d39663fa4cd0f238044"> 5999</a></span>TGraph <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">NcDSP::Periodogram</a>(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TH1&amp; h,Bool_t err,TF1* Z,<a class="code hl_class" href="../../de/df5/class_nc_device.html">NcDevice</a>* results)<span class="keyword"> const</span></div>
+<div class="line"><a id="l06000" name="l06000"></a><span class="lineno"> 6000</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l06057" name="l06057"></a><span class="lineno"> 6057</span> </div>
+<div class="line"><a id="l06058" name="l06058"></a><span class="lineno"> 6058</span> TGraph gr;</div>
+<div class="line"><a id="l06059" name="l06059"></a><span class="lineno"> 6059</span> </div>
+<div class="line"><a id="l06060" name="l06060"></a><span class="lineno"> 6060</span> Int_t nbins=h.GetNbinsX();</div>
+<div class="line"><a id="l06061" name="l06061"></a><span class="lineno"> 6061</span> Int_t nen=h.GetEntries();</div>
+<div class="line"><a id="l06062" name="l06062"></a><span class="lineno"> 6062</span> </div>
+<div class="line"><a id="l06063" name="l06063"></a><span class="lineno"> 6063</span> <span class="keywordflow">if</span> (nbins&lt;1 || nen&lt;1)</div>
+<div class="line"><a id="l06064" name="l06064"></a><span class="lineno"> 6064</span> {</div>
+<div class="line"><a id="l06065" name="l06065"></a><span class="lineno"> 6065</span>  printf(<span class="stringliteral">&quot;*%-s::Periodogram* Inconsistent histogram input: nbins=%-i #entries=%-i \n&quot;</span>,ClassName(),nbins,nen);</div>
+<div class="line"><a id="l06066" name="l06066"></a><span class="lineno"> 6066</span>  <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l06067" name="l06067"></a><span class="lineno"> 6067</span> }</div>
+<div class="line"><a id="l06068" name="l06068"></a><span class="lineno"> 6068</span> </div>
+<div class="line"><a id="l06069" name="l06069"></a><span class="lineno"> 6069</span> TArrayD t(nbins);</div>
+<div class="line"><a id="l06070" name="l06070"></a><span class="lineno"> 6070</span> TArrayD y(nbins);</div>
+<div class="line"><a id="l06071" name="l06071"></a><span class="lineno"> 6071</span> TArrayD dy(nbins);</div>
+<div class="line"><a id="l06072" name="l06072"></a><span class="lineno"> 6072</span> </div>
+<div class="line"><a id="l06073" name="l06073"></a><span class="lineno"> 6073</span> <span class="keywordflow">for</span> (Int_t i=1; i&lt;=nbins; i++)</div>
+<div class="line"><a id="l06074" name="l06074"></a><span class="lineno"> 6074</span> {</div>
+<div class="line"><a id="l06075" name="l06075"></a><span class="lineno"> 6075</span>  t[i-1]=h.GetBinCenter(i);</div>
+<div class="line"><a id="l06076" name="l06076"></a><span class="lineno"> 6076</span>  y[i-1]=h.GetBinContent(i);</div>
+<div class="line"><a id="l06077" name="l06077"></a><span class="lineno"> 6077</span>  <span class="keywordflow">if</span> (err) dy[i-1]=h.GetBinError(i);</div>
+<div class="line"><a id="l06078" name="l06078"></a><span class="lineno"> 6078</span> }</div>
+<div class="line"><a id="l06079" name="l06079"></a><span class="lineno"> 6079</span> </div>
+<div class="line"><a id="l06080" name="l06080"></a><span class="lineno"> 6080</span> <span class="keywordflow">if</span> (err) <span class="comment">// Uncertainties will be used as weights</span></div>
+<div class="line"><a id="l06081" name="l06081"></a><span class="lineno"> 6081</span> {</div>
+<div class="line"><a id="l06082" name="l06082"></a><span class="lineno"> 6082</span>  gr=<a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a>(tu,Tmin,Tmax,n,t,y,&amp;dy,Z,results);</div>
+<div class="line"><a id="l06083" name="l06083"></a><span class="lineno"> 6083</span> }</div>
+<div class="line"><a id="l06084" name="l06084"></a><span class="lineno"> 6084</span> <span class="keywordflow">else</span> <span class="comment">// No weights will be used</span></div>
+<div class="line"><a id="l06085" name="l06085"></a><span class="lineno"> 6085</span> {</div>
+<div class="line"><a id="l06086" name="l06086"></a><span class="lineno"> 6086</span>  gr=<a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a>(tu,Tmin,Tmax,n,t,y,0,Z,results);</div>
+<div class="line"><a id="l06087" name="l06087"></a><span class="lineno"> 6087</span> }</div>
+<div class="line"><a id="l06088" name="l06088"></a><span class="lineno"> 6088</span> </div>
+<div class="line"><a id="l06089" name="l06089"></a><span class="lineno"> 6089</span> <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l06090" name="l06090"></a><span class="lineno"> 6090</span>}</div>
+</div>
+<div class="line"><a id="l06091" name="l06091"></a><span class="lineno"> 6091</span></div>
+<div class="foldopen" id="foldopen06092" data-start="{" data-end="}">
+<div class="line"><a id="l06092" name="l06092"></a><span class="lineno"><a class="line" href="../../d7/d8a/class_nc_d_s_p.html#a00e88fa06a6bf28519e0e4ba6b520e6a"> 6092</a></span>TGraph <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">NcDSP::Periodogram</a>(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TGraph&amp; g,Bool_t err,TF1* Z,<a class="code hl_class" href="../../de/df5/class_nc_device.html">NcDevice</a>* results)<span class="keyword"> const</span></div>
+<div class="line"><a id="l06093" name="l06093"></a><span class="lineno"> 6093</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l06151" name="l06151"></a><span class="lineno"> 6151</span> </div>
+<div class="line"><a id="l06152" name="l06152"></a><span class="lineno"> 6152</span> TGraph gr;</div>
+<div class="line"><a id="l06153" name="l06153"></a><span class="lineno"> 6153</span> </div>
+<div class="line"><a id="l06154" name="l06154"></a><span class="lineno"> 6154</span> <span class="keywordflow">if</span> (err &amp;&amp; !(g.InheritsFrom(<span class="stringliteral">&quot;TGraphErrors&quot;</span>)))</div>
+<div class="line"><a id="l06155" name="l06155"></a><span class="lineno"> 6155</span> {</div>
+<div class="line"><a id="l06156" name="l06156"></a><span class="lineno"> 6156</span>  printf(<span class="stringliteral">&quot;*%-s::Periodogram* Error: For weighted fitting the input graph has to be a TGraphErrors object. \n&quot;</span>,ClassName());</div>
+<div class="line"><a id="l06157" name="l06157"></a><span class="lineno"> 6157</span>  <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l06158" name="l06158"></a><span class="lineno"> 6158</span> }</div>
+<div class="line"><a id="l06159" name="l06159"></a><span class="lineno"> 6159</span> </div>
+<div class="line"><a id="l06160" name="l06160"></a><span class="lineno"> 6160</span> Int_t np=g.GetN();</div>
+<div class="line"><a id="l06161" name="l06161"></a><span class="lineno"> 6161</span> </div>
+<div class="line"><a id="l06162" name="l06162"></a><span class="lineno"> 6162</span> <span class="keywordflow">if</span> (np&lt;1)</div>
+<div class="line"><a id="l06163" name="l06163"></a><span class="lineno"> 6163</span> {</div>
+<div class="line"><a id="l06164" name="l06164"></a><span class="lineno"> 6164</span>  printf(<span class="stringliteral">&quot;*%-s::Periodogram* Error: Input graph is empty. \n&quot;</span>,ClassName());</div>
+<div class="line"><a id="l06165" name="l06165"></a><span class="lineno"> 6165</span>  <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l06166" name="l06166"></a><span class="lineno"> 6166</span> }</div>
+<div class="line"><a id="l06167" name="l06167"></a><span class="lineno"> 6167</span> </div>
+<div class="line"><a id="l06168" name="l06168"></a><span class="lineno"> 6168</span> TArrayD t(np);</div>
+<div class="line"><a id="l06169" name="l06169"></a><span class="lineno"> 6169</span> TArrayD y(np);</div>
+<div class="line"><a id="l06170" name="l06170"></a><span class="lineno"> 6170</span> TArrayD dy(np);</div>
+<div class="line"><a id="l06171" name="l06171"></a><span class="lineno"> 6171</span> </div>
+<div class="line"><a id="l06172" name="l06172"></a><span class="lineno"> 6172</span> Double_t gx=0;</div>
+<div class="line"><a id="l06173" name="l06173"></a><span class="lineno"> 6173</span> Double_t gy=0;</div>
+<div class="line"><a id="l06174" name="l06174"></a><span class="lineno"> 6174</span> <span class="keywordflow">for</span> (Int_t i=0; i&lt;np; i++)</div>
+<div class="line"><a id="l06175" name="l06175"></a><span class="lineno"> 6175</span> {</div>
+<div class="line"><a id="l06176" name="l06176"></a><span class="lineno"> 6176</span>  g.GetPoint(i,gx,gy);</div>
+<div class="line"><a id="l06177" name="l06177"></a><span class="lineno"> 6177</span>  t[i]=gx;</div>
+<div class="line"><a id="l06178" name="l06178"></a><span class="lineno"> 6178</span>  y[i]=gy;</div>
+<div class="line"><a id="l06179" name="l06179"></a><span class="lineno"> 6179</span>  <span class="keywordflow">if</span> (err) dy[i]=g.GetErrorY(i);</div>
+<div class="line"><a id="l06180" name="l06180"></a><span class="lineno"> 6180</span> }</div>
+<div class="line"><a id="l06181" name="l06181"></a><span class="lineno"> 6181</span> </div>
+<div class="line"><a id="l06182" name="l06182"></a><span class="lineno"> 6182</span> <span class="keywordflow">if</span> (err) <span class="comment">// Uncertainties will be used as weights</span></div>
+<div class="line"><a id="l06183" name="l06183"></a><span class="lineno"> 6183</span> {</div>
+<div class="line"><a id="l06184" name="l06184"></a><span class="lineno"> 6184</span>  gr=<a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a>(tu,Tmin,Tmax,n,t,y,&amp;dy,Z,results);</div>
+<div class="line"><a id="l06185" name="l06185"></a><span class="lineno"> 6185</span> }</div>
+<div class="line"><a id="l06186" name="l06186"></a><span class="lineno"> 6186</span> <span class="keywordflow">else</span> <span class="comment">// No weights will be used</span></div>
+<div class="line"><a id="l06187" name="l06187"></a><span class="lineno"> 6187</span> {</div>
+<div class="line"><a id="l06188" name="l06188"></a><span class="lineno"> 6188</span>  gr=<a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">Periodogram</a>(tu,Tmin,Tmax,n,t,y,0,Z,results);</div>
+<div class="line"><a id="l06189" name="l06189"></a><span class="lineno"> 6189</span> }</div>
+<div class="line"><a id="l06190" name="l06190"></a><span class="lineno"> 6190</span> </div>
+<div class="line"><a id="l06191" name="l06191"></a><span class="lineno"> 6191</span> <span class="keywordflow">return</span> gr;</div>
+<div class="line"><a id="l06192" name="l06192"></a><span class="lineno"> 6192</span>}</div>
+</div>
+<div class="line"><a id="l06193" name="l06193"></a><span class="lineno"> 6193</span></div>
+<div class="foldopen" id="foldopen06194" data-start="{" data-end="}">
+<div class="line"><a id="l06194" name="l06194"></a><span class="lineno"><a class="line" href="../../d7/d8a/class_nc_d_s_p.html#ac9fd73361974806a775989f7e89e5729"> 6194</a></span>TObject* <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#ac9fd73361974806a775989f7e89e5729">NcDSP::Clone</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name)<span class="keyword"> const</span></div>
+<div class="line"><a id="l06195" name="l06195"></a><span class="lineno"> 6195</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l06205" name="l06205"></a><span class="lineno"> 6205</span> </div>
+<div class="line"><a id="l06206" name="l06206"></a><span class="lineno"> 6206</span> <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a6f2607c80cc20d8fb8acf85c8469e293">NcDSP</a>* q=<span class="keyword">new</span> <a class="code hl_function" href="../../d7/d8a/class_nc_d_s_p.html#a6f2607c80cc20d8fb8acf85c8469e293">NcDSP</a>(*<span class="keyword">this</span>);</div>
+<div class="line"><a id="l06207" name="l06207"></a><span class="lineno"> 6207</span> <span class="keywordflow">if</span> (name)</div>
+<div class="line"><a id="l06208" name="l06208"></a><span class="lineno"> 6208</span> {</div>
+<div class="line"><a id="l06209" name="l06209"></a><span class="lineno"> 6209</span>  <span class="keywordflow">if</span> (strlen(name)) q-&gt;SetName(name);</div>
+<div class="line"><a id="l06210" name="l06210"></a><span class="lineno"> 6210</span> }</div>
+<div class="line"><a id="l06211" name="l06211"></a><span class="lineno"> 6211</span> <span class="keywordflow">return</span> q;</div>
+<div class="line"><a id="l06212" name="l06212"></a><span class="lineno"> 6212</span>}</div>
+</div>
+<div class="line"><a id="l06213" name="l06213"></a><span class="lineno"> 6213</span></div>
 <div class="ttc" id="a_nc_d_s_p_8cxx_html_a21d6fda282e3465aa80c5fb973237d30"><div class="ttname"><a href="../../d6/d65/_nc_d_s_p_8cxx.html#a21d6fda282e3465aa80c5fb973237d30">ClassImp</a></div><div class="ttdeci">ClassImp(NcDSP)</div></div>
 <div class="ttc" id="a_nc_d_s_p_8h_html"><div class="ttname"><a href="../../db/da5/_nc_d_s_p_8h.html">NcDSP.h</a></div></div>
 <div class="ttc" id="a_riostream_8h_html"><div class="ttname"><a href="../../d1/da7/_riostream_8h.html">Riostream.h</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html">NcDSP</a></div><div class="ttdoc">Various Digital Signal Processing (DSP) operations for (sequential) data samples.</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00018">NcDSP.h:19</a></div></div>
+<div class="ttc" id="aclass_nc_attrib_html_a4887a29a0f4ff85953718fd21c964313"><div class="ttname"><a href="../../d5/d2a/class_nc_attrib.html#a4887a29a0f4ff85953718fd21c964313">NcAttrib::AddNamedSlot</a></div><div class="ttdeci">void AddNamedSlot(TString s)</div><div class="ttdef"><b>Definition</b> <a href="../../d4/de1/_nc_attrib_8cxx_source.html#l01492">NcAttrib.cxx:1492</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html">NcDSP</a></div><div class="ttdoc">Various Digital Signal Processing (DSP) operations for (sequential) data samples.</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00020">NcDSP.h:21</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a0251f481e659a9d8aea78b76dc311a33"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a0251f481e659a9d8aea78b76dc311a33">NcDSP::LoadResult</a></div><div class="ttdeci">void LoadResult()</div><div class="ttdef"><b>Definition</b> <a href="#l00691">NcDSP.cxx:691</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a09897f6df6a8ba077a86b24714400aaf"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a09897f6df6a8ba077a86b24714400aaf">NcDSP::GetN</a></div><div class="ttdeci">Int_t GetN(Int_t mode=0) const</div><div class="ttdef"><b>Definition</b> <a href="#l01008">NcDSP.cxx:1008</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a0ae44f29a31ddda09119ef82d49acee9"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a0ae44f29a31ddda09119ef82d49acee9">NcDSP::FilterMultiBand</a></div><div class="ttdeci">TArrayD FilterMultiBand(TArray &amp;freqs, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l04533">NcDSP.cxx:4533</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a1301f9e36ac0292108a475a7fc62f889"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a1301f9e36ac0292108a475a7fc62f889">NcDSP::SetSamplingFrequency</a></div><div class="ttdeci">void SetSamplingFrequency(Float_t f)</div><div class="ttdef"><b>Definition</b> <a href="#l00370">NcDSP.cxx:370</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a24c382cba3b7bc94eedfbfe9c543734a"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a24c382cba3b7bc94eedfbfe9c543734a">NcDSP::FilterLowPass</a></div><div class="ttdeci">TArrayD FilterLowPass(Double_t fcut, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l03946">NcDSP.cxx:3946</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a34e5e42913d9623d72e9cee8b6858ae4"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a34e5e42913d9623d72e9cee8b6858ae4">NcDSP::fImIn</a></div><div class="ttdeci">TArrayD fImIn</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00076">NcDSP.h:76</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a34e5e42913d9623d72e9cee8b6858ae4"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a34e5e42913d9623d72e9cee8b6858ae4">NcDSP::fImIn</a></div><div class="ttdeci">TArrayD fImIn</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00084">NcDSP.h:84</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a368854525d1dd9b8639863172bcd36ed"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a368854525d1dd9b8639863172bcd36ed">NcDSP::Convolve</a></div><div class="ttdeci">TArrayD Convolve(TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, Int_t shift=0)</div><div class="ttdef"><b>Definition</b> <a href="#l02126">NcDSP.cxx:2126</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a37e5d5f7d0ed5644ec4e8da2ad78acee"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a37e5d5f7d0ed5644ec4e8da2ad78acee">NcDSP::Periodogram</a></div><div class="ttdeci">TGraph Periodogram(TString tu, Double_t Tmin, Double_t Tmax, Int_t n, TArray &amp;t, TArray &amp;y, TArray *dy=0, TF1 *Z=0, NcDevice *results=0) const</div><div class="ttdef"><b>Definition</b> <a href="#l05552">NcDSP.cxx:5552</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a3fb8f355038b2a8e3a3cbea599e38a0c"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a3fb8f355038b2a8e3a3cbea599e38a0c">NcDSP::GetMultiBandKernel</a></div><div class="ttdeci">TArrayD GetMultiBandKernel(TArray &amp;freqs, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l05278">NcDSP.cxx:5278</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a575237089eac623bf91975837386563f"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a575237089eac623bf91975837386563f">NcDSP::HistogramTrafoResult</a></div><div class="ttdeci">void HistogramTrafoResult(TString name, Int_t mode, TH1 *hist, TString sel)</div><div class="ttdef"><b>Definition</b> <a href="#l01768">NcDSP.cxx:1768</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a5d4532d92035792cda2b6bf57eb9687c"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a5d4532d92035792cda2b6bf57eb9687c">NcDSP::fWaveform</a></div><div class="ttdeci">TArrayD fWaveform</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00080">NcDSP.h:80</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a5d4532d92035792cda2b6bf57eb9687c"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a5d4532d92035792cda2b6bf57eb9687c">NcDSP::fWaveform</a></div><div class="ttdeci">TArrayD fWaveform</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00088">NcDSP.h:88</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a5e9923feba6dd30ff1de67d849cdf678"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a5e9923feba6dd30ff1de67d849cdf678">NcDSP::Hilbert</a></div><div class="ttdeci">void Hilbert(Int_t mode, TH1 *hist=0, TString sel=&quot;none&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l01568">NcDSP.cxx:1568</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a5ff8680e1c66ca2defd7ac8a2e17c191"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a5ff8680e1c66ca2defd7ac8a2e17c191">NcDSP::fSample</a></div><div class="ttdeci">Float_t fSample</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00082">NcDSP.h:82</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a5ff8680e1c66ca2defd7ac8a2e17c191"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a5ff8680e1c66ca2defd7ac8a2e17c191">NcDSP::fSample</a></div><div class="ttdeci">Float_t fSample</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00090">NcDSP.h:90</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a62d6ef8baf2426d10c55e5e8786315c3"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a62d6ef8baf2426d10c55e5e8786315c3">NcDSP::Fourier</a></div><div class="ttdeci">void Fourier(TString mode, TH1 *hist=0, TString sel=&quot;none&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l01092">NcDSP.cxx:1092</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a63d66c347ca2cdc882b590940e7ac175"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a63d66c347ca2cdc882b590940e7ac175">NcDSP::SetWaveform</a></div><div class="ttdeci">void SetWaveform(Int_t n, Double_t *h, Float_t f=-1)</div><div class="ttdef"><b>Definition</b> <a href="#l00716">NcDSP.cxx:716</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a66948496d9a3a99604e3ac4d5761c96e"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a66948496d9a3a99604e3ac4d5761c96e">NcDSP::FilterHighPass</a></div><div class="ttdeci">TArrayD FilterHighPass(Double_t fcut, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l04091">NcDSP.cxx:4091</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a69555899fb115f18c44c3d0103e38e45"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a69555899fb115f18c44c3d0103e38e45">NcDSP::GetBandRejectKernel</a></div><div class="ttdeci">TArrayD GetBandRejectKernel(Double_t f1, Double_t f2, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l05153">NcDSP.cxx:5153</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a69b54f8645cb90858a0135afd08e740c"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a69b54f8645cb90858a0135afd08e740c">NcDSP::fHisto</a></div><div class="ttdeci">TArrayD fHisto</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00079">NcDSP.h:79</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a6b8348e01bce8e11b8ea3c1216ccb020"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a6b8348e01bce8e11b8ea3c1216ccb020">NcDSP::fImOut</a></div><div class="ttdeci">TArrayD fImOut</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00078">NcDSP.h:78</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a6f049e701e085d51118e339f80be5cdf"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a6f049e701e085d51118e339f80be5cdf">NcDSP::fN</a></div><div class="ttdeci">Int_t fN</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00073">NcDSP.h:73</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a69b54f8645cb90858a0135afd08e740c"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a69b54f8645cb90858a0135afd08e740c">NcDSP::fHisto</a></div><div class="ttdeci">TArrayD fHisto</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00087">NcDSP.h:87</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a6b8348e01bce8e11b8ea3c1216ccb020"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a6b8348e01bce8e11b8ea3c1216ccb020">NcDSP::fImOut</a></div><div class="ttdeci">TArrayD fImOut</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00086">NcDSP.h:86</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a6f049e701e085d51118e339f80be5cdf"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a6f049e701e085d51118e339f80be5cdf">NcDSP::fN</a></div><div class="ttdeci">Int_t fN</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00081">NcDSP.h:81</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a6f2607c80cc20d8fb8acf85c8469e293"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a6f2607c80cc20d8fb8acf85c8469e293">NcDSP::NcDSP</a></div><div class="ttdeci">NcDSP(const char *name=&quot;&quot;, const char *title=&quot;&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l00293">NcDSP.cxx:293</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a7b90651b703eba06ee4320d0107bbf00"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a7b90651b703eba06ee4320d0107bbf00">NcDSP::Cosine</a></div><div class="ttdeci">void Cosine(Int_t type, TH1 *hist=0, TString sel=&quot;none&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l01334">NcDSP.cxx:1334</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a83aecc252cea37b922fab4056f128d45"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a83aecc252cea37b922fab4056f128d45">NcDSP::ADC</a></div><div class="ttdeci">TArrayL64 ADC(Int_t nbits, Double_t range, Double_t Vbias=0, TArray *Vsig=0, TH1 *hist=0, Int_t B=0, Int_t C=3) const</div><div class="ttdef"><b>Definition</b> <a href="#l02798">NcDSP.cxx:2798</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a8498148368a1c5fafca2ab544e326d91"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a8498148368a1c5fafca2ab544e326d91">NcDSP::fNorm</a></div><div class="ttdeci">TString fNorm</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00081">NcDSP.h:81</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a8498148368a1c5fafca2ab544e326d91"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a8498148368a1c5fafca2ab544e326d91">NcDSP::fNorm</a></div><div class="ttdeci">TString fNorm</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00089">NcDSP.h:89</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a8829a4cbc8de99cf6d442a1b784c875b"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a8829a4cbc8de99cf6d442a1b784c875b">NcDSP::GetHighPassKernel</a></div><div class="ttdeci">TArrayD GetHighPassKernel(Double_t fcut, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l04911">NcDSP.cxx:4911</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a8bbb9fd73ba629c831f41538c639c978"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a8bbb9fd73ba629c831f41538c639c978">NcDSP::FilterMovingAverage</a></div><div class="ttdeci">TArrayD FilterMovingAverage(Int_t n, TString mode, TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, TH1 *hisf=0, Bool_t dB=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l03698">NcDSP.cxx:3698</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a8c2608c32bb15409daef231f43648e1a"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a8c2608c32bb15409daef231f43648e1a">NcDSP::Hartley</a></div><div class="ttdeci">void Hartley(Int_t mode, TH1 *hist=0, TString sel=&quot;none&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l01240">NcDSP.cxx:1240</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a8d672ab3cb4298ed53214d1147e03f35"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a8d672ab3cb4298ed53214d1147e03f35">NcDSP::GetData</a></div><div class="ttdeci">TArrayD GetData(TString mode) const</div><div class="ttdef"><b>Definition</b> <a href="#l01028">NcDSP.cxx:1028</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a8e0119bb2ee8d82d8cf6447f1bb60c9f"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a8e0119bb2ee8d82d8cf6447f1bb60c9f">NcDSP::Digitize</a></div><div class="ttdeci">TArrayD Digitize(Int_t nbits, Double_t vcal, Int_t mode, TH1 *hist=0, Double_t *stp=0, Double_t *scale=0) const</div><div class="ttdef"><b>Definition</b> <a href="#l02577">NcDSP.cxx:2577</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_a920356d1a2bd3d00c4be0148e166d3b4"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a920356d1a2bd3d00c4be0148e166d3b4">NcDSP::fReOut</a></div><div class="ttdeci">TArrayD fReOut</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00077">NcDSP.h:77</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_a920356d1a2bd3d00c4be0148e166d3b4"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a920356d1a2bd3d00c4be0148e166d3b4">NcDSP::fReOut</a></div><div class="ttdeci">TArrayD fReOut</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00085">NcDSP.h:85</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a9b1b310255c5a22e6c58839cd0dcf9c2"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a9b1b310255c5a22e6c58839cd0dcf9c2">NcDSP::FilterBandReject</a></div><div class="ttdeci">TArrayD FilterBandReject(Double_t f1, Double_t f2, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l04385">NcDSP.cxx:4385</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_a9fdac328a320753b02f4afe7cced73a5"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#a9fdac328a320753b02f4afe7cced73a5">NcDSP::HistogramFilterFFT</a></div><div class="ttdeci">void HistogramFilterFFT(TArray *h, TH1 *hisf, Bool_t dB, Bool_t kernel, TH1 *hist=0)</div><div class="ttdef"><b>Definition</b> <a href="#l05420">NcDSP.cxx:5420</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_aa0e67f9ac1058ceacfe6111eb7688d0a"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aa0e67f9ac1058ceacfe6111eb7688d0a">NcDSP::DAC</a></div><div class="ttdeci">TArrayD DAC(Int_t nbits, Double_t range, Double_t Vbias=0, TArray *adcs=0, TArray *peds=0, TH1 *hist=0, Int_t B=0, Int_t C=3) const</div><div class="ttdef"><b>Definition</b> <a href="#l03025">NcDSP.cxx:3025</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_aa2799f6a940c6ee0a298f48fe371c913"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aa2799f6a940c6ee0a298f48fe371c913">NcDSP::~NcDSP</a></div><div class="ttdeci">virtual ~NcDSP()</div><div class="ttdef"><b>Definition</b> <a href="#l00307">NcDSP.cxx:307</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_aacd75a5e0c6ff58406ed592ee34c5af9"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aacd75a5e0c6ff58406ed592ee34c5af9">NcDSP::GetLowPassKernel</a></div><div class="ttdeci">TArrayD GetLowPassKernel(Double_t fcut, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l04776">NcDSP.cxx:4776</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_ab2dfa20010b5370a7c322f992d845c93"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ab2dfa20010b5370a7c322f992d845c93">NcDSP::fProc</a></div><div class="ttdeci">TVirtualFFT * fProc</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00072">NcDSP.h:72</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_ab2dfa20010b5370a7c322f992d845c93"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ab2dfa20010b5370a7c322f992d845c93">NcDSP::fProc</a></div><div class="ttdeci">TVirtualFFT * fProc</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00080">NcDSP.h:80</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_ab403e51f2b327b1edd31a16eb0f1e625"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ab403e51f2b327b1edd31a16eb0f1e625">NcDSP::GetMovingAverageKernel</a></div><div class="ttdeci">TArrayD GetMovingAverageKernel(Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0)</div><div class="ttdef"><b>Definition</b> <a href="#l04688">NcDSP.cxx:4688</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_ac85fe915d2a3bcd806ea3968a73c53be"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ac85fe915d2a3bcd806ea3968a73c53be">NcDSP::SampleAndHold</a></div><div class="ttdeci">TArrayD SampleAndHold(TF1 f, Double_t step, Double_t vmin, Double_t vmax, TH1 *hist=0, Int_t loc=-1) const</div><div class="ttdef"><b>Definition</b> <a href="#l03357">NcDSP.cxx:3357</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_ac9fd73361974806a775989f7e89e5729"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ac9fd73361974806a775989f7e89e5729">NcDSP::Clone</a></div><div class="ttdeci">virtual TObject * Clone(const char *name=&quot;&quot;) const</div><div class="ttdef"><b>Definition</b> <a href="#l05552">NcDSP.cxx:5552</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_ac9fd73361974806a775989f7e89e5729"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ac9fd73361974806a775989f7e89e5729">NcDSP::Clone</a></div><div class="ttdeci">virtual TObject * Clone(const char *name=&quot;&quot;) const</div><div class="ttdef"><b>Definition</b> <a href="#l06194">NcDSP.cxx:6194</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_acb599c179a7c300ddd455fc53c9ebd54"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#acb599c179a7c300ddd455fc53c9ebd54">NcDSP::GetSamplingFrequency</a></div><div class="ttdeci">Float_t GetSamplingFrequency() const</div><div class="ttdef"><b>Definition</b> <a href="#l00384">NcDSP.cxx:384</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_ad105520e483dc48a2ee5ca221f4f5502"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ad105520e483dc48a2ee5ca221f4f5502">NcDSP::fNwf</a></div><div class="ttdeci">Int_t fNwf</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00074">NcDSP.h:74</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_ad11cc8c1e6213b72de4c28eea9981e07"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ad11cc8c1e6213b72de4c28eea9981e07">NcDSP::fReIn</a></div><div class="ttdeci">TArrayD fReIn</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00075">NcDSP.h:75</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_ad105520e483dc48a2ee5ca221f4f5502"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ad105520e483dc48a2ee5ca221f4f5502">NcDSP::fNwf</a></div><div class="ttdeci">Int_t fNwf</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00082">NcDSP.h:82</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_ad11cc8c1e6213b72de4c28eea9981e07"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ad11cc8c1e6213b72de4c28eea9981e07">NcDSP::fReIn</a></div><div class="ttdeci">TArrayD fReIn</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00083">NcDSP.h:83</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_ad60376eeb44c4579aa66b4c447180e40"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ad60376eeb44c4579aa66b4c447180e40">NcDSP::Correlate</a></div><div class="ttdeci">TArrayD Correlate(TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, Double_t *peak=0, TString norm=&quot;NONE&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l02402">NcDSP.cxx:2402</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_ae5421ce4995ad4d99d6e9cba90f850e5"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#ae5421ce4995ad4d99d6e9cba90f850e5">NcDSP::SampleAndSum</a></div><div class="ttdeci">TArrayD SampleAndSum(TF1 f, Double_t step, Double_t vmin, Double_t vmax, TH1 *hist=0) const</div><div class="ttdef"><b>Definition</b> <a href="#l03534">NcDSP.cxx:3534</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_aeb13c3f3c536b0527aaccc44d4f5a8a1"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aeb13c3f3c536b0527aaccc44d4f5a8a1">NcDSP::Sine</a></div><div class="ttdeci">void Sine(Int_t type, TH1 *hist=0, TString sel=&quot;none&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l01452">NcDSP.cxx:1452</a></div></div>
-<div class="ttc" id="aclass_nc_d_s_p_html_aebe9cb538759a671784075e62ae7f799"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aebe9cb538759a671784075e62ae7f799">NcDSP::fKeepOutput</a></div><div class="ttdeci">Bool_t fKeepOutput</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00083">NcDSP.h:83</a></div></div>
+<div class="ttc" id="aclass_nc_d_s_p_html_aebe9cb538759a671784075e62ae7f799"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aebe9cb538759a671784075e62ae7f799">NcDSP::fKeepOutput</a></div><div class="ttdeci">Bool_t fKeepOutput</div><div class="ttdef"><b>Definition</b> <a href="../../db/da5/_nc_d_s_p_8h_source.html#l00091">NcDSP.h:91</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_aeed9635f232bec20b1b8a8d64cfd2b0a"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aeed9635f232bec20b1b8a8d64cfd2b0a">NcDSP::Load</a></div><div class="ttdeci">void Load(Int_t n, Double_t *re, Double_t *im=0, Float_t f=-1)</div><div class="ttdef"><b>Definition</b> <a href="#l00395">NcDSP.cxx:395</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_aefcde9f30432748f529637ee3da3a2f1"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#aefcde9f30432748f529637ee3da3a2f1">NcDSP::FilterBandPass</a></div><div class="ttdeci">TArrayD FilterBandPass(Double_t f1, Double_t f2, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Int_t *i1=0, Int_t *i2=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l04236">NcDSP.cxx:4236</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_af82b12df8da7719258c97bdab1337701"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#af82b12df8da7719258c97bdab1337701">NcDSP::GetBandPassKernel</a></div><div class="ttdeci">TArrayD GetBandPassKernel(Double_t f1, Double_t f2, Int_t n, TH1 *hisf=0, Bool_t dB=kTRUE, TH1 *hist=0, Bool_t adaptn=kTRUE)</div><div class="ttdef"><b>Definition</b> <a href="#l05030">NcDSP.cxx:5030</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_af9d6afad52d8b8cf9ec43e851f63bf03"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#af9d6afad52d8b8cf9ec43e851f63bf03">NcDSP::Reset</a></div><div class="ttdeci">void Reset()</div><div class="ttdef"><b>Definition</b> <a href="#l00344">NcDSP.cxx:344</a></div></div>
 <div class="ttc" id="aclass_nc_d_s_p_html_afacc03640067b04d54f8e0a1a515886c"><div class="ttname"><a href="../../d7/d8a/class_nc_d_s_p.html#afacc03640067b04d54f8e0a1a515886c">NcDSP::Transmit</a></div><div class="ttdeci">TArrayD Transmit(Int_t nbits, Double_t range, Double_t Vbias=0, TArray *Vsig=0, TArray *peds=0, TH1 *hist=0, Int_t B=0, Int_t C=3) const</div><div class="ttdef"><b>Definition</b> <a href="#l03265">NcDSP.cxx:3265</a></div></div>
+<div class="ttc" id="aclass_nc_device_html"><div class="ttname"><a href="../../de/df5/class_nc_device.html">NcDevice</a></div><div class="ttdoc">Signal (Hit) handling of a generic device.</div><div class="ttdef"><b>Definition</b> <a href="../../d6/dcd/_nc_device_8h_source.html#l00013">NcDevice.h:14</a></div></div>
+<div class="ttc" id="aclass_nc_device_html_a12e83b8de4e2d514c2bbc02a39261abb"><div class="ttname"><a href="../../de/df5/class_nc_device.html#a12e83b8de4e2d514c2bbc02a39261abb">NcDevice::AddHit</a></div><div class="ttdeci">void AddHit(NcSignal &amp;s)</div><div class="ttdef"><b>Definition</b> <a href="../../d4/d87/_nc_device_8cxx_source.html#l00336">NcDevice.cxx:336</a></div></div>
+<div class="ttc" id="aclass_nc_device_html_aeeab04a1fcf3146e4510fea9df1ad356"><div class="ttname"><a href="../../de/df5/class_nc_device.html#aeeab04a1fcf3146e4510fea9df1ad356">NcDevice::Reset</a></div><div class="ttdeci">virtual void Reset(Int_t mode=0)</div><div class="ttdef"><b>Definition</b> <a href="../../d4/d87/_nc_device_8cxx_source.html#l00222">NcDevice.cxx:222</a></div></div>
 <div class="ttc" id="aclass_nc_math_html"><div class="ttname"><a href="../../d7/d31/class_nc_math.html">NcMath</a></div><div class="ttdoc">Various mathematical tools for scientific analysis.</div><div class="ttdef"><b>Definition</b> <a href="../../dc/d1b/_nc_math_8h_source.html#l00025">NcMath.h:26</a></div></div>
 <div class="ttc" id="aclass_nc_math_html_a146a626e587d8e2dad0b96c1e197b0dd"><div class="ttname"><a href="../../d7/d31/class_nc_math.html#a146a626e587d8e2dad0b96c1e197b0dd">NcMath::Log</a></div><div class="ttdeci">Double_t Log(Double_t B, Double_t x) const</div><div class="ttdef"><b>Definition</b> <a href="../../d5/d28/_nc_math_8cxx_source.html#l02613">NcMath.cxx:2613</a></div></div>
 <div class="ttc" id="aclass_nc_sample_html"><div class="ttname"><a href="../../de/dcd/class_nc_sample.html">NcSample</a></div><div class="ttdoc">Sampling and statistics tools for various multi-dimensional data samples.</div><div class="ttdef"><b>Definition</b> <a href="../../da/d5c/_nc_sample_8h_source.html#l00027">NcSample.h:28</a></div></div>
@@ -3717,6 +4081,8 @@ $(function(){initNavTree('d6/d65/_nc_d_s_p_8cxx_source.html','../../'); initResi
 <div class="ttc" id="aclass_nc_sample_html_a623113fbadb6586117c84b3f4f582ba8"><div class="ttname"><a href="../../de/dcd/class_nc_sample.html#a623113fbadb6586117c84b3f4f582ba8">NcSample::GetIndex</a></div><div class="ttdeci">Int_t GetIndex(TString name) const</div><div class="ttdef"><b>Definition</b> <a href="../../da/ded/_nc_sample_8cxx_source.html#l01125">NcSample.cxx:1125</a></div></div>
 <div class="ttc" id="aclass_nc_sample_html_acabfe2d329ac183cdc9d66229209c07a"><div class="ttname"><a href="../../de/dcd/class_nc_sample.html#acabfe2d329ac183cdc9d66229209c07a">NcSample::GetDimension</a></div><div class="ttdeci">Int_t GetDimension() const</div><div class="ttdef"><b>Definition</b> <a href="../../da/ded/_nc_sample_8cxx_source.html#l01188">NcSample.cxx:1188</a></div></div>
 <div class="ttc" id="aclass_nc_sample_html_ae9433e1eeaf4725edc948a6ae3339a17"><div class="ttname"><a href="../../de/dcd/class_nc_sample.html#ae9433e1eeaf4725edc948a6ae3339a17">NcSample::GetEntry</a></div><div class="ttdeci">Double_t GetEntry(Int_t i, Int_t j, Int_t mode=0, Int_t k=0)</div><div class="ttdef"><b>Definition</b> <a href="../../da/ded/_nc_sample_8cxx_source.html#l02340">NcSample.cxx:2340</a></div></div>
+<div class="ttc" id="aclass_nc_signal_html"><div class="ttname"><a href="../../d6/d42/class_nc_signal.html">NcSignal</a></div><div class="ttdoc">Generic handling of (extrapolated) detector signals.</div><div class="ttdef"><b>Definition</b> <a href="../../d7/dca/_nc_signal_8h_source.html#l00022">NcSignal.h:23</a></div></div>
+<div class="ttc" id="aclass_nc_signal_html_a3e47ac0595b960172b1cbe35b26cc01a"><div class="ttname"><a href="../../d6/d42/class_nc_signal.html#a3e47ac0595b960172b1cbe35b26cc01a">NcSignal::SetSignal</a></div><div class="ttdeci">virtual void SetSignal(Double_t sig, Int_t j=1)</div><div class="ttdef"><b>Definition</b> <a href="../../d6/d96/_nc_signal_8cxx_source.html#l00516">NcSignal.cxx:516</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
