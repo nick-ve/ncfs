@@ -65,3 +65,4 @@
 05-dec-2023 NvE New class RnoExplorer introduced to provide a GUI to interactively investigate RNO-G data.
 26-mar-2025 NvE Functionality of the class RnoExplorer extended to use the new normalization features for cross-correlation studies.
 29-may-2025 NvE The docs sections in the .h and .cxx files were modified, such that they satisfy both the THtml and Doxygen format. 
+01-jul-2025 NvE Misplaced comment block corrected in RnoMonitor::SetDevices().

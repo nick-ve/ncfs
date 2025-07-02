@@ -3689,13 +3689,13 @@ $(function(){initNavTree('d6/d65/_nc_d_s_p_8cxx_source.html','../../'); initResi
 <div class="line"><a id="l05655" name="l05655"></a><span class="lineno"> 5655</span> </div>
 <div class="line"><a id="l05656" name="l05656"></a><span class="lineno"> 5656</span>  <span class="comment">// Create compact internal arrays for efficient processing </span></div>
 <div class="line"><a id="l05657" name="l05657"></a><span class="lineno"> 5657</span>  Int_t na=0;</div>
-<div class="line"><a id="l05658" name="l05658"></a><span class="lineno"> 5658</span>  Float_t ti,yi,dyi2,wi,zi;</div>
-<div class="line"><a id="l05659" name="l05659"></a><span class="lineno"> 5659</span>  TArrayF tarr(nt);</div>
-<div class="line"><a id="l05660" name="l05660"></a><span class="lineno"> 5660</span>  TArrayF yarr(nt);</div>
-<div class="line"><a id="l05661" name="l05661"></a><span class="lineno"> 5661</span>  TArrayF warr(nt);</div>
-<div class="line"><a id="l05662" name="l05662"></a><span class="lineno"> 5662</span>  TArrayF zarr(nt);</div>
-<div class="line"><a id="l05663" name="l05663"></a><span class="lineno"> 5663</span>  Float_t Y=0;</div>
-<div class="line"><a id="l05664" name="l05664"></a><span class="lineno"> 5664</span>  Float_t Y2=0;</div>
+<div class="line"><a id="l05658" name="l05658"></a><span class="lineno"> 5658</span>  Double_t ti,yi,dyi2,wi,zi;</div>
+<div class="line"><a id="l05659" name="l05659"></a><span class="lineno"> 5659</span>  TArrayD tarr(nt);</div>
+<div class="line"><a id="l05660" name="l05660"></a><span class="lineno"> 5660</span>  TArrayD yarr(nt);</div>
+<div class="line"><a id="l05661" name="l05661"></a><span class="lineno"> 5661</span>  TArrayD warr(nt);</div>
+<div class="line"><a id="l05662" name="l05662"></a><span class="lineno"> 5662</span>  TArrayD zarr(nt);</div>
+<div class="line"><a id="l05663" name="l05663"></a><span class="lineno"> 5663</span>  Double_t Y=0;</div>
+<div class="line"><a id="l05664" name="l05664"></a><span class="lineno"> 5664</span>  Double_t Y2=0;</div>
 <div class="line"><a id="l05665" name="l05665"></a><span class="lineno"> 5665</span>  <span class="keywordflow">for</span> (Int_t i=0; i&lt;nt; i++)</div>
 <div class="line"><a id="l05666" name="l05666"></a><span class="lineno"> 5666</span>  {</div>
 <div class="line"><a id="l05667" name="l05667"></a><span class="lineno"> 5667</span>   ti=t.GetAt(i);</div>
@@ -3721,7 +3721,7 @@ $(function(){initNavTree('d6/d65/_nc_d_s_p_8cxx_source.html','../../'); initResi
 <div class="line"><a id="l05687" name="l05687"></a><span class="lineno"> 5687</span>  tarr.Set(na);</div>
 <div class="line"><a id="l05688" name="l05688"></a><span class="lineno"> 5688</span>  yarr.Set(na);</div>
 <div class="line"><a id="l05689" name="l05689"></a><span class="lineno"> 5689</span>  warr.Set(na);</div>
-<div class="line"><a id="l05690" name="l05690"></a><span class="lineno"> 5690</span>  Float_t W=warr.GetSum();</div>
+<div class="line"><a id="l05690" name="l05690"></a><span class="lineno"> 5690</span>  Double_t W=warr.GetSum();</div>
 <div class="line"><a id="l05691" name="l05691"></a><span class="lineno"> 5691</span> </div>
 <div class="line"><a id="l05692" name="l05692"></a><span class="lineno"> 5692</span>  <span class="keywordflow">if</span> (!na || W&lt;=0)</div>
 <div class="line"><a id="l05693" name="l05693"></a><span class="lineno"> 5693</span>  {</div>
@@ -3733,22 +3733,22 @@ $(function(){initNavTree('d6/d65/_nc_d_s_p_8cxx_source.html','../../'); initResi
 <div class="line"><a id="l05699" name="l05699"></a><span class="lineno"> 5699</span>  Y2=Y2/W;</div>
 <div class="line"><a id="l05700" name="l05700"></a><span class="lineno"> 5700</span> </div>
 <div class="line"><a id="l05701" name="l05701"></a><span class="lineno"> 5701</span>  <span class="comment">// Loop over the frequencies</span></div>
-<div class="line"><a id="l05702" name="l05702"></a><span class="lineno"> 5702</span>  Float_t twopi=2.*acos(-1.);</div>
-<div class="line"><a id="l05703" name="l05703"></a><span class="lineno"> 5703</span>  Float_t omega=0;</div>
-<div class="line"><a id="l05704" name="l05704"></a><span class="lineno"> 5704</span>  Float_t zcosi=0;</div>
-<div class="line"><a id="l05705" name="l05705"></a><span class="lineno"> 5705</span>  Float_t zsini=0;</div>
-<div class="line"><a id="l05706" name="l05706"></a><span class="lineno"> 5706</span>  Float_t C=0;</div>
-<div class="line"><a id="l05707" name="l05707"></a><span class="lineno"> 5707</span>  Float_t S=0;</div>
-<div class="line"><a id="l05708" name="l05708"></a><span class="lineno"> 5708</span>  Float_t CS=0;</div>
-<div class="line"><a id="l05709" name="l05709"></a><span class="lineno"> 5709</span>  Float_t C2=0;</div>
-<div class="line"><a id="l05710" name="l05710"></a><span class="lineno"> 5710</span>  Float_t S2=0;</div>
-<div class="line"><a id="l05711" name="l05711"></a><span class="lineno"> 5711</span>  Float_t YC=0;</div>
-<div class="line"><a id="l05712" name="l05712"></a><span class="lineno"> 5712</span>  Float_t YS=0;</div>
-<div class="line"><a id="l05713" name="l05713"></a><span class="lineno"> 5713</span>  Float_t D=0;</div>
-<div class="line"><a id="l05714" name="l05714"></a><span class="lineno"> 5714</span>  Float_t P=0;</div>
-<div class="line"><a id="l05715" name="l05715"></a><span class="lineno"> 5715</span>  Float_t a=0;</div>
-<div class="line"><a id="l05716" name="l05716"></a><span class="lineno"> 5716</span>  Float_t b=0;</div>
-<div class="line"><a id="l05717" name="l05717"></a><span class="lineno"> 5717</span>  Float_t c=0;</div>
+<div class="line"><a id="l05702" name="l05702"></a><span class="lineno"> 5702</span>  Double_t twopi=2.*acos(-1.);</div>
+<div class="line"><a id="l05703" name="l05703"></a><span class="lineno"> 5703</span>  Double_t omega=0;</div>
+<div class="line"><a id="l05704" name="l05704"></a><span class="lineno"> 5704</span>  Double_t zcosi=0;</div>
+<div class="line"><a id="l05705" name="l05705"></a><span class="lineno"> 5705</span>  Double_t zsini=0;</div>
+<div class="line"><a id="l05706" name="l05706"></a><span class="lineno"> 5706</span>  Double_t C=0;</div>
+<div class="line"><a id="l05707" name="l05707"></a><span class="lineno"> 5707</span>  Double_t S=0;</div>
+<div class="line"><a id="l05708" name="l05708"></a><span class="lineno"> 5708</span>  Double_t CS=0;</div>
+<div class="line"><a id="l05709" name="l05709"></a><span class="lineno"> 5709</span>  Double_t C2=0;</div>
+<div class="line"><a id="l05710" name="l05710"></a><span class="lineno"> 5710</span>  Double_t S2=0;</div>
+<div class="line"><a id="l05711" name="l05711"></a><span class="lineno"> 5711</span>  Double_t YC=0;</div>
+<div class="line"><a id="l05712" name="l05712"></a><span class="lineno"> 5712</span>  Double_t YS=0;</div>
+<div class="line"><a id="l05713" name="l05713"></a><span class="lineno"> 5713</span>  Double_t D=0;</div>
+<div class="line"><a id="l05714" name="l05714"></a><span class="lineno"> 5714</span>  Double_t P=0;</div>
+<div class="line"><a id="l05715" name="l05715"></a><span class="lineno"> 5715</span>  Double_t a=0;</div>
+<div class="line"><a id="l05716" name="l05716"></a><span class="lineno"> 5716</span>  Double_t b=0;</div>
+<div class="line"><a id="l05717" name="l05717"></a><span class="lineno"> 5717</span>  Double_t c=0;</div>
 <div class="line"><a id="l05718" name="l05718"></a><span class="lineno"> 5718</span>  Int_t ip=0;</div>
 <div class="line"><a id="l05719" name="l05719"></a><span class="lineno"> 5719</span>  <a class="code hl_class" href="../../d6/d42/class_nc_signal.html">NcSignal</a> sx;</div>
 <div class="line"><a id="l05720" name="l05720"></a><span class="lineno"> 5720</span>  sx.<a class="code hl_function" href="../../d5/d2a/class_nc_attrib.html#a4887a29a0f4ff85953718fd21c964313">AddNamedSlot</a>(<span class="stringliteral">&quot;f&quot;</span>);</div>

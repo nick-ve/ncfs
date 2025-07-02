@@ -279,7 +279,7 @@
 //
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, October 19, 2021  09:42Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, June 28, 2025  14:21Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, July 1, 2025  13:15Z
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -5655,13 +5655,13 @@ TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TArray&
 
   // Create compact internal arrays for efficient processing 
   Int_t na=0;
-  Float_t ti,yi,dyi2,wi,zi;
-  TArrayF tarr(nt);
-  TArrayF yarr(nt);
-  TArrayF warr(nt);
-  TArrayF zarr(nt);
-  Float_t Y=0;
-  Float_t Y2=0;
+  Double_t ti,yi,dyi2,wi,zi;
+  TArrayD tarr(nt);
+  TArrayD yarr(nt);
+  TArrayD warr(nt);
+  TArrayD zarr(nt);
+  Double_t Y=0;
+  Double_t Y2=0;
   for (Int_t i=0; i<nt; i++)
   {
    ti=t.GetAt(i);
@@ -5687,7 +5687,7 @@ TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TArray&
   tarr.Set(na);
   yarr.Set(na);
   warr.Set(na);
-  Float_t W=warr.GetSum();
+  Double_t W=warr.GetSum();
 
   if (!na || W<=0)
   {
@@ -5699,22 +5699,22 @@ TGraph NcDSP::Periodogram(TString tu,Double_t Tmin,Double_t Tmax,Int_t n,TArray&
   Y2=Y2/W;
 
   // Loop over the frequencies
-  Float_t twopi=2.*acos(-1.);
-  Float_t omega=0;
-  Float_t zcosi=0;
-  Float_t zsini=0;
-  Float_t C=0;
-  Float_t S=0;
-  Float_t CS=0;
-  Float_t C2=0;
-  Float_t S2=0;
-  Float_t YC=0;
-  Float_t YS=0;
-  Float_t D=0;
-  Float_t P=0;
-  Float_t a=0;
-  Float_t b=0;
-  Float_t c=0;
+  Double_t twopi=2.*acos(-1.);
+  Double_t omega=0;
+  Double_t zcosi=0;
+  Double_t zsini=0;
+  Double_t C=0;
+  Double_t S=0;
+  Double_t CS=0;
+  Double_t C2=0;
+  Double_t S2=0;
+  Double_t YC=0;
+  Double_t YS=0;
+  Double_t D=0;
+  Double_t P=0;
+  Double_t a=0;
+  Double_t b=0;
+  Double_t c=0;
   Int_t ip=0;
   NcSignal sx;
   sx.AddNamedSlot("f");

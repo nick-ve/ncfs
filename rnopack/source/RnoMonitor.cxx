@@ -117,12 +117,12 @@ void RnoMonitor::SetDevices(TString devclass,Int_t ista,Int_t ichan)
 // In the default constructor devclass is set to "RnoGANT" to select all antenna types
 // and also all channels and all stations are selected.
 // At invokation of this member function, the default values are ista=-1 and ichan=-1.
+~~~
+**/
 
  fDevClass=devclass;
  fSta=ista;
  fChan=ichan;
-~~~
-**/
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoMonitor::SetDeviceSample(Int_t j)
