@@ -39,7 +39,7 @@ class NcJob : public TTask
   TFolder* fFolder;     // Pointer to the folder which serves as the job's whiteboard
   TObject* fMainObject; // Pointer to the main processing object structure within the job
   TObjArray* fObjects;  // Pointers to the various user-added objects 
-  TObjArray* fSelect;   //!< Temp. array of pointers to user-selected stored objects 
+  TObjArray* fSelect;   ///<! Temp. array of pointers to user-selected stored objects 
 
   void SetMainObject(TObject* obj); // Store pointer to the main object structure
 

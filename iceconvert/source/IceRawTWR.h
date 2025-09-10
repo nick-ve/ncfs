@@ -49,11 +49,11 @@ class IceRawTWR : public NcJob
   void PutTrigger(Int_t year);   // Put the trigger info from the raw data event into the IcePack structure
   void PutWaveforms(Int_t year); // Put the waveforms from the raw data event into the IcePack structure
 
-  FILE* fInput;              //!< Pointer to the TWR raw data input file
-  sys_config_t* fHeader;     //!< Structure holding the raw configuration header info
-  event_t fEvent;            //!< Structure holding the actual raw event data
-  trigger_hits_t fTrigger;   //!< Structure holding the event trigger info
-  waveform_analyse_t fWform; //!< Waveform info for a certain OM from (merged) fragment(s)
+  FILE* fInput;              ///<! Pointer to the TWR raw data input file
+  sys_config_t* fHeader;     ///<! Structure holding the raw configuration header info
+  event_t fEvent;            ///<! Structure holding the actual raw event data
+  trigger_hits_t fTrigger;   ///<! Structure holding the event trigger info
+  waveform_analyse_t fWform; ///<! Waveform info for a certain OM from (merged) fragment(s)
 
   // Ralice/IcePack implementation of Wolfgang Wagner's original code
   Int_t extract_info_from_filename(char* fname,twr_raw_data_file_t* twr_file);

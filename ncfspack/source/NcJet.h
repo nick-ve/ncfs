@@ -85,7 +85,7 @@ class NcJet : public TNamed,public Nc4Vector
   Int_t fTrackCopy;                      // Flag to denote creation of private copies in fTracks
   Int_t fUserId;                         // The user defined identifier
   NcPositionObj* fRef;                   // The reference-point of the jet
-  TObjArray* fSelected;                  //!< Temp. array to hold user selected or ordered objects
+  TObjArray* fSelected;                  ///<! Temp. array to hold user selected or ordered objects
   Float_t fEscale;                       // The scale of the energy/momentum units of the jet
  
  ClassDef(NcJet,8) // Creation and investigation of a jet of particle tracks.

@@ -254,16 +254,16 @@ class NcAstrolab : public TTask,public NcTimestamp
   TObjArray* fRefs;      // Array holding the reference signals
   TObjArray* fSigs;      // Array holding the measured signals
   ULong64_t fNen[2];     // Counters to record every storage of an unnamed reference c.q. measurement signal
-  TRotMatrix fB;         //!< The frame bias matrix for conversion of ICRS to J2000 coordinates
-  Int_t fBias;           //!< Initialisation flag for fB values (0=uninitialised  1=initialised)
-  TRotMatrix fP;         //!< Matrix for precession correction  
-  TRotMatrix fN;         //!< Matrix for nutation correction  
-  TRotMatrix fG;         //!< Matrix for conversion of equatorial to galactic coordinates
-  Int_t fGal;            //!< Type indicator for fG values (0=uninitialised  1=B1950  2=J2000)
-  TRotMatrix fE;         //!< Matrix for conversion of equatorial to ecliptic coordinates
-  TRotMatrix fH;         //!< Matrix for conversion of equatorial to horizontal coordinates
+  TRotMatrix fB;         ///<! The frame bias matrix for conversion of ICRS to J2000 coordinates
+  Int_t fBias;           ///<! Initialisation flag for fB values (0=uninitialised  1=initialised)
+  TRotMatrix fP;         ///<! Matrix for precession correction  
+  TRotMatrix fN;         ///<! Matrix for nutation correction  
+  TRotMatrix fG;         ///<! Matrix for conversion of equatorial to galactic coordinates
+  Int_t fGal;            ///<! Type indicator for fG values (0=uninitialised  1=B1950  2=J2000)
+  TRotMatrix fE;         ///<! Matrix for conversion of equatorial to ecliptic coordinates
+  TRotMatrix fH;         ///<! Matrix for conversion of equatorial to horizontal coordinates
   TRotMatrix fL;         // Matrix for conversion of horizontal to local-frame coordinates
-  TArrayI* fIndices;     //!< Storage indices of the matching reference signals
+  TArrayI* fIndices;     ///<! Storage indices of the matching reference signals
   Int_t fTscmode;        // Time scrambling mode
   Double_t fTscmin;      // Minimal value (in sec.) for time scrambling
   Double_t fTscmax;      // Maximal value (in sec.) for time scrambling
@@ -298,11 +298,11 @@ class NcAstrolab : public TTask,public NcTimestamp
 
   // The skymap display facilities
   Int_t fUsMeridian;      // Flag to denote the (user) selection of the central meridian and display mode
-  Double_t fMeridian;     //!< Central meridian (in rad) for the sky display
-  TString fProj;          //!< Projection which is currently in use
-  TCanvas* fCanvas;       //!< The canvas for the skymap
-  TH2* fHist[2];          //!< Temp. histograms for the sky display
-  TObjArray* fMarkers;    //!< Temp. array to hold the markers for the signal display
+  Double_t fMeridian;     ///<! Central meridian (in rad) for the sky display
+  TString fProj;          ///<! Projection which is currently in use
+  TCanvas* fCanvas;       ///<! The canvas for the skymap
+  TH2* fHist[2];          ///<! Temp. histograms for the sky display
+  TObjArray* fMarkers;    ///<! Temp. array to hold the markers for the signal display
   Float_t fMarkerSize[4]; // Size of the marker symbols for the skymaps and related histograms
   Int_t fMarkerStyle[4];  // Style of the marker symbols for the skymaps and related histograms
   Int_t fMarkerColor[4];  // Color of the marker symbols for the skymaps and related histograms
@@ -313,51 +313,51 @@ class NcAstrolab : public TTask,public NcTimestamp
   void ProjectMercator(Double_t l,Double_t b,Double_t& x,Double_t& y);     // Mercator projection of (l,b) pair
 
   // The variables for the various SkyMapPanel GUI facilities
-  TGMainFrame* fSkyMapPanel;            //!< The main frame for the SkyMapPanel GUI 
-  TGNumberEntryField* fMapLabLBI[3];    //!< The GUI number entries for the Lab location specification
-  TGComboBox* fMapLabU;                 //!< The GUI Lab location angular unit selection box
-  TGComboBox* fMapLabE;                 //!< The GUI Lab experiment site selection box
-  Double_t fMapLabLocL;                 //!< The GUI entered Lab longitude
-  Double_t fMapLabLocB;                 //!< The GUI entered Lab latitude
-  TString fMapLabLocU;                  //!< The GUI entered Lab location angular units
-  TString fMapLabExpName;               //!< The GUI entered Lab experimental site
-  Int_t fMapLabId;                      //!< The GUI entered Lab detector Id
-  TGTextEntry* fMapTSdatetime;          //!< The GUI TS date/time specification
-  TGComboBox* fMapTStimetype;           //!< The GUI TS time type selection box
-  TString fMapDate;                     //!< The GUI entered date
-  TString fMapTime;                     //!< The GUI entered time
-  TString fMapTimeType;                 //!< The GUI entered time type
-  TString fMapDateTime;                 //!< The GUI entered datetime 
-  NcTimestamp fMapTS;                   //!< The GUI entered timestamp to be used for the List/Map
-  Bool_t fMapLabTS;                     //!< The GUI selection to use the Lab timestamp for the List/Map
-  TGNumberEntryField* fMapLabLframe[6]; //!< The GUI number entries for the local frame specification
-  TString fMapCinfo;                    //!< The GUI selected info category 
-  Int_t fMapTinfo;                      //!< The GUI selected mode for the timestamp info
-  TString fMapUinfo;                    //!< The GUI selected angular units for the Lab info 
-  TString fMapIname;                    //!< The GUI selected entry name for the info
-  Double_t fMapEa;                      //!< The GUI entered a coordinate of an entry
-  TString fMapEua;                      //!< The GUI entered angular units of a
-  Double_t fMapEb;                      //!< The GUI entered b coordinate of an entry
-  TString fMapEub;                      //!< The GUI entered angular units of b
-  Int_t fMapEtype;                      //!< The GUI entered entry type
-  TString fMapEcoord;                   //!< The GUI entered coordinate system of the entry
-  TString fMapEmode;                    //!< The GUI entered coordinate system mode of the entry
-  TString fMapEname;                    //!< The GUI entered name of the entry
-  TString fMapDcoord;                   //!< The GUI selected coordinate system for the Map/List
-  TString fMapProj;                     //!< The GUI selected projection for the Map
-  TString fMapDmode;                    //!< The GUI selected coordinate system mode for the Map/List
-  Bool_t fMapDoptions[5];               //!< The GUI Map/List options (histo, clr, ref, meas, refTS)
-  Int_t fMapNmax;                       //!< The GUI selected max. number of signals of each type to Map/List
-  Int_t fMapNdigs;                      //!< The GUI selected number of digits for the List output
-  TString fMapDname;                    //!< The GUI entered name pattern for entries to be shown in the Map/List
-  Bool_t fMapSolar[10];                 //!< The GUI selection of solar system objects
-  Int_t fMapMerMode;                    //!< The GUI selected meridian orientation for the Map
-  Double_t fMapMerC;                    //!< The GUI entered central meridian location for the Map
-  TString fMapMerUc;                    //!< The GUI selected angular units for the central meridian location
-  Double_t fMapMarkSize;                //!< The GUI entered marker size for the Map
-  Int_t fMapMarkStyle;                  //!< The GUI selected marker style for the Map
-  Int_t fMapMarkColor;                  //!< The GUI selected marker color for the Map
-  Int_t fMapMarkType;                   //!< The GUI selected entry type to apply the marker attributes on
+  TGMainFrame* fSkyMapPanel;            ///<! The main frame for the SkyMapPanel GUI 
+  TGNumberEntryField* fMapLabLBI[3];    ///<! The GUI number entries for the Lab location specification
+  TGComboBox* fMapLabU;                 ///<! The GUI Lab location angular unit selection box
+  TGComboBox* fMapLabE;                 ///<! The GUI Lab experiment site selection box
+  Double_t fMapLabLocL;                 ///<! The GUI entered Lab longitude
+  Double_t fMapLabLocB;                 ///<! The GUI entered Lab latitude
+  TString fMapLabLocU;                  ///<! The GUI entered Lab location angular units
+  TString fMapLabExpName;               ///<! The GUI entered Lab experimental site
+  Int_t fMapLabId;                      ///<! The GUI entered Lab detector Id
+  TGTextEntry* fMapTSdatetime;          ///<! The GUI TS date/time specification
+  TGComboBox* fMapTStimetype;           ///<! The GUI TS time type selection box
+  TString fMapDate;                     ///<! The GUI entered date
+  TString fMapTime;                     ///<! The GUI entered time
+  TString fMapTimeType;                 ///<! The GUI entered time type
+  TString fMapDateTime;                 ///<! The GUI entered datetime 
+  NcTimestamp fMapTS;                   ///<! The GUI entered timestamp to be used for the List/Map
+  Bool_t fMapLabTS;                     ///<! The GUI selection to use the Lab timestamp for the List/Map
+  TGNumberEntryField* fMapLabLframe[6]; ///<! The GUI number entries for the local frame specification
+  TString fMapCinfo;                    ///<! The GUI selected info category 
+  Int_t fMapTinfo;                      ///<! The GUI selected mode for the timestamp info
+  TString fMapUinfo;                    ///<! The GUI selected angular units for the Lab info 
+  TString fMapIname;                    ///<! The GUI selected entry name for the info
+  Double_t fMapEa;                      ///<! The GUI entered a coordinate of an entry
+  TString fMapEua;                      ///<! The GUI entered angular units of a
+  Double_t fMapEb;                      ///<! The GUI entered b coordinate of an entry
+  TString fMapEub;                      ///<! The GUI entered angular units of b
+  Int_t fMapEtype;                      ///<! The GUI entered entry type
+  TString fMapEcoord;                   ///<! The GUI entered coordinate system of the entry
+  TString fMapEmode;                    ///<! The GUI entered coordinate system mode of the entry
+  TString fMapEname;                    ///<! The GUI entered name of the entry
+  TString fMapDcoord;                   ///<! The GUI selected coordinate system for the Map/List
+  TString fMapProj;                     ///<! The GUI selected projection for the Map
+  TString fMapDmode;                    ///<! The GUI selected coordinate system mode for the Map/List
+  Bool_t fMapDoptions[5];               ///<! The GUI Map/List options (histo, clr, ref, meas, refTS)
+  Int_t fMapNmax;                       ///<! The GUI selected max. number of signals of each type to Map/List
+  Int_t fMapNdigs;                      ///<! The GUI selected number of digits for the List output
+  TString fMapDname;                    ///<! The GUI entered name pattern for entries to be shown in the Map/List
+  Bool_t fMapSolar[10];                 ///<! The GUI selection of solar system objects
+  Int_t fMapMerMode;                    ///<! The GUI selected meridian orientation for the Map
+  Double_t fMapMerC;                    ///<! The GUI entered central meridian location for the Map
+  TString fMapMerUc;                    ///<! The GUI selected angular units for the central meridian location
+  Double_t fMapMarkSize;                ///<! The GUI entered marker size for the Map
+  Int_t fMapMarkStyle;                  ///<! The GUI selected marker style for the Map
+  Int_t fMapMarkColor;                  ///<! The GUI selected marker color for the Map
+  Int_t fMapMarkType;                   ///<! The GUI selected entry type to apply the marker attributes on
 
   // Some (astro)physical parameters
   Double_t fSpeedC;  // Speed of light in vacuum in m/s

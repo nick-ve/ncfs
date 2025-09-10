@@ -40,8 +40,8 @@ class NcHelix : public THelix
   Float_t fMsize;      // The size of the marker
   Int_t fMcol;         // The colour of the marker
   Int_t fEnduse;       // Flag to denote tracks endpoint usage
-  TObjArray* fCurves;  //!< Temp. storage for the curves on the drawing
-  NcPosition* fExt;    //!< The extrapolation result
+  TObjArray* fCurves;  ///<! Temp. storage for the curves on the drawing
+  NcPosition* fExt;    ///<! The extrapolation result
  
  ClassDef(NcHelix,1) // Representation and extrapolation of NcTracks in a magnetic field.
 };

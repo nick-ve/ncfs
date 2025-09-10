@@ -33,7 +33,7 @@ class NcBoost : public TObject
   Nc3Vector fBeta;     // The beta 3-vector
   Double32_t fGamma;   // The gamma factor
   Double32_t fDgamma;  // Error on the gamma value
-  Double32_t fDresult; //!< Error on scalar result
+  Double32_t fDresult; ///<! Error on scalar result
  
  ClassDef(NcBoost,1) // Perform various Lorentz transformations.
 };

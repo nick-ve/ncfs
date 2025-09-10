@@ -88,18 +88,18 @@ class NcCalorimeter : public NcDevice
  protected:
   Int_t fNrows;                              // The number of rows
   Int_t fNcolumns;                           // The number of columns
-  NcObjMatrix* fMatrix;                      //!< Matrix lookup table of module pointers
+  NcObjMatrix* fMatrix;                      ///<! Matrix lookup table of module pointers
   Int_t fSwap;                               // The swapmode for the module and position matrices
   void SortM();                              // Order the modules with decreasing signal (matrix search)
   void SortA();                              // Order the modules with decreasing signal (fired array search)
   TObjArray* fClusters;                      // The array of clusters
   void AddRing(Int_t row,Int_t col,Int_t n); // add signals of n rings around cluster center
   void Ungroup();                            // Restore module matrix as before clustering
-  TH2F* fHmodules;                           //!< The module 2-D histogram for event display
-  TH2F* fHclusters;                          //!< The cluster 2-D histogram for event display
+  TH2F* fHmodules;                           ///<! The module 2-D histogram for event display
+  TH2F* fHclusters;                          ///<! The cluster 2-D histogram for event display
   TObjArray* fVetos;                         // The array of associated (extrapolated) veto signals
-  TObjArray* fAttributes;                    //!< Matrix dbase with module attributes (e.g. gain, offset etc...)
-  NcObjMatrix* fPositions;                   //!< Matrix dbase of module position pointers
+  TObjArray* fAttributes;                    ///<! Matrix dbase with module attributes (e.g. gain, offset etc...)
+  NcObjMatrix* fPositions;                   ///<! Matrix dbase of module position pointers
   void LoadMatrix();                         // Loading of matrix lookup table from the linear hit array
  
  ClassDef(NcCalorimeter,1) // Description of a modular calorimeter system.

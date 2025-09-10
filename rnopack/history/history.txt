@@ -66,3 +66,6 @@
 26-mar-2025 NvE Functionality of the class RnoExplorer extended to use the new normalization features for cross-correlation studies.
 29-may-2025 NvE The docs sections in the .h and .cxx files were modified, such that they satisfy both the THtml and Doxygen format. 
 01-jul-2025 NvE Misplaced comment block corrected in RnoMonitor::SetDevices().
+10-sep-2025 NvE All //!< strings in all .h files replaced by ///<! to indicate variables that should not be written
+                to a ROOT file, and still be compatible with the Doxygen conventions.
+                It turned out that //!< resulted in errors when reading old ROOT files.

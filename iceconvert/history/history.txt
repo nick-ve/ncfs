@@ -182,5 +182,7 @@
                 All related files have been modified accordingly.
 27-may-2025 NvE The docs sections in the .h and .cxx files of IceCal2Root, IceDB2Root, IceF2k, IceRawTWR, IceRoot and IceRootx
                 were modified, such that they satisfy both the THtml and Doxygen format. 
+10-sep-2025 NvE All //!< strings in all .h files replaced by ///<! to indicate variables that should not be written
+                to a ROOT file, and still be compatible with the Doxygen conventions.
+                It turned out that //!< resulted in errors when reading old ROOT files.
                 
-

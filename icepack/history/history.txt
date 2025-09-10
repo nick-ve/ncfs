@@ -239,3 +239,6 @@
                 *** Note : NCFS versions up to 5.41 (incl.) will NOT yet be compatible with ROOT6 because of lacking Pythia6 support ***
 27-may-2025 NvE The docs sections in the .h and .cxx files were modified, such that they satisfy both the THtml and Doxygen format. 
 29-may-2025 NvE TSpectrum replaced by NcSpectrum in class IceMakeHits, in order to stay consistent. 
+10-sep-2025 NvE All //!< strings in all .h files replaced by ///<! to indicate variables that should not be written
+                to a ROOT file, and still be compatible with the Doxygen conventions.
+                It turned out that //!< resulted in errors when reading old ROOT files.

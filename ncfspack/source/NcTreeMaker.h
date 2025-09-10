@@ -53,18 +53,18 @@ class NcTreeMaker : public TTask
   Int_t fTrackIds;              // Track Ids selection flag
   Int_t fTrackNsigs;            // Track number of associated signals selection flag
   TObjArray* fTrackUnames;      // The names of the track user words to be selected 
-  Int_t fTn;                    //!< Number of tracks in the output tree storage array
-  Float_t* fTp;                 //!< Array for track data storage in output tree
-  Float_t* fTthetap;            //!< Array for track data storage in output tree
-  Float_t* fTphip;              //!< Array for track data storage in output tree
-  Float_t* fTe;                 //!< Array for track data storage in output tree
-  Float_t* fTq;                 //!< Array for track data storage in output tree
-  Float_t* fTm;                 //!< Array for track data storage in output tree
-  Double_t* fTmjd;              //!< Array for track data storage in output tree
-  Double_t* fTsec;              //!< Array for track data storage in output tree
-  Int_t* fTid;                  //!< Array for track data storage in output tree
-  Int_t* fTnsig;                //!< Array for track data storage in output tree
-  Float_t** fTuser;             //!< Matrix array for track data storage in output tree
+  Int_t fTn;                    ///<! Number of tracks in the output tree storage array
+  Float_t* fTp;                 ///<! Array for track data storage in output tree
+  Float_t* fTthetap;            ///<! Array for track data storage in output tree
+  Float_t* fTphip;              ///<! Array for track data storage in output tree
+  Float_t* fTe;                 ///<! Array for track data storage in output tree
+  Float_t* fTq;                 ///<! Array for track data storage in output tree
+  Float_t* fTm;                 ///<! Array for track data storage in output tree
+  Double_t* fTmjd;              ///<! Array for track data storage in output tree
+  Double_t* fTsec;              ///<! Array for track data storage in output tree
+  Int_t* fTid;                  ///<! Array for track data storage in output tree
+  Int_t* fTnsig;                ///<! Array for track data storage in output tree
+  Float_t** fTuser;             ///<! Matrix array for track data storage in output tree
   Int_t fEventJruns;            // Event run number selection flag
   Int_t fEventJevts;            // Event event number selection flag
   Int_t fEventMjds;             // Event MJD selection flag
@@ -75,23 +75,23 @@ class NcTreeMaker : public TTask
   Int_t fEventMasses;           // Event invariant mass selection flag
   Int_t fEventWeights;          // Event weight selection flag
   TObjArray* fEventUnames;      // The names of the event user words to be selected 
-  Int_t fEjrun;                 //!< Variable for event data storage in output tree
-  Int_t fEjevt;                 //!< Variable for event data storage in output tree
-  Double_t fEweight;            //!< Variable for event data storage in output tree
-  Double_t fEmjd;               //!< Variable for event data storage in output tree
-  Double_t fEsec;               //!< Variable for event data storage in output tree
-  Float_t fEp;                  //!< Variable for event data storage in output tree
-  Float_t fEthetap;             //!< Variable for event data storage in output tree
-  Float_t fEphip;               //!< Variable for event data storage in output tree
-  Float_t fEe;                  //!< Variable for event data storage in output tree
-  Float_t fEq;                  //!< Variable for event data storage in output tree
-  Float_t fEm;                  //!< Variable for event data storage in output tree
-  Float_t* fEuser;              //!< Variable for event data storage in output tree
+  Int_t fEjrun;                 ///<! Variable for event data storage in output tree
+  Int_t fEjevt;                 ///<! Variable for event data storage in output tree
+  Double_t fEweight;            ///<! Variable for event data storage in output tree
+  Double_t fEmjd;               ///<! Variable for event data storage in output tree
+  Double_t fEsec;               ///<! Variable for event data storage in output tree
+  Float_t fEp;                  ///<! Variable for event data storage in output tree
+  Float_t fEthetap;             ///<! Variable for event data storage in output tree
+  Float_t fEphip;               ///<! Variable for event data storage in output tree
+  Float_t fEe;                  ///<! Variable for event data storage in output tree
+  Float_t fEq;                  ///<! Variable for event data storage in output tree
+  Float_t fEm;                  ///<! Variable for event data storage in output tree
+  Float_t* fEuser;              ///<! Variable for event data storage in output tree
   TObjArray* fUseDevices;       // The device classes to be used 
   Int_t fDeviceNdevs;           // Device class number of fired devices selection flag
   Int_t fDeviceNhits;           // Device class number of hits selection flag
-  Int_t fDndev;                 //!< Variable for device data storage in output tree
-  Int_t fDnhit;                 //!< Variable for device data storage in output tree
+  Int_t fDndev;                 ///<! Variable for device data storage in output tree
+  Int_t fDnhit;                 ///<! Variable for device data storage in output tree
   void Track();                 // Obtain individual track observables
   void Event();                 // Obtain total event observables
   void Device();                // Obtain device observables

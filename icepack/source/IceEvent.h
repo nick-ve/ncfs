@@ -33,7 +33,7 @@ class IceEvent : public NcEvent
   Float_t GetTriggerTime(TString trigname,TObjArray* arr=0,Int_t slc=0,TArrayF* peaks=0) const; // Provide selected trigger time
 
  protected:
-  TArrayI* fStrings; //!< Temp. array to hold the string ids of fired modules
+  TArrayI* fStrings; ///<! Temp. array to hold the string ids of fired modules
 
  ClassDef(IceEvent,9) // Handling of IceCube event data.
 };

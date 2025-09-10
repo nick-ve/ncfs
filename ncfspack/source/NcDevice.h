@@ -54,8 +54,8 @@ class NcDevice : public NcSignal
   Int_t fStatus;       // User definable status word
   Int_t fHitCopy;      // Flag to denote making private copies of added hits
   TObjArray* fHits;    // Array to hold the registered hits
-  TObjArray* fOrdered; //!< Temp. array to hold the ordered hits
-  TObjArray* fMarkers; //!< Temp. array to hold the 3D markers for the hit display
+  TObjArray* fOrdered; ///<! Temp. array to hold the ordered hits
+  TObjArray* fMarkers; ///<! Temp. array to hold the 3D markers for the hit display
 
  ClassDef(NcDevice,13) // Signal (Hit) handling of a generic device.
 };

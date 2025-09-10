@@ -58,7 +58,7 @@ class Nc3Vector
  protected:
   Int_t fNv;           // The number of components of the array fV
   Double32_t* fV;      //[fNv] Vector in spherical (and errors in Cartesian) coordinates
-  Double32_t fDresult; //!< Error on scalar result (e.g. norm or dotproduct)
+  Double32_t fDresult; ///<! Error on scalar result (e.g. norm or dotproduct)
 
  ClassDef(Nc3Vector,2) // Handling of 3-vectors in various reference frames.
 };

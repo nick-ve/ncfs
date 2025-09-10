@@ -114,7 +114,7 @@ class NcTrack : public TNamed,public Nc4Vector
   TObject* fFit;             // Object containing details of the fit
   NcTimestamp* fTstamp;      // The track timestamp
   Float_t fEscale;           // The scale of the energy-momentum units of the track
-  TObjArray* fTemp;          //!< Temporary storage for exchange of object pointers
+  TObjArray* fTemp;          ///<! Temporary storage for exchange of object pointers
   Int_t fHypCopy;            // Flag to denote storage of private copies of hypothesis tracks
 
  private:

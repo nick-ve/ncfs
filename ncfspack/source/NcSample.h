@@ -158,12 +158,12 @@ class NcSample : public TNamed
   TArrayD* fY;                      // Storage array for the 2nd variable (e.g. Y)
   TArrayD* fZ;                      // Storage array for the 3rd variable (e.g. Z)
   TArrayD* fT;                      // Storage array for the 4th variable (e.g. T)
-  TArrayD* fArr;                    //!< Temp. storage array for ordered values
-  TArrayI* fIndices;                //!< Temp. storage array for the indices of the ordered entries
-  Int_t fOrdered;                   //!< Indicator of the status of the current ordering
-  TGraphTime* fGraphT;              //!< Temp. pointer to return a TGraphTime object
-  TCanvas* fCanvas;                 //!< Multi-purpose canvas for e.g. animation displays
-  TObject* fAnimObject;             //!< Multi-purpose pointer for animation objects
+  TArrayD* fArr;                    ///<! Temp. storage array for ordered values
+  TArrayI* fIndices;                ///<! Temp. storage array for the indices of the ordered entries
+  Int_t fOrdered;                   ///<! Indicator of the status of the current ordering
+  TGraphTime* fGraphT;              ///<! Temp. pointer to return a TGraphTime object
+  TCanvas* fCanvas;                 ///<! Multi-purpose canvas for e.g. animation displays
+  TObject* fAnimObject;             ///<! Multi-purpose pointer for animation objects
 
   void  Compute();                    // Compute the various quantities
   void Order(Int_t mode,Int_t i);     // Order the entries according to the i-th variable

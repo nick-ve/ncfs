@@ -28,7 +28,7 @@ class RnoStation : public NcDetectorUnit
   TH1F GetSamplingDFT(Int_t ich,TString sel="AMP Hz",Int_t j=1); // Provide the sampling DFT of a channel for the j-th sampled observable
 
  protected:
-  TCanvas* fCanvas; //!< Pointer to the temp. canvas for displays
+  TCanvas* fCanvas; ///<! Pointer to the temp. canvas for displays
 
  ClassDef(RnoStation,5) // Handling of RNO-G event data.
 };

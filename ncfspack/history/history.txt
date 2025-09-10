@@ -1581,4 +1581,8 @@
                 Also internal computations in NcDSP::Periodogram() performed in double precision, in order to support
                 sufficient accuracy for very large numbers like for instance time series provided in MJD.
                 The version indicator in NcVersion has been updated to 6.2a.          
+10-sep-2025 NvE All //!< strings in all .h files replaced by ///<! to indicate variables that should not be written
+                to a ROOT file, and still be compatible with the Doxygen conventions.
+                It turned out that //!< resulted in errors when reading old ROOT files.
+                The version indicator in NcVersion has been updated to 6.3.          
 

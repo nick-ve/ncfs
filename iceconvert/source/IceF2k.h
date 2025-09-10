@@ -69,9 +69,9 @@ class IceF2k : public NcJob
   void PutHits();       // Put the hits and waveforms from the F2000 file into the IcePack structure
   void PutTrigger();    // Put the trigger information from the F2000 file into the IcePack structure
 
-  mcfile* fInput;  //!< Structure holding the input file characteristics
-  Array   fHeader; //!< Structure holding the file header info
-  mevt    fEvent;  //!< Structure holding the actual event data (hits, tracks, etc...)
+  mcfile* fInput;  ///<! Structure holding the input file characteristics
+  Array   fHeader; ///<! Structure holding the file header info
+  mevt    fEvent;  ///<! Structure holding the actual event data (hits, tracks, etc...)
 
  ClassDef(IceF2k,9) // Job for conversion of F2K data into IceEvent physics event structures.
 };
