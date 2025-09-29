@@ -21,6 +21,7 @@
 #include "RnoEvent.h"
 #include "NcBlocks.h"
 #include "NcDSP.h"
+#include "NcAstrolab.h"
 
 /** Graphical User Interface (GUI) to explore RNO-G event data. **/
 
@@ -32,6 +33,7 @@ class RnoExplorer : public TChain
   void ShowPanel();                  // Show the GUI panel
   void FileAdd();                    // Add the specified input file to the input chain
   void LoadEntry();                  // Load the specified entry
+  void LoadEvent();                  // Load the specified (run,event)
   void ExpChannel(const char* text); // Update the channel selection
   void ExpMode(Int_t i);             // Set the sampling mode
   void ExpFmV(const char* text);     // Update the function for the ADC->mV conversion
@@ -42,12 +44,14 @@ class RnoExplorer : public TChain
   void ExpExecMode(Int_t i);         // Select the execution mode for the selected operation(s) for the requested channel(s)
   void ExpExecute();                 // Execute the selected operation(s) for the requested channel(s)
   void ExpDevName(const char* text); // Update the device (class) name selection
+  void ListDate();                   // List the event date/time info
   void ListDevices();                // List the various devices
   void ListDAQ();                    // List the event DAQ status
   void ListTriggers();               // List the event trigger data
   void ListTags();                   // List the event tag/filter data
   void ExpClose();                   // Close the explorer panel window
   void ExpExit();                    // Exit the current ROOT session
+  RnoEvent* GetEvent();              // Provide the pointer to the event structure
 
  protected:
   Int_t fEnt;               // The current TChain entry number
@@ -81,6 +85,8 @@ class RnoExplorer : public TChain
   TGTextEntry* fHead[4];    // The text windows to show the event header data
   TGTextEntry* fParams[3];  // The text windows for the various operations parameters
 
+  Bool_t fIndexed;          // Flag to indicate whether the input data have been indexed or not 
+
   // Internal functions for the composition of the various sub-panels of the ExplorerPanel GUI
   virtual void ExplorePanel();                           // Main routine for creation of the GUI panel
   virtual void FilesPanel(TGCompositeFrame* frame);      // Compose the input file and entries panel 
@@ -91,7 +97,7 @@ class RnoExplorer : public TChain
   void GetHistograms(Int_t jstore); // Internal memberfunction to obtain the requested output histograms
   void DrawResult(Int_t jstore); // Draw the result of the selected operation(s) for the requested channel(s)
 
- ClassDef(RnoExplorer,1) // Graphical User Interface (GUI) to explore RNO-G event data.
+ ClassDef(RnoExplorer,2) // Graphical User Interface (GUI) to explore RNO-G event data.
 };
 #endif
 

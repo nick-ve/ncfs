@@ -37,7 +37,7 @@
 // Please refer to /macros/convert.cc for a usage example.
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, July 9, 2021  10:09Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 11, 2023  12:08Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, September 26, 2025  09:48Z
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -57,12 +57,17 @@ RnoConvert::RnoConvert(const char* name,const char* title) : NcJob(name,title)
 ~~~
 **/
 
- fSplit=0;
+ fSplit=99;
  fBsize=32000;
  fMaxevt=-1;
  fPrintfreq=0;
  fPrintlevel=0;
  fOutfile=0;
+ fHdr=0;
+ fDs=0;
+ fWf=0;
+ fComb=0;
+ fPed=0;
  fData=0;
  fMinSelectLevel=0;
  fMaxSelectLevel=-1;
@@ -136,7 +141,7 @@ void RnoConvert::SetSplitLevel(Int_t split)
 /**
 ~~~
 // Set the split level for the ROOT data file.
-// split=0 is the default initialisation in the constructor.
+// split=99 is the default initialisation in the constructor.
 ~~~
 **/
 
@@ -155,32 +160,64 @@ void RnoConvert::SetBufferSize(Int_t bsize)
  if (bsize>=0) fBsize=bsize;
 }
 ///////////////////////////////////////////////////////////////////////////
-void RnoConvert::AddInputFile(TString file,TString tree)
+void RnoConvert::AddInputFile(TString file,TString type)
 {
 /**
 ~~~
 // Add the RNO-G input file to the data chain.
 //
 // file : Name of the input file to be added (wildcards are allowed)
-// tree : Name of the Tree containing the data
+// type : The type of data that is contained in the file
+//
+// The supported options for "type" are the following :
+// ----------------------------------------------------
+// hdr       : To indicate a file that contains event header data
+// ds        : To indicate a file that contains the DAQ status for each event
+// wf        : To indicate a file that contains the recorded waveform for each channel in the event
+// combined  : To indicate a file that contains for each event a combination of the above
+// pedestal  : To indicate a file that contains pedestal data for each channel
 //
 // Environment variables may be used as $(...) in the filenname for convenience.
 // For example "$(HOME)/my-data/station11/combined.root".
-//
-// Note : The name of the Tree has to be the same for all added input files.
 ~~~
 **/
 
  // Expand the path name of the provided input file
  file=gSystem->ExpandPathName(file.Data());
 
- if (!fData) fData=new TChain(tree.Data());
-
- if (fData)
+ if (type!="hdr" && type!="ds" && type!="wf" && type!="combined" && type!="pedestal")
  {
-  fData->Add(file.Data());
-  cout << " *" << ClassName() << "::AddInputFile* Added RNO-G data input file : " << file << endl;
+  printf(" *%-s::AddInputFile* Unsupported type : %-s. File %-s not added. \n",ClassName(),type.Data(),file.Data());
+  return;
  }
+
+ TChain* chain=0;
+ if (type=="hdr") chain=fHdr;
+ if (type=="ds") chain=fDs;
+ if (type=="wf") chain=fWf;
+ if (type=="combined") chain=fComb;
+ if (type=="pedestal") chain=fPed;
+
+ if (!chain)
+ {
+  if (type!="pedestal")
+  {
+   chain=new TChain(type.Data());
+  }
+  else
+  {
+   chain=new TChain();
+  }
+  if (type=="hdr") fHdr=chain;
+  if (type=="ds") fDs=chain;
+  if (type=="wf") fWf=chain;
+  if (type=="combined") fComb=chain;
+  if (type=="pedestal") fPed=chain;
+ }
+
+ chain->Add(file.Data());
+
+ printf(" *%-s::AddInputFile* Added RNO-G %-s data input file : %-s \n",ClassName(),type.Data(),file.Data());
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::SetOutputFile(TFile* ofile)
@@ -252,28 +289,65 @@ Int_t RnoConvert::GetMaxSelectLevel() const
  return fMaxSelectLevel;
 }
 ///////////////////////////////////////////////////////////////////////////
-void RnoConvert::ListInput(Option_t* opt)
+void RnoConvert::ListInput(TString type,Option_t* opt)
 {
 /**
 ~~~
-// Provide an overview listing of the input data chain.
+// Provide an overview listing of the input data chain selected via "type".
+//
+// The supported options for "type" are the following :
+// ----------------------------------------------------
+// hdr       : Data chain that contains event header data
+// ds        : Data chain that contains the DAQ status for each event
+// wf        : Data chain that contains the recorded waveform for each channel in the event
+// combined  : Data chain that contains for each event a combination of the above
+// pedestal  : Data chain that contains pedestal data for each channel
+// *         : List all stored data chains
+//
 // The input argument "opt" has the same meaning as for the ROOT TTree::Print().
-// The default is opt="".
+//
+// The default values are type="*" and opt="".
 ~~~
 **/
 
+ if (!fHdr && !fDs && !fWf && !fComb && !fPed)
+ {
+  printf("\n *%-s::ListInput* No input file of type %-s has been attached. \n",ClassName(),type.Data());
+  return;
+ }
+
  TString s=opt;
  if (s=="") s="Default";
- if (fData)
+
+ // Printout for all stored data
+ if (type=="*")
  {
-  cout << endl;
-  cout << " *" << ClassName() << "::ListInput* Overview of the input data with option : " << s << endl;
-  fData->Print(opt);
+  printf("\n *%-s::ListInput* Overview of all the stored input data with option : %-s \n",ClassName(),s.Data());
+  if (fHdr) fHdr->Print(opt);
+  if (fDs) fDs->Print(opt);
+  if (fWf) fWf->Print(opt);
+  if (fComb) fComb->Print(opt);
+  if (fPed) fPed->Print(opt);
+  return;
+ }
+
+ // Selected printout
+ TChain* chain=0;
+ if (type=="hdr") chain=fHdr;
+ if (type=="ds") chain=fDs;
+ if (type=="wf") chain=fWf;
+ if (type=="combined") chain=fComb;
+ if (type=="pedestal") chain=fPed;
+
+ if (chain)
+ {
+  printf("\n *%-s::ListInput* Overview of the %-s input data with option : %-s \n",ClassName(),type.Data(),s.Data());
+  chain->Print(opt);
  }
  else
  {
-  cout << endl;
-  cout << " *" << ClassName() << "::ListInput* No input file has been attached." << endl;
+  printf("\n *%-s::ListInput* No input file of type %-s has been attached. \n",ClassName(),type.Data());
+  return;
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -286,6 +360,99 @@ TFile* RnoConvert::GetOutputFile()
 **/
 
  return fOutfile;
+}
+///////////////////////////////////////////////////////////////////////////
+void RnoConvert::CreateMainChain()
+{
+/**
+~~~
+// Internal member function to create the main input data chain for processing.
+~~~
+**/
+
+ if (fData)
+ {
+  delete fData;
+  fData=0;
+ }
+
+ // Check whether loaded input data exists
+ if (!fHdr && !fDs && !fWf && !fComb && !fPed) return;
+
+ fData=new TChain("Data");
+
+ // Build the total input chain
+ Bool_t first=kTRUE;
+
+ if (fHdr)
+ {
+  if (first)
+  {
+   fData=new TChain("Data");
+   fData->Add(fHdr);
+   first=kFALSE;
+  }
+  else
+  {
+   if (fData) fData->AddFriend(fHdr);
+  }
+ }
+
+ if (fDs)
+ {
+  if (first)
+  {
+   fData=new TChain("Data");
+   fData->Add(fDs);
+   first=kFALSE;
+  }
+  else
+  {
+   if (fData) fData->AddFriend(fDs);
+  }
+ }
+
+ if (fWf)
+ {
+  if (first)
+  {
+   fData=new TChain("Data");
+   fData->Add(fWf);
+   first=kFALSE;
+  }
+  else
+  {
+   if (fData) fData->AddFriend(fWf);
+  }
+ }
+
+ if (fComb)
+ {
+  if (first)
+  {
+   fData=new TChain("Data");
+   fData->Add(fComb);
+   first=kFALSE;
+  }
+  else
+  {
+   if (fData) fData->AddFriend(fComb);
+  }
+ }
+
+ if (fPed)
+ {
+  if (first)
+  {
+   fData=new TChain("Data");
+   fData->Add(fPed);
+   first=kFALSE;
+  }
+  else
+  {
+   if (fData) fData->AddFriend(fPed);
+  }
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoConvert::Exec(Option_t* opt)
@@ -310,6 +477,9 @@ void RnoConvert::Exec(Option_t* opt)
 // 2) The main object in this job environment is an RnoEvent* pointer.
 ~~~
 **/
+
+ // Create the main input data chain for processing
+ CreateMainChain();
 
  if (!fData)
  {
@@ -396,10 +566,6 @@ void RnoConvert::Exec(Option_t* opt)
  // Loop over the entries in the input data chain //
  ///////////////////////////////////////////////////
 
- TTree* tx=0;         // Pointer to the current Tree in the Chain
- TTree* txold=0;      // Pointer to the previous Tree (if any) in the Chain
- TObjArray* leaves=0; // Array with pointers to the leaves of the current Tree
- Int_t nleaves=0;
  TLeaf* lx=0;
  TLeaf* lradiant=0;  // Pointer to the Radiant waveform data
  TLeaf* lpedestal=0; // Pointer to the Pedestal waveform data
@@ -428,15 +594,6 @@ void RnoConvert::Exec(Option_t* opt)
 
   fData->GetEntry(ient);
 
-  tx=fData->GetTree();
-  if (tx!=txold)
-  {
-   leaves=tx->GetListOfLeaves();
-   nleaves=0;
-   if (leaves) nleaves=leaves->GetEntries();
-   txold=tx;
-  }
-
   // Loop over all the leaves and extract the relevant data for this entry.
   // This approach makes the functionality independent of the Tree/Branch structure.
   run=0;
@@ -447,12 +604,9 @@ void RnoConvert::Exec(Option_t* opt)
   trigger.Reset();
   lradiant=0;
   lpedestal=0;
-  for (Int_t ileaf=0; ileaf<nleaves; ileaf++)
+  TIterator* iter=fData->GetIteratorOnAllLeaves();
+  while((lx=(TLeaf*)iter->Next()))
   {
-   lx=(TLeaf*)leaves->At(ileaf);
-
-   if (!lx) continue;
-
    name=lx->GetName();
 
    // Header data
@@ -555,8 +709,7 @@ void RnoConvert::Exec(Option_t* opt)
 
    // Pointers to the waveform data
    if (name=="radiant_data") lradiant=lx;
-   if (name=="pedestals") lpedestal=lx;   
-
+   if (name=="pedestals") lpedestal=lx;
   } // End of loop over the leaves
 
   // Create this station in the detector structure
@@ -657,6 +810,8 @@ void RnoConvert::Exec(Option_t* opt)
   evt->SetRunNumber(run);
   evt->SetEventNumber(event);
   evt->SetDetector(det);
+  UInt_t id=station+100*run;
+  evt->SetUniqueID(id);
 
   // Invoke all available sub-tasks (if any)
   CleanTasks();

@@ -24,7 +24,7 @@
 // This class is derived from TChain to directly access the data (files).
 //
 //--- Author: Nick van Eijndhoven 19-jul-2023 IIHE-VUB Brussel.
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, March 25, 2025  13:23Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, September 24, 2025  09:23Z
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -84,6 +84,8 @@ RnoExplorer::RnoExplorer(const char* name,const char* title) : TChain(name,title
  {
   fFilterBands[i].Set(0);
  }
+
+ fIndexed=kFALSE;
 
  ExplorePanel();
 }
@@ -249,23 +251,23 @@ void RnoExplorer::FileAdd()
 
  Add(filename.Data());
 
- UInt_t nen=0;
+ fIndexed=kFALSE;
+
  if (!fConnected)
  {
   SetBranchAddress("Events",&fEvt);
 
   if (GetBranch("Events")) fConnected=kTRUE;
-
-  nen=GetEntries();
-  if (nen)
-  {
-   GetEntry(0);
-   fEntry->SetText("0");
-   HeadEnter();
-  }
  }
 
- nen=GetEntries();
+ Long64_t nen=GetEntries();
+ if (nen)
+ {
+  GetEntry(0);
+  fEntry->SetText("0");
+  HeadEnter();
+ }
+
  TString s="";
  s+=nen;
  fNentries->SetText(s.Data());
@@ -331,6 +333,12 @@ void RnoExplorer::HeaderPanel(TGCompositeFrame* frame)
  fHead[3]->SetAlignment(kTextRight);
  fHead[3]->Resize(80,20);
  event->AddFrame(fHead[3]);
+
+ TGTextButton* getevent=new TGTextButton(event,"LoadEvent");
+ getevent->Connect("Clicked()",ClassName(),this,"LoadEvent()");
+ getevent->SetToolTipText("Load the specified (run,event)");
+ TGLayoutHints* Lgetevent=new TGLayoutHints(kLHintsLeft,10,0,0,-5);
+ event->AddFrame(getevent,Lgetevent);
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::LoadEntry()
@@ -356,6 +364,49 @@ void RnoExplorer::LoadEntry()
   s="";
   s+=fEnt;
   fEntry->SetText(s.Data());
+  LoadEntry();
+ }
+}
+///////////////////////////////////////////////////////////////////////////
+void RnoExplorer::LoadEvent()
+{
+/**
+~~~
+// Load the specified entry.
+~~~
+**/
+
+  // Build the indexing for fast (station,run,event) access
+  // using the fact that fUniqueID=station+100*run.
+  if (!fIndexed)
+  {
+   BuildIndex("fUniqueID","fEvent");
+   fIndexed=kTRUE;
+  }
+
+ TString station=fHead[1]->GetText();
+ TString run=fHead[2]->GetText();
+ TString event=fHead[3]->GetText();
+
+ Int_t ist=station.Atoi();
+ Int_t irun=run.Atoi();
+ Int_t ievt=event.Atoi();
+
+ Int_t id=ist+100*irun;
+ Int_t ien=GetEntryNumberWithIndex(id,ievt);
+
+ TString entry="";
+ if (ien>=0)
+ {
+  entry+=ien;
+  fEntry->SetText(entry.Data());
+  LoadEntry();
+ }
+ else
+ {
+  printf("\n *** Non-existing (station,run,event) specification : (%-i,%-i,%-i) *** \n",ist,irun,ievt);
+  entry+=fEnt;
+  fEntry->SetText(entry.Data());
   LoadEntry();
  }
 }
@@ -1451,19 +1502,11 @@ void RnoExplorer::CommandPanel(TGCompositeFrame* frame)
  listings->SetTitlePos(TGGroupFrame::kCenter);
  frame->AddFrame(listings);
 
- // The device specification for the listing
- TGTextEntry* devname=new TGTextEntry(listings,"*");
- devname->SetAlignment(kTextRight);
- devname->Connect("TextChanged(const char*)",ClassName(),this,"ExpDevName(const char*)");
- devname->SetToolTipText("Device (class) name (*=all)");
- devname->Resize(80,20);
- listings->AddFrame(devname);
-
- TGTextButton* devs=new TGTextButton(listings,"Device(s)");
- devs->Connect("Clicked()",ClassName(),this,"ListDevices()");
- devs->SetToolTipText("List the selected device (class)");
- TGLayoutHints* Ldevs=new TGLayoutHints(kLHintsLeft,10,0,0,-5);
- listings->AddFrame(devs,Ldevs);
+ // The event header
+ TGTextButton* date=new TGTextButton(listings,"Date/Time");
+ date->Connect("Clicked()",ClassName(),this,"ListDate()");
+ date->SetToolTipText("List the detailed event date/time info");
+ listings->AddFrame(date);
 
  TGTextButton* daq=new TGTextButton(listings,"DAQ");
  daq->Connect("Clicked()",ClassName(),this,"ListDAQ()");
@@ -1482,6 +1525,21 @@ void RnoExplorer::CommandPanel(TGCompositeFrame* frame)
  tags->SetToolTipText("Listing of the event tag data");
  TGLayoutHints* Ltags=new TGLayoutHints(kLHintsLeft,5,0,0,-5);
  listings->AddFrame(tags,Ltags);
+
+ // The device specification for the listing
+ TGTextEntry* devname=new TGTextEntry(listings,"*");
+ devname->SetAlignment(kTextRight);
+ devname->Connect("TextChanged(const char*)",ClassName(),this,"ExpDevName(const char*)");
+ devname->SetToolTipText("Device (class) name (*=all)");
+ devname->Resize(80,20);
+ TGLayoutHints* Ldevname=new TGLayoutHints(kLHintsLeft,5,0,0,-5);
+ listings->AddFrame(devname,Ldevname);
+
+ TGTextButton* devs=new TGTextButton(listings,"Device(s)");
+ devs->Connect("Clicked()",ClassName(),this,"ListDevices()");
+ devs->SetToolTipText("List the selected device (class)");
+ TGLayoutHints* Ldevs=new TGLayoutHints(kLHintsLeft,5,0,0,-5);
+ listings->AddFrame(devs,Ldevs);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ExpDevName(const char* text)
@@ -1493,6 +1551,37 @@ void RnoExplorer::ExpDevName(const char* text)
 **/
 
  fDevName=text;
+}
+///////////////////////////////////////////////////////////////////////////
+void RnoExplorer::ListDate()
+{
+/**
+~~~
+// List the detailed event date/time info.
+~~~
+**/
+
+ if (!fEvt)
+ {
+  printf("\n *** No RnoEvent structure loaded (yet). *** \n");
+  return;
+ }
+
+ // Get the detailed date/time info for this event via NcAstrolab
+ Int_t mjd,sec,ns,ps;
+ fEvt->GetMJD(mjd,sec,ns);
+ ps=fEvt->GetPs();
+
+ TString station=fHead[1]->GetText();
+ Int_t ist=station.Atoi();
+
+ NcAstrolab lab;
+ lab.SetRandomiser(0);
+ lab.SetExperiment("RNO-G",ist);
+ lab.SetMJD(mjd,sec,ns,ps,"A");
+
+ printf("\n");
+ lab.Data(3);
 }
 ///////////////////////////////////////////////////////////////////////////
 void RnoExplorer::ListDevices()
@@ -1664,5 +1753,16 @@ void RnoExplorer::ShowPanel()
 
   // Map main frame
   fExpPanel->MapWindow();
+}
+///////////////////////////////////////////////////////////////////////////////
+RnoEvent* RnoExplorer::GetEvent()
+{
+/**
+~~~
+// Provide a pointer to the event structure.
+~~~
+**/
+
+ return fEvt;
 }
 ///////////////////////////////////////////////////////////////////////////////

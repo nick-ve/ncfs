@@ -21,6 +21,7 @@ var searchData=
   ['correlate_18',['Correlate',['../d7/d8a/class_nc_d_s_p.html#ad60376eeb44c4579aa66b4c447180e40',1,'NcDSP']]],
   ['cosine_19',['Cosine',['../d7/d8a/class_nc_d_s_p.html#a7b90651b703eba06ee4320d0107bbf00',1,'NcDSP::Cosine()'],['../de/d6a/class_nc_transform.html#a9b3ea41a36f636d6fb73a846c6a3d8dd',1,'NcTransform::Cosine()']]],
   ['createdetector_20',['CreateDetector',['../d9/d8d/class_nc_event.html#af68daaa56a1d05a53b30cc8e68e93bd1',1,'NcEvent']]],
-  ['createstation_21',['CreateStation',['../d1/d5a/class_rno_detector.html#ad046c3acdbb7e0c3beb2e18b450d96e2',1,'RnoDetector']]],
-  ['cross_22',['Cross',['../da/d2e/class_nc3_vector.html#a50ef13644558248257da5fc5534b067d',1,'Nc3Vector']]]
+  ['createmainchain_21',['CreateMainChain',['../df/d13/class_rno_convert.html#ada7b315797a86384b0f460f31f6f6216',1,'RnoConvert']]],
+  ['createstation_22',['CreateStation',['../d1/d5a/class_rno_detector.html#ad046c3acdbb7e0c3beb2e18b450d96e2',1,'RnoDetector']]],
+  ['cross_23',['Cross',['../da/d2e/class_nc3_vector.html#a50ef13644558248257da5fc5534b067d',1,'Nc3Vector']]]
 ];

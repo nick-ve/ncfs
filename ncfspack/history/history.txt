@@ -1585,4 +1585,5 @@
                 to a ROOT file, and still be compatible with the Doxygen conventions.
                 It turned out that //!< resulted in errors when reading old ROOT files.
                 The version indicator in NcVersion has been updated to 6.3.          
-
+29-sep-2025 NvE Functionality of the classes RnoConvert and RnoExplorer extended.
+                The version indicator in NcVersion has been updated to 6.4.          
