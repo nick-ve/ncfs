@@ -1587,3 +1587,5 @@
                 The version indicator in NcVersion has been updated to 6.3.          
 29-sep-2025 NvE Functionality of the classes RnoConvert and RnoExplorer extended.
                 The version indicator in NcVersion has been updated to 6.4.          
+30-sep-2025 NvE Typo corrected for fRscmode testing in class NcAstrolab.
+                The version indicator in NcVersion has been updated to 6.4a.          

@@ -180,7 +180,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 2, 2025  13:00Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, September 30, 2025  22:30Z
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -653,7 +653,7 @@ void NcAstrolab::Data(Int_t mode,TString u,Bool_t utc)
   }
   printf("\n");
 
-  if (abs(fRscmode==1))
+  if (abs(fRscmode)==1)
   {
    printf(" *** Each obtained angular difference will be scrambled (mode %-i) *** \n",fRscmode);
    printf(" *** The time differences are not affected *** \n");
