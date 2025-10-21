@@ -38,7 +38,7 @@
  TTree* otree=new TTree("T","GRB data");
 
  // The output variables for the Tree
- otree->Branch("name",idname.Data(),"name/C");
+ otree->Branch("name",(void*)(idname.Data()),"name/C");
  otree->Branch("date",&date,"date/I");
  otree->Branch("leapsec",&leapsec,"leapsec/I");
  otree->Branch("dut",&dut,"dut/F");
