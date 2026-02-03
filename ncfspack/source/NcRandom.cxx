@@ -798,9 +798,9 @@ Float_t NcRandom::Poisson(Float_t mean)
 //
 // Method :
 //
-// P(n) = exp(-mean)*mean**n/n! is the Poisson distribution function
+// P(k) = exp(-mean)*mean**k/k! is the Poisson distribution function
 //
-// with : n  = 0,1,2,3,...   and  mean > 0
+// with : k = 0,1,2,3,...   and  mean > 0
 //
 // To generate the distribution, the "sum trick" is used as mentioned
 // in "Formulae and Methods in Experimental data Evaluation Vol. 1"
@@ -853,9 +853,9 @@ void NcRandom::Poisson(Float_t* vec,Int_t n,Float_t mean)
 //
 // Method :
 //
-// P(n) = exp(-mean)*mean**n/n! is the Poisson distribution function
+// P(k) = exp(-mean)*mean**k/k! is the Poisson distribution function
 //
-// with : n  = 0,1,2,3,...   and  mean > 0
+// with : k = 0,1,2,3,...   and  mean > 0
 //
 // To generate the distribution, the "sum trick" is used as mentioned
 // in "Formulae and Methods in Experimental data Evaluation Vol. 1"

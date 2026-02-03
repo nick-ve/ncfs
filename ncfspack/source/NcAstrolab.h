@@ -177,6 +177,7 @@ class NcAstrolab : public TTask,public NcTimestamp
   NcDevice* GetBurstParameters();    // Provide the device containing all the burst parameter settings
   void ListBurstParameters() const;  // Listing of all the burst parameter settings
   void LoadInputData(Bool_t src,TString file,TString tree,Int_t date1=0,Int_t date2=0,Int_t nmax=-1,TString type="-");  // Load source (c.q. burst) or observed event data
+  void LoadAeffData(TString file,TString hist);  // Load effective area data for the used event data sample
   void GenBurstGCNdata(Int_t n,TString name="GRB",Bool_t scale=kFALSE); // Generate fictative burst GCN data
   void GenBurstSignals(); // Generate detector signals from the stored transient bursts
   void MatchBurstData(NcDevice& matches,Int_t i1=1,Int_t i2=0,Int_t itype=0,Int_t j1=1,Int_t j2=0,Int_t jtype=1); // Provide Burst and Event data space and time matching info
@@ -186,9 +187,9 @@ class NcAstrolab : public TTask,public NcTimestamp
   void MakeBurstZdist(TString file,TString tree,TString name,Int_t nb=200,Float_t zmin=0,Float_t zmax=20); // Make transient burst observed redshift distribution
   void MakeBurstT90dist(TString file,TString tree,TString name,Int_t nb=50,Float_t xmin=-5,Float_t xmax=5); // Make transient burst observed T90 distribution
   void MakeBurstSigmaPosdist(TString file,TString tree,TString name,TString u,Int_t nb=900,Float_t xmin=0,Float_t xmax=90); // Make burst observed position uncertainty dist.
-  void MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Double_t Emin,Double_t Emax,Int_t nb=1000);
-  void MakeBurstEnergydist(Int_t mode,TF1& spec,Double_t Emin,Double_t Emax,Int_t nbins=1000);
-  void MakeBurstEnergydist(Int_t mode,Double_t alpha,Double_t Emin,Double_t Emax,Int_t nbins=1000);
+  void MakeBurstEnergydist(Int_t mode,TString file,TString tree,TString name1,TString name2,TString u,Int_t nb=1000);
+  void MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc=0,Int_t nbins=1000);
+  void MakeBurstEnergydist(TString mode,Double_t alpha,Int_t nbins=1000);
   void MakeBurstRecoAngresdist(TString file,TString tree,TString name1,TString name2,TString ua,TString name3,TString ud,Double_t Emin,Double_t Emax,Int_t nbe=100,Int_t nba=1000);
   Double_t GetBurstSignalEnergy(Double_t Emin=-1,Double_t Emax=-1) const;
   Double_t GetBurstBackgroundEnergy(Double_t Emin=-1,Double_t Emax=-1) const;
@@ -405,6 +406,12 @@ class NcAstrolab : public TTask,public NcTimestamp
   TString fDataMode;      // Indicator for equatorial coordinates mode (Mean, True, B1950 or J2000)
   NcObjMatrix fDataNames; // The correspondence table between physical observables and variable names
 
+  // Identifiers for the provided signal and background energy profiles
+  TString fSigEmode; // To indicated the signal energy profile representing PDF, Flux, Fluence or Intensity 
+  TString fBkgEmode; // To indicated the background energy profile representing PDF, Flux, Fluence or Intensity
+  TF1 fSigEprofile;  // The signal dN/dE functional description 
+  TF1 fBkgEprofile;  // The background dN/dE functional description 
+
   // Storage for transient burst investigations
   NcDevice* fBurstParameters; // Various parameters describing the transient burst
   TObjArray fBurstHistos;     // Storage of all the produced transient burst histograms
@@ -414,6 +421,9 @@ class NcAstrolab : public TTask,public NcTimestamp
   NcSample fBurstSignal;      // The simulated signal events
   NcSample fBurstOffReco;     // The Off-source reconstructed track data
   NcSample fBurstOffMatch;    // The Off-source matching data
+  NcSample fBurstOnAeff;      // The On-source effective area data for each reconstructed track
+  NcSample fBurstOffAeff;     // The Off-source effective area data for each reconstructed track
+  NcSample fBurstSigAeff;     // The effective area data for each simulated signal track
 
   // Internal functions for transient burst investigations
   void BurstCompensate(Int_t& nmugrb);
@@ -423,6 +433,10 @@ class NcAstrolab : public TTask,public NcTimestamp
   TH1* GetBurstSigmaPosdist(TString name,TString type);
   void MakeBurstDataStats(Int_t mode,Int_t nmugrb=0);
   void GetBurstDtDistributions(Int_t ndt,TH1F& hisdtOn,TF1& pdfdtOn,TH1F& hisdtOff,TF1& pdfdtOff,Bool_t zcor);
+  void MakeBurstNuCountProfile(TString mode);
+  void GetBurstMaxEventCount(NcSignal* sx);
+  Double_t GetBurstTotalFluence(Double_t nsig,TString str);
+  void ListBurstSignalStats(Double_t rate,Int_t mode,TString str="-");
 
   // Internal functions for the composition of the various sub-panels of the SkyMapPanel GUI
   virtual void LabLocationPanel(TGCompositeFrame* frame);
@@ -434,6 +448,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   virtual void CommandPanel(TGCompositeFrame* frame);
   void SetMapTS();
  
- ClassDef(NcAstrolab,43) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,44) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

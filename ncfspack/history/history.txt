@@ -1589,3 +1589,9 @@
                 The version indicator in NcVersion has been updated to 6.4.          
 30-sep-2025 NvE Typo corrected for fRscmode testing in class NcAstrolab.
                 The version indicator in NcVersion has been updated to 6.4a.          
+28-jan-2026 NvE Folder icepack/Aeff added to hold effective area data and the ROOT macro Aeff.cc to create the ROOT files.
+                Also documentation of NcRandom::Poisson() made more clear.
+03-feb-2026 NvE Functionality of class NcAstrolab extended to enable the treatment of effective area, Fluence, Flux and Intensity info.
+                This new functionality is provided via the NcAstrolab memberfunctions LoadAeffData(), MakeBurstEnergydist()
+                and GetBurstBayesianSignalRate(). The latter also produces corresponding Fluence and Flux histograms.
+                The version indicator in NcVersion has been updated to 6.5.          
