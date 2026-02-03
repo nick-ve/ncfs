@@ -1594,4 +1594,5 @@
 03-feb-2026 NvE Functionality of class NcAstrolab extended to enable the treatment of effective area, Fluence, Flux and Intensity info.
                 This new functionality is provided via the NcAstrolab memberfunctions LoadAeffData(), MakeBurstEnergydist()
                 and GetBurstBayesianSignalRate(). The latter also produces corresponding Fluence and Flux histograms.
+                Also an updated ROOT macro template BurstModel.cc added in the folder physics/macros.
                 The version indicator in NcVersion has been updated to 6.5.          
