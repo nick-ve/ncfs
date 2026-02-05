@@ -19,5 +19,7 @@
                 Also new (template) ROOT macros burst-analysis.cc and data-analysis.cc introduced.
 21-may-2025 NvE ROOT macro burst-analysis.cc updated to satisfy the new, more strict, Cling interpreter.
 03-feb-2026 NvE ROOT macro template BurstModel.cc added to match the extended NcAstrolab functionality.
+05-feb-2026 NvE Also ROOT macro templates BurstAnalysis.cc and SourceAnalysis.cc added to match
+                the extended NcAstrolab functionality.
 
 

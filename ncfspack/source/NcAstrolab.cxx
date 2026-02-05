@@ -180,7 +180,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 3, 2026  10:50Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 5, 2026  18:51Z
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -17100,11 +17100,7 @@ Double_t NcAstrolab::GetBurstTotalFluence(Double_t nsig,TString str)
 
  Int_t nen=fBurstOnAeff.GetN();
 
- if (n>=nen) // All stored values should be used
- {
-  Fluence=fBurstOnAeff.GetSum("Fluence");
-  return Fluence;
- }
+ if (n>nen) n=nen; // Only stored values should be used
 
  // Take the Fluence sum of the "nsig" values ordered by increasing angular separation.
  // The assumption is that the closest tracks represent signal tracks.

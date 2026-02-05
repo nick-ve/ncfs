@@ -1596,3 +1596,6 @@
                 and GetBurstBayesianSignalRate(). The latter also produces corresponding Fluence and Flux histograms.
                 Also an updated ROOT macro template BurstModel.cc added in the folder physics/macros.
                 The version indicator in NcVersion has been updated to 6.5.          
+05-feb-2026 NvE Correction performed in NcAstrolab::GetBurstTotalFluence() to properly treat the case when "n>nen".
+                Also ROOT macro templates BurstAnalysis.cc and SourceAnalysis.cc added in the folder physics/macros.
+                The version indicator in NcVersion has been updated to 6.5a.          
