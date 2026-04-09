@@ -434,7 +434,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   void MakeBurstDataStats(Int_t mode,Int_t nmugrb=0);
   void GetBurstDtDistributions(Int_t ndt,TH1F& hisdtOn,TF1& pdfdtOn,TH1F& hisdtOff,TF1& pdfdtOff,Bool_t zcor);
   void MakeBurstNuCountProfile(TString mode);
-  void GetBurstMaxEventCount(NcSignal* sx);
   Double_t GetBurstTotalFluence(Double_t nsig,TString str);
   void ListBurstSignalStats(Double_t rate,Int_t mode,TString str="-");
 

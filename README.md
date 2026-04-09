@@ -236,7 +236,7 @@ Some final remarks :
     in general ROOT macros.    
     To overcome this issue, one can invoke this on the ROOT command line like for instance
 
-         $root -b -q -e 'gROOT->LoadMacro("myclass.cxx+");' test.cc >test.log
+         $root -e 'gROOT->LoadMacro("myclass.cxx+");' -b -q test.cc >test.log
 
     which first creates a shared library object of "myclass" and then executes the
     ROOT macro test.cc (in which "myclass" can be used) with the output stored in the file test.log.

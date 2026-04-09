@@ -191,7 +191,7 @@ Some final remarks :</h1>
  3) Due to a (slight) difference between the new ROOT/Cling interpreter w.r.t. ROOT/CINT, statements like 'gSystem-&gt;Load("ncfspack");' don't work anymore in general in ROOT macros (apart from the rootlogon.cc macro). <br  />
  This is the reason that starting from NCFS release tag v6.0, all libraries are loaded in the provided rootlogon.cc macro. However, old ROOT macros that still contain these statements, will continue to work as usual. <br  />
  4) Similar to 3), statements like 'gROOT-&gt;LoadMacro("myclass.cxx+");' don't work anymore in general ROOT macros. <br  />
- To overcome this issue, one can invoke this on the ROOT command line like for instance </p><pre class="fragment"> $root -b -q -e 'gROOT-&gt;LoadMacro("myclass.cxx+");' test.cc &gt;test.log
+ To overcome this issue, one can invoke this on the ROOT command line like for instance </p><pre class="fragment"> $root -e 'gROOT-&gt;LoadMacro("myclass.cxx+");' -b -q test.cc &gt;test.log
 </pre><p>which first creates a shared library object of "myclass" and then executes the ROOT macro test.cc (in which "myclass" can be used) with the output stored in the file test.log.</p>
 <pre class="fragment">                                      Nick van Eijndhoven
                                       Inter-university Institute for High Energies (IIHE)

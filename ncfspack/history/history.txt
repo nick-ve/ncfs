@@ -1599,3 +1599,6 @@
 05-feb-2026 NvE Correction performed in NcAstrolab::GetBurstTotalFluence() to properly treat the case when "n>nen".
                 Also ROOT macro templates BurstAnalysis.cc and SourceAnalysis.cc added in the folder physics/macros.
                 The version indicator in NcVersion has been updated to 6.5a.          
+09-apr-2026 NvE Source distance weight option for specified signal Fluence, Flux or Intensity introduced in class NcAstrolab.
+                In class NcAstrolab also optional (de)activation of Poisson fluctuations introduced for the expected average signal counts.   
+                The version indicator in NcVersion has been updated to 6.6.          

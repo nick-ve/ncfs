@@ -23,7 +23,6 @@ var class_nc_astrolab =
     [ "GetBurstChi2Statistics", "d1/dfe/class_nc_astrolab.html#aaf82d19bd9e80c1bcd7fdd58cb8b9f8e", null ],
     [ "GetBurstDtDistributions", "d1/dfe/class_nc_astrolab.html#af69baa5c203f48253c9c25dfaee87883", null ],
     [ "GetBurstLiMaSignificance", "d1/dfe/class_nc_astrolab.html#a5c2ffc742e3bd3698db04e1775ead84a", null ],
-    [ "GetBurstMaxEventCount", "d1/dfe/class_nc_astrolab.html#a36a676a62a5ca4dd76df97431ecad521", null ],
     [ "GetBurstParameters", "d1/dfe/class_nc_astrolab.html#a8d2762003956fe4dc8109926ddf495c2", null ],
     [ "GetBurstRecoAngres", "d1/dfe/class_nc_astrolab.html#a3062193799c933ae274cf5965f17d07c", null ],
     [ "GetBurstSigmaPosdist", "d1/dfe/class_nc_astrolab.html#a4cfd434a5b15938a6779ac51297aacdf", null ],
