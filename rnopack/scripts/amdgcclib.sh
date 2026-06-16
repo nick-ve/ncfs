@@ -13,7 +13,7 @@ lib=rnopack.so
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -Wunused -Wno-long-long -Woverloaded-virtual -I$NCFS/ncfspack/source -I$ROOTSYS/include -o $lib"
+gccroot="-fPIC -shared -g0 -Wunused -Wno-long-long -Woverloaded-virtual -Wno-format-truncation -Wno-format-overflow -I$NCFS/ncfspack/source -I$ROOTSYS/include -o $lib"
 #
 echo ' '
 echo '*** Creation of the rnopack shared library for RNO-G analyses ***' 
@@ -26,7 +26,7 @@ echo "gccroot = " $gccroot
 cd $NCFS/rnopack/source
 #
 ### Create the dictionary files
-rootcint -f rnopackdict.cxx -c -I$NCFS/ncfspack/source RNOHeaders.h RNOLinkDef.h
+rootcling -f rnopackdict.cxx -c -I$NCFS/ncfspack/source RNOHeaders.h RNOLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 g++ $gccroot *.cxx   

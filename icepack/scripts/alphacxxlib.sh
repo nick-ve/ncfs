@@ -23,7 +23,7 @@ echo "alpharoot = " $alpharoot
 cd $NCFS/icepack/source
 #
 ### Create the dictionary files
-rootcint -f icepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
+rootcling -f icepackdict.cxx -c -I$NCFS/ncfspack/source ICEHeaders.h ICELinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 cxx $alpharoot *.cxx   

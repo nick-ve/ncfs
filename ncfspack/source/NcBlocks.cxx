@@ -148,7 +148,7 @@
 //
 // TH1F h("h","Example 2: Binned data (Data Mode 2);Time in sec.;Weighted counts",100,0,100);
 //
-// h.Fill(0,1.5);
+// h.Fill(0.,1.5);
 // h.Fill(1,1.0);
 // h.Fill(2,1.3);
 // h.Fill(3,0.9);
@@ -275,7 +275,7 @@
 //
 // TH1F h("h","Example 4: Triggering;Time in sec.;Weighted counts",100,0,100);
 //
-// h.Fill(0,1.5);
+// h.Fill(0.,1.5);
 // h.Fill(1,1);
 // h.Fill(2,1.3);
 // h.Fill(3,0.9);
@@ -337,7 +337,7 @@
 // NcBlocks q;
 //
 // Float_t fpr=0.1;
-// Int_t nevt=100;
+// const Int_t nevt=100;
 // Float_t arr[nevt];
 //
 // Float_t t=0;
@@ -381,7 +381,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, December 5, 2024  14:54Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC June 14, 2026  11:07
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -525,9 +525,12 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
 /**
 ~~~
 // Get the Bayesian Block partitions for the binned data (Data Mode 2) of histogram "hin"
-// with a false positive rate "fpr", and provide the results in the 1-D histogram "hout".
+// with a false positive rate "abs(fpr)", and provide the results in the 1-D histogram "hout".
 //
-// Note : Both "hin" and "hout" must be existing 1-dimensional histograms.
+// Notes :
+// -------
+// 1) Both "hin" and "hout" must be existing 1-dimensional histograms.
+// 2) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the bin contents of the input histogram "hin".
@@ -558,6 +561,12 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  Int_t n=hin->GetNbinsX();
 
  if (!n) return 0;
+
+ if (fabs(fpr)>1)
+ {
+  printf(" *NcBlocks::GetBlocks* Inconsistent parameter fpr=%-g for histogram treatment. \n",fpr);
+  return 0;
+ }
 
  // Set the Data Mode for binned data, if it was not set already
  // Also initialize the output histogram title for binned data
@@ -607,14 +616,18 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  // Add Data Cells one by one to the sample to be partioned
  Int_t ncells=0;
  Int_t first=1;
+ Int_t jstart=1;
  for (Int_t i=1; i<=n; i++)
  {
   ncells=i;
-  prior=GetPrior(i,fpr);
+  prior=GetPrior(i,fabs(fpr));
   xup=hin->GetBinLowEdge(i)+hin->GetBinWidth(i);
   // Loop over all possible block partitions for this Data Cell sample
+  // For fpr<0 it will ignore the already constructed blocks in view of cpu speed
+  jstart=1;
+  if (fpr<0 && optj) jstart=optj;
   first=1;
-  for (Int_t j=1; j<=i; j++)
+  for (Int_t j=jstart; j<=i; j++)
   {
    xlow=hin->GetBinLowEdge(j);
    blen=xup-xlow;
@@ -797,13 +810,14 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
 /**
 ~~~
 // Get the Bayesian Block partitions for the (Data Mode 1) i-th variable of NcSample "s"
-// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+// with a false positive rate "abs(fpr)", and provide the results in 1-D histogram "hout".
 // A common case is where the NcSample contains recorded event times.
 //
 // Notes :
 // -------
 // 1) The Store Mode of the NcSample must be activated.
 // 2) "hout" must be an existing 1-dimensional histogram.
+// 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided NcSample.
@@ -839,7 +853,7 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  Int_t store=s.GetStoreMode();
  Int_t dim=s.GetDimension();
 
- if (n<2 || !store || dim<1 || i<1 || i>dim || fpr<0 || fpr>1)
+ if (n<2 || !store || dim<1 || i<1 || i>dim || fabs(fpr)>1)
  {
   cout << " *NcBlocks::GetBlocks* Inconsistent input for NcSample treatment." << endl;
   cout << " Store Mode:" << store << " Entries:" << n << " Dimension:" << dim << " i:" << i << " fpr:" << fpr << endl; 
@@ -850,14 +864,31 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  fMode=1;
 
  // Represent each observation as 1 count in a variable binned histogram
- Double_t* xbins=new Double_t[n];
+ TArrayD xarr(n+1);
  Double_t val=0;
+ Int_t idstore=0;
  for (Int_t idx=1; idx<=n; idx++)
  {
   val=s.GetEntry(idx,i,1,i);
-  xbins[idx-1]=val;
+
+  // Check for a double occurance of an observation
+  if (idstore>0)
+  {
+   if (val-xarr[idstore-1]<=0) continue;
+  }
+
+  xarr[idstore]=val;
+  idstore++;
  }
 
+ // Obtain the correct amount of bin lower edges
+ if (idstore<n)
+ {
+  n=idstore;
+  xarr.Set(n);
+ } 
+ 
+ Double_t* xbins=xarr.GetArray();
  TH1F hin("","",n-1,xbins);
  for (Int_t j=1; j<n; j++)
  {
@@ -880,8 +911,6 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  str=title.Format(title.Data(),fpr);
  hout->SetTitle(str.Data());
 
- delete [] xbins;
-
  return xtrig;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -890,13 +919,14 @@ Double_t NcBlocks::GetBlocks(NcSample s,TString name,Double_t fpr,TH1* hout,Int_
 /**
 ~~~
 // Get the Bayesian Block partitions for the (Data Mode 1) named variable of NcSample "s"
-// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+// with a false positive rate "abs(fpr)", and provide the results in 1-D histogram "hout".
 // A common case is where the NcSample contains recorded event times.
 //
 // Notes :
 // -------
 // 1) The Store Mode of the NcSample must be activated.
 // 2) "hout" must be an existing 1-dimensional histogram.
+// 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided NcSample.
@@ -934,7 +964,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 /**
 ~~~
 // Get the Bayesian Block partitions for the "n" data recordings (Data Mode 1)
-// contained in the data array "arr" with a false positive rate "fpr",
+// contained in the data array "arr" with a false positive rate "abs(fpr)",
 // and provide the results in the 1-D histogram "hout".
 // A common case is where the array "arr" contains recorded event times.
 //
@@ -944,6 +974,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 //    For Data Mode 2 or Data Mode 3 treatment, please use the corresponding GetBlocks() function.
 // 2) The data elements in the array "arr" do not need to be ordered.
 // 3) "hout" must be an existing 1-dimensional histogram.
+// 4) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided array.
@@ -971,11 +1002,11 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 
  if (!hout)
  {
-  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified for array treatment." << endl;
   return 0;
  }
 
- if (!arr || n<2 || fpr<0 || fpr>1)
+ if (!arr || n<2 || fabs(fpr)>1)
  {
   cout << " *NcBlocks::GetBlocks* Inconsistent input for array treatment." << endl;
   if (!arr)
@@ -1013,7 +1044,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 /**
 ~~~
 // Get the Bayesian Block partitions for the "n" data recordings (Data Mode 1)
-// contained in the data array "arr" with a false positive rate "fpr",
+// contained in the data array "arr" with a false positive rate "abs(fpr)",
 // and provide the results in the 1-D histogram "hout".
 // A common case is where the array "arr" contains recorded event times.
 //
@@ -1023,6 +1054,7 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 //    For Data Mode 2 or Data Mode 3 treatment, please use the corresponding GetBlocks() function.
 // 2) The data elements in the array "arr" do not need to be ordered.
 // 3) "hout" must be an existing 1-dimensional histogram.
+// 4) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided array.
@@ -1050,11 +1082,11 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 
  if (!hout)
  {
-  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified for array treatment." << endl;
   return 0;
  }
 
- if (!arr || n<2 || fpr<0 || fpr>1)
+ if (!arr || n<2 || fabs(fpr)>1)
  {
   cout << " *NcBlocks::GetBlocks* Inconsistent input for array treatment." << endl;
   if (!arr)
@@ -1092,7 +1124,7 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 /**
 ~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
-// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+// with a false positive rate "abs(fpr)", and provide the results in 1-D histogram "hout".
 //
 // Notes :
 // -------
@@ -1100,6 +1132,7 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 //    used as weights in the statistical analysis.
 //    The errors on the x-values may be omitted, since they are not used in the process.
 // 2) "hout" must be an existing 1-dimenstional histogram.
+// 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the measured value based on the recordings in the provided TGraphErrors object.
@@ -1127,13 +1160,13 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 
  if (!hout)
  {
-  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified." << endl;
+  cout << " *NcBlocks::GetBlocks* Error : Output histogram not specified for TGraphErrors treatment." << endl;
   return 0;
  }
 
  Int_t n=gr.GetN();
 
- if (n<2 || fpr<0 || fpr>1)
+ if (n<2 || fabs(fpr)>1)
  {
   cout << " *NcBlocks::GetBlocks* Inconsistent input for TGraphErrors treatment." << endl;
   cout << " Entries:" << n << " fpr:" << fpr << endl; 
@@ -1213,12 +1246,13 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
 /**
 ~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
-// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+// with a false positive rate "abs(fpr)", and provide the results in 1-D histogram "hout".
 //
 // Notes :
 // -------
 // 1) "hout" must be an existing 1-dimensional histogram.
 // 2) The other member function with TGraphErrors input provides more flexibilty.
+// 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // The error of each y-value is determined by the absolute value of f(y).
 // This provides an easy way to perform quickly a Bayesian Block analysis directly
@@ -1280,12 +1314,13 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t nt
 /**
 ~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
-// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+// with a false positive rate "abs(fpr)", and provide the results in 1-D histogram "hout".
 //
 // Notes :
 // -------
 // 1) "hout" must be an existing 1-dimensional histogram.
 // 2) The other member function with TGraphErrors input provides more flexibilty.
+// 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // The error of each y-value is determined by the absolute value of f(y), where the
 // function is described by the input argument "f" following the TF1 string format convention.
@@ -1349,12 +1384,13 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
 /**
 ~~~
 // Get the Bayesian Block partitions for measurements of an observable (Data Mode 3)
-// with a false positive rate "fpr", and provide the results in 1-D histogram "hout".
+// with a false positive rate "abs(fpr)", and provide the results in 1-D histogram "hout".
 //
 // Notes :
 // -------
 // 1) "hout" must be an existing 1-dimensional histogram.
 // 2) The other member function with TGraphErrors input provides more flexibilty.
+// 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
 //
 // The error of each y-value is determined by "nrms" times the RMS deviation of all the y-values,
 // which often provides an efficient way to ignore noise variations of a background pedestal.

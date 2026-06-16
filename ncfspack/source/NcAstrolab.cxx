@@ -180,7 +180,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, April 9, 2026  21:31Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 16, 2026  10:05
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -10077,7 +10077,7 @@ TF1 NcAstrolab::GetBackgroundRatePDF(Double_t Noff,Double_t Toff,Double_t bmax,D
  if (bmax<0) bmax=100.*Noff/Toff;
 
  Int_t npar=4;
- TF1 pdf("BkgRatePDF",this,&NcAstrolab::GetBackgroundRateProb,0,bmax,npar,"NcAstrolab","GetBackgroundRateProb");
+ TF1 pdf("BkgRatePDF",this,&NcAstrolab::GetBackgroundRateProb,0,bmax,npar);
 
  pdf.SetParName(0,"Noff");
  pdf.SetParName(1,"Toff");
@@ -10144,7 +10144,7 @@ TF1 NcAstrolab::GetSignalRatePDF(Double_t Non,Double_t Ton,Double_t Noff,Double_
  if (bmax<0) bmax=100.*Noff/Toff;
 
  Int_t npar=7;
- TF1 pdf("SignalRatePDF",this,&NcAstrolab::GetSignalRateProb,0,smax,npar,"NcAstrolab","GetSignalRateProb");
+ TF1 pdf("SignalRatePDF",this,&NcAstrolab::GetSignalRateProb,0,smax,npar);
 
  pdf.SetParName(0,"Non");
  pdf.SetParName(1,"Ton");
@@ -11358,6 +11358,10 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 // Tbin      // Time bin size (>0=time units or units of average T90  0=variable bins  <0 will result in a mean |Tbin| counts/bin)
 // VarTbin   // Size (in time units) of the first time bin in case of variable time bins
 // Abin      // Angular bin size in degrees (<0 will result in a mean |Abin| counts/bin)
+// BBtime    // Flag to activate (1) or de-activate (0) the creation of Bayesian Block data for the arrival times
+// BBangle   // Flag to activate (1) or de-activate (0) the creation of Bayesian Block data for the cosine of the opening angles
+// BBfpr     // False positive rate for Bayesian Block processing
+//           Note : If fpr<0 a fast(er) procedure will be used by skipping the already created blocks in the processing
 //
 // Note :
 // ------
@@ -11405,6 +11409,9 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
 // Tbin=1
 // VarTbin=10
 // Abin=1
+// BBtime=1
+// BBangle=1
+// BBfpr=-0.05
 ~~~
 **/
 
@@ -11561,6 +11568,15 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
   name="Abin";
   fBurstParameters->AddNamedSlot(name);
   fBurstParameters->SetSignal(1,name);
+  name="BBtime";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(1,name);
+  name="BBangle";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(1,name);
+  name="BBfpr";
+  fBurstParameters->AddNamedSlot(name);
+  fBurstParameters->SetSignal(-0.05,name);
 
   // Remove all histograms related to burst investigations
   fBurstHistos.Clear();
@@ -11741,6 +11757,9 @@ void NcAstrolab::ListBurstParameters() const
  Float_t fTbin=fBurstParameters->GetSignal("Tbin");
  Float_t fVarTbin=fBurstParameters->GetSignal("VarTbin");
  Float_t fAbin=fBurstParameters->GetSignal("Abin");
+ Int_t fBBtime=TMath::Nint(fBurstParameters->GetSignal("BBtime"));
+ Int_t fBBangle=TMath::Nint(fBurstParameters->GetSignal("BBangle"));
+ Float_t fBBfpr=fBurstParameters->GetSignal("BBfpr");
 
  // Derived parameters
  Float_t fMaxsigmatot=fBurstParameters->GetSignal("Maxsigmatot");
@@ -11833,6 +11852,24 @@ void NcAstrolab::ListBurstParameters() const
  {
   printf(" Angular histogram bin size : %-g degrees \n",fAbin);
  }
+
+ if (fBBtime)
+ {
+  printf(" Bayesian Block data will be created for the arrival times. \n");
+ }
+ else
+ {
+  printf(" No Bayesian Block data will be created for the arrival times. \n");
+ }
+ if (fBBangle)
+ {
+  printf(" Bayesian Block data will be created for the cosine of the opening angles. \n");
+ }
+ else
+ {
+  printf(" No Bayesian Block data will be created for the cosine of the opening angles. \n");
+ }
+ if (fBBtime || fBBangle) printf(" False positive rate parameter for Bayesian Block processing : %-g \n",fBBfpr);
 
  // Parameters for burst signal and background generation
  if (fGrbnu)
@@ -14561,7 +14598,7 @@ void NcAstrolab::GenBurstSignals()
     elow=-1;
     eup=-1;
     nsig=1;
-    GetSignal(dgrb,thetagrb,"deg",phigrb,"deg","loc",tx,igrb+1); //$$$$$$$$$$$
+    GetSignal(dgrb,thetagrb,"deg",phigrb,"deg","loc",tx,igrb+1);
    }
    else // Signal strength set via user provided Fluence, Flux or Intensity
    {
@@ -14856,6 +14893,9 @@ void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
  Float_t fEnergyBkg=fEnergyOn-fEnergySig;
  Float_t fSensarea=fBurstParameters->GetSignal("Sensarea");
  Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
+ Int_t fBBtime=TMath::Nint(fBurstParameters->GetSignal("BBtime"));
+ Int_t fBBangle=TMath::Nint(fBurstParameters->GetSignal("BBangle"));
+ Float_t fBBfpr=fBurstParameters->GetSignal("BBfpr");
 
  TString tu="days";
  if (fTunits==1) tu="hours";
@@ -15337,98 +15377,220 @@ void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
   if (hOnSigZta) hOnSigZta->Fill(value2,value4);
  }
 
- // Bayesian block analysis of the arrival times
+ //////////////////////////////////////////////////
+ // Bayesian block analysis of the arrival times //
+ //////////////////////////////////////////////////
  NcBlocks BB;
  TH1F hOnBBt;
+ TH1F* hOnBBtN=0;
  TH1F hOnBBzt;
- if (fBurstOnMatch.GetN())
+ TH1F* hOnBBztN=0;
+ if (fBBtime && fBurstOnMatch.GetN())
  {
-  BB.GetBlocks(fBurstOnMatch,"dtime",0.05,&hOnBBt);
-  title.Form("Bayesian blocks for on-source arrival times %-s;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",scrt.Data(),tu.Data(),tu.Data(),fNgrbs);
+  BB.GetBlocks(fBurstOnMatch,"dtime",fBBfpr,&hOnBBt);
+  title.Form("Bayesian blocks (fpr=%-g) for on-source arrival times %-s;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",fBBfpr,scrt.Data(),tu.Data(),tu.Data(),fNgrbs);
   title.ReplaceAll("days^","day^");
   title.ReplaceAll("hours^","hour^");
   hOnBBt.SetNameTitle("hOnBBt",title);
-  BB.GetBlocks(fBurstOnMatch,"dtimez",0.05,&hOnBBzt);
-  title.Form("Bayesian blocks for redshift corrected on-source arrival times %-s;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",scrt.Data(),tu.Data(),tu.Data(),fNgrbs);
+
+  // The per patch scaled corresponding histogram
+  hOnBBtN=(TH1F*)hOnBBt.Clone("hOnBBtN");
+  if (fNgrbs>1) hOnBBtN->Scale(1./float(fNgrbs));
+  title.Form("Event rate (%-s^{-1}) scaled per time window",tu.Data());
+  title.ReplaceAll("days^","day^");
+  title.ReplaceAll("hours^","hour^");
+  hOnBBtN->SetYTitle(title);
+
+  BB.GetBlocks(fBurstOnMatch,"dtimez",fBBfpr,&hOnBBzt);
+  title.Form("Bayesian blocks (fpr=%-g) for redshift corrected on-source arrival times %-s;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",fBBfpr,scrt.Data(),tu.Data(),tu.Data(),fNgrbs);
   title.ReplaceAll("days^","day^");
   title.ReplaceAll("hours^","hour^");
   hOnBBzt.SetNameTitle("hOnBBzt",title);
+
+  // The per patch scaled corresponding histogram
+  hOnBBztN=(TH1F*)hOnBBzt.Clone("hOnBBztN");
+  if (fNgrbs>1) hOnBBztN->Scale(1./float(fNgrbs));
+  title.Form("Event rate (%-s^{-1}) scaled per time window",tu.Data());
+  title.ReplaceAll("days^","day^");
+  title.ReplaceAll("hours^","hour^");
+  hOnBBztN->SetYTitle(title);
  }
  TH1F hOffBBt;
+ TH1F* hOffBBtN=0;
  TH1F hOffBBzt;
- if (fBurstOffMatch.GetN())
+ TH1F* hOffBBztN=0;
+ if (fBBtime && fBurstOffMatch.GetN())
  {
-  BB.GetBlocks(fBurstOffMatch,"dtime",0.05,&hOffBBt);
-  title.Form("Bayesian blocks for off-source arrival times;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",tu.Data(),tu.Data(),fNgrbs*fNbkg);
+  BB.GetBlocks(fBurstOffMatch,"dtime",fBBfpr,&hOffBBt);
+  title.Form("Bayesian blocks for (fpr=%-g) off-source arrival times;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",fBBfpr,tu.Data(),tu.Data(),fNgrbs*fNbkg);
   title.ReplaceAll("days^","day^");
   title.ReplaceAll("hours^","hour^");
   hOffBBt.SetNameTitle("hOffBBt",title);
-  BB.GetBlocks(fBurstOffMatch,"dtimez",0.05,&hOffBBzt);
-  title.Form("Bayesian blocks for redshift corrected off-source arrival times;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",tu.Data(),tu.Data(),fNgrbs*fNbkg);
+
+  // The per patch scaled corresponding histogram
+  hOffBBtN=(TH1F*)hOffBBt.Clone("hOffBBtN");
+  if (fNgrbs*fNbkg>1) hOffBBtN->Scale(1./float(fNgrbs*fNbkg));
+  title.Form("Event rate (%-s^{-1}) scaled per time window",tu.Data());
+  title.ReplaceAll("days^","day^");
+  title.ReplaceAll("hours^","hour^");
+  hOffBBtN->SetYTitle(title);
+
+  BB.GetBlocks(fBurstOffMatch,"dtimez",fBBfpr,&hOffBBzt);
+  title.Form("Bayesian blocks (fpr=%-g) for redshift corrected off-source arrival times;Event arrival time (in %-s) w.r.t. burst trigger;Event rate (%-s^{-1}) for %-i stacked time windows",fBBfpr,tu.Data(),tu.Data(),fNgrbs*fNbkg);
   title.ReplaceAll("days^","day^");
   title.ReplaceAll("hours^","hour^");
   hOffBBzt.SetNameTitle("hOffBBzt",title);
+
+  // The per patch scaled corresponding histogram
+  hOffBBztN=(TH1F*)hOffBBzt.Clone("hOffBBztN");
+  if (fNgrbs*fNbkg>1) hOffBBztN->Scale(1./float(fNgrbs*fNbkg));
+  title.Form("Event rate (%-s^{-1}) scaled per time window",tu.Data());
+  title.ReplaceAll("days^","day^");
+  title.ReplaceAll("hours^","hour^");
+  hOffBBztN->SetYTitle(title);
  }
 
- // Ratio On/Off for the Bayesian Block histograms
+ // Ratio On/Off for the arrival time Bayesian Block histograms
+ TH1F hOnUBBtN;
+ TH1F hOffUBBtN;
+ TH1F hRatUBBtN;
+ title.Form("Event rate (%-s^{-1}) scaled per time window",tu.Data());
+ title.ReplaceAll("days^","day^");
+ title.ReplaceAll("hours^","hour^");
  Float_t temp=0;
  Int_t nb1=0;
  Int_t nb2=0;
 
- axis=hOnBBt.GetXaxis();
- xmin=axis->GetXmin();
- xmax=axis->GetXmax();
- axis=hOffBBt.GetXaxis();
- temp=axis->GetXmin();
- if (temp<xmin) xmin=temp;
- temp=axis->GetXmax();
- if (temp>xmax) xmax=temp;
+ if (hOnBBtN && hOffBBtN)
+ {
+  axis=hOnBBtN->GetXaxis();
+  xmin=axis->GetXmin();
+  xmax=axis->GetXmax();
+  axis=hOffBBtN->GetXaxis();
+  temp=axis->GetXmin();
+  if (temp<xmin) xmin=temp;
+  temp=axis->GetXmax();
+  if (temp>xmax) xmax=temp;
 
- TH1F hOnUBBt;
- TH1F hOffUBBt;
- TH1F hRatUBBt;
- title.Form("Event rate (%-s^{-1}) scaled per time window",tu.Data());
- title.ReplaceAll("days^","day^");
- title.ReplaceAll("hours^","hour^");
- nb1=BB.Rebin(&hOnBBt,&hOnUBBt,kFALSE,0,xmin,xmax);
- nb2=BB.Rebin(&hOffBBt,&hOffUBBt,kFALSE,0,xmin,xmax);
- if (nb2>nb1) BB.Rebin(&hOnBBt,&hOnUBBt,kFALSE,nb2,xmin,xmax);
- hOnUBBt.SetName("hOnUBBt");
- hOffUBBt.SetName("hOffUBBt");
- if (fNgrbs>1) hOnUBBt.Scale(1./float(fNgrbs));
- if (fNgrbs*fNbkg>1) hOffUBBt.Scale(1./float(fNgrbs*fNbkg));
- hOnUBBt.SetYTitle(title);
- hOffUBBt.SetYTitle(title);
- BB.Divide(&hOnUBBt,&hOffUBBt,&hRatUBBt,kFALSE,1);
- hRatUBBt.SetName("hRatUBBt");
- hRatUBBt.SetYTitle("Ratio");
+  nb1=BB.Rebin(hOnBBtN,&hOnUBBtN,kFALSE,0,xmin,xmax);
+  nb2=BB.Rebin(hOffBBtN,&hOffUBBtN,kFALSE,0,xmin,xmax);
+  if (nb2>nb1) BB.Rebin(hOnBBtN,&hOnUBBtN,kFALSE,nb2,xmin,xmax);
+  hOnUBBtN.SetName("hOnUBBtN");
+  hOffUBBtN.SetName("hOffUBBtN");
+  hOnUBBtN.SetYTitle(title);
+  hOffUBBtN.SetYTitle(title);
+  BB.Divide(&hOnUBBtN,&hOffUBBtN,&hRatUBBtN,kFALSE,1);
+  hRatUBBtN.SetName("hRatUBBtN");
+  hRatUBBtN.SetYTitle("Ratio");
+ }
 
- nbins=hOnBBzt.GetNbinsX();
- if (hOffBBzt.GetNbinsX()>nbins) nbins=hOffBBzt.GetNbinsX();
- axis=hOnBBzt.GetXaxis();
- xmin=axis->GetXmin();
- xmax=axis->GetXmax();
- axis=hOffBBzt.GetXaxis();
- temp=axis->GetXmin();
- if (temp<xmin) xmin=temp;
- temp=axis->GetXmax();
- if (temp>xmax) xmax=temp;
 
- TH1F hOnUBBzt;
- TH1F hOffUBBzt;
- TH1F hRatUBBzt;
- nb1=BB.Rebin(&hOnBBzt,&hOnUBBzt,kFALSE,0,xmin,xmax);
- nb2=BB.Rebin(&hOffBBzt,&hOffUBBzt,kFALSE,0,xmin,xmax);
- if (nb2>nb1) BB.Rebin(&hOnBBzt,&hOnUBBzt,kFALSE,nb2,xmin,xmax);
- hOnUBBzt.SetName("hOnUBBzt");
- hOffUBBzt.SetName("hOffUBBzt");
- if (fNgrbs>1) hOnUBBzt.Scale(1./float(fNgrbs));
- if (fNgrbs*fNbkg>1) hOffUBBzt.Scale(1./float(fNgrbs*fNbkg));
- hOnUBBzt.SetYTitle(title);
- hOffUBBzt.SetYTitle(title);
- BB.Divide(&hOnUBBzt,&hOffUBBzt,&hRatUBBzt,kFALSE,1);
- hRatUBBzt.SetName("hRatUBBzt");
- hRatUBBzt.SetYTitle("Ratio");
+ TH1F hOnUBBztN;
+ TH1F hOffUBBztN;
+ TH1F hRatUBBztN;
+ if (hOnBBztN && hOffBBztN)
+ {
+  axis=hOnBBztN->GetXaxis();
+  xmin=axis->GetXmin();
+  xmax=axis->GetXmax();
+  axis=hOffBBztN->GetXaxis();
+  temp=axis->GetXmin();
+  if (temp<xmin) xmin=temp;
+  temp=axis->GetXmax();
+  if (temp>xmax) xmax=temp;
+
+  nb1=BB.Rebin(hOnBBztN,&hOnUBBztN,kFALSE,0,xmin,xmax);
+  nb2=BB.Rebin(hOffBBztN,&hOffUBBztN,kFALSE,0,xmin,xmax);
+  if (nb2>nb1) BB.Rebin(hOnBBztN,&hOnUBBztN,kFALSE,nb2,xmin,xmax);
+  hOnUBBztN.SetName("hOnUBBztN");
+  hOffUBBztN.SetName("hOffUBBztN");
+  hOnUBBztN.SetYTitle(title);
+  hOffUBBztN.SetYTitle(title);
+  BB.Divide(&hOnUBBztN,&hOffUBBztN,&hRatUBBztN,kFALSE,1);
+  hRatUBBztN.SetName("hRatUBBztN");
+  hRatUBBztN.SetYTitle("Ratio");
+ }
+
+ ///////////////////////////////////////////////////
+ // Bayesian block analysis of the opening angles //
+ ///////////////////////////////////////////////////
+ TH1F hOnBBa;
+ TH1F* hOnBBaN=0;
+ Int_t nen=fBurstOnMatch.GetN();
+ Double_t value=0;
+ TArrayD tarr;
+ Double_t* arr;
+ if (fBBangle && nen)
+ {
+  tarr.Set(nen);
+  for (Int_t i=1; i<=nen; i++)
+  {
+   value=fBurstOnMatch.GetEntry(i,"dang");
+   tarr[i-1]=cos(value*pi/180.);
+  }
+  arr=tarr.GetArray();
+  BB.GetBlocks(nen,arr,fBBfpr,&hOnBBa);
+  title.Form("Bayesian blocks (fpr=%-g) for on-source angular differences;cos(opening angle) w.r.t. source location;Occurence density for %-i stacked patches",fBBfpr,fNgrbs);
+  hOnBBa.SetNameTitle("hOnBBa",title);
+
+  // The per patch scaled corresponding histogram
+  hOnBBaN=(TH1F*)hOnBBa.Clone("hOnBBaN");
+  if (fNgrbs>1) hOnBBaN->Scale(1./float(fNgrbs));
+  hOnBBaN->SetYTitle("Occurrence density scaled per patch");
+ }
+ TH1F hOffBBa;
+ TH1F* hOffBBaN=0;
+ nen=fBurstOffMatch.GetN();
+ if (fBBangle && nen)
+ {
+  tarr.Set(nen);
+  for (Int_t i=1; i<=nen; i++)
+  {
+   value=fBurstOffMatch.GetEntry(i,"dang");
+   tarr[i-1]=cos(value*pi/180.);
+  }
+  arr=tarr.GetArray();
+  BB.GetBlocks(nen,arr,fBBfpr,&hOffBBa);
+  title.Form("Bayesian blocks (fpr=%-g) for off-source angular differences;cos(opening angle) w.r.t. source location;Occurence density for %-i stacked patches",fBBfpr,fNgrbs*fNbkg);
+  hOffBBa.SetNameTitle("hOffBBa",title);
+
+  // The per patch scaled corresponding histogram
+  hOffBBaN=(TH1F*)hOffBBa.Clone("hOffBBaN");
+  if (fNgrbs*fNbkg>1) hOffBBaN->Scale(1./float(fNgrbs*fNbkg));
+  hOffBBaN->SetYTitle("Occurrence density scaled per patch");
+ }
+
+ // Ratio On/Off for the angular differences Bayesian Block histograms
+ TH1F hOnUBBaN;
+ TH1F hOffUBBaN;
+ TH1F hRatUBBaN;
+ title.Form("Occurrence density scaled per patch");
+ temp=0;
+ nb1=0;
+ nb2=0;
+
+ if (hOnBBaN && hOffBBaN)
+ {
+  axis=hOnBBaN->GetXaxis();
+  xmin=axis->GetXmin();
+  xmax=axis->GetXmax();
+  axis=hOffBBaN->GetXaxis();
+  temp=axis->GetXmin();
+  if (temp<xmin) xmin=temp;
+  temp=axis->GetXmax();
+  if (temp>xmax) xmax=temp;
+
+  nb1=BB.Rebin(hOnBBaN,&hOnUBBaN,kFALSE,0,xmin,xmax);
+  nb2=BB.Rebin(hOffBBaN,&hOffUBBaN,kFALSE,0,xmin,xmax);
+  if (nb2>nb1) BB.Rebin(hOnBBaN,&hOnUBBaN,kFALSE,nb2,xmin,xmax);
+  hOnUBBaN.SetName("hOnUBBaN");
+  hOffUBBaN.SetName("hOffUBBaN");
+  hOnUBBaN.SetYTitle(title);
+  hOffUBBaN.SetYTitle(title);
+  BB.Divide(&hOnUBBaN,&hOffUBBaN,&hRatUBBaN,kFALSE,1);
+  hRatUBBaN.SetName("hRatUBBaN");
+  hRatUBBaN.SetYTitle("Ratio");
+ }
 
  // Store the produced histograms
  if (hOnSourceZ) fBurstHistos.Add(hOnSourceZ);
@@ -15458,22 +15620,51 @@ void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
  if (hOnta) fBurstHistos.Add(hOnta);
  if (hOffta) fBurstHistos.Add(hOffta);
  if (hOnSigta)fBurstHistos.Add(hOnSigta);
- if (hOnt && hOnBBt.GetEntries()) fBurstHistos.Add(hOnBBt.Clone());
- if (hOfft && hOffBBt.GetEntries()) fBurstHistos.Add(hOffBBt.Clone());
- if (hOnt && hOnUBBt.GetEntries()) fBurstHistos.Add(hOnUBBt.Clone());
- if (hOfft && hOffUBBt.GetEntries()) fBurstHistos.Add(hOffUBBt.Clone());
- if (hOnt && hOfft && hRatUBBt.GetEntries()) fBurstHistos.Add(hRatUBBt.Clone());
+ if (hOnt && hOnBBt.GetEntries())
+ {
+  fBurstHistos.Add(hOnBBt.Clone());
+  if (hOnBBtN) fBurstHistos.Add(hOnBBtN);
+ }
+ if (hOfft && hOffBBt.GetEntries())
+ {
+  fBurstHistos.Add(hOffBBt.Clone());
+  if (hOffBBtN) fBurstHistos.Add(hOffBBtN);
+ }
+ if (hOnt && hOnUBBtN.GetEntries()) fBurstHistos.Add(hOnUBBtN.Clone());
+ if (hOfft && hOffUBBtN.GetEntries()) fBurstHistos.Add(hOffUBBtN.Clone());
+ if (hOnt && hOfft && hRatUBBtN.GetEntries()) fBurstHistos.Add(hRatUBBtN.Clone());
  if (hOnZt) fBurstHistos.Add(hOnZt);
  if (hOffZt) fBurstHistos.Add(hOffZt);
  if (hOnSigZt) fBurstHistos.Add(hOnSigZt);
  if (hOnZta) fBurstHistos.Add(hOnZta);
  if (hOffZta) fBurstHistos.Add(hOffZta);
  if (hOnSigZta) fBurstHistos.Add(hOnSigZta);
- if (hOnZt && hOnBBzt.GetEntries()) fBurstHistos.Add(hOnBBzt.Clone());
- if (hOffZt && hOffBBzt.GetEntries()) fBurstHistos.Add(hOffBBzt.Clone());
- if (hOnZt && hOnUBBzt.GetEntries()) fBurstHistos.Add(hOnUBBzt.Clone());
- if (hOffZt && hOffUBBzt.GetEntries()) fBurstHistos.Add(hOffUBBzt.Clone());
- if (hOnZt && hOffZt && hRatUBBzt.GetEntries()) fBurstHistos.Add(hRatUBBzt.Clone());
+ if (hOnZt && hOnBBzt.GetEntries())
+ {
+  fBurstHistos.Add(hOnBBzt.Clone());
+  if (hOnBBztN) fBurstHistos.Add(hOnBBztN);
+ }
+ if (hOffZt && hOffBBzt.GetEntries())
+ {
+  fBurstHistos.Add(hOffBBzt.Clone());
+  if (hOffBBztN) fBurstHistos.Add(hOffBBztN);
+ }
+ if (hOnZt && hOnUBBztN.GetEntries()) fBurstHistos.Add(hOnUBBztN.Clone());
+ if (hOffZt && hOffUBBztN.GetEntries()) fBurstHistos.Add(hOffUBBztN.Clone());
+ if (hOnZt && hOffZt && hRatUBBztN.GetEntries()) fBurstHistos.Add(hRatUBBztN.Clone());
+ if (hOna && hOnBBa.GetEntries())
+ {
+  fBurstHistos.Add(hOnBBa.Clone());
+  if (hOnBBaN) fBurstHistos.Add(hOnBBaN);
+ }
+ if (hOffa && hOffBBa.GetEntries())
+ {
+  fBurstHistos.Add(hOffBBa.Clone());
+  if (hOffBBaN) fBurstHistos.Add(hOffBBaN);
+ }
+ if (hOna && hOnUBBaN.GetEntries()) fBurstHistos.Add(hOnUBBaN.Clone());
+ if (hOffa && hOffUBBaN.GetEntries()) fBurstHistos.Add(hOffUBBaN.Clone());
+ if (hOna && hOffa && hRatUBBaN.GetEntries()) fBurstHistos.Add(hRatUBBaN.Clone());
 
  // Make sure that also the auto-binned histograms have their axes ranges set
  Int_t nh=fBurstHistos.GetEntries();
@@ -17497,19 +17688,30 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 //
 // Input arguments :
 // -----------------
-// type : "time"   --> Provide statistics for the observed arrival times.
-//                     This will investigate the deviation from a uniform background time spectrum.
-//        "BBtime" --> Provide statistics for the Bayesian blocks corresponding to the observed arrival times.
-//                     This will investigate the deviation from a uniform event rate.
-//        "BBrat"  --> Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
-//                     corresponding to the observed arrival times.
-//                     This will investigate the relative deviation in event rate.
-//        "angle"  --> Provide statistics for the observed opening angles.
-//                     This will investigate the deviation from a isotropic background angular spectrum.
-//        "cosa"   --> Provide statistics for the cosine of the observed opening angles.
-//                     This will investigate the deviation from a uniform background cos(angle) spectrum.
-//        "dt"     --> Provide statistics for the time intervals between the observed arrival times.
-//                     This will investigate the deviation from dt spectrum expected from Poisson statistics.
+// type : "time"    --> Provide statistics for the observed arrival times.
+//                      This will investigate the deviation from a uniform background time spectrum.
+//        "BBtime"  --> Provide statistics for the Bayesian blocks corresponding to the observed arrival times.
+//                      This will investigate the deviation from a uniform event rate.
+//        "BBtimeN" --> Provide statistics for the Bayesian blocks corresponding to the observed arrival times,
+//                      normalized to a single time window.
+//                      This will investigate the deviation from a uniform event rate.
+//        "BBrat"   --> Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
+//                      corresponding to the observed arrival times.
+//                      This will investigate the relative deviation in event rate.
+//        "angle"   --> Provide statistics for the observed opening angles.
+//                      This will investigate the deviation from a isotropic background angular spectrum.
+//        "cosa"    --> Provide statistics for the cosine of the observed opening angles.
+//                      This will investigate the deviation from a uniform background cos(angle) spectrum.
+//        "BBcosa"  --> Provide statistics for the Bayesian blocks corresponding to the cosine of the observed opening angles.
+//                      This will investigate the deviation from a uniform distribution.
+//        "BBcosaN" --> Provide statistics for the Bayesian blocks corresponding to the cosine of the observed opening angles,
+//                      normalized to a single patch.
+//                      This will investigate the deviation from a uniform distribution.
+//        "BBrac"   --> Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
+//                      corresponding to the cosine of the observed opening angles.
+//                      This will investigate the relative deviation from a uniform distribution.
+//        "dt"      --> Provide statistics for the time intervals between the observed arrival times.
+//                      This will investigate the deviation from a dt spectrum expected from Poisson statistics.
 // nr   : (Maximum) number of randomised configurations for psi P-value determination.
 //        nr<0 implies that no psi P-values will be determined (saves CPU time).
 //        nr=0 implies the allowed maximum of 1e19 randomisations.
@@ -17532,10 +17734,14 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 
  TString text="none";
  if (type=="time") text="arrival time";
- if (type=="BBtime") text="Bayesian Block event rate";
- if (type=="BBrat") text="normalized On-source/Off-source Bayesian Block event rate ratio";
+ if (type=="BBtime") text="stacked Bayesian Block event rate";
+ if (type=="BBtimeN") text="per time window normalized Bayesian Block event rate";
+ if (type=="BBrat") text="per time window normalized On-source/Off-source Bayesian Block event rate ratio";
  if (type=="angle") text="opening angle";
  if (type=="cosa") text="cos(opening angle)";
+ if (type=="BBcosa") text="stacked Bayesian Block cos(opening angle)";
+ if (type=="BBcosaN") text="per patch normalized Bayesian Block cos(opening angle)";
+ if (type=="BBrac") text="per patch normalized On-source/Off-source Bayesian Block cos(opening angle) ratio";
  if (type=="dt") text="arrival time interval";
 
  if (zcor)
@@ -17544,15 +17750,14 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   text.ReplaceAll("event rate","redshift corrected event rate");
  }
 
- cout << endl; 
  if (text=="none")
  {
-  cout << " *" << ClassName() << "::GetBurstBayesianPsiStatistics* Unknown statistics type : " << type << endl;
+  printf("\n *%-s::GetBurstBayesianPsiStatistics* Unknown statistics type : %-s \n",ClassName(),type.Data());
   return;
  }
  else
  {
-  cout << " *" << ClassName() << "::GetBurstBayesianPsiStatistics* Analysis of " << text << " statistics" << endl;
+  printf("\n *%-s::GetBurstBayesianPsiStatistics* Analysis of %-s statistics \n",ClassName(),text.Data());
  }
 
  Int_t fTunits=TMath::Nint(fBurstParameters->GetSignal("Tunits"));
@@ -17674,27 +17879,39 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
     pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
     fBurstHistos.Add(rbkg);
    }
-
-   cout << " The following randomised Psi histograms have been generated :" << endl;
-   if (rtot) cout << " ... " << rtot->GetName() << " : " << rtot->GetTitle() << endl;      
-   if (rbkg) cout << " ... " << rbkg->GetName() << " : " << rbkg->GetTitle() << endl;
   }
  }
 
  ////////////////////////////////////////////
  // Event rate histo Bayesian statistics   //
  ////////////////////////////////////////////
- if (type=="BBtime")
+ if (type.Contains("BBtime"))
  {
   if (!zcor) // Plain observed arrival times
   {
-   tot=(TH1*)fBurstHistos.FindObject("hOnBBt");
-   bkg=(TH1*)fBurstHistos.FindObject("hOffBBt");
+   if (!type.Contains("N"))
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBt");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBt");
+   }
+   else
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBtN");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBtN");
+   }
   }
   else // Redshift corrected arrival times
   {
-   tot=(TH1*)fBurstHistos.FindObject("hOnBBzt");
-   bkg=(TH1*)fBurstHistos.FindObject("hOffBBzt");
+   if (!type.Contains("N"))
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBzt");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBzt");
+   }
+   else
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBztN");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBztN");
+   }
   }
 
   if (!tot) printf(" === No on source data available === \n");
@@ -17746,11 +17963,21 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     hPsiOn=(TH1F*)fBurstHistos.FindObject("hPsiOnBBt");
     hPsiOff=(TH1F*)fBurstHistos.FindObject("hPsiOffBBt");
+    if (type.Contains("N"))
+    {
+     hPsiOn=(TH1F*)fBurstHistos.FindObject("hPsiOnBBtN");
+     hPsiOff=(TH1F*)fBurstHistos.FindObject("hPsiOffBBtN");
+    }
    }
    else // Redshift corrected arrival times
    {
     hPsiOn=(TH1F*)fBurstHistos.FindObject("hPsiOnBBzt");
     hPsiOff=(TH1F*)fBurstHistos.FindObject("hPsiOffBBzt");
+    if (type.Contains("N"))
+    {
+     hPsiOn=(TH1F*)fBurstHistos.FindObject("hPsiOnBBztN");
+     hPsiOff=(TH1F*)fBurstHistos.FindObject("hPsiOffBBztN");
+    }
    }
 
    if (hPsiOn)
@@ -17762,8 +17989,28 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     if (tot)
     {
-     if (!zcor) rtot=new TH1F("hPsiOnBBt","Psi distr. for bkg hypothesis of on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
-     if (zcor)  rtot=new TH1F("hPsiOnBBzt","Psi distr. for bkg hypothesis of redshift corrected on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+     if (!zcor)
+     {
+      if (type.Contains("N"))
+      {
+       rtot=new TH1F("hPsiOnBBtN","Psi distr. for bkg hypothesis of per time window normalized on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+      }
+      else
+      {
+       rtot=new TH1F("hPsiOnBBt","Psi distr. for bkg hypothesis of stacked on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+      }
+     }
+     if (zcor)
+     {
+      if (type.Contains("N"))
+      {
+       rtot=new TH1F("hPsiOnBBztN","Psi distr. for bkg hypothesis of redshift corrected per time window normalized on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+      }
+      else
+      {
+       rtot=new TH1F("hPsiOnBBzt","Psi distr. for bkg hypothesis of redshift corrected stacked on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+      }
+     }
     }
    }
 
@@ -17776,8 +18023,28 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     if (bkg)
     {
-     if (!zcor) rbkg=new TH1F("hPsiOffBBt","Psi distr. for bkg hypothesis of off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
-     if (zcor)  rbkg=new TH1F("hPsiOffBBzt","Psi distr. for bkg hypothesis of redshift corrected off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+     if (!zcor)
+     {
+      if (type.Contains("N"))
+      {
+       rbkg=new TH1F("hPsiOffBBtN","Psi distr. for bkg hypothesis of per time window normalized off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+      }
+      else
+      {
+       rbkg=new TH1F("hPsiOffBBt","Psi distr. for bkg hypothesis of stacked off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+      }
+     }
+     if (zcor)
+     {
+      if (type.Contains("N"))
+      {
+       rbkg=new TH1F("hPsiOffBBztN","Psi distr. for bkg hypothesis of redshift corrected per time window normalized off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+      }
+      else
+      {
+       rbkg=new TH1F("hPsiOffBBzt","Psi distr. for bkg hypothesis of redshift corrected stacked off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+      }
+     }
     }
    }
 
@@ -17791,10 +18058,6 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
     pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
     fBurstHistos.Add(rbkg);
    }
-
-   cout << " The following randomised Psi histograms have been generated :" << endl;
-   if (rtot) cout << " ... " << rtot->GetName() << " : " << rtot->GetTitle() << endl;      
-   if (rbkg) cout << " ... " << rbkg->GetName() << " : " << rbkg->GetTitle() << endl;
   }
 
   // Restore the original histogram data
@@ -17821,11 +18084,11 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
  {
   if (!zcor) // Plain observed arrival times
   {
-   rat=(TH1*)fBurstHistos.FindObject("hRatUBBt");
+   rat=(TH1*)fBurstHistos.FindObject("hRatUBBtN");
   }
   else // Redshift corrected arrival times
   {
-   rat=(TH1*)fBurstHistos.FindObject("hRatUBBzt");
+   rat=(TH1*)fBurstHistos.FindObject("hRatUBBztN");
   }
 
   if (!rat)
@@ -17848,11 +18111,11 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   {
    if (!zcor) // Plain observed arrival times
    {
-    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBt");
+    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBtN");
    }
    else // Redshift corrected arrival times
    {
-    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBzt");
+    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBztN");
    }
 
    if (hPsiRat)
@@ -17862,15 +18125,12 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    if (!zcor) rrat=new TH1F("hPsiRatUBBt","Psi distr. for bkg hypothesis of on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
-    if (zcor)  rrat=new TH1F("hPsiRatUBBzt","Psi distr. for bkg hypothesis of redshift corrected on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+    if (!zcor) rrat=new TH1F("hPsiRatUBBtN","Psi distr. for bkg hypothesis of on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+    if (zcor)  rrat=new TH1F("hPsiRatUBBztN","Psi distr. for bkg hypothesis of redshift corrected on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
    }
 
    pvaluerat=math.PsiPvalue(-1,nr,rat,0,0,freq,0,rrat,ncut,&nrxrat);
    fBurstHistos.Add(rrat);
-
-   cout << " The following randomised Psi histograms have been generated :" << endl;
-   if (rrat) cout << " ... " << rrat->GetName() << " : " << rrat->GetTitle() << endl;
   }
  }
  
@@ -17944,10 +18204,6 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
     pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,&pdfa,freq,0,rbkg,ncut,&nrxbkg);
     fBurstHistos.Add(rbkg);
    }
-
-   cout << " The following randomised Psi histograms have been generated :" << endl;
-   if (rtot) cout << " ... " << rtot->GetName() << " : " << rtot->GetTitle() << endl;      
-   if (rbkg) cout << " ... " << rbkg->GetName() << " : " << rbkg->GetTitle() << endl;
   }      
  }
 
@@ -18020,10 +18276,185 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
      pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
      fBurstHistos.Add(rbkg);
     }
+  }
+ }
 
-    cout << " The following randomised Psi histograms have been generated :" << endl;
-    if (rtot) cout << " ... " << rtot->GetName() << " : " << rtot->GetTitle() << endl;      
-    if (rbkg) cout << " ... " << rbkg->GetName() << " : " << rbkg->GetTitle() << endl;
+ //////////////////////////////////////////////////
+ // BB of cos(opening angle) Bayesian statistics //
+ //////////////////////////////////////////////////
+ if (type.Contains("BBcosa"))
+ {
+  if (!type.Contains("N"))
+  {
+   tot=(TH1*)fBurstHistos.FindObject("hOnBBa");
+   bkg=(TH1*)fBurstHistos.FindObject("hOffBBa");
+  }
+  else
+  {
+   tot=(TH1*)fBurstHistos.FindObject("hOnBBaN");
+   bkg=(TH1*)fBurstHistos.FindObject("hOffBBaN");
+  }
+
+  if (!tot) printf(" === No on source data available === \n");
+  if (!bkg) printf(" === No off source data available === \n");
+
+  if (!tot && !bkg) return;
+
+  // Temporarily offset the bin contents so that the lowest bin content is 1 for the psi analysis
+  if (tot)
+  {
+   for (Int_t i=1; i<=tot->GetNbinsX(); i++)
+   {
+    tot->AddBinContent(i,1);
+   }
+  }
+  if (bkg)
+  {
+   for (Int_t i=1; i<=bkg->GetNbinsX(); i++)
+   {
+    bkg->AddBinContent(i,1);
+   }
+  }
+
+  if (tot) psitot=math.PsiValue(tot,0,0,freq);
+  if (bkg) psibkg=math.PsiValue(bkg,0,0,freq);
+  psidif=psitot-psibkg;
+
+  // Extreme Psi values for a pure background hypothesis of the recorded arrival time entries
+  if (tot)
+  {
+   psimintot=math.PsiExtreme(tot,0,0,-2);
+   if (psitot<psimintot) psimintot=psitot;
+   psimaxtot=math.PsiExtreme(tot,0,0,-1);
+   if (psimaxtot>psimintot) psifractot=(psimaxtot-psitot)/(psimaxtot-psimintot);
+  }
+  if (bkg)
+  {
+   psiminbkg=math.PsiExtreme(bkg,0,0,-2); 
+   if (psibkg<psiminbkg) psiminbkg=psibkg;
+   psimaxbkg=math.PsiExtreme(bkg,0,0,-1);
+   if (psimaxbkg>psiminbkg) psifracbkg=(psimaxbkg-psibkg)/(psimaxbkg-psiminbkg);
+  }
+
+  // P-value determination
+  if (nr>=0)
+  {
+   hPsiOn=(TH1F*)fBurstHistos.FindObject("hPsiOnBBa");
+   hPsiOff=(TH1F*)fBurstHistos.FindObject("hPsiOffBBa");
+   if (type.Contains("N"))
+   {
+    hPsiOn=(TH1F*)fBurstHistos.FindObject("hPsiOnBBaN");
+    hPsiOff=(TH1F*)fBurstHistos.FindObject("hPsiOffBBaN");
+   }
+
+   if (hPsiOn)
+   {
+    rtot=(TH1F*)hPsiOn->Clone();
+    rtot->Reset();
+   }
+   else
+   {
+    if (tot)
+    {
+     if (type.Contains("N"))
+     {
+      rtot=new TH1F("hPsiOnBBaN","Psi distr. for bkg hypothesis of per patch normalized on-source cos(opening angle) Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+     }
+     else
+     {
+      rtot=new TH1F("hPsiOnBBa","Psi distr. for bkg hypothesis of stacked on-source cos(opening angle) Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+     }
+    }
+   }
+
+   if (hPsiOff)
+   {
+    rbkg=(TH1F*)hPsiOff->Clone();
+    rbkg->Reset();
+   }
+   else
+   {
+    if (bkg)
+    {
+     if (type.Contains("N"))
+     {
+      rbkg=new TH1F("hPsiOffBBaN","Psi distr. for bkg hypothesis of per patch normalized off-source cos(opening angle) Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+     }
+     else
+     {
+      rbkg=new TH1F("hPsiOffBBa","Psi distr. for bkg hypothesis of stacked off-source cos(opening angle) Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+     }
+    }
+   }
+
+   if (tot)
+   {
+    pvaluetot=math.PsiPvalue(-1,nr,tot,0,0,freq,0,rtot,ncut,&nrxtot);
+    fBurstHistos.Add(rtot);
+   }
+   if (bkg)
+   {
+    pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
+    fBurstHistos.Add(rbkg);
+   }
+  }
+
+  // Restore the original histogram data
+  if (tot)
+  {
+   for (Int_t i=1; i<=tot->GetNbinsX(); i++)
+   {
+    tot->AddBinContent(i,-1);
+   }
+  }
+  if (bkg)
+  {
+   for (Int_t i=1; i<=bkg->GetNbinsX(); i++)
+   {
+    bkg->AddBinContent(i,-1);
+   }
+  }
+ }
+
+ //////////////////////////////////////////////////////////////////////////
+ // On-source/Off-source BB cos(opening angle) ratio Bayesian statistics //
+ //////////////////////////////////////////////////////////////////////////
+ if (type=="BBrac")
+ {
+  rat=(TH1*)fBurstHistos.FindObject("hRatUBBaN");
+
+  if (!rat)
+  {
+   printf(" === No data available === \n");
+   return;
+  }
+
+  psirat=math.PsiValue(rat,0,0,freq);
+  psidif=psitot-psibkg;
+
+  // Extreme Psi values for a pure background hypothesis of the recorded arrival time entries
+  psiminrat=math.PsiExtreme(rat,0,0,-2); 
+  if (psirat<psiminrat) psiminrat=psirat;
+  psimaxrat=math.PsiExtreme(rat,0,0,-1);
+  if (psimaxrat>psiminrat) psifracrat=(psimaxrat-psirat)/(psimaxrat-psiminrat);
+
+  // P-value determination
+  if (nr>=0)
+  {
+   hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBaN");
+
+   if (hPsiRat)
+   {
+    rrat=(TH1F*)hPsiRat->Clone();
+    rrat->Reset();
+   }
+   else
+   {
+    rrat=new TH1F("hPsiRatUBBaN","Psi distr. for bkg hypothesis of on/off source cos(opening angle) Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+   }
+
+   pvaluerat=math.PsiPvalue(-1,nr,rat,0,0,freq,0,rrat,ncut,&nrxrat);
+   fBurstHistos.Add(rrat);
   }
  }
 
@@ -18120,36 +18551,65 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
     pvaluebkg=math.PsiPvalue(-1,nr,&hOffdt,0,&pdfdtbkg,freq,0,rbkg,ncut,&nrxbkg);
     fBurstHistos.Add(rbkg);
    }
-
-   cout << " The following randomised Psi histograms have been (re)generated :" << endl;
-   if (rtot) cout << " ... " << rtot->GetName() << " : " << rtot->GetTitle() << endl;      
-   if (rbkg) cout << " ... " << rbkg->GetName() << " : " << rbkg->GetTitle() << endl;
   }
  }
 
- // Listing of the statistics results
- cout << " *** Observed Psi values (in dB) for the hypothesis of no burst signal ***" << endl;
- if (psitot>=0) cout << " For the on-source  stacked patches : psi = " << psitot << endl;
- if (psibkg>=0) cout << " For the off-source stacked patches : psi = " << psibkg << endl;
- if (psitot>=0 && psibkg>=0) cout << " --> Difference between observed on-source and off-source psi values : " << psidif << endl;
- if (psirat>=0) cout << " For the on/off source event rate Bayesian Blocks : psi = " << psirat << endl;
- cout << " *** Extreme Psi values for the case of pure background ***" << endl;
- if (psimintot>=0) cout << " For on-source  psimin : " << psimintot << " psimax : " << psimaxtot;
- if (psifractot>0) printf(" (psimax-psi)/range : %-g",psifractot);
- if (psimintot>=0 || psifractot>0) printf("\n");
- if (psiminbkg>=0) cout << " For off-source psimin : " << psiminbkg << " psimax : " << psimaxbkg;
- if (psifracbkg>0) printf(" (psimax-psi)/range : %-g",psifracbkg);
- if (psiminbkg>=0 || psifracbkg>0) printf("\n");
- if (psiminrat>=0) cout << " For on/off source event rate Bayesian Blocks psimin : " << psiminrat << " psimax : " << psimaxrat;
- if (psifracrat>0) printf(" (psimax-psi)/range : %-g",psifracrat);
- if (psiminrat>=0 || psifracrat>0) printf("\n");
+ ///////////////////////////////////////
+ // Listing of the statistics results //
+ ///////////////////////////////////////
+
+ printf(" The following randomised Psi histograms have been (re)generated : \n");
+ if (rtot) printf(" ... %-s  : %-s \n",rtot->GetName(),rtot->GetTitle());
+ if (rbkg) printf(" ... %-s : %-s \n",rbkg->GetName(),rbkg->GetTitle());
+ if (rrat) printf(" ... %-s : %-s \n",rrat->GetName(),rrat->GetTitle());
+
+ text="stacked patches data:";
+ if (type.Contains("N")) text="per patch normalized data:";
+
+ printf(" *** Observed Psi values (in dB) for the hypothesis of no burst signal *** \n");
+ if (psitot>=0) printf(" For the on-source  %-s psi=%-g \n",text.Data(),psitot);
+ if (psibkg>=0) printf(" For the off-source %-s psi=%-g \n",text.Data(),psibkg);
+ if (psitot>=0 && psibkg>=0) printf(" --> Difference between observed on-source and off-source psi values : %-g \n",psidif);
+ if (psirat>=0)
+ {
+  if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks : psi=%-g \n",psirat);
+  if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks : psi=%-g \n",psirat);
+ }
+
+ if (psimintot>=0 || psiminbkg>=0 || psiminrat>=0)
+ {
+  printf(" *** Extreme Psi values for the case of pure background *** \n");
+  if (psimintot>=0)
+  {
+   printf(" For the on-source  %-s psimin=%-g psimax=%-g",text.Data(),psimintot,psimaxtot);
+   if (psifractot>0) printf(" (psimax-psi)/range=%-g",psifractot);
+   printf("\n");
+  }
+  if (psiminbkg>=0)
+  {
+   printf(" For the off-source %-s psimin=%-g psimax=%-g",text.Data(),psiminbkg,psimaxbkg);
+   if (psifracbkg>0) printf(" (psimax-psi)/range=%-g",psifracbkg);
+   printf("\n");
+  }
+  if (psiminrat>=0)
+  {
+   if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks psimin= %-g psimax= %-g",psiminrat,psimaxrat);
+   if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks psimin= %-g psimax=%-g",psiminrat,psimaxrat);
+   if (psifracrat>0) printf(" (psimax-psi)/range=%-g",psifracrat);
+   printf("\n");
+  }
+ }
 
  if (nr>=0)
  {
-  cout << " *** P-values of the observed on-source and off-source psi values ***" << endl;
-  if (nrxtot>0) cout << " For the on-source  stacked patches : P-value = " << pvaluetot << " Used number of randomisations : " << nrxtot << endl;
-  if (nrxbkg>0) cout << " For the off-source stacked patches : P-value = " << pvaluebkg << " Used number of randomisations : " << nrxbkg << endl;
-  if (nrxrat>0) cout << " For the on/off source event rate Bayesian Blocks : P-value = " << pvaluerat << " Used number of randomisations : " << nrxrat << endl;
+  printf(" *** P-values of the observed on-source and off-source psi values *** \n");
+  if (nrxtot>0) printf(" For the on-source  %-s P-value=%-g Used number of randomisations: %-g \n",text.Data(),pvaluetot,nrxtot);
+  if (nrxbkg>0) printf(" For the off-source %-s P-value=%-g Used number of randomisations: %-g \n",text.Data(),pvaluebkg,nrxbkg);
+  if (nrxrat>0)
+  {
+   if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks : P-value=%-g Used number of randomisations: %-g \n",pvaluerat,nrxrat);
+   if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks : P-value=%-g Used number of randomisations: %-g \n",pvaluerat,nrxrat);
+  }
  }
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -18166,19 +18626,30 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
 //
 // Input arguments :
 // -----------------
-// type : "time"   --> Provide statistics for the observed arrival times
-//                     This will investigate the deviation from a uniform background time spectrum 
-//        "BBtime" --> Provide statistics for the Bayesian blocks corresponding to the observed arrival times
-//                     This will investigate the deviation from a uniform event rate
-//        "BBrat"  --> Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
-//                     corresponding to the observed arrival times.
-//                     This will investigate the relative deviation in event rate.
-//        "angle"  --> Provide statistics for the observed opening angles
-//                     This will investigate the deviation from a isotropic background angular spectrum 
-//        "cosa"   --> Provide statistics for the cosine of the observed opening angles
-//                     This will investigate the deviation from a uniform background cos(angle) spectrum 
-//        "dt"     --> Provide statistics for the time intervals between the observed arrival times
-//                     This will investigate the deviation from dt spectrum expected from Poisson statistics
+// type : "time"    --> Provide statistics for the observed arrival times
+//                      This will investigate the deviation from a uniform background time spectrum 
+//        "BBtime"  --> Provide statistics for the Bayesian blocks corresponding to the observed arrival times
+//                      This will investigate the deviation from a uniform event rate
+//        "BBtimeN" --> Provide statistics for the Bayesian blocks corresponding to the observed arrival times,
+//                      normalized to a single time window.
+//                      This will investigate the deviation from a uniform event rate.
+//        "BBrat"   --> Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
+//                      corresponding to the observed arrival times.
+//                      This will investigate the relative deviation in event rate.
+//        "angle"   --> Provide statistics for the observed opening angles
+//                      This will investigate the deviation from a isotropic background angular spectrum 
+//        "cosa"    --> Provide statistics for the cosine of the observed opening angles
+//                      This will investigate the deviation from a uniform background cos(angle) spectrum 
+//        "BBcosa"  --> Provide statistics for the Bayesian blocks corresponding to the cosine of the observed opening angles.
+//                      This will investigate the deviation from a uniform distribution.
+//        "BBcosaN" --> Provide statistics for the Bayesian blocks corresponding to the cosine of the observed opening angles,
+//                      normalized to a single patch.
+//                      This will investigate the deviation from a uniform distribution.
+//        "BBrac"   --> Provide statistics for the normalized On-source/Off-source ratio of the Bayesian blocks
+//                      corresponding to the cosine of the observed opening angles.
+//                      This will investigate the relative deviation from a uniform distribution.
+//        "dt"      --> Provide statistics for the time intervals between the observed arrival times
+//                      This will investigate the deviation from dt spectrum expected from Poisson statistics
 // ndt  : The step count to arrive at the required consecutive entry to perform the dt statistics.
 //        Specifying "ndt=1" will provide the statistics of dt intervals between each consecutive event,
 //        i.e. time intervals between the events (1,2), (2,3), (3,4) etc.
@@ -18194,10 +18665,14 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
 
  TString text="none";
  if (type=="time") text="arrival time";
- if (type=="BBtime") text="Bayesian Block event rate";
- if (type=="BBrat") text="normalized On-source/Off-source Bayesian Block event rate ratio";
+ if (type=="BBtime") text="stacked Bayesian Block event rate";
+ if (type=="BBtimeN") text="per time window normalized Bayesian Block event rate";
+ if (type=="BBrat") text="per time window normalized On-source/Off-source Bayesian Block event rate ratio";
  if (type=="angle") text="opening angle";
  if (type=="cosa") text="cos(opening angle)";
+ if (type=="BBcosa") text="stacked Bayesian Block cos(opening angle)";
+ if (type=="BBcosaN") text="per patch normalized Bayesian Block cos(opening angle)";
+ if (type=="BBrac") text="per patch normalized On-source/Off-source Bayesian Block cos(opening angle) ratio";
  if (type=="dt") text="arrival time interval";
 
  if (zcor)
@@ -18206,15 +18681,14 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
   text.ReplaceAll("event rate","redshift corrected event rate");
  }
 
- cout << endl; 
  if (text=="none")
  {
-  cout << " *" << ClassName() << "::GetBurstChi2Statistics* Unknown statistics type : " << type << endl;
+  printf("\n *%-s::GetBurstChi2Statistics* Unknown statistics type : %-s \n",ClassName(),type.Data());
   return;
  }
  else
  {
-  cout << " *" << ClassName() << "::GetBurstChi2Statistics* Analysis of " << text << " statistics" << endl;
+  printf("\n *%-s::GetBurstChi2Statistics* Analysis of %-s statistics \n",ClassName(),text.Data());
  }
 
  TH1* tot=0;
@@ -18256,17 +18730,33 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
  /////////////////////////////////////////////
  // Event rate histo Chi-squared statistics //
  /////////////////////////////////////////////
- if (type=="BBtime")
+ if (type.Contains("BBtime"))
  {
   if (!zcor)
   {
-   tot=(TH1*)fBurstHistos.FindObject("hOnBBt");
-   bkg=(TH1*)fBurstHistos.FindObject("hOffBBt");
+   if (!type.Contains("N"))
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBt");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBt");
+   }
+   else
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBtN");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBtN");
+   }
   }
   else
   {
-   tot=(TH1*)fBurstHistos.FindObject("hOnBBzt");
-   bkg=(TH1*)fBurstHistos.FindObject("hOffBBzt");
+   if (!type.Contains("N"))
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBzt");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBzt");
+   }
+   else
+   {
+    tot=(TH1*)fBurstHistos.FindObject("hOnBBztN");
+    bkg=(TH1*)fBurstHistos.FindObject("hOffBBztN");
+   }
   }
 
   if (!tot) printf(" === No on source data available === \n");
@@ -18285,11 +18775,11 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
  {
   if (!zcor)
   {
-   rat=(TH1*)fBurstHistos.FindObject("hRatUBBt");
+   rat=(TH1*)fBurstHistos.FindObject("hRatUBBtN");
   }
   else
   {
-   rat=(TH1*)fBurstHistos.FindObject("hRatUBBzt");
+   rat=(TH1*)fBurstHistos.FindObject("hRatUBBztN");
   }
 
   if (!rat)
@@ -18336,6 +18826,47 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
   if (bkg) chibkg=math.Chi2Value(bkg,0,0,&ndfbkg);
  }
 
+ /////////////////////////////////////////////////////
+ // BB of cos(opening angle) Chi-squared statistics //
+ /////////////////////////////////////////////////////
+ if (type.Contains("BBcosa"))
+ {
+  if (!type.Contains("N"))
+  {
+   tot=(TH1*)fBurstHistos.FindObject("hOnBBa");
+   bkg=(TH1*)fBurstHistos.FindObject("hOffBBa");
+  }
+  else
+  {
+   tot=(TH1*)fBurstHistos.FindObject("hOnBBaN");
+   bkg=(TH1*)fBurstHistos.FindObject("hOffBBaN");
+  }
+
+  if (!tot) printf(" === No on source data available === \n");
+  if (!bkg) printf(" === No off source data available === \n");
+
+  if (!tot && !bkg) return;
+
+  if (tot) chitot=math.Chi2Value(tot,0,0,&ndftot);
+  if (bkg) chibkg=math.Chi2Value(bkg,0,0,&ndfbkg);
+ }
+
+ /////////////////////////////////////////////////////////////////////////////
+ // On-source/Off-source BB cos(opening angle) ratio Chi-squared statistics //
+ /////////////////////////////////////////////////////////////////////////////
+ if (type=="BBrac")
+ {
+  rat=(TH1*)fBurstHistos.FindObject("hRatUBBaN");
+
+  if (!rat)
+  {
+   printf(" === No data available === \n");
+   return;
+  }
+
+  chirat=math.Chi2Value(rat,0,0,&ndfrat);
+ }
+
  //////////////////////////////////////////////////
  // Arrival time interval Chi-squared statistics //
  //////////////////////////////////////////////////
@@ -18362,11 +18893,15 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
 
  // Listing of the statistics results
  Float_t chidif=chitot-chibkg;
- cout << " *** Observed Chi-squared values for the hypothesis of no burst signal ***" << endl;
- if (chitot>0) cout << " For the on-source  stacked patches : chi2 = " << chitot << " ndf = " << ndftot << endl;
- if (chibkg>0) cout << " For the off-source stacked patches : chi2 = " << chibkg << " ndf = " << ndfbkg << endl;
- if (chitot>0 && chibkg>0) cout << " --> Difference between observed on-source and off-source chi2 values : " << chidif << endl;
- if (chirat>0) cout << " For the on/off source event rate Bayesian Blocks : chi2 = " << chirat << " ndf = " << ndfrat << endl;
+ printf(" *** Observed Chi-squared values for the hypothesis of no burst signal *** \n");
+ if (chitot>0) printf(" For the on-source  stacked patches : chi2=%-g ndf=%-i \n",chitot,ndftot);
+ if (chibkg>0) printf(" For the off-source stacked patches : chi2=%-g ndf=%-i \n",chibkg,ndfbkg);
+ if (chitot>0 && chibkg>0) printf(" --> Difference between observed on-source and off-source chi2 values : %-g \n",chidif);
+ if (chirat>0)
+ {
+  if (type=="BBrat") printf(" For the on/off source event rate Bayesian Blocks : chi2=%-g ndf=%-i \n",chirat,ndfrat);
+  if (type=="BBrac") printf(" For the on/off source cos(opening angle) Bayesian Blocks : chi2=%-g ndf=%-i \n",chirat,ndfrat);
+ }
 
  Float_t ptot=-1;
  Float_t sigmatot=-1;
@@ -18391,10 +18926,14 @@ void NcAstrolab::GetBurstChi2Statistics(TString type,Int_t ndt,Bool_t zcor)
   sigmarat=math.Chi2Pvalue(chirat,ndfrat,0,1);
  }
 
- cout << " *** P-values of the observed on-source and off-source chi2 values ***" << endl;
- if (ptot>=0) cout << " For the on-source  stacked patches : P-value = " << ptot << " (" << sigmatot << " sigma)" << endl;
- if (pbkg>=0) cout << " For the off-source stacked patches : P-value = " << pbkg << " (" << sigmabkg << " sigma)" << endl;
- if (prat>=0) cout << " For the on/off source event rate Bayesian Blocks : P-value = " << prat << " (" << sigmarat << " sigma)" << endl;
+ printf(" *** P-values of the observed on-source and off-source chi2 values *** \n");
+ if (ptot>=0) printf(" For the on-source  stacked patches : P-value=%-g (sigma=%-g) \n",ptot,sigmatot);
+ if (pbkg>=0) printf(" For the off-source stacked patches : P-value=%-g (sigma=%-g) \n",pbkg,sigmabkg);
+ if (prat>=0)
+ {
+  if (type=="BBrat") printf(" For the on/off source event rate Bayesian Blocks : P-value=%-g (sigma=%-g) \n ",prat,sigmarat);
+  if (type=="BBrac") printf(" For the on/off source cos(opening angle) Bayesian Blocks : P-value=%-g (sigma=%-g) \n ",prat,sigmarat);
+ }
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::GetBurstDtDistributions(Int_t ndt,TH1F& hisdtOn,TF1& pdfdtOn,TH1F& hisdtOff,TF1& pdfdtOff,Bool_t zcor)

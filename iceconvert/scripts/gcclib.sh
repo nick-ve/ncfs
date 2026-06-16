@@ -12,12 +12,12 @@ lib=iceconvert.so
 ### The option string for GCC compilation of the .c code
 ### For the GCC ROOT loadable shared lib the strict requirements are
 ### dropped to avoid many warnings from the rootcint generated code
-gcccomp="-fPIC -c -g0 -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
+gcccomp="-fPIC -c -g0 -Wall -Wno-long-long -Wno-format-truncation -Wno-format-overflow -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include"
 #
 ### The option string for GCC shared lib compilation and linking ***
 ### For the GCC ROOT loadable shared lib the strict requirements are ***
 ### dropped to avoid many warnings from the rootcint generated code ***
-gccroot="-fPIC -shared -g0 -ansi -Wall -Wno-long-long -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include -o $lib"
+gccroot="-fPIC -shared -g0 -ansi -Wall -Wno-long-long -Wno-format-truncation -Wno-format-overflow -I$NCFS/ncfspack/source -I$NCFS/icepack/source -I$ROOTSYS/include -o $lib"
 #
 echo "lib = " $lib
 echo "ROOTSYS = " $ROOTSYS
@@ -29,7 +29,7 @@ echo "gccroot = " $gccroot
 cd $NCFS/iceconvert/source
 #
 ### Create the dictionary files
-rootcint -f iceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
+rootcling -f iceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 gcc $gcccomp *.c   

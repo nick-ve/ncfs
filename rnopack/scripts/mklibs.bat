@@ -76,7 +76,7 @@ goto end
 echo *** Creation of ROOT loadable export libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint rnopackdict.cxx -c -I%NCFS%\ncfspack\source ICEHeaders.h ICELinkDef.h
+rootcling rnopackdict.cxx -c -I%NCFS%\ncfspack\source ICEHeaders.h ICELinkDef.h
 rem --- Compilation step ---
 cl %mscomp% *.cxx
 rem --- Creation of the export LIB ---
@@ -97,7 +97,7 @@ goto root_clean
 echo *** Creation of ROOT loadable full version libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint rnopackdict.cxx -c -I%NCFS%\ncfspack\source RNOHeaders.h RNOLinkDef.h
+rootcling rnopackdict.cxx -c -I%NCFS%\ncfspack\source RNOHeaders.h RNOLinkDef.h
 rem --- Creation of the DLL ---
 cl %msdll% *.cxx /link %mslink% /OUT:rnopack.dll
 rem --- Creation of the full version LIB ---

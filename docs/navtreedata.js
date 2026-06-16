@@ -77,5 +77,6 @@ var NAVTREEINDEX =
 "df/d92/class_nc_random.html#a7073af944d14ff73ef923df73a4bea34"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronization';
-var SYNCOFFMSG = 'click to enable panel synchronization';
+const SYNCONMSG = 'click to disable panel synchronization';
+const SYNCOFFMSG = 'click to enable panel synchronization';
+const LISTOFALLMEMBERS = 'List of all members';

@@ -23,7 +23,7 @@ echo "alpharoot = " $alpharoot
 cd $NCFS/ncfspack/source
 #
 ### Create the dictionary files
-rootcint -f ncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
+rootcling -f ncfspackdict.cxx -c -I$CFITSIO NCFSHeaders.h NCFSLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 cxx $alpharoot *.cxx   

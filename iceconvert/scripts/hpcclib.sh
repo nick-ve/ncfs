@@ -26,7 +26,7 @@ echo "hproot = " $hproot
 cd $NCFS/iceconvert/source
 #
 ### Create the dictionary files
-rootcint -f iceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
+rootcling -f iceconvertdict.cxx -c -p -I$NCFS/ncfspack/source -I$NCFS/icepack/source ICEConvHeaders.h ICEConvLinkDef.h
 # 
 ### Compile and create the ROOT loadable shared library
 CC $hpcomp *.c   

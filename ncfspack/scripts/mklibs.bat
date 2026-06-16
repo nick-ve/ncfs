@@ -78,7 +78,7 @@ goto end
 echo *** Creation of ROOT loadable export libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint ncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
+rootcling ncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
 rem --- Compilation step ---
 cl %mscomp% *.cxx
 rem --- Creation of the export LIB ---
@@ -103,7 +103,7 @@ goto end
 echo *** Creation of ROOT loadable full version libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint ncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
+rootcling ncfspackdict.cxx -c /I%CFITSIO% NCFSHeaders.h NCFSLinkDef.h
 rem --- Creation of the DLL ---
 cl %msdll% *.cxx /link %mslink% /OUT:ncfspack.dll
 rem --- Creation of the full version LIB ---

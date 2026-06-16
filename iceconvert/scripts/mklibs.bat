@@ -78,7 +78,7 @@ echo *** Creation of ROOT loadable export libraries
 echo.
 cl %msc% *.c
 rem --- Creation of ROOT dictionary ---
-rootcint iceconvertdict.cxx -c -p -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
+rootcling iceconvertdict.cxx -c -p -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
 rem --- Compilation step ---
 cl %mscomp% *.cxx
 rem --- Creation of the export LIB ---
@@ -99,7 +99,7 @@ goto root_clean
 echo *** Creation of ROOT loadable full version libraries
 echo.
 rem --- Creation of ROOT dictionary ---
-rootcint iceconvertdict.cxx -c -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
+rootcling iceconvertdict.cxx -c -I%NCFS%\ncfspack\source -I%NCFS%\icepack\source ICEConvHeaders.h ICEConvLinkDef.h
 rem --- Creation of the DLL ---
 cl %msdll% *.c *.cxx /link %mslink% /OUT:iceconvert.dll
 rem --- Creation of the full version LIB ---
