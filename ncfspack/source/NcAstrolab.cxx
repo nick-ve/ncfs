@@ -180,7 +180,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 16, 2026  10:05
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 25, 2026  14:43
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -14228,7 +14228,6 @@ void NcAstrolab::GenBurstSignals()
 
  Int_t fNgrbs=GetNsignals(0);
 
- TH1* hSigmaReco=(TH1*)fBurstHistos.FindObject("hSigmaReco");
  TH1* hSigE=(TH1*)fBurstHistos.FindObject("hSigE");
  TH1* hSigEzcor=(TH1*)fBurstHistos.FindObject("hSigEzcor");
  TH2* hAeffProfile=(TH2*)fBurstHistos.FindObject("hAeffProfile");
@@ -14508,8 +14507,6 @@ void NcAstrolab::GenBurstSignals()
 
      if (sigmareco<fAngresmin || sigmareco>fAngresmax) continue;
 
-     if (hSigmaReco) hSigmaReco->Fill(sigmareco);
-
      sigmatot=-1;
      if (fSumsigmas==-1) sigmatot=sigmareco;
      if (fSumsigmas==0) sigmatot=sigmagrb;
@@ -14615,7 +14612,7 @@ void NcAstrolab::GenBurstSignals()
     }
     nmu=nbinsx; // nmu will loop over all the energy bins for this GRB at the corresponding theta position
 
-    // Obtain the GRB position in local coordinates at the signal detection time
+    // Obtain the GRB position in local coordinates at the mean signal detection time
     if (!fInburst) // Neutrino and gamma production decoupled
     {
      dt=fDtnu;
@@ -14744,8 +14741,6 @@ void NcAstrolab::GenBurstSignals()
 
      if (sigmareco<fAngresmin || sigmareco>fAngresmax) continue;
 
-     if (hSigmaReco) hSigmaReco->Fill(sigmareco);
-
      SmearPosition(rmu,sigmareco);
 
      // Determine angular difference w.r.t. the presumed GRB position
@@ -14766,7 +14761,10 @@ void NcAstrolab::GenBurstSignals()
 
      if (fDatype>=0 && dang>dangmax) continue;
 
+     if (dt<fTmin || dt>fTmax) continue;
+
      if (dangmax>dangmaxon) dangmaxon=dangmax;
+
      fBurstOnReco.Enter(zgrb,sigmagrb,sigmareco,sigmatot);
      fBurstOnMatch.Enter(E,dt,dang,dt/(zgrb+1.));
      fBurstSigReco.Enter(zgrb,sigmagrb,sigmareco,sigmatot);
@@ -17025,6 +17023,8 @@ void NcAstrolab::BurstCompensate(Int_t& nmugrb)
  Float_t fAngresmax=fBurstParameters->GetSignal("Angresmax");
  Float_t fAngresfix=fBurstParameters->GetSignal("Angresfix");
  Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
+ Float_t fTmin=fBurstParameters->GetSignal("Tmin");
+ Float_t fTmax=fBurstParameters->GetSignal("Tmax");
 
  // Deactivate redshift correction for source signal events from archival observed data
  if (!fPDFsigE)
@@ -17174,6 +17174,8 @@ void NcAstrolab::BurstCompensate(Int_t& nmugrb)
   }
 
   if (fDatype>=0 && dang>dangmax) continue;
+
+  if (dt<fTmin || dt>fTmax) continue;
 
   fBurstOnReco.Enter(zgrb,sigmagrb,sigmareco,sigmatot);
   fBurstOnMatch.Enter(E,dt,dang,dt/(zgrb+1.));

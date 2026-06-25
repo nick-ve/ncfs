@@ -55,7 +55,7 @@
 // improvements or extensions that are fully backward compatible.
 //
 //--- Author: Nick van Eijndhoven 24-sep-2009 NCFS
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 16, 2026  22:26
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 25, 2026  16:51
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -74,9 +74,9 @@ NcVersion::NcVersion() : TObject()
 ~~~
 **/
 
- fVersion="6.7";
+ fVersion="6.8";
  fRev="Branch: master";
- fDate="UTC June 16, 2026  22:26";
+ fDate="UTC June 25, 2026  16:51";
 }
 ///////////////////////////////////////////////////////////////////////////
 NcVersion::~NcVersion()
