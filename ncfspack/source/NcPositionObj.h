@@ -12,11 +12,12 @@
 class NcPositionObj : public TObject,public NcPosition
 {
  public:
-  NcPositionObj();                        // Default constructor
-  NcPositionObj(NcPosition& p);           // Constructor
-  virtual ~NcPositionObj();               // Destructor
-  NcPositionObj(const NcPositionObj& p);  // Copy constructor
+  NcPositionObj();                                  // Default constructor
+  NcPositionObj(NcPosition& p);                     // Constructor
+  virtual ~NcPositionObj();                         // Destructor
+  NcPositionObj(const NcPositionObj& p);            // Copy constructor
+  NcPositionObj& operator=(const NcPositionObj& p); // Set all attributes equal to those of NcPositionObj p
 
- ClassDef(NcPositionObj,1) // Handling of positions in various reference frames.
+ ClassDef(NcPositionObj,2) // Handling of positions in various reference frames.
 };
 #endif

@@ -13,6 +13,7 @@ var class_nc_position =
     [ "GetPositionErrors", "d2/d24/class_nc_position.html#af4cdf31fda58e116e534ae1909e1dfd5", null ],
     [ "GetTimestamp", "d2/d24/class_nc_position.html#ad69ffa1c3e230a992dcb0aa25cc0039c", null ],
     [ "GetUnitScale", "d2/d24/class_nc_position.html#a86061c4d184558219b13d8b42c12c6ed", null ],
+    [ "operator=", "d2/d24/class_nc_position.html#a71daf7fe99d11d23a8eb3e911454c925", null ],
     [ "RemoveTimestamp", "d2/d24/class_nc_position.html#a3c6e43700f180983bc8d43df7f25e1c4", null ],
     [ "ResetPosition", "d2/d24/class_nc_position.html#ad27e7e520e7d57c677b6f94b95d9f183", null ],
     [ "SetPosition", "d2/d24/class_nc_position.html#abf71301d2855a83c7a877c8453ba1fc2", null ],

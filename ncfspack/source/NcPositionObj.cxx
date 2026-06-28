@@ -67,7 +67,7 @@
 // ssum.Data();
 //
 //--- Author: Nick van Eijndhoven 18-oct-1999 Utrecht University
-//- Modified: NvE $Date: 2010-03-19 11:10:02 +0100 (Fri, 19 Mar 2010) $ NCFS
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC June 26, 2026  06:41
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -113,5 +113,23 @@ NcPositionObj::NcPositionObj(const NcPositionObj& p) : TObject(p),NcPosition(p)
 // Copy constructor.
 ~~~
 **/
+}
+///////////////////////////////////////////////////////////////////////////
+NcPositionObj& NcPositionObj::operator=(const NcPositionObj& p)
+{
+/**
+~~~
+// Set all attributes equal to those of NcPositionObj p
+~~~
+**/
+
+ fScale=p.fScale;
+ fTstamp=0;
+ if (p.fTstamp) fTstamp=new NcTimestamp(*(p.fTstamp));
+
+ Nc3Vector v=(Nc3Vector)p; 
+ SetPosition(v);
+
+ return *this;
 }
 ///////////////////////////////////////////////////////////////////////////

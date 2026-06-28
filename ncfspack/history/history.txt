@@ -1614,3 +1614,5 @@
 25-jun-2026 NvE Test on time window limits introduced for the generation of signal events in the memberfunctions GenBurstSignals() and BurstCompensate()
                 of class NcAstrolab, such that when source signal neutrinos are generated outside the time window, they will not be recorded. 
                 The version indicator in NcVersion has been updated to 6.8. 
+28-jun-2026 NvE Operator "=" introduced in classes NcPosition, NcPositionObj and NcTimestamp to prevent complains from a new(er) gcc compiler version.
+                The version indicator in NcVersion has been updated to 6.8a. 

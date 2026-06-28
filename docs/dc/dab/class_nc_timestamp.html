@@ -482,7 +482,7 @@ Inheritance diagram for NcTimestamp:</div>
 <div class="line"><span class="comment">// Double_t epoch=t.GetJE(mjdate,&quot;mjd&quot;);</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">//--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University</span></div>
-<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 29, 2024  07:15Z</span></div>
+<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 28, 2026  11:10</span></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00019">19</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 </div><table class="memberdecls">
@@ -545,6 +545,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7cd0746082421edcb19536b658b92fd7" id="r_a7cd0746082421edcb19536b658b92fd7"><td class="memItemLeft">Int_t&#160;</td><td class="memItemRight"><a class="el" href="#a7cd0746082421edcb19536b658b92fd7">GetUTCparameters</a> (Int_t mjd, Int_t &amp;leap, Double_t &amp;dut) const</td></tr>
 <tr class="memitem:a8b00f5a083e5142336e838205f56aa86" id="r_a8b00f5a083e5142336e838205f56aa86"><td class="memItemLeft">Bool_t&#160;</td><td class="memItemRight"><a class="el" href="#a8b00f5a083e5142336e838205f56aa86">IsUT1</a> () const</td></tr>
 <tr class="memitem:ab8512bbfdb87e83cd469905cf6e37e44" id="r_ab8512bbfdb87e83cd469905cf6e37e44"><td class="memItemLeft">TTree *&#160;</td><td class="memItemRight"><a class="el" href="#ab8512bbfdb87e83cd469905cf6e37e44">LoadUTCparameterFiles</a> (TString leapfile=&quot;$(NCFS)/IERS/leap.txt&quot;, TString dutfile=&quot;$(NCFS)/IERS/dut.txt&quot;)</td></tr>
+<tr class="memitem:a5e466f28b78f3067323d055bed8bc4d7" id="r_a5e466f28b78f3067323d055bed8bc4d7"><td class="memItemLeft"><a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a5e466f28b78f3067323d055bed8bc4d7">operator=</a> (const <a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> &amp;t)</td></tr>
 <tr class="memitem:aac993f438111c7555b810343680e2ced" id="r_aac993f438111c7555b810343680e2ced"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aac993f438111c7555b810343680e2ced">PrintTime</a> (Double_t h, Int_t ndig=1) const</td></tr>
 <tr class="memitem:a991c853e4960cc57d46de9953440c4cb" id="r_a991c853e4960cc57d46de9953440c4cb"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a991c853e4960cc57d46de9953440c4cb">SetEpoch</a> (Double_t e, TString mode, TString utc=&quot;U&quot;, Int_t leap=0, Double_t dut=0)</td></tr>
 <tr class="memitem:ac79e803d83eb1da6c2a828d083d7c973" id="r_ac79e803d83eb1da6c2a828d083d7c973"><td class="memItemLeft">Int_t&#160;</td><td class="memItemRight"><a class="el" href="#ac79e803d83eb1da6c2a828d083d7c973">SetGPS</a> (Int_t w, Int_t dow, Int_t sod, Int_t ns, Int_t ps, TString utc, Int_t leap, Double_t dut=0, Int_t icycle=0)</td></tr>
@@ -722,7 +723,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The UTC parameters (i.e. Leap Seconds and dut=UT1-UTC) will be updated accordingly.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03189">3189</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03229">3229</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -776,7 +777,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : ps=0 is the default value.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03158">3158</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03198">3198</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -821,7 +822,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is utcpar=kTRUE.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03317">3317</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03357">3357</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -892,7 +893,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are ps=0 and utcpar=kTRUE.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03225">3225</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03265">3265</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -919,7 +920,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The UTC parameters (i.e. Leap Seconds and dut=UT1-UTC) will be updated accordingly.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03207">3207</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03247">3247</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -964,7 +965,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is utcpar=kTRUE.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03353">3353</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03393">3393</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1131,7 +1132,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Since all calculations are based on the JD, the TTimeStamp limitations</span></div>
 <div class="line"><span class="comment">// do not apply here.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04997">4997</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05037">5037</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1183,7 +1184,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00881">881</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00921">921</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1230,7 +1231,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//    or TTimeStamp.</span></div>
 <div class="line"><span class="comment">// 2) This facility can also be used to convert degrees in arcminutes etc...</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00988">988</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01028">1028</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1288,7 +1289,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00948">948</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00988">988</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1334,7 +1335,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00916">916</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00956">956</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1376,7 +1377,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//    or TTimeStamp.</span></div>
 <div class="line"><span class="comment">// 2) This facility can also be used to convert ddd:mm:ss.s into fractional degrees.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01055">1055</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01095">1095</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1429,7 +1430,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01020">1020</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01060">1060</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1470,7 +1471,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : In case the (M/T)JD falls outside the TTimeStamp range,</span></div>
 <div class="line"><span class="comment">//        the yy-mm-dd info will be omitted.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00462">462</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00502">502</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1499,7 +1500,7 @@ Private Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction for calculation and setting of the Julian date/time parameters</span></div>
 <div class="line"><span class="comment">// corresponding to the current TTimeStamp UTC date/time parameters.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01129">1129</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01169">1169</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1529,7 +1530,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// corresponding to the current NcTimestamp parameters.</span></div>
 <div class="line"><span class="comment">// A separate MJD counting system is recorded for the TAI timing system. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02098">2098</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02138">2138</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1550,7 +1551,7 @@ Private Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Provide the Besselian Epoch (BE) corresponding to the currently stored</span></div>
 <div class="line"><span class="comment">// NcTimestamp date/time parameters.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01511">1511</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01551">1551</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1594,7 +1595,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00842">842</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00882">882</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1676,7 +1677,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 2) In case the MJD falls outside the TTimeStamp range, the date info will be omitted from the</span></div>
 <div class="line"><span class="comment">//    combined date/time string and the (optional) date string will contain &quot;---&quot;. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05633">5633</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05673">5673</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1761,7 +1762,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent input the time difference and the return argument will be set to 0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03541">3541</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03581">3581</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1856,7 +1857,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent input the time difference will be set to 0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03759">3759</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03799">3799</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -1941,7 +1942,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent input the time difference and the return argument will be set to 0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03386">3386</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03426">3426</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2036,7 +2037,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent input the time difference will be set to 0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03593">3593</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03633">3633</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2060,7 +2061,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// mode = &quot;B&quot; ==&gt; Besselian epoch</span></div>
 <div class="line"><span class="comment">//        &quot;J&quot; ==&gt; Julian epoch</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05615">5615</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05655">5655</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2094,7 +2095,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// </span></div>
 <div class="line"><span class="comment">// Since GMST is based on the MJD, the TTimeStamp limitations do not apply here.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04422">4422</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04462">4462</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2117,7 +2118,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// This facility is based on the MJD, so the TTimeStamp limitations</span></div>
 <div class="line"><span class="comment">// do not apply here.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04402">4402</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04442">4442</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2160,7 +2161,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// This facility is based on the MJD, so the TTimeStamp limitations</span></div>
 <div class="line"><span class="comment">// do not apply here.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04350">4350</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04390">4390</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2182,7 +2183,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In case no database TTree exists the pointer value 0 will be returned.</span></div>
 <div class="line"><span class="comment">// For details please refer to the member function LoadUTCparameterFiles().</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03145">3145</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03185">3185</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2206,7 +2207,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Due to computer accuracy the ns precision may be lost.</span></div>
 <div class="line"><span class="comment">// It is advised to use the (jd,sec,ns) getter instead.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01475">1475</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01515">1515</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2236,7 +2237,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is mode=&quot;J&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04936">4936</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04976">4976</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2271,7 +2272,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// sec : The number of seconds elapsed within the JD.</span></div>
 <div class="line"><span class="comment">// ns  : The remaining fractional number of seconds (in ns) elapsed within the JD.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01449">1449</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01489">1489</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2346,7 +2347,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00668">668</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00708">708</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2367,7 +2368,7 @@ Private Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Provide the Julian Epoch (JE) corresponding to the currently stored</span></div>
 <div class="line"><span class="comment">// NcTimestamp date/time parameters.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01497">1497</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01537">1537</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2411,7 +2412,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00803">803</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00843">843</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2438,7 +2439,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case a hh:mm:ss.sss format is needed, please use the Convert() facility. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04571">4571</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04611">4611</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2472,7 +2473,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// </span></div>
 <div class="line"><span class="comment">// In case a hh:mm:ss format is needed, please use the Convert() facility. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04495">4495</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04535">4535</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2499,7 +2500,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case a hh:mm:ss format is needed, please use the Convert() facility. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04539">4539</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04579">4579</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2526,7 +2527,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case a hh:mm:ss format is needed, please use the Convert() facility. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04463">4463</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04503">4503</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2550,7 +2551,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Due to computer accuracy the ns precision may be lost.</span></div>
 <div class="line"><span class="comment">// It is advised to use the (mjd,sec,ns) getter instead.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01181">1181</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01221">1221</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2580,7 +2581,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is mode=&quot;J&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04959">4959</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04999">4999</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2615,7 +2616,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// sec : The number of seconds elapsed within the MJD.</span></div>
 <div class="line"><span class="comment">// ns  : The remaining fractional number of seconds (in ns) elapsed within the MJD.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01156">1156</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01196">1196</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2690,7 +2691,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00717">717</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00757">757</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2713,7 +2714,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// experiments.</span></div>
 <div class="line"><span class="comment">// Note : For additional accuracy see also GetPs().</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02693">2693</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02733">2733</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2735,7 +2736,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// This function allows time of flight analysis for particle physics</span></div>
 <div class="line"><span class="comment">// experiments.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02723">2723</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02763">2763</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2771,7 +2772,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 2) In case tmjd=kFALSE and the current timestamp lies before the TAI start epoch,</span></div>
 <div class="line"><span class="comment">//    a negative value is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01294">1294</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01334">1334</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2830,7 +2831,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 2) In case tmjd=kFALSE and the current timestamp lies before the TAI start epoch,</span></div>
 <div class="line"><span class="comment">//    a negative day count is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01245">1245</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01285">1285</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2892,7 +2893,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 3) This facility is based on the TAI day count, so the TTimeStamp limitations</span></div>
 <div class="line"><span class="comment">//    do not apply here.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01331">1331</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01371">1371</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2916,7 +2917,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Due to computer accuracy the ns precision may be lost.</span></div>
 <div class="line"><span class="comment">// It is advised to use the (tjd,sec,ns) getter instead.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01223">1223</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01263">1263</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2946,7 +2947,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is mode=&quot;J&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04978">4978</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05018">5018</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -2981,7 +2982,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// sec : The number of seconds elapsed within the TJD.</span></div>
 <div class="line"><span class="comment">// ns  : The remaining fractional number of seconds (in ns) elapsed within the TJD.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01203">1203</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01243">1243</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3056,7 +3057,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// please use the corresponding SET() memberfunctions of either NcTimestamp</span></div>
 <div class="line"><span class="comment">// or TTimeStamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00760">760</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00800">800</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3101,7 +3102,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Due to computer accuracy the ns precision may be lost.</span></div>
 <div class="line"><span class="comment">// For better precision it is advised to use the other date/time Get() facilities instead.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01389">1389</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01429">1429</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3123,7 +3124,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// This facility is based on the MJD, so the TTimeStamp limitations</span></div>
 <div class="line"><span class="comment">// do not apply here.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04331">4331</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04371">4371</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3164,7 +3165,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// This facility is based on the MJD, so the TTimeStamp limitations</span></div>
 <div class="line"><span class="comment">// do not apply here.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04308">4308</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04348">4348</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3200,11 +3201,11 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Notes :</span></div>
 <div class="line"><span class="comment">// -------</span></div>
 <div class="line"><span class="comment">// 1) For the return values 0 and -3 only the UTC (0) or UT1 (-3) time recording is available,</span></div>
-<div class="line"><span class="comment">//    depending on the input argument &quot;utc&quot;, as outlined above.</span></div>
+<div class="line"><span class="comment">//    as outlined above. This depends on the input argument &quot;utc&quot; that was used when the time was set.</span></div>
 <div class="line"><span class="comment">// 2) A return value of -2 or -3 indicates that the time which was entered via SetUT()</span></div>
 <div class="line"><span class="comment">//    or via one of the Julian Date facilities was actually UT1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02736">2736</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02776">2776</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3238,7 +3239,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In case the corresponding data could not be found, the return value is -1</span></div>
 <div class="line"><span class="comment">// and &quot;leap&quot; and &quot;dut&quot; are set to 0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02766">2766</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02806">2806</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3258,7 +3259,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Indicate whether the reference time is UT1 (kTRUE) or UTC (kFALSE).</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05900">5900</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05940">5940</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3325,7 +3326,27 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : In case of an error or inconsistency, no ROOT TTree will be created</span></div>
 <div class="line"><span class="comment">//        and the returned pointer will be zero.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02948">2948</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02988">2988</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a5e466f28b78f3067323d055bed8bc4d7" name="a5e466f28b78f3067323d055bed8bc4d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e466f28b78f3067323d055bed8bc4d7">&#9670;&#160;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> &amp; NcTimestamp::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>t</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Set all attributes equal to those of NcTimestamp t</span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l00462">462</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3360,7 +3381,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : The time info is printed without additional spaces or &quot;endline&quot;.</span></div>
 <div class="line"><span class="comment">//        This allows the print to be included in various composite output formats.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01087">1087</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01127">1127</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3449,7 +3470,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are utc=&quot;U&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05553">5553</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05593">5593</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3559,7 +3580,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 3) In case a date/time setting outside the range of the IERS information is required,</span></div>
 <div class="line"><span class="comment">//    the manual setting of &quot;leap&quot; and &quot;dut&quot; has to be invoked.  </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02490">2490</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02530">2530</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3663,7 +3684,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 3) In case a date/time setting outside the range of the IERS information is required,</span></div>
 <div class="line"><span class="comment">//    the manual setting of &quot;leap&quot; and &quot;dut&quot; has to be invoked.  </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02411">2411</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02451">2451</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3770,7 +3791,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are utc=&quot;U&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01834">1834</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01874">1874</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -3892,7 +3913,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are ps=0, utc=&quot;U&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01742">1742</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01782">1782</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4014,7 +4035,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// and then corrects the UT by subtracting the local time offset w.r.t. UT.</span></div>
 <div class="line"><span class="comment">// As such this facility is valid for all AD dates in the Gregorian calendar.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04861">4861</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04901">4901</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4129,7 +4150,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// and then corrects the UT by subtracting the local time offset w.r.t. UT.</span></div>
 <div class="line"><span class="comment">// As such this facility is valid for all AD dates in the Gregorian calendar.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04674">4674</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04714">4714</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4262,7 +4283,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// As such this facility is valid for all AD dates in the Gregorian</span></div>
 <div class="line"><span class="comment">// calendar with picosecond precision.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04603">4603</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04643">4643</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4365,7 +4386,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// and then corrects the UT by subtracting the local time offset w.r.t. UT.</span></div>
 <div class="line"><span class="comment">// As such this facility is valid for all AD dates in the Gregorian calendar.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04737">4737</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04777">4777</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4465,7 +4486,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// and then corrects the UT by subtracting the local time offset w.r.t. UT.</span></div>
 <div class="line"><span class="comment">// As such this facility is valid for all AD dates in the Gregorian calendar.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04798">4798</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04838">4838</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4572,7 +4593,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are utc=&quot;U&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01654">1654</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01694">1694</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4694,7 +4715,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The defaults are ps=0, utc=&quot;U&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01525">1525</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01565">1565</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4720,7 +4741,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 2) The ns fraction can also be entered directly via SetMJD() etc...</span></div>
 <div class="line"><span class="comment">// 3) For additional accuracy see SetPs().</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02676">2676</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02716">2716</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4745,7 +4766,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//    Outside that range no action is performed.</span></div>
 <div class="line"><span class="comment">// 2) The ps fraction can also be entered directly via SetMJD() etc...</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02707">2707</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02747">2747</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4768,7 +4789,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In case no database value of dUT=UT1-UTC is available,</span></div>
 <div class="line"><span class="comment">// the system clock time is used as the main (UTC) reference.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05870">5870</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l05910">5910</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4868,7 +4889,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//    This implies that for these earlier/later TAI values the TTimeStamp parameters</span></div>
 <div class="line"><span class="comment">//    do not match the TAI c.q. Julian parameters of NcTimestamp.  </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02332">2332</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02372">2372</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -4983,7 +5004,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//    This implies that for these earlier/later TAI values the TTimeStamp parameters</span></div>
 <div class="line"><span class="comment">//    do not match the TAI c.q. Julian parameters of NcTimestamp.  </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02225">2225</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02265">2265</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5082,7 +5103,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 3) In case a date/time setting outside the range of the IERS information is required,</span></div>
 <div class="line"><span class="comment">//    the manual setting of &quot;leap&quot; and &quot;dut&quot; has to be invoked.  </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02134">2134</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02174">2174</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5189,7 +5210,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are utc=&quot;U&quot;, leap=0, dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02009">2009</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02049">2049</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5311,7 +5332,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are ps=0, utc=&quot;U&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01923">1923</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l01963">1963</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5420,7 +5441,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 2) In case utc=&quot;A&quot; and no data files have been loaded, or no information is available,</span></div>
 <div class="line"><span class="comment">//    the utc=&quot;N&quot; mode will be invoked.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02566">2566</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02606">2606</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5550,7 +5571,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Subsequently the day and (sub)second parts are added to the NcTimestamp.</span></div>
 <div class="line"><span class="comment">// As such this facility is valid for all AD dates in the Gregorian calendar.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04211">4211</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04251">4251</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5667,7 +5688,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are utc=&quot;A&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03924">3924</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03964">3964</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5807,7 +5828,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// As such this facility is valid for all AD dates in the Gregorian</span></div>
 <div class="line"><span class="comment">// calendar with picosecond precision.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03831">3831</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03871">3871</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -5912,7 +5933,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are utc=&quot;A&quot;, leap=0 and dut=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l03998">3998</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04038">4038</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -6016,7 +6037,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : In case of incompatible argument(s) the current UT date/time will not be modified.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04088">4088</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l04128">4128</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -6108,7 +6129,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 3) A return value of -2 or -3 indicates that the time which was entered via SetUT()</span></div>
 <div class="line"><span class="comment">//    or via one of the Julian Date facilities was actually UT1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02818">2818</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html#l02858">2858</a> of file <a class="el" href="../../d6/d99/_nc_timestamp_8cxx_source.html">NcTimestamp.cxx</a>.</p>
 
 </div>
 </div>
@@ -6133,7 +6154,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00132">132</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00133">133</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6157,7 +6178,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00131">131</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00132">132</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6181,7 +6202,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00115">115</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00116">116</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6205,7 +6226,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00111">111</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00112">112</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6229,7 +6250,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00112">112</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00113">113</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6253,7 +6274,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00110">110</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00111">111</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6277,7 +6298,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00114">114</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00115">115</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6301,7 +6322,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00109">109</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00110">110</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6325,7 +6346,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00116">116</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00117">117</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6349,7 +6370,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00118">118</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00119">119</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6373,7 +6394,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00119">119</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00120">120</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6397,7 +6418,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00117">117</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00118">118</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6421,7 +6442,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00113">113</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00114">114</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>
@@ -6445,7 +6466,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00120">120</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html#l00121">121</a> of file <a class="el" href="../../d5/dbd/_nc_timestamp_8h_source.html">NcTimestamp.h</a>.</p>
 
 </div>
 </div>

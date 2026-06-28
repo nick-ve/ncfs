@@ -23,6 +23,7 @@ class NcTimestamp : public TTimeStamp
   NcTimestamp(TTimeStamp& t);                  // Constructor
   virtual ~NcTimestamp();                      // Destructor
   NcTimestamp(const NcTimestamp& t);           // Copy constructor
+  NcTimestamp& operator=(const NcTimestamp& t);// Set all attributes equal to those of NcTimestamp t
   void Date(Int_t mode=3,Double_t offset=0);   // Print date/time info
   Double_t GetJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns) const; // Julian Date from input args.
   Double_t GetMJD(Int_t y,Int_t m,Int_t d,Int_t hh,Int_t mm,Int_t ss,Int_t ns) const;// Modified JD from input args.
@@ -119,7 +120,7 @@ class NcTimestamp : public TTimeStamp
   Int_t fTps;      // Remaining fractional number of nanoseconds (in picoseconds) elapsed within the TAI day
   TTree* fUTCdata; // Internal tree to contain the daily leap second and UT-UTC values
 
- protected:
+//$$$$ protected:
   Int_t SetUTCparameters(TString utc,Int_t leap,Double_t dut); // Setting of the UTC parameters
 
  private:
@@ -131,6 +132,6 @@ class NcTimestamp : public TTimeStamp
   Int_t fCalcs;      // The TTimeStamp seconds counter value at Julian parameter calculation
   Int_t fCalcns;     // The TTimeStamp nanoseconds counter value at Julian parameter calculation
 
- ClassDef(NcTimestamp,17) // Handling of timestamps for (astro)particle physics research.
+ ClassDef(NcTimestamp,18) // Handling of timestamps for (astro)particle physics research.
 };
 #endif

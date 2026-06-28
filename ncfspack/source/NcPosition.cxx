@@ -84,7 +84,7 @@
 // q.GetPositionErrors(dloc,"sph","deg");
 //
 //--- Author: Nick van Eijndhoven 06-feb-1999 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:49Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC June 26, 2026  06:41
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -134,6 +134,24 @@ NcPosition::NcPosition(const NcPosition& p) : Nc3Vector(p)
  fScale=p.fScale;
  fTstamp=0;
  if (p.fTstamp) fTstamp=new NcTimestamp(*(p.fTstamp));
+}
+///////////////////////////////////////////////////////////////////////////
+NcPosition& NcPosition::operator=(const NcPosition& p)
+{
+/**
+~~~
+// Set all attributes equal to those of NcPosition p
+~~~
+**/
+
+ fScale=p.fScale;
+ fTstamp=0;
+ if (p.fTstamp) fTstamp=new NcTimestamp(*(p.fTstamp));
+
+ Nc3Vector v=(Nc3Vector)p; 
+ SetPosition(v);
+
+ return *this;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcPosition::SetPosition(Double_t* r,TString f,TString u)

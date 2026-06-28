@@ -363,7 +363,7 @@
 // Double_t epoch=t.GetJE(mjdate,"mjd");
 //
 //--- Author: Nick van Eijndhoven 28-jan-2005 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, October 29, 2024  07:15Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 28, 2026  11:10
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -457,6 +457,46 @@ NcTimestamp::NcTimestamp(const NcTimestamp& t) : TTimeStamp(t)
  fUTCdata=0;
  TTree* tx=t.fUTCdata;
  if (tx) fUTCdata=(TTree*)tx->Clone();
+}
+///////////////////////////////////////////////////////////////////////////
+NcTimestamp& NcTimestamp::operator=(const NcTimestamp& t)
+{
+/**
+~~~
+// Set all attributes equal to those of NcTimestamp t
+~~~
+**/
+
+ NcTimestamp ts(t);
+
+ fUTCdata=0;
+ TTree* tx=ts.fUTCdata;
+ if (tx) fUTCdata=(TTree*)tx->Clone();
+
+ Int_t mjd=0;
+ Int_t sec=0;
+ Int_t ns=0;
+ Int_t ps=0;
+ Int_t leap=0;
+ Double_t dut=0;
+
+ ts.GetMJD(mjd,sec,ns);
+ ps=ts.fJps;
+
+ Int_t flag=ts.GetUTCparameters(leap,dut);
+
+ TString utc="N";
+ if (flag==1) utc="M";
+ if (flag==-1) utc="A";
+ if (flag==-2) utc="U";
+ if (flag==-3) utc="U";
+
+ SetMJD(mjd,sec,ns,ps,utc,leap,dut);
+
+ // Correct for double setting of dut
+ if (utc=="A" || utc=="M") AddSec(-dut);
+
+ return *this;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcTimestamp::Date(Int_t mode,Double_t offset)
@@ -2751,7 +2791,7 @@ Int_t NcTimestamp::GetUTCparameters(Int_t& leap,Double_t& dut) const
 // Notes :
 // -------
 // 1) For the return values 0 and -3 only the UTC (0) or UT1 (-3) time recording is available,
-//    depending on the input argument "utc", as outlined above.
+//    as outlined above. This depends on the input argument "utc" that was used when the time was set.
 // 2) A return value of -2 or -3 indicates that the time which was entered via SetUT()
 //    or via one of the Julian Date facilities was actually UT1.
 ~~~

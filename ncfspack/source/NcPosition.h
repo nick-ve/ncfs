@@ -20,6 +20,7 @@ class NcPosition : public Nc3Vector
   NcPosition();                                         // Default constructor
   virtual ~NcPosition();                                // Destructor
   NcPosition(const NcPosition& p);                      // Copy constructor
+  NcPosition& operator=(const NcPosition& p);           // Set all attributes equal to those of NcPosition p
   void SetPosition(Double_t* r,TString f,TString u="rad");       // Store position r in frame f with ang units u
   void SetPosition(Double_t r1,Double_t r2,Double_t r3,TString f,TString u="rad"); // Store position r
   void GetPosition(Double_t* r,TString f,TString u="rad",Float_t s=-1) const; // Provide position r in frame f in ang units u
@@ -46,6 +47,6 @@ class NcPosition : public Nc3Vector
   Float_t fScale;       // The unit scale used for the position coordinates
   NcTimestamp* fTstamp; // The timestamp for this position
 
- ClassDef(NcPosition,1) // Handling of positions (with timestamps) in various reference frames.
+ ClassDef(NcPosition,2) // Handling of positions (with timestamps) in various reference frames.
 };
 #endif

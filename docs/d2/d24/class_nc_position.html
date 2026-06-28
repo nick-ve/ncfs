@@ -214,7 +214,7 @@ Inheritance diagram for NcPosition:</div>
 <div class="line"><span class="comment">// q.GetPositionErrors(dloc,&quot;sph&quot;,&quot;deg&quot;);</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">//--- Author: Nick van Eijndhoven 06-feb-1999 Utrecht University</span></div>
-<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, May 4, 2021  10:49Z</span></div>
+<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC June 26, 2026  06:41</span></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="../../d3/d02/_nc_position_8h_source.html#l00017">17</a> of file <a class="el" href="../../d3/d02/_nc_position_8h_source.html">NcPosition.h</a>.</p>
 </div><table class="memberdecls">
@@ -233,6 +233,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af4cdf31fda58e116e534ae1909e1dfd5" id="r_af4cdf31fda58e116e534ae1909e1dfd5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af4cdf31fda58e116e534ae1909e1dfd5">GetPositionErrors</a> (Float_t *e, TString f, TString u=&quot;rad&quot;, Float_t s=-1) const</td></tr>
 <tr class="memitem:ad69ffa1c3e230a992dcb0aa25cc0039c" id="r_ad69ffa1c3e230a992dcb0aa25cc0039c"><td class="memItemLeft"><a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> *&#160;</td><td class="memItemRight"><a class="el" href="#ad69ffa1c3e230a992dcb0aa25cc0039c">GetTimestamp</a> ()</td></tr>
 <tr class="memitem:a86061c4d184558219b13d8b42c12c6ed" id="r_a86061c4d184558219b13d8b42c12c6ed"><td class="memItemLeft">Float_t&#160;</td><td class="memItemRight"><a class="el" href="#a86061c4d184558219b13d8b42c12c6ed">GetUnitScale</a> () const</td></tr>
+<tr class="memitem:a71daf7fe99d11d23a8eb3e911454c925" id="r_a71daf7fe99d11d23a8eb3e911454c925"><td class="memItemLeft"><a class="el" href="../../d2/d24/class_nc_position.html">NcPosition</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a71daf7fe99d11d23a8eb3e911454c925">operator=</a> (const <a class="el" href="../../d2/d24/class_nc_position.html">NcPosition</a> &amp;p)</td></tr>
 <tr class="memitem:a3c6e43700f180983bc8d43df7f25e1c4" id="r_a3c6e43700f180983bc8d43df7f25e1c4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a3c6e43700f180983bc8d43df7f25e1c4">RemoveTimestamp</a> ()</td></tr>
 <tr class="memitem:ad27e7e520e7d57c677b6f94b95d9f183" id="r_ad27e7e520e7d57c677b6f94b95d9f183"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad27e7e520e7d57c677b6f94b95d9f183">ResetPosition</a> ()</td></tr>
 <tr class="memitem:abf71301d2855a83c7a877c8453ba1fc2" id="r_abf71301d2855a83c7a877c8453ba1fc2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#abf71301d2855a83c7a877c8453ba1fc2">SetPosition</a> (Double_t *r, TString f, TString u=&quot;rad&quot;)</td></tr>
@@ -405,7 +406,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="../../d3/df6/class_nc_detector_unit.html#a66832a7364353581c487027c00ea6539">NcDetectorUnit</a>, <a class="el" href="../../de/df5/class_nc_device.html#a66832a7364353581c487027c00ea6539">NcDevice</a>, <a class="el" href="../../d6/d42/class_nc_signal.html#ac5505871a59d59454b5ba61929c25198">NcSignal</a>, and <a class="el" href="../../d2/d13/class_nc_vertex.html#a9f5060e4c9e4ed449b58adbe0aaa9d1c">NcVertex</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00509">509</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00527">527</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -443,7 +444,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// the position coordinates have a different unit scale.</span></div>
 <div class="line"><span class="comment">// However, it is recommended to work always with one single unit scale.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00393">393</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00411">411</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -474,7 +475,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d3/d02/_nc_position_8h_source.html#l00031">31</a> of file <a class="el" href="../../d3/d02/_nc_position_8h_source.html">NcPosition.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d3/d02/_nc_position_8h_source.html#l00032">32</a> of file <a class="el" href="../../d3/d02/_nc_position_8h_source.html">NcPosition.h</a>.</p>
 
 </div>
 </div>
@@ -494,7 +495,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide position.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00247">247</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00265">265</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -542,7 +543,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The convention is that scale=1 corresponds to meter, so specification</span></div>
 <div class="line"><span class="comment">// of scale=0.01 will provide the position coordinates in cm.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00175">175</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00193">193</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -590,7 +591,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The convention is that scale=1 corresponds to meter, so specification</span></div>
 <div class="line"><span class="comment">// of scale=0.01 will provide the position coordinates in cm.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00220">220</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00238">238</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -638,7 +639,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The convention is that scale=1 corresponds to meter, so specification</span></div>
 <div class="line"><span class="comment">// of scale=0.01 will provide the position coordinate errors in cm.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00309">309</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00327">327</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -686,7 +687,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The convention is that scale=1 corresponds to meter, so specification</span></div>
 <div class="line"><span class="comment">// of scale=0.01 will provide the position coordinate errors in cm.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00354">354</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00372">372</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -706,7 +707,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the timestamp of this position.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00483">483</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00501">501</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -728,7 +729,27 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The scale is normalised w.r.t. the meter, so a unit scale of 0.01</span></div>
 <div class="line"><span class="comment">// means that all position coordinates are in cm.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00458">458</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00476">476</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a71daf7fe99d11d23a8eb3e911454c925" name="a71daf7fe99d11d23a8eb3e911454c925"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71daf7fe99d11d23a8eb3e911454c925">&#9670;&#160;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d2/d24/class_nc_position.html">NcPosition</a> &amp; NcPosition::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d2/d24/class_nc_position.html">NcPosition</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Set all attributes equal to those of NcPosition p</span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00139">139</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -748,7 +769,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Remove the timestamp from this postion.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00494">494</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00512">512</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -769,7 +790,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Reset the position and corresponding errors.</span></div>
 <div class="line"><span class="comment">// When retrieved, values of 0 will be returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00381">381</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00399">399</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -805,7 +826,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is u=&quot;rad&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00139">139</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00157">157</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -851,7 +872,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is u=&quot;rad&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00157">157</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00175">175</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -887,7 +908,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is u=&quot;rad&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00202">202</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00220">220</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -907,7 +928,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Set position.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00258">258</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00276">276</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -943,7 +964,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is u=&quot;rad&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00273">273</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00291">291</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -989,7 +1010,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is u=&quot;rad&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00291">291</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00309">309</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -1025,7 +1046,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is u=&quot;rad&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00336">336</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00354">354</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -1045,7 +1066,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Store the timestamp for this position.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00471">471</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00489">489</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -1074,7 +1095,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//        the position coordinates.</span></div>
 <div class="line"><span class="comment">//        It only specifies their numerical meaning.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00431">431</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html#l00449">449</a> of file <a class="el" href="../../df/dbb/_nc_position_8cxx_source.html">NcPosition.cxx</a>.</p>
 
 </div>
 </div>
@@ -1099,7 +1120,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d3/d02/_nc_position_8h_source.html#l00046">46</a> of file <a class="el" href="../../d3/d02/_nc_position_8h_source.html">NcPosition.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d3/d02/_nc_position_8h_source.html#l00047">47</a> of file <a class="el" href="../../d3/d02/_nc_position_8h_source.html">NcPosition.h</a>.</p>
 
 </div>
 </div>
@@ -1123,7 +1144,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d3/d02/_nc_position_8h_source.html#l00047">47</a> of file <a class="el" href="../../d3/d02/_nc_position_8h_source.html">NcPosition.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d3/d02/_nc_position_8h_source.html#l00048">48</a> of file <a class="el" href="../../d3/d02/_nc_position_8h_source.html">NcPosition.h</a>.</p>
 
 </div>
 </div>

@@ -62,6 +62,7 @@ var class_nc_timestamp =
     [ "GetUTCparameters", "dc/dab/class_nc_timestamp.html#a7cd0746082421edcb19536b658b92fd7", null ],
     [ "IsUT1", "dc/dab/class_nc_timestamp.html#a8b00f5a083e5142336e838205f56aa86", null ],
     [ "LoadUTCparameterFiles", "dc/dab/class_nc_timestamp.html#ab8512bbfdb87e83cd469905cf6e37e44", null ],
+    [ "operator=", "dc/dab/class_nc_timestamp.html#a5e466f28b78f3067323d055bed8bc4d7", null ],
     [ "PrintTime", "dc/dab/class_nc_timestamp.html#aac993f438111c7555b810343680e2ced", null ],
     [ "SetEpoch", "dc/dab/class_nc_timestamp.html#a991c853e4960cc57d46de9953440c4cb", null ],
     [ "SetGPS", "dc/dab/class_nc_timestamp.html#ac79e803d83eb1da6c2a828d083d7c973", null ],
