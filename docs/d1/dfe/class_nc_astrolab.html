@@ -296,7 +296,7 @@ Inheritance diagram for NcAstrolab:</div>
 <div class="line"><span class="comment">// lab.DisplaySignals(&quot;equ&quot;,&quot;J&quot;,0,&quot;ham&quot;,1);</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">//--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University</span></div>
-<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 25, 2026  14:43</span></div>
+<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC July 30, 2026  10:57</span></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00046">46</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 </div><table class="memberdecls">
@@ -319,7 +319,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a071edb01e7a75c4c61e0516881f8fa27" id="r_a071edb01e7a75c4c61e0516881f8fa27"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a071edb01e7a75c4c61e0516881f8fa27">GetBurstBayesianPsiStatistics</a> (TString type, Double_t nr=-1, Int_t ncut=10, Int_t ndt=2, Bool_t zcor=kFALSE, Int_t freq=0)</td></tr>
 <tr class="memitem:a344d6d138dbb0b08e034f2bbb26996b3" id="r_a344d6d138dbb0b08e034f2bbb26996b3"><td class="memItemLeft">TH1 *&#160;</td><td class="memItemRight"><a class="el" href="#a344d6d138dbb0b08e034f2bbb26996b3">GetBurstBayesianSignalRate</a> (Double_t p, Double_t &amp;rlow, Double_t &amp;rup, Int_t n=1000)</td></tr>
 <tr class="memitem:aaf82d19bd9e80c1bcd7fdd58cb8b9f8e" id="r_aaf82d19bd9e80c1bcd7fdd58cb8b9f8e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aaf82d19bd9e80c1bcd7fdd58cb8b9f8e">GetBurstChi2Statistics</a> (TString type, Int_t ndt=2, Bool_t zcor=kFALSE)</td></tr>
+<tr class="memitem:a2fbf63ef1dcb1444d6f70826faa472c9" id="r_a2fbf63ef1dcb1444d6f70826faa472c9"><td class="memItemLeft"><a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2fbf63ef1dcb1444d6f70826faa472c9">GetBurstDataSample</a> (TString type, TString data) const</td></tr>
+<tr class="memitem:a7e809560929c8634e02e9dc26ed9ff3c" id="r_a7e809560929c8634e02e9dc26ed9ff3c"><td class="memItemLeft">TH1 *&#160;</td><td class="memItemRight"><a class="el" href="#a7e809560929c8634e02e9dc26ed9ff3c">GetBurstHistogram</a> (TString name) const</td></tr>
 <tr class="memitem:a5c2ffc742e3bd3698db04e1775ead84a" id="r_a5c2ffc742e3bd3698db04e1775ead84a"><td class="memItemLeft">Double_t&#160;</td><td class="memItemRight"><a class="el" href="#a5c2ffc742e3bd3698db04e1775ead84a">GetBurstLiMaSignificance</a> () const</td></tr>
+<tr class="memitem:af74fc24783ab8d95fa92a8a5a2b9934a" id="r_af74fc24783ab8d95fa92a8a5a2b9934a"><td class="memItemLeft">Double_t&#160;</td><td class="memItemRight"><a class="el" href="#af74fc24783ab8d95fa92a8a5a2b9934a">GetBurstParameter</a> (TString name)</td></tr>
 <tr class="memitem:a8d2762003956fe4dc8109926ddf495c2" id="r_a8d2762003956fe4dc8109926ddf495c2"><td class="memItemLeft"><a class="el" href="../../de/df5/class_nc_device.html">NcDevice</a> *&#160;</td><td class="memItemRight"><a class="el" href="#a8d2762003956fe4dc8109926ddf495c2">GetBurstParameters</a> ()</td></tr>
 <tr class="memitem:a3062193799c933ae274cf5965f17d07c" id="r_a3062193799c933ae274cf5965f17d07c"><td class="memItemLeft">Double_t&#160;</td><td class="memItemRight"><a class="el" href="#a3062193799c933ae274cf5965f17d07c">GetBurstRecoAngres</a> (Double_t Emin=-1, Double_t Emax=-1, Double_t Amin=0, Double_t Amax=999) const</td></tr>
 <tr class="memitem:ab00ec1b466cd09cf7be573857b9e08ce" id="r_ab00ec1b466cd09cf7be573857b9e08ce"><td class="memItemLeft">Double_t&#160;</td><td class="memItemRight"><a class="el" href="#ab00ec1b466cd09cf7be573857b9e08ce">GetBurstSignalEnergy</a> (Double_t Emin=-1, Double_t Emax=-1) const</td></tr>
@@ -397,6 +400,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a122992a6bf94f188f17d3ea578484a03" id="r_a122992a6bf94f188f17d3ea578484a03"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a122992a6bf94f188f17d3ea578484a03">HelioToGeocentric</a> (Double_t &amp;R, Double_t &amp;B, Double_t &amp;L, <a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> *ts, TString Bu=&quot;deg&quot;, TString Lu=&quot;deg&quot;)</td></tr>
 <tr class="memitem:a652d62c14168a3b0237a9406d2da187e" id="r_a652d62c14168a3b0237a9406d2da187e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a652d62c14168a3b0237a9406d2da187e">InitDataNames</a> (Int_t dir, TString frame, TString mode=&quot;J&quot;)</td></tr>
 <tr class="memitem:ae418fd3ed809b4cacd1a129c1acbfa79" id="r_ae418fd3ed809b4cacd1a129c1acbfa79"><td class="memItemLeft">Double_t&#160;</td><td class="memItemRight"><a class="el" href="#ae418fd3ed809b4cacd1a129c1acbfa79">KolmogorovTest</a> (TString mode, TH1 *h1, TH1 *h2=0, TF1 *pdf=0, Double_t nr=1000, TH1F *ksh=0, Int_t ncut=0, Double_t *nrx=0, Int_t mark=1)</td></tr>
+<tr class="memitem:a608b51fe364e891f61fe2c5b92d93692" id="r_a608b51fe364e891f61fe2c5b92d93692"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a608b51fe364e891f61fe2c5b92d93692">ListBurstDataStats</a> () const</td></tr>
 <tr class="memitem:a8d4a6b5b61f87933ac0a706219cb904f" id="r_a8d4a6b5b61f87933ac0a706219cb904f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8d4a6b5b61f87933ac0a706219cb904f">ListBurstHistograms</a> () const</td></tr>
 <tr class="memitem:a5e7e772b4643344993d9108a7af3e8a9" id="r_a5e7e772b4643344993d9108a7af3e8a9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5e7e772b4643344993d9108a7af3e8a9">ListBurstParameters</a> () const</td></tr>
 <tr class="memitem:ac659a74f14bfe3b84324e13aff0db4eb" id="r_ac659a74f14bfe3b84324e13aff0db4eb"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac659a74f14bfe3b84324e13aff0db4eb">ListDataNames</a> ()</td></tr>
@@ -405,7 +409,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4f8f9ead6c15707a547bc2a674f767ce" id="r_a4f8f9ead6c15707a547bc2a674f767ce"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4f8f9ead6c15707a547bc2a674f767ce">LoadInputData</a> (Bool_t src, TString file, TString tree, Int_t date1=0, Int_t date2=0, Int_t nmax=-1, TString type=&quot;-&quot;)</td></tr>
 <tr class="memitem:a8d879ecac392b011235a1d2290325647" id="r_a8d879ecac392b011235a1d2290325647"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8d879ecac392b011235a1d2290325647">MakeBurstEnergydist</a> (Int_t mode, TString file, TString tree, TString name1, TString name2, TString u, Int_t nb=1000)</td></tr>
 <tr class="memitem:afb883cef3705e059033d7ce1dc811e1c" id="r_afb883cef3705e059033d7ce1dc811e1c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#afb883cef3705e059033d7ce1dc811e1c">MakeBurstEnergydist</a> (TString mode, Double_t alpha, Int_t nbins=1000)</td></tr>
-<tr class="memitem:a4f8314922ec0a38a8e8e7e88bbb9f5e1" id="r_a4f8314922ec0a38a8e8e7e88bbb9f5e1"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4f8314922ec0a38a8e8e7e88bbb9f5e1">MakeBurstEnergydist</a> (TString mode, TF1 &amp;spec, Int_t nsrc=0, Int_t nbins=1000)</td></tr>
+<tr class="memitem:acfb061fce0d24bead4799a32946b7c54" id="r_acfb061fce0d24bead4799a32946b7c54"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#acfb061fce0d24bead4799a32946b7c54">MakeBurstEnergydist</a> (TString mode, TF1 &amp;spec, Int_t nsrc=0, Int_t nbins=1000, Float_t Tem=-1)</td></tr>
 <tr class="memitem:a026b30e09c883a03f8a382ef96e112dc" id="r_a026b30e09c883a03f8a382ef96e112dc"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a026b30e09c883a03f8a382ef96e112dc">MakeBurstRecoAngresdist</a> (TString file, TString tree, TString name1, TString name2, TString ua, TString name3, TString ud, Double_t Emin, Double_t Emax, Int_t nbe=100, Int_t nba=1000)</td></tr>
 <tr class="memitem:a844b5a45e8454e4f6b2934f1a11beac5" id="r_a844b5a45e8454e4f6b2934f1a11beac5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a844b5a45e8454e4f6b2934f1a11beac5">MakeBurstSigmaPosdist</a> (TString file, TString tree, TString name, TString u, Int_t nb=900, Float_t xmin=0, Float_t xmax=90)</td></tr>
 <tr class="memitem:a96d7636b6108931fafe0a8c0f728cdee" id="r_a96d7636b6108931fafe0a8c0f728cdee"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a96d7636b6108931fafe0a8c0f728cdee">MakeBurstT90dist</a> (TString file, TString tree, TString name, Int_t nb=50, Float_t xmin=-5, Float_t xmax=5)</td></tr>
@@ -603,11 +607,11 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a7ecfcc17158e7a2a2398a82fc417b335" id="r_a7ecfcc17158e7a2a2398a82fc417b335"><td class="memItemLeft"><a class="el" href="../../d6/d42/class_nc_signal.html">NcSignal</a> *&#160;</td><td class="memItemRight"><a class="el" href="#a7ecfcc17158e7a2a2398a82fc417b335">GetSignal</a> (<a class="el" href="../../da/d2e/class_nc3_vector.html">Nc3Vector</a> &amp;r, TString frame, TString mode, <a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> *ts, Int_t jref, Int_t type)</td></tr>
 <tr class="memitem:abe7d52edfcd08ee00dd6835b24855cc4" id="r_abe7d52edfcd08ee00dd6835b24855cc4"><td class="memItemLeft">Double_t&#160;</td><td class="memItemRight"><a class="el" href="#abe7d52edfcd08ee00dd6835b24855cc4">GetSignalRateProb</a> (Double_t *vars, Double_t *pars)</td></tr>
 <tr class="memitem:ac02b77e3bd3372a8c870ac1ef47bfb96" id="r_ac02b77e3bd3372a8c870ac1ef47bfb96"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ac02b77e3bd3372a8c870ac1ef47bfb96">InfoPanel</a> (TGCompositeFrame *frame)</td></tr>
-<tr class="memitem:a538bbc9b2a4b8e1c6decb07d50e40ce3" id="r_a538bbc9b2a4b8e1c6decb07d50e40ce3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a538bbc9b2a4b8e1c6decb07d50e40ce3">InitBurstHistograms</a> (Int_t mode)</td></tr>
+<tr class="memitem:a23c8800f04a5e28c6d41dac01fb59fb0" id="r_a23c8800f04a5e28c6d41dac01fb59fb0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a23c8800f04a5e28c6d41dac01fb59fb0">InitBurstHistograms</a> ()</td></tr>
 <tr class="memitem:ac682aaaf11823244960d3aadf9c7cb75" id="r_ac682aaaf11823244960d3aadf9c7cb75"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ac682aaaf11823244960d3aadf9c7cb75">LabLocalFramePanel</a> (TGCompositeFrame *frame)</td></tr>
 <tr class="memitem:a0672afb2a9fdf73cbeac2078e68cd49f" id="r_a0672afb2a9fdf73cbeac2078e68cd49f"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a0672afb2a9fdf73cbeac2078e68cd49f">LabLocationPanel</a> (TGCompositeFrame *frame)</td></tr>
 <tr class="memitem:a9358480a25c752b7c6046f70d76c37cd" id="r_a9358480a25c752b7c6046f70d76c37cd"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9358480a25c752b7c6046f70d76c37cd">ListBurstSignalStats</a> (Double_t rate, Int_t mode, TString str=&quot;-&quot;)</td></tr>
-<tr class="memitem:a9160aff8ea478c129b1bb13630ea87d6" id="r_a9160aff8ea478c129b1bb13630ea87d6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9160aff8ea478c129b1bb13630ea87d6">MakeBurstDataStats</a> (Int_t mode, Int_t nmugrb=0)</td></tr>
+<tr class="memitem:a03c9db1371def1b6c1372917df072ac9" id="r_a03c9db1371def1b6c1372917df072ac9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a03c9db1371def1b6c1372917df072ac9">MakeBurstDataStats</a> ()</td></tr>
 <tr class="memitem:a72d3e060b13fd5199db94b8ad2fd70f4" id="r_a72d3e060b13fd5199db94b8ad2fd70f4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a72d3e060b13fd5199db94b8ad2fd70f4">MakeBurstNuCountProfile</a> (TString mode)</td></tr>
 <tr class="memitem:aa10a5627533bc7ae4f11ef33658e8aae" id="r_aa10a5627533bc7ae4f11ef33658e8aae"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#aa10a5627533bc7ae4f11ef33658e8aae">MapListOptionsPanel</a> (TGCompositeFrame *frame)</td></tr>
 <tr class="memitem:a0268b95446043ab074a9c9ca94fbec99" id="r_a0268b95446043ab074a9c9ca94fbec99"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a0268b95446043ab074a9c9ca94fbec99">Nutate</a> (<a class="el" href="../../da/d2e/class_nc3_vector.html">Nc3Vector</a> &amp;r, <a class="el" href="../../dc/dab/class_nc_timestamp.html">NcTimestamp</a> *ts)</td></tr>
@@ -941,7 +945,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Compensate statistical underfluctuation in the number of transient burst muons.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16999">16999</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17176">17176</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -974,7 +978,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p>Reimplemented in <a class="el" href="../../d8/d27/class_nc_event_selector.html#acf62cbeaa662eee1747ae4396964f133">NcEventSelector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20919">20919</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l21115">21115</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -1002,7 +1006,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to render the GUI panel with the various command buttons.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20693">20693</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20889">20889</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -1542,7 +1546,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to render the GUI panel to enter c.q. remove data entries.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19923">19923</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20119">20119</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -1586,7 +1590,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12715">12715</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12755">12755</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -1619,7 +1623,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l14142">14142</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l14211">14211</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -1843,7 +1847,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are Emin=-1 and Emax=-1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13940">13940</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l14009">14009</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -1962,7 +1966,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are nr=-1, ncut=10, ndt=2, zcor=kFALSE and freq=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17652">17652</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17829">17829</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2021,7 +2025,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent data all returned values are 0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17222">17222</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17399">17399</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2090,7 +2094,40 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are ndt=2 and zcor=kFALSE.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l18618">18618</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l18795">18795</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a2fbf63ef1dcb1444d6f70826faa472c9" name="a2fbf63ef1dcb1444d6f70826faa472c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fbf63ef1dcb1444d6f70826faa472c9">&#9670;&#160;</a></span>GetBurstDataSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a> NcAstrolab::GetBurstDataSample </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>type</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide the specified observed/simulated data sample of the burst analysis</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// Input arguments :</span></div>
+<div class="line"><span class="comment">// -----------------</span></div>
+<div class="line"><span class="comment">// type : On    --&gt; All simulated c.q. observed data recorded on source</span></div>
+<div class="line"><span class="comment">//        Off   --&gt; All simulated c.q. observed data recorded off source</span></div>
+<div class="line"><span class="comment">//        Sig   --&gt; Simulated data recorded on source</span></div>
+<div class="line"><span class="comment">// data : Reco  --&gt; Source redshift and source/track localisation/direction accuracy in degrees</span></div>
+<div class="line"><span class="comment">//        Match --&gt; Track energy (GeV) and angular (deg) c.q. time (sec) differences w.r.t. source</span></div>
+<div class="line"><span class="comment">//        Aeff  --&gt; Track Effective area (cm^2), Fluence (1/Aeff), Energy (GeV) and angular differefence (deg)</span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16126">16126</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2155,7 +2192,31 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// pdfdtOff : The Poisson dt pdf corresponding to the observed event rate from the off source data</span></div>
 <div class="line"><span class="comment">// zcor     : Use redshift corrected arrival times (kTRUE) or not (kFALSE)</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l18941">18941</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19118">19118</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a7e809560929c8634e02e9dc26ed9ff3c" name="a7e809560929c8634e02e9dc26ed9ff3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e809560929c8634e02e9dc26ed9ff3c">&#9670;&#160;</a></span>GetBurstHistogram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TH1 * NcAstrolab::GetBurstHistogram </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide the pointer to the stored transient burst histogram &quot;name&quot;.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// **********************************************************************************</span></div>
+<div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
+<div class="line"><span class="comment">// **********************************************************************************</span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19352">19352</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2182,7 +2243,31 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent data the value 0 is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17593">17593</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17770">17770</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+
+</div>
+</div>
+<a id="af74fc24783ab8d95fa92a8a5a2b9934a" name="af74fc24783ab8d95fa92a8a5a2b9934a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af74fc24783ab8d95fa92a8a5a2b9934a">&#9670;&#160;</a></span>GetBurstParameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Double_t NcAstrolab::GetBurstParameter </td>
+          <td>(</td>
+          <td class="paramtype">TString</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// Provide the value of the requested transient burst parameter.</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// **********************************************************************************</span></div>
+<div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
+<div class="line"><span class="comment">// **********************************************************************************</span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l11688">11688</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2206,7 +2291,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l11688">11688</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l11704">11704</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2258,7 +2343,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are Emin=-1, Emax=-1, Amin=0 and Amax=999.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l14011">14011</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l14080">14080</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2293,7 +2378,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The input argument &quot;type&quot; serves to identify the source class for which a fit has to be provided.</span></div>
 <div class="line"><span class="comment">// Currently only a fit for GRB is available.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13228">13228</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13268">13268</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2329,7 +2414,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are Emin=-1 and Emax=-1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13869">13869</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13938">13938</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2364,7 +2449,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The input argument &quot;type&quot; serves to identify the source class for which a fit has to be provided.</span></div>
 <div class="line"><span class="comment">// Currently only a fit for GRB is available.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13089">13089</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13129">13129</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2406,7 +2491,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent data the value -1 is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17399">17399</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17576">17576</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -2441,7 +2526,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// The input argument &quot;type&quot; serves to identify the source class for which a fit has to be provided.</span></div>
 <div class="line"><span class="comment">// Currently only a fit for GRB is available.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12962">12962</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13002">13002</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -6831,12 +6916,12 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// The Information panel.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19693">19693</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19889">19889</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
-<a id="a538bbc9b2a4b8e1c6decb07d50e40ce3" name="a538bbc9b2a4b8e1c6decb07d50e40ce3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a538bbc9b2a4b8e1c6decb07d50e40ce3">&#9670;&#160;</a></span>InitBurstHistograms()</h2>
+<a id="a23c8800f04a5e28c6d41dac01fb59fb0" name="a23c8800f04a5e28c6d41dac01fb59fb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23c8800f04a5e28c6d41dac01fb59fb0">&#9670;&#160;</a></span>InitBurstHistograms()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -6847,7 +6932,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void NcAstrolab::InitBurstHistograms </td>
           <td>(</td>
-          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>mode</em></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -6859,14 +6944,13 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to initialize the histograms for transient burst analyses.</span></div>
 <div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// mode : 0 --&gt; Invoked from GenBurstSignals()</span></div>
-<div class="line"><span class="comment">//        1 --&gt; Invoked from MatchBurstData()</span></div>
+<div class="line"><span class="comment">// This function is invoked by GenBurstSignals() and MatchBurstData().</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16749">16749</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16922">16922</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7090,7 +7174,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to render the Lab local reference frame specification GUI panel.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19599">19599</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19795">19795</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7118,7 +7202,27 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to render the Lab location and experiment specification GUI panel.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19326">19326</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19522">19522</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+
+</div>
+</div>
+<a id="a608b51fe364e891f61fe2c5b92d93692" name="a608b51fe364e891f61fe2c5b92d93692"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a608b51fe364e891f61fe2c5b92d93692">&#9670;&#160;</a></span>ListBurstDataStats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NcAstrolab::ListBurstDataStats </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="comment">// List the observed/simulated data statistics of the burst analysis</span></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l15896">15896</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7142,7 +7246,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19150">19150</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19327">19327</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7166,7 +7270,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l11703">11703</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l11719">11719</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7216,7 +7320,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is str=&quot;-&quot;, which will suppress the production of the histogram.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17506">17506</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l17683">17683</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7402,7 +7506,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Environment variables may be used as $(...) in the filename for convenience.</span></div>
 <div class="line"><span class="comment">// For example &quot;$(NCFS)/icepack/Aeff/IC86-GFU-Aeff.root&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12497">12497</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12537">12537</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7502,12 +7606,12 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 1) This memberfunction make be invoked several times to read different files to accumulate data.</span></div>
 <div class="line"><span class="comment">// 2) The internal storage arrays will be compressed, so that the indices of previously stored objects may change.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12010">12010</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12050">12050</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
-<a id="a9160aff8ea478c129b1bb13630ea87d6" name="a9160aff8ea478c129b1bb13630ea87d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9160aff8ea478c129b1bb13630ea87d6">&#9670;&#160;</a></span>MakeBurstDataStats()</h2>
+<a id="a03c9db1371def1b6c1372917df072ac9" name="a03c9db1371def1b6c1372917df072ac9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03c9db1371def1b6c1372917df072ac9">&#9670;&#160;</a></span>MakeBurstDataStats()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -7518,12 +7622,8 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void NcAstrolab::MakeBurstDataStats </td>
           <td>(</td>
-          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>mode</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>nmugrb</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -7534,16 +7634,13 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to determine and list the burst-data statistics.</span></div>
 <div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// mode : 0 --&gt; Invoked from GenBurstSignals()</span></div>
-<div class="line"><span class="comment">//        1 --&gt; Invoked from MatchBurstData()</span></div>
+<div class="line"><span class="comment">// This function is invoked by GenBurstSignals() and MatchBurstData().</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
-<div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// Default value is nmugrb=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l14853">14853</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l14930">14930</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7643,7 +7740,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is nb=1000.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13528">13528</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13597">13597</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7700,12 +7797,12 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is nbins=1000.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13481">13481</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13550">13550</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
-<a id="a4f8314922ec0a38a8e8e7e88bbb9f5e1" name="a4f8314922ec0a38a8e8e7e88bbb9f5e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f8314922ec0a38a8e8e7e88bbb9f5e1">&#9670;&#160;</a></span>MakeBurstEnergydist() <span class="overload">[3/3]</span></h2>
+<a id="acfb061fce0d24bead4799a32946b7c54" name="acfb061fce0d24bead4799a32946b7c54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfb061fce0d24bead4799a32946b7c54">&#9670;&#160;</a></span>MakeBurstEnergydist() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -7728,12 +7825,19 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>nbins</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1000</span>&#160;)</td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>nbins</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1000</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Float_t</td>          <td class="paramname"><span class="paramname"><em>Tem</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Create a background or burst induced signal (see below) energy distribution</span></div>
 <div class="line"><span class="comment">// on the interval [Emin,Emax] GeV based on the spectral function &quot;spec&quot; describing dN/dE.</span></div>
+<div class="line"><span class="comment">// Since dN/dE is treated as #/GeV, all the energy terms in the function description of &quot;spec&quot;</span></div>
+<div class="line"><span class="comment">// have to be given in units of GeV as well.</span></div>
 <div class="line"><span class="comment">// The energy interval [Emin,Emax] corresponds to the background or signal energy interval</span></div>
 <div class="line"><span class="comment">// as specified via SetBurstParameters().</span></div>
 <div class="line"><span class="comment">// If this memberfunction is invoked before GenBurstSignals(), the resulting </span></div>
@@ -7771,38 +7875,54 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//          &quot;BkgF&quot; --&gt; Particle Flux as a function of energy in cm^-2 s^-1 for background events at Earth</span></div>
 <div class="line"><span class="comment">//          &quot;BkgI&quot; --&gt; Particle Intensity as a function of energy in cm^-2 s^-1 sr^-1 for background events at Earth</span></div>
 <div class="line"><span class="comment">// spec   = The spectral function in TF1 format describing the specified &quot;mode&quot; dN/dE in units of GeV</span></div>
-<div class="line"><span class="comment">// nbins  = The number of equally sized bins on the interval [Emin,Emax] for the resulting distribution</span></div>
 <div class="line"><span class="comment">// nsrc   = The number of (stacked) sources that corresponds to a specified Fluence.</span></div>
+<div class="line"><span class="comment">// nbins  = The number of equally sized bins on the interval [Emin,Emax] for the resulting distribution</span></div>
+<div class="line"><span class="comment">// Tem    = Signal emission time in units of Dtnus.</span></div>
+<div class="line"><span class="comment">//          See 3) below and the definitions of observation time window and Dtnus in SetBurstParameter().</span></div>
+<div class="line"><span class="comment">//          &gt;0  : Provided Flux c.q. Intensity relates only to the emission period Tem.</span></div>
+<div class="line"><span class="comment">//                Automatic scaling w.r.t. the observation time window (Tobs) will be performed with a factor Tem/Tobs</span></div>
+<div class="line"><span class="comment">//                This allows a generic treatment of all kinds of sources.</span></div>
+<div class="line"><span class="comment">//                It should be noted that the value of Tem is irrelevant in the case of Fluence specifications.   </span></div>
+<div class="line"><span class="comment">//          &lt;=0 : No automatic scaling.</span></div>
+<div class="line"><span class="comment">//                Scaling (if needed) may still be performed by the user in the description of &quot;spec&quot;.</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Notes :</span></div>
 <div class="line"><span class="comment">// -------</span></div>
 <div class="line"><span class="comment">// 1) &quot;nsrc&quot; is only relevant when the spectrum represents a signal Fluence, since it is assumed that</span></div>
 <div class="line"><span class="comment">//    the (signals of the) transient phenomena are observed in non-overlapping time windows.</span></div>
-<div class="line"><span class="comment">//    As such, Fluxes or Intensities of different sources are not cumulative.</span></div>
+<div class="line"><span class="comment">//    As such, Fluxes or Intensities of different sources are not cumulative, and the specified spectrum</span></div>
+<div class="line"><span class="comment">//    is regarded as the Flux or Intensity per individual source.</span></div>
 <div class="line"><span class="comment">//    When a background is specified, the Fluence, Flux or Intensity is assumed to be</span></div>
 <div class="line"><span class="comment">//    isotropic and constant over the entire observation period.</span></div>
 <div class="line"><span class="comment">// 2) When a signal Fluence is specified, it is assumed that the observation time was long enough</span></div>
 <div class="line"><span class="comment">//    for each (transient) phenomenon to cover the full signal emission period.</span></div>
-<div class="line"><span class="comment">// 3) When a signal Flux or Intensity is specified for transient phenomena, it is assumed that the</span></div>
-<div class="line"><span class="comment">//    the emission is constant over the whole observation period (Tobs) of the corresponding phenomenon.</span></div>
-<div class="line"><span class="comment">//    In case a specific emission time (Tem) is assumed, one should scale the Flux c.q. Intensity normalisation</span></div>
-<div class="line"><span class="comment">//    by a factor Tobs/Tem.  </span></div>
+<div class="line"><span class="comment">// 3) When a signal Flux or Intensity is specified, it is assumed that the emission is constant over</span></div>
+<div class="line"><span class="comment">//    the whole observation period (Tobs) of the corresponding phenomenon.</span></div>
+<div class="line"><span class="comment">//    In case a specific emission time (Tem) is specified for a transient, the Flux c.q. Intensity normalisation</span></div>
+<div class="line"><span class="comment">//    will be automatically scaled as indicated above.</span></div>
 <div class="line"><span class="comment">// 4) When a signal Intensity is specified, it is interpreted as an isotropic diffuse signal yield</span></div>
 <div class="line"><span class="comment">//    due to the &quot;nsrc&quot; sources.</span></div>
 <div class="line"><span class="comment">// 5) For mode=&quot;SigE&quot; a signal energy pdf at Earth may be specified by setting the parameter &quot;Ezcor&quot; to 0</span></div>
 <div class="line"><span class="comment">//    via invokation of the memberfunction SetBurstParameter(). </span></div>
 <div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// Example: To make a dN/dE=E^-2 plain burst induced signal energy distribution</span></div>
+<div class="line"><span class="comment">// In presenting a Fluence, Flux or Intensity, it is custom to denote the normalisation at a specific energy E0</span></div>
+<div class="line"><span class="comment">// (aka &quot;anchor point&quot;) as &quot;phi(E0)&quot;.</span></div>
 <div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// TString mode=&quot;SigE&quot;;</span></div>
-<div class="line"><span class="comment">// TF1 spec(&quot;spec&quot;,&quot;pow(x,-2)&quot;);</span></div>
-<div class="line"><span class="comment">// nsrc=0;</span></div>
-<div class="line"><span class="comment">// nbins=1000;</span></div>
-<div class="line"><span class="comment">// MakeBurstEnergydist(mode,spec,nsrc,nbins);</span></div>
+<div class="line"><span class="comment">// Example: To specify an E^-2 burst induced signal Flux distribution with normalisation phi(1TeV)=1e-9 [GeV cm^-2 s^-1],</span></div>
+<div class="line"><span class="comment">//          the corresponding formula is dN/dEdAdt=phi(E0)*(E/E0)^-2.</span></div>
 <div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// The default values are nsrc=0 and nbins=1000.</span></div>
+<div class="line"><span class="comment">// The corresponding code is :</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// TString mode=&quot;SigF&quot;;</span></div>
+<div class="line"><span class="comment">// TF1 spec(&quot;spec&quot;,&quot;1e-9*pow(x/1000,-2)&quot;); // All energies must be specified in GeV</span></div>
+<div class="line"><span class="comment">// Int_t nsrc=0;</span></div>
+<div class="line"><span class="comment">// Int_ nbins=1000;</span></div>
+<div class="line"><span class="comment">// Float_t Tem=0; // Flux is assumed to be constant over the whole observation period </span></div>
+<div class="line"><span class="comment">// MakeBurstEnergydist(mode,spec,nsrc,nbins,Tem);</span></div>
+<div class="line"><span class="comment">//</span></div>
+<div class="line"><span class="comment">// The default values are nsrc=0, nbins=1000 and Tem=-1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13274">13274</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13314">13314</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7842,7 +7962,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12545">12545</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12585">12585</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -7953,7 +8073,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : This memberfunction may be invoked several times to read different files</span></div>
 <div class="line"><span class="comment">//        to accumulate data.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13734">13734</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13803">13803</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8035,7 +8155,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : This memberfunction may be invoked several times to read different files</span></div>
 <div class="line"><span class="comment">//        to accumulate data.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13135">13135</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13175">13175</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8103,7 +8223,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : This memberfunction may be invoked several times to read different files</span></div>
 <div class="line"><span class="comment">//        to accumulate data.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13008">13008</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l13048">13048</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8173,7 +8293,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : This memberfunction may be invoked several times to read different files</span></div>
 <div class="line"><span class="comment">//        to accumulate data.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12867">12867</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l12907">12907</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8193,7 +8313,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the category selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19764">19764</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19960">19960</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8213,7 +8333,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Close the SkyMapPanel window but do NOT exit the current ROOT session.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20788">20788</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20984">20984</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8233,7 +8353,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the time specification entry field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19552">19552</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19748">19748</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8253,7 +8373,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the coordinate system selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20444">20444</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20640">20640</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8273,7 +8393,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the draw/list entry name selection field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20560">20560</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20756">20756</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8293,7 +8413,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on an button from the draw/list options group.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20515">20515</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20711">20711</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8313,7 +8433,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Draw the skymap.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20758">20758</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20954">20954</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8333,7 +8453,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the entries a coordinate specification field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20029">20029</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20225">20225</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8353,7 +8473,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the entries b coordinate specification field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20053">20053</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20249">20249</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8373,7 +8493,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the entry coordinate frame selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20077">20077</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20273">20273</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8393,7 +8513,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the (optional) entry name selection field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20105">20105</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20301">20301</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8413,7 +8533,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Enter the provided entry.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20116">20116</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20312">20312</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8433,7 +8553,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Enter the seleced Solar system objects as reference object.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20644">20644</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20840">20840</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8453,7 +8573,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the entry type selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20093">20093</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20289">20289</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8473,7 +8593,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Exit this ROOT session.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20807">20807</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l21003">21003</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8493,7 +8613,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the lab experiment site box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19432">19432</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19628">19628</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8513,7 +8633,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Treating the text of the entry name for the information panel.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19806">19806</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20002">20002</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8533,7 +8653,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the requested info.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19817">19817</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20013">20013</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8555,7 +8675,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : Local frame parameters for established experimental sites</span></div>
 <div class="line"><span class="comment">//        may NOT be modified.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19659">19659</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19855">19855</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8575,7 +8695,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Use the current date/time selection as the Lab timestamp.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19579">19579</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19775">19775</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8595,7 +8715,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// List the entries of the skymap.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20732">20732</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20928">20928</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8623,7 +8743,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to render the GUI panel to specify various Mapping and Listing options.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20151">20151</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20347">20347</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8643,7 +8763,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the lab latitude entry field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19408">19408</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19604">19604</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8663,7 +8783,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Enter the provided lab location entry.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19456">19456</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19652">19652</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8683,7 +8803,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the lab detector element Id entry field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19444">19444</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19640">19640</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8703,7 +8823,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the lab longitude entry field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19396">19396</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19592">19592</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8723,7 +8843,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the marker color selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20598">20598</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20794">20794</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8743,7 +8863,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the marker size selection field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20571">20571</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20767">20767</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8763,7 +8883,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the marker style selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20583">20583</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20779">20779</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8783,7 +8903,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the markers entry type selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20613">20613</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20809">20809</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8803,7 +8923,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the central meridian specification field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20491">20491</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20687">20687</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8823,7 +8943,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the meridian ordering selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20479">20479</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20675">20675</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8843,7 +8963,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the central meridian angular format selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20503">20503</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20699">20699</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8863,7 +8983,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the draw/list Ndigs selection field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20548">20548</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20744">20744</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8883,7 +9003,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the draw/list Nmax selection field.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20536">20536</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20732">20732</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8903,7 +9023,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the projection selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20460">20460</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20656">20656</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8923,7 +9043,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Remove the entry/entries specified by type and name pattern.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20133">20133</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20329">20329</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8943,7 +9063,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Remove the seleced Solar system object(s) from the reference objects.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20665">20665</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20861">20861</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8963,7 +9083,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the Solar system selection group.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20624">20624</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20820">20820</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -8983,7 +9103,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on the time type selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19563">19563</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19759">19759</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -9003,7 +9123,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the time type selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19776">19776</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19972">19972</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -9023,7 +9143,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the a coordinate angular format selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20041">20041</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20237">20237</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -9043,7 +9163,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the b coordinate angular format selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20065">20065</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20261">20261</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -9063,7 +9183,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the info angular format selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19794">19794</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19990">19990</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -9083,7 +9203,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Action on a button from the lab angular unit selection box.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19420">19420</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19616">19616</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -9221,7 +9341,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// tx-&gt;Date();</span></div>
 <div class="line"><span class="comment">// Double_t mjd1=tx-&gt;GetMJD();</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16000">16000</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16169">16169</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -9358,7 +9478,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// tx-&gt;Date();</span></div>
 <div class="line"><span class="comment">// Double_t mjd1=tx-&gt;GetMJD();</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16627">16627</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l16800">16800</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -12286,7 +12406,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to compose the timestamp within the SkyMapPanel GUI.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l20820">20820</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l21016">21016</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -13425,7 +13545,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// to provide a user friendly interface to this NcAstrolab instance</span></div>
 <div class="line"><span class="comment">// to Enter, Remove, List and Display entries and their properties.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19207">19207</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19403">19403</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -13490,7 +13610,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Internal memberfunction to render the Timestamp specification GUI panel.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19501">19501</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19697">19697</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -13514,7 +13634,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// * This is a beta test version, so currently no backward compatibility guaranteed *</span></div>
 <div class="line"><span class="comment">// **********************************************************************************</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19175">19175</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html#l19371">19371</a> of file <a class="el" href="../../dc/d05/_nc_astrolab_8cxx_source.html">NcAstrolab.cxx</a>.</p>
 
 </div>
 </div>
@@ -13539,7 +13659,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00376">376</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00380">380</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13563,7 +13683,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00369">369</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00373">373</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13587,7 +13707,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00382">382</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00386">386</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13611,7 +13731,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00254">254</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00258">258</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13637,7 +13757,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The frame bias matrix for conversion of ICRS to J2000 coordinates </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00258">258</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00262">262</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13663,7 +13783,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Initialisation flag for fB values (0=uninitialised 1=initialised) </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00259">259</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00263">263</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13687,7 +13807,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00411">411</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00415">415</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13711,7 +13831,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00413">413</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00417">417</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13735,7 +13855,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00379">379</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00383">383</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13759,7 +13879,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00417">417</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00421">421</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13783,7 +13903,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00425">425</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00429">429</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13807,7 +13927,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00423">423</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00427">427</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13831,7 +13951,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00422">422</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00426">426</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13855,7 +13975,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00424">424</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00428">428</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13879,7 +13999,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00419">419</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00423">423</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13903,7 +14023,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00418">418</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00422">422</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13927,7 +14047,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00416">416</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00420">420</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13951,7 +14071,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00426">426</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00430">430</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13975,7 +14095,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00421">421</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00425">425</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -13999,7 +14119,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00420">420</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00424">424</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14025,7 +14145,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The canvas for the skymap </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00304">304</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00308">308</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14049,7 +14169,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00404">404</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00408">408</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14073,7 +14193,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00405">405</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00409">409</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14097,7 +14217,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00406">406</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00410">410</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14121,7 +14241,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00407">407</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00411">411</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14145,7 +14265,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00275">275</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00279">279</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14169,7 +14289,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00274">274</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00278">278</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14193,7 +14313,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00273">273</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00277">277</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14219,7 +14339,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Matrix for conversion of equatorial to ecliptic coordinates </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00264">264</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00268">268</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14243,7 +14363,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00251">251</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00255">255</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14267,7 +14387,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00377">377</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00381">381</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14293,7 +14413,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Matrix for conversion of equatorial to galactic coordinates </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00262">262</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00266">266</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14319,7 +14439,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Type indicator for fG values (0=uninitialised 1=B1950 2=J2000) </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00263">263</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00267">267</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14343,7 +14463,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00373">373</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00377">377</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14367,7 +14487,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00375">375</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00379">379</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14391,7 +14511,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00381">381</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00385">385</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14417,7 +14537,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Matrix for conversion of equatorial to horizontal coordinates </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00265">265</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00269">269</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14441,7 +14561,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00392">392</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00396">396</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14465,7 +14585,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00393">393</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00397">397</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14489,7 +14609,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00394">394</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00398">398</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14515,7 +14635,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Temp. histograms for the sky display </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00305">305</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00309">309</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14539,7 +14659,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00384">384</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00388">388</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14565,7 +14685,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Storage indices of the matching reference signals </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00267">267</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00271">271</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14589,7 +14709,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00266">266</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00270">270</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14613,7 +14733,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00252">252</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00256">256</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14637,7 +14757,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00250">250</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00254">254</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14663,7 +14783,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected info category </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00335">335</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00339">339</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14689,7 +14809,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered date </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00328">328</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00332">332</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14715,7 +14835,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered datetime </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00331">331</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00335">335</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14741,7 +14861,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected coordinate system for the Map/List </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00347">347</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00351">351</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14767,7 +14887,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected coordinate system mode for the Map/List </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00349">349</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00353">353</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14793,7 +14913,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered name pattern for entries to be shown in the Map/List </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00353">353</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00357">357</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14819,7 +14939,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI Map/List options (histo, clr, ref, meas, refTS) </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00350">350</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00354">354</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14845,7 +14965,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered a coordinate of an entry </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00339">339</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00343">343</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14871,7 +14991,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered b coordinate of an entry </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00341">341</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00345">345</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14897,7 +15017,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered coordinate system of the entry </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00344">344</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00348">348</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14923,7 +15043,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered coordinate system mode of the entry </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00345">345</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00349">349</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14949,7 +15069,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered name of the entry </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00346">346</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00350">350</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -14975,7 +15095,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered entry type </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00343">343</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00347">347</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15001,7 +15121,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered angular units of a </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00340">340</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00344">344</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15027,7 +15147,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered angular units of b </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00342">342</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00346">346</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15053,7 +15173,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected entry name for the info </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00338">338</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00342">342</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15079,7 +15199,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI Lab experiment site selection box </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00320">320</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00324">324</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15105,7 +15225,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered Lab experimental site </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00324">324</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00328">328</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15131,7 +15251,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered Lab detector Id </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00325">325</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00329">329</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15157,7 +15277,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI number entries for the Lab location specification </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00318">318</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00322">322</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15183,7 +15303,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI number entries for the local frame specification </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00334">334</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00338">338</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15209,7 +15329,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered Lab latitude </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00322">322</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00326">326</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15235,7 +15355,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered Lab longitude </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00321">321</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00325">325</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15261,7 +15381,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered Lab location angular units </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00323">323</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00327">327</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15287,7 +15407,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selection to use the Lab timestamp for the List/Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00333">333</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00337">337</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15313,7 +15433,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI Lab location angular unit selection box </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00319">319</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00323">323</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15339,7 +15459,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected marker color for the Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00360">360</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00364">364</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15365,7 +15485,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered marker size for the Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00358">358</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00362">362</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15391,7 +15511,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected marker style for the Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00359">359</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00363">363</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15417,7 +15537,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected entry type to apply the marker attributes on </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00361">361</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00365">365</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15443,7 +15563,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered central meridian location for the Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00356">356</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00360">360</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15469,7 +15589,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected meridian orientation for the Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00355">355</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00359">359</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15495,7 +15615,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected angular units for the central meridian location </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00357">357</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00361">361</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15521,7 +15641,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected number of digits for the List output </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00352">352</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00356">356</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15547,7 +15667,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected max. number of signals of each type to Map/List </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00351">351</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00355">355</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15573,7 +15693,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected projection for the Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00348">348</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00352">352</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15599,7 +15719,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selection of solar system objects </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00354">354</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00358">358</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15625,7 +15745,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered time </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00329">329</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00333">333</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15651,7 +15771,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered time type </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00330">330</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00334">334</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15677,7 +15797,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected mode for the timestamp info </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00336">336</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00340">340</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15703,7 +15823,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI entered timestamp to be used for the List/Map </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00332">332</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00336">336</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15729,7 +15849,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI TS date/time specification </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00326">326</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00330">330</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15755,7 +15875,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI TS time type selection box </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00327">327</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00331">331</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15781,7 +15901,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The GUI selected angular units for the Lab info </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00337">337</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00341">341</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15805,7 +15925,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00309">309</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00313">313</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15831,7 +15951,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Temp. array to hold the markers for the signal display </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00306">306</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00310">310</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15855,7 +15975,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00307">307</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00311">311</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15879,7 +15999,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00308">308</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00312">312</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15903,7 +16023,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00283">283</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00287">287</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15927,7 +16047,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00366">366</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00370">370</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15953,7 +16073,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Central meridian (in rad) for the sky display </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00302">302</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00306">306</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -15977,7 +16097,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00367">367</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00371">371</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16001,7 +16121,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00371">371</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00375">375</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16025,7 +16145,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00370">370</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00374">374</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16049,7 +16169,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00368">368</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00372">372</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16073,7 +16193,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00372">372</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00376">376</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16097,7 +16217,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00374">374</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00378">378</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16123,7 +16243,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Matrix for nutation correction </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00261">261</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00265">265</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16147,7 +16267,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00257">257</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00261">261</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16171,7 +16291,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00380">380</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00384">384</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16195,7 +16315,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00397">397</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00401">401</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16219,7 +16339,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00388">388</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00392">392</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16243,7 +16363,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00389">389</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00393">393</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16267,7 +16387,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00387">387</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00391">391</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16291,7 +16411,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00385">385</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00389">389</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16315,7 +16435,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00386">386</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00390">390</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16341,7 +16461,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Matrix for precession correction </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00260">260</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00264">264</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16365,7 +16485,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00383">383</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00387">387</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16389,7 +16509,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00281">281</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00285">285</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16413,7 +16533,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00280">280</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00284">284</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16437,7 +16557,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00279">279</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00283">283</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16461,7 +16581,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00378">378</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00382">382</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16487,7 +16607,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! Projection which is currently in use </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00303">303</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00307">307</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16511,7 +16631,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00365">365</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00369">369</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16535,7 +16655,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00282">282</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00286">286</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16559,7 +16679,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00255">255</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00259">259</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16583,7 +16703,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00272">272</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00276">276</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16607,7 +16727,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00410">410</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00414">414</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16631,7 +16751,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00412">412</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00416">416</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16655,7 +16775,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00256">256</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00260">260</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16681,7 +16801,7 @@ Protected Attributes</h2></td></tr>
 
 <p>! The main frame for the SkyMapPanel GUI </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00317">317</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00321">321</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16705,7 +16825,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00297">297</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00301">301</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16729,7 +16849,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00364">364</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00368">368</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16753,7 +16873,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00278">278</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00282">282</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16777,7 +16897,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00277">277</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00281">281</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16801,7 +16921,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00276">276</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00280">280</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16825,7 +16945,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00253">253</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00257">257</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16849,7 +16969,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00271">271</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00275">275</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16873,7 +16993,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00270">270</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00274">274</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16897,7 +17017,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00269">269</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00273">273</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16921,7 +17041,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00268">268</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00272">272</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>
@@ -16945,7 +17065,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00301">301</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html#l00305">305</a> of file <a class="el" href="../../d0/d61/_nc_astrolab_8h_source.html">NcAstrolab.h</a>.</p>
 
 </div>
 </div>

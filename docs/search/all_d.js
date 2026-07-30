@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['makeburstdatastats_0',['MakeBurstDataStats',['../d1/dfe/class_nc_astrolab.html#a9160aff8ea478c129b1bb13630ea87d6',1,'NcAstrolab']]],
-  ['makeburstenergydist_1',['MakeBurstEnergydist',['../d1/dfe/class_nc_astrolab.html#a8d879ecac392b011235a1d2290325647',1,'NcAstrolab::MakeBurstEnergydist(Int_t mode, TString file, TString tree, TString name1, TString name2, TString u, Int_t nb=1000)'],['../d1/dfe/class_nc_astrolab.html#a4f8314922ec0a38a8e8e7e88bbb9f5e1',1,'NcAstrolab::MakeBurstEnergydist(TString mode, TF1 &amp;spec, Int_t nsrc=0, Int_t nbins=1000)'],['../d1/dfe/class_nc_astrolab.html#afb883cef3705e059033d7ce1dc811e1c',1,'NcAstrolab::MakeBurstEnergydist(TString mode, Double_t alpha, Int_t nbins=1000)']]],
+  ['makeburstdatastats_0',['MakeBurstDataStats',['../d1/dfe/class_nc_astrolab.html#a03c9db1371def1b6c1372917df072ac9',1,'NcAstrolab']]],
+  ['makeburstenergydist_1',['MakeBurstEnergydist',['../d1/dfe/class_nc_astrolab.html#a8d879ecac392b011235a1d2290325647',1,'NcAstrolab::MakeBurstEnergydist(Int_t mode, TString file, TString tree, TString name1, TString name2, TString u, Int_t nb=1000)'],['../d1/dfe/class_nc_astrolab.html#acfb061fce0d24bead4799a32946b7c54',1,'NcAstrolab::MakeBurstEnergydist(TString mode, TF1 &amp;spec, Int_t nsrc=0, Int_t nbins=1000, Float_t Tem=-1)'],['../d1/dfe/class_nc_astrolab.html#afb883cef3705e059033d7ce1dc811e1c',1,'NcAstrolab::MakeBurstEnergydist(TString mode, Double_t alpha, Int_t nbins=1000)']]],
   ['makeburstnucountprofile_2',['MakeBurstNuCountProfile',['../d1/dfe/class_nc_astrolab.html#a72d3e060b13fd5199db94b8ad2fd70f4',1,'NcAstrolab']]],
   ['makeburstrecoangresdist_3',['MakeBurstRecoAngresdist',['../d1/dfe/class_nc_astrolab.html#a026b30e09c883a03f8a382ef96e112dc',1,'NcAstrolab']]],
   ['makeburstsigmaposdist_4',['MakeBurstSigmaPosdist',['../d1/dfe/class_nc_astrolab.html#a844b5a45e8454e4f6b2934f1a11beac5',1,'NcAstrolab']]],

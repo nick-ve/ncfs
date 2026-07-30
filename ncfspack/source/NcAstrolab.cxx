@@ -180,7 +180,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC June 25, 2026  14:43
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC July 30, 2026  10:57
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -11685,6 +11685,22 @@ void NcAstrolab::SetBurstParameter(TString name,Double_t value)
  fBurstParameters->SetSignal(NbkgWin,name);
 }
 ///////////////////////////////////////////////////////////////////////////
+Double_t NcAstrolab::GetBurstParameter(TString name)
+{
+/**
+~~~
+// Provide the value of the requested transient burst parameter.
+//
+// **********************************************************************************
+// * This is a beta test version, so currently no backward compatibility guaranteed *
+// **********************************************************************************
+~~~
+**/
+
+ Double_t value=fBurstParameters->GetSignal(name);
+ return value;
+}
+///////////////////////////////////////////////////////////////////////////
 NcDevice* NcAstrolab::GetBurstParameters()
 {
 /**
@@ -11901,13 +11917,25 @@ void NcAstrolab::ListBurstParameters() const
   }
   else
   {
-   str="Signal energy profile at Earth : dN/dE=";
+   str="Per source signal energy profile at Earth : dN/dE=";
   }
   str+=fSigEprofile.GetExpFormula("p");
   str.ReplaceAll("x","E");
-  if (fSigEmode=="SigS") str+=" cm^-2";
-  if (fSigEmode=="SigF") str+=" cm^-2 s^-1";
-  if (fSigEmode=="SigI") str+=" cm^-2 s^-1 sr^-1";
+  if (fSigEmode=="SigS")
+  {
+   str.ReplaceAll("dE","(dEdA)");
+   str+=" cm^-2";
+  }
+  if (fSigEmode=="SigF")
+  {
+   str.ReplaceAll("dE","(dEdAdt)");
+   str+=" cm^-2 s^-1";
+  }
+  if (fSigEmode=="SigI")
+  {
+   str.ReplaceAll("dE","(dEdAdtdOmega)");
+   str+=" cm^-2 s^-1 sr^-1";
+  }
   printf(" %-s within [%-g,%-g] GeV \n",str.Data(),fESigmin,fESigmax);
 
   if (fSigEmode=="SigE")
@@ -11967,9 +11995,21 @@ void NcAstrolab::ListBurstParameters() const
   }
   str+=fBkgEprofile.GetExpFormula("p");
   str.ReplaceAll("x","E");
-  if (fBkgEmode=="BkgS") str+=" cm^-2";
-  if (fBkgEmode=="BkgF") str+=" cm^-2 s^-1";
-  if (fBkgEmode=="BkgI") str+=" cm^-2 s^-1 sr^-1";
+  if (fBkgEmode=="BkgS")
+  {
+   str.ReplaceAll("dE","(dEdA)");
+   str+=" cm^-2";
+  }
+  if (fBkgEmode=="BkgF")
+  {
+   str.ReplaceAll("dE","(dEdAdt)");
+   str+=" cm^-2 s^-1";
+  }
+  if (fBkgEmode=="BkgI")
+  {
+   str.ReplaceAll("dE","(dEdAdtdOmega)");
+   str+=" cm^-2 s^-1 sr^-1";
+  }
   printf(" %-s within [%-g,%-g] GeV \n",str.Data(),fEmin,fEmax);
 
   printf(" Fixed event reco angular resolution (sigma in degrees), also used when no distribution (value) is available : %-g \n",fAngresfix);
@@ -12601,7 +12641,7 @@ void NcAstrolab::MakeBurstNuCountProfile(TString mode)
  // Create the distributions for signal data
  if (hSigEprofile && (mode=="Aeff" || mode=="SigS" || mode=="SigF" || mode=="SigI"))
  {
-  title="Contraction of hSigEprofile and hAeffProfile;Log(E) in GeV;Cosine of the Zenith angle (#theta);Counts";
+  title="Contraction of hSigEprofile and hAeffProfile;Log(E/1GeV);Cosine of the Zenith angle (#theta);Counts";
   if (mode.Contains("F")) title+=" s^{-1}";
   if (mode.Contains("I")) title+=" s^{-1} sr^{ -1}";
   if (!hSigNuCountProfile)
@@ -13271,12 +13311,14 @@ TH1* NcAstrolab::GetBurstSigmaPosdist(TString name,TString type)
  return sigmaposdist;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbins)
+void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbins,Float_t Tem)
 {
 /**
 ~~~
 // Create a background or burst induced signal (see below) energy distribution
 // on the interval [Emin,Emax] GeV based on the spectral function "spec" describing dN/dE.
+// Since dN/dE is treated as #/GeV, all the energy terms in the function description of "spec"
+// have to be given in units of GeV as well.
 // The energy interval [Emin,Emax] corresponds to the background or signal energy interval
 // as specified via SetBurstParameters().
 // If this memberfunction is invoked before GenBurstSignals(), the resulting 
@@ -13314,42 +13356,59 @@ void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbi
 //          "BkgF" --> Particle Flux as a function of energy in cm^-2 s^-1 for background events at Earth
 //          "BkgI" --> Particle Intensity as a function of energy in cm^-2 s^-1 sr^-1 for background events at Earth
 // spec   = The spectral function in TF1 format describing the specified "mode" dN/dE in units of GeV
-// nbins  = The number of equally sized bins on the interval [Emin,Emax] for the resulting distribution
 // nsrc   = The number of (stacked) sources that corresponds to a specified Fluence.
+// nbins  = The number of equally sized bins on the interval [Emin,Emax] for the resulting distribution
+// Tem    = Signal emission time in units of Dtnus.
+//          See 3) below and the definitions of observation time window and Dtnus in SetBurstParameter().
+//          >0  : Provided Flux c.q. Intensity relates only to the emission period Tem.
+//                Automatic scaling w.r.t. the observation time window (Tobs) will be performed with a factor Tem/Tobs
+//                This allows a generic treatment of all kinds of sources.
+//                It should be noted that the value of Tem is irrelevant in the case of Fluence specifications.   
+//          <=0 : No automatic scaling.
+//                Scaling (if needed) may still be performed by the user in the description of "spec".
 //
 // Notes :
 // -------
 // 1) "nsrc" is only relevant when the spectrum represents a signal Fluence, since it is assumed that
 //    the (signals of the) transient phenomena are observed in non-overlapping time windows.
-//    As such, Fluxes or Intensities of different sources are not cumulative.
+//    As such, Fluxes or Intensities of different sources are not cumulative, and the specified spectrum
+//    is regarded as the Flux or Intensity per individual source.
 //    When a background is specified, the Fluence, Flux or Intensity is assumed to be
 //    isotropic and constant over the entire observation period.
 // 2) When a signal Fluence is specified, it is assumed that the observation time was long enough
 //    for each (transient) phenomenon to cover the full signal emission period.
-// 3) When a signal Flux or Intensity is specified for transient phenomena, it is assumed that the
-//    the emission is constant over the whole observation period (Tobs) of the corresponding phenomenon.
-//    In case a specific emission time (Tem) is assumed, one should scale the Flux c.q. Intensity normalisation
-//    by a factor Tobs/Tem.  
+// 3) When a signal Flux or Intensity is specified, it is assumed that the emission is constant over
+//    the whole observation period (Tobs) of the corresponding phenomenon.
+//    In case a specific emission time (Tem) is specified for a transient, the Flux c.q. Intensity normalisation
+//    will be automatically scaled as indicated above.
 // 4) When a signal Intensity is specified, it is interpreted as an isotropic diffuse signal yield
 //    due to the "nsrc" sources.
 // 5) For mode="SigE" a signal energy pdf at Earth may be specified by setting the parameter "Ezcor" to 0
 //    via invokation of the memberfunction SetBurstParameter(). 
 //
-// Example: To make a dN/dE=E^-2 plain burst induced signal energy distribution
+// In presenting a Fluence, Flux or Intensity, it is custom to denote the normalisation at a specific energy E0
+// (aka "anchor point") as "phi(E0)".
 //
-// TString mode="SigE";
-// TF1 spec("spec","pow(x,-2)");
-// nsrc=0;
-// nbins=1000;
-// MakeBurstEnergydist(mode,spec,nsrc,nbins);
+// Example: To specify an E^-2 burst induced signal Flux distribution with normalisation phi(1TeV)=1e-9 [GeV cm^-2 s^-1],
+//          the corresponding formula is dN/dEdAdt=phi(E0)*(E/E0)^-2.
 //
-// The default values are nsrc=0 and nbins=1000.
+// The corresponding code is :
+//
+// TString mode="SigF";
+// TF1 spec("spec","1e-9*pow(x/1000,-2)"); // All energies must be specified in GeV
+// Int_t nsrc=0;
+// Int_ nbins=1000;
+// Float_t Tem=0; // Flux is assumed to be constant over the whole observation period 
+// MakeBurstEnergydist(mode,spec,nsrc,nbins,Tem);
+//
+// The default values are nsrc=0, nbins=1000 and Tem=-1.
 ~~~
 **/
 
  if (mode!="SigE" && mode!="SigS" && mode!="SigF" && mode!="SigI" && mode!="BkgE" && mode!="BkgS" && mode!="BkgF" && mode!="BkgI")
  {
   printf("\n *%-s::MakeBurstEnergydist* Inconsistent mode : %-s \n",ClassName(),mode.Data());
+  printf(" The default energy PDF will be used \n");
   return;
  }
 
@@ -13380,6 +13439,7 @@ void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbi
  if (Emax<=Emin || nbins<1 || nsrc<1)
  {
   printf("\n *%-s::MakeBurstEnergydist* Inconsistent data : mode=%-s nsrc=%-i Emin=%-g Emax=%-g nbins=%-i \n",ClassName(),mode.Data(),nsrc,Emin,Emax,nbins);
+  printf(" The default energy PDF will be used \n");
   return;
  }
 
@@ -13387,26 +13447,35 @@ void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbi
  Double_t xmin=log10(Emin);
  Double_t xmax=log10(Emax);
 
- // Normalize the Fluence, Flux or Intensity to a single source (if needed)
+ // Obtain the automatic Tem/Tobs scaling if needed
+ Float_t fTfact=fBurstParameters->GetSignal("Tfact");
+ Float_t fDtwin=fBurstParameters->GetSignal("Dtwin");
+ Float_t fDtnus=fBurstParameters->GetSignal("Dtnus");
+ Float_t Tobs=fDtwin*fTfact;
+ if (Tem>0) Tem=Tem*fDtnus;
+
  TString sf="";
- Float_t norm=1;
- if (nsrc>1 && (mode=="SigS" || mode=="BkgS"))
+ if (nsrc>1 && (mode=="SigS" || mode=="BkgS")) // Normalize the Fluence to a single source
  {
-  norm=1./float(nsrc);
-  sf.Form("%-g*%-s",norm,(spec.GetExpFormula("p")).Data());
+  sf.Form("(1./%-i)*%-s",nsrc,(spec.GetExpFormula("p")).Data());
+ }
+ else if (Tobs>0 && Tem>0 && (mode=="SigF" || mode=="SigI")) // Flux c.q. Intensity normalisation via Tem/Tobs
+ {
+  sf.Form("%-g*%-s",Tem/Tobs,(spec.GetExpFormula("p")).Data());
  }
  else
  {
   sf=spec.GetExpFormula("p");
  }
 
- // The spectral function normalized (if needed) to a single source
+ // The spectral function for each individual source
  TF1 spec2("spec2",sf); 
 
  // Store the normalized spectral function
  if (mode.Contains("Sig")) fSigEprofile=spec2; 
  if (mode.Contains("Bkg")) fBkgEprofile=spec2; 
 
+ Float_t norm=1;
  if (mode=="SigE" || mode=="BkgE")
  {
   sf="PDF for dN/dE=";
@@ -13415,7 +13484,7 @@ void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbi
  }
  else
  {
-  sf="Counts cm^{-2}";
+  sf="N cm^{-2}";
   if (mode.Contains("F")) sf+=" s^{-1}";
   if (mode.Contains("I")) sf+=" s^{-1} sr^{ -1}";
   sf+=" for dN/dE=";
@@ -13435,7 +13504,7 @@ void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbi
    sh="Average per source induced signal energy distribution at Earth";
   }
  }
- sh+=";^{10}log(E) in GeV;";
+ sh+=";^{10}log(E/1GeV);";
  sh+=sf;
  TH1F his=GetCountsHistogram(spec2,nbins,xmin,xmax,1,sh);
 
@@ -13472,7 +13541,7 @@ void NcAstrolab::MakeBurstEnergydist(TString mode,TF1& spec,Int_t nsrc,Int_t nbi
   fBurstParameters->SetSignal(1,"PDFsigE");
  }
 
- printf("\n *%-s::MakeBurstEnergydist* Created a %-s profile %-s on [Emin,Emax]=[%-g,%-g] GeV \n",ClassName(),mode.Data(),sf.Data(),Emin,Emax);
+ printf("\n *%-s::MakeBurstEnergydist* Per source %-s profile %-s on [Emin,Emax]=[%-g,%-g] GeV \n",ClassName(),mode.Data(),sf.Data(),Emin,Emax);
 
  // Create the corresponding NuCount and Zenith profile by using the Effective Area data (if any)
  MakeBurstNuCountProfile(mode);
@@ -14160,6 +14229,10 @@ void NcAstrolab::GenBurstSignals()
 ~~~
 **/
 
+ // Indicate that this will be a burst analysis on simulated data
+ fBurstParameters->AddNamedSlot("BurstDataMode");
+ fBurstParameters->SetSignal(0,"BurstDataMode");   
+
  // Signal and background generation can only be performed for a user defined fixed time window size
  Float_t fTmin=fBurstParameters->GetSignal("Tmin");
  Float_t fTmax=fBurstParameters->GetSignal("Tmax");
@@ -14180,7 +14253,7 @@ void NcAstrolab::GenBurstSignals()
  // Initialise the final sample histograms //
  ////////////////////////////////////////////
 
- InitBurstHistograms(0);
+ InitBurstHistograms();
 
  // Retrieve the needed parameters
  Float_t fRAmin=fBurstParameters->GetSignal("RAmin");
@@ -14846,28 +14919,34 @@ void NcAstrolab::GenBurstSignals()
   fBurstParameters->AddSignal(solidangle,"SolidangleOff");
  }
 
+ // Store the number of recorded burst signal events
+ fBurstParameters->AddNamedSlot("Nmugrb");
+ fBurstParameters->SetSignal(nmugrb,"Nmugrb");   
+
  // Determine and list the burst statistics
- MakeBurstDataStats(0,nmugrb);
+ MakeBurstDataStats();
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
+void NcAstrolab::MakeBurstDataStats()
 {
 /**
 ~~~
 // Internal memberfunction to determine and list the burst-data statistics.
 //
-// mode : 0 --> Invoked from GenBurstSignals()
-//        1 --> Invoked from MatchBurstData()
+// This function is invoked by GenBurstSignals() and MatchBurstData().
 //
 // **********************************************************************************
 // * This is a beta test version, so currently no backward compatibility guaranteed *
 // **********************************************************************************
-//
-// Default value is nmugrb=0.
 ~~~
 **/
 
  Double_t pi=acos(-1.);
+
+ // Retrieve the burst analysis data mode
+ // mode : 0 --> Analysis based on simulated data via GenBurstSignals()
+ //        1 --> Analysis based on real data via MatchBurstData()
+ Int_t mode=TMath::Nint(fBurstParameters->GetSignal("BurstDataMode"));
 
  // Retrieve the needed parameters
  Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
@@ -14885,12 +14964,6 @@ void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
  Float_t fRbkgDecl=fBurstParameters->GetSignal("RbkgDecl");
  Float_t fSolidangleOn=fBurstParameters->GetSignal("SolidangleOn");
  Float_t fSolidangleOff=fBurstParameters->GetSignal("SolidangleOff");
- Float_t fEnergyOn=fBurstParameters->GetSignal("EnergyOn");
- Float_t fEnergyOff=fBurstParameters->GetSignal("EnergyOff");
- Float_t fEnergySig=fBurstParameters->GetSignal("EnergySig");
- Float_t fEnergyBkg=fEnergyOn-fEnergySig;
- Float_t fSensarea=fBurstParameters->GetSignal("Sensarea");
- Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
  Int_t fBBtime=TMath::Nint(fBurstParameters->GetSignal("BBtime"));
  Int_t fBBangle=TMath::Nint(fBurstParameters->GetSignal("BBangle"));
  Float_t fBBfpr=fBurstParameters->GetSignal("BBfpr");
@@ -15702,197 +15775,18 @@ void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
  // Determination of the on-source and off-source event rates
  Float_t nOn=non;
  Float_t nOff=noff;
- Float_t nsigOn=nsig;
- Float_t nbkgOn=nOn-nsigOn;
  Float_t Ton=DtwinOn*fTfact*float(fNgrbs);                // Total on-source exposure time in seconds
  Float_t Toff=DtwinOff*fTfact*float(fNgrbs)*float(fNbkg); // Total off-source exposure time in seconds
  Float_t rateOn=nOn/(DtwinOn*fTfact);
  Float_t rateOff=nOff/(DtwinOff*fTfact);
 
  // (Average) values per patch
- Float_t TwinOn=DtwinOn*fTfact;
- Float_t TwinOff=DtwinOff*fTfact;
  Float_t AvSolidangleOn=0;
  Float_t AvSolidangleOff=0;
- Float_t AvNon=0;
- Float_t AvNoff=0;
- Float_t AvRon=0;
- Float_t AvRoff=0;
- Float_t AvEon=0;
- Float_t AvEoff=0;
- Float_t AvNsigOn=0;
- Float_t AvNbkgOn=0;
- Float_t AvRsigOn=0;
- Float_t AvRbkgOn=0;
- Float_t AvEsigOn=0;
- Float_t AvEbkgOn=0;
  Float_t scale=fNgrbs;
- if (scale)
- {
-  AvSolidangleOn=fSolidangleOn/scale;
-  AvNon=nOn/scale;
-  AvRon=nOn/Ton;
-  AvEon=fEnergyOn/scale;
-  AvNsigOn=nsigOn/scale;
-  AvNbkgOn=nbkgOn/scale;
-  AvRsigOn=nsigOn/Ton;
-  AvRbkgOn=nbkgOn/Ton;
-  AvEsigOn=fEnergySig/scale;
-  AvEbkgOn=fEnergyBkg/scale;
- }
+ if (scale) AvSolidangleOn=fSolidangleOn/scale;
  scale=fNgrbs*fNbkg;
- if (scale)
- {
-  AvSolidangleOff=fSolidangleOff/scale;
-  AvNoff=nOff/scale;
-  AvRoff=nOff/Toff;
-  AvEoff=fEnergyOff/scale;
- }
-
- // Statistics of the stacked event samples
- printf("\n *%-s::MakeBurstDataStats* Statistics of the stacked observed event samples. \n",ClassName());
- printf(" Solid angle coverage corresponding to the selected RA and DEC range : %-g steradian \n",fOmegaDecl);
- printf(" Integrated on-source  exposure time of the %-i stacked time windows : %-g %-s \n",fNgrbs,Ton/fTfact,tu.Data());
- printf(" Integrated off-source exposure time of the %-i*%-i stacked time windows : %-g %-s \n",fNgrbs,fNbkg,Toff/fTfact,tu.Data());
- printf(" Total accumulated on-source  solid angle : %-g sr in %-i stacked patches --> Average per patch : %-g sr \n",fSolidangleOn,fNgrbs,AvSolidangleOn); 
- printf(" Total accumulated off-source solid angle : %-g sr in %-i*%-i stacked patches --> Average per patch : %-g sr \n",fSolidangleOff,fNgrbs,fNbkg,AvSolidangleOff);
- if (fSensarea>0) printf(" Area covered c.q. overlooked by the detector sensors : %-g m^2. \n",fSensarea);
- fSensarea*=1e4; // Convert to cm^2
-
- printf(" *On source*  Total number of recorded on-source events : %-g --> Average per patch : %-g events. \n",nOn,AvNon);
- printf("              --- Average recorded values per on-source patch --- \n");
- printf("              Steady event rate during the time window : %-g Hz",AvRon);
- if (AvSolidangleOn) printf(" --> %-g Hz sr^-1",AvRon/AvSolidangleOn);
- printf("\n");
- if (fSensarea>0)
- {
-  printf("              Particle fluence : %-g cm^-2",AvNon/fSensarea);
-  if (AvSolidangleOn) printf(" --> %-g cm^-2 sr^-1",AvNon/(fSensarea*AvSolidangleOn));
-  printf("\n");
-  printf("              Particle flux : %-g cm^-2 s^-1",AvRon/fSensarea);
-  if (AvSolidangleOn) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRon/(fSensarea*AvSolidangleOn));
-  printf("\n");
- }
- printf("              Cumulated energy : %-g GeV",AvEon);
- if (AvSolidangleOn) printf(" --> %-g GeV sr^-1",AvEon/AvSolidangleOn);
- printf("\n");
- printf("              Power : %-g GeV/s",AvEon/TwinOn);
- if (AvSolidangleOn) printf(" --> %-g GeV s^-1 sr^-1",AvEon/(TwinOn*AvSolidangleOn));
- printf("\n");
- if (fSensarea>0)
- {
-  printf("              Energy fluence : %-g GeV cm^-2",AvEon/fSensarea);
-  if (AvSolidangleOn) printf(" --> %-g GeV cm^-2 sr^-1",AvEon/(fSensarea*AvSolidangleOn));
-  printf("\n");
-  printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEon/(fSensarea*TwinOn));
-  if (AvSolidangleOn) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEon/(fSensarea*TwinOn*AvSolidangleOn));
-  printf("\n");
- }
-
- if (fNbkg)
- {
-  printf(" *Off source* Total number of recorded off-source (background) events : %-g --> Average per patch : %-g events. \n",nOff,AvNoff);
-  printf("              --- Average recorded values per off-source patch --- \n");
-  printf("              Steady event rate during the time window : %-g Hz",AvRoff);
-  if (AvSolidangleOff) printf(" --> %-g Hz sr^-1",AvRoff/AvSolidangleOff);
-  printf("\n");
-  if (fSensarea>0)
-  {
-   printf("              Particle fluence : %-g cm^-2",AvNoff/fSensarea);
-   if (AvSolidangleOff) printf(" --> %-g cm^-2 sr^-1",AvNoff/(fSensarea*AvSolidangleOff));
-   printf("\n");
-   printf("              Particle flux : %-g cm^-2 s^-1",AvRoff/fSensarea);
-   if (AvSolidangleOff) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRoff/(fSensarea*AvSolidangleOff));
-   printf("\n");
-  }
-  printf("              Cumulated energy : %-g GeV",AvEoff);
-  if (AvSolidangleOff) printf(" --> %-g GeV sr^-1",AvEoff/AvSolidangleOff);
-  printf("\n");
-  printf("              Power : %-g GeV/s",AvEoff/TwinOff);
-  if (AvSolidangleOff) printf(" --> %-g GeV s^-1 sr^-1",AvEoff/(TwinOn*AvSolidangleOff));
-  printf("\n");
-  if (fSensarea>0)
-  {
-   printf("              Energy fluence : %-g GeV cm^-2",AvEoff/fSensarea);
-   if (AvSolidangleOff) printf(" --> %-g GeV cm^-2 sr^-1",AvEoff/(fSensarea*AvSolidangleOff));
-   printf("\n");
-   printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEoff/(fSensarea*TwinOff));
-   if (AvSolidangleOff) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEoff/(fSensarea*TwinOff*AvSolidangleOff));
-   printf("\n");
-  }
- }
-
- // On-source signal and background info is only available for simulated data
- if (!mode)
- {
-  printf(" -(Unknown)-  Total number of injected on-source signal events : %-i",nmugrb);
-  if (fNgrbs) printf(" --> Average per patch : %-g events.",float(nmugrb)/float(fNgrbs));
-  printf("\n");
-  printf("              Total number of recorded on-source signal events : %-g",nsigOn);
-  if (fNgrbs) printf(" --> Average per patch : %-g events.",nsigOn/float(fNgrbs));
-  printf("\n");
-  printf("              Total number of recorded on-source bkg    events : %-g",nbkgOn);
-  if (fNgrbs) printf(" --> Average per patch : %-g events.",nbkgOn/float(fNgrbs));
-  printf("\n");
-
-  printf("              --- Average signal values per on-source patch --- \n");
-  printf("              Steady event rate during the time window : %-g Hz",AvRsigOn);
-  if (AvSolidangleOn) printf(" --> %-g Hz sr^-1",AvRsigOn/AvSolidangleOn);
-  printf("\n");
-  if (fSensarea>0)
-  {
-   printf("              Particle fluence : %-g cm^-2",AvNsigOn/fSensarea);
-   if (AvSolidangleOn) printf(" --> %-g cm^-2 sr^-1",AvNsigOn/(fSensarea*AvSolidangleOn));
-   printf("\n");
-   printf("              Particle flux : %-g cm^-2 s^-1",AvRsigOn/fSensarea);
-   if (AvSolidangleOn) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRsigOn/(fSensarea*AvSolidangleOn));
-   printf("\n");
-  }
-  printf("              Cumulated energy : %-g GeV",AvEsigOn);
-  if (AvSolidangleOn) printf(" --> %-g GeV sr^-1",AvEsigOn/AvSolidangleOn);
-  printf("\n");
-  printf("              Power : %-g GeV/s",AvEsigOn/TwinOn);
-  if (AvSolidangleOn) printf(" --> %-g GeV s^-1 sr^-1",AvEsigOn/(TwinOn*AvSolidangleOn));
-  printf("\n");
-  if (fSensarea>0)
-  {
-   printf("              Energy fluence : %-g GeV cm^-2",AvEsigOn/fSensarea);
-   if (AvSolidangleOn) printf(" --> %-g GeV cm^-2 sr^-1",AvEsigOn/(fSensarea*AvSolidangleOn));
-   printf("\n");
-   printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEsigOn/(fSensarea*TwinOn));
-   if (AvSolidangleOn) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEsigOn/(fSensarea*TwinOn*AvSolidangleOn));
-   printf("\n");
-  }
-  printf("              --- Average background values per on-source patch --- \n");
-  printf("              Steady event rate during the time window : %-g Hz",AvRbkgOn);
-  if (AvSolidangleOn) printf(" --> %-g Hz sr^-1",AvRbkgOn/AvSolidangleOn);
-  printf("\n");
-  if (fSensarea>0)
-  {
-   printf("              Particle fluence : %-g cm^-2",AvNbkgOn/fSensarea);
-   if (AvSolidangleOn) printf(" --> %-g cm^-2 sr^-1",AvNbkgOn/(fSensarea*AvSolidangleOn));
-   printf("\n");
-   printf("              Particle flux : %-g cm^-2 s^-1",AvRbkgOn/fSensarea);
-   if (AvSolidangleOn) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRbkgOn/(fSensarea*AvSolidangleOn));
-   printf("\n");
-  }
-  printf("              Cumulated energy : %-g GeV",AvEbkgOn);
-  if (AvSolidangleOn) printf(" --> %-g GeV sr^-1",AvEbkgOn/AvSolidangleOn);
-  printf("\n");
-  printf("              Power : %-g GeV/s",AvEbkgOn/TwinOn);
-  if (AvSolidangleOn) printf(" --> %-g GeV s^-1 sr^-1",AvEbkgOn/(TwinOn*AvSolidangleOn));
-  printf("\n");
-  if (fSensarea>0)
-  {
-   printf("              Energy fluence : %-g GeV cm^-2",AvEbkgOn/fSensarea);
-   if (AvSolidangleOn) printf(" --> %-g GeV cm^-2 sr^-1",AvEbkgOn/(fSensarea*AvSolidangleOn));
-   printf("\n");
-   printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEbkgOn/(fSensarea*TwinOn));
-   if (AvSolidangleOn) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEbkgOn/(fSensarea*TwinOn*AvSolidangleOn));
-   printf("\n");
-  }
- }
- printf("\n");
+ if (scale) AvSolidangleOff=fSolidangleOff/scale;
 
  // Create the simulated incoming signal Fluence vs. E histogram
  nsig=fBurstSigAeff.GetN();
@@ -15900,11 +15794,11 @@ void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
  {
   TString nameS,titleS,nameF,titleF,nameE2F,titleE2F;
   nameS="hSigFluence";
-  titleS="Stacked simulated incoming signal Fluence;Event energy [GeV];dN/dE [GeV^{-1} cm^{-2}]";
+  titleS="Stacked simulated incoming signal Fluence;Event energy [GeV];dN/(dEdA) [GeV^{-1} cm^{-2}]";
   nameF="hSigFlux";
-  titleF="Simulated incoming signal Flux for a steady rate;Event energy [GeV];dN/dE [GeV^{-1} cm^{-2} s^{-1}]";
+  titleF="Simulated incoming signal Flux for a steady rate;Event energy [GeV];dN/(dEdAdt) [GeV^{-1} cm^{-2} s^{-1}]";
   nameE2F="hSigE2Flux";
-  titleE2F="E-scaled simulated incoming signal Flux for a steady rate;Event energy [GeV];E^{2}dN/dE [GeV cm^{-2} s^{-1}]";
+  titleE2F="E-scaled simulated incoming signal Flux for a steady rate;Event energy [GeV];E^{2}dN/(dEdAdt) [GeV cm^{-2} s^{-1}]";
   TH1F* hS=(TH1F*)fBurstHistos.FindObject(nameS);
   TH1F* hF=(TH1F*)fBurstHistos.FindObject(nameF);
   TH1F* hE2F=(TH1F*)fBurstHistos.FindObject(nameE2F);
@@ -15995,6 +15889,281 @@ void NcAstrolab::MakeBurstDataStats(Int_t mode,Int_t nmugrb)
  fBurstParameters->SetSignal(TmaxOn,"Tmax");   
  fBurstParameters->SetSignal(DtwinOn,"Dtwin");   
  fBurstParameters->SetSignal(NbkgWinOn,"NbkgWin");
+
+ ListBurstDataStats();
+}
+///////////////////////////////////////////////////////////////////////////
+void NcAstrolab::ListBurstDataStats() const
+{
+/**
+~~~
+// List the observed/simulated data statistics of the burst analysis
+~~~
+**/
+
+ // Retrieve the needed parameters
+ Int_t fNgrbs=TMath::Nint(fBurstParameters->GetSignal("Ngrbs"));
+ Int_t fNbkg=TMath::Nint(fBurstParameters->GetSignal("Nbkg"));
+ Int_t fBurstDataMode=TMath::Nint(fBurstParameters->GetSignal("BurstDataMode"));
+ Int_t fNmugrb=TMath::Nint(fBurstParameters->GetSignal("Nmugrb"));
+ Int_t fTunits=TMath::Nint(fBurstParameters->GetSignal("Tunits"));
+ Float_t fTfact=fBurstParameters->GetSignal("Tfact");
+ Float_t fSolidangleOn=fBurstParameters->GetSignal("SolidangleOn");
+ Float_t fSolidangleOff=fBurstParameters->GetSignal("SolidangleOff");
+ Float_t fEnergyOn=fBurstParameters->GetSignal("EnergyOn");
+ Float_t fEnergyOff=fBurstParameters->GetSignal("EnergyOff");
+ Float_t fEnergySig=fBurstParameters->GetSignal("EnergySig");
+ Float_t fEnergyBkg=fEnergyOn-fEnergySig;
+ Float_t fSensarea=fBurstParameters->GetSignal("Sensarea");
+ Float_t fOmegaDecl=fBurstParameters->GetSignal("OmegaDecl");
+
+ TString tu="days";
+ if (fTunits==1) tu="hours";
+ if (fTunits==2) tu="sec";
+ if (fTunits==3) tu="ns";
+ if (fTunits==4) tu="ps";
+
+ Int_t non=fBurstOnMatch.GetN();
+ Int_t noff=fBurstOffMatch.GetN();
+ Int_t nsig=fBurstSignal.GetN();
+
+ // The time window sizes and the average number of background events in them
+ Float_t DtwinOn=fBurstParameters->GetSignal("DtwinOn");
+ Float_t DtwinOff=fBurstParameters->GetSignal("DtwinOff");
+
+ // Determination of the on-source and off-source event rates
+ Float_t nOn=non;
+ Float_t nOff=noff;
+ Float_t nsigOn=nsig;
+ Float_t nbkgOn=nOn-nsigOn;
+ Float_t Ton=fBurstParameters->GetSignal("TtotOn");   // Total on-source exposure time in seconds
+ Float_t Toff=fBurstParameters->GetSignal("TtotOff"); // Total off-source exposure time in seconds
+
+ // (Average) values per patch
+ Float_t TwinOn=DtwinOn*fTfact;
+ Float_t TwinOff=DtwinOff*fTfact;
+ Float_t AvSolidangleOn=fBurstParameters->GetSignal("AvSolidangleOn");
+ Float_t AvSolidangleOff=fBurstParameters->GetSignal("AvSolidangleOff");
+ Float_t AvNon=0;
+ Float_t AvNoff=0;
+ Float_t AvRon=0;
+ Float_t AvRoff=0;
+ Float_t AvEon=0;
+ Float_t AvEoff=0;
+ Float_t AvNsigOn=0;
+ Float_t AvNbkgOn=0;
+ Float_t AvRsigOn=0;
+ Float_t AvRbkgOn=0;
+ Float_t AvEsigOn=0;
+ Float_t AvEbkgOn=0;
+ Float_t scale=fNgrbs;
+ if (scale)
+ {
+  AvNon=nOn/scale;
+  AvRon=nOn/Ton;
+  AvEon=fEnergyOn/scale;
+  AvNsigOn=nsigOn/scale;
+  AvNbkgOn=nbkgOn/scale;
+  AvRsigOn=nsigOn/Ton;
+  AvRbkgOn=nbkgOn/Ton;
+  AvEsigOn=fEnergySig/scale;
+  AvEbkgOn=fEnergyBkg/scale;
+ }
+ scale=fNgrbs*fNbkg;
+ if (scale)
+ {
+  AvNoff=nOff/scale;
+  AvRoff=nOff/Toff;
+  AvEoff=fEnergyOff/scale;
+ }
+
+ // Statistics of the stacked event samples
+ printf("\n *%-s::ListBurstDataStats* Statistics of the stacked observed event samples. \n",ClassName());
+ printf(" Solid angle coverage corresponding to the selected RA and DEC range : %-g steradian \n",fOmegaDecl);
+ printf(" Integrated on-source  exposure time of the %-i stacked time windows : %-g %-s \n",fNgrbs,Ton/fTfact,tu.Data());
+ printf(" Integrated off-source exposure time of the %-i*%-i stacked time windows : %-g %-s \n",fNgrbs,fNbkg,Toff/fTfact,tu.Data());
+ printf(" Total accumulated on-source  solid angle : %-g sr in %-i stacked patches --> Average per patch : %-g sr \n",fSolidangleOn,fNgrbs,AvSolidangleOn); 
+ printf(" Total accumulated off-source solid angle : %-g sr in %-i*%-i stacked patches --> Average per patch : %-g sr \n",fSolidangleOff,fNgrbs,fNbkg,AvSolidangleOff);
+ if (fSensarea>0) printf(" Area covered c.q. overlooked by the detector sensors : %-g m^2. \n",fSensarea);
+ fSensarea*=1e4; // Convert to cm^2
+
+ printf(" *On source*  Total number of recorded on-source events : %-g --> Average per patch : %-g events. \n",nOn,AvNon);
+ printf("              --- Average recorded values per on-source patch --- \n");
+ printf("              Steady event rate during the time window : %-g Hz",AvRon);
+ if (AvSolidangleOn) printf(" --> %-g Hz sr^-1",AvRon/AvSolidangleOn);
+ printf("\n");
+ if (fSensarea>0)
+ {
+  printf("              Particle fluence : %-g cm^-2",AvNon/fSensarea);
+  if (AvSolidangleOn) printf(" --> %-g cm^-2 sr^-1",AvNon/(fSensarea*AvSolidangleOn));
+  printf("\n");
+  printf("              Particle flux : %-g cm^-2 s^-1",AvRon/fSensarea);
+  if (AvSolidangleOn) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRon/(fSensarea*AvSolidangleOn));
+  printf("\n");
+ }
+ printf("              Cumulated energy : %-g GeV",AvEon);
+ if (AvSolidangleOn) printf(" --> %-g GeV sr^-1",AvEon/AvSolidangleOn);
+ printf("\n");
+ printf("              Power : %-g GeV/s",AvEon/TwinOn);
+ if (AvSolidangleOn) printf(" --> %-g GeV s^-1 sr^-1",AvEon/(TwinOn*AvSolidangleOn));
+ printf("\n");
+ if (fSensarea>0)
+ {
+  printf("              Energy fluence : %-g GeV cm^-2",AvEon/fSensarea);
+  if (AvSolidangleOn) printf(" --> %-g GeV cm^-2 sr^-1",AvEon/(fSensarea*AvSolidangleOn));
+  printf("\n");
+  printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEon/(fSensarea*TwinOn));
+  if (AvSolidangleOn) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEon/(fSensarea*TwinOn*AvSolidangleOn));
+  printf("\n");
+ }
+
+ if (fNbkg)
+ {
+  printf(" *Off source* Total number of recorded off-source (background) events : %-g --> Average per patch : %-g events. \n",nOff,AvNoff);
+  printf("              --- Average recorded values per off-source patch --- \n");
+  printf("              Steady event rate during the time window : %-g Hz",AvRoff);
+  if (AvSolidangleOff) printf(" --> %-g Hz sr^-1",AvRoff/AvSolidangleOff);
+  printf("\n");
+  if (fSensarea>0)
+  {
+   printf("              Particle fluence : %-g cm^-2",AvNoff/fSensarea);
+   if (AvSolidangleOff) printf(" --> %-g cm^-2 sr^-1",AvNoff/(fSensarea*AvSolidangleOff));
+   printf("\n");
+   printf("              Particle flux : %-g cm^-2 s^-1",AvRoff/fSensarea);
+   if (AvSolidangleOff) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRoff/(fSensarea*AvSolidangleOff));
+   printf("\n");
+  }
+  printf("              Cumulated energy : %-g GeV",AvEoff);
+  if (AvSolidangleOff) printf(" --> %-g GeV sr^-1",AvEoff/AvSolidangleOff);
+  printf("\n");
+  printf("              Power : %-g GeV/s",AvEoff/TwinOff);
+  if (AvSolidangleOff) printf(" --> %-g GeV s^-1 sr^-1",AvEoff/(TwinOn*AvSolidangleOff));
+  printf("\n");
+  if (fSensarea>0)
+  {
+   printf("              Energy fluence : %-g GeV cm^-2",AvEoff/fSensarea);
+   if (AvSolidangleOff) printf(" --> %-g GeV cm^-2 sr^-1",AvEoff/(fSensarea*AvSolidangleOff));
+   printf("\n");
+   printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEoff/(fSensarea*TwinOff));
+   if (AvSolidangleOff) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEoff/(fSensarea*TwinOff*AvSolidangleOff));
+   printf("\n");
+  }
+ }
+
+ // On-source signal and background info is only available for simulated data
+ if (!fBurstDataMode)
+ {
+  printf(" -(Unknown)-  Total number of injected on-source signal events : %-i",fNmugrb);
+  if (fNgrbs) printf(" --> Average per patch : %-g events.",float(fNmugrb)/float(fNgrbs));
+  printf("\n");
+  printf("              Total number of recorded on-source signal events : %-g",nsigOn);
+  if (fNgrbs) printf(" --> Average per patch : %-g events.",nsigOn/float(fNgrbs));
+  printf("\n");
+  printf("              Total number of recorded on-source bkg    events : %-g",nbkgOn);
+  if (fNgrbs) printf(" --> Average per patch : %-g events.",nbkgOn/float(fNgrbs));
+  printf("\n");
+
+  printf("              --- Average signal values per on-source patch --- \n");
+  printf("              Steady event rate during the time window : %-g Hz",AvRsigOn);
+  if (AvSolidangleOn) printf(" --> %-g Hz sr^-1",AvRsigOn/AvSolidangleOn);
+  printf("\n");
+  if (fSensarea>0)
+  {
+   printf("              Particle fluence : %-g cm^-2",AvNsigOn/fSensarea);
+   if (AvSolidangleOn) printf(" --> %-g cm^-2 sr^-1",AvNsigOn/(fSensarea*AvSolidangleOn));
+   printf("\n");
+   printf("              Particle flux : %-g cm^-2 s^-1",AvRsigOn/fSensarea);
+   if (AvSolidangleOn) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRsigOn/(fSensarea*AvSolidangleOn));
+   printf("\n");
+  }
+  printf("              Cumulated energy : %-g GeV",AvEsigOn);
+  if (AvSolidangleOn) printf(" --> %-g GeV sr^-1",AvEsigOn/AvSolidangleOn);
+  printf("\n");
+  printf("              Power : %-g GeV/s",AvEsigOn/TwinOn);
+  if (AvSolidangleOn) printf(" --> %-g GeV s^-1 sr^-1",AvEsigOn/(TwinOn*AvSolidangleOn));
+  printf("\n");
+  if (fSensarea>0)
+  {
+   printf("              Energy fluence : %-g GeV cm^-2",AvEsigOn/fSensarea);
+   if (AvSolidangleOn) printf(" --> %-g GeV cm^-2 sr^-1",AvEsigOn/(fSensarea*AvSolidangleOn));
+   printf("\n");
+   printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEsigOn/(fSensarea*TwinOn));
+   if (AvSolidangleOn) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEsigOn/(fSensarea*TwinOn*AvSolidangleOn));
+   printf("\n");
+  }
+  printf("              --- Average background values per on-source patch --- \n");
+  printf("              Steady event rate during the time window : %-g Hz",AvRbkgOn);
+  if (AvSolidangleOn) printf(" --> %-g Hz sr^-1",AvRbkgOn/AvSolidangleOn);
+  printf("\n");
+  if (fSensarea>0)
+  {
+   printf("              Particle fluence : %-g cm^-2",AvNbkgOn/fSensarea);
+   if (AvSolidangleOn) printf(" --> %-g cm^-2 sr^-1",AvNbkgOn/(fSensarea*AvSolidangleOn));
+   printf("\n");
+   printf("              Particle flux : %-g cm^-2 s^-1",AvRbkgOn/fSensarea);
+   if (AvSolidangleOn) printf(" --> Intensity : %-g cm^-2 s^-1 sr^-1",AvRbkgOn/(fSensarea*AvSolidangleOn));
+   printf("\n");
+  }
+  printf("              Cumulated energy : %-g GeV",AvEbkgOn);
+  if (AvSolidangleOn) printf(" --> %-g GeV sr^-1",AvEbkgOn/AvSolidangleOn);
+  printf("\n");
+  printf("              Power : %-g GeV/s",AvEbkgOn/TwinOn);
+  if (AvSolidangleOn) printf(" --> %-g GeV s^-1 sr^-1",AvEbkgOn/(TwinOn*AvSolidangleOn));
+  printf("\n");
+  if (fSensarea>0)
+  {
+   printf("              Energy fluence : %-g GeV cm^-2",AvEbkgOn/fSensarea);
+   if (AvSolidangleOn) printf(" --> %-g GeV cm^-2 sr^-1",AvEbkgOn/(fSensarea*AvSolidangleOn));
+   printf("\n");
+   printf("              Energy flux : %-g GeV cm^-2 s^-1",AvEbkgOn/(fSensarea*TwinOn));
+   if (AvSolidangleOn) printf(" --> Intensity : %-g GeV cm^-2 s^-1 sr^-1",AvEbkgOn/(fSensarea*TwinOn*AvSolidangleOn));
+   printf("\n");
+  }
+ }
+ printf("\n");
+}
+///////////////////////////////////////////////////////////////////////////
+NcSample NcAstrolab::GetBurstDataSample(TString type,TString data) const
+{
+/**
+~~~
+// Provide the specified observed/simulated data sample of the burst analysis
+//
+// Input arguments :
+// -----------------
+// type : On    --> All simulated c.q. observed data recorded on source
+//        Off   --> All simulated c.q. observed data recorded off source
+//        Sig   --> Simulated data recorded on source
+// data : Reco  --> Source redshift and source/track localisation/direction accuracy in degrees
+//        Match --> Track energy (GeV) and angular (deg) c.q. time (sec) differences w.r.t. source
+//        Aeff  --> Track Effective area (cm^2), Fluence (1/Aeff), Energy (GeV) and angular differefence (deg)
+~~~
+**/
+
+ if (type=="On")
+ {
+  if (data=="Reco") return fBurstOnReco;
+  if (data=="Match") return fBurstOnMatch;
+  if (data=="Aeff") return fBurstOnAeff;
+ }
+
+ if (type=="Off")
+ {
+  if (data=="Reco") return fBurstOffReco;
+  if (data=="Match") return fBurstOffMatch;
+  if (data=="Aeff") return fBurstOffAeff;
+ }
+
+ if (type=="Sig")
+ {
+  if (data=="Reco") return fBurstSigReco;
+  if (data=="Match") return fBurstSignal;
+  if (data=="Aeff") return fBurstSigAeff;
+ }
+
+ printf(" *%-s::GetBurstDataSample* Inconsitent input type=%-s data=%-s \n",ClassName(),type.Data(),data.Data());
+ NcSample sx;
+ return sx;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::MatchBurstData(NcDevice& matches,Int_t i1,Int_t i2,Int_t itype,Int_t j1,Int_t j2,Int_t jtype)
@@ -16094,6 +16263,10 @@ void NcAstrolab::MatchBurstData(NcDevice& matches,Int_t i1,Int_t i2,Int_t itype,
 ~~~
 **/
 
+ // Indicate that this will be a burst analysis on real data
+ fBurstParameters->AddNamedSlot("BurstDataMode");
+ fBurstParameters->SetSignal(1,"BurstDataMode");   
+
  Float_t fAngresfix=fBurstParameters->GetSignal("Angresfix");
  Int_t fRecoangle=TMath::Nint(fBurstParameters->GetSignal("Recoangle"));
  Int_t fSumsigmas=TMath::Nint(fBurstParameters->GetSignal("Sumsigmas"));
@@ -16114,7 +16287,7 @@ void NcAstrolab::MatchBurstData(NcDevice& matches,Int_t i1,Int_t i2,Int_t itype,
  fBurstParameters->SetSignal(fNevts,"Nevts");
 
  // Initialize generic histograms for analysis
- InitBurstHistograms(1);
+ InitBurstHistograms();
 
  TString tu="d";
  if (fTunits==1) tu="hrs";
@@ -16621,7 +16794,7 @@ void NcAstrolab::MatchBurstData(NcDevice& matches,Int_t i1,Int_t i2,Int_t itype,
  matches.SetSignal(idtmin,"idt");
 
  // Determine and list the burst statistics
- MakeBurstDataStats(1);
+ MakeBurstDataStats();
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::MatchBurstData(NcDevice& matches,TString name,Int_t itype,Int_t j1,Int_t j2,Int_t jtype)
@@ -16746,20 +16919,24 @@ void NcAstrolab::MatchBurstData(NcDevice& matches,TString name,Int_t itype,Int_t
  fSolUpdate=0;
 }
 ///////////////////////////////////////////////////////////////////////////
-void NcAstrolab::InitBurstHistograms(Int_t mode)
+void NcAstrolab::InitBurstHistograms()
 {
 /**
 ~~~
 // Internal memberfunction to initialize the histograms for transient burst analyses.
 //
-// mode : 0 --> Invoked from GenBurstSignals()
-//        1 --> Invoked from MatchBurstData()
+// This function is invoked by GenBurstSignals() and MatchBurstData().
 //
 // **********************************************************************************
 // * This is a beta test version, so currently no backward compatibility guaranteed *
 // **********************************************************************************
 ~~~
 **/
+
+ // Retrieve the burst analysis data mode
+ // mode : 0 --> Analysis based on simulated data via GenBurstSignals()
+ //        1 --> Analysis based on real data via MatchBurstData()
+ Int_t mode=TMath::Nint(fBurstParameters->GetSignal("BurstDataMode"));
 
  // Retreive the needed parameters
  Float_t fT90min=fBurstParameters->GetSignal("T90min");
@@ -16792,10 +16969,10 @@ void NcAstrolab::InitBurstHistograms(Int_t mode)
  fBurstOnMatch.SetNameTitle("BurstOnMatch","On-source matching data");
  fBurstOnMatch.SetStoreMode();
  fBurstOnMatch.SetNames("E","dtime","dang","dtimez");
- fBurstSigReco.SetNameTitle("BurstSigReco","Simulated signal reco data");
+ fBurstSigReco.SetNameTitle("BurstSigReco","Recorded simulated signal reco data");
  fBurstSigReco.SetStoreMode();
  fBurstSigReco.SetNames("zburst","sigmaburst","sigmareco","sigmacomb");
- fBurstSignal.SetNameTitle("BurstSignal","Simulated signal events");
+ fBurstSignal.SetNameTitle("BurstSignal","Recorded simulated signal events");
  fBurstSignal.SetStoreMode();
  fBurstSignal.SetNames("E","dtime","dang","dtimez");
  fBurstOffReco.SetNameTitle("BurstOffReco","Off-source reco data");
@@ -16807,13 +16984,13 @@ void NcAstrolab::InitBurstHistograms(Int_t mode)
  fBurstOnAeff.Reset();
  fBurstOffAeff.Reset();
  fBurstSigAeff.Reset();
- fBurstOnAeff.SetNameTitle("BurstOnAeff","On-source track Aeff, E and dang data");
+ fBurstOnAeff.SetNameTitle("BurstOnAeff","On-source track Aeff, Fluence, E and dang data");
  fBurstOnAeff.SetStoreMode();
  fBurstOnAeff.SetNames("Aeff","Fluence","E","dang");
- fBurstOffAeff.SetNameTitle("BurstOffAeff","Off-source track Aeff, E and dang data");
+ fBurstOffAeff.SetNameTitle("BurstOffAeff","Off-source track Aeff, Fluence, E and dang data");
  fBurstOffAeff.SetStoreMode();
  fBurstOffAeff.SetNames("Aeff","Fluence","E","dang");
- fBurstSigAeff.SetNameTitle("BurstSigAeff","Simulated signal track Aeff, E and dang data");
+ fBurstSigAeff.SetNameTitle("BurstSigAeff","Recorded simulated signal track Aeff, Fluence, E and dang data");
  fBurstSigAeff.SetStoreMode();
  fBurstSigAeff.SetNames("Aeff","Fluence","E","dang");
 
@@ -17433,11 +17610,11 @@ Double_t NcAstrolab::GetBurstTotalFluence(Double_t nsig,TString str)
  Double_t Stot=0;
  TString nameS,titleS,nameF,titleF,nameE2F,titleE2F;
  nameS.Form("h%-sFluence",str.Data());
- titleS.Form("Stacked incoming signal Fluence for Bayesian %s rate;Event energy [GeV];dN/dE [GeV^{-1} cm^{-2}]",str.Data());
+ titleS.Form("Stacked incoming signal Fluence for Bayesian %s rate;Event energy [GeV];dN/(dEdA) [GeV^{-1} cm^{-2}]",str.Data());
  nameF.Form("h%-sFlux",str.Data());
- titleF.Form("Incoming signal Flux for a steady Bayesian %s rate;Event energy [GeV];dN/dE [GeV^{-1} cm^{-2} s^{-1}]",str.Data());
+ titleF.Form("Incoming signal Flux for a steady Bayesian %s rate;Event energy [GeV];dN/(dEdAdt) [GeV^{-1} cm^{-2} s^{-1}]",str.Data());
  nameE2F.Form("h%-sE2Flux",str.Data());
- titleE2F.Form("E-Scaled incoming signal Flux for a steady Bayesian %s rate;Event energy [GeV];E^{2}dN/dE [GeV cm^{-2} s^{-1}]",str.Data());
+ titleE2F.Form("E-Scaled incoming signal Flux for a steady Bayesian %s rate;Event energy [GeV];E^{2}dN/(dEdAdt) [GeV cm^{-2} s^{-1}]",str.Data());
  TH1F* hS=0;
  TH1F* hF=0;
  TH1F* hE2F=0;
@@ -19170,6 +19347,25 @@ void NcAstrolab::ListBurstHistograms() const
   cout << " " << hx->GetName() << " : " << hx->GetTitle() << endl;
  }
  cout << " ===============================================================================" << endl;
+}
+///////////////////////////////////////////////////////////////////////////
+TH1* NcAstrolab::GetBurstHistogram(TString name) const
+{
+/**
+~~~
+// Provide the pointer to the stored transient burst histogram "name".
+//
+// **********************************************************************************
+// * This is a beta test version, so currently no backward compatibility guaranteed *
+// **********************************************************************************
+~~~
+**/
+
+ TH1* h=(TH1*)fBurstHistos.FindObject(name);
+
+ if (!h) printf(" *** Histogram %-s not found. *** \n",name.Data());
+
+ return h;
 }
 ///////////////////////////////////////////////////////////////////////////
 void NcAstrolab::WriteBurstHistograms(TString filename)

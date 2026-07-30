@@ -1616,3 +1616,9 @@
                 The version indicator in NcVersion has been updated to 6.8. 
 28-jun-2026 NvE Operator "=" introduced in classes NcPosition, NcPositionObj and NcTimestamp to prevent complains from a new(er) gcc compiler version.
                 The version indicator in NcVersion has been updated to 6.8a. 
+17-jul-2026 NvE New memberfunctions ListBurstDataStats(), GetBurstHistogram() and GetBurstDataSample() introduced in class NcAstrolab to increase
+                the flexibility for interactive transient source analyses. To facilitate this, the input arguments of the internal memberfunctions
+                MakeBurstDataStats() and InitBurstHistograms() were removed and their invokations from the  memberfunctions GenBurstSignals() and MatchBurstData()
+                were adapted accordingly.
+30-jul-2026 NvE New memberfunction GetBurstParameter() introduced and input argument Tem added to MakeBurstEnergydist() in class NcAstrolab.
+                The version indicator in NcVersion has been updated to 6.9. 
