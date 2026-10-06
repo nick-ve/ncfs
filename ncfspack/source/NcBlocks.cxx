@@ -381,7 +381,7 @@
 // }
 //
 //--- Author: Nick van Eijndhoven, IIHE-VUB, Brussel, September 7, 2021  08:06Z
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC June 14, 2026  11:07
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC October 6, 2026  08:51
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -531,6 +531,9 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
 // -------
 // 1) Both "hin" and "hout" must be existing 1-dimensional histograms.
 // 2) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 3) The number of entries for "hout" will be set equal to the number of entries of "hin".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the bin contents of the input histogram "hin".
@@ -555,6 +558,8 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
 // In case of inconsistent input, the value 0 is returned.
 ~~~
 **/
+
+ if (hout) hout->Reset();
 
  if (!hin || !hout) return 0;
 
@@ -718,21 +723,33 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  index=ncells;
  Double_t x=0;
  Double_t y=0;
+ Int_t iup=0;
+ Int_t nfilled=0;
  ncp=0;
  TArrayD xarr(ncells+1);
  TArrayD yarr(ncells+1);
  while (index>0)
  {
   index--; // Reduce array index by 1 because of C++ array convention
-  jcp=last.At(index);
+  jcp=last[index];
   ncp++;
-  x=hin->GetBinLowEdge(jcp)+lengths.At(index);
+  x=hin->GetBinLowEdge(jcp)+lengths[index];
+  iup=hin->FindFixBin(x);
   y=0;
-  if (fMode==1 || fMode==2)
+  
+  if (fMode==1 && lengths[index]) y=counts[index]/lengths[index];
+
+  if (fMode==2)
   {
-   if (lengths.At(index)) y=counts.At(index)/lengths.At(index);
+   nfilled=0;
+   for (Int_t i=jcp; i<=iup; i++)
+   {
+    if (hin->GetBinContent(i)) nfilled++;
+   }
+   if (nfilled) y=counts[index]/double(nfilled); // Take the average of the filled bins in this block as Y-value
   }
-  if (fMode==3) y=counts.At(index);
+
+  if (fMode==3) y=counts[index];
 
   xarr.SetAt(x,ncp-1);
   yarr.SetAt(y,ncp-1);
@@ -758,6 +775,9 @@ Double_t NcBlocks::GetBlocks(TH1* hin,Double_t fpr,TH1* hout,Int_t ntrig)
  {
   hout->SetBinContent(i,yvals[i]);
  }
+
+ // Set the number of entries for the output histogram
+ hout->SetEntries(hin->GetEntries());
 
  // Determine the first trigger point after the full sample analysis
  if (!ntrig) xtrig=xbins[1];
@@ -818,6 +838,10 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
 // 1) The Store Mode of the NcSample must be activated.
 // 2) "hout" must be an existing 1-dimensional histogram.
 // 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 4) The number of entries for "hout" will be set equal to the number of entries of "s",
+//    in which multiple occurrences of exactly the same data recording (e.g. event time) are counted as 1 single entry.
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided NcSample.
@@ -864,12 +888,12 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  fMode=1;
 
  // Represent each observation as 1 count in a variable binned histogram
- TArrayD xarr(n+1);
+ TArrayD xarr(n);
  Double_t val=0;
  Int_t idstore=0;
  for (Int_t idx=1; idx<=n; idx++)
  {
-  val=s.GetEntry(idx,i,1,i);
+  val=s.GetEntry(idx,i,1,i); // Get an entry after ordering the values in increasing order
 
   // Check for a double occurance of an observation
   if (idstore>0)
@@ -881,12 +905,13 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
   idstore++;
  }
 
+
  // Obtain the correct amount of bin lower edges
  if (idstore<n)
  {
   n=idstore;
   xarr.Set(n);
- } 
+ }
  
  Double_t* xbins=xarr.GetArray();
  TH1F hin("","",n-1,xbins);
@@ -896,6 +921,9 @@ Double_t NcBlocks::GetBlocks(NcSample s,Int_t i,Double_t fpr,TH1* hout,Int_t ntr
  }
 
  Double_t xtrig=GetBlocks(&hin,fpr,hout,ntrig);
+
+ // Set the number of entries for "hout"
+ hout->SetEntries(double(n));
 
  // Set the output histogram and axes titles
  TString title,str;
@@ -927,6 +955,10 @@ Double_t NcBlocks::GetBlocks(NcSample s,TString name,Double_t fpr,TH1* hout,Int_
 // 1) The Store Mode of the NcSample must be activated.
 // 2) "hout" must be an existing 1-dimensional histogram.
 // 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 4) The number of entries for "hout" will be set equal to the number of entries of "s",
+//    in which multiple occurrences of exactly the same data recording (e.g. event time) are counted as 1 single entry.
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided NcSample.
@@ -975,6 +1007,9 @@ Double_t NcBlocks::GetBlocks(Int_t n,Double_t* arr,Double_t fpr,TH1* hout,Int_t 
 // 2) The data elements in the array "arr" do not need to be ordered.
 // 3) "hout" must be an existing 1-dimensional histogram.
 // 4) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 5) The number of entries for "hout" will be set equal to "n".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided array.
@@ -1055,6 +1090,9 @@ Double_t NcBlocks::GetBlocks(Int_t n,Float_t* arr,Double_t fpr,TH1* hout,Int_t n
 // 2) The data elements in the array "arr" do not need to be ordered.
 // 3) "hout" must be an existing 1-dimensional histogram.
 // 4) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 5) The number of entries for "hout" will be set equal to "n".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the event rate based on the recordings in the provided array.
@@ -1133,6 +1171,9 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 //    The errors on the x-values may be omitted, since they are not used in the process.
 // 2) "hout" must be an existing 1-dimenstional histogram.
 // 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 4) The number of entries for "hout" will be set equal to the number of entries of "gr".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // Each new block is started at a so called Change Point, to indicate a significant change
 // in the measured value based on the recordings in the provided TGraphErrors object.
@@ -1211,6 +1252,9 @@ Double_t NcBlocks::GetBlocks(TGraphErrors gr,Double_t fpr,TH1* hout,Int_t ntrig)
 
  Double_t xtrig=GetBlocks(&hin,fpr,hout,ntrig);
 
+ // Set the number of entries for "hout"
+ hout->SetEntries(double(n));
+
  // Set the output histogram and axes titles
  TString title,str;
  TString xtitle="Samplings (e.g. time)";
@@ -1253,6 +1297,9 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TF1 f,Double_t fpr,TH1* hout,Int_t ntrig)
 // 1) "hout" must be an existing 1-dimensional histogram.
 // 2) The other member function with TGraphErrors input provides more flexibilty.
 // 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 4) The number of entries for "hout" will be set equal to the number of entries of "gr".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The error of each y-value is determined by the absolute value of f(y).
 // This provides an easy way to perform quickly a Bayesian Block analysis directly
@@ -1321,6 +1368,9 @@ Double_t NcBlocks::GetBlocks(TGraph gr,TString f,Double_t fpr,TH1* hout,Int_t nt
 // 1) "hout" must be an existing 1-dimensional histogram.
 // 2) The other member function with TGraphErrors input provides more flexibilty.
 // 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 4) The number of entries for "hout" will be set equal to the number of entries of "gr".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The error of each y-value is determined by the absolute value of f(y), where the
 // function is described by the input argument "f" following the TF1 string format convention.
@@ -1391,6 +1441,9 @@ Double_t NcBlocks::GetBlocks(TGraph gr,Double_t nrms,Double_t fpr,TH1* hout,Int_
 // 1) "hout" must be an existing 1-dimensional histogram.
 // 2) The other member function with TGraphErrors input provides more flexibilty.
 // 3) For fpr<0 a fast(er) procedure will be applied by skipping the already created blocks in the processing.
+// 4) The number of entries for "hout" will be set equal to the number of entries of "gr".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The error of each y-value is determined by "nrms" times the RMS deviation of all the y-values,
 // which often provides an efficient way to ignore noise variations of a background pedestal.
@@ -1478,6 +1531,9 @@ Int_t NcBlocks::GetBlocks(TH1* hin,TH1* hout,Int_t n,Int_t mode)
 //    in case the sampling was not continuous.
 //    As such, the structure of the output histogram is comparable to the result
 //    of a Bayesian Block analysis.  
+// 3) The number of entries for "hout" will be set equal to the number of entries of "hin".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
@@ -1560,6 +1616,9 @@ Int_t NcBlocks::GetBlocks(TH1* hin,TH1* hout,Int_t n,Int_t mode)
   hout->SetBinContent(i,yvals[i-1]);
  }
 
+ // Set the number of entries for "hout"
+ hout->SetEntries(hin->GetEntries());
+
  hout->SetLineWidth(2);
  hout->SetLineColor(kBlue);
  hout->SetStats(kFALSE);
@@ -1614,6 +1673,10 @@ Int_t NcBlocks::GetBlocks(NcSample s,Int_t i,TH1* hout,Int_t n,Int_t mode)
 //    in case the sampling was not continuous.
 //    As such, the structure of the output histogram is comparable to the result
 //    of a Bayesian Block analysis.  
+// 4) The number of entries for "hout" will be set equal to the number of entries of "s",
+//    in which multiple occurrences of exactly the same data recording (e.g. event time) are counted as 1 single entry.
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
@@ -1687,6 +1750,10 @@ Int_t NcBlocks::GetBlocks(NcSample s,TString name,TH1* hout,Int_t n,Int_t mode)
 //    in case the sampling was not continuous.
 //    As such, the structure of the output histogram is comparable to the result
 //    of a Bayesian Block analysis.  
+// 4) The number of entries for "hout" will be set equal to the number of entries of "s",
+//    in which multiple occurrences of exactly the same data recording (e.g. event time) are counted as 1 single entry.
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
@@ -1725,6 +1792,9 @@ Int_t NcBlocks::GetBlocks(Int_t nr,Double_t* arr,TH1* hout,Int_t n,Int_t mode)
 //    in case the sampling was not continuous.
 //    As such, the structure of the output histogram is comparable to the result
 //    of a Bayesian Block analysis.  
+// 4) The number of entries for "hout" will be set equal to "nr".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
@@ -1799,6 +1869,9 @@ Int_t NcBlocks::GetBlocks(Int_t nr,Float_t* arr,TH1* hout,Int_t n,Int_t mode)
 //    in case the sampling was not continuous.
 //    As such, the structure of the output histogram is comparable to the result
 //    of a Bayesian Block analysis.  
+// 4) The number of entries for "hout" will be set equal to "nr".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
@@ -1873,6 +1946,9 @@ Int_t NcBlocks::GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode)
 //    in case the sampling was not continuous.
 //    As such, the structure of the output histogram is comparable to the result
 //    of a Bayesian Block analysis.  
+// 3) The number of entries for "hout" will be set equal to the number of entries of "gr".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The returned value is the number of produced blocks. 
 // In case of inconsistent input, the value 0 is returned.
@@ -1925,6 +2001,9 @@ Int_t NcBlocks::GetBlocks(TGraph* gr,TH1* hout,Int_t n,Int_t mode)
 
  Int_t nblocks=GetBlocks(&hin,hout,n,mode);
 
+ // Set the number of entries for "hout"
+ hout->SetEntries(double(npoints));
+
  // Set the output histogram and axes titles
  TString title,str;
  TString xtitle="Samplings (e.g. time)";
@@ -1964,7 +2043,6 @@ Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d
 // Provide the 1-dimensional histogram hout=h1+c*h2+d.
 // So, for c=-1 and d=0, the values contained in the histogram "h2" will be 
 // subtracted from the corresponding bin values of the input histogram "h1".
-// The output histogram "hout" will be given the same binning as the histogram "h1".
 //
 // Note : All histograms "h1", "h2" and "hout" must be existing 1-dimensional histograms.
 //
@@ -1973,21 +2051,27 @@ Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d
 // However, it can be applied to other combinations of 1-dimensional histograms as well.
 //
 // All provided histograms have to be 1-dimensional and histograms with
-// variable bin sizes are supported. However, all bin sizes of "h1"
-// have to be smaller than or equal to the smallest bin size of "h2".
-// Obviously, this is always the case when "h2" contains the Bayesian Block
-// partitions of "h1".
+// variable bin sizes are supported.
 //
 // The return value indicates whether an error occured (1) or not (0).
 //
 // The input parameter "scale" allows to scale (kTRUE) or not scale (kFALSE)
-// the bin content of "h2" to be "added", to the corresponding bin width of "h1".
+// the bin contents w.r.t. the corresponding bin widths.
 //
-// Note :
-// ------
-// Since this facility is mainly intended for "adding" variable binned Bayesian Blocks,
-// scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
-// the use of scaling will correctly reflect the resulting (event) counts in each bin.
+// Notes :
+// -------
+// 1) Since this facility is mainly intended for "adding" variable binned Bayesian Block data,
+//    which represent a constant y-value over the corresponding Bayesian Block x-bin,
+//    scaling should in general *not* be used.
+//    However, when both "h1" and "h2" contain normal binned (event) counts (so-called mode 2 data),
+//    the use of scaling will correctly reflect the resulting (event) counts in each bin.
+// 2) In case there is no overlap of a bin of "h2" with a certain bin of "h1", the bin content of "h2"
+//    will be regarded as 0 in constructing the corresponding "hout" bin.
+// 3) Bins of "h1" with a content 0 will be regarded as "not overlapping" with a bin of "h2" for c<0.
+//    Consequently, the bin content of "h2" will be regarded as 0 in constructing the corresponding "hout" bin.
+// 4) The number of entries for "hout" will be set equal to the number of entries of "h1".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The default value is d=0.
 ~~~
@@ -2058,67 +2142,119 @@ Int_t NcBlocks::Add(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d
  Int_t nb1=h1->GetNbinsX();
  Int_t nb2=h2->GetNbinsX();
 
- if (!nb1 || !nb2) return 1;
-
- // Get the largest bin size of "h1"
- Double_t bwidth1=0;
- Double_t bwmax1=0;
- Int_t imax1=0;
- for (Int_t i=1; i<=nb1; i++)
+ if (!nb1 || !nb2)
  {
-  bwidth1=h1->GetBinWidth(i);
-  if (i==1 || bwidth1>bwmax1)
-  {
-   bwmax1=bwidth1;
-   imax1=i;
-  }
- }
-
- // Get the smallest bin size of "h2" 
- Double_t bwidth2=0;
- Double_t bwmin2=0;
- Int_t imin2=0;
- for (Int_t i=1; i<=nb2; i++)
- {
-  bwidth2=h2->GetBinWidth(i);
-  if (i==1 || bwidth2<bwmin2)
-  {
-   bwmin2=bwidth2;
-   imin2=i;
-  }
- }
-
- Double_t ratio=bwmax1/bwmin2;
- if (ratio>1.001)
- {
-  printf(" *NcBlocks::Add* Error : Larger bin size encountered in histogram %-s than in %-s \n",name1.Data(),name2.Data());
-  printf(" %-s: binsize=%-g for bin=%-i  %-s: binsize=%-g for bin=%-i \n",name1.Data(),bwmax1,imax1,name2.Data(),bwmin2,imin2);
+  printf(" *NcBlocks::Add* Error : nbins of h1 is %-i and nbins of h2 is %-i. \n",nb1,nb2);
   return 1;
  }
 
- // Loop over all the bins of the input histogram h1
- Double_t x1=0;
- Double_t y1=0;
- Int_t i2=0;
- Double_t y2=0;
- Double_t ynew=0;
- TAxis* axis2=h2->GetXaxis();
- for (Int_t i1=1; i1<=nb1; i1++)
+ // Check whether the range of the axes of h1 and h2 overlap
+ Double_t x1min=h1->GetXaxis()->GetXmin();
+ Double_t x1max=h1->GetXaxis()->GetXmax();
+ Double_t x2min=h2->GetXaxis()->GetXmin();
+ Double_t x2max=h2->GetXaxis()->GetXmax();
+
+ if (x1min>x2max || x1max<x2min)
  {
-  x1=h1->GetBinCenter(i1);
-  y1=h1->GetBinContent(i1);
-  bwidth1=h1->GetBinWidth(i1);
-  i2=axis2->FindFixBin(x1);
-  y2=h2->GetBinContent(i2);
-  bwidth2=h2->GetBinWidth(i2);
-
-  // Do not consider underflow or overflow bins
-  if (i2<1 || i2>nb2) continue;
-
-  if (scale) y2*=bwidth1/bwidth2;
-  ynew=y1+c*y2+d;
-  hout->SetBinContent(i1,ynew);
+  printf(" *NcBlocks::Add* Error : The ranges of the input histograms do not overlap. \n");
+  return 1;
  }
+
+ /////////////////////////////////////////////////////////////////
+ // Scan over the bins of h1 and h2 to create the data for hout //
+ /////////////////////////////////////////////////////////////////
+
+ Int_t i1=1;
+ Double_t bwidth1=h1->GetBinWidth(i1);
+ Double_t x1low=h1->GetBinLowEdge(i1);
+ Double_t x1up=x1low+bwidth1;
+ Int_t i2=0;
+ Int_t i2up=0;
+ Double_t bwidth2=0;
+ Double_t x2low=0;
+ Double_t x2up=0;
+ Double_t y1=0;
+ Double_t frac1=1;
+ Double_t y2=0;
+ Double_t frac2=1;
+ Double_t xlow=0;
+ Double_t xup=0;
+ Double_t y=0;
+ NcSample s;
+ s.SetStoreMode();
+
+ while (i1<=nb1)
+ {
+  y1=h1->GetBinContent(i1);
+
+  i2=h2->FindFixBin(x1low);
+  i2up=h2->FindFixBin(x1up);
+
+  if ((i2<1 && i2up<1) || (i2>nb2 && i2up>nb2) || x1up<=x1low || (c<0 && !y1)) // No overlap
+  {
+   // Regard the h2 bin content as 0 for this h1 bin
+   y=d+y1;
+   if (x1up>x1low) s.Enter(x1low,y);
+   // Go for the next h1 bin
+   i1++;
+   x1low=h1->GetBinLowEdge(i1);
+   bwidth1=h1->GetBinWidth(i1);
+   x1up=x1low+bwidth1;
+   continue;
+  }
+
+  // Overlapping bins of h1 and h2 -> Determine the bin boundaries of hout
+  x2low=h2->GetBinLowEdge(i2);
+  bwidth2=h2->GetBinWidth(i2);
+  x2up=x2low+bwidth2;
+  y2=h2->GetBinContent(i2);
+  xlow=x1low;
+  xup=x1up;
+  if (x2up<xup) xup=x2up;
+
+  frac1=(xup-xlow)/bwidth1;  
+  frac2=(xup-xlow)/bwidth2;
+  if (scale)
+  {
+   y1*=frac1;
+   y2*=frac2;
+  }
+  y=d+y1+c*y2;
+  if (frac1>1e-10 && frac2>1e-10) s.Enter(xlow,y); // Protection against machine accuracy
+  x1low=xup;
+  i1=h1->FindFixBin(x1low);
+  bwidth1=h1->GetBinWidth(i1);
+  x1up=bwidth1+h1->GetBinLowEdge(i1);
+ }
+
+ ///////////////////////////////
+ // Create the hout histogram //
+ ///////////////////////////////
+
+ Int_t nbins=s.GetN();
+ Double_t* xbins=new Double_t[nbins+1];
+
+ for (Int_t i=0; i<nbins; i++)
+ {
+  xbins[i]=s.GetEntry(i+1,"X");
+ }
+
+ // Set also the last boundary
+ xup=x1max;
+ xbins[nbins]=xup;
+
+ hout->SetBins(nbins,xbins);
+
+ for (Int_t jbin=1; jbin<=nbins; jbin++)
+ {
+  y=s.GetEntry(jbin,"Y");
+  hout->SetBinContent(jbin,y);
+ }
+
+ // Set the number of entries for "hout"
+ hout->SetEntries(h1->GetEntries()); 
+
+ delete [] xbins;
 
  return 0;
 }
@@ -2238,7 +2374,6 @@ Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_
 /**
 ~~~
 // Provide the 1-dimensional histogram hout=d+h1/(c*h2).
-// The output histogram "hout" will be given the same binning as the histogram "h1".
 //
 // Note : All histograms "h1", "h2" and "hout" must be existing 1-dimensional histograms.
 //
@@ -2247,21 +2382,23 @@ Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_
 // However, it can be applied to other combinations of 1-dimensional histograms as well.
 //
 // All provided histograms have to be 1-dimensional and histograms with
-// variable bin sizes are supported. However, all bin sizes of "h1"
-// have to be smaller than or equal to the smallest bin size of "h2".
-// Obviously, this is always the case when "h2" contains the Bayesian Block
-// partitions of "h1".
+// variable bin sizes are supported.
 //
 // The return value indicates whether an error occured (1) or not (0).
 //
 // The input parameter "scale" allows to scale (kTRUE) or not scale (kFALSE)
-// the bin content of "h2" to the corresponding bin width of "h1".
+// the bin contents w.r.t. the corresponding bin widths.
 //
-// Note :
-// ------
-// Since this facility is mainly intended for division by variable binned Bayesian Blocks,
-// scaling should *not* be used in case of mode 3 data, whereas for mode 2 data
-// the use of scaling will correctly reflect the resulting (event) counts in each bin.
+// Notes :
+// -------
+// 1) Since this facility is mainly intended for division by variable binned Bayesian Block data,
+//    which represent a constant y-value over the corresponding Bayesian Block x-bin,
+//    scaling should in general *not* be used.
+//    However, when both "h1" and "h2" contain normal binned (event) counts (so-called mode 2 data),
+//    the use of scaling will correctly reflect the resulting (event) counts in each bin.
+// 2) The number of entries for "hout" will be set equal to the number of entries of "h1".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
 //
 // The default value is d=0.
 ~~~
@@ -2344,71 +2481,130 @@ Int_t NcBlocks::Divide(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_
  Int_t nb1=h1->GetNbinsX();
  Int_t nb2=h2->GetNbinsX();
 
- if (!nb1 || !nb2) return 1;
-
- // Get the largest bin size of "h1"
- Double_t bwidth1=0;
- Double_t bwmax1=0;
- Int_t imax1=0;
- for (Int_t i=1; i<=nb1; i++)
+ if (!nb1 || !nb2)
  {
-  bwidth1=h1->GetBinWidth(i);
-  if (i==1 || bwidth1>bwmax1)
-  {
-   bwmax1=bwidth1;
-   imax1=i;
-  }
- }
-
- // Get the smallest bin size of "h2" 
- Double_t bwidth2=0;
- Double_t bwmin2=0;
- Int_t imin2=0;
- for (Int_t i=1; i<=nb2; i++)
- {
-  bwidth2=h2->GetBinWidth(i);
-  if (i==1 || bwidth2<bwmin2)
-  {
-   bwmin2=bwidth2;
-   imin2=i;
-  }
- }
-
- Double_t ratio=bwmax1/bwmin2;
- if (ratio>1.001)
- {
-  printf(" *NcBlocks::Divide* Error : Larger bin size encountered in histogram %-s than in %-s \n",name1.Data(),name2.Data());
-  printf(" %-s: binsize=%-g for bin=%-i  %-s: binsize=%-g for bin=%-i \n",name1.Data(),bwmax1,imax1,name2.Data(),bwmin2,imin2);
+  printf(" *NcBlocks::Divide* Error : nbins of h1 is %-i and nbins of h2 is %-i. \n",nb1,nb2);
   return 1;
  }
 
- // Loop over all the bins of the input histogram h1
- Double_t x1=0;
- Double_t y1=0;
- Int_t i2=0;
- Double_t y2=0;
- Double_t val=0;
- Double_t ynew=0;
- TAxis* axis2=h2->GetXaxis();
- for (Int_t i1=1; i1<=nb1; i1++)
+ // Check whether the range of the axes of h1 and h2 overlap
+ Double_t x1min=h1->GetXaxis()->GetXmin();
+ Double_t x1max=h1->GetXaxis()->GetXmax();
+ Double_t x2min=h2->GetXaxis()->GetXmin();
+ Double_t x2max=h2->GetXaxis()->GetXmax();
+
+ if (x1min>x2max || x1max<x2min)
  {
-  x1=h1->GetBinCenter(i1);
-  y1=h1->GetBinContent(i1);
-  bwidth1=h1->GetBinWidth(i1);
-  i2=axis2->FindFixBin(x1);
-  y2=h2->GetBinContent(i2);
-  bwidth2=h2->GetBinWidth(i2);
-
-  // Do not consider underflow or overflow bins
-  if (i2<1 || i2>nb2) continue;
-
-  val=c*y2;
-  if (!val) continue;
-
-  if (scale) y2*=bwidth1/bwidth2;
-  ynew=d+y1/val;
-  hout->SetBinContent(i1,ynew);
+  printf(" *NcBlocks::Divide* Error : The ranges of the input histograms do not overlap. \n");
+  return 1;
  }
+
+ /////////////////////////////////////////////////////////////////
+ // Scan over the bins of h1 and h2 to create the data for hout //
+ /////////////////////////////////////////////////////////////////
+
+ Int_t i1=1;
+ Double_t bwidth1=h1->GetBinWidth(i1);
+ Double_t x1low=h1->GetBinLowEdge(i1);
+ Double_t x1up=x1low+bwidth1;
+ Int_t i2=0;
+ Int_t i2up=0;
+ Double_t bwidth2=0;
+ Double_t x2low=0;
+ Double_t x2up=0;
+ Double_t y1=0;
+ Double_t frac1=1;
+ Double_t y2=0;
+ Double_t frac2=1;
+ Double_t xlow=0;
+ Double_t xup=0;
+ Double_t val=0;
+ Double_t y=0;
+ NcSample s;
+ s.SetStoreMode();
+
+ while (i1<=nb1 && i2<=nb2)
+ {
+  i2=h2->FindFixBin(x1low);
+  i2up=h2->FindFixBin(x1up);
+
+  if ((i2<1 && i2up<1) || (i2>nb2 && i2up>nb2) || x1up<=x1low) // No overlap
+  {
+   i1++;
+   x1low=h1->GetBinLowEdge(i1);
+   bwidth1=h1->GetBinWidth(i1);
+   x1up=x1low+bwidth1;
+   continue;
+  }
+
+  y1=h1->GetBinContent(i1);
+
+  // If the current bin of h1 is empty, also make it empty in hout and move to the next bin of h1
+  if (!y1)
+  {
+   s.Enter(x1low,0);
+   i1++;
+   x1low=h1->GetBinLowEdge(i1);
+   bwidth1=h1->GetBinWidth(i1);
+   x1up=x1low+bwidth1;
+   continue;
+  }
+
+  // Overlapping bins of h1 and h2 -> Determine the bin boundaries of hout
+  x2low=h2->GetBinLowEdge(i2);
+  bwidth2=h2->GetBinWidth(i2);
+  x2up=x2low+bwidth2;
+  y2=h2->GetBinContent(i2);
+  xlow=x1low;
+  xup=x1up;
+  if (x2up<xup) xup=x2up;
+
+  frac1=(xup-xlow)/bwidth1;  
+  frac2=(xup-xlow)/bwidth2;
+  if (scale)
+  {
+   y1*=frac1;
+   y2*=frac2;
+  }
+  y=0;
+  val=c*y2;
+  if (val) y=d+y1/val;
+  if (frac1>1e-10 && frac2>1e-10) s.Enter(xlow,y); // Protection against machine accuracy
+  x1low=xup;
+  i1=h1->FindFixBin(x1low);
+  bwidth1=h1->GetBinWidth(i1);
+  x1up=bwidth1+h1->GetBinLowEdge(i1);
+ }
+
+ ///////////////////////////////
+ // Create the hout histogram //
+ ///////////////////////////////
+
+ Int_t nbins=s.GetN();
+ Double_t* xbins=new Double_t[nbins+1];
+
+ for (Int_t i=0; i<nbins; i++)
+ {
+  xbins[i]=s.GetEntry(i+1,"X");
+ }
+
+ // Set also the last boundary
+ xup=x1max;
+ if (x2max<x1max) xup=x2max;
+ xbins[nbins]=xup;
+
+ hout->SetBins(nbins,xbins);
+
+ for (Int_t jbin=1; jbin<=nbins; jbin++)
+ {
+  y=s.GetEntry(jbin,"Y");
+  hout->SetBinContent(jbin,y);
+ }
+
+ // Set the number of entries for "hout"
+ hout->SetEntries(h1->GetEntries()); 
+
+ delete [] xbins;
 
  return 0;
 }
@@ -2523,6 +2719,353 @@ Int_t NcBlocks::Divide(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
   if (!val) continue;
 
   ynew=d+y/val;
+  gout->SetPoint(j,x,ynew);
+
+  if (gr->InheritsFrom("TGraphErrors") && gout->InheritsFrom("TGraphErrors"))
+  {
+   TGraphErrors* gre=(TGraphErrors*)gr;
+   TGraphErrors* goute=(TGraphErrors*)gout;
+   ex=gre->GetErrorX(i);
+   ey=gre->GetErrorY(i);
+   goute->SetPointError(j,ex,ey);
+  }
+
+  j++;
+ }
+
+ return 0;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::Multiply(TH1* h1,TH1* h2,TH1* hout,Bool_t scale,Double_t c,Double_t d)
+{
+/**
+~~~
+// Provide the 1-dimensional histogram hout=d+c*h1*h2.
+//
+// Note : All histograms "h1", "h2" and "hout" must be existing 1-dimensional histograms.
+//
+// This facility is mainly intended for multiplying the values contained in the bins of "h1"
+// by the corresponding variable binned Bayesian Block values contained in "h2".
+// However, it can be applied to other combinations of 1-dimensional histograms as well.
+//
+// All provided histograms have to be 1-dimensional and histograms with
+// variable bin sizes are supported.
+//
+// The return value indicates whether an error occured (1) or not (0).
+//
+// The input parameter "scale" allows to scale (kTRUE) or not scale (kFALSE)
+// the bin contents w.r.t. the corresponding bin widths.
+//
+// Notes :
+// -------
+// 1) Since this facility is mainly intended for multiplication by variable binned Bayesian Block data,
+//    which represent a constant y-value over the corresponding Bayesian Block x-bin,
+//    scaling should in general *not* be used.
+//    However, when both "h1" and "h2" contain normal binned (event) counts (so-called mode 2 data),
+//    the use of scaling will correctly reflect the resulting (event) counts in each bin.
+// 2) The number of entries for "hout" will be set equal to the number of entries of "h1".
+//    To obtain the actual weighted number of entries reflected by the contents of "hout",
+//    the user should invoke the memberfunction Integral("width") for "hout". 
+//
+// The default value is d=0.
+~~~
+**/
+
+ if (hout) hout->Reset();
+
+ if (!h1 || !h2 || !hout) return 1;
+
+ Int_t ndim1=h1->GetDimension();
+ Int_t ndim2=h2->GetDimension();
+ Int_t ndimo=hout->GetDimension();
+
+ if (ndim1!=1 || ndim2!=1 || ndimo!=1)
+ {
+  cout << " *NcBlocks::Multiply* Error : Histograms should all be 1-dimensional." << endl;
+  return 1;
+ }
+
+ // Make the X-axis of "hout" identical to the X-axis of "h1"
+ TString name=hout->GetName();
+ h1->Copy(*hout);
+ hout->Reset();
+
+ TString name1=h1->GetName();
+ if (name1=="") name1="h1";
+
+ TString name2=h2->GetName();
+ if (name2=="") name2="h2";
+
+ TString sc="";
+ if (fabs(c)!=1) sc.Form("%-.3g*",fabs(c));
+
+ TString sd;
+ if (c>=0)
+ {
+  sd="";
+  if (d) sd.Form("%-.3g+",d);
+ }
+ else
+ {
+  sd="-";
+  if (d) sd.Form("%-.3g-",d);
+ }
+
+ TString title="Resulting histogram of: ";
+ if (sd!="") title+=sd;
+ title+=sc;
+ title+=name1;
+ title+="*";
+ title+=name2;
+ if (scale)
+ {
+  title+=" (scaled w.r.t. bin size)"; 
+ }
+ else
+ {
+  title+=" (not scaled w.r.t. bin size)"; 
+ }
+ title+=";";
+ TAxis* axis1=h1->GetXaxis();
+ title+=axis1->GetTitle();
+ title+=";";
+ axis1=h1->GetYaxis();
+ title+=axis1->GetTitle();
+
+ hout->SetName(name);
+ hout->SetTitle(title);
+
+ Int_t nb1=h1->GetNbinsX();
+ Int_t nb2=h2->GetNbinsX();
+
+ if (!nb1 || !nb2)
+ {
+  printf(" *NcBlocks::Multiply* Error : nbins of h1 is %-i and nbins of h2 is %-i. \n",nb1,nb2);
+  return 1;
+ }
+
+ // Check whether the range of the axes of h1 and h2 overlap
+ Double_t x1min=h1->GetXaxis()->GetXmin();
+ Double_t x1max=h1->GetXaxis()->GetXmax();
+ Double_t x2min=h2->GetXaxis()->GetXmin();
+ Double_t x2max=h2->GetXaxis()->GetXmax();
+
+ if (x1min>x2max || x1max<x2min)
+ {
+  printf(" *NcBlocks::Multiply* Error : The ranges of the input histograms do not overlap. \n");
+  return 1;
+ }
+
+ /////////////////////////////////////////////////////////////////
+ // Scan over the bins of h1 and h2 to create the data for hout //
+ /////////////////////////////////////////////////////////////////
+
+ Int_t i1=1;
+ Double_t bwidth1=h1->GetBinWidth(i1);
+ Double_t x1low=h1->GetBinLowEdge(i1);
+ Double_t x1up=x1low+bwidth1;
+ Int_t i2=0;
+ Int_t i2up=0;
+ Double_t bwidth2=0;
+ Double_t x2low=0;
+ Double_t x2up=0;
+ Double_t y1=0;
+ Double_t frac1=1;
+ Double_t y2=0;
+ Double_t frac2=1;
+ Double_t xlow=0;
+ Double_t xup=0;
+ Double_t val=0;
+ Double_t y=0;
+ NcSample s;
+ s.SetStoreMode();
+
+ while (i1<=nb1 && i2<=nb2)
+ {
+  i2=h2->FindFixBin(x1low);
+  i2up=h2->FindFixBin(x1up);
+
+  if ((i2<1 && i2up<1) || (i2>nb2 && i2up>nb2) || x1up<=x1low) // No overlap
+  {
+   i1++;
+   x1low=h1->GetBinLowEdge(i1);
+   bwidth1=h1->GetBinWidth(i1);
+   x1up=x1low+bwidth1;
+   continue;
+  }
+
+  y1=h1->GetBinContent(i1);
+
+  // If the current bin of h1 is empty, there is only a contribution from the offset "d"
+  if (!y1)
+  {
+   s.Enter(x1low,d);
+   i1++;
+   x1low=h1->GetBinLowEdge(i1);
+   bwidth1=h1->GetBinWidth(i1);
+   x1up=x1low+bwidth1;
+   continue;
+  }
+
+  // Overlapping bins of h1 and h2 -> Determine the bin boundaries of hout
+  x2low=h2->GetBinLowEdge(i2);
+  bwidth2=h2->GetBinWidth(i2);
+  x2up=x2low+bwidth2;
+  y2=h2->GetBinContent(i2);
+  xlow=x1low;
+  xup=x1up;
+  if (x2up<xup) xup=x2up;
+
+  frac1=(xup-xlow)/bwidth1;  
+  frac2=(xup-xlow)/bwidth2;
+  if (scale)
+  {
+   y1*=frac1;
+   y2*=frac2;
+  }
+  y=0;
+  val=c*y2;
+  y=d+y1*val;
+  if (frac1>1e-10 && frac2>1e-10) s.Enter(xlow,y); // Protection against machine accuracy
+  x1low=xup;
+  i1=h1->FindFixBin(x1low);
+  bwidth1=h1->GetBinWidth(i1);
+  x1up=bwidth1+h1->GetBinLowEdge(i1);
+ }
+
+ ///////////////////////////////
+ // Create the hout histogram //
+ ///////////////////////////////
+
+ Int_t nbins=s.GetN();
+ Double_t* xbins=new Double_t[nbins+1];
+
+ for (Int_t i=0; i<nbins; i++)
+ {
+  xbins[i]=s.GetEntry(i+1,"X");
+ }
+
+ // Set also the last boundary
+ xup=x1max;
+ if (x2max<x1max) xup=x2max;
+ xbins[nbins]=xup;
+
+ hout->SetBins(nbins,xbins);
+
+ for (Int_t jbin=1; jbin<=nbins; jbin++)
+ {
+  y=s.GetEntry(jbin,"Y");
+  hout->SetBinContent(jbin,y);
+ }
+
+ // Set the number of entries for "hout"
+ hout->SetEntries(h1->GetEntries()); 
+
+ delete [] xbins;
+
+ return 0;
+}
+///////////////////////////////////////////////////////////////////////////
+Int_t NcBlocks::Multiply(TGraph* gr,TH1* h,TGraph* gout,Double_t c,Double_t d)
+{
+/**
+~~~
+// Provide the TGraph gout=d+c*gr*h, where "h" is a 1-dimensional histogram.
+//
+// Notes :
+// -------
+// 1) Both graphs "gr" and "gout" as well as histogram "h" must be existing.
+// 2) In case both "gr" and "gout" are TGraphErrors objects, the errors
+//    of "gout" will be set to the values of the errors of the input graph "gr".
+//
+// The return value indicates whether an error occured (1) or not (0).
+//
+// This facility is mainly intended for multiplying the mode 3 data contained in the graph "gr"
+// by the corresponding variable binned Bayesian Block values contained in "h".
+// However, it can be applied to any combination of input graph "gr" and histogram "h".
+//
+// The default value is d=0.
+~~~
+**/
+
+ if (gout) gout->Set(0);
+
+ if (!gr || !h || !gout) return 1;
+
+ TString nameg=gr->GetName();
+ if (nameg=="") nameg="gr";
+
+ TString nameh=h->GetName();
+ if (nameh=="") nameh="h";
+
+ TString sc="";
+ if (fabs(c)!=1) sc.Form("%-.3g*",fabs(c));
+
+ TString sd;
+ if (c>=0)
+ {
+  sd="";
+  if (d) sd.Form("%-.3g+",d);
+ }
+ else
+ {
+  sd="-";
+  if (d) sd.Form("%-.3g-",d);
+ }
+
+ TString title="Resulting graph of: ";
+ if (sd!="") title+=sd;
+ title+=sc;
+ title+=nameg;
+ title+="*";
+ title+=nameh;
+ title+=";";
+ TAxis* axis=0;
+ axis=gr->GetXaxis();
+ title+=axis->GetTitle();
+ title+=";";
+ axis=gr->GetYaxis();
+ title+=axis->GetTitle();
+
+ gout->SetTitle(title);
+
+ Int_t ndim=h->GetDimension();
+
+ if (ndim!=1)
+ {
+  cout << " *NcBlocks::Multiply* Error : Histogram " << nameh << " should be 1-dimensional." << endl;
+  return 1;
+ }
+
+ Int_t np=gr->GetN();
+ Int_t nb=h->GetNbinsX();
+
+ if (!np || !nb) return 1;
+
+ // Loop over all the points in the graph
+ Double_t x=0;
+ Double_t y=0;
+ Double_t ex=0;
+ Double_t ey=0;
+ Int_t hbin=0;
+ Double_t hval=0;
+ Double_t val=0;
+ Double_t ynew=0;
+ axis=h->GetXaxis();
+ Int_t j=0;
+ for (Int_t i=0; i<np; i++)
+ {
+  gr->GetPoint(i,x,y);
+  hbin=axis->FindFixBin(x);
+  hval=h->GetBinContent(hbin);
+
+  // Do not consider underflow or overflow bins
+  if (hbin<1 || hbin>nb) continue;
+
+  val=c*hval;
+  if (!val) continue;
+
+  ynew=d+y*val;
   gout->SetPoint(j,x,ynew);
 
   if (gr->InheritsFrom("TGraphErrors") && gout->InheritsFrom("TGraphErrors"))

@@ -61,5 +61,6 @@ var searchData=
   ['matchsignals_58',['MatchSignals',['../d1/dfe/class_nc_astrolab.html#a186e446103b987c4035675b715db5ff5',1,'NcAstrolab::MatchSignals(NcDevice &amp;matches, Double_t da, TString au, Double_t dt, TString tu, Int_t mode=1, Int_t i1=1, Int_t i2=0, Int_t itype=0, Int_t j1=1, Int_t j2=0, Int_t jtype=1)'],['../d1/dfe/class_nc_astrolab.html#ad96516a2ad1c76f3a66dd713edc875f7',1,'NcAstrolab::MatchSignals(NcDevice &amp;matches, TString name, Double_t da, TString au, Double_t dt, TString tu, Int_t mode=1, Int_t itype=0, Int_t j1=1, Int_t j2=0, Int_t jtype=1)']]],
   ['meanmu_59',['MeanMu',['../d7/d31/class_nc_math.html#a49d158fed90da1e5da5cf411dd252c9f',1,'NcMath']]],
   ['mergejets_60',['MergeJets',['../d8/d47/class_ice_dwalk.html#afbb6c68ef10a3a1035d484db7223db11',1,'IceDwalk::MergeJets()'],['../d4/d1b/class_ice_dwalkx.html#afd8b99f7e037e4bc8c66d57040cdf709',1,'IceDwalkx::MergeJets()']]],
-  ['mudaq_61',['MuDaq',['../d0/d9a/class_ice_clean_hits.html#aefe5fc2e9f6aaba2b7de1c070fdea6f0',1,'IceCleanHits']]]
+  ['mudaq_61',['MuDaq',['../d0/d9a/class_ice_clean_hits.html#aefe5fc2e9f6aaba2b7de1c070fdea6f0',1,'IceCleanHits']]],
+  ['multiply_62',['Multiply',['../de/d02/class_nc_blocks.html#a2cb99e96d2b6867057b5d3950978a42b',1,'NcBlocks::Multiply(TH1 *h1, TH1 *h2, TH1 *hout, Bool_t scale, Double_t c, Double_t d=0)'],['../de/d02/class_nc_blocks.html#a46319aef3997a87ebe65416629078240',1,'NcBlocks::Multiply(TGraph *gr, TH1 *h, TGraph *gout, Double_t c, Double_t d=0)']]]
 ];

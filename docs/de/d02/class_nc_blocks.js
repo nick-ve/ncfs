@@ -24,6 +24,8 @@ var class_nc_blocks =
     [ "GetBlocks", "de/d02/class_nc_blocks.html#ae73c03a0ac59460498cf11815d7b30ae", null ],
     [ "GetBlocks", "de/d02/class_nc_blocks.html#a0ef7dd78afc2b2a9feaa592d572e996f", null ],
     [ "GetPrior", "de/d02/class_nc_blocks.html#a4b8068b0e894074bd405ec1f3e359aca", null ],
+    [ "Multiply", "de/d02/class_nc_blocks.html#a46319aef3997a87ebe65416629078240", null ],
+    [ "Multiply", "de/d02/class_nc_blocks.html#a2cb99e96d2b6867057b5d3950978a42b", null ],
     [ "Rebin", "de/d02/class_nc_blocks.html#a657ea243b50d74747f949f381667ead9", null ],
     [ "fMode", "de/d02/class_nc_blocks.html#aac70248d5748600add86b7f1f5b3113a", null ]
 ];

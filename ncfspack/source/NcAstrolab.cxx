@@ -180,7 +180,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC July 30, 2026  10:57
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC October 6, 2026  13:23
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -15004,8 +15004,6 @@ void NcAstrolab::MakeBurstDataStats()
  TString title;
  TString name;
  TString s;
- Float_t xmin=0;
- Float_t xmax=0;
  TAxis* axis=0;
  Int_t nbins=0;
  Double_t binsize=0;
@@ -15522,64 +15520,23 @@ void NcAstrolab::MakeBurstDataStats()
  }
 
  // Ratio On/Off for the arrival time Bayesian Block histograms
- TH1F hOnUBBtN;
- TH1F hOffUBBtN;
- TH1F hRatUBBtN;
- title.Form("Event rate (%-s^{-1}) scaled per time window",tu.Data());
- title.ReplaceAll("days^","day^");
- title.ReplaceAll("hours^","hour^");
- Float_t temp=0;
- Int_t nb1=0;
- Int_t nb2=0;
+
+ TH1F hRatBBtN;
 
  if (hOnBBtN && hOffBBtN)
  {
-  axis=hOnBBtN->GetXaxis();
-  xmin=axis->GetXmin();
-  xmax=axis->GetXmax();
-  axis=hOffBBtN->GetXaxis();
-  temp=axis->GetXmin();
-  if (temp<xmin) xmin=temp;
-  temp=axis->GetXmax();
-  if (temp>xmax) xmax=temp;
-
-  nb1=BB.Rebin(hOnBBtN,&hOnUBBtN,kFALSE,0,xmin,xmax);
-  nb2=BB.Rebin(hOffBBtN,&hOffUBBtN,kFALSE,0,xmin,xmax);
-  if (nb2>nb1) BB.Rebin(hOnBBtN,&hOnUBBtN,kFALSE,nb2,xmin,xmax);
-  hOnUBBtN.SetName("hOnUBBtN");
-  hOffUBBtN.SetName("hOffUBBtN");
-  hOnUBBtN.SetYTitle(title);
-  hOffUBBtN.SetYTitle(title);
-  BB.Divide(&hOnUBBtN,&hOffUBBtN,&hRatUBBtN,kFALSE,1);
-  hRatUBBtN.SetName("hRatUBBtN");
-  hRatUBBtN.SetYTitle("Ratio");
+  BB.Divide(hOnBBtN,hOffBBtN,&hRatBBtN,kFALSE,1);
+  hRatBBtN.SetName("hRatBBtN");
+  hRatBBtN.SetYTitle("Ratio");
  }
 
+ TH1F hRatBBztN;
 
- TH1F hOnUBBztN;
- TH1F hOffUBBztN;
- TH1F hRatUBBztN;
  if (hOnBBztN && hOffBBztN)
  {
-  axis=hOnBBztN->GetXaxis();
-  xmin=axis->GetXmin();
-  xmax=axis->GetXmax();
-  axis=hOffBBztN->GetXaxis();
-  temp=axis->GetXmin();
-  if (temp<xmin) xmin=temp;
-  temp=axis->GetXmax();
-  if (temp>xmax) xmax=temp;
-
-  nb1=BB.Rebin(hOnBBztN,&hOnUBBztN,kFALSE,0,xmin,xmax);
-  nb2=BB.Rebin(hOffBBztN,&hOffUBBztN,kFALSE,0,xmin,xmax);
-  if (nb2>nb1) BB.Rebin(hOnBBztN,&hOnUBBztN,kFALSE,nb2,xmin,xmax);
-  hOnUBBztN.SetName("hOnUBBztN");
-  hOffUBBztN.SetName("hOffUBBztN");
-  hOnUBBztN.SetYTitle(title);
-  hOffUBBztN.SetYTitle(title);
-  BB.Divide(&hOnUBBztN,&hOffUBBztN,&hRatUBBztN,kFALSE,1);
-  hRatUBBztN.SetName("hRatUBBztN");
-  hRatUBBztN.SetYTitle("Ratio");
+  BB.Divide(hOnBBztN,hOffBBztN,&hRatBBztN,kFALSE,1);
+  hRatBBztN.SetName("hRatBBztN");
+  hRatBBztN.SetYTitle("Ratio");
  }
 
  ///////////////////////////////////////////////////
@@ -15632,35 +15589,14 @@ void NcAstrolab::MakeBurstDataStats()
  }
 
  // Ratio On/Off for the angular differences Bayesian Block histograms
- TH1F hOnUBBaN;
- TH1F hOffUBBaN;
- TH1F hRatUBBaN;
- title.Form("Occurrence density scaled per patch");
- temp=0;
- nb1=0;
- nb2=0;
+
+ TH1F hRatBBaN;
 
  if (hOnBBaN && hOffBBaN)
  {
-  axis=hOnBBaN->GetXaxis();
-  xmin=axis->GetXmin();
-  xmax=axis->GetXmax();
-  axis=hOffBBaN->GetXaxis();
-  temp=axis->GetXmin();
-  if (temp<xmin) xmin=temp;
-  temp=axis->GetXmax();
-  if (temp>xmax) xmax=temp;
-
-  nb1=BB.Rebin(hOnBBaN,&hOnUBBaN,kFALSE,0,xmin,xmax);
-  nb2=BB.Rebin(hOffBBaN,&hOffUBBaN,kFALSE,0,xmin,xmax);
-  if (nb2>nb1) BB.Rebin(hOnBBaN,&hOnUBBaN,kFALSE,nb2,xmin,xmax);
-  hOnUBBaN.SetName("hOnUBBaN");
-  hOffUBBaN.SetName("hOffUBBaN");
-  hOnUBBaN.SetYTitle(title);
-  hOffUBBaN.SetYTitle(title);
-  BB.Divide(&hOnUBBaN,&hOffUBBaN,&hRatUBBaN,kFALSE,1);
-  hRatUBBaN.SetName("hRatUBBaN");
-  hRatUBBaN.SetYTitle("Ratio");
+  BB.Divide(hOnBBaN,hOffBBaN,&hRatBBaN,kFALSE,1);
+  hRatBBaN.SetName("hRatBBaN");
+  hRatBBaN.SetYTitle("Ratio");
  }
 
  // Store the produced histograms
@@ -15701,9 +15637,7 @@ void NcAstrolab::MakeBurstDataStats()
   fBurstHistos.Add(hOffBBt.Clone());
   if (hOffBBtN) fBurstHistos.Add(hOffBBtN);
  }
- if (hOnt && hOnUBBtN.GetEntries()) fBurstHistos.Add(hOnUBBtN.Clone());
- if (hOfft && hOffUBBtN.GetEntries()) fBurstHistos.Add(hOffUBBtN.Clone());
- if (hOnt && hOfft && hRatUBBtN.GetEntries()) fBurstHistos.Add(hRatUBBtN.Clone());
+ if (hOnt && hOfft && hRatBBtN.GetEntries()) fBurstHistos.Add(hRatBBtN.Clone());
  if (hOnZt) fBurstHistos.Add(hOnZt);
  if (hOffZt) fBurstHistos.Add(hOffZt);
  if (hOnSigZt) fBurstHistos.Add(hOnSigZt);
@@ -15720,9 +15654,7 @@ void NcAstrolab::MakeBurstDataStats()
   fBurstHistos.Add(hOffBBzt.Clone());
   if (hOffBBztN) fBurstHistos.Add(hOffBBztN);
  }
- if (hOnZt && hOnUBBztN.GetEntries()) fBurstHistos.Add(hOnUBBztN.Clone());
- if (hOffZt && hOffUBBztN.GetEntries()) fBurstHistos.Add(hOffUBBztN.Clone());
- if (hOnZt && hOffZt && hRatUBBztN.GetEntries()) fBurstHistos.Add(hRatUBBztN.Clone());
+ if (hOnZt && hOffZt && hRatBBztN.GetEntries()) fBurstHistos.Add(hRatBBztN.Clone());
  if (hOna && hOnBBa.GetEntries())
  {
   fBurstHistos.Add(hOnBBa.Clone());
@@ -15733,9 +15665,7 @@ void NcAstrolab::MakeBurstDataStats()
   fBurstHistos.Add(hOffBBa.Clone());
   if (hOffBBaN) fBurstHistos.Add(hOffBBaN);
  }
- if (hOna && hOnUBBaN.GetEntries()) fBurstHistos.Add(hOnUBBaN.Clone());
- if (hOffa && hOffUBBaN.GetEntries()) fBurstHistos.Add(hOffUBBaN.Clone());
- if (hOna && hOffa && hRatUBBaN.GetEntries()) fBurstHistos.Add(hRatUBBaN.Clone());
+ if (hOna && hOffa && hRatBBaN.GetEntries()) fBurstHistos.Add(hRatBBaN.Clone());
 
  // Make sure that also the auto-binned histograms have their axes ranges set
  Int_t nh=fBurstHistos.GetEntries();
@@ -18263,11 +18193,11 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
  {
   if (!zcor) // Plain observed arrival times
   {
-   rat=(TH1*)fBurstHistos.FindObject("hRatUBBtN");
+   rat=(TH1*)fBurstHistos.FindObject("hRatBBtN");
   }
   else // Redshift corrected arrival times
   {
-   rat=(TH1*)fBurstHistos.FindObject("hRatUBBztN");
+   rat=(TH1*)fBurstHistos.FindObject("hRatBBztN");
   }
 
   if (!rat)
@@ -18290,11 +18220,11 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   {
    if (!zcor) // Plain observed arrival times
    {
-    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBtN");
+    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatBBtN");
    }
    else // Redshift corrected arrival times
    {
-    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBztN");
+    hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatBBztN");
    }
 
    if (hPsiRat)
@@ -18304,8 +18234,8 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    if (!zcor) rrat=new TH1F("hPsiRatUBBtN","Psi distr. for bkg hypothesis of on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
-    if (zcor)  rrat=new TH1F("hPsiRatUBBztN","Psi distr. for bkg hypothesis of redshift corrected on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+    if (!zcor) rrat=new TH1F("hPsiRatBBtN","Psi distr. for bkg hypothesis of on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+    if (zcor)  rrat=new TH1F("hPsiRatBBztN","Psi distr. for bkg hypothesis of redshift corrected on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
    }
 
    pvaluerat=math.PsiPvalue(-1,nr,rat,0,0,freq,0,rrat,ncut,&nrxrat);
@@ -18600,7 +18530,7 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
  //////////////////////////////////////////////////////////////////////////
  if (type=="BBrac")
  {
-  rat=(TH1*)fBurstHistos.FindObject("hRatUBBaN");
+  rat=(TH1*)fBurstHistos.FindObject("hRatBBaN");
 
   if (!rat)
   {
@@ -18620,7 +18550,7 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   // P-value determination
   if (nr>=0)
   {
-   hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatUBBaN");
+   hPsiRat=(TH1F*)fBurstHistos.FindObject("hPsiRatBBaN");
 
    if (hPsiRat)
    {
@@ -18629,7 +18559,7 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    rrat=new TH1F("hPsiRatUBBaN","Psi distr. for bkg hypothesis of on/off source cos(opening angle) Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+    rrat=new TH1F("hPsiRatBBaN","Psi distr. for bkg hypothesis of on/off source cos(opening angle) Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
    }
 
    pvaluerat=math.PsiPvalue(-1,nr,rat,0,0,freq,0,rrat,ncut,&nrxrat);

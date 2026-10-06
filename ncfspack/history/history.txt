@@ -1622,3 +1622,12 @@
                 were adapted accordingly.
 30-jul-2026 NvE New memberfunction GetBurstParameter() introduced and input argument Tem added to MakeBurstEnergydist() in class NcAstrolab.
                 The version indicator in NcVersion has been updated to 6.9. 
+06-oct-2026 NvE In class NcBlocks the functionality of the memberfunctions Add() and Divide() has been improved to handle variable binned histograms
+                and a memberfunction Multiply() has been introduced.
+                Also the height of the blocks in the final histogram for Mode 2 data is now determined by taking the average of the filled bins only,
+                so that it matches better the bin contents of the input histogram, independent of the binning.
+                Also the class NcAstrolab has been adapted to the improved NcBlocks::Divide() functionality, such that no uniform rebinning is
+                needed anymore.
+                Note: The various psi value facilities in classes NcMath and NcRandom still have to be modified for extended functionality of the
+                      input parameter "f" in order to cope with Bayesion Block distributions.
+                The version indicator in NcVersion has been updated to 6.9a. 

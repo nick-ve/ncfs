@@ -73,8 +73,8 @@ var NAVTREEINDEX =
 "d9/d8d/class_nc_event.html#af972d315fdc3c39bdf6bf90acfbda4cf",
 "dc/d7c/class_rno_monitor.html#ae72b701ac85c40eec3fb3b0a7290dd5c",
 "dc/df9/class_ice_chi2.html#a33e3a93d74c00fee609d2cc148c16fa2",
-"de/dcd/class_nc_sample.html#a0b714d4efe7cdabfe4270477141010bc",
-"df/d92/class_nc_random.html#a3c71ad08f2b22f4218c8db9cb212a6b9"
+"de/dcd/class_nc_sample.html#a09c98f4ba0b7f57282467386eeefa640",
+"df/d92/class_nc_random.html#a36e36e592203f2c239f5b378bc7d5ab3"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';
