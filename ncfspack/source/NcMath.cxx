@@ -47,7 +47,7 @@
 //                             // correct model
 //
 //--- Author: Nick van Eijndhoven 14-nov-1998 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, February 10, 2025  16:22Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC October 28, 2026  22:42
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -3029,16 +3029,26 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
 // Further mathematical details can be found in astro-ph/0702029.
 //
 // his : The experimental observations in histogram format
-//       Note that Underflow and/or Overflow entries are not taken into account
 // hyp : Hypothetical observations according to some hypothesis
 // pdf : Probability distribution function for the hypothesis
-// f   : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
-//       or the exact Bayesian expression (f=0).
+// f   : Flag to specify what to use as the representation of the number of entries
+//       1 = his->GetSumOfWeights()
+//       2 = his->GetEntries()
+//       3 = his->Integral()
+//       4 = his->Integral("width") and bin contents weighted with the binwidth
+//           This should be used when "his" is a Bayesian Block histogram
+//       5 = his->GetEntries() and bin contents regarded as relative weights
+//           This should be used when "his" is the ratio of 2 histograms 
+//
+//       When f<0 the frequentist (Stirling) approximation will be used
+//       instead of the exact Bayesian expression for Psi.
+//
+// Note : For backward compatibility, f=0 is identical to f=1.
 //
 // In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
 // background distribution is assumed.
 //
-// Default values are : hyp=0, pdf=0 and f=0.
+// Default values are : hyp=0, pdf=0 and f=1.
 //
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
@@ -3055,7 +3065,27 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
  Double_t xmax=xaxis->GetXmax();
  Double_t range=xmax-xmin;
  Int_t nbins=his->GetNbinsX();
+
+ // Obtain the value for representing the number of entries
  Double_t nensig=his->GetSumOfWeights();
+ if (abs(f)==2) nensig=his->GetEntries();
+ if (abs(f)==3) nensig=his->Integral();
+ if (abs(f)==4) nensig=his->Integral("width");
+ if (abs(f)==5) nensig=his->GetEntries();
+
+ Int_t fsave=f;
+
+ // Convert "f" to the convention for the related memberfunctions
+ // to distinghuish between the frequentist (Stirling) approximation (f=1)
+ // or the exact Bayesian expression (f=0).
+ if (f<0)
+ {
+  f=1;
+ }
+ else
+ {
+  f=0;
+ } 
 
  if (nbins<=0 || nensig<=0 || range<=0) return psi;
 
@@ -3063,14 +3093,29 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
  Double_t* p=new Double_t[nbins]; 
  Double_t nk;
  Double_t pk;
+ Double_t binwidth;
+ Double_t norm=his->GetSumOfWeights();
 
  // Uniform hypothesis distribution
  if (!hyp && !pdf)
  {
   for (Int_t i=1; i<=nbins; i++)
   {
+   binwidth=his->GetBinWidth(i);
    nk=his->GetBinContent(i);
-   pk=his->GetBinWidth(i)/range;
+   if (abs(fsave)==4) nk=nk*binwidth;
+   if (abs(fsave)==5)
+   {
+    if (norm)
+    {
+     nk=nk*nensig/norm;
+    }
+    else
+    {
+     nk=0;
+    }
+   }
+   pk=binwidth/range;
    n[i-1]=0;
    p[i-1]=0;
    if (nk>0) n[i-1]=nk;
@@ -3089,9 +3134,22 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
    Double_t x1,x2;
    for (Int_t ipdf=1; ipdf<=nbins; ipdf++)
    {
+    binwidth=his->GetBinWidth(ipdf);
     nk=his->GetBinContent(ipdf);
+    if (abs(fsave)==4) nk=nk*binwidth;
+    if (abs(fsave)==5)
+    {
+     if (norm)
+     {
+      nk=nk*nensig/norm;
+     }
+     else
+     {
+      nk=0;
+     }
+    }
     x1=his->GetBinLowEdge(ipdf);
-    x2=x1+his->GetBinWidth(ipdf);
+    x2=x1+binwidth;
     pk=pdf->Integral(x1,x2)/ftot;
     n[ipdf-1]=0;
     p[ipdf-1]=0;
@@ -3118,7 +3176,20 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
   }
   for (Int_t j=1; j<=nbins; j++)
   {
+   binwidth=his->GetBinWidth(j);
    nk=his->GetBinContent(j);
+   if (abs(fsave)==4) nk=nk*binwidth;
+   if (abs(fsave)==5)
+   {
+    if (norm)
+    {
+     nk=nk*nensig/norm;
+    }
+    else
+    {
+     nk=0;
+    }
+   }
    pk=href->GetBinContent(j)/nenhyp;
    n[j-1]=0;
    p[j-1]=0;
@@ -3135,7 +3206,7 @@ Double_t NcMath::PsiValue(TH1* his,TH1* hyp,TF1* pdf,Int_t f) const
  return psi;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
+Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k,Int_t f) const
 {
 /**
 ~~~
@@ -3182,10 +3253,12 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
 //            k=-1 implies the worst match of the outcomes with the predictions,
 //                 where all trials yield the outcome with the lowest probability.
 //            k=-2 implies the best match of the outcomes with integer nk values.
+// f : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
+//     or the exact Bayesian expression (f=0).
 //
 // In case no probabilities are given (i.e. p=0), a uniform distribution is assumed.
 //
-// The default values are p=0 and k=0.
+// The default values are p=0, k=0 and f=0.
 //
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
@@ -3197,7 +3270,8 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
 
  if (m<=0 || n<=0 || k<-2 || k>m) return psi;
 
- psi=LogRfac(n);
+ psi=0;
+ if (!f) psi=LogRfac(n);
  Double_t pk=1./double(m); // Prob. of getting outcome k for a uniform distr.
 
  ///////////////////////////////////////////
@@ -3208,8 +3282,16 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
   if (p) pk=p[k-1];
   if (pk>0)
   {
-   psi+=n*log10(pk)-LogRfac(n);
-   psi*=-10.;
+   if (!f) // Exact Bayesian expression
+   {
+    psi+=n*log10(pk)-LogRfac(n);
+    psi*=-10.;
+   }
+   else // Frequentist (Stirling) approximation
+   {
+    psi+=n*log10(1./pk);
+    psi*=10.;
+   }
   }
   else 
   {
@@ -3250,7 +3332,7 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
  }
 
  // Check for validity of the encountered pmin and pmax
- if (jmin<0 || jmax<0) return psi;
+ if (jmin<0 || jmax<0) return -1;
 
  /////////////////////////////
  // The worst matching case //
@@ -3259,8 +3341,16 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
  {
   if (pmin>0)
   {
-   psi+=n*log10(pmin)-LogRfac(n);
-   psi*=-10.;
+   if (!f) // Exact Bayesian expression
+   {
+    psi+=n*log10(pmin)-LogRfac(n);
+    psi*=-10.;
+   }
+   else // Frequentist (Stirling) approximation
+   {
+    psi+=n*log10(1./pmin);
+    psi*=10.;
+   }
   }
   else
   {
@@ -3276,6 +3366,14 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
  /////////////////////////////////////////////////////
  if (k==0)
  {
+  // Frequentist (Stirling) approximation
+  if (f)
+  {
+   psi=0;
+   return psi;
+  }
+
+  // Exact Bayesian expression
   for (Int_t i=0; i<m; i++)
   {
    if (p) pk=p[i]; // Probabilities from a specific B_m hypothesis
@@ -3374,17 +3472,34 @@ Double_t NcMath::PsiExtreme(Double_t n,Int_t m,Double_t* p,Int_t k) const
    if (pk>0)
    {
     nk=int(narr[i]);
-    psi+=nk*log10(pk)-LogRfac(nk);
+    if (nk>0)
+    {
+     if (!f) // Exact Bayesian expression
+     {
+      psi+=nk*log10(pk)-LogRfac(nk);
+     }
+     else // Frequentist (Stirling) approximation
+     {
+      psi+=nk*log10(nk/(n*pk));
+     }
+    }
    }
   }
-  psi*=-10.;
+  if (!f) // Exact Bayesian expression
+  {
+   psi*=-10.;
+  }
+  else // Frequentist (Stirling) approximation
+  {
+   psi*=10.;
+  }
   
   delete [] narr;
  }
  return psi;
 }
 ///////////////////////////////////////////////////////////////////////////
-Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
+Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k,Int_t f) const
 {
 /**
 ~~~
@@ -3427,7 +3542,6 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
 // Further mathematical details can be found in astro-ph/0702029.
 //
 // his : The experimental observations in histogram format
-//       Note that Underflow and/or Overflow entries are not taken into account
 // hyp : Hypothetical observations in histogram format according to some hypothesis
 // pdf : Probability distribution function for the hypothesis
 // k   : The specified (k=1,2,..,m) fixed outcome (bin) which is obtained at every trial.
@@ -3435,11 +3549,22 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
 //              k=-1 implies the worst match of the outcomes with the predictions,
 //                   where all trials yield the outcome with the lowest probability
 //              k=-2 implies the best match of the outcomes with integer nk values.
+// f   : Flag to specify what to use as the representation of the number of entries
+//       1 = his->GetSumOfWeights()
+//       2 = his->GetEntries()
+//       3 = his->Integral()
+//       4 = his->Integral("width") and bin contents weighted with the binwidth
+//           This should be used when "his" is a Bayesian Block histogram
+//       5 = his->GetEntries() and bin contents regarded as relative weights
+//           This should be used when "his" is the ratio of 2 histograms 
+//
+//       When f<0 the frequentist (Stirling) approximation will be used
+//       instead of the exact Bayesian expression for Psi.
 //
 // In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
 // background distribution is assumed.
 //
-// Default values are : hyp=0, pdf=0 and k=0.
+// Default values are : hyp=0, pdf=0, k=0 and f=1.
 //
 // In the case of inconsistent input, a Psi value of -1 is returned.
 //
@@ -3456,9 +3581,27 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
  Double_t xmax=xaxis->GetXmax();
  Double_t range=xmax-xmin;
  Int_t nbins=his->GetNbinsX();
+
+ // Obtain the value for representing the number of entries
  Double_t nensig=his->GetSumOfWeights();
+ if (abs(f)==2) nensig=his->GetEntries();
+ if (abs(f)==3) nensig=his->Integral();
+ if (abs(f)==4) nensig=his->Integral("width");
+ if (abs(f)==5) nensig=his->GetEntries();
 
  if (nbins<=0 || nensig<=0 || range<=0) return psi;
+
+ // Convert "f" to the convention for the related memberfunctions
+ // to distinghuish between the frequentist (Stirling) approximation (f=1)
+ // or the exact Bayesian expression (f=0).
+ if (f<0)
+ {
+  f=1;
+ }
+ else
+ {
+  f=0;
+ } 
 
  Double_t* p=new Double_t[nbins]; 
  Double_t pk;
@@ -3472,7 +3615,7 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
    p[i-1]=0;
    if (pk>0) p[i-1]=pk;
   }
-  psi=PsiExtreme(nensig,nbins,p,k);
+  psi=PsiExtreme(nensig,nbins,p,k,f);
  }
 
  // Hypothesis specified via a pdf
@@ -3491,7 +3634,7 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
     p[ipdf-1]=0;
     if (pk>0) p[ipdf-1]=pk;
    }
-   psi=PsiExtreme(nensig,nbins,p,k);
+   psi=PsiExtreme(nensig,nbins,p,k,f);
   }
  }
 
@@ -3516,7 +3659,7 @@ Double_t NcMath::PsiExtreme(TH1* his,TH1* hyp,TF1* pdf,Int_t k) const
    p[j-1]=0;
    if (pk>0) p[j-1]=pk;
   }
-  psi=PsiExtreme(nensig,nbins,p,k);
+  psi=PsiExtreme(nensig,nbins,p,k,f);
   delete href;
  }
 
@@ -3604,6 +3747,13 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t
 //
 // 5) In case a histogram "psih" is provided, this function will set the axes titles (and a legend if "mark" is activated).
 //
+// 6) In case "mark" is activated, an extra (fake) entry will be added at the threshold psi value (psi0)
+//    in order to allow the range of the X-axis to comprise the marking at the psi0 value when the histogram "psih"
+//    was created with automatic binning. In case the buffer size for the automatic binning was too small,
+//    this extra (fake) entry will show up in the underflow or overflow bin.
+//    If this extra (fake) entry is not located in the underflow or overflow, the extra count in the corresponding bin
+//    and the number of entries is removed. 
+//
 // For practical reasons the maximum values of "nr" and "n" have been limited
 // to 1e19, which is about the corresponding maximum value of an unsigned 64-bit integer.
 //
@@ -3628,21 +3778,29 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t
  if (val>=0) pval=val/nrused;
  if (nrx) (*nrx)=nrused;
 
- // Set axes titles for the "psih" histogram
+ // Set the axes titles for the "psih" histogram
+ // and mark the threshold psi0 value, if selected.
  if (psih)
  {
-  TString title="#psi value in dB";
-  TString s="Counts after ";
-  s+=nrused;
-  s+=" randomisations";
-
-  psih->GetXaxis()->SetTitle(title.Data());
-  psih->GetYaxis()->SetTitle(s.Data());
+  TString s;
 
   // Mark the psi0 value by a vertical line in the "psih" histogram
   // Also the corresponding P-value is mentioned in the legend
   if (mark)
   {
+   // Add a fake entry at the psi0 value
+   psih->Fill(psi0);
+
+   // Remove the fake entry, but keep it when it is located in the underflow or overflow
+   psih->BufferEmpty(1);
+   Int_t jbin=psih->FindFixBin(psi0);
+   if (jbin>0 && jbin<=psih->GetNbinsX())
+   {
+    psih->AddBinContent(jbin,-1);
+    Double_t nen=psih->GetEntries();
+    psih->SetEntries(nen-1);
+   }
+
    Float_t x=psi0;
    Float_t ymin=0;
    Float_t ymax=psih->GetMaximum();
@@ -3652,8 +3810,7 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t
    vline->SetLineWidth(2);
    vline->SetLineColor(4); // Blue color
 
-   title="P-value : %-10.3g";
-   s=title.Format(title.Data(),pval);
+   s.Form("P-value : %-.3g",pval);
 
    TLegend* leg=new TLegend(0.6,0.8,0.8,0.9);
    leg->SetFillColor(0);
@@ -3664,8 +3821,16 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t
    hlist->Add(vline);
    hlist->Add(leg);
   }
- }
 
+  // Also flush the buffer in case "mark" was not selected
+  psih->BufferEmpty(1);
+
+  // Set axes titles for the "psih" histogram
+  TString title="#psi value in dB";
+  s.Form("Counts after %-g randomisations",nrused);
+  psih->SetXTitle(title);
+  psih->SetYTitle(s);
+ }
 
  return pval;
 }
@@ -3711,11 +3876,22 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
 //        If psi0<0 the corresponding psi value of the input histogram "his" will be taken as psi0.
 // nr   : The number of repetitions (see note 4) of the counting experiment with n independent random trials.
 // his  : The experimental observations of the different B_m outcomes in histogram format.
-//        Note that Underflow and/or Overflow entries are not taken into account.
 // hyp  : Hypothetical observations (in histogram format) according to some B_m hypothesis.
 // pdf  : Probability distribution function for some B_m hypothesis.
-// f    : Flag to indicate the use of a frequentist (Stirling) approximation (f=1)
-//        or the exact Bayesian expression (f=0).
+// f   : Flag to specify what to use as the representation of the number of entries
+//       1 = his->GetSumOfWeights()
+//       2 = his->GetEntries()
+//       3 = his->Integral()
+//       4 = his->Integral("width") and bin contents weighted with the binwidth
+//           This should be used when "his" is a Bayesian Block histogram
+//       5 = his->GetEntries() and bin contents regarded as relative weights
+//           This should be used when "his" is the ratio of 2 histograms 
+//
+//       When f<0 the frequentist (Stirling) approximation will be used
+//       instead of the exact Bayesian expression for Psi.
+//
+// Note : For backward compatibility, f=0 is identical to f=1.
+//
 // na   : Array with the signal c.q. (cumulative) observed numbers of occurrences of the different outcomes.
 // psih : Histogram with observed psi values (see notes 2, 4 and 5).
 // ncut : Number of psi>=psi0 values to be obtained to trigger an early stop of the number of repetitions.
@@ -3765,7 +3941,7 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
 // In case no hypothesis is specified (i.e. hyp=0 and pdf=0), a uniform
 // background distribution is assumed.
 //
-// Default values are : hyp=0, pdf=0 f=0, na=0, psih=0, ncut=0, nrx=0 and mark=1.
+// Default values are : hyp=0, pdf=0 f=1, na=0, psih=0, ncut=0, nrx=0 and mark=1.
 //
 // In the case of inconsistent input, a P-value of -1 is returned.
 //
@@ -3782,23 +3958,58 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
  Double_t xmax=xaxis->GetXmax();
  Double_t range=xmax-xmin;
  Int_t nbins=his->GetNbinsX();
+
+ // Obtain the value for representing the number of entries
  Double_t nensig=his->GetSumOfWeights();
+ if (abs(f)==2) nensig=his->GetEntries();
+ if (abs(f)==3) nensig=his->Integral();
+ if (abs(f)==4) nensig=his->Integral("width");
+ if (abs(f)==5) nensig=his->GetEntries();
 
  if (nbins<=0 || nensig<=0 || range<=0) return pval;
 
  if (psi0<0) psi0=PsiValue(his,hyp,pdf,f);
 
+ Int_t fsave=f;
+
+ // Convert "f" to the convention for the related memberfunctions
+ // to distinghuish between the frequentist (Stirling) approximation (f=1)
+ // or the exact Bayesian expression (f=0).
+ if (f<0)
+ {
+  f=1;
+ }
+ else
+ {
+  f=0;
+ } 
+
  Double_t* n=new Double_t[nbins];
  Double_t* p=new Double_t[nbins]; 
  Double_t nk;
  Double_t pk;
+ Double_t binwidth;
+ Double_t norm=his->GetSumOfWeights();
 
  // Uniform hypothesis distribution
  if (!hyp && !pdf)
  {
   for (Int_t i=1; i<=nbins; i++)
   {
+   binwidth=his->GetBinWidth(i);
    nk=his->GetBinContent(i);
+   if (abs(fsave)==4) nk=nk*binwidth;
+   if (abs(fsave)==5)
+   {
+    if (norm)
+    {
+     nk=nk*nensig/norm;
+    }
+    else
+    {
+     nk=0;
+    }
+   }
    pk=his->GetBinWidth(i)/range;
    n[i-1]=0;
    p[i-1]=0;
@@ -3818,9 +4029,22 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
    Double_t x1,x2;
    for (Int_t ipdf=1; ipdf<=nbins; ipdf++)
    {
+    binwidth=his->GetBinWidth(ipdf);
     nk=his->GetBinContent(ipdf);
+    if (abs(fsave)==4) nk=nk*binwidth;
+    if (abs(fsave)==5)
+    {
+     if (norm)
+     {
+      nk=nk*nensig/norm;
+     }
+     else
+     {
+      nk=0;
+     }
+    }
     x1=his->GetBinLowEdge(ipdf);
-    x2=x1+his->GetBinWidth(ipdf);
+    x2=x1+binwidth;
     pk=pdf->Integral(x1,x2)/ftot;
     n[ipdf-1]=0;
     p[ipdf-1]=0;
@@ -3847,7 +4071,20 @@ Double_t NcMath::PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp,TF1* pdf,
   }
   for (Int_t j=1; j<=nbins; j++)
   {
+   binwidth=his->GetBinWidth(j);
    nk=his->GetBinContent(j);
+   if (abs(fsave)==4) nk=nk*binwidth;
+   if (abs(fsave)==5)
+   {
+    if (norm)
+    {
+     nk=nk*nensig/norm;
+    }
+    else
+    {
+     nk=0;
+    }
+   }
    pk=href->GetBinContent(j)/nenhyp;
    n[j-1]=0;
    p[j-1]=0;

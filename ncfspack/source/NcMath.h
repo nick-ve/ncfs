@@ -84,11 +84,11 @@ class NcMath : public TObject
   Double_t LogRfac(Double_t r) const;           // Compute log_10(r!) for a fractional value r 
   Double_t PsiValue(Int_t m,Int_t* n,Double_t* p=0,Int_t f=0) const;     // Bayesian Psi value of a counting exp. w.r.t. hypothesis
   Double_t PsiValue(Int_t m,Double_t* n,Double_t* p=0,Int_t f=0) const;  // Bayesian Psi value of a counting exp. w.r.t. hypothesis
-  Double_t PsiValue(TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t f=0) const;     // Bayesian Psi value of a counting exp. w.r.t. hypothesis
-  Double_t PsiExtreme(Double_t n,Int_t m,Double_t* p=0,Int_t k=0) const; // Extreme Bayesian Psi values w.r.t. some hypothesis
-  Double_t PsiExtreme(TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t k=0) const;   // Extreme Bayesian Psi values w.r.t. some hypothesis
+  Double_t PsiValue(TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t f=1) const;     // Bayesian Psi value of a counting exp. w.r.t. hypothesis
+  Double_t PsiExtreme(Double_t n,Int_t m,Double_t* p=0,Int_t k=0,Int_t f=0) const; // Extreme Bayesian Psi values w.r.t. some hypothesis
+  Double_t PsiExtreme(TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t k=0,Int_t f=1) const;   // Extreme Bayesian Psi values w.r.t. some hypothesis
   Double_t PsiPvalue(Double_t psi0,Double_t nr,Double_t n,Int_t m,Double_t* p=0,Int_t f=0,Double_t* na=0,TH1F* psih=0,Int_t ncut=0,Double_t* nrx=0,Int_t mark=1); // P-value of psi0 for specified B_m exp.
-  Double_t PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t f=0,Double_t* na=0,TH1F* psih=0,Int_t ncut=0,Double_t* nrx=0,Int_t mark=1);   // P-value of psi0 for specified B_m exp.
+  Double_t PsiPvalue(Double_t psi0,Double_t nr,TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t f=1,Double_t* na=0,TH1F* psih=0,Int_t ncut=0,Double_t* nrx=0,Int_t mark=1);   // P-value of psi0 for specified B_m exp.
   Double_t Chi2Value(Int_t m,Int_t* n,Double_t* p=0,Int_t* ndf=0) const;    // Frequentist Chi2 value of a counting exp. w.r.t. hypothesis
   Double_t Chi2Value(Int_t m,Double_t* n,Double_t* p=0,Int_t* ndf=0) const; // Frequentist Chi2 value of a counting exp. w.r.t. hypothesis
   Double_t Chi2Value(TH1* his,TH1* hyp=0,TF1* pdf=0,Int_t* ndf=0) const;    // Frequentist Chi2 value of a counting exp. w.r.t. hypothesis
@@ -103,7 +103,7 @@ class NcMath : public TObject
   Double_t BesselI1(Double_t x) const;          // Compute modified Bessel function I_1(x)
   Double_t BesselK1(Double_t x) const;          // Compute modified Bessel function K_1(x)
  
- ClassDef(NcMath,14) // Various mathematical tools for scientific analysis.
+ ClassDef(NcMath,15) // Various mathematical tools for scientific analysis.
  
 };
 #endif

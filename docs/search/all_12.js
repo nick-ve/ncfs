@@ -195,7 +195,7 @@ var searchData=
   ['setstatus_192',['SetStatus',['../de/df5/class_nc_device.html#ac63ff2a2c4629aa6dca1441a5dd72c2e',1,'NcDevice']]],
   ['setstokesparameters_193',['SetStokesParameters',['../da/d28/class_nc_stokes.html#a07751dc7ea4f29eac92b0a1a29203eb9',1,'NcStokes']]],
   ['setstoragemode_194',['SetStorageMode',['../dc/da7/class_nc_invmass.html#adacac2b05ce4aafe91e654a2b74e2a47',1,'NcInvmass']]],
-  ['setstoremode_195',['SetStoreMode',['../de/dcd/class_nc_sample.html#ad5e7b6a49c8fe1bbbe4836d315db958d',1,'NcSample']]],
+  ['setstoremode_195',['SetStoreMode',['../de/dcd/class_nc_sample.html#ac48158e8a3bb62b5b16c76e71b36cd4b',1,'NcSample']]],
   ['setswapmode_196',['SetSwapMode',['../d1/de3/class_nc_obj_matrix.html#abd9f01574f2fe1651d1882c2a178b5b9',1,'NcObjMatrix::SetSwapMode()'],['../d6/d42/class_nc_signal.html#a40c4265f1540c1308aeb8d9733a80f3c',1,'NcSignal::SetSwapMode()']]],
   ['setsystemtime_197',['SetSystemTime',['../dc/dab/class_nc_timestamp.html#a47217e19105f1cbf0e16b94501fcd12b',1,'NcTimestamp']]],
   ['settag_198',['SetTag',['../d9/d15/class_nc_tagger.html#a06a10d875a0f0e532b4bbb54dd0528f1',1,'NcTagger']]],

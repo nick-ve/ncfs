@@ -77,7 +77,7 @@
 // All statistics of a sample are obtained via s.Data().
 //
 //--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva
-//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 14, 2025  13:09Z
+//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC October 23, 2026  11:09
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -282,10 +282,13 @@ void NcSample::Reset()
  }
 
  // Set storage arrays to initial size
- if (fX) fX->Set(10);
- if (fY) fY->Set(10);
- if (fZ) fZ->Set(10);
- if (fT) fT->Set(10);
+ if (fStore)
+ {
+  if (fX) fX->Set(fStore);
+  if (fY) fY->Set(fStore);
+  if (fZ) fZ->Set(fStore);
+  if (fT) fT->Set(fStore);
+ }
 
  // Resetting the variable names to their defaults
  SetNames();
@@ -395,11 +398,11 @@ void NcSample::Enter(Double_t x)
   if (x>fMax[0]) fMax[0]=x;
  }
 
- // Store all entered data when storage mode has been selected 
+ // Store all entered data when storage mode has been selected
  if (fStore)
  {
-  if (!fX) fX=new TArrayD(10);
-  if (fX->GetSize() < fN) fX->Set(fN+10);
+  if (!fX) fX=new TArrayD(fStore);
+  if (fX->GetSize() < fN) fX->Set(2*fN);
   fX->AddAt(x,fN-1);
  }
 
@@ -500,11 +503,11 @@ void NcSample::Enter(Double_t x,Double_t y)
  // Store all entered data when storage mode has been selected 
  if (fStore)
  {
-  if (!fX) fX=new TArrayD(10);
-  if (fX->GetSize() < fN) fX->Set(fN+10);
+  if (!fX) fX=new TArrayD(fStore);
+  if (fX->GetSize() < fN) fX->Set(2*fN);
   fX->AddAt(x,fN-1);
-  if (!fY) fY=new TArrayD(10);
-  if (fY->GetSize() < fN) fY->Set(fN+10);
+  if (!fY) fY=new TArrayD(fStore);
+  if (fY->GetSize() < fN) fY->Set(2*fN);
   fY->AddAt(y,fN-1);
  }
 
@@ -619,17 +622,17 @@ void NcSample::Enter(Double_t x,Double_t y,Double_t z)
   if (z>fMax[2]) fMax[2]=z;
  }
 
- // Store all entered data when storage mode has been selected 
+ // Store all entered data when storage mode has been selected
  if (fStore)
  {
-  if (!fX) fX=new TArrayD(10);
-  if (fX->GetSize() < fN) fX->Set(fN+10);
+  if (!fX) fX=new TArrayD(fStore);
+  if (fX->GetSize() < fN) fX->Set(2*fN);
   fX->AddAt(x,fN-1);
-  if (!fY) fY=new TArrayD(10);
-  if (fY->GetSize() < fN) fY->Set(fN+10);
+  if (!fY) fY=new TArrayD(fStore);
+  if (fY->GetSize() < fN) fY->Set(2*fN);
   fY->AddAt(y,fN-1);
-  if (!fZ) fZ=new TArrayD(10);
-  if (fZ->GetSize() < fN) fZ->Set(fN+10);
+  if (!fZ) fZ=new TArrayD(fStore);
+  if (fZ->GetSize() < fN) fZ->Set(2*fN);
   fZ->AddAt(z,fN-1);
  }
 
@@ -762,20 +765,20 @@ void NcSample::Enter(Double_t x,Double_t y,Double_t z,Double_t t)
   if (t>fMax[3]) fMax[3]=t;
  }
 
- // Store all entered data when storage mode has been selected 
+ // Store all entered data when storage mode has been selected
  if (fStore)
  {
-  if (!fX) fX=new TArrayD(10);
-  if (fX->GetSize() < fN) fX->Set(fN+10);
+  if (!fX) fX=new TArrayD(fStore);
+  if (fX->GetSize() < fN) fX->Set(2*fN);
   fX->AddAt(x,fN-1);
-  if (!fY) fY=new TArrayD(10);
-  if (fY->GetSize() < fN) fY->Set(fN+10);
+  if (!fY) fY=new TArrayD(fStore);
+  if (fY->GetSize() < fN) fY->Set(2*fN);
   fY->AddAt(y,fN-1);
-  if (!fZ) fZ=new TArrayD(10);
-  if (fZ->GetSize() < fN) fZ->Set(fN+10);
+  if (!fZ) fZ=new TArrayD(fStore);
+  if (fZ->GetSize() < fN) fZ->Set(2*fN);
   fZ->AddAt(z,fN-1);
-  if (!fT) fT=new TArrayD(10);
-  if (fT->GetSize() < fN) fT->Set(fN+10);
+  if (!fT) fT=new TArrayD(fStore);
+  if (fT->GetSize() < fN) fT->Set(2*fN);
   fT->AddAt(t,fN-1);
  }
 
@@ -1762,14 +1765,14 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 // by removing every first entry after ordering w.r.t. the i-th variable (1=first)
 // once a new entry is entered that would exceed "nmax". 
 //
-// mode = 0 : Entered data will not be stored, but at each entry the statistics will be updated.
-//        1 : Data will be stored as entered.
-// nmax = 0 : No maximum is set for the number of stored entries.
-//      > 0 : Entries will be stored up to a maximum of "nmax" entries.
-// i    > 0 : Re-order the entries w.r.t. the i-th variable in increasing order before removing the first (=lowest value).
-//      = 0 : Re-order the entries in the order they were entered before removing the first one.
-//      < 0 : Re-order the entries w.r.t. the i-th variable in decreasing order before removing the first (=highest value).
-//            When nmax=0 the value of "i" is irrelevant.
+// mode = 0  : Entered data will not be stored, but at each entry the statistics will be updated.
+//        >0 : Data will be stored as entered and the value of "mode" is also the initial size of the data arrays. 
+// nmax = 0  : No maximum is set for the number of stored entries.
+//      > 0  : Entries will be stored up to a maximum of "nmax" entries.
+// i    > 0  : Re-order the entries w.r.t. the i-th variable in increasing order before removing the first (=lowest value).
+//      = 0  : Re-order the entries in the order they were entered before removing the first one.
+//      < 0  : Re-order the entries w.r.t. the i-th variable in decreasing order before removing the first (=highest value).
+//             When nmax=0 the value of "i" is irrelevant.
 //
 // Notes :
 // -------
@@ -1777,9 +1780,10 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
 // 2) Specification of i=0 results in a regular First In First Out (FIFO) buffer performance,
 //    whereas for other "i" values it reflects a FIFO behaviour of removing the first entry
 //    after the requested ordering.
+// 3) For backward compatibility mode=1 will internally be converted to mode=100.
 //
 // By default the values of mode, nmax and i are set to 0 in the constructor of this class.
-// The default at invokation of this memberfunction is mode=1, nmax=0 and i=0.
+// The default at invokation of this memberfunction is mode=100, nmax=0 and i=0.
 //
 // For normal statistics evaluation (e.g. mean, sigma, covariance etc...)
 // storage of entered data is not needed. This is the default mode
@@ -1797,7 +1801,7 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
  {
   cout << "  Storage mode can only be set before first data." << endl;
  }
- else if ((!mode && nmax) || mode<0 || mode>1 || nmax<0 || abs(i)>fDim)
+ else if ((!mode && nmax) || mode<0 || nmax<0 || abs(i)>fDim)
  {
   cout << "  Inconsistent input : mode=" << mode << " nmax=" << nmax << " i=" << i << endl;
   fNmax=0;
@@ -1805,9 +1809,41 @@ void NcSample::SetStoreMode(Int_t mode,Int_t nmax,Int_t i)
  }
  else
  {
+  if (mode==1) mode=100; // Backward compatibility
   fStore=mode;
   fNmax=nmax;
   fMoveVariable=i;
+
+  if (fStore) // Set storage arrays to the requested size
+  {
+   if (fX) fX->Set(fStore);
+   if (fY) fY->Set(fStore);
+   if (fZ) fZ->Set(fStore);
+   if (fT) fT->Set(fStore);
+  }
+  else // Delete the storage arrays
+  {
+   if (fX)
+   {
+    delete fX;
+    fX=0;
+   }
+   if (fY)
+   {
+    delete fY;
+    fY=0;
+   }
+   if (fZ)
+   {
+    delete fZ;
+    fZ=0;
+   }
+   if (fT)
+   {
+    delete fT;
+    fT=0;
+   }
+  }
  }
 }
 ///////////////////////////////////////////////////////////////////////////

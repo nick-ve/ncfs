@@ -111,7 +111,7 @@ var class_nc_sample =
     [ "SampleAndSum", "de/dcd/class_nc_sample.html#afa65f2599a1f667f10dc2951ee0febd4", null ],
     [ "SampleAndSum", "de/dcd/class_nc_sample.html#a64cccee164aad86ee6ce7a849c008aa6", null ],
     [ "SetNames", "de/dcd/class_nc_sample.html#aa908f74e72a150b2fcd8e119dfbbebfa", null ],
-    [ "SetStoreMode", "de/dcd/class_nc_sample.html#ad5e7b6a49c8fe1bbbe4836d315db958d", null ],
+    [ "SetStoreMode", "de/dcd/class_nc_sample.html#ac48158e8a3bb62b5b16c76e71b36cd4b", null ],
     [ "Transmit", "de/dcd/class_nc_sample.html#a09c98f4ba0b7f57282467386eeefa640", null ],
     [ "Transmit", "de/dcd/class_nc_sample.html#a8d2eb83926f3c2a9b27564db1cb4189d", null ],
     [ "fAnimObject", "de/dcd/class_nc_sample.html#a4adeb8db8fdd24649c7f9f2feed877bf", null ],

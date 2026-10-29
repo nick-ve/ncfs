@@ -77,7 +77,7 @@ class NcSample : public TNamed
   void Data(TString nameA,TString nameB="-");         // Statistics info for the sample
   void ListOrdered(Int_t mode,Int_t i);               // Provide a listing of the stored entries ordered w.r.t. the i-th variable
   void ListOrdered(Int_t mode,TString name);          // Provide a listing of the stored entries ordered w.r.t. the variable with the specified name
-  void SetStoreMode(Int_t mode=1,Int_t nmax=0,Int_t i=0); // Set mode for storage of entered data
+  void SetStoreMode(Int_t mode=100,Int_t nmax=0,Int_t i=0); // Set mode for storage of entered data
   Int_t GetStoreMode() const;                         // Provide storage mode of entered data
   Int_t GetStoreNmax() const;                         // Provide the maximum number of entries for storage
   Double_t GetQuantile(Double_t f,TH1* histo,Int_t mode=0) const; // Quantile value for fraction f from the specified 1D histogram
@@ -151,7 +151,7 @@ class NcSample : public TNamed
   Double_t fMin[fMaxdim];           // Minimum value for each variable
   Double_t fMax[fMaxdim];           // Maximum value for each variable
   Int_t fRemove;                    // Flag to indicate that some entry has been removed
-  Int_t fStore;                     // Flag to denote storage of entered data 
+  Int_t fStore;                     // Parameter to denote storage of entered data and the initial size of the data arrays 
   Int_t fNmax;                      // Maximum number of entries to be stored before moving some out
   Int_t fMoveVariable;              // Variable to order before moving out entries  
   TArrayD* fX;                      // Storage array for the 1st variable (e.g. X)
@@ -172,6 +172,6 @@ class NcSample : public TNamed
   TArrayL64 ADC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* Vsig=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Provide the quantized data of an "nbits" ADC.
   TArrayD DAC(Int_t nbits,Double_t range,Double_t Vbias=0,TArray* adcs=0,TArray* peds=0,TH1* hist=0,Int_t B=0,Int_t C=3) const; // Reconstruct the analog signals from an "nbits" ADC.
 
- ClassDef(NcSample,17) // Sampling and statistics tools for various multi-dimensional data samples.
+ ClassDef(NcSample,18) // Sampling and statistics tools for various multi-dimensional data samples.
 };
 #endif

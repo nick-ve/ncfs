@@ -180,7 +180,7 @@
 // lab.DisplaySignals("equ","J",0,"ham",1);
 //
 //--- Author: Nick van Eijndhoven 15-mar-2007 Utrecht University
-//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC October 6, 2026  13:23
+//- Modified: Nick van Eijndhoven, IIHE-VUB Brussel, UTC October 29, 2026  12:22
 ~~~
 **/
 ///////////////////////////////////////////////////////////////////////////
@@ -17916,6 +17916,16 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 
   if (!tot && !bkg) return;
 
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
+  {
+   freq=1;
+  }
+  else
+  {
+   freq=-1;
+  }
+  
   if (tot) psitot=math.PsiValue(tot,0,0,freq);
   if (bkg) psibkg=math.PsiValue(bkg,0,0,freq);
   psidif=psitot-psibkg;
@@ -17923,16 +17933,16 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   // Extreme Psi values for a pure background hypothesis of the recorded arrival time entries
   if (tot)
   {
-   psimintot=math.PsiExtreme(tot,0,0,-2);
+   psimintot=math.PsiExtreme(tot,0,0,-2,freq);
    if (psitot<psimintot) psimintot=psitot;
-   psimaxtot=math.PsiExtreme(tot,0,0,-1);
+   psimaxtot=math.PsiExtreme(tot,0,0,-1,freq);
    if (psimaxtot>psimintot) psifractot=(psimaxtot-psitot)/(psimaxtot-psimintot);
   }
   if (bkg)
   {
-   psiminbkg=math.PsiExtreme(bkg,0,0,-2); 
+   psiminbkg=math.PsiExtreme(bkg,0,0,-2,freq); 
    if (psibkg<psiminbkg) psiminbkg=psibkg;
-   psimaxbkg=math.PsiExtreme(bkg,0,0,-1);
+   psimaxbkg=math.PsiExtreme(bkg,0,0,-1,freq);
    if (psimaxbkg>psiminbkg) psifracbkg=(psimaxbkg-psibkg)/(psimaxbkg-psiminbkg);
   }
 
@@ -17959,8 +17969,8 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     if (tot)
     {
-     if (!zcor) rtot=new TH1F("hPsiOnt","Psi distr. for bkg hypothesis of on-source arrival time data",100,psimintot-1.,psimaxtot+1.);
-     if (zcor)  rtot=new TH1F("hPsiOnZt","Psi distr. for bkg hypothesis of redshift corrected on-source arrival time data",100,psimintot-1.,psimaxtot+1.);
+     if (!zcor) rtot=new TH1F("hPsiOnt","Psi distr. for bkg hypothesis of on-source arrival time data",100,0,-1);
+     if (zcor)  rtot=new TH1F("hPsiOnZt","Psi distr. for bkg hypothesis of redshift corrected on-source arrival time data",100,0,-1);
     }
    }
 
@@ -17973,10 +17983,13 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     if (bkg)
     {
-     if (!zcor) rbkg=new TH1F("hPsiOfft","Psi distr. for bkg hypothesis of off-source arrival time data",100,psiminbkg-1.,psimaxbkg+1.);
-     if (zcor)  rbkg=new TH1F("hPsiOffZt","Psi distr. for bkg hypothesis of redshift corrected off-source arrival time data",100,psiminbkg-1.,psimaxbkg+1.);
+     if (!zcor) rbkg=new TH1F("hPsiOfft","Psi distr. for bkg hypothesis of off-source arrival time data",100,0,-1);
+     if (zcor)  rbkg=new TH1F("hPsiOffZt","Psi distr. for bkg hypothesis of redshift corrected off-source arrival time data",100,0,-1);
     }
    }
+
+   if (rtot && nr>0) rtot->SetBuffer(int(nr)+1);
+   if (rbkg && nr>0) rbkg->SetBuffer(int(nr)+1);
 
    if (tot)
    {
@@ -18028,40 +18041,33 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 
   if (!tot && !bkg) return;
 
-  // Temporarily offset the bin contents so that the lowest bin content is 1 for the psi analysis
-  if (tot)
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
   {
-   for (Int_t i=1; i<=tot->GetNbinsX(); i++)
-   {
-    tot->AddBinContent(i,1);
-   }
+   freq=4;
   }
-  
-  if (bkg)
+  else
   {
-   for (Int_t i=1; i<=bkg->GetNbinsX(); i++)
-   {
-    bkg->AddBinContent(i,1);
-   }
+   freq=-4;
   }
 
   if (tot) psitot=math.PsiValue(tot,0,0,freq);
   if (bkg) psibkg=math.PsiValue(bkg,0,0,freq);
   psidif=psitot-psibkg;
 
-  // Extreme Psi values for a pure background hypothesis of the recorded arrival time entries
+  // Extreme Psi values for a pure background hypothesis of the recorded arrival time Bayesian Blocks
   if (tot)
   {
-   psimintot=math.PsiExtreme(tot,0,0,-2);
+   psimintot=math.PsiExtreme(tot,0,0,0,freq);
    if (psitot<psimintot) psimintot=psitot;
-   psimaxtot=math.PsiExtreme(tot,0,0,-1);
+   psimaxtot=math.PsiExtreme(tot,0,0,-1,freq);
    if (psimaxtot>psimintot) psifractot=(psimaxtot-psitot)/(psimaxtot-psimintot);
   }
   if (bkg)
   {
-   psiminbkg=math.PsiExtreme(bkg,0,0,-2); 
+   psiminbkg=math.PsiExtreme(bkg,0,0,0,freq); 
    if (psibkg<psiminbkg) psiminbkg=psibkg;
-   psimaxbkg=math.PsiExtreme(bkg,0,0,-1);
+   psimaxbkg=math.PsiExtreme(bkg,0,0,-1,freq);
    if (psimaxbkg>psiminbkg) psifracbkg=(psimaxbkg-psibkg)/(psimaxbkg-psiminbkg);
   }
 
@@ -18102,22 +18108,22 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
      {
       if (type.Contains("N"))
       {
-       rtot=new TH1F("hPsiOnBBtN","Psi distr. for bkg hypothesis of per time window normalized on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+       rtot=new TH1F("hPsiOnBBtN","Psi distr. for bkg hypothesis of per time window normalized on-source event rate Bayesian Block data",100,0,-1);
       }
       else
       {
-       rtot=new TH1F("hPsiOnBBt","Psi distr. for bkg hypothesis of stacked on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+       rtot=new TH1F("hPsiOnBBt","Psi distr. for bkg hypothesis of stacked on-source event rate Bayesian Block data",100,0,-1);
       }
      }
      if (zcor)
      {
       if (type.Contains("N"))
       {
-       rtot=new TH1F("hPsiOnBBztN","Psi distr. for bkg hypothesis of redshift corrected per time window normalized on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+       rtot=new TH1F("hPsiOnBBztN","Psi distr. for bkg hypothesis of redshift corrected per time window normalized on-source event rate Bayesian Block data",100,0,-1);
       }
       else
       {
-       rtot=new TH1F("hPsiOnBBzt","Psi distr. for bkg hypothesis of redshift corrected stacked on-source event rate Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+       rtot=new TH1F("hPsiOnBBzt","Psi distr. for bkg hypothesis of redshift corrected stacked on-source event rate Bayesian Block data",100,0,-1);
       }
      }
     }
@@ -18136,26 +18142,29 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
      {
       if (type.Contains("N"))
       {
-       rbkg=new TH1F("hPsiOffBBtN","Psi distr. for bkg hypothesis of per time window normalized off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+       rbkg=new TH1F("hPsiOffBBtN","Psi distr. for bkg hypothesis of per time window normalized off-source event rate Bayesian Block data",100,0,-1);
       }
       else
       {
-       rbkg=new TH1F("hPsiOffBBt","Psi distr. for bkg hypothesis of stacked off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+       rbkg=new TH1F("hPsiOffBBt","Psi distr. for bkg hypothesis of stacked off-source event rate Bayesian Block data",100,0,-1);
       }
      }
      if (zcor)
      {
       if (type.Contains("N"))
       {
-       rbkg=new TH1F("hPsiOffBBztN","Psi distr. for bkg hypothesis of redshift corrected per time window normalized off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+       rbkg=new TH1F("hPsiOffBBztN","Psi distr. for bkg hypothesis of redshift corrected per time window normalized off-source event rate Bayesian Block data",100,0,-1);
       }
       else
       {
-       rbkg=new TH1F("hPsiOffBBzt","Psi distr. for bkg hypothesis of redshift corrected stacked off-source event rate Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+       rbkg=new TH1F("hPsiOffBBzt","Psi distr. for bkg hypothesis of redshift corrected stacked off-source event rate Bayesian Block data",100,0,-1);
       }
      }
     }
    }
+
+   if (rtot && nr>0) rtot->SetBuffer(int(nr)+1);
+   if (rbkg && nr>0) rbkg->SetBuffer(int(nr)+1);
 
    if (tot)
    {
@@ -18166,22 +18175,6 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
     fBurstHistos.Add(rbkg);
-   }
-  }
-
-  // Restore the original histogram data
-  if (tot)
-  {
-   for (Int_t i=1; i<=tot->GetNbinsX(); i++)
-   {
-    tot->AddBinContent(i,-1);
-   }
-  }
-  if (bkg)
-  {
-   for (Int_t i=1; i<=bkg->GetNbinsX(); i++)
-   {
-    bkg->AddBinContent(i,-1);
    }
   }
  }
@@ -18206,13 +18199,23 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    return;
   }
 
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
+  {
+   freq=5;
+  }
+  else
+  {
+   freq=-5;
+  }
+
   psirat=math.PsiValue(rat,0,0,freq);
   psidif=psitot-psibkg;
 
-  // Extreme Psi values for a pure background hypothesis of the recorded arrival time entries
-  psiminrat=math.PsiExtreme(rat,0,0,-2); 
+  // Extreme Psi values for a pure background hypothesis of the ratio of the arrival time Bayesian Blocks
+  psiminrat=math.PsiExtreme(rat,0,0,0,freq); 
   if (psirat<psiminrat) psiminrat=psirat;
-  psimaxrat=math.PsiExtreme(rat,0,0,-1);
+  psimaxrat=math.PsiExtreme(rat,0,0,-1,freq);
   if (psimaxrat>psiminrat) psifracrat=(psimaxrat-psirat)/(psimaxrat-psiminrat);
 
   // P-value determination
@@ -18234,9 +18237,11 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    if (!zcor) rrat=new TH1F("hPsiRatBBtN","Psi distr. for bkg hypothesis of on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
-    if (zcor)  rrat=new TH1F("hPsiRatBBztN","Psi distr. for bkg hypothesis of redshift corrected on/off source event rate Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+    if (!zcor) rrat=new TH1F("hPsiRatBBtN","Psi distr. for bkg hypothesis of on/off source event rate Bayesian Block data",100,0,-1);
+    if (zcor)  rrat=new TH1F("hPsiRatBBztN","Psi distr. for bkg hypothesis of redshift corrected on/off source event rate Bayesian Block data",100,0,-1);
    }
+
+   if (rrat && nr>0) rrat->SetBuffer(int(nr)+1);
 
    pvaluerat=math.PsiPvalue(-1,nr,rat,0,0,freq,0,rrat,ncut,&nrxrat);
    fBurstHistos.Add(rrat);
@@ -18256,6 +18261,16 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 
   if (!tot && !bkg) return;
 
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
+  {
+   freq=1;
+  }
+  else
+  {
+   freq=-1;
+  }
+
   TF1 pdfa("pdfa","sin(x*acos(-1.)/180.)");
   if (tot) psitot=math.PsiValue(tot,0,&pdfa,freq);
   if (bkg) psibkg=math.PsiValue(bkg,0,&pdfa,freq);
@@ -18264,16 +18279,16 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   // Extreme Psi values for a pure background hypothesis of the recorded opening angle entries
   if (tot)
   {
-   psimintot=math.PsiExtreme(tot,0,&pdfa,-2);
+   psimintot=math.PsiExtreme(tot,0,&pdfa,-2,freq);
    if (psitot<psimintot) psimintot=psitot;
-   psimaxtot=math.PsiExtreme(tot,0,&pdfa,-1);
+   psimaxtot=math.PsiExtreme(tot,0,&pdfa,-1,freq);
    if (psimaxtot>psimintot) psifractot=(psimaxtot-psitot)/(psimaxtot-psimintot);
   }
   if (bkg)
   {
-   psiminbkg=math.PsiExtreme(bkg,0,&pdfa,-2);
+   psiminbkg=math.PsiExtreme(bkg,0,&pdfa,-2,freq);
    if (psibkg<psiminbkg) psiminbkg=psibkg;
-   psimaxbkg=math.PsiExtreme(bkg,0,&pdfa,-1);
+   psimaxbkg=math.PsiExtreme(bkg,0,&pdfa,-1,freq);
    if (psimaxbkg>psiminbkg) psifracbkg=(psimaxbkg-psibkg)/(psimaxbkg-psiminbkg);
   }
 
@@ -18290,7 +18305,10 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    if (tot) rtot=new TH1F("hPsiOna","Psi distr. for bkg hypothesis of on-source opening angle data",100,psimintot-1.,psimaxtot+1.);
+    if (tot)
+    {
+     rtot=new TH1F("hPsiOna","Psi distr. for bkg hypothesis of on-source opening angle data",100,0,-1);
+    }
    }
 
    if (hPsiOff)
@@ -18300,8 +18318,14 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    if (bkg) rbkg=new TH1F("hPsiOffa","Psi distr. for bkg hypothesis of off-source opening angle data",100,psiminbkg-1.,psimaxbkg+1.);
+    if (bkg)
+    {
+     rbkg=new TH1F("hPsiOffa","Psi distr. for bkg hypothesis of off-source opening angle data",100,0,-1);
+    }
    }
+
+   if (rtot && nr>0) rtot->SetBuffer(int(nr)+1);
+   if (rbkg && nr>0) rbkg->SetBuffer(int(nr)+1);
 
    if (tot)
    {
@@ -18329,6 +18353,16 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 
   if (!tot && !bkg) return;
 
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
+  {
+   freq=1;
+  }
+  else
+  {
+   freq=-1;
+  }
+
   if (tot) psitot=math.PsiValue(tot,0,0,freq);
   if (bkg) psibkg=math.PsiValue(bkg,0,0,freq);
   psidif=psitot-psibkg;
@@ -18336,16 +18370,16 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   // Extreme Psi values for a pure background hypothesis of the recorded cos(opening angle) entries
   if (tot)
   {
-   psimintot=math.PsiExtreme(tot,0,0,-2);
+   psimintot=math.PsiExtreme(tot,0,0,-2,freq);
    if (psitot<psimintot) psimintot=psitot;
-   psimaxtot=math.PsiExtreme(tot,0,0,-1);
+   psimaxtot=math.PsiExtreme(tot,0,0,-1,freq);
    if (psimaxtot>psimintot) psifractot=(psimaxtot-psitot)/(psimaxtot-psimintot);
   }
   if (bkg)
   {
-   psiminbkg=math.PsiExtreme(bkg,0,0,-2);
+   psiminbkg=math.PsiExtreme(bkg,0,0,-2,freq);
    if (psibkg<psiminbkg) psiminbkg=psibkg;
-   psimaxbkg=math.PsiExtreme(bkg,0,0,-1);
+   psimaxbkg=math.PsiExtreme(bkg,0,0,-1,freq);
    if (psimaxbkg>psiminbkg) psifracbkg=(psimaxbkg-psibkg)/(psimaxbkg-psiminbkg);
   }
 
@@ -18362,7 +18396,10 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    if (tot) rtot=new TH1F("hPsiOnCosa","Psi distr. for bkg hypothesis of on-source cos(opening angle) data",100,psimintot-1.,psimaxtot+1.);
+    if (tot)
+    {
+     rtot=new TH1F("hPsiOnCosa","Psi distr. for bkg hypothesis of on-source cos(opening angle) data",100,0,-1);
+    }
    }
 
    if (hPsiOff)
@@ -18372,19 +18409,25 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    if (bkg) rbkg=new TH1F("hPsiOffCosa","Psi distr. for bkg hypothesis of off-source cos(opening angle) data",100,psiminbkg-1.,psimaxbkg+1.);
-   }
-
-    if (tot)
-    {
-     pvaluetot=math.PsiPvalue(-1,nr,tot,0,0,freq,0,rtot,ncut,&nrxtot);
-     fBurstHistos.Add(rtot);
-    }
     if (bkg)
     {
-     pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
-     fBurstHistos.Add(rbkg);
+     rbkg=new TH1F("hPsiOffCosa","Psi distr. for bkg hypothesis of off-source cos(opening angle) data",100,0,-1);
     }
+   }
+
+   if (rtot && nr>0) rtot->SetBuffer(int(nr)+1);
+   if (rbkg && nr>0) rbkg->SetBuffer(int(nr)+1);
+
+   if (tot)
+   {
+    pvaluetot=math.PsiPvalue(-1,nr,tot,0,0,freq,0,rtot,ncut,&nrxtot);
+    fBurstHistos.Add(rtot);
+   }
+   if (bkg)
+   {
+    pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
+    fBurstHistos.Add(rbkg);
+   }
   }
  }
 
@@ -18409,39 +18452,33 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 
   if (!tot && !bkg) return;
 
-  // Temporarily offset the bin contents so that the lowest bin content is 1 for the psi analysis
-  if (tot)
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
   {
-   for (Int_t i=1; i<=tot->GetNbinsX(); i++)
-   {
-    tot->AddBinContent(i,1);
-   }
+   freq=4;
   }
-  if (bkg)
+  else
   {
-   for (Int_t i=1; i<=bkg->GetNbinsX(); i++)
-   {
-    bkg->AddBinContent(i,1);
-   }
+   freq=-4;
   }
 
   if (tot) psitot=math.PsiValue(tot,0,0,freq);
   if (bkg) psibkg=math.PsiValue(bkg,0,0,freq);
   psidif=psitot-psibkg;
 
-  // Extreme Psi values for a pure background hypothesis of the recorded arrival time entries
+  // Extreme Psi values for a pure background hypothesis of the recorded cos(opening angle) Bayesian Blocks
   if (tot)
   {
-   psimintot=math.PsiExtreme(tot,0,0,-2);
+   psimintot=math.PsiExtreme(tot,0,0,0,freq);
    if (psitot<psimintot) psimintot=psitot;
-   psimaxtot=math.PsiExtreme(tot,0,0,-1);
+   psimaxtot=math.PsiExtreme(tot,0,0,-1,freq);
    if (psimaxtot>psimintot) psifractot=(psimaxtot-psitot)/(psimaxtot-psimintot);
   }
   if (bkg)
   {
-   psiminbkg=math.PsiExtreme(bkg,0,0,-2); 
+   psiminbkg=math.PsiExtreme(bkg,0,0,0,freq); 
    if (psibkg<psiminbkg) psiminbkg=psibkg;
-   psimaxbkg=math.PsiExtreme(bkg,0,0,-1);
+   psimaxbkg=math.PsiExtreme(bkg,0,0,-1,freq);
    if (psimaxbkg>psiminbkg) psifracbkg=(psimaxbkg-psibkg)/(psimaxbkg-psiminbkg);
   }
 
@@ -18467,11 +18504,11 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
     {
      if (type.Contains("N"))
      {
-      rtot=new TH1F("hPsiOnBBaN","Psi distr. for bkg hypothesis of per patch normalized on-source cos(opening angle) Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+      rtot=new TH1F("hPsiOnBBaN","Psi distr. for bkg hypothesis of per patch normalized on-source cos(opening angle) Bayesian Block data",100,0,-1);
      }
      else
      {
-      rtot=new TH1F("hPsiOnBBa","Psi distr. for bkg hypothesis of stacked on-source cos(opening angle) Bayesian Block data",100,psimintot-1.,psimaxtot+1.);
+      rtot=new TH1F("hPsiOnBBa","Psi distr. for bkg hypothesis of stacked on-source cos(opening angle) Bayesian Block data",100,0,-1);
      }
     }
    }
@@ -18487,14 +18524,17 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
     {
      if (type.Contains("N"))
      {
-      rbkg=new TH1F("hPsiOffBBaN","Psi distr. for bkg hypothesis of per patch normalized off-source cos(opening angle) Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+      rbkg=new TH1F("hPsiOffBBaN","Psi distr. for bkg hypothesis of per patch normalized off-source cos(opening angle) Bayesian Block data",100,0,-1);
      }
      else
      {
-      rbkg=new TH1F("hPsiOffBBa","Psi distr. for bkg hypothesis of stacked off-source cos(opening angle) Bayesian Block data",100,psiminbkg-1.,psimaxbkg+1.);
+      rbkg=new TH1F("hPsiOffBBa","Psi distr. for bkg hypothesis of stacked off-source cos(opening angle) Bayesian Block data",100,0,-1);
      }
     }
    }
+
+   if (rtot && nr>0) rtot->SetBuffer(int(nr)+1);
+   if (rbkg && nr>0) rbkg->SetBuffer(int(nr)+1);
 
    if (tot)
    {
@@ -18505,22 +18545,6 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     pvaluebkg=math.PsiPvalue(-1,nr,bkg,0,0,freq,0,rbkg,ncut,&nrxbkg);
     fBurstHistos.Add(rbkg);
-   }
-  }
-
-  // Restore the original histogram data
-  if (tot)
-  {
-   for (Int_t i=1; i<=tot->GetNbinsX(); i++)
-   {
-    tot->AddBinContent(i,-1);
-   }
-  }
-  if (bkg)
-  {
-   for (Int_t i=1; i<=bkg->GetNbinsX(); i++)
-   {
-    bkg->AddBinContent(i,-1);
    }
   }
  }
@@ -18538,13 +18562,23 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    return;
   }
 
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
+  {
+   freq=5;
+  }
+  else
+  {
+   freq=-5;
+  }
+
   psirat=math.PsiValue(rat,0,0,freq);
   psidif=psitot-psibkg;
 
-  // Extreme Psi values for a pure background hypothesis of the recorded arrival time entries
-  psiminrat=math.PsiExtreme(rat,0,0,-2); 
+  // Extreme Psi values for a pure background hypothesis of the ratio of the cos(opening angle) Bayesian Blocks
+  psiminrat=math.PsiExtreme(rat,0,0,0,freq); 
   if (psirat<psiminrat) psiminrat=psirat;
-  psimaxrat=math.PsiExtreme(rat,0,0,-1);
+  psimaxrat=math.PsiExtreme(rat,0,0,-1,freq);
   if (psimaxrat>psiminrat) psifracrat=(psimaxrat-psirat)/(psimaxrat-psiminrat);
 
   // P-value determination
@@ -18559,8 +18593,10 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
    else
    {
-    rrat=new TH1F("hPsiRatBBaN","Psi distr. for bkg hypothesis of on/off source cos(opening angle) Bayesian Block data",100,psiminrat-1.,psimaxrat+1.);
+    rrat=new TH1F("hPsiRatBBaN","Psi distr. for bkg hypothesis of on/off source cos(opening angle) Bayesian Block data",100,0,-1);
    }
+
+   if (rrat && nr>0) rrat->SetBuffer(int(nr)+1);
 
    pvaluerat=math.PsiPvalue(-1,nr,rat,0,0,freq,0,rrat,ncut,&nrxrat);
    fBurstHistos.Add(rrat);
@@ -18587,22 +18623,32 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
 
   if (!ntot && !nbkg) return;
 
+  // Use the "freq" flag to specify the number of entries to be used
+  if (!freq)
+  {
+   freq=1;
+  }
+  else
+  {
+   freq=-1;
+  }
+
   if (ntot) psitot=math.PsiValue(&hOndt,0,&pdfdttot,freq);
   if (nbkg) psibkg=math.PsiValue(&hOffdt,0,&pdfdtbkg,freq);
   psidif=psitot-psibkg;
 
   if (ntot)
   {
-   psimintot=math.PsiExtreme(&hOndt,0,&pdfdttot,-2);
+   psimintot=math.PsiExtreme(&hOndt,0,&pdfdttot,-2,freq);
    if (psitot<psimintot) psimintot=psitot;
-   psimaxtot=math.PsiExtreme(&hOndt,0,&pdfdttot,-1);
+   psimaxtot=math.PsiExtreme(&hOndt,0,&pdfdttot,-1,freq);
    if (psimaxtot>psimintot) psifractot=(psimaxtot-psitot)/(psimaxtot-psimintot);
   }
   if (nbkg)
   {
-   psiminbkg=math.PsiExtreme(&hOffdt,0,&pdfdtbkg,-2);
+   psiminbkg=math.PsiExtreme(&hOffdt,0,&pdfdtbkg,-2,freq);
    if (psibkg<psiminbkg) psiminbkg=psibkg;
-   psimaxbkg=math.PsiExtreme(&hOffdt,0,&pdfdtbkg,-1);
+   psimaxbkg=math.PsiExtreme(&hOffdt,0,&pdfdtbkg,-1,freq);
    if (psimaxbkg>psiminbkg) psifracbkg=(psimaxbkg-psibkg)/(psimaxbkg-psiminbkg);
   }
 
@@ -18635,7 +18681,10 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     if (!zcor) title.Form("Psi distr. for bkg hypothesis of on-source dt data for n=%-i",ndt);
     if (zcor)  title.Form("Psi distr. for bkg hypothesis of redshift corrected on-source dt data for n=%-i",ndt);
-    if (ntot) rtot=new TH1F(nametot,title,100,psimintot-1.,psimaxtot+1.);
+    if (ntot)
+    {
+     rtot=new TH1F(nametot,title,100,0,-1);
+    }
    }
 
    if (hPsiOff)
@@ -18647,8 +18696,14 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    {
     if (!zcor) title.Form("Psi distr. for bkg hypothesis of off-source dt data for n=%-i",ndt);
     if (zcor)  title.Form("Psi distr. for bkg hypothesis of redshift corrected off-source dt data for n=%-i",ndt);
-    if (nbkg) rbkg=new TH1F(namebkg,title,100,psiminbkg-1.,psimaxbkg+1.);
+    if (nbkg)
+    {
+     rbkg=new TH1F(namebkg,title,100,0,-1);
+    }
    }
+
+   if (rtot && nr>0) rtot->SetBuffer(int(nr)+1);
+   if (rbkg && nr>0) rbkg->SetBuffer(int(nr)+1);
 
    if (ntot)
    {
@@ -18662,6 +18717,11 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
    }
   }
  }
+
+ // Flush and delete the buffers of the auto-binned histograms
+ if (rtot) rtot->BufferEmpty(1);
+ if (rbkg) rbkg->BufferEmpty(1);
+ if (rrat) rrat->BufferEmpty(1);
 
  ///////////////////////////////////////
  // Listing of the statistics results //
@@ -18684,7 +18744,6 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks : psi=%-g \n",psirat);
   if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks : psi=%-g \n",psirat);
  }
-
  if (psimintot>=0 || psiminbkg>=0 || psiminrat>=0)
  {
   printf(" *** Extreme Psi values for the case of pure background *** \n");
@@ -18702,22 +18761,28 @@ void NcAstrolab::GetBurstBayesianPsiStatistics(TString type,Double_t nr,Int_t nc
   }
   if (psiminrat>=0)
   {
-   if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks psimin= %-g psimax= %-g",psiminrat,psimaxrat);
-   if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks psimin= %-g psimax=%-g",psiminrat,psimaxrat);
+   if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks psimin=%-g psimax=%-g",psiminrat,psimaxrat);
+   if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks psimin=%-g psimax=%-g",psiminrat,psimaxrat);
    if (psifracrat>0) printf(" (psimax-psi)/range=%-g",psifracrat);
    printf("\n");
   }
  }
-
  if (nr>=0)
  {
   printf(" *** P-values of the observed on-source and off-source psi values *** \n");
-  if (nrxtot>0) printf(" For the on-source  %-s P-value=%-g Used number of randomisations: %-g \n",text.Data(),pvaluetot,nrxtot);
-  if (nrxbkg>0) printf(" For the off-source %-s P-value=%-g Used number of randomisations: %-g \n",text.Data(),pvaluebkg,nrxbkg);
-  if (nrxrat>0)
+  if (nrxtot<=0 && nrxbkg<=0 && nrxrat<=0)
   {
-   if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks : P-value=%-g Used number of randomisations: %-g \n",pvaluerat,nrxrat);
-   if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks : P-value=%-g Used number of randomisations: %-g \n",pvaluerat,nrxrat);
+   printf(" Entries c.q. bin contents are not sufficient for reliable P-values \n");
+  }
+  else
+  {
+   if (nrxtot>0) printf(" For the on-source  %-s P-value=%-g Used number of randomisations: %-g \n",text.Data(),pvaluetot,nrxtot);
+   if (nrxbkg>0) printf(" For the off-source %-s P-value=%-g Used number of randomisations: %-g \n",text.Data(),pvaluebkg,nrxbkg);
+   if (nrxrat>0)
+   {
+    if (type=="BBrat") printf(" For the patch normalized on/off source event rate Bayesian Blocks : P-value=%-g Used number of randomisations: %-g \n",pvaluerat,nrxrat);
+    if (type=="BBrac") printf(" For the patch normalized on/off source cos(opening angle) Bayesian Blocks : P-value=%-g Used number of randomisations: %-g \n",pvaluerat,nrxrat);
+   }
   }
  }
 }

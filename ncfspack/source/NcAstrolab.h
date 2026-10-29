@@ -451,6 +451,6 @@ class NcAstrolab : public TTask,public NcTimestamp
   virtual void CommandPanel(TGCompositeFrame* frame);
   void SetMapTS();
  
- ClassDef(NcAstrolab,45) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
+ ClassDef(NcAstrolab,46) // Virtual lab to provide (astro)physical parameters, treat data and relate observations with astrophysical phenomena
 };
 #endif

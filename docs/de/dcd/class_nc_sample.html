@@ -189,7 +189,7 @@ Inheritance diagram for NcSample:</div>
 <div class="line"><span class="comment">// All statistics of a sample are obtained via s.Data().</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">//--- Author: Nick van Eijndhoven 30-mar-1996 CERN Geneva</span></div>
-<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, January 14, 2025  13:09Z</span></div>
+<div class="line"><span class="comment">//- Modified: Nick van Eijndhoven, IIHE-VUB, Brussel, UTC October 23, 2026  11:09</span></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="../../da/d5c/_nc_sample_8h_source.html#l00027">27</a> of file <a class="el" href="../../da/d5c/_nc_sample_8h_source.html">NcSample.h</a>.</p>
 </div><table class="memberdecls">
@@ -300,7 +300,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afa65f2599a1f667f10dc2951ee0febd4" id="r_afa65f2599a1f667f10dc2951ee0febd4"><td class="memItemLeft"><a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a>&#160;</td><td class="memItemRight"><a class="el" href="#afa65f2599a1f667f10dc2951ee0febd4">SampleAndSum</a> (Int_t i, Double_t step, Int_t loc=0, Int_t j=0, Double_t vmin=0, Double_t vmax=-1)</td></tr>
 <tr class="memitem:a64cccee164aad86ee6ce7a849c008aa6" id="r_a64cccee164aad86ee6ce7a849c008aa6"><td class="memItemLeft"><a class="el" href="../../de/dcd/class_nc_sample.html">NcSample</a>&#160;</td><td class="memItemRight"><a class="el" href="#a64cccee164aad86ee6ce7a849c008aa6">SampleAndSum</a> (TString nameA, Double_t step, Int_t loc=0, TString nameB=&quot;-&quot;, Double_t vmin=0, Double_t vmax=-1)</td></tr>
 <tr class="memitem:aa908f74e72a150b2fcd8e119dfbbebfa" id="r_aa908f74e72a150b2fcd8e119dfbbebfa"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa908f74e72a150b2fcd8e119dfbbebfa">SetNames</a> (TString name1=&quot;X&quot;, TString name2=&quot;Y&quot;, TString name3=&quot;Z&quot;, TString name4=&quot;T&quot;)</td></tr>
-<tr class="memitem:ad5e7b6a49c8fe1bbbe4836d315db958d" id="r_ad5e7b6a49c8fe1bbbe4836d315db958d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad5e7b6a49c8fe1bbbe4836d315db958d">SetStoreMode</a> (Int_t mode=1, Int_t nmax=0, Int_t i=0)</td></tr>
+<tr class="memitem:ac48158e8a3bb62b5b16c76e71b36cd4b" id="r_ac48158e8a3bb62b5b16c76e71b36cd4b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac48158e8a3bb62b5b16c76e71b36cd4b">SetStoreMode</a> (Int_t mode=100, Int_t nmax=0, Int_t i=0)</td></tr>
 <tr class="memitem:a09c98f4ba0b7f57282467386eeefa640" id="r_a09c98f4ba0b7f57282467386eeefa640"><td class="memItemLeft">Long64_t&#160;</td><td class="memItemRight"><a class="el" href="#a09c98f4ba0b7f57282467386eeefa640">Transmit</a> (Int_t i, Int_t nbits, Double_t range, Double_t Vbias=0, TArray *peds=0, TH1 *hist=0, Int_t B=0, Int_t C=3)</td></tr>
 <tr class="memitem:a8d2eb83926f3c2a9b27564db1cb4189d" id="r_a8d2eb83926f3c2a9b27564db1cb4189d"><td class="memItemLeft">Long64_t&#160;</td><td class="memItemRight"><a class="el" href="#a8d2eb83926f3c2a9b27564db1cb4189d">Transmit</a> (TString name, Int_t nbits, Double_t range, Double_t Vbias=0, TArray *peds=0, TH1 *hist=0, Int_t B=0, Int_t C=3)</td></tr>
 </table><table class="memberdecls">
@@ -586,7 +586,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are Vbias=0, Vsig=0, hist=0, B=0 and C=3.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05209">5209</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05245">5245</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -655,7 +655,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04815">4815</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04851">4851</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -719,7 +719,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04701">4701</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04737">4737</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -782,7 +782,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04782">4782</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04818">4818</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -850,7 +850,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04901">4901</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04937">4937</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -882,7 +882,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// for containers like NcEvent when adding objects in case the</span></div>
 <div class="line"><span class="comment">// container owns the objects.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l06090">6090</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l06126">6126</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -911,7 +911,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Internal member function to compute the various statistical values</span></div>
 <div class="line"><span class="comment">// after each entering or removing action on a certain sample.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01144">1144</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01147">1147</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1054,7 +1054,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are Vbias=0, adcs=0, peds=0, hist=0, B=0 and C=3.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05426">5426</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05462">5462</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1088,7 +1088,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are i=0 and j=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01474">1474</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01477">1477</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1132,7 +1132,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is nameB=&quot;-&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01568">1568</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01571">1571</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1223,7 +1223,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04935">4935</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04971">4971</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1314,7 +1314,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent input parameters, no digitization is performed and the value 0 is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05139">5139</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05175">5175</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1335,7 +1335,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Entering a value into a 1-dim. sample.</span></div>
 <div class="line"><span class="comment">// In case of first entry the dimension is set to 1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00357">357</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00360">360</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1360,7 +1360,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Entering a pair (x,y) into a 2-dim. sample.</span></div>
 <div class="line"><span class="comment">// In case of first entry the dimension is set to 2.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00452">452</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00455">455</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1390,7 +1390,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Entering a set (x,y,z) into a 3-dim. sample.</span></div>
 <div class="line"><span class="comment">// In case of first entry the dimension is set to 3.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00565">565</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00568">568</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1425,7 +1425,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Entering a set (x,y,z,t) into a 4-dim. sample.</span></div>
 <div class="line"><span class="comment">// In case of first entry the dimension is set to 4.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00700">700</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00703">703</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1474,7 +1474,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are j=0, sumw2=kFALSE, nbx=100 and f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02755">2755</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02791">2791</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1522,7 +1522,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are nameB=&quot;-&quot;, sumw2=kFALSE, nbx=100 and f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02837">2837</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02873">2873</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1582,7 +1582,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are k=0, sumw2=kFALSE, nbx=100, nby=100 and f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02859">2859</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02895">2895</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1641,7 +1641,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are nameC=&quot;-&quot;, sumw2=kFALSE, nbx=100, nby=100 and f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02953">2953</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02989">2989</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1711,7 +1711,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are m=0, sumw2=kFALSE, nbx=100, nby=100, nbz=100 and f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02977">2977</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03013">3013</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1780,7 +1780,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are nameD=&quot;-&quot;, sumw2=kFALSE, nbx=100, nby=100, nbz=100 and f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03080">3080</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03116">3116</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1805,7 +1805,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Provide the correlation coefficient between variables i and j.</span></div>
 <div class="line"><span class="comment">// The index of the first variable is 1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01443">1443</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01446">1446</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1829,7 +1829,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the correlation coefficient the variables with the specified names.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01461">1461</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01464">1464</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1854,7 +1854,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Provide the covariance between variables i and j.</span></div>
 <div class="line"><span class="comment">// The index of the first variable is 1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01412">1412</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01415">1415</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1878,7 +1878,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the covariance between the variables with the specified names.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01430">1430</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01433">1433</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1921,7 +1921,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent data, the value -1 is returned. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04628">4628</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04664">4664</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1963,7 +1963,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent data, the value -1 is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04671">4671</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04707">4707</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -1983,7 +1983,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the dimension of this sample.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01188">1188</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01191">1191</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2065,7 +2065,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In the text above the values of the current sample are regarded as observed event times,</span></div>
 <div class="line"><span class="comment">// but actually any sampling of an observable with a well defined ordering can be used.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02502">2502</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02538">2538</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2147,7 +2147,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In the text above the values of the current sample are regarded as observed event times,</span></div>
 <div class="line"><span class="comment">// but actually any sampling of an observable with a well defined ordering can be used.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02592">2592</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02628">2628</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2193,7 +2193,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are mode=0 and k=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02340">2340</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02376">2376</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2239,7 +2239,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are mode=0 and nameB=&quot;-&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02411">2411</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02447">2447</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2280,7 +2280,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03701">3701</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03737">3737</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2318,7 +2318,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03779">3779</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03815">3815</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2391,7 +2391,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is smp=kTRUE.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03546">3546</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03582">3582</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2427,7 +2427,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03203">3203</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03239">3239</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2460,7 +2460,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03269">3269</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03305">3305</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2491,7 +2491,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03105">3105</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03141">3141</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2519,7 +2519,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03168">3168</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03204">3204</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2549,7 +2549,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03185">3185</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03221">3221</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2621,7 +2621,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is smp=kTRUE.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03654">3654</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03690">3690</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2656,7 +2656,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03286">3286</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03322">3322</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2696,7 +2696,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03796">3796</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03832">3832</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2733,7 +2733,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03816">3816</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03852">3852</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2823,7 +2823,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The defaults are ix=0, iy=0, iz=0, fx=0, fy=0 and fz=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03832">3832</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03868">3868</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2913,7 +2913,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The defaults are fx=0, fy=0 and fz=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04079">4079</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04115">4115</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -2988,7 +2988,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The defaults are ix=0, iy=0, fx=0 and fy=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03305">3305</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03341">3341</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3063,7 +3063,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The defaults are fx=0 and fy=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03496">3496</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l03532">3532</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3084,7 +3084,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Provide the index (1=first) of the specified variable name.</span></div>
 <div class="line"><span class="comment">// In case of no match, the value 0 is returned.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01125">1125</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01128">1128</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3106,7 +3106,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In case entries have been removed from the sample, a correct value can</span></div>
 <div class="line"><span class="comment">// only be obtained if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02110">2110</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02146">2146</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3128,7 +3128,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In case entries have been removed from the sample, a correct value can</span></div>
 <div class="line"><span class="comment">// only be obtained if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02152">2152</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02188">2188</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3148,7 +3148,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the mean of the i-th variable (first is i=1).</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01263">1263</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01266">1266</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3168,7 +3168,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the mean of the variable with the specified name.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01280">1280</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01283">1283</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3199,7 +3199,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//        via the specification of a histogram. </span></div>
 <div class="line"><span class="comment">//        See the other GetMedian memberfunction for details.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01925">1925</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01961">1961</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3230,7 +3230,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Please refer to the documentation of the corresponding GetQuantile()</span></div>
 <div class="line"><span class="comment">// memberfunction for further details.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02242">2242</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02278">2278</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3261,7 +3261,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//        via the specification of a histogram. </span></div>
 <div class="line"><span class="comment">//        See the other GetMedian memberfunction for details.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01948">1948</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01984">1984</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3283,7 +3283,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In case entries have been removed from the sample, a correct value can</span></div>
 <div class="line"><span class="comment">// only be obtained if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02054">2054</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02090">2090</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3305,7 +3305,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// In case entries have been removed from the sample, a correct value can</span></div>
 <div class="line"><span class="comment">// only be obtained if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02096">2096</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02132">2132</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3325,7 +3325,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the number of entries of a certain sample.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01199">1199</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01202">1202</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3361,7 +3361,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04135">4135</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04171">4171</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3396,7 +3396,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04221">4221</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04257">4257</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3431,7 +3431,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//        via the specification of a histogram. </span></div>
 <div class="line"><span class="comment">//        See the other GetQuantile memberfunction for details.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01836">1836</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01872">1872</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3477,7 +3477,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// By default mode=0 will be used to agree with standard ROOT processing.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02166">2166</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02202">2202</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3512,7 +3512,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//        via the specification of a histogram. </span></div>
 <div class="line"><span class="comment">//        See the other GetQuantile memberfunction for details.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01902">1902</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01938">1938</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3537,7 +3537,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// This is NOT the RMS deviation defined as sqrt(variance).</span></div>
 <div class="line"><span class="comment">// Use the memberfunction GetSigma() to obtain the RMS deviation.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01292">1292</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01295">1295</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3562,7 +3562,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// This is NOT the RMS deviation defined as sqrt(variance).</span></div>
 <div class="line"><span class="comment">// Use the memberfunction GetSigma() to obtain the RMS deviation.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01318">1318</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01321">1321</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3593,7 +3593,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02649">2649</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02685">2685</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3621,7 +3621,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02703">2703</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02739">2739</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3651,7 +3651,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is f=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02720">2720</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02756">2756</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3679,7 +3679,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : This facility is only available if the storage mode has been activated.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02738">2738</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02774">2774</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3707,7 +3707,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is model=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01373">1373</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01376">1376</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3734,7 +3734,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is model=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01397">1397</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01400">1400</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3835,7 +3835,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04409">4409</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04445">4445</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3935,7 +3935,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of a direct power measurement, the sqrt() of expression (6) or (7) should be used.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04545">4545</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04581">4581</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -3978,7 +3978,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent data, the value -1 is returned. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01971">1971</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02007">2007</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4033,7 +4033,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are mode=0, model=0 and vref=0 for backward compatibility.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02261">2261</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02297">2297</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4076,7 +4076,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// In case of inconsistent data, the value -1 is returned. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02028">2028</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02064">2064</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4096,7 +4096,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the storage mode.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01814">1814</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01850">1850</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4116,7 +4116,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the maximum number of entries for storage.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01825">1825</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01861">1861</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4168,7 +4168,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are mode=0 and k=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02436">2436</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l02472">2472</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4188,7 +4188,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the sum of the i-th variable (first is i=1).</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01232">1232</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01235">1235</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4208,7 +4208,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the sum of the variable with the specified name.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01251">1251</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01254">1254</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4235,7 +4235,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is model=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01335">1335</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01338">1338</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4262,7 +4262,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is model=0.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01358">1358</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01361">1361</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4282,7 +4282,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Provide the name of the i-th variable (first is i=1).</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01210">1210</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01213">1213</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4311,7 +4311,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Internal member function to list the statistics of i-th variable.</span></div>
 <div class="line"><span class="comment">// The index of the first variable is 1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01704">1704</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01707">1707</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4344,7 +4344,7 @@ Protected Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="comment">// Internal member function to list the covariance and correlation coefficient between variables i and j.</span></div>
 <div class="line"><span class="comment">// The index of the first variable is 1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01736">1736</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01739">1739</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4377,7 +4377,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : If mode=0 the value of &quot;i&quot; is irrelevant. </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01601">1601</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01604">1604</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4410,7 +4410,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : If mode=0 the provided name is irrelevant.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01683">1683</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01686">1686</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4441,7 +4441,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is clr=1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04370">4370</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04406">4406</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4472,7 +4472,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is clr=1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04240">4240</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04276">4276</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4503,7 +4503,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is clr=1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04281">4281</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04317">4317</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4534,7 +4534,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is clr=1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04323">4323</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l04359">4359</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4575,7 +4575,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : If mode=0 the value of &quot;i&quot; is irrelevant, but i=1 will be used to obtain</span></div>
 <div class="line"><span class="comment">//        a correct setting of the ordering status word.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00991">991</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00994">994</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4595,7 +4595,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Removing a value from a 1-dim. sample.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00410">410</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00413">413</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4619,7 +4619,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Removing a pair (x,y) from a 2-dim. sample.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00515">515</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00518">518</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4648,7 +4648,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Removing a set (x,y,z) from a 3-dim. sample.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00640">640</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00643">643</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4682,7 +4682,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="comment">// Removing a set (x,y,z,t) from a 4-dim. sample.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00786">786</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00789">789</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4725,7 +4725,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : If mode=0 the value of &quot;k&quot; is irrelevant</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00945">945</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00948">948</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4768,7 +4768,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : If mode=0 the value of name is irrelevant</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00968">968</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00971">971</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4813,7 +4813,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : If mode=0 the value of &quot;j&quot; is irrelevant</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00858">858</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00861">861</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4858,7 +4858,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Note : If mode=0 the value of name is irrelevant</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00917">917</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00920">920</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4932,7 +4932,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default value is loc=-1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05890">5890</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05926">5926</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -4997,7 +4997,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are loc=0, j=0, vmin=0 and vmax=-1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05945">5945</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05981">5981</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -5061,7 +5061,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are loc=0, nameB=&quot;-&quot;, vmin=0 and vmax=-1.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l06056">6056</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l06092">6092</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -5104,12 +5104,12 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are : name1=&quot;X&quot;,  name2=&quot;Y&quot;,  name3=&quot;Z&quot; and name4=&quot;T&quot;.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00327">327</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l00330">330</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
-<a id="ad5e7b6a49c8fe1bbbe4836d315db958d" name="ad5e7b6a49c8fe1bbbe4836d315db958d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5e7b6a49c8fe1bbbe4836d315db958d">&#9670;&#160;</a></span>SetStoreMode()</h2>
+<a id="ac48158e8a3bb62b5b16c76e71b36cd4b" name="ac48158e8a3bb62b5b16c76e71b36cd4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac48158e8a3bb62b5b16c76e71b36cd4b">&#9670;&#160;</a></span>SetStoreMode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -5117,7 +5117,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void NcSample::SetStoreMode </td>
           <td>(</td>
-          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>mode</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>, </td>
+          <td class="paramtype">Int_t</td>          <td class="paramname"><span class="paramname"><em>mode</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -5136,14 +5136,14 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// by removing every first entry after ordering w.r.t. the i-th variable (1=first)</span></div>
 <div class="line"><span class="comment">// once a new entry is entered that would exceed &quot;nmax&quot;. </span></div>
 <div class="line"><span class="comment">//</span></div>
-<div class="line"><span class="comment">// mode = 0 : Entered data will not be stored, but at each entry the statistics will be updated.</span></div>
-<div class="line"><span class="comment">//        1 : Data will be stored as entered.</span></div>
-<div class="line"><span class="comment">// nmax = 0 : No maximum is set for the number of stored entries.</span></div>
-<div class="line"><span class="comment">//      &gt; 0 : Entries will be stored up to a maximum of &quot;nmax&quot; entries.</span></div>
-<div class="line"><span class="comment">// i    &gt; 0 : Re-order the entries w.r.t. the i-th variable in increasing order before removing the first (=lowest value).</span></div>
-<div class="line"><span class="comment">//      = 0 : Re-order the entries in the order they were entered before removing the first one.</span></div>
-<div class="line"><span class="comment">//      &lt; 0 : Re-order the entries w.r.t. the i-th variable in decreasing order before removing the first (=highest value).</span></div>
-<div class="line"><span class="comment">//            When nmax=0 the value of &quot;i&quot; is irrelevant.</span></div>
+<div class="line"><span class="comment">// mode = 0  : Entered data will not be stored, but at each entry the statistics will be updated.</span></div>
+<div class="line"><span class="comment">//        &gt;0 : Data will be stored as entered and the value of &quot;mode&quot; is also the initial size of the data arrays. </span></div>
+<div class="line"><span class="comment">// nmax = 0  : No maximum is set for the number of stored entries.</span></div>
+<div class="line"><span class="comment">//      &gt; 0  : Entries will be stored up to a maximum of &quot;nmax&quot; entries.</span></div>
+<div class="line"><span class="comment">// i    &gt; 0  : Re-order the entries w.r.t. the i-th variable in increasing order before removing the first (=lowest value).</span></div>
+<div class="line"><span class="comment">//      = 0  : Re-order the entries in the order they were entered before removing the first one.</span></div>
+<div class="line"><span class="comment">//      &lt; 0  : Re-order the entries w.r.t. the i-th variable in decreasing order before removing the first (=highest value).</span></div>
+<div class="line"><span class="comment">//             When nmax=0 the value of &quot;i&quot; is irrelevant.</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// Notes :</span></div>
 <div class="line"><span class="comment">// -------</span></div>
@@ -5151,9 +5151,10 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// 2) Specification of i=0 results in a regular First In First Out (FIFO) buffer performance,</span></div>
 <div class="line"><span class="comment">//    whereas for other &quot;i&quot; values it reflects a FIFO behaviour of removing the first entry</span></div>
 <div class="line"><span class="comment">//    after the requested ordering.</span></div>
+<div class="line"><span class="comment">// 3) For backward compatibility mode=1 will internally be converted to mode=100.</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// By default the values of mode, nmax and i are set to 0 in the constructor of this class.</span></div>
-<div class="line"><span class="comment">// The default at invokation of this memberfunction is mode=1, nmax=0 and i=0.</span></div>
+<div class="line"><span class="comment">// The default at invokation of this memberfunction is mode=100, nmax=0 and i=0.</span></div>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// For normal statistics evaluation (e.g. mean, sigma, covariance etc...)</span></div>
 <div class="line"><span class="comment">// storage of entered data is not needed. This is the default mode</span></div>
@@ -5165,7 +5166,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">// Note : Specification of storage mode can only be performed before the</span></div>
 <div class="line"><span class="comment">//        first data item is entered or after invokation of Reset(). </span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01756">1756</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l01759">1759</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -5286,7 +5287,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05655">5655</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05691">5691</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>
@@ -5408,7 +5409,7 @@ Protected Attributes</h2></td></tr>
 <div class="line"><span class="comment">//</span></div>
 <div class="line"><span class="comment">// The default values are Vbias=0, peds=0, hist=0, B=0 and C=3.</span></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05809">5809</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html#l05845">5845</a> of file <a class="el" href="../../da/ded/_nc_sample_8cxx_source.html">NcSample.cxx</a>.</p>
 
 </div>
 </div>

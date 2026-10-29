@@ -1631,3 +1631,16 @@
                 Note: The various psi value facilities in classes NcMath and NcRandom still have to be modified for extended functionality of the
                       input parameter "f" in order to cope with Bayesion Block distributions.
                 The version indicator in NcVersion has been updated to 6.9a. 
+23-oct-2026 NvE In class NcSample the storage mode parameter, which is set in SetStoreMode(), now represents the initial size of the TArrayD data arrays,
+                which are (re)initialized in the memberfunctions SetStoreMode(), Reset() and Enter() when entering the first data.
+                Also the automatic increase of 10 of the storage sizes in Enter() was changed to doubling the TArrayD size, in order to make the this
+                more efficient w.r.t. cpu time.
+                In the memberfunction SetStoreMode() the TArrayD data arrays are now re-initialized or deleted, depending on the input parameter "mode".
+28-oct-2026 NvE In class NcMath the functionality of the "f" input argument has been extended in the memberfunctions PsiValue(), PsiPvalue() and PsiExtreme(),
+                to enable selection of how the number of entries is represented and the bin contents of the input histogram "his" are treated.
+                Also a fake entry for psi0 has been introduced in the memberfunction PsiPvalue() in case the option "mark" is selected,
+                in order to support an output histogram with automatic binning.
+29-oct-2026 NvE New NcMath functionality adopted in NcAstrolab::GetBurstBayesianPsiStatistics() and also automatic binning introduced for the
+                produced P-value histograms. The introduced modifications are 100% backward compatible for the user, so no modifications are needed
+                in any user code. 
+                The version indicator in NcVersion has been updated to 6.10. 
